@@ -1,0 +1,37 @@
+! by DD
+! 仅适作业帮家长版，可跳身份证验证，去广告
+! ADGUARD
+
+#by DD
+#仅适作业帮家长版，可跳身份证验证，去广告
+#qx clash rule
+#加入分流引用，关闭策略偏好
+
+@@|app-search.cdnjtzy.com^
+@@|bd-s.zuoyebang.cc^
+@@|img.zuoyebang.cc^
+@@|img10.zuoyebang.cc^
+@@|mathjax.cdnjtzy.com^
+@@|paisou.zuoyebang.com^
+@@|search.zybang.com^
+@@|shumei-app-thirdpart.zuoyebang.com^
+@@|www.kuaiduizuoye.com^
+@@|www.zuoyebang.cc^
+@@|www.zuoyebang.com^
+@@|yy-s.zuoyebang.cc^
+@@|pluto.zuoyebang.com^
+
+|bgg.baidu.com^
+|httpdns.yunxindns.com^
+|kd02-1253445850.image.myqcloud.com^
+|kw1-1253445850.image.myqcloud.com^
+|statistic.live.126.net^
+|www.daxuesoutijiang.com^
+||cdnjtzy.com^
+||kuaiduizuoye.com^
+||netease.im^
+||qiyukf.com^
+||zuoyebang.cc^
+||zuoyebang.com^
+||zybang.cc^
+||zybang.com^

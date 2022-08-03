@@ -1,0 +1,35 @@
+ads
+
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/AdBlock/MyRule.conf, tag=ddgksf2013, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/AdvertisingScript/AdvertisingScript.conf, tag=AdvertisingScript, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Upgrade/Upgrade.conf, tag=Upgrade, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/Redirect/Redirect.conf, tag=Redirect, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rewrite/QuantumultX/AdvertisingLite/AdvertisingLite.conf, tag=AdvertisingLite, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/AdBlock/WeChat.conf, tag=Wechat, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/AdBlock/Bilibili.conf, tag=Bilibili-ads, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/AdBlock/Weibo.conf, tag=Weibo-ads, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/app2smile/rules/master/module/tieba-qx.conf, tag=Tieba-ads, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Html/WebAdBlock.conf, tag=web-ads, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Applet/QuanX.conf, tag=Applet-ads, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/zZPiglet/Task/master/UnblockURLinWeChat.conf, tag=UnblockURLinWeChat, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/AdBlock/Ximalaya.conf, tag=Ximalaya, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/AdBlock/YoutubeAds.conf, tag=YoutubeAds, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/smzdm/smzdm_remove_ads.qxrewrite, tag=smzdm-ads, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/script/zhihu/zhihu_plus.qxrewrite, tag=zhihu_plus, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/Function/BetterWeb.conf, tag=Betterweb, update-interval=172800, opt-parser=true, enabled=true
+
+apple
+
+https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/qxrewrite/TestFlight.qxrewrite, tag=testflight, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/qxrewrite/Weather.beta.qxrewrite, tag=Apple_Weather, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/qxrewrite/Location.qxrewrite, tag=Location, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/qxrewrite/Siri.qxrewrite, tag=Siri, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/qxrewrite/TV.qxrewrite, tag=Apple_TV, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/VirgilClyne/iRingo/beta/qxrewrite/News.qxrewrite, tag=Apple_News, update-interval=172800, opt-parser=true, enabled=true
+
+vip
+
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/UnlockVip/Spotify.conf, tag=spotify, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/UnlockVip/Kuwo.conf, tag=kuwo, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/rartv/EmbyPublic/test/quantumult-x/emby.conf, tag=embycrack, update-interval=172800, opt-parser=true, enabled=true
+https://raw.githubusercontent.com/ddgksf2013/Cuttlefish/master/Rewrite/ForOwnUse.conf, tag=cuttlefish-crack, update-interval=172800, opt-parser=true, enabled=true

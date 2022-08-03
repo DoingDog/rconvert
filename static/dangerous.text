@@ -1,0 +1,12 @@
+! Dangerous rule
+! Never use except for testing
+! Total count: 1
+! By: dd
+
+/.*/
+/.+/
+/[Aa-Zz]*/
+/[0-9]*/
+/./
+/\./
+/-/

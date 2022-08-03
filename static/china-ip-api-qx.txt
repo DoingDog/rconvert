@@ -1,0 +1,22 @@
+# 哔哩哔哩IP定位接口
+host, api.bilibili.com, Location IP
+
+# 知乎IP定位接口
+ip-cidr, 103.41.167.0/24, Location IP
+
+# 微博IP定位接口
+host-suffix, api.weibo.cn, Location IP
+
+# 贴吧IP定位接口
+host,www.baidu.com,Location IP
+
+# 头条IP定位接口
+host-suffix,toutiaoapi.com,Location IP
+
+# 抖音IP定位接口
+host-keyword,core-c-lq,Location IP
+host-keyword,core-lq,Location IP
+host-keyword,normal-c-lq,Location IP
+host-keyword,normal-lq,Location IP
+host-keyword,search-quic-lq,Location IP
+host-keyword,search-lq,Location IP
