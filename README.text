@@ -1,0 +1,103 @@
+# rconvert
+
+------------------------------------------------------
+
+log
+
+05.03 - 准备借助gpt用python重写此项目，加入子域名去重功能，优化速度
+05.07 - 子域名去重完成。bug已修复。速度优化到3分钟
+05.07 - 准备完全用python重写
+05.20 - 注意： CF 加速域名过期，已更换地址
+07.07 - 注意： CF 加速域名再次更换
+
+------------------------------------------------------
+
+又要广告拦截又要扶墙，你可以试试给扶墙软件加规则！
+dd自用 clash，小火箭， qx， surge 分流
+
+[注意]这是一个极端的拦截规则列表，只给需要的人使用
+
+具体 QX 示例配置文件见 https://github.com/DoingDog/qxprofile/blob/main/Profile.ini
+
+[所有上游规则权利属于原作者]
+
+issues 随便提，(我也不会看吧
+pr 你写了就会接收
+
+利用 Github Actions 每隔3天早上 6 点，脚本自动更新一次所有规则。（规则 4 除外）
+
+awsl.app 地址为 cloudflare 镜像
+两条链接选择一条即可
+
+------------------------------------------------------
+
+关于格式
+默认fin.txt为不带目标策略的Rule-set格式
+在 clash 和 surge 上使用时，请选择 RULE-SET 而不是 DOMAIN-SET 格式
+在 quanx 上使用时，请把 fin.txt 换成 fin-qx.txt （规则 4 除外）
+在 Clash Rule Provider 上使用时，请把 fin.txt 换成 fin.yaml （规则 4 除外）
+在 Adblock 上使用时 (去广告规则) ，请把 fin.txt 换成 fin-adb.txt
+
+------------------------------------------------------
+
+DNS 广告拦截规则
+
+1 黑名单
+https://raw.githubusercontent.com/DoingDog/rconvert/main/a1/fin-adb.txt
+https://r.awsl.app/a1/fin-adb.txt
+
+2 白名单
+https://raw.githubusercontent.com/DoingDog/rconvert/main/static/main/Adb-unblock.list
+https://r.awsl.app/static/main/Adb-unblock.list
+
+------------------------------------------------------
+
+去广告
+
+1 去广告完整版 （合并 blackmatrix7 毒奶 sukka 的规则，最好的） 大概10万条
+https://raw.githubusercontent.com/DoingDog/rconvert/main/a2/fin.txt
+https://r.awsl.app/a2/fin.txt
+
+2 去广告实验版 （合并 完整版 Adguard EasyPrivacy 和一些额外规则 不建议使用） 大概20万条 自用
+https://raw.githubusercontent.com/DoingDog/rconvert/main/a1/fin.txt
+https://r.awsl.app/a1/fin.txt
+
+------------------------------------------------------
+
+文件分享
+
+4 外国文件分享站列表 （网赚网盘） 手动维护 大概3百条 有错误可以发issues
+https://raw.githubusercontent.com/DoingDog/rconvert/main/static/serv/sharing.list
+https://r.awsl.app/static/serv/sharing.list
+
+大流量
+
+5 CDN （合并 sukka 的规则 1000条） 很少
+https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.txt
+https://r.awsl.app/cdn/fin.txt
+
+6 大流量分流 （合并 4 5 blackmatrix7流媒体规则 和 static/mycdn.txt） 大概4千条 自用
+https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.txt
+https://r.awsl.app/big-data/fin.txt
+
+------------------------------------------------------
+
+直连
+
+7 国内直连 （合并 sukka 和 blackmatrix7 ）大概4千条 不建议
+https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.txt
+https://r.awsl.app/dirt/fin.txt
+
+------------------------------------------------------
+
+说明 4 5 6 规则，仅用于像我这种（机场流量小的可怜）分出去给便宜备用机场
+每月几TB的大佬不建议使用以免导致错误
+
+自己fork可以改规则
+
+脚本在这 https://github.com/DoingDog/rconvert/blob/main/r.cmd
+功能是是自动转换合并去重
+ini放的是上游规则链接
+脚本可以直接接受 DOMAINSET, RULESET, QX, Clash yaml, AdBlock DNS格式的规则，自动识别转换为 4 种格式
+
+------------------------------------------------------

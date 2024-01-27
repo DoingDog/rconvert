@@ -1,0 +1,34 @@
+#by DD
+#仅适作业帮家长版，可跳身份证验证，去广告
+#qx clash rule
+#加入分流引用，关闭策略偏好
+
+DOMAIN,app-search.cdnjtzy.com,DIRECT
+DOMAIN,bd-s.zuoyebang.cc,DIRECT
+DOMAIN,img.zuoyebang.cc,DIRECT
+DOMAIN,img10.zuoyebang.cc,DIRECT
+DOMAIN,mathjax.cdnjtzy.com,DIRECT
+DOMAIN,paisou.zuoyebang.com,DIRECT
+DOMAIN,search.zybang.com,DIRECT
+DOMAIN,shumei-app-thirdpart.zuoyebang.com,DIRECT
+DOMAIN,www.kuaiduizuoye.com,DIRECT
+DOMAIN,www.zuoyebang.cc,DIRECT
+DOMAIN,www.zuoyebang.com,DIRECT
+DOMAIN,yy-s.zuoyebang.cc,DIRECT
+DOMAIN,pluto.zuoyebang.com,DIRECT
+
+DOMAIN,bgg.baidu.com,REJECT
+DOMAIN,httpdns.yunxindns.com,REJECT
+DOMAIN,kd02-1253445850.image.myqcloud.com,REJECT
+DOMAIN,kw1-1253445850.image.myqcloud.com,REJECT
+DOMAIN,statistic.live.126.net,REJECT
+DOMAIN,www.daxuesoutijiang.com,REJECT
+DOMAIN-SUFFIX,cdnjtzy.com,REJECT
+DOMAIN-SUFFIX,kuaiduizuoye.com,REJECT
+DOMAIN-SUFFIX,netease.im,REJECT
+DOMAIN-SUFFIX,qiyukf.com,REJECT
+DOMAIN-SUFFIX,zuoyebang.cc,REJECT
+DOMAIN-SUFFIX,zuoyebang.com,REJECT
+DOMAIN-SUFFIX,zybang.cc,REJECT
+DOMAIN-SUFFIX,zybang.com,REJECT
+IP-CIDR,180.76.76.200/32,REJECT
