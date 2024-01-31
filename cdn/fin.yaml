@@ -1,5 +1,5 @@
-# Clash total line 2183
-# Last updated Tue 01/30/2024 13:59:45.35
+# Clash total line 2185
+# Last updated Wed 01/31/2024 22:09:55.11
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -415,6 +415,7 @@ payload:
   - DOMAIN,chart.googleapis.com
   - DOMAIN,checkout.stripe.com
   - DOMAIN,ci.testling.com
+  - DOMAIN,claritystatic.azureedge.net
   - DOMAIN,client.px-cloud.net
   - DOMAIN,clips-media-assets2.twitch.tv
   - DOMAIN,cloud.redhat.com
@@ -612,6 +613,7 @@ payload:
   - DOMAIN,images.purevpn-tools.com
   - DOMAIN,images.scalero.io
   - DOMAIN,images.spot.im
+  - DOMAIN,images.spr.so
   - DOMAIN,images.store.crowdstrike.com
   - DOMAIN,images.unsplash.com
   - DOMAIN,images.web3.storage
