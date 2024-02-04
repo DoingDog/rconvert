@@ -1,5 +1,5 @@
-# Quantumult total line 4096
-# Last updated Thu 02/01/2024 22:09:51.77
+# Quantumult total line 4097
+# Last updated Sun 02/04/2024 22:07:20.84
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -9,12 +9,10 @@ HOST,cdp.cloud.unity3d.com,LIST
 HOST,client.amplifi.com,LIST
 HOST,cn.download.nvidia.com,LIST
 HOST,download.jetbrains.com,LIST
-HOST,emby.plusmedia.site,LIST
 HOST,gs-loc-cn.apple.com,LIST
 HOST,images-cn.ssl-images-amazon.com,LIST
 HOST,injections.adguard.org,LIST
 HOST,ip.istatmenus.app,LIST
-HOST,jz.mcjoker.xyz,LIST
 HOST,kc.kexinshe.com,LIST
 HOST,local.adguard.org,LIST
 HOST,origin-a.akamaihd.ne,LIST
@@ -400,6 +398,7 @@ HOST-SUFFIX,alihealth.hk,LIST
 HOST-SUFFIX,aliimg.com,LIST
 HOST-SUFFIX,alikmd.com,LIST
 HOST-SUFFIX,alikunlun.com,LIST
+HOST-SUFFIX,alikunlun.net,LIST
 HOST-SUFFIX,alimama.com,LIST
 HOST-SUFFIX,alimebot.com,LIST
 HOST-SUFFIX,alimei.com,LIST
@@ -516,6 +515,7 @@ HOST-SUFFIX,baydn.com,LIST
 HOST-SUFFIX,bazai.com,LIST
 HOST-SUFFIX,bbbcdns.com,LIST
 HOST-SUFFIX,bcebos.com,LIST
+HOST-SUFFIX,bcelive.com,LIST
 HOST-SUFFIX,bcfmglobal.com,LIST
 HOST-SUFFIX,bcvbw.com,LIST
 HOST-SUFFIX,bcy.net,LIST
@@ -2588,6 +2588,7 @@ HOST-SUFFIX,opstatics.com,LIST
 HOST-SUFFIX,oracle-tencent.com,LIST
 HOST-SUFFIX,oracle-tencent.net,LIST
 HOST-SUFFIX,oracle.com,LIST
+HOST-SUFFIX,oray-img.com,LIST
 HOST-SUFFIX,oray.com,LIST
 HOST-SUFFIX,orient-fund.com,LIST
 HOST-SUFFIX,orpheus.network,LIST

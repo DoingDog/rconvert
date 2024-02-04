@@ -1,5 +1,5 @@
-# Clash total line 4136
-# Last updated Thu 02/01/2024 22:09:51.80
+# Clash total line 4137
+# Last updated Sun 02/04/2024 22:07:20.87
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -10,12 +10,10 @@ payload:
   - DOMAIN,client.amplifi.com
   - DOMAIN,cn.download.nvidia.com
   - DOMAIN,download.jetbrains.com
-  - DOMAIN,emby.plusmedia.site
   - DOMAIN,gs-loc-cn.apple.com
   - DOMAIN,images-cn.ssl-images-amazon.com
   - DOMAIN,injections.adguard.org
   - DOMAIN,ip.istatmenus.app
-  - DOMAIN,jz.mcjoker.xyz
   - DOMAIN,kc.kexinshe.com
   - DOMAIN,local.adguard.org
   - DOMAIN,origin-a.akamaihd.ne
@@ -401,6 +399,7 @@ payload:
   - DOMAIN-SUFFIX,aliimg.com
   - DOMAIN-SUFFIX,alikmd.com
   - DOMAIN-SUFFIX,alikunlun.com
+  - DOMAIN-SUFFIX,alikunlun.net
   - DOMAIN-SUFFIX,alimama.com
   - DOMAIN-SUFFIX,alimebot.com
   - DOMAIN-SUFFIX,alimei.com
@@ -517,6 +516,7 @@ payload:
   - DOMAIN-SUFFIX,bazai.com
   - DOMAIN-SUFFIX,bbbcdns.com
   - DOMAIN-SUFFIX,bcebos.com
+  - DOMAIN-SUFFIX,bcelive.com
   - DOMAIN-SUFFIX,bcfmglobal.com
   - DOMAIN-SUFFIX,bcvbw.com
   - DOMAIN-SUFFIX,bcy.net
@@ -2589,6 +2589,7 @@ payload:
   - DOMAIN-SUFFIX,oracle-tencent.com
   - DOMAIN-SUFFIX,oracle-tencent.net
   - DOMAIN-SUFFIX,oracle.com
+  - DOMAIN-SUFFIX,oray-img.com
   - DOMAIN-SUFFIX,oray.com
   - DOMAIN-SUFFIX,orient-fund.com
   - DOMAIN-SUFFIX,orpheus.network

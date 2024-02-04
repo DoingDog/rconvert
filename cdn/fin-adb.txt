@@ -1,5 +1,5 @@
-# Adblock total line 2194
-# Last updated Thu 02/01/2024 22:09:34.81
+# Adblock total line 2218
+# Last updated Sun 02/04/2024 22:07:05.22
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||9191.ga^
@@ -60,6 +60,7 @@
 ||assets.bbhub.io^
 ||assets.bitstamp.net^
 ||assets.braintreegateway.com^
+||assets.buttondown.email^
 ||assets.bwbx.io^
 ||assets.byteplus.com^
 ||assets.calendly.com^
@@ -132,6 +133,7 @@
 ||assets0.lottiefiles.com^
 ||assets1.lottiefiles.com^
 ||assets10.lottiefiles.com^
+||assets2.canny.io^
 ||assets2.lottiefiles.com^
 ||assets3.lottiefiles.com^
 ||assets4.lottiefiles.com^
@@ -246,6 +248,7 @@
 ||cdn.datatables.net^
 ||cdn.db-ip.com^
 ||cdn.dnsimple.com^
+||cdn.dotaoutpost.com^
 ||cdn.download.it^
 ||cdn.dribbble.com^
 ||cdn.dynamicyield.com^
@@ -596,6 +599,7 @@
 ||images-ext-2.discordapp.net^
 ||images.arigatotravel.com^
 ||images.contentful.com^
+||images.design-editor.com^
 ||images.dmca.com^
 ||images.ecomm.microsoft.com^
 ||images.emojiterra.com^
@@ -622,6 +626,8 @@
 ||images.weserv.nl^
 ||images.wikia.com^
 ||images.wsj.net^
+||images7.design-editor.com^
+||images8.design-editor.com^
 ||imagizer.imageshack.com^
 ||img-prod-cms-rt-microsoft-com.akamaized.net^
 ||img-s-msn-com.akamaized.net^
@@ -868,6 +874,7 @@
 ||raw.github.com^
 ||react.dev^
 ||rebound.postmarkapp.com^
+||redircdn.com^
 ||registry-cdn.wapm.io^
 ||registry.api.cnn.io^
 ||registry.bower.io^
@@ -966,6 +973,7 @@
 ||secure.fanboy.co.nz^
 ||secure.telegraph.co.uk^
 ||services.linkfire.com^
+||sf-flow-web-cdn.ciciai.com^
 ||share.riseup.net^
 ||shell.cdn.office.net^
 ||shopify.cleverecommerce.com^
@@ -1126,6 +1134,7 @@
 ||static.tumblr.com^
 ||static.twitchcdn.net^
 ||static.typingclub.com^
+||static.underhentai.net^
 ||static.v2ex.com^
 ||static.vocadb.net^
 ||static.whatsapp.net^
@@ -1265,6 +1274,7 @@
 ||widget.intercom.io^
 ||widget.trustpilot.com^
 ||widget.user.com^
+||widget.uservoice.com^
 ||widgets.outbrain.com^
 ||widgets.tree-nation.com^
 ||widgets.wp.com^
@@ -1341,6 +1351,7 @@
 ||botsrv2.com^
 ||boxcdn.net^
 ||bp.blogspot.com^
+||bstatic.com^
 ||bundle.run^
 ||bundle.thimatic-apps.com^
 ||bytebucket.org^
@@ -1398,6 +1409,7 @@
 ||codeberg.page^
 ||codepenassets.com^
 ||combinatronics.io^
+||content-storage-upload.googleapis.com^
 ||content001.bet365.com^
 ||coral.coralproject.net^
 ||cos.ap-bangkok.myqcloud.com^
@@ -1768,7 +1780,9 @@
 ||runkitcdn.com^
 ||s3-1.amazonaws.com^
 ||s3-accesspoint-fips.ca-central-1.amazonaws.com^
+||s3-accesspoint-fips.ca-west-1.amazonaws.com^
 ||s3-accesspoint-fips.dualstack.ca-central-1.amazonaws.com^
+||s3-accesspoint-fips.dualstack.ca-west-1.amazonaws.com^
 ||s3-accesspoint-fips.dualstack.us-east-1.amazonaws.com^
 ||s3-accesspoint-fips.dualstack.us-east-2.amazonaws.com^
 ||s3-accesspoint-fips.dualstack.us-gov-east-1.amazonaws.com^
@@ -1793,6 +1807,7 @@
 ||s3-accesspoint.ap-southeast-3.amazonaws.com^
 ||s3-accesspoint.ap-southeast-4.amazonaws.com^
 ||s3-accesspoint.ca-central-1.amazonaws.com^
+||s3-accesspoint.ca-west-1.amazonaws.com^
 ||s3-accesspoint.dualstack.af-south-1.amazonaws.com^
 ||s3-accesspoint.dualstack.ap-east-1.amazonaws.com^
 ||s3-accesspoint.dualstack.ap-northeast-1.amazonaws.com^
@@ -1805,6 +1820,7 @@
 ||s3-accesspoint.dualstack.ap-southeast-3.amazonaws.com^
 ||s3-accesspoint.dualstack.ap-southeast-4.amazonaws.com^
 ||s3-accesspoint.dualstack.ca-central-1.amazonaws.com^
+||s3-accesspoint.dualstack.ca-west-1.amazonaws.com^
 ||s3-accesspoint.dualstack.eu-central-1.amazonaws.com^
 ||s3-accesspoint.dualstack.eu-central-2.amazonaws.com^
 ||s3-accesspoint.dualstack.eu-north-1.amazonaws.com^
@@ -1862,7 +1878,9 @@
 ||s3-fips-us-gov-east-1.amazonaws.com^
 ||s3-fips-us-gov-west-1.amazonaws.com^
 ||s3-fips.ca-central-1.amazonaws.com^
+||s3-fips.ca-west-1.amazonaws.com^
 ||s3-fips.dualstack.ca-central-1.amazonaws.com^
+||s3-fips.dualstack.ca-west-1.amazonaws.com^
 ||s3-fips.dualstack.us-east-1.amazonaws.com^
 ||s3-fips.dualstack.us-east-2.amazonaws.com^
 ||s3-fips.dualstack.us-gov-east-1.amazonaws.com^
@@ -1933,6 +1951,7 @@
 ||s3-website.ap-southeast-3.amazonaws.com^
 ||s3-website.ap-southeast-4.amazonaws.com^
 ||s3-website.ca-central-1.amazonaws.com^
+||s3-website.ca-west-1.amazonaws.com^
 ||s3-website.dualstack.af-south-1.amazonaws.com^
 ||s3-website.dualstack.ap-northeast-1.amazonaws.com^
 ||s3-website.dualstack.ap-northeast-2.amazonaws.com^
@@ -1941,6 +1960,7 @@
 ||s3-website.dualstack.ap-southeast-1.amazonaws.com^
 ||s3-website.dualstack.ap-southeast-2.amazonaws.com^
 ||s3-website.dualstack.ca-central-1.amazonaws.com^
+||s3-website.dualstack.ca-west-1.amazonaws.com^
 ||s3-website.dualstack.eu-central-1.amazonaws.com^
 ||s3-website.dualstack.eu-south-1.amazonaws.com^
 ||s3-website.dualstack.eu-west-1.amazonaws.com^
@@ -1983,6 +2003,7 @@
 ||s3.ap-southeast-3.amazonaws.com^
 ||s3.ap-southeast-4.amazonaws.com^
 ||s3.ca-central-1.amazonaws.com^
+||s3.ca-west-1.amazonaws.com^
 ||s3.dualstack.af-south-1.amazonaws.com^
 ||s3.dualstack.ap-east-1.amazonaws.com^
 ||s3.dualstack.ap-northeast-1.amazonaws.com^
@@ -1995,6 +2016,7 @@
 ||s3.dualstack.ap-southeast-3.amazonaws.com^
 ||s3.dualstack.ap-southeast-4.amazonaws.com^
 ||s3.dualstack.ca-central-1.amazonaws.com^
+||s3.dualstack.ca-west-1.amazonaws.com^
 ||s3.dualstack.eu-central-1.amazonaws.com^
 ||s3.dualstack.eu-central-2.amazonaws.com^
 ||s3.dualstack.eu-north-1.amazonaws.com^
@@ -2129,6 +2151,7 @@
 ||usercontent.goog^
 ||usercontent.google.com^
 ||usercontent.one^
+||uvcdn.com^
 ||v-cdn.net^
 ||v-corp.staticblitz.com^
 ||v2ex.co^
@@ -2166,6 +2189,7 @@
 ||wpcomstaging.com^
 ||wsimg.com^
 ||www.s81c.com^
+||xda-cdn.com^
 ||xdaimages.com^
 ||xhcdn.com^
 ||xingcdn.com^

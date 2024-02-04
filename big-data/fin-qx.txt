@@ -1,5 +1,5 @@
-# Quantumult total line 4730
-# Last updated Thu 02/01/2024 22:09:44.30
+# Quantumult total line 4744
+# Last updated Sun 02/04/2024 22:07:14.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -67,6 +67,7 @@ HOST,assets.awwwards.com,LIST
 HOST,assets.bbhub.io,LIST
 HOST,assets.bitstamp.net,LIST
 HOST,assets.braintreegateway.com,LIST
+HOST,assets.buttondown.email,LIST
 HOST,assets.bwbx.io,LIST
 HOST,assets.byteplus.com,LIST
 HOST,assets.calendly.com,LIST
@@ -137,6 +138,7 @@ HOST,assets0.headwayapp.co,LIST
 HOST,assets0.lottiefiles.com,LIST
 HOST,assets1.lottiefiles.com,LIST
 HOST,assets10.lottiefiles.com,LIST
+HOST,assets2.canny.io,LIST
 HOST,assets2.lottiefiles.com,LIST
 HOST,assets3.lottiefiles.com,LIST
 HOST,assets4.lottiefiles.com,LIST
@@ -255,6 +257,7 @@ HOST,cdn.datacamp.com,LIST
 HOST,cdn.datatables.net,LIST
 HOST,cdn.db-ip.com,LIST
 HOST,cdn.dnsimple.com,LIST
+HOST,cdn.dotaoutpost.com,LIST
 HOST,cdn.download.it,LIST
 HOST,cdn.dribbble.com,LIST
 HOST,cdn.dynamicyield.com,LIST
@@ -661,6 +664,7 @@ HOST,images-ext-1.discordapp.net,LIST
 HOST,images-ext-2.discordapp.net,LIST
 HOST,images.arigatotravel.com,LIST
 HOST,images.contentful.com,LIST
+HOST,images.design-editor.com,LIST
 HOST,images.dmca.com,LIST
 HOST,images.ecomm.microsoft.com,LIST
 HOST,images.emojiterra.com,LIST
@@ -686,6 +690,8 @@ HOST,images.web3.storage,LIST
 HOST,images.weserv.nl,LIST
 HOST,images.wikia.com,LIST
 HOST,images.wsj.net,LIST
+HOST,images7.design-editor.com,LIST
+HOST,images8.design-editor.com,LIST
 HOST,imagizer.imageshack.com,LIST
 HOST,img.announcekit.app,LIST
 HOST,img.apponic.com,LIST
@@ -941,6 +947,7 @@ HOST,r3.o.lencr.org,LIST
 HOST,raw.github.com,LIST
 HOST,react.dev,LIST
 HOST,rebound.postmarkapp.com,LIST
+HOST,redircdn.com,LIST
 HOST,redstone-launcher.mojang.com,LIST
 HOST,registry-cdn.wapm.io,LIST
 HOST,registry.bower.io,LIST
@@ -1042,6 +1049,7 @@ HOST,secure.download.dm.origin.com,LIST
 HOST,secure.fanboy.co.nz,LIST
 HOST,secure.telegraph.co.uk,LIST
 HOST,services.linkfire.com,LIST
+HOST,sf-flow-web-cdn.ciciai.com,LIST
 HOST,share.riseup.net,LIST
 HOST,shell.cdn.office.net,LIST
 HOST,shopify.cleverecommerce.com,LIST
@@ -1185,6 +1193,7 @@ HOST,static.tradingview.com,LIST
 HOST,static.tronscan.org,LIST
 HOST,static.tumblr.com,LIST
 HOST,static.typingclub.com,LIST
+HOST,static.underhentai.net,LIST
 HOST,static.v2ex.com,LIST
 HOST,static.vocadb.net,LIST
 HOST,static.whatsapp.net,LIST
@@ -1310,6 +1319,7 @@ HOST,widget.freshworks.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.trustpilot.com,LIST
 HOST,widget.user.com,LIST
+HOST,widget.uservoice.com,LIST
 HOST,widgets.outbrain.com,LIST
 HOST,widgets.tree-nation.com,LIST
 HOST,widgets.wp.com,LIST
@@ -1565,6 +1575,7 @@ HOST-SUFFIX,bravotv.com,LIST
 HOST-SUFFIX,braze.com,LIST
 HOST-SUFFIX,brupload.net,LIST
 HOST-SUFFIX,bstarstatic.com,LIST
+HOST-SUFFIX,bstatic.com,LIST
 HOST-SUFFIX,btafile.com,LIST
 HOST-SUFFIX,bucketeer.jp,LIST
 HOST-SUFFIX,bundle.run,LIST
@@ -1708,6 +1719,7 @@ HOST-SUFFIX,combinatronics.io,LIST
 HOST-SUFFIX,comicporn.xxx,LIST
 HOST-SUFFIX,connatix.com,LIST
 HOST-SUFFIX,containersonaws.com,LIST
+HOST-SUFFIX,content-storage-upload.googleapis.com,LIST
 HOST-SUFFIX,content.jwplatform.com,LIST
 HOST-SUFFIX,content.steampowered.com,LIST
 HOST-SUFFIX,content001.bet365.com,LIST
@@ -3523,6 +3535,7 @@ HOST-SUFFIX,usersfiles.com,LIST
 HOST-SUFFIX,userupload.in,LIST
 HOST-SUFFIX,userupload.net,LIST
 HOST-SUFFIX,uuu.glass,LIST
+HOST-SUFFIX,uvcdn.com,LIST
 HOST-SUFFIX,v-cdn.net,LIST
 HOST-SUFFIX,v-corp.staticblitz.com,LIST
 HOST-SUFFIX,v.smtcdns.com,LIST
@@ -3693,6 +3706,7 @@ HOST-SUFFIX,wushare.com,LIST
 HOST-SUFFIX,www.s81c.com,LIST
 HOST-SUFFIX,wwwhuluplus.com,LIST
 HOST-SUFFIX,xcream.net,LIST
+HOST-SUFFIX,xda-cdn.com,LIST
 HOST-SUFFIX,xdaimages.com,LIST
 HOST-SUFFIX,xenupload.com,LIST
 HOST-SUFFIX,xeton.dev,LIST
