@@ -1,5 +1,5 @@
-# Quantumult total line 4744
-# Last updated Sun 02/04/2024 22:07:14.16
+# Quantumult total line 4748
+# Last updated Wed 02/07/2024 22:06:42.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -119,6 +119,7 @@ HOST,assets.scaleflex.com,LIST
 HOST,assets.scroll.com,LIST
 HOST,assets.sendinblue.com,LIST
 HOST,assets.squarespace.com,LIST
+HOST,assets.st-note.com,LIST
 HOST,assets.static-upwork.com,LIST
 HOST,assets.stickpng.com,LIST
 HOST,assets.swoogo.com,LIST
@@ -574,6 +575,7 @@ HOST,files.reg.ru,LIST
 HOST,files.slack.com,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
+HOST,filestore.fortinet.com,LIST
 HOST,flows.trysavvy.com,LIST
 HOST,fontbit.io,LIST
 HOST,fonts-api.wp.com,LIST
@@ -1006,6 +1008,7 @@ HOST,s2.qwant.com,LIST
 HOST,s2.wp.com,LIST
 HOST,s3-alpha-sig.figma.com,LIST
 HOST,s3-alpha.figma.com,LIST
+HOST,s3-figma-plugin-images-production-sig.figma.com,LIST
 HOST,s3-symbol-logo.tradingview.com,LIST
 HOST,s3.acg.mn,LIST
 HOST,s3.arkjp.net,LIST
@@ -2535,6 +2538,7 @@ HOST-SUFFIX,img3.acsta.net,LIST
 HOST-SUFFIX,imgbox.com,LIST
 HOST-SUFFIX,imgix.net,LIST
 HOST-SUFFIX,imglarger.com,LIST
+HOST-SUFFIX,imglink.win,LIST
 HOST-SUFFIX,imgmrplay.xyz,LIST
 HOST-SUFFIX,imgsmail.ru,LIST
 HOST-SUFFIX,imkan.tv,LIST
