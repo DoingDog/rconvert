@@ -1,5 +1,5 @@
-# Quantumult total line 4748
-# Last updated Wed 02/07/2024 22:06:42.54
+# Quantumult total line 4750
+# Last updated Sat 02/10/2024 22:06:25.67
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -160,6 +160,7 @@ HOST,avatars.hubspot.net,LIST
 HOST,avatars.mds.yandex.net,LIST
 HOST,avatars.micro.blog,LIST
 HOST,avatars.plurk.com,LIST
+HOST,avts.wmlabs.net,LIST
 HOST,aws-static.kwai.net,LIST
 HOST,az700632.vo.msecnd.net,LIST
 HOST,az764295.vo.msecnd.net,LIST
@@ -3335,6 +3336,7 @@ HOST-SUFFIX,static2cdn.hubspot.com,LIST
 HOST-SUFFIX,statically.io,LIST
 HOST-SUFFIX,staticaly.com,LIST
 HOST-SUFFIX,staticflickr.com,LIST
+HOST-SUFFIX,staticimgly.com,LIST
 HOST-SUFFIX,staticworld.net,LIST
 HOST-SUFFIX,statuspage.io,LIST
 HOST-SUFFIX,steam-api.com,LIST

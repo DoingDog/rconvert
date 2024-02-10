@@ -1,5 +1,5 @@
-# Clash total line 2222
-# Last updated Wed 02/07/2024 22:06:34.00
+# Clash total line 2225
+# Last updated Sat 02/10/2024 22:06:17.45
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -156,6 +156,7 @@ payload:
   - DOMAIN,avatars.mds.yandex.net
   - DOMAIN,avatars.micro.blog
   - DOMAIN,avatars.plurk.com
+  - DOMAIN,avts.wmlabs.net
   - DOMAIN,aws-static.kwai.net
   - DOMAIN,az700632.vo.msecnd.net
   - DOMAIN,badbits.dwebops.pub
@@ -1434,6 +1435,7 @@ payload:
   - DOMAIN-SUFFIX,ctfassets.net
   - DOMAIN-SUFFIX,cthd.icu
   - DOMAIN-SUFFIX,cwwcdn.com
+  - DOMAIN-SUFFIX,daumcdn.net
   - DOMAIN-SUFFIX,debian.org
   - DOMAIN-SUFFIX,delvenetworks.com
   - DOMAIN-SUFFIX,deno.land
@@ -2106,6 +2108,7 @@ payload:
   - DOMAIN-SUFFIX,statically.io
   - DOMAIN-SUFFIX,staticaly.com
   - DOMAIN-SUFFIX,staticflickr.com
+  - DOMAIN-SUFFIX,staticimgly.com
   - DOMAIN-SUFFIX,staticworld.net
   - DOMAIN-SUFFIX,statuspage.io
   - DOMAIN-SUFFIX,steamstatic.com
