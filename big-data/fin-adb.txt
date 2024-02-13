@@ -1,5 +1,5 @@
-# Adblock total line 3814
-# Last updated Sat 02/10/2024 22:06:25.80
+# Adblock total line 3841
+# Last updated Tue 02/13/2024 22:10:37.56
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||9191.ga^
@@ -175,6 +175,7 @@
 ||binaries.prisma.sh^
 ||binary-factory.kde.org^
 ||blacklist.tampermonkey.net^
+||blizzard.gcdn.cloudn.co.kr^
 ||boards.greenhouse.io^
 ||boot.netboot.xyz^
 ||bot.ivy.ai^
@@ -353,6 +354,7 @@
 ||cdn.shopify.com^
 ||cdn.shoppinggives.com^
 ||cdn.signalfx.com^
+||cdn.simpleicons.org^
 ||cdn.sketch.com^
 ||cdn.skk.moe^
 ||cdn.smooch.io^
@@ -503,9 +505,12 @@
 ||download-core.sys.truenas.net^
 ||download.anydesk.com^
 ||download.beeper.com^
+||download.dlsite.com^
+||download.dm.origin.com^
 ||download.docker.com^
 ||download.gigabyte.com^
 ||download.gimp.org^
+||download.hikarifield.co.jp^
 ||download.iboysoft.com^
 ||download.maxmind.com^
 ||download.mikrotik.com^
@@ -520,6 +525,9 @@
 ||download.todesktop.com^
 ||download.typora.io^
 ||download.visualstudio.microsoft.com^
+||download2.epicgames.com^
+||download3.epicgames.com^
+||download4.epicgames.com^
 ||downloadr2.apkmirror.com^
 ||downloads.coindesk.com^
 ||downloads.openwrt.org^
@@ -533,6 +541,7 @@
 ||edge-mobile-static.azureedge.net^
 ||edge.cwtv-vod-ext.top.comcast.net^
 ||edge.personalizer.io^
+||edge.steam-dns.top.comcast.net^
 ||edgeassetservice.azureedge.net^
 ||edgedl.me.gvt4.com^
 ||edgestatic.azureedge.net^
@@ -561,6 +570,7 @@
 ||f003.backblazeb2.com^
 ||f004.backblazeb2.com^
 ||fast.wistia.com^
+||fastly-download.epicgames.com^
 ||favicons.nextdns.io^
 ||favicons.teams.cloudflare.com^
 ||fedorapeople.org^
@@ -606,6 +616,9 @@
 ||gmedia.playstation.com^
 ||go.vercel.com^
 ||godoc.org^
+||gog-cdn-fastly-cp77.gog.com^
+||gog-cdn-fastly.gog.com^
+||gog-cdn-lumen.secure2.footprint.net^
 ||gopkg.in^
 ||graph.facebook.com^
 ||gravatar.cat.net^
@@ -646,6 +659,7 @@
 ||ias.r10s.jp^
 ||icons.buffer.com^
 ||icons.duckduckgo.com^
+||icons.ly^
 ||imag.malavida.com^
 ||image.civitai.com^
 ||image.crisp.chat^
@@ -678,6 +692,7 @@
 ||images.g2crowd.com^
 ||images.idgesg.net^
 ||images.macrumors.com^
+||images.moovitapp.com^
 ||images.opencollective.com^
 ||images.pexels.com^
 ||images.plurk.com^
@@ -767,6 +782,7 @@
 ||kh.google.com^
 ||ktpx.amazon.com^
 ||lain.bgm.tv^
+||level3.blizzard.com^
 ||lib.arvancloud.com^
 ||libs.quillbot.com^
 ||link.storjshare.io^
@@ -860,6 +876,7 @@
 ||npmgraph.js.org^
 ||nr.staticblitz.com^
 ||o.n1mp.org^
+||object.innei.in^
 ||objects.g0v.social^
 ||objects.hit.moe^
 ||ocecdn.oraclecloud.com^
@@ -896,6 +913,7 @@
 ||pba.apple.com^
 ||pcz.javidol.org^
 ||pengtu.cc^
+||pf-cdn-content-prod.azureedge.net^
 ||phishing.army^
 ||photos5.appleinsider.com^
 ||pic.7mmtv.me^
@@ -1063,9 +1081,11 @@
 ||sigma9.zokhoi.com^
 ||signal.cdnbye.com^
 ||signalcloud.cdnbye.com^
+||simpleicons.org^
 ||simplicity.trustpilot.com^
 ||sites.super.so^
 ||skills-assets.pstmn.io^
+||skimdb.npmjs.com^
 ||sm.ign.com^
 ||sn-s3-cdn.angry.im^
 ||snippet.growsumo.com^
@@ -1343,6 +1363,8 @@
 ||www.typescriptlang.org^
 ||wwwimages2.adobe.com^
 ||xpaywalletcdn.azureedge.net^
+||xvcf1.xboxlive.com^
+||xvcf2.xboxlive.com^
 ||ysa-static.passport.yandex.net^
 ||yummlystatic.com^
 ||10musume.com^
@@ -1621,9 +1643,11 @@
 ||cdn-spurit.com^
 ||cdn-uploads.huggingface.co^
 ||cdn.angruo.com^
+||cdn.blizzard.com^
 ||cdn.cloudflare.net^
 ||cdn.cwinfo.net^
 ||cdn.discordapp.com^
+||cdn.ea.com^
 ||cdn.entelectonline.co.za^
 ||cdn.greenhouse.io^
 ||cdn.hinative.com^
@@ -1724,6 +1748,7 @@
 ||connatix.com^
 ||containersonaws.com^
 ||content-storage-upload.googleapis.com^
+||content.cdp.bethesda.net^
 ||content.jwplatform.com^
 ||content.steampowered.com^
 ||content001.bet365.com^
@@ -1913,6 +1938,7 @@
 ||disquscdn.com^
 ||divio-media.net^
 ||dl-file.xyz^
+||dl.dlsite.com^
 ||dl.elementary.io^
 ||dl.free.fr^
 ||dl.steam.clngaa.com^
@@ -1945,6 +1971,7 @@
 ||downace.com^
 ||downfile.site^
 ||download^
+||download.cdp.bethesda.net^
 ||download.epicgames.com^
 ||download.gg^
 ||download.mokeedev.com^

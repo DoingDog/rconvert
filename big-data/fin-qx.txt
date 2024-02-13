@@ -1,5 +1,5 @@
-# Quantumult total line 4750
-# Last updated Sat 02/10/2024 22:06:25.67
+# Quantumult total line 4777
+# Last updated Tue 02/13/2024 22:10:37.44
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -175,6 +175,7 @@ HOST,badges.greenkeeper.io,LIST
 HOST,binaries.prisma.sh,LIST
 HOST,binary-factory.kde.org,LIST
 HOST,blacklist.tampermonkey.net,LIST
+HOST,blizzard.gcdn.cloudn.co.kr,LIST
 HOST,boards.greenhouse.io,LIST
 HOST,boot.netboot.xyz,LIST
 HOST,bot.ivy.ai,LIST
@@ -353,6 +354,7 @@ HOST,cdn.sheetjs.com,LIST
 HOST,cdn.shopify.com,LIST
 HOST,cdn.shoppinggives.com,LIST
 HOST,cdn.signalfx.com,LIST
+HOST,cdn.simpleicons.org,LIST
 HOST,cdn.sketch.com,LIST
 HOST,cdn.skk.moe,LIST
 HOST,cdn.smooch.io,LIST
@@ -503,9 +505,12 @@ HOST,down.filen.net,LIST
 HOST,download-core.sys.truenas.net,LIST
 HOST,download.anydesk.com,LIST
 HOST,download.beeper.com,LIST
+HOST,download.dlsite.com,LIST
+HOST,download.dm.origin.com,LIST
 HOST,download.docker.com,LIST
 HOST,download.gigabyte.com,LIST
 HOST,download.gimp.org,LIST
+HOST,download.hikarifield.co.jp,LIST
 HOST,download.iboysoft.com,LIST
 HOST,download.maxmind.com,LIST
 HOST,download.mikrotik.com,LIST
@@ -520,6 +525,9 @@ HOST,download.tensorflow.google.com,LIST
 HOST,download.todesktop.com,LIST
 HOST,download.typora.io,LIST
 HOST,download.visualstudio.microsoft.com,LIST
+HOST,download2.epicgames.com,LIST
+HOST,download3.epicgames.com,LIST
+HOST,download4.epicgames.com,LIST
 HOST,downloadr2.apkmirror.com,LIST
 HOST,downloads.coindesk.com,LIST
 HOST,downloads.openwrt.org,LIST
@@ -533,6 +541,7 @@ HOST,edge-consumer-static.azureedge.net,LIST
 HOST,edge-mobile-static.azureedge.net,LIST
 HOST,edge.cwtv-vod-ext.top.comcast.net,LIST
 HOST,edge.personalizer.io,LIST
+HOST,edge.steam-dns.top.comcast.net,LIST
 HOST,edgeassetservice.azureedge.net,LIST
 HOST,edgedl.me.gvt4.com,LIST
 HOST,edgestatic.azureedge.net,LIST
@@ -561,6 +570,7 @@ HOST,f002.backblazeb2.com,LIST
 HOST,f003.backblazeb2.com,LIST
 HOST,f004.backblazeb2.com,LIST
 HOST,fast.wistia.com,LIST
+HOST,fastly-download.epicgames.com,LIST
 HOST,favicons.nextdns.io,LIST
 HOST,favicons.teams.cloudflare.com,LIST
 HOST,fedorapeople.org,LIST
@@ -606,6 +616,9 @@ HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
 HOST,go.vercel.com,LIST
 HOST,godoc.org,LIST
+HOST,gog-cdn-fastly-cp77.gog.com,LIST
+HOST,gog-cdn-fastly.gog.com,LIST
+HOST,gog-cdn-lumen.secure2.footprint.net,LIST
 HOST,gopkg.in,LIST
 HOST,graph.facebook.com,LIST
 HOST,gravatar.cat.net,LIST
@@ -646,6 +659,7 @@ HOST,i3.wp.com,LIST
 HOST,ias.r10s.jp,LIST
 HOST,icons.buffer.com,LIST
 HOST,icons.duckduckgo.com,LIST
+HOST,icons.ly,LIST
 HOST,imag.malavida.com,LIST
 HOST,image.civitai.com,LIST
 HOST,image.crisp.chat,LIST
@@ -678,6 +692,7 @@ HOST,images.freeimages.com,LIST
 HOST,images.g2crowd.com,LIST
 HOST,images.idgesg.net,LIST
 HOST,images.macrumors.com,LIST
+HOST,images.moovitapp.com,LIST
 HOST,images.opencollective.com,LIST
 HOST,images.pexels.com,LIST
 HOST,images.plurk.com,LIST
@@ -767,6 +782,7 @@ HOST,kdata1.com,LIST
 HOST,kh.google.com,LIST
 HOST,ktpx.amazon.com,LIST
 HOST,lain.bgm.tv,LIST
+HOST,level3.blizzard.com,LIST
 HOST,lib.arvancloud.com,LIST
 HOST,libs.quillbot.com,LIST
 HOST,link.storjshare.io,LIST
@@ -860,6 +876,7 @@ HOST,np-edge.itunes.apple.com,LIST
 HOST,npmgraph.js.org,LIST
 HOST,nr.staticblitz.com,LIST
 HOST,o.n1mp.org,LIST
+HOST,object.innei.in,LIST
 HOST,objects.g0v.social,LIST
 HOST,objects.hit.moe,LIST
 HOST,ocecdn.oraclecloud.com,LIST
@@ -896,6 +913,7 @@ HOST,parts.blog.livedoor.jp,LIST
 HOST,pba.apple.com,LIST
 HOST,pcz.javidol.org,LIST
 HOST,pengtu.cc,LIST
+HOST,pf-cdn-content-prod.azureedge.net,LIST
 HOST,phishing.army,LIST
 HOST,photos5.appleinsider.com,LIST
 HOST,pic.7mmtv.me,LIST
@@ -1063,9 +1081,11 @@ HOST,sig.grumpybumpers.com,LIST
 HOST,sigma9.zokhoi.com,LIST
 HOST,signal.cdnbye.com,LIST
 HOST,signalcloud.cdnbye.com,LIST
+HOST,simpleicons.org,LIST
 HOST,simplicity.trustpilot.com,LIST
 HOST,sites.super.so,LIST
 HOST,skills-assets.pstmn.io,LIST
+HOST,skimdb.npmjs.com,LIST
 HOST,sm.ign.com,LIST
 HOST,sn-s3-cdn.angry.im,LIST
 HOST,snippet.growsumo.com,LIST
@@ -1343,6 +1363,8 @@ HOST,www.pngmart.com,LIST
 HOST,www.typescriptlang.org,LIST
 HOST,wwwimages2.adobe.com,LIST
 HOST,xpaywalletcdn.azureedge.net,LIST
+HOST,xvcf1.xboxlive.com,LIST
+HOST,xvcf2.xboxlive.com,LIST
 HOST,ysa-static.passport.yandex.net,LIST
 HOST,yummlystatic.com,LIST
 HOST-SUFFIX,10musume.com,LIST
@@ -1621,9 +1643,11 @@ HOST-SUFFIX,cdkworkshop.com,LIST
 HOST-SUFFIX,cdn-spurit.com,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn.angruo.com,LIST
+HOST-SUFFIX,cdn.blizzard.com,LIST
 HOST-SUFFIX,cdn.cloudflare.net,LIST
 HOST-SUFFIX,cdn.cwinfo.net,LIST
 HOST-SUFFIX,cdn.discordapp.com,LIST
+HOST-SUFFIX,cdn.ea.com,LIST
 HOST-SUFFIX,cdn.entelectonline.co.za,LIST
 HOST-SUFFIX,cdn.greenhouse.io,LIST
 HOST-SUFFIX,cdn.hinative.com,LIST
@@ -1724,6 +1748,7 @@ HOST-SUFFIX,comicporn.xxx,LIST
 HOST-SUFFIX,connatix.com,LIST
 HOST-SUFFIX,containersonaws.com,LIST
 HOST-SUFFIX,content-storage-upload.googleapis.com,LIST
+HOST-SUFFIX,content.cdp.bethesda.net,LIST
 HOST-SUFFIX,content.jwplatform.com,LIST
 HOST-SUFFIX,content.steampowered.com,LIST
 HOST-SUFFIX,content001.bet365.com,LIST
@@ -1913,6 +1938,7 @@ HOST-SUFFIX,disneyworld-go.com,LIST
 HOST-SUFFIX,disquscdn.com,LIST
 HOST-SUFFIX,divio-media.net,LIST
 HOST-SUFFIX,dl-file.xyz,LIST
+HOST-SUFFIX,dl.dlsite.com,LIST
 HOST-SUFFIX,dl.elementary.io,LIST
 HOST-SUFFIX,dl.free.fr,LIST
 HOST-SUFFIX,dl.steam.clngaa.com,LIST
@@ -1945,6 +1971,7 @@ HOST-SUFFIX,down.mdiaload.com,LIST
 HOST-SUFFIX,downace.com,LIST
 HOST-SUFFIX,downfile.site,LIST
 HOST-SUFFIX,download,LIST
+HOST-SUFFIX,download.cdp.bethesda.net,LIST
 HOST-SUFFIX,download.epicgames.com,LIST
 HOST-SUFFIX,download.gg,LIST
 HOST-SUFFIX,download.mokeedev.com,LIST

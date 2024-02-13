@@ -1,5 +1,5 @@
-# Main total line 4765
-# Last updated Sat 02/10/2024 22:06:25.53
+# Main total line 4792
+# Last updated Tue 02/13/2024 22:10:37.31
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
@@ -175,6 +175,7 @@ DOMAIN,badges.greenkeeper.io
 DOMAIN,binaries.prisma.sh
 DOMAIN,binary-factory.kde.org
 DOMAIN,blacklist.tampermonkey.net
+DOMAIN,blizzard.gcdn.cloudn.co.kr
 DOMAIN,boards.greenhouse.io
 DOMAIN,boot.netboot.xyz
 DOMAIN,bot.ivy.ai
@@ -353,6 +354,7 @@ DOMAIN,cdn.sheetjs.com
 DOMAIN,cdn.shopify.com
 DOMAIN,cdn.shoppinggives.com
 DOMAIN,cdn.signalfx.com
+DOMAIN,cdn.simpleicons.org
 DOMAIN,cdn.sketch.com
 DOMAIN,cdn.skk.moe
 DOMAIN,cdn.smooch.io
@@ -503,9 +505,12 @@ DOMAIN,down.filen.net
 DOMAIN,download-core.sys.truenas.net
 DOMAIN,download.anydesk.com
 DOMAIN,download.beeper.com
+DOMAIN,download.dlsite.com
+DOMAIN,download.dm.origin.com
 DOMAIN,download.docker.com
 DOMAIN,download.gigabyte.com
 DOMAIN,download.gimp.org
+DOMAIN,download.hikarifield.co.jp
 DOMAIN,download.iboysoft.com
 DOMAIN,download.maxmind.com
 DOMAIN,download.mikrotik.com
@@ -520,6 +525,9 @@ DOMAIN,download.tensorflow.google.com
 DOMAIN,download.todesktop.com
 DOMAIN,download.typora.io
 DOMAIN,download.visualstudio.microsoft.com
+DOMAIN,download2.epicgames.com
+DOMAIN,download3.epicgames.com
+DOMAIN,download4.epicgames.com
 DOMAIN,downloadr2.apkmirror.com
 DOMAIN,downloads.coindesk.com
 DOMAIN,downloads.openwrt.org
@@ -533,6 +541,7 @@ DOMAIN,edge-consumer-static.azureedge.net
 DOMAIN,edge-mobile-static.azureedge.net
 DOMAIN,edge.cwtv-vod-ext.top.comcast.net
 DOMAIN,edge.personalizer.io
+DOMAIN,edge.steam-dns.top.comcast.net
 DOMAIN,edgeassetservice.azureedge.net
 DOMAIN,edgedl.me.gvt4.com
 DOMAIN,edgestatic.azureedge.net
@@ -561,6 +570,7 @@ DOMAIN,f002.backblazeb2.com
 DOMAIN,f003.backblazeb2.com
 DOMAIN,f004.backblazeb2.com
 DOMAIN,fast.wistia.com
+DOMAIN,fastly-download.epicgames.com
 DOMAIN,favicons.nextdns.io
 DOMAIN,favicons.teams.cloudflare.com
 DOMAIN,fedorapeople.org
@@ -606,6 +616,9 @@ DOMAIN,glyph.medium.com
 DOMAIN,gmedia.playstation.com
 DOMAIN,go.vercel.com
 DOMAIN,godoc.org
+DOMAIN,gog-cdn-fastly-cp77.gog.com
+DOMAIN,gog-cdn-fastly.gog.com
+DOMAIN,gog-cdn-lumen.secure2.footprint.net
 DOMAIN,gopkg.in
 DOMAIN,graph.facebook.com
 DOMAIN,gravatar.cat.net
@@ -646,6 +659,7 @@ DOMAIN,i3.wp.com
 DOMAIN,ias.r10s.jp
 DOMAIN,icons.buffer.com
 DOMAIN,icons.duckduckgo.com
+DOMAIN,icons.ly
 DOMAIN,imag.malavida.com
 DOMAIN,image.civitai.com
 DOMAIN,image.crisp.chat
@@ -678,6 +692,7 @@ DOMAIN,images.freeimages.com
 DOMAIN,images.g2crowd.com
 DOMAIN,images.idgesg.net
 DOMAIN,images.macrumors.com
+DOMAIN,images.moovitapp.com
 DOMAIN,images.opencollective.com
 DOMAIN,images.pexels.com
 DOMAIN,images.plurk.com
@@ -767,6 +782,7 @@ DOMAIN,kdata1.com
 DOMAIN,kh.google.com
 DOMAIN,ktpx.amazon.com
 DOMAIN,lain.bgm.tv
+DOMAIN,level3.blizzard.com
 DOMAIN,lib.arvancloud.com
 DOMAIN,libs.quillbot.com
 DOMAIN,link.storjshare.io
@@ -860,6 +876,7 @@ DOMAIN,np-edge.itunes.apple.com
 DOMAIN,npmgraph.js.org
 DOMAIN,nr.staticblitz.com
 DOMAIN,o.n1mp.org
+DOMAIN,object.innei.in
 DOMAIN,objects.g0v.social
 DOMAIN,objects.hit.moe
 DOMAIN,ocecdn.oraclecloud.com
@@ -896,6 +913,7 @@ DOMAIN,parts.blog.livedoor.jp
 DOMAIN,pba.apple.com
 DOMAIN,pcz.javidol.org
 DOMAIN,pengtu.cc
+DOMAIN,pf-cdn-content-prod.azureedge.net
 DOMAIN,phishing.army
 DOMAIN,photos5.appleinsider.com
 DOMAIN,pic.7mmtv.me
@@ -1063,9 +1081,11 @@ DOMAIN,sig.grumpybumpers.com
 DOMAIN,sigma9.zokhoi.com
 DOMAIN,signal.cdnbye.com
 DOMAIN,signalcloud.cdnbye.com
+DOMAIN,simpleicons.org
 DOMAIN,simplicity.trustpilot.com
 DOMAIN,sites.super.so
 DOMAIN,skills-assets.pstmn.io
+DOMAIN,skimdb.npmjs.com
 DOMAIN,sm.ign.com
 DOMAIN,sn-s3-cdn.angry.im
 DOMAIN,snippet.growsumo.com
@@ -1343,6 +1363,8 @@ DOMAIN,www.pngmart.com
 DOMAIN,www.typescriptlang.org
 DOMAIN,wwwimages2.adobe.com
 DOMAIN,xpaywalletcdn.azureedge.net
+DOMAIN,xvcf1.xboxlive.com
+DOMAIN,xvcf2.xboxlive.com
 DOMAIN,ysa-static.passport.yandex.net
 DOMAIN,yummlystatic.com
 DOMAIN-SUFFIX,10musume.com
@@ -1621,9 +1643,11 @@ DOMAIN-SUFFIX,cdkworkshop.com
 DOMAIN-SUFFIX,cdn-spurit.com
 DOMAIN-SUFFIX,cdn-uploads.huggingface.co
 DOMAIN-SUFFIX,cdn.angruo.com
+DOMAIN-SUFFIX,cdn.blizzard.com
 DOMAIN-SUFFIX,cdn.cloudflare.net
 DOMAIN-SUFFIX,cdn.cwinfo.net
 DOMAIN-SUFFIX,cdn.discordapp.com
+DOMAIN-SUFFIX,cdn.ea.com
 DOMAIN-SUFFIX,cdn.entelectonline.co.za
 DOMAIN-SUFFIX,cdn.greenhouse.io
 DOMAIN-SUFFIX,cdn.hinative.com
@@ -1724,6 +1748,7 @@ DOMAIN-SUFFIX,comicporn.xxx
 DOMAIN-SUFFIX,connatix.com
 DOMAIN-SUFFIX,containersonaws.com
 DOMAIN-SUFFIX,content-storage-upload.googleapis.com
+DOMAIN-SUFFIX,content.cdp.bethesda.net
 DOMAIN-SUFFIX,content.jwplatform.com
 DOMAIN-SUFFIX,content.steampowered.com
 DOMAIN-SUFFIX,content001.bet365.com
@@ -1913,6 +1938,7 @@ DOMAIN-SUFFIX,disneyworld-go.com
 DOMAIN-SUFFIX,disquscdn.com
 DOMAIN-SUFFIX,divio-media.net
 DOMAIN-SUFFIX,dl-file.xyz
+DOMAIN-SUFFIX,dl.dlsite.com
 DOMAIN-SUFFIX,dl.elementary.io
 DOMAIN-SUFFIX,dl.free.fr
 DOMAIN-SUFFIX,dl.steam.clngaa.com
@@ -1945,6 +1971,7 @@ DOMAIN-SUFFIX,down.mdiaload.com
 DOMAIN-SUFFIX,downace.com
 DOMAIN-SUFFIX,downfile.site
 DOMAIN-SUFFIX,download
+DOMAIN-SUFFIX,download.cdp.bethesda.net
 DOMAIN-SUFFIX,download.epicgames.com
 DOMAIN-SUFFIX,download.gg
 DOMAIN-SUFFIX,download.mokeedev.com
