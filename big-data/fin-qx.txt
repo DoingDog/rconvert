@@ -1,5 +1,5 @@
-# Quantumult total line 4777
-# Last updated Tue 02/13/2024 22:10:37.44
+# Quantumult total line 4786
+# Last updated Fri 02/16/2024 22:10:08.96
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -99,8 +99,10 @@ HOST,assets.kraken.com,LIST
 HOST,assets.leetcode.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
 HOST,assets.mailgun.com,LIST
+HOST,assets.mastercard.com,LIST
 HOST,assets.matters.news,LIST
 HOST,assets.mayoclinic.org,LIST
+HOST,assets.monei.com,LIST
 HOST,assets.mozilla.social,LIST
 HOST,assets.msn.com,LIST
 HOST,assets.nationbuilder.com,LIST
@@ -288,6 +290,7 @@ HOST,cdn.headwayapp.co,LIST
 HOST,cdn.hellofresh.com,LIST
 HOST,cdn.hentaibomb.com,LIST
 HOST,cdn.heysavvy.com,LIST
+HOST,cdn.hongkongcard.com,LIST
 HOST,cdn.hyperbeam.com,LIST
 HOST,cdn.imageengine.io,LIST
 HOST,cdn.img.ly,LIST
@@ -331,6 +334,7 @@ HOST,cdn.piano.io,LIST
 HOST,cdn.pickystory.com,LIST
 HOST,cdn.pika.dev,LIST
 HOST,cdn.pixabay.com,LIST
+HOST,cdn.plaid.com,LIST
 HOST,cdn.player.fm,LIST
 HOST,cdn.plu.mx,LIST
 HOST,cdn.pricespider.com,LIST
@@ -391,6 +395,7 @@ HOST,cdn03.jotfor.ms,LIST
 HOST,cdn1.dan.com,LIST
 HOST,cdn1.epicgames.com,LIST
 HOST,cdn1.stamped.io,LIST
+HOST,cdn1.sysgears.com,LIST
 HOST,cdn1.unrealengine.com,LIST
 HOST,cdn10.hiftporn.fun,LIST
 HOST,cdn2.dan.com,LIST
@@ -400,12 +405,15 @@ HOST,cdn2.epicgames.com,LIST
 HOST,cdn2.hextom.com,LIST
 HOST,cdn2.onlyfans.com,LIST
 HOST,cdn2.stamped.io,LIST
+HOST,cdn2.sysgears.com,LIST
 HOST,cdn2.unrealengine.com,LIST
 HOST,cdn3.dan.com,LIST
 HOST,cdn3.hextom.com,LIST
 HOST,cdn3.onlyfans.com,LIST
 HOST,cdn3.stamped.io,LIST
+HOST,cdn3.sysgears.com,LIST
 HOST,cdn3.unrealengine.com,LIST
+HOST,cdn4.sysgears.com,LIST
 HOST,cdn5.hextom.com,LIST
 HOST,cdn6.aptoide.com,LIST
 HOST,cdn7.pornmaster.fun,LIST
@@ -1180,6 +1188,7 @@ HOST,static.meiguo.com,LIST
 HOST,static.mendeley.com,LIST
 HOST,static.missav.com,LIST
 HOST,static.mocortech.com,LIST
+HOST,static.monei.net,LIST
 HOST,static.mysph.sph.com.sg,LIST
 HOST,static.namebeta.com,LIST
 HOST,static.news.bitcoin.com,LIST
