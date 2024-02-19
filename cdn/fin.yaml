@@ -1,5 +1,5 @@
-# Clash total line 2240
-# Last updated Fri 02/16/2024 22:09:58.63
+# Clash total line 2245
+# Last updated Mon 02/19/2024 22:07:12.89
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -216,8 +216,10 @@ payload:
   - DOMAIN,cdn-txweb.transifex.com
   - DOMAIN,cdn-www.bluestacks.com
   - DOMAIN,cdn-yotpo-images-production.yotpo.com
+  - DOMAIN,cdn.9to5terminal.com
   - DOMAIN,cdn.accounts.nintendo.com
   - DOMAIN,cdn.adguard.com
+  - DOMAIN,cdn.adguard.info
   - DOMAIN,cdn.amcharts.com
   - DOMAIN,cdn.announcekit.app
   - DOMAIN,cdn.apkmonk.com
@@ -318,6 +320,7 @@ payload:
   - DOMAIN,cdn.paddle.com
   - DOMAIN,cdn.pagefly.io
   - DOMAIN,cdn.pagic.org
+  - DOMAIN,cdn.parsely.com
   - DOMAIN,cdn.pathfactory.com
   - DOMAIN,cdn.perfops.net
   - DOMAIN,cdn.piano.io
@@ -415,6 +418,7 @@ payload:
   - DOMAIN,cdnapisec.kaltura.com
   - DOMAIN,cdne-pics.youjizz.com
   - DOMAIN,cdnjs.betterstack.com
+  - DOMAIN,cdnjs.buymeacoffee.com
   - DOMAIN,cdnjs.cat.net
   - DOMAIN,cdnjs.cloudflare.com
   - DOMAIN,cdnl.tnaflix.com
@@ -802,6 +806,7 @@ payload:
   - DOMAIN,objects.hit.moe
   - DOMAIN,ocecdn.oraclecloud.com
   - DOMAIN,ocsp.digicert.com
+  - DOMAIN,ocsp.sectigo.com
   - DOMAIN,ocsp2.apple.com
   - DOMAIN,ohttp-relay1.fastly-edge.com
   - DOMAIN,ooo.0o0.ooo

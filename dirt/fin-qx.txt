@@ -1,5 +1,5 @@
-# Quantumult total line 4097
-# Last updated Fri 02/16/2024 22:10:17.08
+# Quantumult total line 4194
+# Last updated Mon 02/19/2024 22:07:30.19
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -17,10 +17,13 @@ HOST,kc.kexinshe.com,LIST
 HOST,local.adguard.org,LIST
 HOST,origin-a.akamaihd.ne,LIST
 HOST,origin-a.akamaihd.net,LIST
+HOST,p-bstarstatic.akamaized.net,LIST
+HOST,p.bstarstatic.com,LIST
 HOST,raw.iqiq.io,LIST
 HOST,sms.imagetasks.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
-HOST,upos-hz-mirrorakam.akamaized.net,LIST
+HOST,upos-bstar-mirrorakam.akamaized.net,LIST
+HOST,upos-bstar1-mirrorakam.akamaized.net,LIST
 HOST,www.layuicdn.com,LIST
 HOST,www.libvideo.com,LIST
 HOST,www.yxssp.com,LIST
@@ -30,6 +33,7 @@ HOST-SUFFIX,0379home.com,LIST
 HOST-SUFFIX,055110.com,LIST
 HOST-SUFFIX,05sun.com,LIST
 HOST-SUFFIX,0759job.com,LIST
+HOST-SUFFIX,1.letvlive.com,LIST
 HOST-SUFFIX,10010.com,LIST
 HOST-SUFFIX,100bt.com,LIST
 HOST-SUFFIX,100offer.com,LIST
@@ -90,6 +94,7 @@ HOST-SUFFIX,1huizhan.com,LIST
 HOST-SUFFIX,1nongjing.com,LIST
 HOST-SUFFIX,1ting.com,LIST
 HOST-SUFFIX,1zhe.com,LIST
+HOST-SUFFIX,2.letvlive.com,LIST
 HOST-SUFFIX,21cn.com,LIST
 HOST-SUFFIX,21jingji.com,LIST
 HOST-SUFFIX,2265.com,LIST
@@ -262,6 +267,7 @@ HOST-SUFFIX,714.com,LIST
 HOST-SUFFIX,71acg.com,LIST
 HOST-SUFFIX,71acg.net,LIST
 HOST-SUFFIX,71edge.com,LIST
+HOST-SUFFIX,71edge.net,LIST
 HOST-SUFFIX,7230.com,LIST
 HOST-SUFFIX,72byte.com,LIST
 HOST-SUFFIX,72whys.com,LIST
@@ -327,6 +333,7 @@ HOST-SUFFIX,acwing.com,LIST
 HOST-SUFFIX,adimages.sina.com.hk,LIST
 HOST-SUFFIX,admin5.com,LIST
 HOST-SUFFIX,adobesc.com,LIST
+HOST-SUFFIX,ads1.lfengmobile.com,LIST
 HOST-SUFFIX,adxvip.com,LIST
 HOST-SUFFIX,af-south-1.myhuaweicloud.com,LIST
 HOST-SUFFIX,afdian.net,LIST
@@ -339,6 +346,7 @@ HOST-SUFFIX,agoralab.co,LIST
 HOST-SUFFIX,agrantsem.com,LIST
 HOST-SUFFIX,ahitv.com,LIST
 HOST-SUFFIX,aiaa.org,LIST
+HOST-SUFFIX,aianno.com,LIST
 HOST-SUFFIX,aicdn.com,LIST
 HOST-SUFFIX,aichaoxing.com,LIST
 HOST-SUFFIX,aicoinstorge.com,LIST
@@ -425,6 +433,7 @@ HOST-SUFFIX,amd.com,LIST
 HOST-SUFFIX,amemv.com,LIST
 HOST-SUFFIX,ams.org,LIST
 HOST-SUFFIX,andfx.net,LIST
+HOST-SUFFIX,androidgo.duapp.com,LIST
 HOST-SUFFIX,anfensi.com,LIST
 HOST-SUFFIX,animebytes.tv,LIST
 HOST-SUFFIX,animetamashi.com,LIST
@@ -452,6 +461,7 @@ HOST-SUFFIX,apaas-zone-test.com,LIST
 HOST-SUFFIX,apabi.com,LIST
 HOST-SUFFIX,apcdns.net,LIST
 HOST-SUFFIX,api.crisp.chat,LIST
+HOST-SUFFIX,api.game.letvstore.com,LIST
 HOST-SUFFIX,apifox.com,LIST
 HOST-SUFFIX,apigwtencent.com,LIST
 HOST-SUFFIX,apimkt.net,LIST
@@ -499,6 +509,8 @@ HOST-SUFFIX,baike.com,LIST
 HOST-SUFFIX,baitiao.com,LIST
 HOST-SUFFIX,baixing.com,LIST
 HOST-SUFFIX,baixing.net,LIST
+HOST-SUFFIX,baiying.com,LIST
+HOST-SUFFIX,baka.im,LIST
 HOST-SUFFIX,baltamatica.com,LIST
 HOST-SUFFIX,bamenzhushou.com,LIST
 HOST-SUFFIX,bangongziyuan.com,LIST
@@ -553,13 +565,6 @@ HOST-SUFFIX,bihu.com,LIST
 HOST-SUFFIX,biji.com,LIST
 HOST-SUFFIX,biliapi.com,LIST
 HOST-SUFFIX,biliapi.net,LIST
-HOST-SUFFIX,bilibili.cc,LIST
-HOST-SUFFIX,bilibili.com,LIST
-HOST-SUFFIX,bilibili.net,LIST
-HOST-SUFFIX,bilibili.tv,LIST
-HOST-SUFFIX,bilibiligame.co,LIST
-HOST-SUFFIX,bilibiligame.net,LIST
-HOST-SUFFIX,bilibilipay.com,LIST
 HOST-SUFFIX,bilicdn1.com,LIST
 HOST-SUFFIX,bilicdn2.com,LIST
 HOST-SUFFIX,bilicdn3.com,LIST
@@ -571,7 +576,9 @@ HOST-SUFFIX,biligame.com,LIST
 HOST-SUFFIX,biligame.net,LIST
 HOST-SUFFIX,biligo.com,LIST
 HOST-SUFFIX,biliimg.com,LIST
+HOST-SUFFIX,biliintl.co,LIST
 HOST-SUFFIX,biliintl.com,LIST
+HOST-SUFFIX,biliplus.com,LIST
 HOST-SUFFIX,bilivideo.com,LIST
 HOST-SUFFIX,bilivideo.net,LIST
 HOST-SUFFIX,bio-equip.com,LIST
@@ -962,6 +969,7 @@ HOST-SUFFIX,cloudyuxi.com,LIST
 HOST-SUFFIX,cloudzhongshan.com,LIST
 HOST-SUFFIX,cloudzhuhai.com,LIST
 HOST-SUFFIX,clsa.com,LIST
+HOST-SUFFIX,cm.fancyapi.com,LIST
 HOST-SUFFIX,cm.steampowered.com,LIST
 HOST-SUFFIX,cmb-leasing.com,LIST
 HOST-SUFFIX,cmbchina.biz,LIST
@@ -1042,6 +1050,7 @@ HOST-SUFFIX,coolbuy.com,LIST
 HOST-SUFFIX,cooldock.com,LIST
 HOST-SUFFIX,coolsite.vip,LIST
 HOST-SUFFIX,cootekservice.com,LIST
+HOST-SUFFIX,corari.com,LIST
 HOST-SUFFIX,cowcs.com,LIST
 HOST-SUFFIX,cowlevel.net,LIST
 HOST-SUFFIX,cowtransfer.com,LIST
@@ -1186,6 +1195,7 @@ HOST-SUFFIX,dl.pinyuncloud.com,LIST
 HOST-SUFFIX,dlgslb.net,LIST
 HOST-SUFFIX,dlnel.com,LIST
 HOST-SUFFIX,dlnel.org,LIST
+HOST-SUFFIX,dmhmusic.com,LIST
 HOST-SUFFIX,dmzj.com,LIST
 HOST-SUFFIX,dns.pub,LIST
 HOST-SUFFIX,dnspod.com,LIST
@@ -1260,6 +1270,7 @@ HOST-SUFFIX,dxdhd.com,LIST
 HOST-SUFFIX,dxpmedia.com,LIST
 HOST-SUFFIX,dxycdn.com,LIST
 HOST-SUFFIX,dxzq.net,LIST
+HOST-SUFFIX,dyhgames.com,LIST
 HOST-SUFFIX,dyhjw.com,LIST
 HOST-SUFFIX,dytt8.net,LIST
 HOST-SUFFIX,dzdvip.com,LIST
@@ -1450,6 +1461,7 @@ HOST-SUFFIX,gameitop.com,LIST
 HOST-SUFFIX,gameloft.com,LIST
 HOST-SUFFIX,gameloop.com,LIST
 HOST-SUFFIX,gamemei.com,LIST
+HOST-SUFFIX,gamenow.club,LIST
 HOST-SUFFIX,gamersky.com,LIST
 HOST-SUFFIX,gandi.net,LIST
 HOST-SUFFIX,ganji.com,LIST
@@ -1599,6 +1611,7 @@ HOST-SUFFIX,hdpost.top,LIST
 HOST-SUFFIX,hdroute.org,LIST
 HOST-SUFFIX,hdsky.me,LIST
 HOST-SUFFIX,hdslb.com,LIST
+HOST-SUFFIX,hdslb.net,LIST
 HOST-SUFFIX,hdslb.org,LIST
 HOST-SUFFIX,hdstreet.club,LIST
 HOST-SUFFIX,hdtime.org,LIST
@@ -1631,6 +1644,7 @@ HOST-SUFFIX,hiascend.com,LIST
 HOST-SUFFIX,hichina.com,LIST
 HOST-SUFFIX,hiclc.com,LIST
 HOST-SUFFIX,hicloud.com,LIST
+HOST-SUFFIX,hifuntv.com,LIST
 HOST-SUFFIX,hihocoder.com,LIST
 HOST-SUFFIX,hihonor.com,LIST
 HOST-SUFFIX,hiido.com,LIST
@@ -1704,6 +1718,7 @@ HOST-SUFFIX,huijiwiki.com,LIST
 HOST-SUFFIX,huize.com,LIST
 HOST-SUFFIX,hujia.org,LIST
 HOST-SUFFIX,hujiang.com,LIST
+HOST-SUFFIX,hunaniptv.com,LIST
 HOST-SUFFIX,hunantv.com,LIST
 HOST-SUFFIX,huochepiao.com,LIST
 HOST-SUFFIX,huocheso.com,LIST
@@ -1734,6 +1749,7 @@ HOST-SUFFIX,iask.com,LIST
 HOST-SUFFIX,ibaotu.com,LIST
 HOST-SUFFIX,ibcet.org,LIST
 HOST-SUFFIX,ibidian.com,LIST
+HOST-SUFFIX,ibkstore.com,LIST
 HOST-SUFFIX,ibreader.com,LIST
 HOST-SUFFIX,ibuychem.com,LIST
 HOST-SUFFIX,ibytedapm.com,LIST
@@ -2141,6 +2157,7 @@ HOST-SUFFIX,kuaizhan.com,LIST
 HOST-SUFFIX,kuangxiangit.com,LIST
 HOST-SUFFIX,kugou.com,LIST
 HOST-SUFFIX,kumiao.com,LIST
+HOST-SUFFIX,kumiao.tv,LIST
 HOST-SUFFIX,kunlunaq.com,LIST
 HOST-SUFFIX,kunlunar.com,LIST
 HOST-SUFFIX,kunlunca.com,LIST
@@ -2162,6 +2179,8 @@ HOST-SUFFIX,kunlunta.com,LIST
 HOST-SUFFIX,kunlunvi.com,LIST
 HOST-SUFFIX,kunlunwe.com,LIST
 HOST-SUFFIX,kuqin.com,LIST
+HOST-SUFFIX,kuxiaomiao.com,LIST
+HOST-SUFFIX,kuxiaomiao.net,LIST
 HOST-SUFFIX,kuyiso.com,LIST
 HOST-SUFFIX,kuyunbo.club,LIST
 HOST-SUFFIX,kwaizt.com,LIST
@@ -2530,6 +2549,7 @@ HOST-SUFFIX,nowcoder.com,LIST
 HOST-SUFFIX,nowcoder.net,LIST
 HOST-SUFFIX,nowcoder.org,LIST
 HOST-SUFFIX,nowscore.com,LIST
+HOST-SUFFIX,noxagile.duapp.com,LIST
 HOST-SUFFIX,npmmirror.com,LIST
 HOST-SUFFIX,npupt.com,LIST
 HOST-SUFFIX,nruan.com,LIST
@@ -2590,6 +2610,8 @@ HOST-SUFFIX,oracle-tencent.net,LIST
 HOST-SUFFIX,oracle.com,LIST
 HOST-SUFFIX,oray-img.com,LIST
 HOST-SUFFIX,oray.com,LIST
+HOST-SUFFIX,oray.net,LIST
+HOST-SUFFIX,orayimg.com,LIST
 HOST-SUFFIX,orient-fund.com,LIST
 HOST-SUFFIX,orpheus.network,LIST
 HOST-SUFFIX,osapublishing.org,LIST
@@ -2668,6 +2690,9 @@ HOST-SUFFIX,pphimalayanrt.com,LIST
 HOST-SUFFIX,pplive.com,LIST
 HOST-SUFFIX,pps.tv,LIST
 HOST-SUFFIX,ppsimg.com,LIST
+HOST-SUFFIX,ppstream.com,LIST
+HOST-SUFFIX,ppstream.net,LIST
+HOST-SUFFIX,ppsurl.com,LIST
 HOST-SUFFIX,pptbest.com,LIST
 HOST-SUFFIX,pptv.com,LIST
 HOST-SUFFIX,prestodb-china.com,LIST
@@ -2801,6 +2826,7 @@ HOST-SUFFIX,qunarzz.com,LIST
 HOST-SUFFIX,qunjielong.com,LIST
 HOST-SUFFIX,quumibao.com,LIST
 HOST-SUFFIX,quyaoya.com,LIST
+HOST-SUFFIX,qy.com,LIST
 HOST-SUFFIX,qy.net,LIST
 HOST-SUFFIX,qyer.com,LIST
 HOST-SUFFIX,qyerstatic.com,LIST
@@ -2892,6 +2918,7 @@ HOST-SUFFIX,shangshi360.com,LIST
 HOST-SUFFIX,shangzhibo.tv,LIST
 HOST-SUFFIX,shanhaitujian.com,LIST
 HOST-SUFFIX,shanshuihotel.com,LIST
+HOST-SUFFIX,sharejoytech.com,LIST
 HOST-SUFFIX,sharejs.com,LIST
 HOST-SUFFIX,sharepoint.com,LIST
 HOST-SUFFIX,shebiaotm.com,LIST
@@ -3070,6 +3097,7 @@ HOST-SUFFIX,tapimg.com,LIST
 HOST-SUFFIX,taptap.com,LIST
 HOST-SUFFIX,tawk.link,LIST
 HOST-SUFFIX,tawk.to,LIST
+HOST-SUFFIX,tazai.com,LIST
 HOST-SUFFIX,tbcache.com,LIST
 HOST-SUFFIX,tburl.in,LIST
 HOST-SUFFIX,tcdlive.com,LIST
@@ -3338,6 +3366,7 @@ HOST-SUFFIX,upai.com,LIST
 HOST-SUFFIX,upaiyun.com,LIST
 HOST-SUFFIX,upcdn.net,LIST
 HOST-SUFFIX,upe.net,LIST
+HOST-SUFFIX,upos-hz-mirrorakam.akamaized.net,LIST
 HOST-SUFFIX,upyun.com,LIST
 HOST-SUFFIX,urselect.com,LIST
 HOST-SUFFIX,urumqi-air.com,LIST
@@ -3440,6 +3469,7 @@ HOST-SUFFIX,wenjuan.com,LIST
 HOST-SUFFIX,wenku8.net,LIST
 HOST-SUFFIX,wenmingban.com,LIST
 HOST-SUFFIX,wenxin-ge.com,LIST
+HOST-SUFFIX,wenyupages.com,LIST
 HOST-SUFFIX,werewolf.53site.com,LIST
 HOST-SUFFIX,west95582.com,LIST
 HOST-SUFFIX,westlaw.com,LIST
@@ -3672,6 +3702,10 @@ HOST-SUFFIX,ynet.com,LIST
 HOST-SUFFIX,ynhr.com,LIST
 HOST-SUFFIX,yo9.com,LIST
 HOST-SUFFIX,yocajr.com,LIST
+HOST-SUFFIX,yodou.com,LIST
+HOST-SUFFIX,yoqoo.com,LIST
+HOST-SUFFIX,yoqoo.net,LIST
+HOST-SUFFIX,yoqoo.tv,LIST
 HOST-SUFFIX,youba.com,LIST
 HOST-SUFFIX,youboy.com,LIST
 HOST-SUFFIX,youdao.com,LIST
@@ -3679,7 +3713,9 @@ HOST-SUFFIX,youhua.com,LIST
 HOST-SUFFIX,youjiao.com,LIST
 HOST-SUFFIX,youke.co,LIST
 HOST-SUFFIX,youku.com,LIST
+HOST-SUFFIX,youku.org,LIST
 HOST-SUFFIX,youlian.fun,LIST
+HOST-SUFFIX,youqoo.net,LIST
 HOST-SUFFIX,youshang.com,LIST
 HOST-SUFFIX,youxiake.com,LIST
 HOST-SUFFIX,youxigt.com,LIST
@@ -3746,6 +3782,7 @@ HOST-SUFFIX,z28j.com,LIST
 HOST-SUFFIX,zaifan.com,LIST
 HOST-SUFFIX,zampda.net,LIST
 HOST-SUFFIX,zampdsp.com,LIST
+HOST-SUFFIX,zamplus.com,LIST
 HOST-SUFFIX,zastatic.com,LIST
 HOST-SUFFIX,zbjimg.com,LIST
 HOST-SUFFIX,zcjbgame.com,LIST
@@ -3845,6 +3882,7 @@ HOST-KEYWORD,alipay,LIST
 HOST-KEYWORD,aliyun,LIST
 HOST-KEYWORD,baidu,LIST
 HOST-KEYWORD,beplay,LIST
+HOST-KEYWORD,bilibili,LIST
 HOST-KEYWORD,cnki.net,LIST
 HOST-KEYWORD,deepdyve,LIST
 HOST-KEYWORD,els-cdn,LIST
@@ -3863,6 +3901,7 @@ IP-CIDR,1.255.62.0/24,LIST,no-resolve
 IP-CIDR,101.198.128.0/18,LIST,no-resolve
 IP-CIDR,101.198.192.0/19,LIST,no-resolve
 IP-CIDR,101.199.196.0/22,LIST,no-resolve
+IP-CIDR,101.224.0.0/13,LIST,no-resolve
 IP-CIDR,101.32.118.0/23,LIST,no-resolve
 IP-CIDR,101.32.96.0/20,LIST,no-resolve
 IP-CIDR,101.71.154.241/32,LIST,no-resolve
@@ -3878,6 +3917,8 @@ IP-CIDR,103.231.60.0/24,LIST,no-resolve
 IP-CIDR,103.235.44.0/22,LIST,no-resolve
 IP-CIDR,103.31.200.0/22,LIST,no-resolve
 IP-CIDR,103.38.56.0/22,LIST,no-resolve
+IP-CIDR,103.44.56.0/22,LIST,no-resolve
+IP-CIDR,103.5.34.153/32,LIST,no-resolve
 IP-CIDR,103.52.76.0/22,LIST,no-resolve
 IP-CIDR,103.69.140.0/23,LIST,no-resolve
 IP-CIDR,103.7.28.0/22,LIST,no-resolve
@@ -3896,14 +3937,18 @@ IP-CIDR,103.72.44.0/22,LIST,no-resolve
 IP-CIDR,103.72.48.0/21,LIST,no-resolve
 IP-CIDR,103.74.24.0/21,LIST,no-resolve
 IP-CIDR,103.74.48.0/22,LIST,no-resolve
+IP-CIDR,104.109.129.153/32,LIST,no-resolve
 IP-CIDR,104.193.88.0/22,LIST,no-resolve
 IP-CIDR,106.11.0.0/16,LIST,no-resolve
 IP-CIDR,106.12.0.0/15,LIST,no-resolve
 IP-CIDR,106.2.32.0/19,LIST,no-resolve
 IP-CIDR,106.2.64.0/18,LIST,no-resolve
+IP-CIDR,106.75.74.76/32,LIST,no-resolve
 IP-CIDR,109.244.0.0/16,LIST,no-resolve
+IP-CIDR,110.238.107.47/32,LIST,no-resolve
 IP-CIDR,110.76.21.0/24,LIST,no-resolve
 IP-CIDR,110.76.23.0/24,LIST,no-resolve
+IP-CIDR,111.206.25.147/32,LIST,no-resolve
 IP-CIDR,111.30.128.0/21,LIST,no-resolve
 IP-CIDR,111.30.136.0/24,LIST,no-resolve
 IP-CIDR,111.30.139.0/24,LIST,no-resolve
@@ -3932,6 +3977,9 @@ IP-CIDR,116.71.251.0/24,LIST,no-resolve
 IP-CIDR,116.71.96.0/20,LIST,no-resolve
 IP-CIDR,117.78.0.0/18,LIST,no-resolve
 IP-CIDR,118.24.63.156/32,LIST,no-resolve
+IP-CIDR,118.26.120.0/24,LIST,no-resolve
+IP-CIDR,118.26.32.0/23,LIST,no-resolve
+IP-CIDR,119.176.0.0/12,LIST,no-resolve
 IP-CIDR,119.28.0.0/15,LIST,no-resolve
 IP-CIDR,119.3.0.0/16,LIST,no-resolve
 IP-CIDR,119.38.208.0/20,LIST,no-resolve
@@ -3942,6 +3990,9 @@ IP-CIDR,119.8.0.0/21,LIST,no-resolve
 IP-CIDR,119.8.32.0/19,LIST,no-resolve
 IP-CIDR,120.195.181.180/32,LIST,no-resolve
 IP-CIDR,120.88.56.0/23,LIST,no-resolve
+IP-CIDR,120.92.108.182/32,LIST,no-resolve
+IP-CIDR,120.92.113.99/32,LIST,no-resolve
+IP-CIDR,120.92.153.217/32,LIST,no-resolve
 IP-CIDR,121.36.0.0/17,LIST,no-resolve
 IP-CIDR,121.36.128.0/18,LIST,no-resolve
 IP-CIDR,121.37.0.0/17,LIST,no-resolve
@@ -4020,6 +4071,7 @@ IP-CIDR,200.32.52.0/24,LIST,no-resolve
 IP-CIDR,200.32.54.0/24,LIST,no-resolve
 IP-CIDR,200.32.57.0/24,LIST,no-resolve
 IP-CIDR,202.46.48.0/20,LIST,no-resolve
+IP-CIDR,203.107.1.0/24,LIST,no-resolve
 IP-CIDR,203.135.0.0/22,LIST,no-resolve
 IP-CIDR,203.135.11.0/24,LIST,no-resolve
 IP-CIDR,203.135.13.0/24,LIST,no-resolve
@@ -4038,15 +4090,28 @@ IP-CIDR,203.135.50.0/24,LIST,no-resolve
 IP-CIDR,203.135.8.0/23,LIST,no-resolve
 IP-CIDR,203.195.128.0/17,LIST,no-resolve
 IP-CIDR,203.205.128.0/17,LIST,no-resolve
+IP-CIDR,203.211.4.169/32,LIST,no-resolve
+IP-CIDR,203.211.4.193/32,LIST,no-resolve
+IP-CIDR,203.74.95.131/32,LIST,no-resolve
+IP-CIDR,203.74.95.139/32,LIST,no-resolve
+IP-CIDR,203.74.95.153/32,LIST,no-resolve
 IP-CIDR,203.90.238.0/24,LIST,no-resolve
 IP-CIDR,205.204.96.0/19,LIST,no-resolve
+IP-CIDR,210.201.32.11/32,LIST,no-resolve
+IP-CIDR,210.201.32.8/32,LIST,no-resolve
 IP-CIDR,210.4.138.0/24,LIST,no-resolve
+IP-CIDR,210.71.227.200/32,LIST,no-resolve
+IP-CIDR,210.71.227.202/32,LIST,no-resolve
 IP-CIDR,211.152.128.0/23,LIST,no-resolve
 IP-CIDR,211.152.132.0/23,LIST,no-resolve
 IP-CIDR,211.152.148.0/23,LIST,no-resolve
 IP-CIDR,212.129.128.0/17,LIST,no-resolve
 IP-CIDR,212.64.0.0/17,LIST,no-resolve
 IP-CIDR,223.252.192.0/19,LIST,no-resolve
+IP-CIDR,23.211.15.99/32,LIST,no-resolve
+IP-CIDR,23.40.241.251/32,LIST,no-resolve
+IP-CIDR,23.40.242.10/32,LIST,no-resolve
+IP-CIDR,23.53.32.88/32,LIST,no-resolve
 IP-CIDR,39.105.63.80/32,LIST,no-resolve
 IP-CIDR,41.222.240.0/22,LIST,no-resolve
 IP-CIDR,41.223.119.0/24,LIST,no-resolve
@@ -4078,6 +4143,9 @@ IP-CIDR,47.76.0.0/14,LIST,no-resolve
 IP-CIDR,47.80.0.0/12,LIST,no-resolve
 IP-CIDR,49.4.0.0/17,LIST,no-resolve
 IP-CIDR,49.51.0.0/16,LIST,no-resolve
+IP-CIDR,58.49.111.117/32,LIST,no-resolve
+IP-CIDR,58.49.111.79/32,LIST,no-resolve
+IP-CIDR,58.49.111.95/32,LIST,no-resolve
 IP-CIDR,59.111.0.0/20,LIST,no-resolve
 IP-CIDR,59.111.128.0/17,LIST,no-resolve
 IP-CIDR,59.82.0.0/20,LIST,no-resolve
@@ -4098,3 +4166,32 @@ IP6-CIDR,2a0b:b580::/48,LIST,no-resolve
 IP6-CIDR,2a0b:b581::/48,LIST,no-resolve
 IP6-CIDR,2a0b:b582::/48,LIST,no-resolve
 IP6-CIDR,2a0b:b583::/48,LIST,no-resolve
+IP6-CIDR,::ffff:113.248.172.245/128,LIST,no-resolve
+IP6-CIDR,::ffff:114.235.96.186/128,LIST,no-resolve
+IP6-CIDR,::ffff:115.236.128.112/128,LIST,no-resolve
+IP6-CIDR,::ffff:115.236.128.120/128,LIST,no-resolve
+IP6-CIDR,::ffff:115.236.128.24/128,LIST,no-resolve
+IP6-CIDR,::ffff:115.236.128.80/128,LIST,no-resolve
+IP6-CIDR,::ffff:117.64.75.196/128,LIST,no-resolve
+IP6-CIDR,::ffff:117.68.200.210/128,LIST,no-resolve
+IP6-CIDR,::ffff:117.87.144.24/128,LIST,no-resolve
+IP6-CIDR,::ffff:121.56.126.255/128,LIST,no-resolve
+IP6-CIDR,::ffff:124.73.198.81/128,LIST,no-resolve
+IP6-CIDR,::ffff:124.73.200.142/128,LIST,no-resolve
+IP6-CIDR,::ffff:175.6.84.30/128,LIST,no-resolve
+IP6-CIDR,::ffff:175.6.84.96/128,LIST,no-resolve
+IP6-CIDR,::ffff:183.161.144.133/128,LIST,no-resolve
+IP6-CIDR,::ffff:183.161.144.230/128,LIST,no-resolve
+IP6-CIDR,::ffff:183.161.149.105/128,LIST,no-resolve
+IP6-CIDR,::ffff:198.18.5.138/128,LIST,no-resolve
+IP6-CIDR,::ffff:198.18.6.81/128,LIST,no-resolve
+IP6-CIDR,::ffff:198.18.6.83/128,LIST,no-resolve
+IP6-CIDR,::ffff:223.240.191.238/128,LIST,no-resolve
+IP6-CIDR,::ffff:27.157.209.46/128,LIST,no-resolve
+IP6-CIDR,::ffff:58.217.232.117/128,LIST,no-resolve
+IP6-CIDR,::ffff:58.217.232.68/128,LIST,no-resolve
+IP6-CIDR,::ffff:58.217.232.79/128,LIST,no-resolve
+IP6-CIDR,::ffff:58.58.0.90/128,LIST,no-resolve
+IP6-CIDR,::ffff:60.171.183.161/128,LIST,no-resolve
+IP6-CIDR,::ffff:60.171.183.186/128,LIST,no-resolve
+IP6-CIDR,::ffff:60.171.183.98/128,LIST,no-resolve

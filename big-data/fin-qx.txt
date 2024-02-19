@@ -1,5 +1,5 @@
-# Quantumult total line 4786
-# Last updated Fri 02/16/2024 22:10:08.96
+# Quantumult total line 4791
+# Last updated Mon 02/19/2024 22:07:22.11
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -227,8 +227,10 @@ HOST,cdn-txweb.transifex.com,LIST
 HOST,cdn-updates.orbstack.dev,LIST
 HOST,cdn-www.bluestacks.com,LIST
 HOST,cdn-yotpo-images-production.yotpo.com,LIST
+HOST,cdn.9to5terminal.com,LIST
 HOST,cdn.accounts.nintendo.com,LIST
 HOST,cdn.adguard.com,LIST
+HOST,cdn.adguard.info,LIST
 HOST,cdn.amcharts.com,LIST
 HOST,cdn.announcekit.app,LIST
 HOST,cdn.apkmonk.com,LIST
@@ -328,6 +330,7 @@ HOST,cdn.osxdaily.com,LIST
 HOST,cdn.paddle.com,LIST
 HOST,cdn.pagefly.io,LIST
 HOST,cdn.pagic.org,LIST
+HOST,cdn.parsely.com,LIST
 HOST,cdn.pathfactory.com,LIST
 HOST,cdn.perfops.net,LIST
 HOST,cdn.piano.io,LIST
@@ -420,6 +423,7 @@ HOST,cdn7.pornmaster.fun,LIST
 HOST,cdnapisec.kaltura.com,LIST
 HOST,cdne-pics.youjizz.com,LIST
 HOST,cdnjs.betterstack.com,LIST
+HOST,cdnjs.buymeacoffee.com,LIST
 HOST,cdnjs.cat.net,LIST
 HOST,cdnjs.cloudflare.com,LIST
 HOST,cdnl.tnaflix.com,LIST
@@ -889,6 +893,7 @@ HOST,objects.g0v.social,LIST
 HOST,objects.hit.moe,LIST
 HOST,ocecdn.oraclecloud.com,LIST
 HOST,ocsp.digicert.com,LIST
+HOST,ocsp.sectigo.com,LIST
 HOST,ocsp2.apple.com,LIST
 HOST,ocvideo.apple.com,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
