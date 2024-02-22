@@ -1,5 +1,5 @@
-# Quantumult total line 2245
-# Last updated Mon 02/19/2024 22:07:12.86
+# Quantumult total line 2250
+# Last updated Thu 02/22/2024 22:07:22.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -373,6 +373,7 @@ HOST,cdn.travis-ci.org,LIST
 HOST,cdn.trustpilot.net,LIST
 HOST,cdn.tuk.dev,LIST
 HOST,cdn.unwire.hk,LIST
+HOST,cdn.usd.fan,LIST
 HOST,cdn.userreport.com,LIST
 HOST,cdn.v2ex.com,LIST
 HOST,cdn.vidible.tv,LIST
@@ -721,6 +722,7 @@ HOST,lib.arvancloud.com,LIST
 HOST,libs.quillbot.com,LIST
 HOST,link.storjshare.io,LIST
 HOST,linkstorage.linkfire.com,LIST
+HOST,linuxiac.b-cdn.net,LIST
 HOST,live.fanmingming.com,LIST
 HOST,livedoor.blogimg.jp,LIST
 HOST,logo.clearbit.com,LIST
@@ -1052,6 +1054,7 @@ HOST,static-exp3.licdn.com,LIST
 HOST,static-gcp.freepikcompany.com,LIST
 HOST,static-lccn.leetcode.com,LIST
 HOST,static-main.moovit.com,LIST
+HOST,static-mh.content.disney.io,LIST
 HOST,static-overlay.ubisoft.com,LIST
 HOST,static-production.npmjs.com,LIST
 HOST,static-resource.np.community.playstation.net,LIST
@@ -1387,6 +1390,7 @@ HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn.cookielaw.org,LIST
 HOST-SUFFIX,cdn.cwinfo.net,LIST
 HOST-SUFFIX,cdn.discordapp.com,LIST
+HOST-SUFFIX,cdn.getfeedback.com,LIST
 HOST-SUFFIX,cdn.greenhouse.io,LIST
 HOST-SUFFIX,cdn.ifixit.com,LIST
 HOST-SUFFIX,cdn.imgeng.in,LIST
@@ -1462,6 +1466,7 @@ HOST-SUFFIX,denopkg.com,LIST
 HOST-SUFFIX,desktop.docker.com,LIST
 HOST-SUFFIX,devrum.uptime.com,LIST
 HOST-SUFFIX,digitaloceanspaces.com,LIST
+HOST-SUFFIX,dilcdn.com,LIST
 HOST-SUFFIX,disconnect.me,LIST
 HOST-SUFFIX,discourse-cdn.com,LIST
 HOST-SUFFIX,disquscdn.com,LIST
