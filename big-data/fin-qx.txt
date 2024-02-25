@@ -1,5 +1,5 @@
-# Quantumult total line 4795
-# Last updated Thu 02/22/2024 22:07:30.91
+# Quantumult total line 4801
+# Last updated Sun 02/25/2024 22:06:47.93
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -184,6 +184,7 @@ HOST,bot.ivy.ai,LIST
 HOST,brick.a.ssl.fastly.net,LIST
 HOST,brick.freetls.fastly.net,LIST
 HOST,bst.icons8.com,LIST
+HOST,builds.paranoidandroid.co,LIST
 HOST,builds.parsec.app,LIST
 HOST,bundle.trysavvy.com,LIST
 HOST,bundlephobia.com,LIST
@@ -678,6 +679,7 @@ HOST,imag.malavida.com,LIST
 HOST,image.civitai.com,LIST
 HOST,image.crisp.chat,LIST
 HOST,image.email.microsoftemail.com,LIST
+HOST,image.freepik.com,LIST
 HOST,image.ibb.co,LIST
 HOST,image.lichess1.org,LIST
 HOST,image.send.grammarly.com,LIST
@@ -1738,6 +1740,7 @@ HOST-SUFFIX,cloudconvert.com,LIST
 HOST-SUFFIX,cloudflare-ipfs.com,LIST
 HOST-SUFFIX,cloudflare.docker.com,LIST
 HOST-SUFFIX,cloudflaremirrors.com,LIST
+HOST-SUFFIX,cloudflarestorage.com,LIST
 HOST-SUFFIX,cloudflarestream.com,LIST
 HOST-SUFFIX,cloudflareworkers.com,LIST
 HOST-SUFFIX,cloudfront.net,LIST
@@ -2988,6 +2991,7 @@ HOST-SUFFIX,nowe.hk,LIST
 HOST-SUFFIX,nowestatic.com,LIST
 HOST-SUFFIX,nowvideo.club,LIST
 HOST-SUFFIX,npm.staticblitz.com,LIST
+HOST-SUFFIX,npmfs.com,LIST
 HOST-SUFFIX,nsstatic.net,LIST
 HOST-SUFFIX,nypost.com,LIST
 HOST-SUFFIX,nypost.help,LIST
@@ -3388,6 +3392,7 @@ HOST-SUFFIX,steam-api.com,LIST
 HOST-SUFFIX,steamcontent.com,LIST
 HOST-SUFFIX,steamcontent.tnkjmec.com,LIST
 HOST-SUFFIX,steamgames.com,LIST
+HOST-SUFFIX,steamserver.net,LIST
 HOST-SUFFIX,steamstatic.com,LIST
 HOST-SUFFIX,steamstatic.com.8686c.com,LIST
 HOST-SUFFIX,steamusercontent.com,LIST
@@ -3701,6 +3706,7 @@ HOST-SUFFIX,vscode-cdn.net,LIST
 HOST-SUFFIX,vscode-unpkg.net,LIST
 HOST-SUFFIX,vsmarketplacebadges.dev,LIST
 HOST-SUFFIX,vultrobjects.com,LIST
+HOST-SUFFIX,vusercontent.net,LIST
 HOST-SUFFIX,vx-cdn.com,LIST
 HOST-SUFFIX,vzw.com,LIST
 HOST-SUFFIX,w-corp.staticblitz.com,LIST

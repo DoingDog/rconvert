@@ -1,5 +1,5 @@
-# Quantumult total line 2250
-# Last updated Thu 02/22/2024 22:07:22.43
+# Quantumult total line 2254
+# Last updated Sun 02/25/2024 22:06:39.66
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -600,6 +600,7 @@ HOST,imag.malavida.com,LIST
 HOST,image.civitai.com,LIST
 HOST,image.crisp.chat,LIST
 HOST,image.email.microsoftemail.com,LIST
+HOST,image.freepik.com,LIST
 HOST,image.ibb.co,LIST
 HOST,image.lichess1.org,LIST
 HOST,image.send.grammarly.com,LIST
@@ -1428,6 +1429,7 @@ HOST-SUFFIX,cloud1.influxdata.com,LIST
 HOST-SUFFIX,cloud2.influxdata.com,LIST
 HOST-SUFFIX,cloudflare-ipfs.com,LIST
 HOST-SUFFIX,cloudflare.docker.com,LIST
+HOST-SUFFIX,cloudflarestorage.com,LIST
 HOST-SUFFIX,cloudflarestream.com,LIST
 HOST-SUFFIX,cloudfront.net,LIST
 HOST-SUFFIX,cloudimg.io,LIST
@@ -1719,6 +1721,7 @@ HOST-SUFFIX,notion-static.com,LIST
 HOST-SUFFIX,now.sh,LIST
 HOST-SUFFIX,nowestatic.com,LIST
 HOST-SUFFIX,npm.staticblitz.com,LIST
+HOST-SUFFIX,npmfs.com,LIST
 HOST-SUFFIX,oaistatic.com,LIST
 HOST-SUFFIX,oaiusercontent.com,LIST
 HOST-SUFFIX,oculuscdn.com,LIST
@@ -2201,6 +2204,7 @@ HOST-SUFFIX,vscode-cdn.net,LIST
 HOST-SUFFIX,vscode-unpkg.net,LIST
 HOST-SUFFIX,vsmarketplacebadges.dev,LIST
 HOST-SUFFIX,vultrobjects.com,LIST
+HOST-SUFFIX,vusercontent.net,LIST
 HOST-SUFFIX,vx-cdn.com,LIST
 HOST-SUFFIX,w-corp.staticblitz.com,LIST
 HOST-SUFFIX,w-credentialless.staticblitz.com,LIST
