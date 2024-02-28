@@ -1,5 +1,5 @@
-# Clash total line 4239
-# Last updated Sun 02/25/2024 22:06:55.51
+# Clash total line 4241
+# Last updated Wed 02/28/2024 22:07:42.73
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -10,6 +10,7 @@ payload:
   - DOMAIN,client.amplifi.com
   - DOMAIN,cn.download.nvidia.com
   - DOMAIN,download.jetbrains.com
+  - DOMAIN,dujs74mcntm.this_ruleset_is_made_by_sukkaw.jfpkl0h3w5m.ruleset.skk.moe
   - DOMAIN,gs-loc-cn.apple.com
   - DOMAIN,images-cn.ssl-images-amazon.com
   - DOMAIN,injections.adguard.org
@@ -3686,6 +3687,7 @@ payload:
   - DOMAIN-SUFFIX,yiqifa.org
   - DOMAIN-SUFFIX,yisu.com
   - DOMAIN-SUFFIX,yitaifang.com
+  - DOMAIN-SUFFIX,yitao.com
   - DOMAIN-SUFFIX,yiwan.com
   - DOMAIN-SUFFIX,yixi.tv
   - DOMAIN-SUFFIX,yixia.com

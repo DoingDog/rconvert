@@ -1,5 +1,5 @@
-# Quantumult total line 2254
-# Last updated Sun 02/25/2024 22:06:39.66
+# Quantumult total line 2258
+# Last updated Wed 02/28/2024 22:07:25.09
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -354,7 +354,6 @@ HOST,cdn.shoppinggives.com,LIST
 HOST,cdn.signalfx.com,LIST
 HOST,cdn.simpleicons.org,LIST
 HOST,cdn.sketch.com,LIST
-HOST,cdn.skk.moe,LIST
 HOST,cdn.smooch.io,LIST
 HOST,cdn.softswiss.net,LIST
 HOST,cdn.solvvy.com,LIST
@@ -481,6 +480,7 @@ HOST,download.maxmind.com,LIST
 HOST,downloads.coindesk.com,LIST
 HOST,downloads.wordpress.org,LIST
 HOST,drscdn.500px.org,LIST
+HOST,dujs74mcntm.this_ruleset_is_made_by_sukkaw.jfpkl0h3w5m.ruleset.skk.moe,LIST
 HOST,dynamic-assets.mobilius.top,LIST
 HOST,e3.365dm.com,LIST
 HOST,eaassets-a.akamaihd.net,LIST
@@ -503,7 +503,6 @@ HOST,emoji-css.afeld.me,LIST
 HOST,emos.plurk.com,LIST
 HOST,epic-social-social-modules-prod.ol.epicgames.com,LIST
 HOST,error.rakuten.co.jp,LIST
-HOST,eu-proxy.startpage.com,LIST
 HOST,eu.hamreus.com,LIST
 HOST,euc-widget.freshworks.com,LIST
 HOST,events-live.apple.com,LIST
@@ -1088,6 +1087,7 @@ HOST,static.deepl.com,LIST
 HOST,static.dw.com,LIST
 HOST,static.dynamicyield.com,LIST
 HOST,static.dzeninfra.ru,LIST
+HOST,static.esimplus.net,LIST
 HOST,static.euronews.com,LIST
 HOST,static.fasthosts.co.uk,LIST
 HOST,static.figma.com,LIST
@@ -1406,6 +1406,7 @@ HOST-SUFFIX,cdn.prismic.io,LIST
 HOST-SUFFIX,cdn.replit.com,LIST
 HOST-SUFFIX,cdn.runcloud.io,LIST
 HOST-SUFFIX,cdn.s7s.ai,LIST
+HOST-SUFFIX,cdn.skk.moe,LIST
 HOST-SUFFIX,cdn.survey.medallia.com,LIST
 HOST-SUFFIX,cdn.turner.com,LIST
 HOST-SUFFIX,cdn.ubi.com,LIST
@@ -1494,6 +1495,8 @@ HOST-SUFFIX,eroimg.net,LIST
 HOST-SUFFIX,esm.run,LIST
 HOST-SUFFIX,esm.sh,LIST
 HOST-SUFFIX,espncdn.com,LIST
+HOST-SUFFIX,eu-browse.startpage.com,LIST
+HOST-SUFFIX,eu-proxy.startpage.com,LIST
 HOST-SUFFIX,exp-tas.com,LIST
 HOST-SUFFIX,ezocdn.com,LIST
 HOST-SUFFIX,ezocdn.net,LIST
@@ -1781,6 +1784,7 @@ HOST-SUFFIX,pravatar.cc,LIST
 HOST-SUFFIX,prcdn.co,LIST
 HOST-SUFFIX,pressablecdn.com,LIST
 HOST-SUFFIX,prod.public.atl-paas.net,LIST
+HOST-SUFFIX,proxy.startpage.com,LIST
 HOST-SUFFIX,proxy.ustclug.org,LIST
 HOST-SUFFIX,pstatic.net,LIST
 HOST-SUFFIX,pstorage.space,LIST
