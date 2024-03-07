@@ -1,5 +1,5 @@
-# Quantumult total line 4805
-# Last updated Mon 03/04/2024 22:07:28.68
+# Quantumult total line 4810
+# Last updated Thu 03/07/2024 22:07:21.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -85,6 +85,7 @@ HOST,assets.dnsfilter.com,LIST
 HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
 HOST,assets.flodesk.com,LIST
+HOST,assets.gcore.pro,LIST
 HOST,assets.getkirby.com,LIST
 HOST,assets.grammarly.com,LIST
 HOST,assets.gumroad.com,LIST
@@ -271,6 +272,7 @@ HOST,cdn.dribbble.com,LIST
 HOST,cdn.dynamicyield.com,LIST
 HOST,cdn.embed.ly,LIST
 HOST,cdn.equalweb.com,LIST
+HOST,cdn.european-alternatives.eu,LIST
 HOST,cdn.faire.com,LIST
 HOST,cdn.faveohelpdesk.com,LIST
 HOST,cdn.filen.io,LIST
@@ -777,6 +779,7 @@ HOST,iterm2.com,LIST
 HOST,j.udn.com.tw,LIST
 HOST,js-cdn.blockchair.io,LIST
 HOST,js-cdn.music.apple.com,LIST
+HOST,js-eu1.hsforms.net,LIST
 HOST,js.braintreegateway.com,LIST
 HOST,js.chargebee.com,LIST
 HOST,js.chilipiper.com,LIST
@@ -794,7 +797,6 @@ HOST,js.upload.io,LIST
 HOST,js.userflow.com,LIST
 HOST,kdata1.com,LIST
 HOST,kh.google.com,LIST
-HOST,kn5z31wiwuc.this_ruleset_is_made_by_sukkaw.b201e8zxxk9.ruleset.skk.moe,LIST
 HOST,ktpx.amazon.com,LIST
 HOST,lain.bgm.tv,LIST
 HOST,level3.blizzard.com,LIST
@@ -889,6 +891,7 @@ HOST,ni-assets.azureedge.net,LIST
 HOST,nightly.link,LIST
 HOST,nodei.co,LIST
 HOST,np-edge.itunes.apple.com,LIST
+HOST,npm.jsr.io,LIST
 HOST,npmgraph.js.org,LIST
 HOST,nr.staticblitz.com,LIST
 HOST,o.n1mp.org,LIST
@@ -1386,6 +1389,7 @@ HOST,xvcf1.xboxlive.com,LIST
 HOST,xvcf2.xboxlive.com,LIST
 HOST,ysa-static.passport.yandex.net,LIST
 HOST,yummlystatic.com,LIST
+HOST,z7s1r4qfhuc.this_ruleset_is_made_by_sukkaw.54jbjabey7f.ruleset.skk.moe,LIST
 HOST-SUFFIX,10musume.com,LIST
 HOST-SUFFIX,112263.com,LIST
 HOST-SUFFIX,1fhjlv1.oloadcdn.net,LIST
@@ -2561,6 +2565,7 @@ HOST-SUFFIX,huluusa.com,LIST
 HOST-SUFFIX,hwcdn.net,LIST
 HOST-SUFFIX,hyper.is,LIST
 HOST-SUFFIX,i-cable.com,LIST
+HOST-SUFFIX,i-dont-care-about-cookies.eu,LIST
 HOST-SUFFIX,i.optimole.com,LIST
 HOST-SUFFIX,ibm.com,LIST
 HOST-SUFFIX,ibytedtos.com,LIST

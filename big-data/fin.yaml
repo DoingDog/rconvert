@@ -1,5 +1,5 @@
-# Clash total line 4820
-# Last updated Mon 03/04/2024 22:07:28.73
+# Clash total line 4825
+# Last updated Thu 03/07/2024 22:07:21.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -86,6 +86,7 @@ payload:
   - DOMAIN,assets.extension.grammarly.com
   - DOMAIN,assets.fastly.com
   - DOMAIN,assets.flodesk.com
+  - DOMAIN,assets.gcore.pro
   - DOMAIN,assets.getkirby.com
   - DOMAIN,assets.grammarly.com
   - DOMAIN,assets.gumroad.com
@@ -272,6 +273,7 @@ payload:
   - DOMAIN,cdn.dynamicyield.com
   - DOMAIN,cdn.embed.ly
   - DOMAIN,cdn.equalweb.com
+  - DOMAIN,cdn.european-alternatives.eu
   - DOMAIN,cdn.faire.com
   - DOMAIN,cdn.faveohelpdesk.com
   - DOMAIN,cdn.filen.io
@@ -778,6 +780,7 @@ payload:
   - DOMAIN,j.udn.com.tw
   - DOMAIN,js-cdn.blockchair.io
   - DOMAIN,js-cdn.music.apple.com
+  - DOMAIN,js-eu1.hsforms.net
   - DOMAIN,js.braintreegateway.com
   - DOMAIN,js.chargebee.com
   - DOMAIN,js.chilipiper.com
@@ -795,7 +798,6 @@ payload:
   - DOMAIN,js.userflow.com
   - DOMAIN,kdata1.com
   - DOMAIN,kh.google.com
-  - DOMAIN,kn5z31wiwuc.this_ruleset_is_made_by_sukkaw.b201e8zxxk9.ruleset.skk.moe
   - DOMAIN,ktpx.amazon.com
   - DOMAIN,lain.bgm.tv
   - DOMAIN,level3.blizzard.com
@@ -890,6 +892,7 @@ payload:
   - DOMAIN,nightly.link
   - DOMAIN,nodei.co
   - DOMAIN,np-edge.itunes.apple.com
+  - DOMAIN,npm.jsr.io
   - DOMAIN,npmgraph.js.org
   - DOMAIN,nr.staticblitz.com
   - DOMAIN,o.n1mp.org
@@ -1387,6 +1390,7 @@ payload:
   - DOMAIN,xvcf2.xboxlive.com
   - DOMAIN,ysa-static.passport.yandex.net
   - DOMAIN,yummlystatic.com
+  - DOMAIN,z7s1r4qfhuc.this_ruleset_is_made_by_sukkaw.54jbjabey7f.ruleset.skk.moe
   - DOMAIN-SUFFIX,10musume.com
   - DOMAIN-SUFFIX,112263.com
   - DOMAIN-SUFFIX,1fhjlv1.oloadcdn.net
@@ -2562,6 +2566,7 @@ payload:
   - DOMAIN-SUFFIX,hwcdn.net
   - DOMAIN-SUFFIX,hyper.is
   - DOMAIN-SUFFIX,i-cable.com
+  - DOMAIN-SUFFIX,i-dont-care-about-cookies.eu
   - DOMAIN-SUFFIX,i.optimole.com
   - DOMAIN-SUFFIX,ibm.com
   - DOMAIN-SUFFIX,ibytedtos.com

@@ -1,5 +1,5 @@
-# Quantumult total line 2258
-# Last updated Mon 03/04/2024 22:07:18.66
+# Quantumult total line 2263
+# Last updated Thu 03/07/2024 22:07:12.23
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -78,6 +78,7 @@ HOST,assets.dnsfilter.com,LIST
 HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
 HOST,assets.flodesk.com,LIST
+HOST,assets.gcore.pro,LIST
 HOST,assets.getkirby.com,LIST
 HOST,assets.grammarly.com,LIST
 HOST,assets.gumroad.com,LIST
@@ -260,6 +261,7 @@ HOST,cdn.dribbble.com,LIST
 HOST,cdn.dynamicyield.com,LIST
 HOST,cdn.embed.ly,LIST
 HOST,cdn.equalweb.com,LIST
+HOST,cdn.european-alternatives.eu,LIST
 HOST,cdn.faire.com,LIST
 HOST,cdn.faveohelpdesk.com,LIST
 HOST,cdn.filen.io,LIST
@@ -699,6 +701,7 @@ HOST,ipfs.d.tube,LIST
 HOST,iterm2.com,LIST
 HOST,j.udn.com.tw,LIST
 HOST,js-cdn.blockchair.io,LIST
+HOST,js-eu1.hsforms.net,LIST
 HOST,js.braintreegateway.com,LIST
 HOST,js.chargebee.com,LIST
 HOST,js.chilipiper.com,LIST
@@ -715,7 +718,6 @@ HOST,js.smile.io,LIST
 HOST,js.upload.io,LIST
 HOST,js.userflow.com,LIST
 HOST,kdata1.com,LIST
-HOST,kn5z31wiwuc.this_ruleset_is_made_by_sukkaw.b201e8zxxk9.ruleset.skk.moe,LIST
 HOST,lain.bgm.tv,LIST
 HOST,launchercontent.mojang.com,LIST
 HOST,lib.arvancloud.com,LIST
@@ -799,6 +801,7 @@ HOST,ni-assets.azureedge.net,LIST
 HOST,nightly.link,LIST
 HOST,nodeassets.nbcnews.com,LIST
 HOST,nodei.co,LIST
+HOST,npm.jsr.io,LIST
 HOST,npmgraph.js.org,LIST
 HOST,nr.staticblitz.com,LIST
 HOST,o.n1mp.org,LIST
@@ -1324,6 +1327,7 @@ HOST,xpaywalletcdn.azureedge.net,LIST
 HOST,yep.video.yahoo.com,LIST
 HOST,ysa-static.passport.yandex.net,LIST
 HOST,yummlystatic.com,LIST
+HOST,z7s1r4qfhuc.this_ruleset_is_made_by_sukkaw.54jbjabey7f.ruleset.skk.moe,LIST
 HOST-SUFFIX,1passwordusercontent.ca,LIST
 HOST-SUFFIX,1passwordusercontent.com,LIST
 HOST-SUFFIX,1passwordusercontent.eu,LIST
@@ -1571,6 +1575,7 @@ HOST-SUFFIX,hubspotusercontent-eu1.net,LIST
 HOST-SUFFIX,hubspotusercontent-na1.net,LIST
 HOST-SUFFIX,hubspotusercontent30.com,LIST
 HOST-SUFFIX,hubspotusercontent30.net,LIST
+HOST-SUFFIX,i-dont-care-about-cookies.eu,LIST
 HOST-SUFFIX,i.optimole.com,LIST
 HOST-SUFFIX,ibytedtos.com,LIST
 HOST-SUFFIX,icon.horse,LIST
