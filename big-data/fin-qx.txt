@@ -1,5 +1,5 @@
-# Quantumult total line 4810
-# Last updated Thu 03/07/2024 22:07:21.59
+# Quantumult total line 4814
+# Last updated Sun 03/10/2024 22:09:25.20
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -66,7 +66,9 @@ HOST,assets.auth.magic.link,LIST
 HOST,assets.awwwards.com,LIST
 HOST,assets.bbhub.io,LIST
 HOST,assets.bitstamp.net,LIST
+HOST,assets.bnidx.com,LIST
 HOST,assets.braintreegateway.com,LIST
+HOST,assets.bravenet.com,LIST
 HOST,assets.buttondown.email,LIST
 HOST,assets.bwbx.io,LIST
 HOST,assets.byteplus.com,LIST
@@ -775,6 +777,7 @@ HOST,install.virtfusion.net,LIST
 HOST,interactive.guim.co.uk,LIST
 HOST,invent.kde.org,LIST
 HOST,ipfs.d.tube,LIST
+HOST,irp-cdn.multiscreensite.com,LIST
 HOST,iterm2.com,LIST
 HOST,j.udn.com.tw,LIST
 HOST,js-cdn.blockchair.io,LIST
@@ -1160,6 +1163,7 @@ HOST,static.bit.dev,LIST
 HOST,static.bitfinex.com,LIST
 HOST,static.buffer.com,LIST
 HOST,static.bytepan.com,LIST
+HOST,static.cdn-website.com,LIST
 HOST,static.change.org,LIST
 HOST,static.cloud.coveo.com,LIST
 HOST,static.codepen.io,LIST
@@ -1291,6 +1295,7 @@ HOST,talk.hyvor.com,LIST
 HOST,talk.washingtonpost.com,LIST
 HOST,th.bing.com,LIST
 HOST,themes.fourthwall.com,LIST
+HOST,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe,LIST
 HOST,thumbnail.missav.com,LIST
 HOST,thumbs.gfycat.com,LIST
 HOST,thumbs.onlyfans.com,LIST
@@ -1389,7 +1394,6 @@ HOST,xvcf1.xboxlive.com,LIST
 HOST,xvcf2.xboxlive.com,LIST
 HOST,ysa-static.passport.yandex.net,LIST
 HOST,yummlystatic.com,LIST
-HOST,z7s1r4qfhuc.this_ruleset_is_made_by_sukkaw.54jbjabey7f.ruleset.skk.moe,LIST
 HOST-SUFFIX,10musume.com,LIST
 HOST-SUFFIX,112263.com,LIST
 HOST-SUFFIX,1fhjlv1.oloadcdn.net,LIST
