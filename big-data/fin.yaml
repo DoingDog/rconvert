@@ -1,5 +1,5 @@
-# Clash total line 4829
-# Last updated Sun 03/10/2024 22:09:25.25
+# Clash total line 4838
+# Last updated Wed 03/13/2024 22:07:29.49
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -99,6 +99,7 @@ payload:
   - DOMAIN,assets.ipstack.com
   - DOMAIN,assets.jable.tv
   - DOMAIN,assets.jolipage.co
+  - DOMAIN,assets.kagi.com
   - DOMAIN,assets.kraken.com
   - DOMAIN,assets.leetcode.com
   - DOMAIN,assets.lemonsqueezy.com
@@ -379,6 +380,7 @@ payload:
   - DOMAIN,cdn.tailwindcss.com
   - DOMAIN,cdn.termius.com
   - DOMAIN,cdn.thisav.com
+  - DOMAIN,cdn.transcend.io
   - DOMAIN,cdn.transifex.com
   - DOMAIN,cdn.travis-ci.com
   - DOMAIN,cdn.travis-ci.org
@@ -407,11 +409,13 @@ payload:
   - DOMAIN,cdn1.sysgears.com
   - DOMAIN,cdn1.unrealengine.com
   - DOMAIN,cdn10.hiftporn.fun
+  - DOMAIN,cdn2-imgix.macpaw.com
   - DOMAIN,cdn2.dan.com
   - DOMAIN,cdn2.downdetector.com
   - DOMAIN,cdn2.editmysite.com
   - DOMAIN,cdn2.epicgames.com
   - DOMAIN,cdn2.hextom.com
+  - DOMAIN,cdn2.macpaw.com
   - DOMAIN,cdn2.onlyfans.com
   - DOMAIN,cdn2.stamped.io
   - DOMAIN,cdn2.sysgears.com
@@ -649,6 +653,7 @@ payload:
   - DOMAIN,headway-widget.net
   - DOMAIN,hls-amt.itunes.apple.com
   - DOMAIN,hls.itunes.apple.com
+  - DOMAIN,hub-assets.displaycal.net
   - DOMAIN,hulu.com.c.footprint.net
   - DOMAIN,hulu.map.fastly.net
   - DOMAIN,hv-monsterdb-data.skk.moe
@@ -1008,6 +1013,7 @@ payload:
   - DOMAIN,replicate.npmjs.com
   - DOMAIN,repo.carbon.sh
   - DOMAIN,repo.nextdns.io
+  - DOMAIN,repo.powerdns.com
   - DOMAIN,repo1.maven.org
   - DOMAIN,repos.danosproject.org
   - DOMAIN,repository.jboss.org
@@ -1995,6 +2001,7 @@ payload:
   - DOMAIN-SUFFIX,doodrive.com
   - DOMAIN-SUFFIX,doodstream.com
   - DOMAIN-SUFFIX,doppiocdn.com
+  - DOMAIN-SUFFIX,doppiocdn.net
   - DOMAIN-SUFFIX,doppiocdn.org
   - DOMAIN-SUFFIX,douploads.com
   - DOMAIN-SUFFIX,douploads.net
@@ -2789,6 +2796,7 @@ payload:
   - DOMAIN-SUFFIX,londonreal.tv
   - DOMAIN-SUFFIX,lookscanned.io
   - DOMAIN-SUFFIX,lowendbox.com
+  - DOMAIN-SUFFIX,lowescdn.com
   - DOMAIN-SUFFIX,ltwebstatic.com
   - DOMAIN-SUFFIX,macupload.net
   - DOMAIN-SUFFIX,maker.tv
@@ -3394,6 +3402,7 @@ payload:
   - DOMAIN-SUFFIX,static.ctinets.com
   - DOMAIN-SUFFIX,static.domains
   - DOMAIN-SUFFIX,static.fun
+  - DOMAIN-SUFFIX,static.gartner.com
   - DOMAIN-SUFFIX,static.palgrave.com
   - DOMAIN-SUFFIX,static2cdn.hubspot.com
   - DOMAIN-SUFFIX,statically.io

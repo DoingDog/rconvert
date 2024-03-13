@@ -1,5 +1,5 @@
-# Quantumult total line 2268
-# Last updated Sun 03/10/2024 22:09:15.71
+# Quantumult total line 2278
+# Last updated Wed 03/13/2024 22:07:19.81
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -91,6 +91,7 @@ HOST,assets.ifttt.com,LIST
 HOST,assets.ipstack.com,LIST
 HOST,assets.jable.tv,LIST
 HOST,assets.jolipage.co,LIST
+HOST,assets.kagi.com,LIST
 HOST,assets.kraken.com,LIST
 HOST,assets.leetcode.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
@@ -370,6 +371,7 @@ HOST,cdn.tailwindcss.com,LIST
 HOST,cdn.termius.com,LIST
 HOST,cdn.thisav.com,LIST
 HOST,cdn.tinypass.com,LIST
+HOST,cdn.transcend.io,LIST
 HOST,cdn.transifex.com,LIST
 HOST,cdn.travis-ci.com,LIST
 HOST,cdn.travis-ci.org,LIST
@@ -399,11 +401,13 @@ HOST,cdn1.stamped.io,LIST
 HOST,cdn1.sysgears.com,LIST
 HOST,cdn1.unrealengine.com,LIST
 HOST,cdn10.hiftporn.fun,LIST
+HOST,cdn2-imgix.macpaw.com,LIST
 HOST,cdn2.dan.com,LIST
 HOST,cdn2.downdetector.com,LIST
 HOST,cdn2.editmysite.com,LIST
 HOST,cdn2.epicgames.com,LIST
 HOST,cdn2.hextom.com,LIST
+HOST,cdn2.macpaw.com,LIST
 HOST,cdn2.onlyfans.com,LIST
 HOST,cdn2.stamped.io,LIST
 HOST,cdn2.sysgears.com,LIST
@@ -568,6 +572,7 @@ HOST,gtranslate.io,LIST
 HOST,hawk.tomsguide.com,LIST
 HOST,headway-widget.net,LIST
 HOST,hp.foxnews.com,LIST
+HOST,hub-assets.displaycal.net,LIST
 HOST,hv-monsterdb-data.skk.moe,LIST
 HOST,i.1password.com,LIST
 HOST,i.creativecommons.org,LIST
@@ -1487,6 +1492,7 @@ HOST-SUFFIX,dmcdn.net,LIST
 HOST-SUFFIX,docker.io,LIST
 HOST-SUFFIX,dogehls.xyz,LIST
 HOST-SUFFIX,doppiocdn.com,LIST
+HOST-SUFFIX,doppiocdn.net,LIST
 HOST-SUFFIX,doppiocdn.org,LIST
 HOST-SUFFIX,dropboxstatic.com,LIST
 HOST-SUFFIX,dsc.cloud,LIST
@@ -1698,6 +1704,7 @@ HOST-SUFFIX,llnwi.net,LIST
 HOST-SUFFIX,local.webcontainer.io,LIST
 HOST-SUFFIX,loli.net,LIST
 HOST-SUFFIX,lowendbox.com,LIST
+HOST-SUFFIX,lowescdn.com,LIST
 HOST-SUFFIX,ltwebstatic.com,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
 HOST-SUFFIX,media-amazon.com,LIST
@@ -1827,6 +1834,7 @@ HOST-SUFFIX,rsb.net,LIST
 HOST-SUFFIX,rss3.dev,LIST
 HOST-SUFFIX,runkitcdn.com,LIST
 HOST-SUFFIX,s3-1.amazonaws.com,LIST
+HOST-SUFFIX,s3-accelerate.amazonaws.com,LIST
 HOST-SUFFIX,s3-accesspoint-fips.ca-central-1.amazonaws.com,LIST
 HOST-SUFFIX,s3-accesspoint-fips.ca-west-1.amazonaws.com,LIST
 HOST-SUFFIX,s3-accesspoint-fips.dualstack.ca-central-1.amazonaws.com,LIST
@@ -2145,6 +2153,7 @@ HOST-SUFFIX,ssl-images-amazon.com,LIST
 HOST-SUFFIX,stack.imgur.com,LIST
 HOST-SUFFIX,stackblitz.io,LIST
 HOST-SUFFIX,static.domains,LIST
+HOST-SUFFIX,static.gartner.com,LIST
 HOST-SUFFIX,static2cdn.hubspot.com,LIST
 HOST-SUFFIX,statically.io,LIST
 HOST-SUFFIX,staticaly.com,LIST
@@ -2160,6 +2169,7 @@ HOST-SUFFIX,storage.yandexcloud.net,LIST
 HOST-SUFFIX,storjipfs-gateway.com,LIST
 HOST-SUFFIX,stream.publicradio.org,LIST
 HOST-SUFFIX,streamhentai.org,LIST
+HOST-SUFFIX,stripcdn.com,LIST
 HOST-SUFFIX,stripecdn.com,LIST
 HOST-SUFFIX,strpst.com,LIST
 HOST-SUFFIX,substackcdn.com,LIST

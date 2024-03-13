@@ -1,5 +1,5 @@
-# Quantumult total line 4814
-# Last updated Sun 03/10/2024 22:09:25.20
+# Quantumult total line 4823
+# Last updated Wed 03/13/2024 22:07:29.46
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -98,6 +98,7 @@ HOST,assets.ifttt.com,LIST
 HOST,assets.ipstack.com,LIST
 HOST,assets.jable.tv,LIST
 HOST,assets.jolipage.co,LIST
+HOST,assets.kagi.com,LIST
 HOST,assets.kraken.com,LIST
 HOST,assets.leetcode.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
@@ -378,6 +379,7 @@ HOST,cdn.sunofbeaches.com,LIST
 HOST,cdn.tailwindcss.com,LIST
 HOST,cdn.termius.com,LIST
 HOST,cdn.thisav.com,LIST
+HOST,cdn.transcend.io,LIST
 HOST,cdn.transifex.com,LIST
 HOST,cdn.travis-ci.com,LIST
 HOST,cdn.travis-ci.org,LIST
@@ -406,11 +408,13 @@ HOST,cdn1.stamped.io,LIST
 HOST,cdn1.sysgears.com,LIST
 HOST,cdn1.unrealengine.com,LIST
 HOST,cdn10.hiftporn.fun,LIST
+HOST,cdn2-imgix.macpaw.com,LIST
 HOST,cdn2.dan.com,LIST
 HOST,cdn2.downdetector.com,LIST
 HOST,cdn2.editmysite.com,LIST
 HOST,cdn2.epicgames.com,LIST
 HOST,cdn2.hextom.com,LIST
+HOST,cdn2.macpaw.com,LIST
 HOST,cdn2.onlyfans.com,LIST
 HOST,cdn2.stamped.io,LIST
 HOST,cdn2.sysgears.com,LIST
@@ -648,6 +652,7 @@ HOST,hawk.tomsguide.com,LIST
 HOST,headway-widget.net,LIST
 HOST,hls-amt.itunes.apple.com,LIST
 HOST,hls.itunes.apple.com,LIST
+HOST,hub-assets.displaycal.net,LIST
 HOST,hulu.com.c.footprint.net,LIST
 HOST,hulu.map.fastly.net,LIST
 HOST,hv-monsterdb-data.skk.moe,LIST
@@ -1007,6 +1012,7 @@ HOST,renderer-assets.typeform.com,LIST
 HOST,replicate.npmjs.com,LIST
 HOST,repo.carbon.sh,LIST
 HOST,repo.nextdns.io,LIST
+HOST,repo.powerdns.com,LIST
 HOST,repo1.maven.org,LIST
 HOST,repos.danosproject.org,LIST
 HOST,repository.jboss.org,LIST
@@ -1994,6 +2000,7 @@ HOST-SUFFIX,dokusho-ojikan.jp,LIST
 HOST-SUFFIX,doodrive.com,LIST
 HOST-SUFFIX,doodstream.com,LIST
 HOST-SUFFIX,doppiocdn.com,LIST
+HOST-SUFFIX,doppiocdn.net,LIST
 HOST-SUFFIX,doppiocdn.org,LIST
 HOST-SUFFIX,douploads.com,LIST
 HOST-SUFFIX,douploads.net,LIST
@@ -2788,6 +2795,7 @@ HOST-SUFFIX,loli.net,LIST
 HOST-SUFFIX,londonreal.tv,LIST
 HOST-SUFFIX,lookscanned.io,LIST
 HOST-SUFFIX,lowendbox.com,LIST
+HOST-SUFFIX,lowescdn.com,LIST
 HOST-SUFFIX,ltwebstatic.com,LIST
 HOST-SUFFIX,macupload.net,LIST
 HOST-SUFFIX,maker.tv,LIST
@@ -3393,6 +3401,7 @@ HOST-SUFFIX,static-verizon.com,LIST
 HOST-SUFFIX,static.ctinets.com,LIST
 HOST-SUFFIX,static.domains,LIST
 HOST-SUFFIX,static.fun,LIST
+HOST-SUFFIX,static.gartner.com,LIST
 HOST-SUFFIX,static.palgrave.com,LIST
 HOST-SUFFIX,static2cdn.hubspot.com,LIST
 HOST-SUFFIX,statically.io,LIST

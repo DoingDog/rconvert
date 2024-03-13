@@ -1,5 +1,5 @@
-# Main total line 2268
-# Last updated Sun 03/10/2024 22:09:15.60
+# Main total line 2278
+# Last updated Wed 03/13/2024 22:07:19.70
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
@@ -91,6 +91,7 @@ DOMAIN,assets.ifttt.com
 DOMAIN,assets.ipstack.com
 DOMAIN,assets.jable.tv
 DOMAIN,assets.jolipage.co
+DOMAIN,assets.kagi.com
 DOMAIN,assets.kraken.com
 DOMAIN,assets.leetcode.com
 DOMAIN,assets.lemonsqueezy.com
@@ -370,6 +371,7 @@ DOMAIN,cdn.tailwindcss.com
 DOMAIN,cdn.termius.com
 DOMAIN,cdn.thisav.com
 DOMAIN,cdn.tinypass.com
+DOMAIN,cdn.transcend.io
 DOMAIN,cdn.transifex.com
 DOMAIN,cdn.travis-ci.com
 DOMAIN,cdn.travis-ci.org
@@ -399,11 +401,13 @@ DOMAIN,cdn1.stamped.io
 DOMAIN,cdn1.sysgears.com
 DOMAIN,cdn1.unrealengine.com
 DOMAIN,cdn10.hiftporn.fun
+DOMAIN,cdn2-imgix.macpaw.com
 DOMAIN,cdn2.dan.com
 DOMAIN,cdn2.downdetector.com
 DOMAIN,cdn2.editmysite.com
 DOMAIN,cdn2.epicgames.com
 DOMAIN,cdn2.hextom.com
+DOMAIN,cdn2.macpaw.com
 DOMAIN,cdn2.onlyfans.com
 DOMAIN,cdn2.stamped.io
 DOMAIN,cdn2.sysgears.com
@@ -568,6 +572,7 @@ DOMAIN,gtranslate.io
 DOMAIN,hawk.tomsguide.com
 DOMAIN,headway-widget.net
 DOMAIN,hp.foxnews.com
+DOMAIN,hub-assets.displaycal.net
 DOMAIN,hv-monsterdb-data.skk.moe
 DOMAIN,i.1password.com
 DOMAIN,i.creativecommons.org
@@ -1487,6 +1492,7 @@ DOMAIN-SUFFIX,dmcdn.net
 DOMAIN-SUFFIX,docker.io
 DOMAIN-SUFFIX,dogehls.xyz
 DOMAIN-SUFFIX,doppiocdn.com
+DOMAIN-SUFFIX,doppiocdn.net
 DOMAIN-SUFFIX,doppiocdn.org
 DOMAIN-SUFFIX,dropboxstatic.com
 DOMAIN-SUFFIX,dsc.cloud
@@ -1698,6 +1704,7 @@ DOMAIN-SUFFIX,llnwi.net
 DOMAIN-SUFFIX,local.webcontainer.io
 DOMAIN-SUFFIX,loli.net
 DOMAIN-SUFFIX,lowendbox.com
+DOMAIN-SUFFIX,lowescdn.com
 DOMAIN-SUFFIX,ltwebstatic.com
 DOMAIN-SUFFIX,makeuseofimages.com
 DOMAIN-SUFFIX,media-amazon.com
@@ -1827,6 +1834,7 @@ DOMAIN-SUFFIX,rsb.net
 DOMAIN-SUFFIX,rss3.dev
 DOMAIN-SUFFIX,runkitcdn.com
 DOMAIN-SUFFIX,s3-1.amazonaws.com
+DOMAIN-SUFFIX,s3-accelerate.amazonaws.com
 DOMAIN-SUFFIX,s3-accesspoint-fips.ca-central-1.amazonaws.com
 DOMAIN-SUFFIX,s3-accesspoint-fips.ca-west-1.amazonaws.com
 DOMAIN-SUFFIX,s3-accesspoint-fips.dualstack.ca-central-1.amazonaws.com
@@ -2145,6 +2153,7 @@ DOMAIN-SUFFIX,ssl-images-amazon.com
 DOMAIN-SUFFIX,stack.imgur.com
 DOMAIN-SUFFIX,stackblitz.io
 DOMAIN-SUFFIX,static.domains
+DOMAIN-SUFFIX,static.gartner.com
 DOMAIN-SUFFIX,static2cdn.hubspot.com
 DOMAIN-SUFFIX,statically.io
 DOMAIN-SUFFIX,staticaly.com
@@ -2160,6 +2169,7 @@ DOMAIN-SUFFIX,storage.yandexcloud.net
 DOMAIN-SUFFIX,storjipfs-gateway.com
 DOMAIN-SUFFIX,stream.publicradio.org
 DOMAIN-SUFFIX,streamhentai.org
+DOMAIN-SUFFIX,stripcdn.com
 DOMAIN-SUFFIX,stripecdn.com
 DOMAIN-SUFFIX,strpst.com
 DOMAIN-SUFFIX,substackcdn.com
