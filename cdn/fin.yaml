@@ -1,5 +1,5 @@
-# Clash total line 2278
-# Last updated Wed 03/13/2024 22:07:19.84
+# Clash total line 2287
+# Last updated Sat 03/16/2024 22:07:05.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -145,6 +145,7 @@ payload:
   - DOMAIN,assets2.lottiefiles.com
   - DOMAIN,assets3.lottiefiles.com
   - DOMAIN,assets4.lottiefiles.com
+  - DOMAIN,assets4.mist-train-girls.com
   - DOMAIN,assets5.lottiefiles.com
   - DOMAIN,assets6.lottiefiles.com
   - DOMAIN,assets7.lottiefiles.com
@@ -208,6 +209,7 @@ payload:
   - DOMAIN,cdn-media-1.freecodecamp.org
   - DOMAIN,cdn-media-2.freecodecamp.org
   - DOMAIN,cdn-mobile.aptoide.com
+  - DOMAIN,cdn-node.diskpart.com
   - DOMAIN,cdn-public.sociabble.com
   - DOMAIN,cdn-raw.modrinth.com
   - DOMAIN,cdn-sellix.com
@@ -218,6 +220,7 @@ payload:
   - DOMAIN,cdn-static.talent.com
   - DOMAIN,cdn-thumbs.porntube.com
   - DOMAIN,cdn-txweb.transifex.com
+  - DOMAIN,cdn-uicons.flaticon.com
   - DOMAIN,cdn-www.bluestacks.com
   - DOMAIN,cdn-yotpo-images-production.yotpo.com
   - DOMAIN,cdn.9to5terminal.com
@@ -465,6 +468,7 @@ payload:
   - DOMAIN,cookie-cdn.cookiepro.com
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,creativajs.altervista.org
+  - DOMAIN,crl.usertrust.com
   - DOMAIN,css.createsend1.com
   - DOMAIN,curl.se
   - DOMAIN,d4.alternativeto.net
@@ -594,6 +598,7 @@ payload:
   - DOMAIN,i.pcmag.com
   - DOMAIN,i.snap.as
   - DOMAIN,i.vgy.me
+  - DOMAIN,i.xozilla.xxx
   - DOMAIN,i0.wp.com
   - DOMAIN,i1.wp.com
   - DOMAIN,i2.wp.com
@@ -611,6 +616,7 @@ payload:
   - DOMAIN,image.freepik.com
   - DOMAIN,image.ibb.co
   - DOMAIN,image.lichess1.org
+  - DOMAIN,image.nmb.best
   - DOMAIN,image.send.grammarly.com
   - DOMAIN,image.ship.vercel.com
   - DOMAIN,image.shutterstock.com
@@ -1073,6 +1079,7 @@ payload:
   - DOMAIN,static-resource.np.community.playstation.net
   - DOMAIN,static-web-prod.skillshare.com
   - DOMAIN,static-web.grammarly.com
+  - DOMAIN,static.4shared.com
   - DOMAIN,static.ada.support
   - DOMAIN,static.addtoany.com
   - DOMAIN,static.adguard.com
@@ -1401,6 +1408,8 @@ payload:
   - DOMAIN-SUFFIX,bytedapm.com
   - DOMAIN-SUFFIX,c.staticblitz.com
   - DOMAIN-SUFFIX,catbox.moe
+  - DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co
+  - DOMAIN-SUFFIX,cdn-lfs.huggingface.co
   - DOMAIN-SUFFIX,cdn-spurit.com
   - DOMAIN-SUFFIX,cdn-uploads.huggingface.co
   - DOMAIN-SUFFIX,cdn.cookielaw.org

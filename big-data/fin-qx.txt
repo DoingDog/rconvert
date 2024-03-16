@@ -1,5 +1,5 @@
-# Quantumult total line 4823
-# Last updated Wed 03/13/2024 22:07:29.46
+# Quantumult total line 4831
+# Last updated Sat 03/16/2024 22:07:14.26
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -149,6 +149,7 @@ HOST,assets2.canny.io,LIST
 HOST,assets2.lottiefiles.com,LIST
 HOST,assets3.lottiefiles.com,LIST
 HOST,assets4.lottiefiles.com,LIST
+HOST,assets4.mist-train-girls.com,LIST
 HOST,assets5.lottiefiles.com,LIST
 HOST,assets6.lottiefiles.com,LIST
 HOST,assets7.lottiefiles.com,LIST
@@ -219,6 +220,7 @@ HOST,cdn-live.foreignaffairs.com,LIST
 HOST,cdn-media-1.freecodecamp.org,LIST
 HOST,cdn-media-2.freecodecamp.org,LIST
 HOST,cdn-mobile.aptoide.com,LIST
+HOST,cdn-node.diskpart.com,LIST
 HOST,cdn-public.sociabble.com,LIST
 HOST,cdn-raw.modrinth.com,LIST
 HOST,cdn-sellix.com,LIST
@@ -229,6 +231,7 @@ HOST,cdn-static.kwai.net,LIST
 HOST,cdn-static.talent.com,LIST
 HOST,cdn-thumbs.porntube.com,LIST
 HOST,cdn-txweb.transifex.com,LIST
+HOST,cdn-uicons.flaticon.com,LIST
 HOST,cdn-updates.orbstack.dev,LIST
 HOST,cdn-www.bluestacks.com,LIST
 HOST,cdn-yotpo-images-production.yotpo.com,LIST
@@ -478,6 +481,7 @@ HOST,content8.steampowered.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,creativajs.altervista.org,LIST
+HOST,crl.usertrust.com,LIST
 HOST,css.createsend1.com,LIST
 HOST,ctldl.windowsupdate.com,LIST
 HOST,curl.se,LIST
@@ -674,6 +678,7 @@ HOST,i.niupic.com,LIST
 HOST,i.pcmag.com,LIST
 HOST,i.snap.as,LIST
 HOST,i.vgy.me,LIST
+HOST,i.xozilla.xxx,LIST
 HOST,i0.wp.com,LIST
 HOST,i1.wp.com,LIST
 HOST,i2.wp.com,LIST
@@ -689,6 +694,7 @@ HOST,image.email.microsoftemail.com,LIST
 HOST,image.freepik.com,LIST
 HOST,image.ibb.co,LIST
 HOST,image.lichess1.org,LIST
+HOST,image.nmb.best,LIST
 HOST,image.send.grammarly.com,LIST
 HOST,image.ship.vercel.com,LIST
 HOST,image.shutterstock.com,LIST
@@ -1673,6 +1679,8 @@ HOST-SUFFIX,cbsstore.com,LIST
 HOST-SUFFIX,cbssvideo.com,LIST
 HOST-SUFFIX,cbstelevisioncity.com,LIST
 HOST-SUFFIX,cdkworkshop.com,LIST
+HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
+HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn-spurit.com,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn.angruo.com,LIST
