@@ -1,5 +1,5 @@
-# Quantumult total line 4831
-# Last updated Tue 03/19/2024 22:07:21.11
+# Quantumult total line 4834
+# Last updated Fri 03/22/2024 22:07:07.55
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -57,6 +57,7 @@ HOST,assets-cdn.jable.tv,LIST
 HOST,assets-cms.kraken.com,LIST
 HOST,assets-fe.change.org,LIST
 HOST,assets-next.matters.news,LIST
+HOST,assets-next.mattersprotocol.io,LIST
 HOST,assets-production.packagecloud.io,LIST
 HOST,assets-s3-us-east-1.ceros.com,LIST
 HOST,assets-v2.super.so,LIST
@@ -519,6 +520,7 @@ HOST,dl.snipaste.com,LIST
 HOST,dl2.nwjs.io,LIST
 HOST,dl2.xmind.net,LIST
 HOST,dl3.xmind.net,LIST
+HOST,dlcdnets.asus.com,LIST
 HOST,docs.rs,LIST
 HOST,down.filen-1.net,LIST
 HOST,down.filen-2.net,LIST
@@ -1734,6 +1736,7 @@ HOST-SUFFIX,centfile.com,LIST
 HOST-SUFFIX,cf-images.ap-southeast-1.prod.boltdns.net,LIST
 HOST-SUFFIX,cf-ipfs.com,LIST
 HOST-SUFFIX,cfcdn.mux.com,LIST
+HOST-SUFFIX,challenges.cloudflare.com,LIST
 HOST-SUFFIX,channel4.com,LIST
 HOST-SUFFIX,channel5.com,LIST
 HOST-SUFFIX,characterai.io,LIST

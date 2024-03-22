@@ -1,5 +1,5 @@
-# Clash total line 2287
-# Last updated Tue 03/19/2024 22:07:11.33
+# Clash total line 2288
+# Last updated Fri 03/22/2024 22:06:59.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -50,6 +50,7 @@ payload:
   - DOMAIN,assets-cms.kraken.com
   - DOMAIN,assets-fe.change.org
   - DOMAIN,assets-next.matters.news
+  - DOMAIN,assets-next.mattersprotocol.io
   - DOMAIN,assets-production.packagecloud.io
   - DOMAIN,assets-s3-us-east-1.ceros.com
   - DOMAIN,assets-v2.super.so
