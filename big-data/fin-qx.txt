@@ -1,5 +1,5 @@
-# Quantumult total line 4834
-# Last updated Mon 03/25/2024 22:10:07.35
+# Quantumult total line 4835
+# Last updated Thu 03/28/2024 22:08:47.87
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -118,6 +118,7 @@ HOST,assets.openshift.net,LIST
 HOST,assets.orz.uno,LIST
 HOST,assets.plurk.com,LIST
 HOST,assets.poool.fr,LIST
+HOST,assets.positional-bucket.com,LIST
 HOST,assets.prowritingaid.com,LIST
 HOST,assets.quillbot.com,LIST
 HOST,assets.repair.org,LIST
@@ -331,6 +332,7 @@ HOST,cdn.micro.blog,LIST
 HOST,cdn.minecraft-server-list.com,LIST
 HOST,cdn.missav.com,LIST
 HOST,cdn.modrinth.com,LIST
+HOST,cdn.myfonts.net,LIST
 HOST,cdn.myportfolio.com,LIST
 HOST,cdn.nerdschalk.com,LIST
 HOST,cdn.neverbounce.com,LIST
@@ -1041,7 +1043,6 @@ HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
 HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rules.ac,LIST
-HOST,ruleset.skk.moe,LIST
 HOST,runkit-packages-static-executables.com,LIST
 HOST,runkit-packages-static.com,LIST
 HOST,s-cdn.anthropic.com,LIST
@@ -1309,7 +1310,6 @@ HOST,talk.hyvor.com,LIST
 HOST,talk.washingtonpost.com,LIST
 HOST,th.bing.com,LIST
 HOST,themes.fourthwall.com,LIST
-HOST,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe,LIST
 HOST,thumbnail.missav.com,LIST
 HOST,thumbs.gfycat.com,LIST
 HOST,thumbs.onlyfans.com,LIST
@@ -3279,6 +3279,7 @@ HOST-SUFFIX,rsb.net,LIST
 HOST-SUFFIX,rss3.dev,LIST
 HOST-SUFFIX,rthk.hk,LIST
 HOST-SUFFIX,rthk.org.hk,LIST
+HOST-SUFFIX,ruleset.skk.moe,LIST
 HOST-SUFFIX,runkitcdn.com,LIST
 HOST-SUFFIX,s-nbcnews.com,LIST
 HOST-SUFFIX,s3-website.fr-par.scw.cloud,LIST

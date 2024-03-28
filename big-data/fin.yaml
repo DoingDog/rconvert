@@ -1,5 +1,5 @@
-# Clash total line 4849
-# Last updated Mon 03/25/2024 22:10:07.40
+# Clash total line 4850
+# Last updated Thu 03/28/2024 22:08:47.90
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -119,6 +119,7 @@ payload:
   - DOMAIN,assets.orz.uno
   - DOMAIN,assets.plurk.com
   - DOMAIN,assets.poool.fr
+  - DOMAIN,assets.positional-bucket.com
   - DOMAIN,assets.prowritingaid.com
   - DOMAIN,assets.quillbot.com
   - DOMAIN,assets.repair.org
@@ -332,6 +333,7 @@ payload:
   - DOMAIN,cdn.minecraft-server-list.com
   - DOMAIN,cdn.missav.com
   - DOMAIN,cdn.modrinth.com
+  - DOMAIN,cdn.myfonts.net
   - DOMAIN,cdn.myportfolio.com
   - DOMAIN,cdn.nerdschalk.com
   - DOMAIN,cdn.neverbounce.com
@@ -1042,7 +1044,6 @@ payload:
   - DOMAIN,rsms.me
   - DOMAIN,rts-static-prod.freshworksapi.com
   - DOMAIN,rules.ac
-  - DOMAIN,ruleset.skk.moe
   - DOMAIN,runkit-packages-static-executables.com
   - DOMAIN,runkit-packages-static.com
   - DOMAIN,s-cdn.anthropic.com
@@ -1310,7 +1311,6 @@ payload:
   - DOMAIN,talk.washingtonpost.com
   - DOMAIN,th.bing.com
   - DOMAIN,themes.fourthwall.com
-  - DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
   - DOMAIN,thumbnail.missav.com
   - DOMAIN,thumbs.gfycat.com
   - DOMAIN,thumbs.onlyfans.com
@@ -3280,6 +3280,7 @@ payload:
   - DOMAIN-SUFFIX,rss3.dev
   - DOMAIN-SUFFIX,rthk.hk
   - DOMAIN-SUFFIX,rthk.org.hk
+  - DOMAIN-SUFFIX,ruleset.skk.moe
   - DOMAIN-SUFFIX,runkitcdn.com
   - DOMAIN-SUFFIX,s-nbcnews.com
   - DOMAIN-SUFFIX,s3-website.fr-par.scw.cloud
