@@ -1,5 +1,5 @@
-# Clash total line 2289
-# Last updated Thu 03/28/2024 22:08:39.36
+# Clash total line 2290
+# Last updated Sun 03/31/2024 22:09:05.76
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1067,6 +1067,7 @@ payload:
   - DOMAIN,static-cdn.osdn.net
   - DOMAIN,static-cdn.spot.im
   - DOMAIN,static-clst.avgle.com
+  - DOMAIN,static-community.tp-link.com
   - DOMAIN,static-dm.ubisoft.com
   - DOMAIN,static-effect.reg.ru
   - DOMAIN,static-exp1.licdn.com

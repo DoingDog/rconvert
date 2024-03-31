@@ -1,5 +1,5 @@
-# Quantumult total line 4835
-# Last updated Thu 03/28/2024 22:08:47.87
+# Quantumult total line 4837
+# Last updated Sun 03/31/2024 22:09:14.90
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -534,6 +534,7 @@ HOST,down.filen.net,LIST
 HOST,download-core.sys.truenas.net,LIST
 HOST,download.anydesk.com,LIST
 HOST,download.beeper.com,LIST
+HOST,download.cpuid.com,LIST
 HOST,download.dlsite.com,LIST
 HOST,download.dm.origin.com,LIST
 HOST,download.docker.com,LIST
@@ -1156,6 +1157,7 @@ HOST,static-cdn.mastodon.social,LIST
 HOST,static-cdn.osdn.net,LIST
 HOST,static-cdn.spot.im,LIST
 HOST,static-clst.avgle.com,LIST
+HOST,static-community.tp-link.com,LIST
 HOST,static-dm.ubisoft.com,LIST
 HOST,static-effect.reg.ru,LIST
 HOST,static-gcp.freepikcompany.com,LIST

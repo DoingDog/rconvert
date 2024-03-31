@@ -1,5 +1,5 @@
-# Quantumult total line 4225
-# Last updated Thu 03/28/2024 22:08:55.27
+# Quantumult total line 4227
+# Last updated Sun 03/31/2024 22:09:23.72
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -20,6 +20,7 @@ HOST,p-bstarstatic.akamaized.net,LIST
 HOST,p.bstarstatic.com,LIST
 HOST,raw.iqiq.io,LIST
 HOST,sms.imagetasks.com,LIST
+HOST,steamcommunity-a.akamaihd.net,LIST
 HOST,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe,LIST
 HOST,upos-bstar-mirrorakam.akamaized.net,LIST
 HOST,upos-bstar1-mirrorakam.akamaized.net,LIST
@@ -3773,6 +3774,7 @@ HOST-SUFFIX,yuantiku.com,LIST
 HOST-SUFFIX,yuewen.com,LIST
 HOST-SUFFIX,yufuid.com,LIST
 HOST-SUFFIX,yufuid.net,LIST
+HOST-SUFFIX,yumchina.com,LIST
 HOST-SUFFIX,yunaq.com,LIST
 HOST-SUFFIX,yunba.io,LIST
 HOST-SUFFIX,yundaex.com,LIST
