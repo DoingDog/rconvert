@@ -1,5 +1,5 @@
-# Quantumult total line 4227
-# Last updated Mon 04/01/2024 22:09:24.70
+# Quantumult total line 4239
+# Last updated Thu 04/04/2024 22:07:52.12
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -64,6 +64,7 @@ HOST-SUFFIX,163.com,LIST
 HOST-SUFFIX,1637.com,LIST
 HOST-SUFFIX,163cn.tv,LIST
 HOST-SUFFIX,163industry.com,LIST
+HOST-SUFFIX,163jiasu.com,LIST
 HOST-SUFFIX,163mail.com,LIST
 HOST-SUFFIX,163qiyukf.com,LIST
 HOST-SUFFIX,163yun.com,LIST
@@ -765,6 +766,7 @@ HOST-SUFFIX,cdnhwczmn114.com,LIST
 HOST-SUFFIX,cdnhwczth23.com,LIST
 HOST-SUFFIX,cdnhwcztu09.com,LIST
 HOST-SUFFIX,cdnhwczxh101.com,LIST
+HOST-SUFFIX,cdnjtzy.com,LIST
 HOST-SUFFIX,cdnmama.com,LIST
 HOST-SUFFIX,cdntip.com,LIST
 HOST-SUFFIX,cdntips.com,LIST
@@ -1164,6 +1166,7 @@ HOST-SUFFIX,deepinos.org,LIST
 HOST-SUFFIX,dengguobi.com,LIST
 HOST-SUFFIX,develenv.com,LIST
 HOST-SUFFIX,devui.design,LIST
+HOST-SUFFIX,dewu.com,LIST
 HOST-SUFFIX,dfcfw.com,LIST
 HOST-SUFFIX,dfham.com,LIST
 HOST-SUFFIX,dfkhgj.com,LIST
@@ -1659,6 +1662,8 @@ HOST-SUFFIX,hicloud.com,LIST
 HOST-SUFFIX,hifuntv.com,LIST
 HOST-SUFFIX,hihocoder.com,LIST
 HOST-SUFFIX,hihonor.com,LIST
+HOST-SUFFIX,hihonorcdn.com,LIST
+HOST-SUFFIX,hihonorcloud.com,LIST
 HOST-SUFFIX,hiido.com,LIST
 HOST-SUFFIX,hikunpeng.com,LIST
 HOST-SUFFIX,hikunpeng.net,LIST
@@ -1690,6 +1695,7 @@ HOST-SUFFIX,hongsanban.com,LIST
 HOST-SUFFIX,hongtastock.com,LIST
 HOST-SUFFIX,hongxiu.com,LIST
 HOST-SUFFIX,hongyuanqh.com,LIST
+HOST-SUFFIX,honor.com,LIST
 HOST-SUFFIX,hori-gz.com,LIST
 HOST-SUFFIX,hostbuf.com,LIST
 HOST-SUFFIX,hotmail.com,LIST
@@ -1827,6 +1833,7 @@ HOST-SUFFIX,iciba.com,LIST
 HOST-SUFFIX,icourse163.org,LIST
 HOST-SUFFIX,ics.design,LIST
 HOST-SUFFIX,id6.com,LIST
+HOST-SUFFIX,id6.me,LIST
 HOST-SUFFIX,idcgcloudcs.com,LIST
 HOST-SUFFIX,idcquan.com,LIST
 HOST-SUFFIX,idongdong.com,LIST
@@ -2172,7 +2179,6 @@ HOST-SUFFIX,kuaishouzt.com,LIST
 HOST-SUFFIX,kuaizhan.com,LIST
 HOST-SUFFIX,kuangxiangit.com,LIST
 HOST-SUFFIX,kugou.com,LIST
-HOST-SUFFIX,kugou.com1,LIST
 HOST-SUFFIX,kumiao.com,LIST
 HOST-SUFFIX,kumiao.tv,LIST
 HOST-SUFFIX,kunlunaq.com,LIST
@@ -2615,6 +2621,7 @@ HOST-SUFFIX,ooklaserver.net,LIST
 HOST-SUFFIX,opdown.com,LIST
 HOST-SUFFIX,open.cd,LIST
 HOST-SUFFIX,openapp.run,LIST
+HOST-SUFFIX,openinstall.io,LIST
 HOST-SUFFIX,openkylin.top,LIST
 HOST-SUFFIX,openlearning.com,LIST
 HOST-SUFFIX,openmidas.com,LIST
@@ -2762,6 +2769,7 @@ HOST-SUFFIX,qdmm.com,LIST
 HOST-SUFFIX,qdwebim.com,LIST
 HOST-SUFFIX,qeodns.com,LIST
 HOST-SUFFIX,qeodns.net,LIST
+HOST-SUFFIX,qh-cdn.com,LIST
 HOST-SUFFIX,qh24.com,LIST
 HOST-SUFFIX,qhimg.com,LIST
 HOST-SUFFIX,qhimgs0.com,LIST
@@ -2822,6 +2830,7 @@ HOST-SUFFIX,qiuwen.wiki,LIST
 HOST-SUFFIX,qixin.com,LIST
 HOST-SUFFIX,qiyukf.com,LIST
 HOST-SUFFIX,qizuang.com,LIST
+HOST-SUFFIX,qlivecdn.com,LIST
 HOST-SUFFIX,qnsdk.com,LIST
 HOST-SUFFIX,qnssl.com,LIST
 HOST-SUFFIX,qq.cn.com,LIST
@@ -2896,6 +2905,7 @@ HOST-SUFFIX,saasops.tech,LIST
 HOST-SUFFIX,saayaa.com,LIST
 HOST-SUFFIX,sagepub.com,LIST
 HOST-SUFFIX,saibo.com,LIST
+HOST-SUFFIX,samsungcloudcn.com,LIST
 HOST-SUFFIX,sandai.net,LIST
 HOST-SUFFIX,sanguosha.com,LIST
 HOST-SUFFIX,sankuai.com,LIST
@@ -3466,6 +3476,7 @@ HOST-SUFFIX,wdzj.com,LIST
 HOST-SUFFIX,we4399.com,LIST
 HOST-SUFFIX,weand.com,LIST
 HOST-SUFFIX,weather.com,LIST
+HOST-SUFFIX,weathercn.com,LIST
 HOST-SUFFIX,webank.com,LIST
 HOST-SUFFIX,webankcdn.net,LIST
 HOST-SUFFIX,webgame163.com,LIST
@@ -3899,6 +3910,7 @@ HOST-SUFFIX,ztfsec.com,LIST
 HOST-SUFFIX,zuche.com,LIST
 HOST-SUFFIX,zuchecdn.com,LIST
 HOST-SUFFIX,zuhaowan.com,LIST
+HOST-SUFFIX,zui.com,LIST
 HOST-SUFFIX,zuidaima.com,LIST
 HOST-SUFFIX,zuimeitianqi.com,LIST
 HOST-SUFFIX,zuodao.com,LIST

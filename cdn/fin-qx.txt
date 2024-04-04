@@ -1,5 +1,5 @@
-# Quantumult total line 2290
-# Last updated Mon 04/01/2024 22:09:08.86
+# Quantumult total line 2302
+# Last updated Thu 04/04/2024 22:07:33.08
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -82,6 +82,7 @@ HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
 HOST,assets.flodesk.com,LIST
 HOST,assets.gcore.pro,LIST
+HOST,assets.genius.com,LIST
 HOST,assets.getkirby.com,LIST
 HOST,assets.grammarly.com,LIST
 HOST,assets.gumroad.com,LIST
@@ -299,6 +300,7 @@ HOST,cdn.ip2location.io,LIST
 HOST,cdn.ipregistry.co,LIST
 HOST,cdn.jetboost.io,LIST
 HOST,cdn.jetphotos.com,LIST
+HOST,cdn.jifi.co,LIST
 HOST,cdn.jolipage.co,LIST
 HOST,cdn.judge.me,LIST
 HOST,cdn.jwplayer.com,LIST
@@ -565,6 +567,7 @@ HOST,g-static.ap4r.com,LIST
 HOST,g1.nyt.com,LIST
 HOST,genesis-cdn.ff.com,LIST
 HOST,geoip-js.com,LIST
+HOST,gfonts.jifi.co,LIST
 HOST,gfx-data.news-engineering.aws.wapo.pub,LIST
 HOST,ghavatars.staticblitz.com,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
@@ -689,11 +692,13 @@ HOST,img.ltyears.com,LIST
 HOST,img.merch.cameo.com,LIST
 HOST,img.pawoo.net,LIST
 HOST,img.perfops.net,LIST
+HOST,img.picacomic.com,LIST
 HOST,img.reg.ru,LIST
 HOST,img.represent.com,LIST
 HOST,img.riskified.com,LIST
 HOST,img.skk.moe,LIST
 HOST,img.timero.xyz,LIST
+HOST,img.urlnode.com,LIST
 HOST,img.utdstc.com,LIST
 HOST,img.vim-cn.com,LIST
 HOST,img.xjh.me,LIST
@@ -982,8 +987,10 @@ HOST,s3.envato.com,LIST
 HOST,s3.eu-central-003.backblazeb2.com,LIST
 HOST,s3.eu-central-2.wasabisys.com,LIST
 HOST,s3.filebase.com,LIST
+HOST,s3.go2778.com,LIST
 HOST,s3.m.0x.mk,LIST
 HOST,s3.masto.ai,LIST
+HOST,s3.picacomic.com,LIST
 HOST,s3.stackabuse.com,LIST
 HOST,s3.toot.io,LIST
 HOST,s3.us-west-000.backblazeb2.com,LIST
@@ -1150,6 +1157,7 @@ HOST,static.news.bitcoin.com,LIST
 HOST,static.nhentai.net,LIST
 HOST,static.nicehash.com,LIST
 HOST,static.npmjs.com,LIST
+HOST,static.nrk.no,LIST
 HOST,static.oklink.com,LIST
 HOST,static.okx.com,LIST
 HOST,static.olelive.com,LIST
@@ -1219,6 +1227,7 @@ HOST,steamcdn-a.akamaihd.net,LIST
 HOST,steamusercontent-a.akamaihd.net,LIST
 HOST,steamuserimages-a.akamaihd.net,LIST
 HOST,steamvideo-a.akamaihd.net,LIST
+HOST,storage-b.picacomic.com,LIST
 HOST,storage.crisp.chat,LIST
 HOST,storage.gra.cloud.ovh.net,LIST
 HOST,storage.sciencecast.org,LIST
@@ -1723,6 +1732,7 @@ HOST-SUFFIX,media.beeper.com,LIST
 HOST-SUFFIX,media.ci-en.jp,LIST
 HOST-SUFFIX,media.tumblr.com,LIST
 HOST-SUFFIX,meetupstatic.com,LIST
+HOST-SUFFIX,mfcimg.com,LIST
 HOST-SUFFIX,mirrors.utermux.dev,LIST
 HOST-SUFFIX,misskeyusercontent.com,LIST
 HOST-SUFFIX,missuo.ru,LIST
@@ -2188,6 +2198,7 @@ HOST-SUFFIX,substackcdn.com,LIST
 HOST-SUFFIX,surge.sh,LIST
 HOST-SUFFIX,susercontent.com,LIST
 HOST-SUFFIX,swiftypecdn.com,LIST
+HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,t.staticblitz.com,LIST
 HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,tedcdn.com,LIST
@@ -2202,6 +2213,7 @@ HOST-SUFFIX,tmpfiles.org,LIST
 HOST-SUFFIX,tnastatic.com,LIST
 HOST-SUFFIX,trackerslist.com,LIST
 HOST-SUFFIX,transcend-cdn.com,LIST
+HOST-SUFFIX,ttcache.com,LIST
 HOST-SUFFIX,tth-ipfs.com,LIST
 HOST-SUFFIX,ttl.sh,LIST
 HOST-SUFFIX,ttwstatic.com,LIST

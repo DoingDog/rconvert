@@ -1,5 +1,5 @@
-# Adblock total line 2290
-# Last updated Mon 04/01/2024 22:09:08.97
+# Adblock total line 2302
+# Last updated Thu 04/04/2024 22:07:33.20
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||9191.ga^
@@ -82,6 +82,7 @@
 ||assets.fastly.com^
 ||assets.flodesk.com^
 ||assets.gcore.pro^
+||assets.genius.com^
 ||assets.getkirby.com^
 ||assets.grammarly.com^
 ||assets.gumroad.com^
@@ -299,6 +300,7 @@
 ||cdn.ipregistry.co^
 ||cdn.jetboost.io^
 ||cdn.jetphotos.com^
+||cdn.jifi.co^
 ||cdn.jolipage.co^
 ||cdn.judge.me^
 ||cdn.jwplayer.com^
@@ -565,6 +567,7 @@
 ||g1.nyt.com^
 ||genesis-cdn.ff.com^
 ||geoip-js.com^
+||gfonts.jifi.co^
 ||gfx-data.news-engineering.aws.wapo.pub^
 ||ghavatars.staticblitz.com^
 ||gitpkg-fork.vercel.sh^
@@ -689,11 +692,13 @@
 ||img.merch.cameo.com^
 ||img.pawoo.net^
 ||img.perfops.net^
+||img.picacomic.com^
 ||img.reg.ru^
 ||img.represent.com^
 ||img.riskified.com^
 ||img.skk.moe^
 ||img.timero.xyz^
+||img.urlnode.com^
 ||img.utdstc.com^
 ||img.vim-cn.com^
 ||img.xjh.me^
@@ -982,8 +987,10 @@
 ||s3.eu-central-003.backblazeb2.com^
 ||s3.eu-central-2.wasabisys.com^
 ||s3.filebase.com^
+||s3.go2778.com^
 ||s3.m.0x.mk^
 ||s3.masto.ai^
+||s3.picacomic.com^
 ||s3.stackabuse.com^
 ||s3.toot.io^
 ||s3.us-west-000.backblazeb2.com^
@@ -1150,6 +1157,7 @@
 ||static.nhentai.net^
 ||static.nicehash.com^
 ||static.npmjs.com^
+||static.nrk.no^
 ||static.oklink.com^
 ||static.okx.com^
 ||static.olelive.com^
@@ -1219,6 +1227,7 @@
 ||steamusercontent-a.akamaihd.net^
 ||steamuserimages-a.akamaihd.net^
 ||steamvideo-a.akamaihd.net^
+||storage-b.picacomic.com^
 ||storage.crisp.chat^
 ||storage.gra.cloud.ovh.net^
 ||storage.sciencecast.org^
@@ -1723,6 +1732,7 @@
 ||media.ci-en.jp^
 ||media.tumblr.com^
 ||meetupstatic.com^
+||mfcimg.com^
 ||mirrors.utermux.dev^
 ||misskeyusercontent.com^
 ||missuo.ru^
@@ -2188,6 +2198,7 @@
 ||surge.sh^
 ||susercontent.com^
 ||swiftypecdn.com^
+||sxccdn.com^
 ||t.staticblitz.com^
 ||tapecontent.net^
 ||tedcdn.com^
@@ -2202,6 +2213,7 @@
 ||tnastatic.com^
 ||trackerslist.com^
 ||transcend-cdn.com^
+||ttcache.com^
 ||tth-ipfs.com^
 ||ttl.sh^
 ||ttwstatic.com^
