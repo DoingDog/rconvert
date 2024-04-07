@@ -1,9 +1,10 @@
-# Main total line 4864
-# Last updated Thu 04/04/2024 22:07:43.09
+# Main total line 4875
+# Last updated Sun 04/07/2024 22:07:06.40
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
 DOMAIN,a.deviantart.net
+DOMAIN,a.fireside.fm
 DOMAIN,a5.behance.net
 DOMAIN,academy-public.coinmarketcap.com
 DOMAIN,accounts-cdn.9gag.com
@@ -87,6 +88,7 @@ DOMAIN,assets.convertkit.com
 DOMAIN,assets.dnsfilter.com
 DOMAIN,assets.extension.grammarly.com
 DOMAIN,assets.fastly.com
+DOMAIN,assets.fireside.fm
 DOMAIN,assets.flodesk.com
 DOMAIN,assets.gcore.pro
 DOMAIN,assets.genius.com
@@ -94,6 +96,7 @@ DOMAIN,assets.getkirby.com
 DOMAIN,assets.grammarly.com
 DOMAIN,assets.gumroad.com
 DOMAIN,assets.habr.com
+DOMAIN,assets.hearstapps.com
 DOMAIN,assets.holopin.io
 DOMAIN,assets.humix.com
 DOMAIN,assets.ifttt.com
@@ -330,6 +333,7 @@ DOMAIN,cdn.mathjax.org
 DOMAIN,cdn.matterhorn.app
 DOMAIN,cdn.mcauto-images-production.sendgrid.net
 DOMAIN,cdn.mcr.ea.com
+DOMAIN,cdn.media.amplience.net
 DOMAIN,cdn.micro.blog
 DOMAIN,cdn.minecraft-server-list.com
 DOMAIN,cdn.missav.com
@@ -487,6 +491,7 @@ DOMAIN,cookie-cdn.cookiepro.com
 DOMAIN,cpwebassets.codepen.io
 DOMAIN,creativajs.altervista.org
 DOMAIN,crl.usertrust.com
+DOMAIN,crt.comodoca.com
 DOMAIN,css.createsend1.com
 DOMAIN,ctldl.windowsupdate.com
 DOMAIN,curl.se
@@ -575,10 +580,12 @@ DOMAIN,edge-mobile-static.azureedge.net
 DOMAIN,edge.cwtv-vod-ext.top.comcast.net
 DOMAIN,edge.personalizer.io
 DOMAIN,edge.steam-dns.top.comcast.net
+DOMAIN,edge1.certona.net
 DOMAIN,edgeassetservice.azureedge.net
 DOMAIN,edgedl.me.gvt4.com
 DOMAIN,edgestatic.azureedge.net
 DOMAIN,eep.io
+DOMAIN,eightcha.com
 DOMAIN,embed-ssl.wistia.com
 DOMAIN,embed.runkit.com
 DOMAIN,embed.savvycal.com
@@ -1187,7 +1194,6 @@ DOMAIN,static.bit.dev
 DOMAIN,static.bitfinex.com
 DOMAIN,static.buffer.com
 DOMAIN,static.bytepan.com
-DOMAIN,static.cdn-website.com
 DOMAIN,static.change.org
 DOMAIN,static.cloud.coveo.com
 DOMAIN,static.codepen.io
@@ -1199,6 +1205,7 @@ DOMAIN,static.cracked.to
 DOMAIN,static.crypto.com
 DOMAIN,static.dash.cloudflare.com
 DOMAIN,static.deepl.com
+DOMAIN,static.doujins.com
 DOMAIN,static.dw.com
 DOMAIN,static.dynamicyield.com
 DOMAIN,static.dzeninfra.ru
@@ -1243,6 +1250,7 @@ DOMAIN,static.onlyfans.com
 DOMAIN,static.opensea.io
 DOMAIN,static.osdn.net
 DOMAIN,static.playstation.com
+DOMAIN,static.plus.net
 DOMAIN,static.rakuten.com
 DOMAIN,static.redhat.com
 DOMAIN,static.reo.dev
@@ -1262,7 +1270,6 @@ DOMAIN,static.status.io
 DOMAIN,static.t-ru.org
 DOMAIN,static.telegraph.co.uk
 DOMAIN,static.theguardian.com
-DOMAIN,static.thisav.com
 DOMAIN,static.tokenview.io
 DOMAIN,static.tradingview.com
 DOMAIN,static.tronscan.org
@@ -1329,6 +1336,7 @@ DOMAIN,thumbsnap.com
 DOMAIN,tiles.stadiamaps.com
 DOMAIN,ton.local.twitter.com
 DOMAIN,topbar-static.piano.io
+DOMAIN,torrindex.net
 DOMAIN,tracker.cdnbye.com
 DOMAIN,typescript.azureedge.net
 DOMAIN,typescript.visualstudio.com
@@ -1696,6 +1704,7 @@ DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co
 DOMAIN-SUFFIX,cdn-lfs.huggingface.co
 DOMAIN-SUFFIX,cdn-spurit.com
 DOMAIN-SUFFIX,cdn-uploads.huggingface.co
+DOMAIN-SUFFIX,cdn-website.com
 DOMAIN-SUFFIX,cdn.angruo.com
 DOMAIN-SUFFIX,cdn.blizzard.com
 DOMAIN-SUFFIX,cdn.cloudflare.net
@@ -2485,6 +2494,7 @@ DOMAIN-SUFFIX,gvt7.com
 DOMAIN-SUFFIX,gvt9.com
 DOMAIN-SUFFIX,gw3.io
 DOMAIN-SUFFIX,gyan.dev
+DOMAIN-SUFFIX,h-cdn.co
 DOMAIN-SUFFIX,hackerone-user-content.com
 DOMAIN-SUFFIX,haiwaikan.com
 DOMAIN-SUFFIX,happyon.jp
@@ -3365,6 +3375,7 @@ DOMAIN-SUFFIX,skyking.com.tw
 DOMAIN-SUFFIX,skypack.dev
 DOMAIN-SUFFIX,slack-edge.com
 DOMAIN-SUFFIX,slack-imgs.com
+DOMAIN-SUFFIX,slidesharecdn.com
 DOMAIN-SUFFIX,smartmediarep.com
 DOMAIN-SUFFIX,smassets.net
 DOMAIN-SUFFIX,smilecdn.co

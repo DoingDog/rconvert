@@ -1,9 +1,10 @@
-# Quantumult total line 4849
-# Last updated Thu 04/04/2024 22:07:43.25
+# Quantumult total line 4860
+# Last updated Sun 04/07/2024 22:07:06.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
 HOST,a.deviantart.net,LIST
+HOST,a.fireside.fm,LIST
 HOST,a5.behance.net,LIST
 HOST,academy-public.coinmarketcap.com,LIST
 HOST,accounts-cdn.9gag.com,LIST
@@ -87,6 +88,7 @@ HOST,assets.convertkit.com,LIST
 HOST,assets.dnsfilter.com,LIST
 HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
+HOST,assets.fireside.fm,LIST
 HOST,assets.flodesk.com,LIST
 HOST,assets.gcore.pro,LIST
 HOST,assets.genius.com,LIST
@@ -94,6 +96,7 @@ HOST,assets.getkirby.com,LIST
 HOST,assets.grammarly.com,LIST
 HOST,assets.gumroad.com,LIST
 HOST,assets.habr.com,LIST
+HOST,assets.hearstapps.com,LIST
 HOST,assets.holopin.io,LIST
 HOST,assets.humix.com,LIST
 HOST,assets.ifttt.com,LIST
@@ -330,6 +333,7 @@ HOST,cdn.mathjax.org,LIST
 HOST,cdn.matterhorn.app,LIST
 HOST,cdn.mcauto-images-production.sendgrid.net,LIST
 HOST,cdn.mcr.ea.com,LIST
+HOST,cdn.media.amplience.net,LIST
 HOST,cdn.micro.blog,LIST
 HOST,cdn.minecraft-server-list.com,LIST
 HOST,cdn.missav.com,LIST
@@ -487,6 +491,7 @@ HOST,cookie-cdn.cookiepro.com,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,creativajs.altervista.org,LIST
 HOST,crl.usertrust.com,LIST
+HOST,crt.comodoca.com,LIST
 HOST,css.createsend1.com,LIST
 HOST,ctldl.windowsupdate.com,LIST
 HOST,curl.se,LIST
@@ -575,10 +580,12 @@ HOST,edge-mobile-static.azureedge.net,LIST
 HOST,edge.cwtv-vod-ext.top.comcast.net,LIST
 HOST,edge.personalizer.io,LIST
 HOST,edge.steam-dns.top.comcast.net,LIST
+HOST,edge1.certona.net,LIST
 HOST,edgeassetservice.azureedge.net,LIST
 HOST,edgedl.me.gvt4.com,LIST
 HOST,edgestatic.azureedge.net,LIST
 HOST,eep.io,LIST
+HOST,eightcha.com,LIST
 HOST,embed-ssl.wistia.com,LIST
 HOST,embed.runkit.com,LIST
 HOST,embed.savvycal.com,LIST
@@ -1187,7 +1194,6 @@ HOST,static.bit.dev,LIST
 HOST,static.bitfinex.com,LIST
 HOST,static.buffer.com,LIST
 HOST,static.bytepan.com,LIST
-HOST,static.cdn-website.com,LIST
 HOST,static.change.org,LIST
 HOST,static.cloud.coveo.com,LIST
 HOST,static.codepen.io,LIST
@@ -1199,6 +1205,7 @@ HOST,static.cracked.to,LIST
 HOST,static.crypto.com,LIST
 HOST,static.dash.cloudflare.com,LIST
 HOST,static.deepl.com,LIST
+HOST,static.doujins.com,LIST
 HOST,static.dw.com,LIST
 HOST,static.dynamicyield.com,LIST
 HOST,static.dzeninfra.ru,LIST
@@ -1243,6 +1250,7 @@ HOST,static.onlyfans.com,LIST
 HOST,static.opensea.io,LIST
 HOST,static.osdn.net,LIST
 HOST,static.playstation.com,LIST
+HOST,static.plus.net,LIST
 HOST,static.rakuten.com,LIST
 HOST,static.redhat.com,LIST
 HOST,static.reo.dev,LIST
@@ -1262,7 +1270,6 @@ HOST,static.status.io,LIST
 HOST,static.t-ru.org,LIST
 HOST,static.telegraph.co.uk,LIST
 HOST,static.theguardian.com,LIST
-HOST,static.thisav.com,LIST
 HOST,static.tokenview.io,LIST
 HOST,static.tradingview.com,LIST
 HOST,static.tronscan.org,LIST
@@ -1329,6 +1336,7 @@ HOST,thumbsnap.com,LIST
 HOST,tiles.stadiamaps.com,LIST
 HOST,ton.local.twitter.com,LIST
 HOST,topbar-static.piano.io,LIST
+HOST,torrindex.net,LIST
 HOST,tracker.cdnbye.com,LIST
 HOST,typescript.azureedge.net,LIST
 HOST,typescript.visualstudio.com,LIST
@@ -1696,6 +1704,7 @@ HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn-spurit.com,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
+HOST-SUFFIX,cdn-website.com,LIST
 HOST-SUFFIX,cdn.angruo.com,LIST
 HOST-SUFFIX,cdn.blizzard.com,LIST
 HOST-SUFFIX,cdn.cloudflare.net,LIST
@@ -2485,6 +2494,7 @@ HOST-SUFFIX,gvt7.com,LIST
 HOST-SUFFIX,gvt9.com,LIST
 HOST-SUFFIX,gw3.io,LIST
 HOST-SUFFIX,gyan.dev,LIST
+HOST-SUFFIX,h-cdn.co,LIST
 HOST-SUFFIX,hackerone-user-content.com,LIST
 HOST-SUFFIX,haiwaikan.com,LIST
 HOST-SUFFIX,happyon.jp,LIST
@@ -3365,6 +3375,7 @@ HOST-SUFFIX,skyking.com.tw,LIST
 HOST-SUFFIX,skypack.dev,LIST
 HOST-SUFFIX,slack-edge.com,LIST
 HOST-SUFFIX,slack-imgs.com,LIST
+HOST-SUFFIX,slidesharecdn.com,LIST
 HOST-SUFFIX,smartmediarep.com,LIST
 HOST-SUFFIX,smassets.net,LIST
 HOST-SUFFIX,smilecdn.co,LIST
