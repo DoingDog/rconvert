@@ -1,5 +1,5 @@
-# Clash total line 2313
-# Last updated Sun 04/07/2024 22:06:58.32
+# Clash total line 2331
+# Last updated Wed 04/10/2024 22:10:24.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -215,6 +215,8 @@ payload:
   - DOMAIN,cdn-media-1.freecodecamp.org
   - DOMAIN,cdn-media-2.freecodecamp.org
   - DOMAIN,cdn-mobile.aptoide.com
+  - DOMAIN,cdn-msp.18comic.vip
+  - DOMAIN,cdn-msp.jmcomic.me
   - DOMAIN,cdn-node.diskpart.com
   - DOMAIN,cdn-public.sociabble.com
   - DOMAIN,cdn-raw.modrinth.com
@@ -290,6 +292,7 @@ payload:
   - DOMAIN,cdn.glitch.com
   - DOMAIN,cdn.glitch.global
   - DOMAIN,cdn.glitch.me
+  - DOMAIN,cdn.gofundme.com
   - DOMAIN,cdn.graph.office.net
   - DOMAIN,cdn.hackernoon.com
   - DOMAIN,cdn.hashnode.com
@@ -310,6 +313,7 @@ payload:
   - DOMAIN,cdn.jwplayer.com
   - DOMAIN,cdn.kinsta.com
   - DOMAIN,cdn.koala.live
+  - DOMAIN,cdn.kobo.com
   - DOMAIN,cdn.langshop.app
   - DOMAIN,cdn.linearicons.com
   - DOMAIN,cdn.linkmink.com
@@ -351,6 +355,7 @@ payload:
   - DOMAIN,cdn.pricespider.com
   - DOMAIN,cdn.privacy-mgmt.com
   - DOMAIN,cdn.prowritingaid.com
+  - DOMAIN,cdn.quadpay.com
   - DOMAIN,cdn.rauno.me
   - DOMAIN,cdn.readme.io
   - DOMAIN,cdn.recovermycart.com
@@ -410,6 +415,7 @@ payload:
   - DOMAIN,cdn03.jotfor.ms
   - DOMAIN,cdn1.dan.com
   - DOMAIN,cdn1.epicgames.com
+  - DOMAIN,cdn1.identitymind.com
   - DOMAIN,cdn1.stamped.io
   - DOMAIN,cdn1.sysgears.com
   - DOMAIN,cdn1.unrealengine.com
@@ -419,6 +425,7 @@ payload:
   - DOMAIN,cdn2.downdetector.com
   - DOMAIN,cdn2.editmysite.com
   - DOMAIN,cdn2.epicgames.com
+  - DOMAIN,cdn2.ettoday.net
   - DOMAIN,cdn2.hextom.com
   - DOMAIN,cdn2.macpaw.com
   - DOMAIN,cdn2.onlyfans.com
@@ -750,6 +757,7 @@ payload:
   - DOMAIN,kdata1.com
   - DOMAIN,lain.bgm.tv
   - DOMAIN,launchercontent.mojang.com
+  - DOMAIN,ledger-wp-website-s3-prd.ledger.com
   - DOMAIN,lib.arvancloud.com
   - DOMAIN,libs.quillbot.com
   - DOMAIN,link.storjshare.io
@@ -808,6 +816,7 @@ payload:
   - DOMAIN,media.yukimochi.jp
   - DOMAIN,media0.giphy.com
   - DOMAIN,media1.giphy.com
+  - DOMAIN,media1.tenor.com
   - DOMAIN,media2.giphy.com
   - DOMAIN,media3.giphy.com
   - DOMAIN,media4.giphy.com
@@ -904,6 +913,7 @@ payload:
   - DOMAIN,plus.unsplash.com
   - DOMAIN,polyfill.bbhub.io
   - DOMAIN,polyfill.mailchimp.com
+  - DOMAIN,pomf2.lain.la
   - DOMAIN,pool.jortage.com
   - DOMAIN,practicaldev-herokuapp-com.freetls.fastly.net
   - DOMAIN,prego-cache.prod.sketch.com
@@ -1088,6 +1098,7 @@ payload:
   - DOMAIN,static-exp2.licdn.com
   - DOMAIN,static-exp3.licdn.com
   - DOMAIN,static-gcp.freepikcompany.com
+  - DOMAIN,static-landing.probit.com
   - DOMAIN,static-lccn.leetcode.com
   - DOMAIN,static-main.moovit.com
   - DOMAIN,static-mh.content.disney.io
@@ -1126,6 +1137,7 @@ payload:
   - DOMAIN,static.dynamicyield.com
   - DOMAIN,static.dzeninfra.ru
   - DOMAIN,static.esimplus.net
+  - DOMAIN,static.ettoday.net
   - DOMAIN,static.euronews.com
   - DOMAIN,static.fasthosts.co.uk
   - DOMAIN,static.figma.com
@@ -1150,6 +1162,7 @@ payload:
   - DOMAIN,static.javcdn.info
   - DOMAIN,static.killedbygoogle.com
   - DOMAIN,static.klaviyo.com
+  - DOMAIN,static.kobo.com
   - DOMAIN,static.licdn.com
   - DOMAIN,static.linear.app
   - DOMAIN,static.maxmind.com
@@ -1176,6 +1189,7 @@ payload:
   - DOMAIN,static.osdn.net
   - DOMAIN,static.playstation.com
   - DOMAIN,static.plus.net
+  - DOMAIN,static.probit.com
   - DOMAIN,static.rakuten.com
   - DOMAIN,static.redhat.com
   - DOMAIN,static.reo.dev
@@ -1263,6 +1277,7 @@ payload:
   - DOMAIN,th.bing.com
   - DOMAIN,themes.fourthwall.com
   - DOMAIN,thumbnail.missav.com
+  - DOMAIN,thumbnailer.mixcloud.com
   - DOMAIN,thumbs.gfycat.com
   - DOMAIN,thumbs.onlyfans.com
   - DOMAIN,thumbs2.sendvid.com
@@ -1425,6 +1440,7 @@ payload:
   - DOMAIN-SUFFIX,bundle.thimatic-apps.com
   - DOMAIN-SUFFIX,bytebucket.org
   - DOMAIN-SUFFIX,bytedapm.com
+  - DOMAIN-SUFFIX,c-dn.net
   - DOMAIN-SUFFIX,c.staticblitz.com
   - DOMAIN-SUFFIX,catbox.moe
   - DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co
@@ -1743,6 +1759,7 @@ payload:
   - DOMAIN-SUFFIX,media.ci-en.jp
   - DOMAIN-SUFFIX,media.tumblr.com
   - DOMAIN-SUFFIX,meetupstatic.com
+  - DOMAIN-SUFFIX,mercdn.net
   - DOMAIN-SUFFIX,mfcimg.com
   - DOMAIN-SUFFIX,mirrors.utermux.dev
   - DOMAIN-SUFFIX,misskeyusercontent.com
@@ -1757,6 +1774,7 @@ payload:
   - DOMAIN-SUFFIX,mypinata.cloud
   - DOMAIN-SUFFIX,myshopapps.com
   - DOMAIN-SUFFIX,nel.cloudflare.com
+  - DOMAIN-SUFFIX,nel.goog
   - DOMAIN-SUFFIX,nelreports.net
   - DOMAIN-SUFFIX,nest.land
   - DOMAIN-SUFFIX,net.anydesk.com

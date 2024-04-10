@@ -1,5 +1,5 @@
-# Quantumult total line 2313
-# Last updated Sun 04/07/2024 22:06:58.29
+# Quantumult total line 2331
+# Last updated Wed 04/10/2024 22:10:24.04
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -214,6 +214,8 @@ HOST,cdn-live.foreignaffairs.com,LIST
 HOST,cdn-media-1.freecodecamp.org,LIST
 HOST,cdn-media-2.freecodecamp.org,LIST
 HOST,cdn-mobile.aptoide.com,LIST
+HOST,cdn-msp.18comic.vip,LIST
+HOST,cdn-msp.jmcomic.me,LIST
 HOST,cdn-node.diskpart.com,LIST
 HOST,cdn-public.sociabble.com,LIST
 HOST,cdn-raw.modrinth.com,LIST
@@ -289,6 +291,7 @@ HOST,cdn.ghostery.com,LIST
 HOST,cdn.glitch.com,LIST
 HOST,cdn.glitch.global,LIST
 HOST,cdn.glitch.me,LIST
+HOST,cdn.gofundme.com,LIST
 HOST,cdn.graph.office.net,LIST
 HOST,cdn.hackernoon.com,LIST
 HOST,cdn.hashnode.com,LIST
@@ -309,6 +312,7 @@ HOST,cdn.judge.me,LIST
 HOST,cdn.jwplayer.com,LIST
 HOST,cdn.kinsta.com,LIST
 HOST,cdn.koala.live,LIST
+HOST,cdn.kobo.com,LIST
 HOST,cdn.langshop.app,LIST
 HOST,cdn.linearicons.com,LIST
 HOST,cdn.linkmink.com,LIST
@@ -350,6 +354,7 @@ HOST,cdn.plyr.io,LIST
 HOST,cdn.pricespider.com,LIST
 HOST,cdn.privacy-mgmt.com,LIST
 HOST,cdn.prowritingaid.com,LIST
+HOST,cdn.quadpay.com,LIST
 HOST,cdn.rauno.me,LIST
 HOST,cdn.readme.io,LIST
 HOST,cdn.recovermycart.com,LIST
@@ -409,6 +414,7 @@ HOST,cdn02.jotfor.ms,LIST
 HOST,cdn03.jotfor.ms,LIST
 HOST,cdn1.dan.com,LIST
 HOST,cdn1.epicgames.com,LIST
+HOST,cdn1.identitymind.com,LIST
 HOST,cdn1.stamped.io,LIST
 HOST,cdn1.sysgears.com,LIST
 HOST,cdn1.unrealengine.com,LIST
@@ -418,6 +424,7 @@ HOST,cdn2.dan.com,LIST
 HOST,cdn2.downdetector.com,LIST
 HOST,cdn2.editmysite.com,LIST
 HOST,cdn2.epicgames.com,LIST
+HOST,cdn2.ettoday.net,LIST
 HOST,cdn2.hextom.com,LIST
 HOST,cdn2.macpaw.com,LIST
 HOST,cdn2.onlyfans.com,LIST
@@ -749,6 +756,7 @@ HOST,js.userflow.com,LIST
 HOST,kdata1.com,LIST
 HOST,lain.bgm.tv,LIST
 HOST,launchercontent.mojang.com,LIST
+HOST,ledger-wp-website-s3-prd.ledger.com,LIST
 HOST,lib.arvancloud.com,LIST
 HOST,libs.quillbot.com,LIST
 HOST,link.storjshare.io,LIST
@@ -807,6 +815,7 @@ HOST,media.wired.com,LIST
 HOST,media.yukimochi.jp,LIST
 HOST,media0.giphy.com,LIST
 HOST,media1.giphy.com,LIST
+HOST,media1.tenor.com,LIST
 HOST,media2.giphy.com,LIST
 HOST,media3.giphy.com,LIST
 HOST,media4.giphy.com,LIST
@@ -903,6 +912,7 @@ HOST,plugins.dprint.dev,LIST
 HOST,plus.unsplash.com,LIST
 HOST,polyfill.bbhub.io,LIST
 HOST,polyfill.mailchimp.com,LIST
+HOST,pomf2.lain.la,LIST
 HOST,pool.jortage.com,LIST
 HOST,practicaldev-herokuapp-com.freetls.fastly.net,LIST
 HOST,prego-cache.prod.sketch.com,LIST
@@ -1087,6 +1097,7 @@ HOST,static-exp1.licdn.com,LIST
 HOST,static-exp2.licdn.com,LIST
 HOST,static-exp3.licdn.com,LIST
 HOST,static-gcp.freepikcompany.com,LIST
+HOST,static-landing.probit.com,LIST
 HOST,static-lccn.leetcode.com,LIST
 HOST,static-main.moovit.com,LIST
 HOST,static-mh.content.disney.io,LIST
@@ -1125,6 +1136,7 @@ HOST,static.dw.com,LIST
 HOST,static.dynamicyield.com,LIST
 HOST,static.dzeninfra.ru,LIST
 HOST,static.esimplus.net,LIST
+HOST,static.ettoday.net,LIST
 HOST,static.euronews.com,LIST
 HOST,static.fasthosts.co.uk,LIST
 HOST,static.figma.com,LIST
@@ -1149,6 +1161,7 @@ HOST,static.itch.io,LIST
 HOST,static.javcdn.info,LIST
 HOST,static.killedbygoogle.com,LIST
 HOST,static.klaviyo.com,LIST
+HOST,static.kobo.com,LIST
 HOST,static.licdn.com,LIST
 HOST,static.linear.app,LIST
 HOST,static.maxmind.com,LIST
@@ -1175,6 +1188,7 @@ HOST,static.oracle.com,LIST
 HOST,static.osdn.net,LIST
 HOST,static.playstation.com,LIST
 HOST,static.plus.net,LIST
+HOST,static.probit.com,LIST
 HOST,static.rakuten.com,LIST
 HOST,static.redhat.com,LIST
 HOST,static.reo.dev,LIST
@@ -1262,6 +1276,7 @@ HOST,telemetry.nextjs.org,LIST
 HOST,th.bing.com,LIST
 HOST,themes.fourthwall.com,LIST
 HOST,thumbnail.missav.com,LIST
+HOST,thumbnailer.mixcloud.com,LIST
 HOST,thumbs.gfycat.com,LIST
 HOST,thumbs.onlyfans.com,LIST
 HOST,thumbs2.sendvid.com,LIST
@@ -1424,6 +1439,7 @@ HOST-SUFFIX,bundle.run,LIST
 HOST-SUFFIX,bundle.thimatic-apps.com,LIST
 HOST-SUFFIX,bytebucket.org,LIST
 HOST-SUFFIX,bytedapm.com,LIST
+HOST-SUFFIX,c-dn.net,LIST
 HOST-SUFFIX,c.staticblitz.com,LIST
 HOST-SUFFIX,catbox.moe,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
@@ -1742,6 +1758,7 @@ HOST-SUFFIX,media.beeper.com,LIST
 HOST-SUFFIX,media.ci-en.jp,LIST
 HOST-SUFFIX,media.tumblr.com,LIST
 HOST-SUFFIX,meetupstatic.com,LIST
+HOST-SUFFIX,mercdn.net,LIST
 HOST-SUFFIX,mfcimg.com,LIST
 HOST-SUFFIX,mirrors.utermux.dev,LIST
 HOST-SUFFIX,misskeyusercontent.com,LIST
@@ -1756,6 +1773,7 @@ HOST-SUFFIX,myavlive.com,LIST
 HOST-SUFFIX,mypinata.cloud,LIST
 HOST-SUFFIX,myshopapps.com,LIST
 HOST-SUFFIX,nel.cloudflare.com,LIST
+HOST-SUFFIX,nel.goog,LIST
 HOST-SUFFIX,nelreports.net,LIST
 HOST-SUFFIX,nest.land,LIST
 HOST-SUFFIX,net.anydesk.com,LIST
