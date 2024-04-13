@@ -1,5 +1,5 @@
-# Adblock total line 3941
-# Last updated Wed 04/10/2024 22:10:34.07
+# Adblock total line 3952
+# Last updated Sat 04/13/2024 22:08:04.23
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||9191.ga^
@@ -278,6 +278,7 @@
 ||cdn.cxense.com^
 ||cdn.datacamp.com^
 ||cdn.datatables.net^
+||cdn.datdota.com^
 ||cdn.db-ip.com^
 ||cdn.dnsimple.com^
 ||cdn.dotaoutpost.com^
@@ -361,6 +362,7 @@
 ||cdn.pixabay.com^
 ||cdn.plaid.com^
 ||cdn.player.fm^
+||cdn.plot.ly^
 ||cdn.plu.mx^
 ||cdn.pricespider.com^
 ||cdn.privacy-mgmt.com^
@@ -403,6 +405,7 @@
 ||cdn.trustpilot.net^
 ||cdn.tuk.dev^
 ||cdn.unwire.hk^
+||cdn.up-timely.com^
 ||cdn.usd.fan^
 ||cdn.userreport.com^
 ||cdn.v2ex.com^
@@ -477,11 +480,14 @@
 ||code.benco.io^
 ||code.highcharts.com^
 ||code.iconify.design^
+||code.ionicframework.com^
 ||code.jquery.com^
 ||compass-ssl.xbox.com^
 ||components.clever-cloud.com^
 ||confluence-v1.prod.atl-paas.net^
 ||connect.facebook.net^
+||connectivitycheck.android.com^
+||connectivitycheck.gstatic.com^
 ||consumersite-assets.trustpilot.net^
 ||content-origin.steampowered.com^
 ||content-prod-live.cert.starbucks.com^
@@ -498,6 +504,7 @@
 ||cpwebassets.codepen.io^
 ||creativajs.altervista.org^
 ||crl.usertrust.com^
+||crl.verisign.com^
 ||crt.comodoca.com^
 ||css.createsend1.com^
 ||ctldl.windowsupdate.com^
@@ -940,6 +947,7 @@
 ||objects.hit.moe^
 ||ocecdn.oraclecloud.com^
 ||ocsp.digicert.com^
+||ocsp.godaddy.com^
 ||ocsp.sectigo.com^
 ||ocsp2.apple.com^
 ||ocvideo.apple.com^
@@ -1025,7 +1033,6 @@
 ||publicsuffix.org^
 ||quriobot.com^
 ||r.r10s.jp^
-||r3.o.lencr.org^
 ||raw.github.com^
 ||react.dev^
 ||rebound.postmarkapp.com^
@@ -1190,6 +1197,7 @@
 ||static-main.moovit.com^
 ||static-overlay.ubisoft.com^
 ||static-production.npmjs.com^
+||static-r.kamihimeproject.net^
 ||static-resource.np.community.playstation.net^
 ||static-web-prod.skillshare.com^
 ||static-web.grammarly.com^
@@ -1407,6 +1415,7 @@
 ||wandi-6402.kxcdn.com^
 ||wcpstatic.microsoft.com^
 ||web-assets.ifttt.com^
+||web-assets.otogi-frontier.com^
 ||web-assets.strava.com^
 ||web-toolbar.playstation.com^
 ||web.onekey-asset.com^
@@ -2810,6 +2819,7 @@
 ||launchercontent.mojang.com^
 ||launchermeta.mojang.com^
 ||leechall.com^
+||lencr.org^
 ||letitbit.net^
 ||letsupload.co^
 ||letsupload.io^
@@ -3535,6 +3545,7 @@
 ||tidalhifi.com^
 ||tik-tokapi.com^
 ||tiktok.com^
+||tiktok.us^
 ||tiktokv.com^
 ||tildacdn.com^
 ||tile.openstreetmap.org^

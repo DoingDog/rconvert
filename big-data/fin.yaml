@@ -1,5 +1,5 @@
-# Clash total line 4892
-# Last updated Wed 04/10/2024 22:10:33.97
+# Clash total line 4903
+# Last updated Sat 04/13/2024 22:08:04.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -279,6 +279,7 @@ payload:
   - DOMAIN,cdn.cxense.com
   - DOMAIN,cdn.datacamp.com
   - DOMAIN,cdn.datatables.net
+  - DOMAIN,cdn.datdota.com
   - DOMAIN,cdn.db-ip.com
   - DOMAIN,cdn.dnsimple.com
   - DOMAIN,cdn.dotaoutpost.com
@@ -362,6 +363,7 @@ payload:
   - DOMAIN,cdn.pixabay.com
   - DOMAIN,cdn.plaid.com
   - DOMAIN,cdn.player.fm
+  - DOMAIN,cdn.plot.ly
   - DOMAIN,cdn.plu.mx
   - DOMAIN,cdn.pricespider.com
   - DOMAIN,cdn.privacy-mgmt.com
@@ -404,6 +406,7 @@ payload:
   - DOMAIN,cdn.trustpilot.net
   - DOMAIN,cdn.tuk.dev
   - DOMAIN,cdn.unwire.hk
+  - DOMAIN,cdn.up-timely.com
   - DOMAIN,cdn.usd.fan
   - DOMAIN,cdn.userreport.com
   - DOMAIN,cdn.v2ex.com
@@ -478,11 +481,14 @@ payload:
   - DOMAIN,code.benco.io
   - DOMAIN,code.highcharts.com
   - DOMAIN,code.iconify.design
+  - DOMAIN,code.ionicframework.com
   - DOMAIN,code.jquery.com
   - DOMAIN,compass-ssl.xbox.com
   - DOMAIN,components.clever-cloud.com
   - DOMAIN,confluence-v1.prod.atl-paas.net
   - DOMAIN,connect.facebook.net
+  - DOMAIN,connectivitycheck.android.com
+  - DOMAIN,connectivitycheck.gstatic.com
   - DOMAIN,consumersite-assets.trustpilot.net
   - DOMAIN,content-origin.steampowered.com
   - DOMAIN,content-prod-live.cert.starbucks.com
@@ -499,6 +505,7 @@ payload:
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,creativajs.altervista.org
   - DOMAIN,crl.usertrust.com
+  - DOMAIN,crl.verisign.com
   - DOMAIN,crt.comodoca.com
   - DOMAIN,css.createsend1.com
   - DOMAIN,ctldl.windowsupdate.com
@@ -941,6 +948,7 @@ payload:
   - DOMAIN,objects.hit.moe
   - DOMAIN,ocecdn.oraclecloud.com
   - DOMAIN,ocsp.digicert.com
+  - DOMAIN,ocsp.godaddy.com
   - DOMAIN,ocsp.sectigo.com
   - DOMAIN,ocsp2.apple.com
   - DOMAIN,ocvideo.apple.com
@@ -1026,7 +1034,6 @@ payload:
   - DOMAIN,publicsuffix.org
   - DOMAIN,quriobot.com
   - DOMAIN,r.r10s.jp
-  - DOMAIN,r3.o.lencr.org
   - DOMAIN,raw.github.com
   - DOMAIN,react.dev
   - DOMAIN,rebound.postmarkapp.com
@@ -1191,6 +1198,7 @@ payload:
   - DOMAIN,static-main.moovit.com
   - DOMAIN,static-overlay.ubisoft.com
   - DOMAIN,static-production.npmjs.com
+  - DOMAIN,static-r.kamihimeproject.net
   - DOMAIN,static-resource.np.community.playstation.net
   - DOMAIN,static-web-prod.skillshare.com
   - DOMAIN,static-web.grammarly.com
@@ -1408,6 +1416,7 @@ payload:
   - DOMAIN,wandi-6402.kxcdn.com
   - DOMAIN,wcpstatic.microsoft.com
   - DOMAIN,web-assets.ifttt.com
+  - DOMAIN,web-assets.otogi-frontier.com
   - DOMAIN,web-assets.strava.com
   - DOMAIN,web-toolbar.playstation.com
   - DOMAIN,web.onekey-asset.com
@@ -2811,6 +2820,7 @@ payload:
   - DOMAIN-SUFFIX,launchercontent.mojang.com
   - DOMAIN-SUFFIX,launchermeta.mojang.com
   - DOMAIN-SUFFIX,leechall.com
+  - DOMAIN-SUFFIX,lencr.org
   - DOMAIN-SUFFIX,letitbit.net
   - DOMAIN-SUFFIX,letsupload.co
   - DOMAIN-SUFFIX,letsupload.io
@@ -3536,6 +3546,7 @@ payload:
   - DOMAIN-SUFFIX,tidalhifi.com
   - DOMAIN-SUFFIX,tik-tokapi.com
   - DOMAIN-SUFFIX,tiktok.com
+  - DOMAIN-SUFFIX,tiktok.us
   - DOMAIN-SUFFIX,tiktokv.com
   - DOMAIN-SUFFIX,tildacdn.com
   - DOMAIN-SUFFIX,tile.openstreetmap.org

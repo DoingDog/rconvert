@@ -1,5 +1,5 @@
-# Quantumult total line 2331
-# Last updated Wed 04/10/2024 22:10:24.04
+# Quantumult total line 2343
+# Last updated Sat 04/13/2024 22:07:53.70
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -267,6 +267,7 @@ HOST,cdn.cxense.com,LIST
 HOST,cdn.dap.dmm.co.jp,LIST
 HOST,cdn.datacamp.com,LIST
 HOST,cdn.datatables.net,LIST
+HOST,cdn.datdota.com,LIST
 HOST,cdn.db-ip.com,LIST
 HOST,cdn.dnsimple.com,LIST
 HOST,cdn.dotaoutpost.com,LIST
@@ -349,6 +350,7 @@ HOST,cdn.pika.dev,LIST
 HOST,cdn.pixabay.com,LIST
 HOST,cdn.plaid.com,LIST
 HOST,cdn.player.fm,LIST
+HOST,cdn.plot.ly,LIST
 HOST,cdn.plu.mx,LIST
 HOST,cdn.plyr.io,LIST
 HOST,cdn.pricespider.com,LIST
@@ -395,6 +397,7 @@ HOST,cdn.travis-ci.org,LIST
 HOST,cdn.trustpilot.net,LIST
 HOST,cdn.tuk.dev,LIST
 HOST,cdn.unwire.hk,LIST
+HOST,cdn.up-timely.com,LIST
 HOST,cdn.usd.fan,LIST
 HOST,cdn.userreport.com,LIST
 HOST,cdn.v2ex.com,LIST
@@ -471,11 +474,14 @@ HOST,cms-cdn.now.gg,LIST
 HOST,code.benco.io,LIST
 HOST,code.highcharts.com,LIST
 HOST,code.iconify.design,LIST
+HOST,code.ionicframework.com,LIST
 HOST,code.jquery.com,LIST
 HOST,compass-ssl.xbox.com,LIST
 HOST,components.clever-cloud.com,LIST
 HOST,confluence-v1.prod.atl-paas.net,LIST
 HOST,connect.facebook.net,LIST
+HOST,connectivitycheck.android.com,LIST
+HOST,connectivitycheck.gstatic.com,LIST
 HOST,consumersite-assets.trustpilot.net,LIST
 HOST,content-prod-live.cert.starbucks.com,LIST
 HOST,content.any.run,LIST
@@ -484,6 +490,7 @@ HOST,cookie-cdn.cookiepro.com,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,creativajs.altervista.org,LIST
 HOST,crl.usertrust.com,LIST
+HOST,crl.verisign.com,LIST
 HOST,crt.comodoca.com,LIST
 HOST,css.createsend1.com,LIST
 HOST,curl.se,LIST
@@ -848,6 +855,7 @@ HOST,objects.g0v.social,LIST
 HOST,objects.hit.moe,LIST
 HOST,ocecdn.oraclecloud.com,LIST
 HOST,ocsp.digicert.com,LIST
+HOST,ocsp.godaddy.com,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,ocsp2.apple.com,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
@@ -934,7 +942,6 @@ HOST,public.saasexch.com,LIST
 HOST,publicsuffix.org,LIST
 HOST,quriobot.com,LIST
 HOST,r.r10s.jp,LIST
-HOST,r3.o.lencr.org,LIST
 HOST,raw.github.com,LIST
 HOST,react.dev,LIST
 HOST,rebound.postmarkapp.com,LIST
@@ -1103,6 +1110,7 @@ HOST,static-main.moovit.com,LIST
 HOST,static-mh.content.disney.io,LIST
 HOST,static-overlay.ubisoft.com,LIST
 HOST,static-production.npmjs.com,LIST
+HOST,static-r.kamihimeproject.net,LIST
 HOST,static-resource.np.community.playstation.net,LIST
 HOST,static-web-prod.skillshare.com,LIST
 HOST,static-web.grammarly.com,LIST
@@ -1346,6 +1354,7 @@ HOST,waitlisted.co,LIST
 HOST,wandi-6402.kxcdn.com,LIST
 HOST,wcpstatic.microsoft.com,LIST
 HOST,web-assets.ifttt.com,LIST
+HOST,web-assets.otogi-frontier.com,LIST
 HOST,web-assets.strava.com,LIST
 HOST,web-toolbar.playstation.com,LIST
 HOST,web.onekey-asset.com,LIST
@@ -1736,6 +1745,7 @@ HOST-SUFFIX,ks3-rus.ksyuncs.com,LIST
 HOST-SUFFIX,ks3-sgp.ksyuncs.com,LIST
 HOST-SUFFIX,kwcdn.com,LIST
 HOST-SUFFIX,kym-cdn.com,LIST
+HOST-SUFFIX,lencr.org,LIST
 HOST-SUFFIX,licensebuttons.net,LIST
 HOST-SUFFIX,limelight.com,LIST
 HOST-SUFFIX,line-cdn.net,LIST
@@ -2234,6 +2244,8 @@ HOST-SUFFIX,tedcdn.com,LIST
 HOST-SUFFIX,temp.sh,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
 HOST-SUFFIX,thisiscdn.com,LIST
+HOST-SUFFIX,tiktokcdn-us.com,LIST
+HOST-SUFFIX,tiktokcdn.com,LIST
 HOST-SUFFIX,tildacdn.com,LIST
 HOST-SUFFIX,tile.openstreetmap.org,LIST
 HOST-SUFFIX,tile.osm.org,LIST
