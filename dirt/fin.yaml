@@ -1,5 +1,5 @@
-# Clash total line 4285
-# Last updated Sat 04/13/2024 22:08:12.08
+# Clash total line 4288
+# Last updated Tue 04/16/2024 22:08:08.52
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -290,6 +290,7 @@ payload:
   - DOMAIN-SUFFIX,8264.com
   - DOMAIN-SUFFIX,84399.com
   - DOMAIN-SUFFIX,8686c.com
+  - DOMAIN-SUFFIX,88.com
   - DOMAIN-SUFFIX,8800.org
   - DOMAIN-SUFFIX,885.com
   - DOMAIN-SUFFIX,8866.org
@@ -2131,6 +2132,7 @@ payload:
   - DOMAIN-SUFFIX,karger.com
   - DOMAIN-SUFFIX,kaspersky-labs.com
   - DOMAIN-SUFFIX,kcbebank.com
+  - DOMAIN-SUFFIX,kdslife.net
   - DOMAIN-SUFFIX,keboyunxiao.com
   - DOMAIN-SUFFIX,kechuang.org
   - DOMAIN-SUFFIX,keepcdn.com
@@ -2678,6 +2680,7 @@ payload:
   - DOMAIN-SUFFIX,pc6.com
   - DOMAIN-SUFFIX,pcbeta.com
   - DOMAIN-SUFFIX,pchome.net
+  - DOMAIN-SUFFIX,pchpic.net
   - DOMAIN-SUFFIX,pcpop.com
   - DOMAIN-SUFFIX,pddpic.com
   - DOMAIN-SUFFIX,pddugc.com

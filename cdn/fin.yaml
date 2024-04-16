@@ -1,5 +1,5 @@
-# Clash total line 2343
-# Last updated Sat 04/13/2024 22:07:53.73
+# Clash total line 2348
+# Last updated Tue 04/16/2024 22:07:52.39
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -553,6 +553,7 @@ payload:
   - DOMAIN,f003.backblazeb2.com
   - DOMAIN,f004.backblazeb2.com
   - DOMAIN,fast.wistia.com
+  - DOMAIN,favicon.yandex.net
   - DOMAIN,favicons.nextdns.io
   - DOMAIN,favicons.teams.cloudflare.com
   - DOMAIN,fiddle.fastly.dev
@@ -719,6 +720,7 @@ payload:
   - DOMAIN,img.represent.com
   - DOMAIN,img.riskified.com
   - DOMAIN,img.skk.moe
+  - DOMAIN,img.supjav.com
   - DOMAIN,img.timero.xyz
   - DOMAIN,img.urlnode.com
   - DOMAIN,img.utdstc.com
@@ -1645,6 +1647,7 @@ payload:
   - DOMAIN-SUFFIX,i-dont-care-about-cookies.eu
   - DOMAIN-SUFFIX,i.optimole.com
   - DOMAIN-SUFFIX,ibytedtos.com
+  - DOMAIN-SUFFIX,ibyteimg.com
   - DOMAIN-SUFFIX,icon.horse
   - DOMAIN-SUFFIX,iframe.ly
   - DOMAIN-SUFFIX,iggcdn.com
@@ -1773,6 +1776,7 @@ payload:
   - DOMAIN-SUFFIX,mfcimg.com
   - DOMAIN-SUFFIX,mirrors.utermux.dev
   - DOMAIN-SUFFIX,misskeyusercontent.com
+  - DOMAIN-SUFFIX,misskeyusercontent.jp
   - DOMAIN-SUFFIX,missuo.ru
   - DOMAIN-SUFFIX,mktgcdn.com
   - DOMAIN-SUFFIX,mlcdn.com
@@ -1781,6 +1785,7 @@ payload:
   - DOMAIN-SUFFIX,muscache.com
   - DOMAIN-SUFFIX,mvnrepository.com
   - DOMAIN-SUFFIX,myavlive.com
+  - DOMAIN-SUFFIX,mycdn.me
   - DOMAIN-SUFFIX,mypinata.cloud
   - DOMAIN-SUFFIX,myshopapps.com
   - DOMAIN-SUFFIX,nel.cloudflare.com

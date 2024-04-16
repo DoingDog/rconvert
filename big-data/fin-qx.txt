@@ -1,5 +1,5 @@
-# Quantumult total line 4888
-# Last updated Sat 04/13/2024 22:08:04.09
+# Quantumult total line 4894
+# Last updated Tue 04/16/2024 22:08:00.98
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -624,6 +624,7 @@ HOST,f003.backblazeb2.com,LIST
 HOST,f004.backblazeb2.com,LIST
 HOST,fast.wistia.com,LIST
 HOST,fastly-download.epicgames.com,LIST
+HOST,favicon.yandex.net,LIST
 HOST,favicons.nextdns.io,LIST
 HOST,favicons.teams.cloudflare.com,LIST
 HOST,fedorapeople.org,LIST
@@ -796,6 +797,7 @@ HOST,img.represent.com,LIST
 HOST,img.riskified.com,LIST
 HOST,img.shana-laopo.xyz,LIST
 HOST,img.skk.moe,LIST
+HOST,img.supjav.com,LIST
 HOST,img.timero.xyz,LIST
 HOST,img.urlnode.com,LIST
 HOST,img.utdstc.com,LIST
@@ -2912,6 +2914,7 @@ HOST-SUFFIX,mirrors.utermux.dev,LIST
 HOST-SUFFIX,misakaf.org,LIST
 HOST-SUFFIX,misakaf.xyz,LIST
 HOST-SUFFIX,misskeyusercontent.com,LIST
+HOST-SUFFIX,misskeyusercontent.jp,LIST
 HOST-SUFFIX,missuo.ru,LIST
 HOST-SUFFIX,mixdrop.club,LIST
 HOST-SUFFIX,mixdrop.co,LIST
@@ -2948,6 +2951,7 @@ HOST-SUFFIX,my5.tv,LIST
 HOST-SUFFIX,my9nj.com,LIST
 HOST-SUFFIX,myairbridge.com,LIST
 HOST-SUFFIX,myavlive.com,LIST
+HOST-SUFFIX,mycdn.me,LIST
 HOST-SUFFIX,myfiles.onl,LIST
 HOST-SUFFIX,myfoxatlanta.com,LIST
 HOST-SUFFIX,myfoxaustin.com,LIST
@@ -3547,6 +3551,8 @@ HOST-SUFFIX,tik-tokapi.com,LIST
 HOST-SUFFIX,tiktok.com,LIST
 HOST-SUFFIX,tiktok.us,LIST
 HOST-SUFFIX,tiktokv.com,LIST
+HOST-SUFFIX,tiktokv.us,LIST
+HOST-SUFFIX,tiktokw.com,LIST
 HOST-SUFFIX,tildacdn.com,LIST
 HOST-SUFFIX,tile.openstreetmap.org,LIST
 HOST-SUFFIX,tile.osm.org,LIST

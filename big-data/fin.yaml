@@ -1,5 +1,5 @@
-# Clash total line 4903
-# Last updated Sat 04/13/2024 22:08:04.14
+# Clash total line 4909
+# Last updated Tue 04/16/2024 22:08:01.02
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -625,6 +625,7 @@ payload:
   - DOMAIN,f004.backblazeb2.com
   - DOMAIN,fast.wistia.com
   - DOMAIN,fastly-download.epicgames.com
+  - DOMAIN,favicon.yandex.net
   - DOMAIN,favicons.nextdns.io
   - DOMAIN,favicons.teams.cloudflare.com
   - DOMAIN,fedorapeople.org
@@ -797,6 +798,7 @@ payload:
   - DOMAIN,img.riskified.com
   - DOMAIN,img.shana-laopo.xyz
   - DOMAIN,img.skk.moe
+  - DOMAIN,img.supjav.com
   - DOMAIN,img.timero.xyz
   - DOMAIN,img.urlnode.com
   - DOMAIN,img.utdstc.com
@@ -2913,6 +2915,7 @@ payload:
   - DOMAIN-SUFFIX,misakaf.org
   - DOMAIN-SUFFIX,misakaf.xyz
   - DOMAIN-SUFFIX,misskeyusercontent.com
+  - DOMAIN-SUFFIX,misskeyusercontent.jp
   - DOMAIN-SUFFIX,missuo.ru
   - DOMAIN-SUFFIX,mixdrop.club
   - DOMAIN-SUFFIX,mixdrop.co
@@ -2949,6 +2952,7 @@ payload:
   - DOMAIN-SUFFIX,my9nj.com
   - DOMAIN-SUFFIX,myairbridge.com
   - DOMAIN-SUFFIX,myavlive.com
+  - DOMAIN-SUFFIX,mycdn.me
   - DOMAIN-SUFFIX,myfiles.onl
   - DOMAIN-SUFFIX,myfoxatlanta.com
   - DOMAIN-SUFFIX,myfoxaustin.com
@@ -3548,6 +3552,8 @@ payload:
   - DOMAIN-SUFFIX,tiktok.com
   - DOMAIN-SUFFIX,tiktok.us
   - DOMAIN-SUFFIX,tiktokv.com
+  - DOMAIN-SUFFIX,tiktokv.us
+  - DOMAIN-SUFFIX,tiktokw.com
   - DOMAIN-SUFFIX,tildacdn.com
   - DOMAIN-SUFFIX,tile.openstreetmap.org
   - DOMAIN-SUFFIX,tile.osm.org
