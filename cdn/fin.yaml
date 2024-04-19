@@ -1,5 +1,5 @@
-# Clash total line 2348
-# Last updated Tue 04/16/2024 22:07:52.39
+# Clash total line 2353
+# Last updated Fri 04/19/2024 22:07:15.42
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -126,6 +126,7 @@ payload:
   - DOMAIN,assets.sendinblue.com
   - DOMAIN,assets.squarespace.com
   - DOMAIN,assets.st-note.com
+  - DOMAIN,assets.stash.com
   - DOMAIN,assets.static-upwork.com
   - DOMAIN,assets.stickpng.com
   - DOMAIN,assets.swoogo.com
@@ -220,6 +221,7 @@ payload:
   - DOMAIN,cdn-node.diskpart.com
   - DOMAIN,cdn-public.sociabble.com
   - DOMAIN,cdn-raw.modrinth.com
+  - DOMAIN,cdn-rdstaticassets.readdle.com
   - DOMAIN,cdn-sellix.com
   - DOMAIN,cdn-service.jp.sumologic.com
   - DOMAIN,cdn-share-sprites.flaticon.com
@@ -385,6 +387,7 @@ payload:
   - DOMAIN,cdn.split.io
   - DOMAIN,cdn.sprig.com
   - DOMAIN,cdn.sstatic.net
+  - DOMAIN,cdn.stash.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
   - DOMAIN,cdn.tailwindcss.com
@@ -487,6 +490,7 @@ payload:
   - DOMAIN,content-prod-live.cert.starbucks.com
   - DOMAIN,content.any.run
   - DOMAIN,content.jwplatform.com
+  - DOMAIN,content.wepik.com
   - DOMAIN,cookie-cdn.cookiepro.com
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,creativajs.altervista.org
@@ -614,6 +618,7 @@ payload:
   - DOMAIN,i.giphy.com
   - DOMAIN,i.guim.co.uk
   - DOMAIN,i.hamreus.com
+  - DOMAIN,i.hentaifox.com
   - DOMAIN,i.ibb.co
   - DOMAIN,i.imgflip.com
   - DOMAIN,i.imgur.com
@@ -629,6 +634,7 @@ payload:
   - DOMAIN,i.xozilla.xxx
   - DOMAIN,i0.wp.com
   - DOMAIN,i1.wp.com
+  - DOMAIN,i2.hentaifox.com
   - DOMAIN,i2.wp.com
   - DOMAIN,i3.wp.com
   - DOMAIN,ias.r10s.jp
@@ -1426,6 +1432,7 @@ payload:
   - DOMAIN-SUFFIX,assets.getpocket.com
   - DOMAIN-SUFFIX,assets.heroku.com
   - DOMAIN-SUFFIX,assets.pinterest.com
+  - DOMAIN-SUFFIX,assets.ubuntu.com
   - DOMAIN-SUFFIX,avdocker.com
   - DOMAIN-SUFFIX,avdocker3.com
   - DOMAIN-SUFFIX,avximg.com
@@ -1533,7 +1540,6 @@ payload:
   - DOMAIN-SUFFIX,cthd.icu
   - DOMAIN-SUFFIX,cwwcdn.com
   - DOMAIN-SUFFIX,daumcdn.net
-  - DOMAIN-SUFFIX,debian.org
   - DOMAIN-SUFFIX,delvenetworks.com
   - DOMAIN-SUFFIX,deno.land
   - DOMAIN-SUFFIX,denopkg.com
@@ -2269,7 +2275,6 @@ payload:
   - DOMAIN-SUFFIX,typography.com
   - DOMAIN-SUFFIX,ubembed.com
   - DOMAIN-SUFFIX,uber-assets.com
-  - DOMAIN-SUFFIX,ubuntu.com
   - DOMAIN-SUFFIX,ucarecdn.com
   - DOMAIN-SUFFIX,ungrounded.net
   - DOMAIN-SUFFIX,unpkg.co

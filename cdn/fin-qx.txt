@@ -1,5 +1,5 @@
-# Quantumult total line 2348
-# Last updated Tue 04/16/2024 22:07:52.36
+# Quantumult total line 2353
+# Last updated Fri 04/19/2024 22:07:15.40
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -125,6 +125,7 @@ HOST,assets.scroll.com,LIST
 HOST,assets.sendinblue.com,LIST
 HOST,assets.squarespace.com,LIST
 HOST,assets.st-note.com,LIST
+HOST,assets.stash.com,LIST
 HOST,assets.static-upwork.com,LIST
 HOST,assets.stickpng.com,LIST
 HOST,assets.swoogo.com,LIST
@@ -219,6 +220,7 @@ HOST,cdn-msp.jmcomic.me,LIST
 HOST,cdn-node.diskpart.com,LIST
 HOST,cdn-public.sociabble.com,LIST
 HOST,cdn-raw.modrinth.com,LIST
+HOST,cdn-rdstaticassets.readdle.com,LIST
 HOST,cdn-sellix.com,LIST
 HOST,cdn-service.jp.sumologic.com,LIST
 HOST,cdn-share-sprites.flaticon.com,LIST
@@ -384,6 +386,7 @@ HOST,cdn.solvvy.com,LIST
 HOST,cdn.split.io,LIST
 HOST,cdn.sprig.com,LIST
 HOST,cdn.sstatic.net,LIST
+HOST,cdn.stash.com,LIST
 HOST,cdn.substack.com,LIST
 HOST,cdn.sunofbeaches.com,LIST
 HOST,cdn.tailwindcss.com,LIST
@@ -486,6 +489,7 @@ HOST,consumersite-assets.trustpilot.net,LIST
 HOST,content-prod-live.cert.starbucks.com,LIST
 HOST,content.any.run,LIST
 HOST,content.jwplatform.com,LIST
+HOST,content.wepik.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,creativajs.altervista.org,LIST
@@ -613,6 +617,7 @@ HOST,i.geekflare.com,LIST
 HOST,i.giphy.com,LIST
 HOST,i.guim.co.uk,LIST
 HOST,i.hamreus.com,LIST
+HOST,i.hentaifox.com,LIST
 HOST,i.ibb.co,LIST
 HOST,i.imgflip.com,LIST
 HOST,i.imgur.com,LIST
@@ -628,6 +633,7 @@ HOST,i.vgy.me,LIST
 HOST,i.xozilla.xxx,LIST
 HOST,i0.wp.com,LIST
 HOST,i1.wp.com,LIST
+HOST,i2.hentaifox.com,LIST
 HOST,i2.wp.com,LIST
 HOST,i3.wp.com,LIST
 HOST,ias.r10s.jp,LIST
@@ -1425,6 +1431,7 @@ HOST-SUFFIX,assets.digitalocean.com,LIST
 HOST-SUFFIX,assets.getpocket.com,LIST
 HOST-SUFFIX,assets.heroku.com,LIST
 HOST-SUFFIX,assets.pinterest.com,LIST
+HOST-SUFFIX,assets.ubuntu.com,LIST
 HOST-SUFFIX,avdocker.com,LIST
 HOST-SUFFIX,avdocker3.com,LIST
 HOST-SUFFIX,avximg.com,LIST
@@ -1532,7 +1539,6 @@ HOST-SUFFIX,ctfassets.net,LIST
 HOST-SUFFIX,cthd.icu,LIST
 HOST-SUFFIX,cwwcdn.com,LIST
 HOST-SUFFIX,daumcdn.net,LIST
-HOST-SUFFIX,debian.org,LIST
 HOST-SUFFIX,delvenetworks.com,LIST
 HOST-SUFFIX,deno.land,LIST
 HOST-SUFFIX,denopkg.com,LIST
@@ -2268,7 +2274,6 @@ HOST-SUFFIX,twimg.com,LIST
 HOST-SUFFIX,typography.com,LIST
 HOST-SUFFIX,ubembed.com,LIST
 HOST-SUFFIX,uber-assets.com,LIST
-HOST-SUFFIX,ubuntu.com,LIST
 HOST-SUFFIX,ucarecdn.com,LIST
 HOST-SUFFIX,ungrounded.net,LIST
 HOST-SUFFIX,unpkg.co,LIST

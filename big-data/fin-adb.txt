@@ -1,5 +1,5 @@
-# Adblock total line 3958
-# Last updated Tue 04/16/2024 22:08:01.13
+# Adblock total line 3995
+# Last updated Fri 04/19/2024 22:07:24.94
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||9191.ga^
@@ -132,6 +132,7 @@
 ||assets.sendinblue.com^
 ||assets.squarespace.com^
 ||assets.st-note.com^
+||assets.stash.com^
 ||assets.static-upwork.com^
 ||assets.stickpng.com^
 ||assets.swoogo.com^
@@ -222,6 +223,7 @@
 ||cdn-fck.tnaflix.com^
 ||cdn-images-1.medium.com^
 ||cdn-images.mailchimp.com^
+||cdn-images.orbstack.dev^
 ||cdn-live.foreignaffairs.com^
 ||cdn-media-1.freecodecamp.org^
 ||cdn-media-2.freecodecamp.org^
@@ -231,6 +233,7 @@
 ||cdn-node.diskpart.com^
 ||cdn-public.sociabble.com^
 ||cdn-raw.modrinth.com^
+||cdn-rdstaticassets.readdle.com^
 ||cdn-sellix.com^
 ||cdn-service.jp.sumologic.com^
 ||cdn-share-sprites.flaticon.com^
@@ -393,6 +396,7 @@
 ||cdn.solvvy.com^
 ||cdn.split.io^
 ||cdn.sprig.com^
+||cdn.stash.com^
 ||cdn.substack.com^
 ||cdn.sunofbeaches.com^
 ||cdn.tailwindcss.com^
@@ -492,6 +496,7 @@
 ||content-origin.steampowered.com^
 ||content-prod-live.cert.starbucks.com^
 ||content.any.run^
+||content.wepik.com^
 ||content1.steampowered.com^
 ||content2.steampowered.com^
 ||content3.steampowered.com^
@@ -658,7 +663,17 @@
 ||forest-mt-s3.seekrtech.com^
 ||formulae.brew.sh^
 ||frames-commandbar-prod.commandbar.com^
+||ftp.au.debian.org^
+||ftp.cn.debian.org^
+||ftp.de.debian.org^
 ||ftp.gnu.org^
+||ftp.hk.debian.org^
+||ftp.jp.debian.org^
+||ftp.kr.debian.org^
+||ftp.ru.debian.org^
+||ftp.tw.debian.org^
+||ftp.uk.debian.org^
+||ftp.us.debian.org^
 ||g-static.ap4r.com^
 ||genesis-cdn.ff.com^
 ||geoip-js.com^
@@ -697,6 +712,7 @@
 ||i.giphy.com^
 ||i.guim.co.uk^
 ||i.hamreus.com^
+||i.hentaifox.com^
 ||i.ibb.co^
 ||i.imgflip.com^
 ||i.imgur.com^
@@ -711,6 +727,7 @@
 ||i.xozilla.xxx^
 ||i0.wp.com^
 ||i1.wp.com^
+||i2.hentaifox.com^
 ||i2.wp.com^
 ||i3.wp.com^
 ||ias.r10s.jp^
@@ -913,7 +930,18 @@
 ||mir-s3-cdn-cf.behance.net^
 ||miro.medium.com^
 ||mirror-cdn.xtom.com^
+||mirror.cat.net^
 ||mirror.navercorp.com^
+||mirror.xtom.au^
+||mirror.xtom.com^
+||mirror.xtom.com.hk^
+||mirror.xtom.de^
+||mirror.xtom.ee^
+||mirror.xtom.hk^
+||mirror.xtom.jp^
+||mirror.xtom.nl^
+||mirror.xtom.sg^
+||mirror.xtom.us^
 ||mirrors.cat.net^
 ||mirrors.edge.kernel.org^
 ||mirrors.xtom.au^
@@ -924,6 +952,8 @@
 ||mirrors.xtom.hk^
 ||mirrors.xtom.jp^
 ||mirrors.xtom.nl^
+||mirrors.xtom.sg^
+||mirrors.xtom.us^
 ||mixin-images.zeromesh.net^
 ||mobilecenter.azureedge.net^
 ||mstdn-s3.o3o.studio^
@@ -1142,6 +1172,8 @@
 ||secure.download.dm.origin.com^
 ||secure.fanboy.co.nz^
 ||secure.telegraph.co.uk^
+||security.debian.org^
+||security.ubuntu.com^
 ||services.linkfire.com^
 ||sf-flow-web-cdn.ciciai.com^
 ||share.riseup.net^
@@ -1583,7 +1615,9 @@
 ||applemusic.com^
 ||appmifile.com^
 ||apranet.eu.org^
+||archive.debian.org^
 ||archive.org^
+||archive.ubuntu.com^
 ||asmfile.com^
 ||asmr.one^
 ||aspnetcdn.com^
@@ -1592,6 +1626,7 @@
 ||assets.getpocket.com^
 ||assets.heroku.com^
 ||assets.pinterest.com^
+||assets.ubuntu.com^
 ||assets.xboxservices.com^
 ||att.tv^
 ||atttvnow.com^
@@ -1908,7 +1943,8 @@
 ||dditscdn.com^
 ||ddl.to^
 ||ddownload.com^
-||debian.org^
+||deb.debian.org^
+||debian.map.fastlydns.net^
 ||deezer.com^
 ||deliver.vkcdnservice.com^
 ||delivery.mp.microsoft.com^
@@ -2446,6 +2482,8 @@
 ||fshare.vn^
 ||fssta.com^
 ||ftcdn.net^
+||ftp-master.debian.org^
+||ftp.debian.org^
 ||fubo.tv^
 ||fubotv.com^
 ||funnyordie.com^
@@ -3611,7 +3649,6 @@
 ||ubembed.com^
 ||uber-assets.com^
 ||ubiqfile.com^
-||ubuntu.com^
 ||ucarecdn.com^
 ||ul.to^
 ||uloz.to^
