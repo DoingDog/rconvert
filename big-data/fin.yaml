@@ -1,5 +1,5 @@
-# Clash total line 4947
-# Last updated Mon 04/22/2024 22:11:37.08
+# Clash total line 4955
+# Last updated Thu 04/25/2024 22:08:05.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -118,6 +118,7 @@ payload:
   - DOMAIN,assets.nationbuilder.com
   - DOMAIN,assets.nintendo.com
   - DOMAIN,assets.onestore.ms
+  - DOMAIN,assets.ontrack.com
   - DOMAIN,assets.openshift.com
   - DOMAIN,assets.openshift.net
   - DOMAIN,assets.orz.uno
@@ -212,6 +213,7 @@ payload:
   - DOMAIN,ca.nfs.pub
   - DOMAIN,cache-05.filehippo.net
   - DOMAIN,cache.agilebits.com
+  - DOMAIN,cache.pack.google.com
   - DOMAIN,cache.video.iqiyi.com
   - DOMAIN,cdn-a.sonyentertainmentnetwork.com
   - DOMAIN,cdn-app.pathfactory.com
@@ -513,6 +515,7 @@ payload:
   - DOMAIN,crl.usertrust.com
   - DOMAIN,crl.verisign.com
   - DOMAIN,crt.comodoca.com
+  - DOMAIN,crt.usertrust.com
   - DOMAIN,css.createsend1.com
   - DOMAIN,ctldl.windowsupdate.com
   - DOMAIN,curl.se
@@ -583,6 +586,7 @@ payload:
   - DOMAIN,download.todesktop.com
   - DOMAIN,download.typora.io
   - DOMAIN,download.visualstudio.microsoft.com
+  - DOMAIN,download.xbox.com
   - DOMAIN,download2.epicgames.com
   - DOMAIN,download3.epicgames.com
   - DOMAIN,download4.epicgames.com
@@ -790,6 +794,7 @@ payload:
   - DOMAIN,images8.design-editor.com
   - DOMAIN,imagizer.imageshack.com
   - DOMAIN,img.announcekit.app
+  - DOMAIN,img.applealmond.com
   - DOMAIN,img.apponic.com
   - DOMAIN,img.badgesize.io
   - DOMAIN,img.bigcloud.cyou
@@ -802,6 +807,7 @@ payload:
   - DOMAIN,img.freepik.com
   - DOMAIN,img.hcloud.lat
   - DOMAIN,img.hellofresh.com
+  - DOMAIN,img.hentaihaven.xxx
   - DOMAIN,img.icons8.com
   - DOMAIN,img.itch.zone
   - DOMAIN,img.javstore.net
@@ -1766,6 +1772,7 @@ payload:
   - DOMAIN-SUFFIX,cdkworkshop.com
   - DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co
   - DOMAIN-SUFFIX,cdn-lfs.huggingface.co
+  - DOMAIN-SUFFIX,cdn-one.com
   - DOMAIN-SUFFIX,cdn-spurit.com
   - DOMAIN-SUFFIX,cdn-uploads.huggingface.co
   - DOMAIN-SUFFIX,cdn-website.com
@@ -2073,6 +2080,7 @@ payload:
   - DOMAIN-SUFFIX,dl.dlsite.com
   - DOMAIN-SUFFIX,dl.elementary.io
   - DOMAIN-SUFFIX,dl.free.fr
+  - DOMAIN-SUFFIX,dl.playstation.net
   - DOMAIN-SUFFIX,dl.steam.clngaa.com
   - DOMAIN-SUFFIX,dl.steam.ksyna.com
   - DOMAIN-SUFFIX,dl.wireshark.org

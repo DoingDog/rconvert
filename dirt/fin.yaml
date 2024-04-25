@@ -1,5 +1,5 @@
-# Clash total line 4288
-# Last updated Mon 04/22/2024 22:11:45.34
+# Clash total line 4289
+# Last updated Thu 04/25/2024 22:08:13.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -2813,6 +2813,7 @@ payload:
   - DOMAIN-SUFFIX,qikucdn.com
   - DOMAIN-SUFFIX,qin.io
   - DOMAIN-SUFFIX,qingcache.com
+  - DOMAIN-SUFFIX,qingcdn.com
   - DOMAIN-SUFFIX,qingcloud.com
   - DOMAIN-SUFFIX,qingdaochina.org
   - DOMAIN-SUFFIX,qingdaonews.com

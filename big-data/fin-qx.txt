@@ -1,5 +1,5 @@
-# Quantumult total line 4932
-# Last updated Mon 04/22/2024 22:11:37.03
+# Quantumult total line 4940
+# Last updated Thu 04/25/2024 22:08:05.45
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -117,6 +117,7 @@ HOST,assets.msn.com,LIST
 HOST,assets.nationbuilder.com,LIST
 HOST,assets.nintendo.com,LIST
 HOST,assets.onestore.ms,LIST
+HOST,assets.ontrack.com,LIST
 HOST,assets.openshift.com,LIST
 HOST,assets.openshift.net,LIST
 HOST,assets.orz.uno,LIST
@@ -211,6 +212,7 @@ HOST,c0.wp.com,LIST
 HOST,ca.nfs.pub,LIST
 HOST,cache-05.filehippo.net,LIST
 HOST,cache.agilebits.com,LIST
+HOST,cache.pack.google.com,LIST
 HOST,cache.video.iqiyi.com,LIST
 HOST,cdn-a.sonyentertainmentnetwork.com,LIST
 HOST,cdn-app.pathfactory.com,LIST
@@ -512,6 +514,7 @@ HOST,creativajs.altervista.org,LIST
 HOST,crl.usertrust.com,LIST
 HOST,crl.verisign.com,LIST
 HOST,crt.comodoca.com,LIST
+HOST,crt.usertrust.com,LIST
 HOST,css.createsend1.com,LIST
 HOST,ctldl.windowsupdate.com,LIST
 HOST,curl.se,LIST
@@ -582,6 +585,7 @@ HOST,download.tensorflow.google.com,LIST
 HOST,download.todesktop.com,LIST
 HOST,download.typora.io,LIST
 HOST,download.visualstudio.microsoft.com,LIST
+HOST,download.xbox.com,LIST
 HOST,download2.epicgames.com,LIST
 HOST,download3.epicgames.com,LIST
 HOST,download4.epicgames.com,LIST
@@ -789,6 +793,7 @@ HOST,images7.design-editor.com,LIST
 HOST,images8.design-editor.com,LIST
 HOST,imagizer.imageshack.com,LIST
 HOST,img.announcekit.app,LIST
+HOST,img.applealmond.com,LIST
 HOST,img.apponic.com,LIST
 HOST,img.badgesize.io,LIST
 HOST,img.bigcloud.cyou,LIST
@@ -801,6 +806,7 @@ HOST,img.foresightnews.pro,LIST
 HOST,img.freepik.com,LIST
 HOST,img.hcloud.lat,LIST
 HOST,img.hellofresh.com,LIST
+HOST,img.hentaihaven.xxx,LIST
 HOST,img.icons8.com,LIST
 HOST,img.itch.zone,LIST
 HOST,img.javstore.net,LIST
@@ -1765,6 +1771,7 @@ HOST-SUFFIX,cbstelevisioncity.com,LIST
 HOST-SUFFIX,cdkworkshop.com,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
+HOST-SUFFIX,cdn-one.com,LIST
 HOST-SUFFIX,cdn-spurit.com,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn-website.com,LIST
@@ -2072,6 +2079,7 @@ HOST-SUFFIX,dl-file.xyz,LIST
 HOST-SUFFIX,dl.dlsite.com,LIST
 HOST-SUFFIX,dl.elementary.io,LIST
 HOST-SUFFIX,dl.free.fr,LIST
+HOST-SUFFIX,dl.playstation.net,LIST
 HOST-SUFFIX,dl.steam.clngaa.com,LIST
 HOST-SUFFIX,dl.steam.ksyna.com,LIST
 HOST-SUFFIX,dl.wireshark.org,LIST
