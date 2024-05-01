@@ -1,5 +1,5 @@
-# Quantumult total line 4941
-# Last updated Sun 04/28/2024 22:08:06.91
+# Quantumult total line 4939
+# Last updated Wed 05/01/2024 22:11:04.35
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -7,6 +7,7 @@ HOST,a.deviantart.net,LIST
 HOST,a.fireside.fm,LIST
 HOST,a5.behance.net,LIST
 HOST,academy-public.coinmarketcap.com,LIST
+HOST,account-cdn.svc.ui.com,LIST
 HOST,accounts-cdn.9gag.com,LIST
 HOST,aff.equalweb.com,LIST
 HOST,ajax.cat.net,LIST
@@ -86,6 +87,7 @@ HOST,assets.coinbase.com,LIST
 HOST,assets.coingecko.com,LIST
 HOST,assets.convertkit.com,LIST
 HOST,assets.dnsfilter.com,LIST
+HOST,assets.dwncdn.net,LIST
 HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
 HOST,assets.fireside.fm,LIST
@@ -214,6 +216,7 @@ HOST,cache-05.filehippo.net,LIST
 HOST,cache.agilebits.com,LIST
 HOST,cache.pack.google.com,LIST
 HOST,cache.video.iqiyi.com,LIST
+HOST,cdimage.kali.org,LIST
 HOST,cdn-a.sonyentertainmentnetwork.com,LIST
 HOST,cdn-app.pathfactory.com,LIST
 HOST,cdn-assets.circleci.com,LIST
@@ -479,6 +482,7 @@ HOST,checkout.stripe.com,LIST
 HOST,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv,LIST
 HOST,ci.testling.com,LIST
 HOST,claritystatic.azureedge.net,LIST
+HOST,client.hikarifield.co.jp,LIST
 HOST,client.px-cloud.net,LIST
 HOST,cloud.redhat.com,LIST
 HOST,cloudflare.tv,LIST
@@ -533,6 +537,7 @@ HOST,design-system.yext.com,LIST
 HOST,design.mayoclinic.org,LIST
 HOST,designsystem.brevo.com,LIST
 HOST,desktop.parallels.com,LIST
+HOST,desktop.wifiman.com,LIST
 HOST,detectportal.firefox.com,LIST
 HOST,devimages-cdn.apple.com,LIST
 HOST,devstreaming-cdn.apple.com,LIST
@@ -549,6 +554,7 @@ HOST,dl.nssurge.com,LIST
 HOST,dl.nwjs.io,LIST
 HOST,dl.pstmn.io,LIST
 HOST,dl.snipaste.com,LIST
+HOST,dl.ubnt.com,LIST
 HOST,dl2.nwjs.io,LIST
 HOST,dl2.xmind.net,LIST
 HOST,dl3.xmind.net,LIST
@@ -668,17 +674,7 @@ HOST,fonts1.unidays.world,LIST
 HOST,forest-mt-s3.seekrtech.com,LIST
 HOST,formulae.brew.sh,LIST
 HOST,frames-commandbar-prod.commandbar.com,LIST
-HOST,ftp.au.debian.org,LIST
-HOST,ftp.cn.debian.org,LIST
-HOST,ftp.de.debian.org,LIST
 HOST,ftp.gnu.org,LIST
-HOST,ftp.hk.debian.org,LIST
-HOST,ftp.jp.debian.org,LIST
-HOST,ftp.kr.debian.org,LIST
-HOST,ftp.ru.debian.org,LIST
-HOST,ftp.tw.debian.org,LIST
-HOST,ftp.uk.debian.org,LIST
-HOST,ftp.us.debian.org,LIST
 HOST,g-static.ap4r.com,LIST
 HOST,genesis-cdn.ff.com,LIST
 HOST,geoip-js.com,LIST
@@ -968,6 +964,7 @@ HOST,mstdn-s3.o3o.studio,LIST
 HOST,mw1.google.com,LIST
 HOST,na-library.klarnaservices.com,LIST
 HOST,navismithapis-cdn.com,LIST
+HOST,net-fe-static-assets.network-controller.svc.ui.com,LIST
 HOST,newassets.hcaptcha.com,LIST
 HOST,news-client.apple.com,LIST
 HOST,news-edge.apple.com,LIST
@@ -1015,6 +1012,7 @@ HOST,packages.httpie.io,LIST
 HOST,packages.linuxmint.com,LIST
 HOST,packages.termux.dev,LIST
 HOST,packages.virtfusion.net,LIST
+HOST,packagespc.xboxlive.com,LIST
 HOST,panel-production-libs.b-cdn.net,LIST
 HOST,participants.evolv.ai,LIST
 HOST,parts.blog.livedoor.jp,LIST
@@ -1396,7 +1394,6 @@ HOST,thumbnail.missav.com,LIST
 HOST,thumbnailer.mixcloud.com,LIST
 HOST,thumbs.gfycat.com,LIST
 HOST,thumbs.onlyfans.com,LIST
-HOST,thumbs44.redgifs.com,LIST
 HOST,thumbsnap.com,LIST
 HOST,tiles.stadiamaps.com,LIST
 HOST,ton.local.twitter.com,LIST
@@ -3404,6 +3401,7 @@ HOST-SUFFIX,schemastore.org,LIST
 HOST-SUFFIX,sciencedirectassets.com,LIST
 HOST-SUFFIX,screens-lab.jp,LIST
 HOST-SUFFIX,scribd.com,LIST
+HOST-SUFFIX,scribdassets.com,LIST
 HOST-SUFFIX,seadn.io,LIST
 HOST-SUFFIX,search.ipfsgate.com,LIST
 HOST-SUFFIX,seattlespheres.com,LIST

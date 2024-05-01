@@ -1,5 +1,5 @@
-# Clash total line 4956
-# Last updated Sun 04/28/2024 22:08:06.94
+# Clash total line 4954
+# Last updated Wed 05/01/2024 22:11:04.38
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -8,6 +8,7 @@ payload:
   - DOMAIN,a.fireside.fm
   - DOMAIN,a5.behance.net
   - DOMAIN,academy-public.coinmarketcap.com
+  - DOMAIN,account-cdn.svc.ui.com
   - DOMAIN,accounts-cdn.9gag.com
   - DOMAIN,aff.equalweb.com
   - DOMAIN,ajax.cat.net
@@ -87,6 +88,7 @@ payload:
   - DOMAIN,assets.coingecko.com
   - DOMAIN,assets.convertkit.com
   - DOMAIN,assets.dnsfilter.com
+  - DOMAIN,assets.dwncdn.net
   - DOMAIN,assets.extension.grammarly.com
   - DOMAIN,assets.fastly.com
   - DOMAIN,assets.fireside.fm
@@ -215,6 +217,7 @@ payload:
   - DOMAIN,cache.agilebits.com
   - DOMAIN,cache.pack.google.com
   - DOMAIN,cache.video.iqiyi.com
+  - DOMAIN,cdimage.kali.org
   - DOMAIN,cdn-a.sonyentertainmentnetwork.com
   - DOMAIN,cdn-app.pathfactory.com
   - DOMAIN,cdn-assets.circleci.com
@@ -480,6 +483,7 @@ payload:
   - DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
   - DOMAIN,ci.testling.com
   - DOMAIN,claritystatic.azureedge.net
+  - DOMAIN,client.hikarifield.co.jp
   - DOMAIN,client.px-cloud.net
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloudflare.tv
@@ -534,6 +538,7 @@ payload:
   - DOMAIN,design.mayoclinic.org
   - DOMAIN,designsystem.brevo.com
   - DOMAIN,desktop.parallels.com
+  - DOMAIN,desktop.wifiman.com
   - DOMAIN,detectportal.firefox.com
   - DOMAIN,devimages-cdn.apple.com
   - DOMAIN,devstreaming-cdn.apple.com
@@ -550,6 +555,7 @@ payload:
   - DOMAIN,dl.nwjs.io
   - DOMAIN,dl.pstmn.io
   - DOMAIN,dl.snipaste.com
+  - DOMAIN,dl.ubnt.com
   - DOMAIN,dl2.nwjs.io
   - DOMAIN,dl2.xmind.net
   - DOMAIN,dl3.xmind.net
@@ -669,17 +675,7 @@ payload:
   - DOMAIN,forest-mt-s3.seekrtech.com
   - DOMAIN,formulae.brew.sh
   - DOMAIN,frames-commandbar-prod.commandbar.com
-  - DOMAIN,ftp.au.debian.org
-  - DOMAIN,ftp.cn.debian.org
-  - DOMAIN,ftp.de.debian.org
   - DOMAIN,ftp.gnu.org
-  - DOMAIN,ftp.hk.debian.org
-  - DOMAIN,ftp.jp.debian.org
-  - DOMAIN,ftp.kr.debian.org
-  - DOMAIN,ftp.ru.debian.org
-  - DOMAIN,ftp.tw.debian.org
-  - DOMAIN,ftp.uk.debian.org
-  - DOMAIN,ftp.us.debian.org
   - DOMAIN,g-static.ap4r.com
   - DOMAIN,genesis-cdn.ff.com
   - DOMAIN,geoip-js.com
@@ -969,6 +965,7 @@ payload:
   - DOMAIN,mw1.google.com
   - DOMAIN,na-library.klarnaservices.com
   - DOMAIN,navismithapis-cdn.com
+  - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
   - DOMAIN,newassets.hcaptcha.com
   - DOMAIN,news-client.apple.com
   - DOMAIN,news-edge.apple.com
@@ -1016,6 +1013,7 @@ payload:
   - DOMAIN,packages.linuxmint.com
   - DOMAIN,packages.termux.dev
   - DOMAIN,packages.virtfusion.net
+  - DOMAIN,packagespc.xboxlive.com
   - DOMAIN,panel-production-libs.b-cdn.net
   - DOMAIN,participants.evolv.ai
   - DOMAIN,parts.blog.livedoor.jp
@@ -1397,7 +1395,6 @@ payload:
   - DOMAIN,thumbnailer.mixcloud.com
   - DOMAIN,thumbs.gfycat.com
   - DOMAIN,thumbs.onlyfans.com
-  - DOMAIN,thumbs44.redgifs.com
   - DOMAIN,thumbsnap.com
   - DOMAIN,tiles.stadiamaps.com
   - DOMAIN,ton.local.twitter.com
@@ -3405,6 +3402,7 @@ payload:
   - DOMAIN-SUFFIX,sciencedirectassets.com
   - DOMAIN-SUFFIX,screens-lab.jp
   - DOMAIN-SUFFIX,scribd.com
+  - DOMAIN-SUFFIX,scribdassets.com
   - DOMAIN-SUFFIX,seadn.io
   - DOMAIN-SUFFIX,search.ipfsgate.com
   - DOMAIN-SUFFIX,seattlespheres.com

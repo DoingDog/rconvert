@@ -1,5 +1,5 @@
-# Quantumult total line 2361
-# Last updated Sun 04/28/2024 22:07:57.57
+# Quantumult total line 2362
+# Last updated Wed 05/01/2024 22:10:54.26
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -9,6 +9,7 @@ HOST,a.fireside.fm,LIST
 HOST,a5.behance.net,LIST
 HOST,a57.foxnews.com,LIST
 HOST,academy-public.coinmarketcap.com,LIST
+HOST,account-cdn.svc.ui.com,LIST
 HOST,accounts-cdn.9gag.com,LIST
 HOST,aff.equalweb.com,LIST
 HOST,ajax.cat.net,LIST
@@ -80,6 +81,7 @@ HOST,assets.coinbase.com,LIST
 HOST,assets.coingecko.com,LIST
 HOST,assets.convertkit.com,LIST
 HOST,assets.dnsfilter.com,LIST
+HOST,assets.dwncdn.net,LIST
 HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
 HOST,assets.fireside.fm,LIST
@@ -854,6 +856,7 @@ HOST,mwf-service.akamaized.net,LIST
 HOST,mycommerce.akamaized.net,LIST
 HOST,na-library.klarnaservices.com,LIST
 HOST,navismithapis-cdn.com,LIST
+HOST,net-fe-static-assets.network-controller.svc.ui.com,LIST
 HOST,newassets.hcaptcha.com,LIST
 HOST,newsletter.postmarkapp.com,LIST
 HOST,next-images.opencollective.com,LIST
@@ -929,7 +932,6 @@ HOST,player.cnevids.com,LIST
 HOST,player.h-cdn.com,LIST
 HOST,player.louisvuitton.com,LIST
 HOST,player.vimeo.com,LIST
-HOST,playwright.azureedge.net,LIST
 HOST,plugins-artifacts.gradle.org,LIST
 HOST,plugins.dprint.dev,LIST
 HOST,plus.unsplash.com,LIST
@@ -1303,7 +1305,6 @@ HOST,thumbnailer.mixcloud.com,LIST
 HOST,thumbs.gfycat.com,LIST
 HOST,thumbs.onlyfans.com,LIST
 HOST,thumbs2.sendvid.com,LIST
-HOST,thumbs44.redgifs.com,LIST
 HOST,thumbsnap.com,LIST
 HOST,tiles.stadiamaps.com,LIST
 HOST,ton.local.twitter.com,LIST
@@ -1751,7 +1752,6 @@ HOST-SUFFIX,jspm.io,LIST
 HOST-SUFFIX,jwpcdn.com,LIST
 HOST-SUFFIX,jwpsrv.com,LIST
 HOST-SUFFIX,k8s.io,LIST
-HOST-SUFFIX,kali.download,LIST
 HOST-SUFFIX,kc-usercontent.com,LIST
 HOST-SUFFIX,kinja-img.com,LIST
 HOST-SUFFIX,kinja-static.com,LIST
@@ -2200,6 +2200,7 @@ HOST-SUFFIX,sbcdnvideo.com,LIST
 HOST-SUFFIX,sc-cdn.com,LIST
 HOST-SUFFIX,schemastore.org,LIST
 HOST-SUFFIX,sciencedirectassets.com,LIST
+HOST-SUFFIX,scribdassets.com,LIST
 HOST-SUFFIX,seadn.io,LIST
 HOST-SUFFIX,search.ipfsgate.com,LIST
 HOST-SUFFIX,sendspace.com,LIST

@@ -1,5 +1,5 @@
-# Clash total line 2361
-# Last updated Sun 04/28/2024 22:07:57.60
+# Clash total line 2362
+# Last updated Wed 05/01/2024 22:10:54.29
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -10,6 +10,7 @@ payload:
   - DOMAIN,a5.behance.net
   - DOMAIN,a57.foxnews.com
   - DOMAIN,academy-public.coinmarketcap.com
+  - DOMAIN,account-cdn.svc.ui.com
   - DOMAIN,accounts-cdn.9gag.com
   - DOMAIN,aff.equalweb.com
   - DOMAIN,ajax.cat.net
@@ -81,6 +82,7 @@ payload:
   - DOMAIN,assets.coingecko.com
   - DOMAIN,assets.convertkit.com
   - DOMAIN,assets.dnsfilter.com
+  - DOMAIN,assets.dwncdn.net
   - DOMAIN,assets.extension.grammarly.com
   - DOMAIN,assets.fastly.com
   - DOMAIN,assets.fireside.fm
@@ -855,6 +857,7 @@ payload:
   - DOMAIN,mycommerce.akamaized.net
   - DOMAIN,na-library.klarnaservices.com
   - DOMAIN,navismithapis-cdn.com
+  - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
   - DOMAIN,newassets.hcaptcha.com
   - DOMAIN,newsletter.postmarkapp.com
   - DOMAIN,next-images.opencollective.com
@@ -930,7 +933,6 @@ payload:
   - DOMAIN,player.h-cdn.com
   - DOMAIN,player.louisvuitton.com
   - DOMAIN,player.vimeo.com
-  - DOMAIN,playwright.azureedge.net
   - DOMAIN,plugins-artifacts.gradle.org
   - DOMAIN,plugins.dprint.dev
   - DOMAIN,plus.unsplash.com
@@ -1304,7 +1306,6 @@ payload:
   - DOMAIN,thumbs.gfycat.com
   - DOMAIN,thumbs.onlyfans.com
   - DOMAIN,thumbs2.sendvid.com
-  - DOMAIN,thumbs44.redgifs.com
   - DOMAIN,thumbsnap.com
   - DOMAIN,tiles.stadiamaps.com
   - DOMAIN,ton.local.twitter.com
@@ -1752,7 +1753,6 @@ payload:
   - DOMAIN-SUFFIX,jwpcdn.com
   - DOMAIN-SUFFIX,jwpsrv.com
   - DOMAIN-SUFFIX,k8s.io
-  - DOMAIN-SUFFIX,kali.download
   - DOMAIN-SUFFIX,kc-usercontent.com
   - DOMAIN-SUFFIX,kinja-img.com
   - DOMAIN-SUFFIX,kinja-static.com
@@ -2201,6 +2201,7 @@ payload:
   - DOMAIN-SUFFIX,sc-cdn.com
   - DOMAIN-SUFFIX,schemastore.org
   - DOMAIN-SUFFIX,sciencedirectassets.com
+  - DOMAIN-SUFFIX,scribdassets.com
   - DOMAIN-SUFFIX,seadn.io
   - DOMAIN-SUFFIX,search.ipfsgate.com
   - DOMAIN-SUFFIX,sendspace.com
