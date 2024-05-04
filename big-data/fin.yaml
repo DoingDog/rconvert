@@ -1,5 +1,5 @@
-# Clash total line 4954
-# Last updated Wed 05/01/2024 22:11:04.38
+# Clash total line 4967
+# Last updated Sat 05/04/2024 22:07:09.67
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -147,6 +147,7 @@ payload:
   - DOMAIN,assets.upload.io
   - DOMAIN,assets.vercel.com
   - DOMAIN,assets.vidyard.com
+  - DOMAIN,assets.vogue.com
   - DOMAIN,assets.volvo.com
   - DOMAIN,assets.xbox.com
   - DOMAIN,assets.xmind.net
@@ -381,6 +382,7 @@ payload:
   - DOMAIN,cdn.readme.io
   - DOMAIN,cdn.recovermycart.com
   - DOMAIN,cdn.redoc.ly
+  - DOMAIN,cdn.reimu.net
   - DOMAIN,cdn.rex.contents.rakuten.co.jp
   - DOMAIN,cdn.robinpro.gallery
   - DOMAIN,cdn.roboflow.com
@@ -599,6 +601,7 @@ payload:
   - DOMAIN,downloadr2.apkmirror.com
   - DOMAIN,downloads.coindesk.com
   - DOMAIN,downloads.openwrt.org
+  - DOMAIN,downloads.raspberrypi.com
   - DOMAIN,downloads.wordpress.org
   - DOMAIN,downloads.xrite.com
   - DOMAIN,drscdn.500px.org
@@ -781,6 +784,7 @@ payload:
   - DOMAIN,images.spot.im
   - DOMAIN,images.spr.so
   - DOMAIN,images.store.crowdstrike.com
+  - DOMAIN,images.svc.ui.com
   - DOMAIN,images.unsplash.com
   - DOMAIN,images.web3.storage
   - DOMAIN,images.weserv.nl
@@ -814,6 +818,7 @@ payload:
   - DOMAIN,img.perfops.net
   - DOMAIN,img.picacomic.com
   - DOMAIN,img.reg.ru
+  - DOMAIN,img.reimu.net
   - DOMAIN,img.represent.com
   - DOMAIN,img.riskified.com
   - DOMAIN,img.shana-laopo.xyz
@@ -823,6 +828,7 @@ payload:
   - DOMAIN,img.urlnode.com
   - DOMAIN,img.utdstc.com
   - DOMAIN,img.vim-cn.com
+  - DOMAIN,img.xhacgn.com
   - DOMAIN,img.xjh.me
   - DOMAIN,img2.tnaflix.com
   - DOMAIN,img2.xiangbinjun.com
@@ -1073,6 +1079,7 @@ payload:
   - DOMAIN,quriobot.com
   - DOMAIN,r.r10s.jp
   - DOMAIN,raw.github.com
+  - DOMAIN,re.reimu.net
   - DOMAIN,react.dev
   - DOMAIN,rebound.postmarkapp.com
   - DOMAIN,redircdn.com
@@ -1325,6 +1332,7 @@ payload:
   - DOMAIN,static.snapchat.com
   - DOMAIN,static.snaptube.in
   - DOMAIN,static.snyk.io
+  - DOMAIN,static.socratic.org
   - DOMAIN,static.solarwinds.com
   - DOMAIN,static.spankbang.com
   - DOMAIN,static.srcspot.com
@@ -1338,6 +1346,7 @@ payload:
   - DOMAIN,static.tronscan.org
   - DOMAIN,static.tumblr.com
   - DOMAIN,static.typingclub.com
+  - DOMAIN,static.ui.com
   - DOMAIN,static.underhentai.net
   - DOMAIN,static.v2ex.com
   - DOMAIN,static.vocadb.net
@@ -1427,6 +1436,7 @@ payload:
   - DOMAIN,userimg-bee.customeriomail.com
   - DOMAIN,userimg.customeriomail.com
   - DOMAIN,userpic.redgifs.com
+  - DOMAIN,useruploads.socratic.org
   - DOMAIN,useruploads.visualwebsiteoptimizer.com
   - DOMAIN,uts-api.itunes.apple.com
   - DOMAIN,utteranc.es
@@ -2102,6 +2112,7 @@ payload:
   - DOMAIN-SUFFIX,doodrive.com
   - DOMAIN-SUFFIX,doodstream.com
   - DOMAIN-SUFFIX,doppiocdn.com
+  - DOMAIN-SUFFIX,doppiocdn.live
   - DOMAIN-SUFFIX,doppiocdn.net
   - DOMAIN-SUFFIX,doppiocdn.org
   - DOMAIN-SUFFIX,douploads.com
@@ -2861,6 +2872,7 @@ payload:
   - DOMAIN-SUFFIX,ks3-sgp.ksyuncs.com
   - DOMAIN-SUFFIX,kshared.com
   - DOMAIN-SUFFIX,ktvu.com
+  - DOMAIN-SUFFIX,kuaikan-cdn4.com
   - DOMAIN-SUFFIX,kwcdn.com
   - DOMAIN-SUFFIX,kym-cdn.com
   - DOMAIN-SUFFIX,launcher.mojang.com
@@ -3552,6 +3564,7 @@ payload:
   - DOMAIN-SUFFIX,subyshare.com
   - DOMAIN-SUFFIX,sundryfiles.com
   - DOMAIN-SUFFIX,surge.sh
+  - DOMAIN-SUFFIX,surrit.com
   - DOMAIN-SUFFIX,susercontent.com
   - DOMAIN-SUFFIX,swiftupload.com
   - DOMAIN-SUFFIX,swiftypecdn.com

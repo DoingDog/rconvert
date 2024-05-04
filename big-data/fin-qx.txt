@@ -1,5 +1,5 @@
-# Quantumult total line 4939
-# Last updated Wed 05/01/2024 22:11:04.35
+# Quantumult total line 4952
+# Last updated Sat 05/04/2024 22:07:09.63
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -146,6 +146,7 @@ HOST,assets.tumblr.com,LIST
 HOST,assets.upload.io,LIST
 HOST,assets.vercel.com,LIST
 HOST,assets.vidyard.com,LIST
+HOST,assets.vogue.com,LIST
 HOST,assets.volvo.com,LIST
 HOST,assets.xbox.com,LIST
 HOST,assets.xmind.net,LIST
@@ -380,6 +381,7 @@ HOST,cdn.rauno.me,LIST
 HOST,cdn.readme.io,LIST
 HOST,cdn.recovermycart.com,LIST
 HOST,cdn.redoc.ly,LIST
+HOST,cdn.reimu.net,LIST
 HOST,cdn.rex.contents.rakuten.co.jp,LIST
 HOST,cdn.robinpro.gallery,LIST
 HOST,cdn.roboflow.com,LIST
@@ -598,6 +600,7 @@ HOST,download4.epicgames.com,LIST
 HOST,downloadr2.apkmirror.com,LIST
 HOST,downloads.coindesk.com,LIST
 HOST,downloads.openwrt.org,LIST
+HOST,downloads.raspberrypi.com,LIST
 HOST,downloads.wordpress.org,LIST
 HOST,downloads.xrite.com,LIST
 HOST,drscdn.500px.org,LIST
@@ -780,6 +783,7 @@ HOST,images.scalero.io,LIST
 HOST,images.spot.im,LIST
 HOST,images.spr.so,LIST
 HOST,images.store.crowdstrike.com,LIST
+HOST,images.svc.ui.com,LIST
 HOST,images.unsplash.com,LIST
 HOST,images.web3.storage,LIST
 HOST,images.weserv.nl,LIST
@@ -813,6 +817,7 @@ HOST,img.pawoo.net,LIST
 HOST,img.perfops.net,LIST
 HOST,img.picacomic.com,LIST
 HOST,img.reg.ru,LIST
+HOST,img.reimu.net,LIST
 HOST,img.represent.com,LIST
 HOST,img.riskified.com,LIST
 HOST,img.shana-laopo.xyz,LIST
@@ -822,6 +827,7 @@ HOST,img.timero.xyz,LIST
 HOST,img.urlnode.com,LIST
 HOST,img.utdstc.com,LIST
 HOST,img.vim-cn.com,LIST
+HOST,img.xhacgn.com,LIST
 HOST,img.xjh.me,LIST
 HOST,img2.tnaflix.com,LIST
 HOST,img2.xiangbinjun.com,LIST
@@ -1072,6 +1078,7 @@ HOST,publicsuffix.org,LIST
 HOST,quriobot.com,LIST
 HOST,r.r10s.jp,LIST
 HOST,raw.github.com,LIST
+HOST,re.reimu.net,LIST
 HOST,react.dev,LIST
 HOST,rebound.postmarkapp.com,LIST
 HOST,redircdn.com,LIST
@@ -1324,6 +1331,7 @@ HOST,static.skyassets.com,LIST
 HOST,static.snapchat.com,LIST
 HOST,static.snaptube.in,LIST
 HOST,static.snyk.io,LIST
+HOST,static.socratic.org,LIST
 HOST,static.solarwinds.com,LIST
 HOST,static.spankbang.com,LIST
 HOST,static.srcspot.com,LIST
@@ -1337,6 +1345,7 @@ HOST,static.tradingview.com,LIST
 HOST,static.tronscan.org,LIST
 HOST,static.tumblr.com,LIST
 HOST,static.typingclub.com,LIST
+HOST,static.ui.com,LIST
 HOST,static.underhentai.net,LIST
 HOST,static.v2ex.com,LIST
 HOST,static.vocadb.net,LIST
@@ -1426,6 +1435,7 @@ HOST,userimg-assets.customeriomail.com,LIST
 HOST,userimg-bee.customeriomail.com,LIST
 HOST,userimg.customeriomail.com,LIST
 HOST,userpic.redgifs.com,LIST
+HOST,useruploads.socratic.org,LIST
 HOST,useruploads.visualwebsiteoptimizer.com,LIST
 HOST,uts-api.itunes.apple.com,LIST
 HOST,utteranc.es,LIST
@@ -2101,6 +2111,7 @@ HOST-SUFFIX,dokusho-ojikan.jp,LIST
 HOST-SUFFIX,doodrive.com,LIST
 HOST-SUFFIX,doodstream.com,LIST
 HOST-SUFFIX,doppiocdn.com,LIST
+HOST-SUFFIX,doppiocdn.live,LIST
 HOST-SUFFIX,doppiocdn.net,LIST
 HOST-SUFFIX,doppiocdn.org,LIST
 HOST-SUFFIX,douploads.com,LIST
@@ -2860,6 +2871,7 @@ HOST-SUFFIX,ks3-rus.ksyuncs.com,LIST
 HOST-SUFFIX,ks3-sgp.ksyuncs.com,LIST
 HOST-SUFFIX,kshared.com,LIST
 HOST-SUFFIX,ktvu.com,LIST
+HOST-SUFFIX,kuaikan-cdn4.com,LIST
 HOST-SUFFIX,kwcdn.com,LIST
 HOST-SUFFIX,kym-cdn.com,LIST
 HOST-SUFFIX,launcher.mojang.com,LIST
@@ -3551,6 +3563,7 @@ HOST-SUFFIX,substackcdn.com,LIST
 HOST-SUFFIX,subyshare.com,LIST
 HOST-SUFFIX,sundryfiles.com,LIST
 HOST-SUFFIX,surge.sh,LIST
+HOST-SUFFIX,surrit.com,LIST
 HOST-SUFFIX,susercontent.com,LIST
 HOST-SUFFIX,swiftupload.com,LIST
 HOST-SUFFIX,swiftypecdn.com,LIST
