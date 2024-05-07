@@ -1,5 +1,5 @@
-# Clash total line 4290
-# Last updated Sat 05/04/2024 22:07:17.21
+# Clash total line 4288
+# Last updated Tue 05/07/2024 22:06:12.83
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -9,7 +9,6 @@ payload:
   - DOMAIN,client.amplifi.com
   - DOMAIN,cn.download.nvidia.com
   - DOMAIN,download.jetbrains.com
-  - DOMAIN,gs-loc-cn.apple.com
   - DOMAIN,images-cn.ssl-images-amazon.com
   - DOMAIN,injections.adguard.org
   - DOMAIN,ip.istatmenus.app
@@ -1549,7 +1548,6 @@ payload:
   - DOMAIN-SUFFIX,growingio.com
   - DOMAIN-SUFFIX,grzq.com
   - DOMAIN-SUFFIX,gsadds.com
-  - DOMAIN-SUFFIX,gspe19-cn-ssl.ls.apple.com
   - DOMAIN-SUFFIX,gszq.com
   - DOMAIN-SUFFIX,gtags.net
   - DOMAIN-SUFFIX,gtarsc.com
