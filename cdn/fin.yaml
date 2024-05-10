@@ -1,5 +1,5 @@
-# Clash total line 2377
-# Last updated Tue 05/07/2024 22:05:54.40
+# Clash total line 2378
+# Last updated Fri 05/10/2024 22:09:08.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1883,6 +1883,7 @@ payload:
   - DOMAIN-SUFFIX,pixiv.nl
   - DOMAIN-SUFFIX,pixiv.re
   - DOMAIN-SUFFIX,pkg.github.com
+  - DOMAIN-SUFFIX,placekitten.com
   - DOMAIN-SUFFIX,pnpm.io
   - DOMAIN-SUFFIX,poecdn.net
   - DOMAIN-SUFFIX,polyfill.io
