@@ -1,5 +1,5 @@
-# Clash total line 2378
-# Last updated Fri 05/10/2024 22:09:08.16
+# Clash total line 2381
+# Last updated Mon 05/13/2024 22:07:40.73
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1218,6 +1218,7 @@ payload:
   - DOMAIN,static.olelive.com
   - DOMAIN,static.onlinewebfonts.com
   - DOMAIN,static.onlyfans.com
+  - DOMAIN,static.oomol.com
   - DOMAIN,static.opensea.io
   - DOMAIN,static.oracle.com
   - DOMAIN,static.osdn.net
@@ -1617,6 +1618,7 @@ payload:
   - DOMAIN-SUFFIX,firefoxusercontent.com
   - DOMAIN-SUFFIX,firestore.googleapis.com
   - DOMAIN-SUFFIX,fiverrcdn.com
+  - DOMAIN-SUFFIX,fivetiu.com
   - DOMAIN-SUFFIX,flagcdn.com
   - DOMAIN-SUFFIX,flagpedia.net
   - DOMAIN-SUFFIX,fontawesome.com
@@ -2233,6 +2235,7 @@ payload:
   - DOMAIN-SUFFIX,sirv.com
   - DOMAIN-SUFFIX,siteintercept.qualtrics.com
   - DOMAIN-SUFFIX,sitescdn.net
+  - DOMAIN-SUFFIX,sixyik.com
   - DOMAIN-SUFFIX,skypack.dev
   - DOMAIN-SUFFIX,slack-edge.com
   - DOMAIN-SUFFIX,slack-imgs.com
