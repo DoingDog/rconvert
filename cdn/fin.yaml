@@ -1,5 +1,5 @@
 # Clash total line 2381
-# Last updated Thu 05/16/2024 22:10:36.64
+# Last updated Sun 05/19/2024 22:10:10.08
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -970,7 +970,6 @@ payload:
   - DOMAIN,r.r10s.jp
   - DOMAIN,raw.github.com
   - DOMAIN,re.reimu.net
-  - DOMAIN,react.dev
   - DOMAIN,rebound.postmarkapp.com
   - DOMAIN,redircdn.com
   - DOMAIN,registry-cdn.wapm.io
@@ -1917,6 +1916,7 @@ payload:
   - DOMAIN-SUFFIX,rawgit.org
   - DOMAIN-SUFFIX,rbxcdn.com
   - DOMAIN-SUFFIX,rdtcdn.com
+  - DOMAIN-SUFFIX,react.dev
   - DOMAIN-SUFFIX,reactjs.org
   - DOMAIN-SUFFIX,reasoningtheory.net
   - DOMAIN-SUFFIX,redd.it
