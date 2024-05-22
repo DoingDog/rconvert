@@ -1,5 +1,5 @@
-# Quantumult total line 4960
-# Last updated Sun 05/19/2024 22:10:18.67
+# Quantumult total line 4963
+# Last updated Wed 05/22/2024 22:09:13.03
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -1428,6 +1428,7 @@ HOST,upload.filebase.com,LIST
 HOST,upload.wikimedia.org,LIST
 HOST,uploads.codesandbox.io,LIST
 HOST,uploads.guim.co.uk,LIST
+HOST,uploads.sitepoint.com,LIST
 HOST,us.hamreus.com,LIST
 HOST,use.typekit.com,LIST
 HOST,use.typekit.net,LIST
@@ -3230,6 +3231,7 @@ HOST-SUFFIX,phncdn.com,LIST
 HOST-SUFFIX,photobucket.com,LIST
 HOST-SUFFIX,photos.live.com,LIST
 HOST-SUFFIX,phprcdn.com,LIST
+HOST-SUFFIX,picsum.photos,LIST
 HOST-SUFFIX,piecejointe.net,LIST
 HOST-SUFFIX,pikpak.me,LIST
 HOST-SUFFIX,pikpakdrive.com,LIST
@@ -3869,6 +3871,7 @@ HOST-SUFFIX,vusercontent.net,LIST
 HOST-SUFFIX,vx-cdn.com,LIST
 HOST-SUFFIX,vzw.com,LIST
 HOST-SUFFIX,w-corp.staticblitz.com,LIST
+HOST-SUFFIX,w-credentialless-staticblitz.com,LIST
 HOST-SUFFIX,w-credentialless.staticblitz.com,LIST
 HOST-SUFFIX,w.staticblitz.com,LIST
 HOST-SUFFIX,w3s.link,LIST

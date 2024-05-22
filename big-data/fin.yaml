@@ -1,5 +1,5 @@
-# Clash total line 4975
-# Last updated Sun 05/19/2024 22:10:18.70
+# Clash total line 4978
+# Last updated Wed 05/22/2024 22:09:13.08
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1429,6 +1429,7 @@ payload:
   - DOMAIN,upload.wikimedia.org
   - DOMAIN,uploads.codesandbox.io
   - DOMAIN,uploads.guim.co.uk
+  - DOMAIN,uploads.sitepoint.com
   - DOMAIN,us.hamreus.com
   - DOMAIN,use.typekit.com
   - DOMAIN,use.typekit.net
@@ -3231,6 +3232,7 @@ payload:
   - DOMAIN-SUFFIX,photobucket.com
   - DOMAIN-SUFFIX,photos.live.com
   - DOMAIN-SUFFIX,phprcdn.com
+  - DOMAIN-SUFFIX,picsum.photos
   - DOMAIN-SUFFIX,piecejointe.net
   - DOMAIN-SUFFIX,pikpak.me
   - DOMAIN-SUFFIX,pikpakdrive.com
@@ -3870,6 +3872,7 @@ payload:
   - DOMAIN-SUFFIX,vx-cdn.com
   - DOMAIN-SUFFIX,vzw.com
   - DOMAIN-SUFFIX,w-corp.staticblitz.com
+  - DOMAIN-SUFFIX,w-credentialless-staticblitz.com
   - DOMAIN-SUFFIX,w-credentialless.staticblitz.com
   - DOMAIN-SUFFIX,w.staticblitz.com
   - DOMAIN-SUFFIX,w3s.link
