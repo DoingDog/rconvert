@@ -1,5 +1,5 @@
-# Main total line 4978
-# Last updated Wed 05/22/2024 22:09:12.89
+# Main total line 4990
+# Last updated Sat 05/25/2024 22:07:20.25
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
@@ -207,6 +207,7 @@ DOMAIN,bundle.trysavvy.com
 DOMAIN,bundlephobia.com
 DOMAIN,bundles.npr.org
 DOMAIN,busuanzi.ibruce.info
+DOMAIN,c.1password.com
 DOMAIN,c.marsflag.com
 DOMAIN,c.navattic.com
 DOMAIN,c.s-microsoft.com
@@ -484,6 +485,7 @@ DOMAIN,chart.googleapis.com
 DOMAIN,checkout.stripe.com
 DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
 DOMAIN,ci.testling.com
+DOMAIN,ciscobinary.openh264
 DOMAIN,claritystatic.azureedge.net
 DOMAIN,client.hikarifield.co.jp
 DOMAIN,client.px-cloud.net
@@ -549,6 +551,7 @@ DOMAIN,dl-cdn.alpinelinux.org
 DOMAIN,dl-portal.iina.io
 DOMAIN,dl.devmate.com
 DOMAIN,dl.discordapp.net
+DOMAIN,dl.flathub.org
 DOMAIN,dl.google.com
 DOMAIN,dl.iina.io
 DOMAIN,dl.l.google.com
@@ -599,6 +602,7 @@ DOMAIN,download2.epicgames.com
 DOMAIN,download3.epicgames.com
 DOMAIN,download4.epicgames.com
 DOMAIN,downloadr2.apkmirror.com
+DOMAIN,downloads.1password.com
 DOMAIN,downloads.coindesk.com
 DOMAIN,downloads.openwrt.org
 DOMAIN,downloads.raspberrypi.com
@@ -957,6 +961,8 @@ DOMAIN,mirror.xtom.sg
 DOMAIN,mirror.xtom.us
 DOMAIN,mirrors.cat.net
 DOMAIN,mirrors.edge.kernel.org
+DOMAIN,mirrors.fedoraproject.org
+DOMAIN,mirrors.rpmfusion.org
 DOMAIN,mirrors.xtom.au
 DOMAIN,mirrors.xtom.com
 DOMAIN,mirrors.xtom.com.hk
@@ -994,6 +1000,7 @@ DOMAIN,objects.hit.moe
 DOMAIN,ocecdn.oraclecloud.com
 DOMAIN,ocsp.digicert.com
 DOMAIN,ocsp.godaddy.com
+DOMAIN,ocsp.r2m02.amazontrust.com
 DOMAIN,ocsp.sectigo.com
 DOMAIN,ocsp2.apple.com
 DOMAIN,ocvideo.apple.com
@@ -1020,6 +1027,7 @@ DOMAIN,packages-cf.termux.dev
 DOMAIN,packages.argotunnel.com
 DOMAIN,packages.httpie.io
 DOMAIN,packages.linuxmint.com
+DOMAIN,packages.microsoft.com
 DOMAIN,packages.termux.dev
 DOMAIN,packages.virtfusion.net
 DOMAIN,packagespc.xboxlive.com
@@ -1088,6 +1096,7 @@ DOMAIN,redircdn.com
 DOMAIN,redstone-launcher.mojang.com
 DOMAIN,registry-cdn.wapm.io
 DOMAIN,registry.bower.io
+DOMAIN,registry.fedoraproject.org
 DOMAIN,registry.npmjs.cf
 DOMAIN,registry.npmjs.com
 DOMAIN,registry.npmjs.org
@@ -1907,6 +1916,7 @@ DOMAIN-SUFFIX,convertio.co
 DOMAIN-SUFFIX,convertio.me
 DOMAIN-SUFFIX,conviva.com
 DOMAIN-SUFFIX,cookielaw.org
+DOMAIN-SUFFIX,copr.fedorainfracloud.org
 DOMAIN-SUFFIX,coral.coralproject.net
 DOMAIN-SUFFIX,coronavirusnow.com
 DOMAIN-SUFFIX,cos.ap-bangkok.myqcloud.com
@@ -2796,6 +2806,7 @@ DOMAIN-SUFFIX,ipfs.xoqq.ch
 DOMAIN-SUFFIX,ipfs.yt
 DOMAIN-SUFFIX,ipfs0.sjc.cloudsigma.com
 DOMAIN-SUFFIX,ipfs1.pixura.io
+DOMAIN-SUFFIX,ipfscdn.io
 DOMAIN-SUFFIX,ipfsgateway.makersplace.com
 DOMAIN-SUFFIX,ipns.co
 DOMAIN-SUFFIX,ipstatp.com
@@ -3610,6 +3621,7 @@ DOMAIN-SUFFIX,theverge.com
 DOMAIN-SUFFIX,thevideo.io
 DOMAIN-SUFFIX,thevideo.me
 DOMAIN-SUFFIX,thevideo.website
+DOMAIN-SUFFIX,thirdwebcdn.com
 DOMAIN-SUFFIX,thisiscdn.com
 DOMAIN-SUFFIX,thisispolaris.com
 DOMAIN-SUFFIX,thisvid.com

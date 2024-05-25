@@ -1,5 +1,5 @@
-# Quantumult total line 2384
-# Last updated Wed 05/22/2024 22:09:03.17
+# Quantumult total line 2388
+# Last updated Sat 05/25/2024 22:07:11.94
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -196,6 +196,7 @@ HOST,bundle.trysavvy.com,LIST
 HOST,bundlephobia.com,LIST
 HOST,bundles.npr.org,LIST
 HOST,busuanzi.ibruce.info,LIST
+HOST,c.1password.com,LIST
 HOST,c.marsflag.com,LIST
 HOST,c.navattic.com,LIST
 HOST,c.s-microsoft.com,LIST
@@ -881,6 +882,7 @@ HOST,objects.hit.moe,LIST
 HOST,ocecdn.oraclecloud.com,LIST
 HOST,ocsp.digicert.com,LIST
 HOST,ocsp.godaddy.com,LIST
+HOST,ocsp.r2m02.amazontrust.com,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,ocsp2.apple.com,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
@@ -1750,6 +1752,7 @@ HOST-SUFFIX,ipfs.xoqq.ch,LIST
 HOST-SUFFIX,ipfs.yt,LIST
 HOST-SUFFIX,ipfs0.sjc.cloudsigma.com,LIST
 HOST-SUFFIX,ipfs1.pixura.io,LIST
+HOST-SUFFIX,ipfscdn.io,LIST
 HOST-SUFFIX,ipfsgateway.makersplace.com,LIST
 HOST-SUFFIX,ipns.co,LIST
 HOST-SUFFIX,itsre-sumo.mozilla.net,LIST
@@ -2284,6 +2287,7 @@ HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,tedcdn.com,LIST
 HOST-SUFFIX,temp.sh,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
+HOST-SUFFIX,thirdwebcdn.com,LIST
 HOST-SUFFIX,thisiscdn.com,LIST
 HOST-SUFFIX,tiktokcdn-us.com,LIST
 HOST-SUFFIX,tiktokcdn.com,LIST

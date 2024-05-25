@@ -1,5 +1,5 @@
-# Quantumult total line 4963
-# Last updated Wed 05/22/2024 22:09:13.03
+# Quantumult total line 4975
+# Last updated Sat 05/25/2024 22:07:20.38
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -207,6 +207,7 @@ HOST,bundle.trysavvy.com,LIST
 HOST,bundlephobia.com,LIST
 HOST,bundles.npr.org,LIST
 HOST,busuanzi.ibruce.info,LIST
+HOST,c.1password.com,LIST
 HOST,c.marsflag.com,LIST
 HOST,c.navattic.com,LIST
 HOST,c.s-microsoft.com,LIST
@@ -484,6 +485,7 @@ HOST,chart.googleapis.com,LIST
 HOST,checkout.stripe.com,LIST
 HOST,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv,LIST
 HOST,ci.testling.com,LIST
+HOST,ciscobinary.openh264,LIST
 HOST,claritystatic.azureedge.net,LIST
 HOST,client.hikarifield.co.jp,LIST
 HOST,client.px-cloud.net,LIST
@@ -549,6 +551,7 @@ HOST,dl-cdn.alpinelinux.org,LIST
 HOST,dl-portal.iina.io,LIST
 HOST,dl.devmate.com,LIST
 HOST,dl.discordapp.net,LIST
+HOST,dl.flathub.org,LIST
 HOST,dl.google.com,LIST
 HOST,dl.iina.io,LIST
 HOST,dl.l.google.com,LIST
@@ -599,6 +602,7 @@ HOST,download2.epicgames.com,LIST
 HOST,download3.epicgames.com,LIST
 HOST,download4.epicgames.com,LIST
 HOST,downloadr2.apkmirror.com,LIST
+HOST,downloads.1password.com,LIST
 HOST,downloads.coindesk.com,LIST
 HOST,downloads.openwrt.org,LIST
 HOST,downloads.raspberrypi.com,LIST
@@ -957,6 +961,8 @@ HOST,mirror.xtom.sg,LIST
 HOST,mirror.xtom.us,LIST
 HOST,mirrors.cat.net,LIST
 HOST,mirrors.edge.kernel.org,LIST
+HOST,mirrors.fedoraproject.org,LIST
+HOST,mirrors.rpmfusion.org,LIST
 HOST,mirrors.xtom.au,LIST
 HOST,mirrors.xtom.com,LIST
 HOST,mirrors.xtom.com.hk,LIST
@@ -994,6 +1000,7 @@ HOST,objects.hit.moe,LIST
 HOST,ocecdn.oraclecloud.com,LIST
 HOST,ocsp.digicert.com,LIST
 HOST,ocsp.godaddy.com,LIST
+HOST,ocsp.r2m02.amazontrust.com,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,ocsp2.apple.com,LIST
 HOST,ocvideo.apple.com,LIST
@@ -1020,6 +1027,7 @@ HOST,packages-cf.termux.dev,LIST
 HOST,packages.argotunnel.com,LIST
 HOST,packages.httpie.io,LIST
 HOST,packages.linuxmint.com,LIST
+HOST,packages.microsoft.com,LIST
 HOST,packages.termux.dev,LIST
 HOST,packages.virtfusion.net,LIST
 HOST,packagespc.xboxlive.com,LIST
@@ -1088,6 +1096,7 @@ HOST,redircdn.com,LIST
 HOST,redstone-launcher.mojang.com,LIST
 HOST,registry-cdn.wapm.io,LIST
 HOST,registry.bower.io,LIST
+HOST,registry.fedoraproject.org,LIST
 HOST,registry.npmjs.cf,LIST
 HOST,registry.npmjs.com,LIST
 HOST,registry.npmjs.org,LIST
@@ -1907,6 +1916,7 @@ HOST-SUFFIX,convertio.co,LIST
 HOST-SUFFIX,convertio.me,LIST
 HOST-SUFFIX,conviva.com,LIST
 HOST-SUFFIX,cookielaw.org,LIST
+HOST-SUFFIX,copr.fedorainfracloud.org,LIST
 HOST-SUFFIX,coral.coralproject.net,LIST
 HOST-SUFFIX,coronavirusnow.com,LIST
 HOST-SUFFIX,cos.ap-bangkok.myqcloud.com,LIST
@@ -2796,6 +2806,7 @@ HOST-SUFFIX,ipfs.xoqq.ch,LIST
 HOST-SUFFIX,ipfs.yt,LIST
 HOST-SUFFIX,ipfs0.sjc.cloudsigma.com,LIST
 HOST-SUFFIX,ipfs1.pixura.io,LIST
+HOST-SUFFIX,ipfscdn.io,LIST
 HOST-SUFFIX,ipfsgateway.makersplace.com,LIST
 HOST-SUFFIX,ipns.co,LIST
 HOST-SUFFIX,ipstatp.com,LIST
@@ -3610,6 +3621,7 @@ HOST-SUFFIX,theverge.com,LIST
 HOST-SUFFIX,thevideo.io,LIST
 HOST-SUFFIX,thevideo.me,LIST
 HOST-SUFFIX,thevideo.website,LIST
+HOST-SUFFIX,thirdwebcdn.com,LIST
 HOST-SUFFIX,thisiscdn.com,LIST
 HOST-SUFFIX,thisispolaris.com,LIST
 HOST-SUFFIX,thisvid.com,LIST
