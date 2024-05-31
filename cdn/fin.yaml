@@ -1,5 +1,5 @@
-# Clash total line 2388
-# Last updated Tue 05/28/2024 22:08:54.63
+# Clash total line 2389
+# Last updated Fri 05/31/2024 22:10:27.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1184,6 +1184,7 @@ payload:
   - DOMAIN,static.frostming.com
   - DOMAIN,static.getbutton.io
   - DOMAIN,static.gettyimages.com
+  - DOMAIN,static.gnome.org
   - DOMAIN,static.gopro.com
   - DOMAIN,static.grammarly.com
   - DOMAIN,static.heavy-r.com
