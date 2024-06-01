@@ -1,5 +1,5 @@
-# Clash total line 4286
-# Last updated Fri 05/31/2024 22:10:43.32
+# Clash total line 4287
+# Last updated Sat 06/01/2024 22:08:13.01
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -1206,6 +1206,7 @@ payload:
   - DOMAIN-SUFFIX,dl.bscstorage.net
   - DOMAIN-SUFFIX,dl.eccdnx.com
   - DOMAIN-SUFFIX,dl.pinyuncloud.com
+  - DOMAIN-SUFFIX,dler.cloud
   - DOMAIN-SUFFIX,dlgslb.net
   - DOMAIN-SUFFIX,dlnel.com
   - DOMAIN-SUFFIX,dlnel.org
