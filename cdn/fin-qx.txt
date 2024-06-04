@@ -1,5 +1,5 @@
-# Quantumult total line 2389
-# Last updated Sat 06/01/2024 22:07:55.50
+# Quantumult total line 2394
+# Last updated Tue 06/04/2024 22:09:17.19
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -1584,6 +1584,7 @@ HOST-SUFFIX,doppiocdn.net,LIST
 HOST-SUFFIX,doppiocdn.org,LIST
 HOST-SUFFIX,dropboxstatic.com,LIST
 HOST-SUFFIX,dsc.cloud,LIST
+HOST-SUFFIX,dummyimage.com,LIST
 HOST-SUFFIX,dweb.eu.org,LIST
 HOST-SUFFIX,dweb.link,LIST
 HOST-SUFFIX,easylist.to,LIST
@@ -1889,7 +1890,11 @@ HOST-SUFFIX,pixiv.cat,LIST
 HOST-SUFFIX,pixiv.nl,LIST
 HOST-SUFFIX,pixiv.re,LIST
 HOST-SUFFIX,pkg.github.com,LIST
+HOST-SUFFIX,place-hold.it,LIST
+HOST-SUFFIX,placehold.co,LIST
+HOST-SUFFIX,placehold.jp,LIST
 HOST-SUFFIX,placekitten.com,LIST
+HOST-SUFFIX,placewaifu.com,LIST
 HOST-SUFFIX,pnpm.io,LIST
 HOST-SUFFIX,poecdn.net,LIST
 HOST-SUFFIX,polyfill.io,LIST

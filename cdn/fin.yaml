@@ -1,5 +1,5 @@
-# Clash total line 2389
-# Last updated Sat 06/01/2024 22:07:55.53
+# Clash total line 2394
+# Last updated Tue 06/04/2024 22:09:17.20
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1585,6 +1585,7 @@ payload:
   - DOMAIN-SUFFIX,doppiocdn.org
   - DOMAIN-SUFFIX,dropboxstatic.com
   - DOMAIN-SUFFIX,dsc.cloud
+  - DOMAIN-SUFFIX,dummyimage.com
   - DOMAIN-SUFFIX,dweb.eu.org
   - DOMAIN-SUFFIX,dweb.link
   - DOMAIN-SUFFIX,easylist.to
@@ -1890,7 +1891,11 @@ payload:
   - DOMAIN-SUFFIX,pixiv.nl
   - DOMAIN-SUFFIX,pixiv.re
   - DOMAIN-SUFFIX,pkg.github.com
+  - DOMAIN-SUFFIX,place-hold.it
+  - DOMAIN-SUFFIX,placehold.co
+  - DOMAIN-SUFFIX,placehold.jp
   - DOMAIN-SUFFIX,placekitten.com
+  - DOMAIN-SUFFIX,placewaifu.com
   - DOMAIN-SUFFIX,pnpm.io
   - DOMAIN-SUFFIX,poecdn.net
   - DOMAIN-SUFFIX,polyfill.io

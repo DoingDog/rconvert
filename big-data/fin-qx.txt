@@ -1,5 +1,5 @@
-# Quantumult total line 4976
-# Last updated Sat 06/01/2024 22:08:04.91
+# Quantumult total line 4984
+# Last updated Tue 06/04/2024 22:09:26.47
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -485,7 +485,7 @@ HOST,chart.googleapis.com,LIST
 HOST,checkout.stripe.com,LIST
 HOST,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv,LIST
 HOST,ci.testling.com,LIST
-HOST,ciscobinary.openh264,LIST
+HOST,ciscobinary.openh264.org,LIST
 HOST,claritystatic.azureedge.net,LIST
 HOST,client.hikarifield.co.jp,LIST
 HOST,client.px-cloud.net,LIST
@@ -589,6 +589,7 @@ HOST,download.mikrotik.com,LIST
 HOST,download.mlcc.google.com,LIST
 HOST,download.mozilla.org,LIST
 HOST,download.nektony.com,LIST
+HOST,download.opensuse.org,LIST
 HOST,download.parallels.com,LIST
 HOST,download.pixelexperience.org,LIST
 HOST,download.sketch.com,LIST
@@ -948,6 +949,7 @@ HOST,mir-s3-cdn-cf.behance.net,LIST
 HOST,miro.medium.com,LIST
 HOST,mirror-cdn.xtom.com,LIST
 HOST,mirror.cat.net,LIST
+HOST,mirror.ghproxy.com,LIST
 HOST,mirror.navercorp.com,LIST
 HOST,mirror.xtom.au,LIST
 HOST,mirror.xtom.com,LIST
@@ -2172,6 +2174,7 @@ HOST-SUFFIX,dtci.technology,LIST
 HOST-SUFFIX,dtvce.com,LIST
 HOST-SUFFIX,dubox.com,LIST
 HOST-SUFFIX,duboxcdn.com,LIST
+HOST-SUFFIX,dummyimage.com,LIST
 HOST-SUFFIX,dweb.eu.org,LIST
 HOST-SUFFIX,dweb.link,LIST
 HOST-SUFFIX,dzcdn.net,LIST
@@ -3261,7 +3264,11 @@ HOST-SUFFIX,pixiv.nl,LIST
 HOST-SUFFIX,pixiv.re,LIST
 HOST-SUFFIX,pjointe.com,LIST
 HOST-SUFFIX,pkg.github.com,LIST
+HOST-SUFFIX,place-hold.it,LIST
+HOST-SUFFIX,placehold.co,LIST
+HOST-SUFFIX,placehold.jp,LIST
 HOST-SUFFIX,placekitten.com,LIST
+HOST-SUFFIX,placewaifu.com,LIST
 HOST-SUFFIX,playercdn.net,LIST
 HOST-SUFFIX,players.brightcove.net,LIST
 HOST-SUFFIX,playmation.com,LIST
@@ -3306,6 +3313,7 @@ HOST-SUFFIX,proxy.startpage.com,LIST
 HOST-SUFFIX,proxy.ustclug.org,LIST
 HOST-SUFFIX,pscdn.co,LIST
 HOST-SUFFIX,pscp.tv,LIST
+HOST-SUFFIX,psg.cdn.hgc.com.hk,LIST
 HOST-SUFFIX,pstatic.net,LIST
 HOST-SUFFIX,pstorage.space,LIST
 HOST-SUFFIX,public.cdn.office.net,LIST

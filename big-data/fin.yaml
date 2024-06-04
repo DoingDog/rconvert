@@ -1,5 +1,5 @@
-# Clash total line 4991
-# Last updated Sat 06/01/2024 22:08:04.95
+# Clash total line 4999
+# Last updated Tue 06/04/2024 22:09:26.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -486,7 +486,7 @@ payload:
   - DOMAIN,checkout.stripe.com
   - DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
   - DOMAIN,ci.testling.com
-  - DOMAIN,ciscobinary.openh264
+  - DOMAIN,ciscobinary.openh264.org
   - DOMAIN,claritystatic.azureedge.net
   - DOMAIN,client.hikarifield.co.jp
   - DOMAIN,client.px-cloud.net
@@ -590,6 +590,7 @@ payload:
   - DOMAIN,download.mlcc.google.com
   - DOMAIN,download.mozilla.org
   - DOMAIN,download.nektony.com
+  - DOMAIN,download.opensuse.org
   - DOMAIN,download.parallels.com
   - DOMAIN,download.pixelexperience.org
   - DOMAIN,download.sketch.com
@@ -949,6 +950,7 @@ payload:
   - DOMAIN,miro.medium.com
   - DOMAIN,mirror-cdn.xtom.com
   - DOMAIN,mirror.cat.net
+  - DOMAIN,mirror.ghproxy.com
   - DOMAIN,mirror.navercorp.com
   - DOMAIN,mirror.xtom.au
   - DOMAIN,mirror.xtom.com
@@ -2173,6 +2175,7 @@ payload:
   - DOMAIN-SUFFIX,dtvce.com
   - DOMAIN-SUFFIX,dubox.com
   - DOMAIN-SUFFIX,duboxcdn.com
+  - DOMAIN-SUFFIX,dummyimage.com
   - DOMAIN-SUFFIX,dweb.eu.org
   - DOMAIN-SUFFIX,dweb.link
   - DOMAIN-SUFFIX,dzcdn.net
@@ -3262,7 +3265,11 @@ payload:
   - DOMAIN-SUFFIX,pixiv.re
   - DOMAIN-SUFFIX,pjointe.com
   - DOMAIN-SUFFIX,pkg.github.com
+  - DOMAIN-SUFFIX,place-hold.it
+  - DOMAIN-SUFFIX,placehold.co
+  - DOMAIN-SUFFIX,placehold.jp
   - DOMAIN-SUFFIX,placekitten.com
+  - DOMAIN-SUFFIX,placewaifu.com
   - DOMAIN-SUFFIX,playercdn.net
   - DOMAIN-SUFFIX,players.brightcove.net
   - DOMAIN-SUFFIX,playmation.com
@@ -3307,6 +3314,7 @@ payload:
   - DOMAIN-SUFFIX,proxy.ustclug.org
   - DOMAIN-SUFFIX,pscdn.co
   - DOMAIN-SUFFIX,pscp.tv
+  - DOMAIN-SUFFIX,psg.cdn.hgc.com.hk
   - DOMAIN-SUFFIX,pstatic.net
   - DOMAIN-SUFFIX,pstorage.space
   - DOMAIN-SUFFIX,public.cdn.office.net
