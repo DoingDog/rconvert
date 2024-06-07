@@ -1,5 +1,5 @@
 # Main total line 4999
-# Last updated Tue 06/04/2024 22:09:26.33
+# Last updated Fri 06/07/2024 22:09:55.74
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
@@ -180,7 +180,6 @@ DOMAIN,avatars.mds.yandex.net
 DOMAIN,avatars.micro.blog
 DOMAIN,avatars.plurk.com
 DOMAIN,avts.wmlabs.net
-DOMAIN,aws-static.kwai.net
 DOMAIN,az700632.vo.msecnd.net
 DOMAIN,az764295.vo.msecnd.net
 DOMAIN,badbits.dwebops.pub
@@ -246,7 +245,6 @@ DOMAIN,cdn-sellix.com
 DOMAIN,cdn-service.jp.sumologic.com
 DOMAIN,cdn-share-sprites.flaticon.com
 DOMAIN,cdn-static-1.medium.com
-DOMAIN,cdn-static.kwai.net
 DOMAIN,cdn-static.talent.com
 DOMAIN,cdn-thumbs.porntube.com
 DOMAIN,cdn-txweb.transifex.com
@@ -504,6 +502,7 @@ DOMAIN,confluence-v1.prod.atl-paas.net
 DOMAIN,connect.facebook.net
 DOMAIN,connectivitycheck.android.com
 DOMAIN,connectivitycheck.gstatic.com
+DOMAIN,consentdeliveryfd.azurefd.net
 DOMAIN,consumersite-assets.trustpilot.net
 DOMAIN,content-origin.steampowered.com
 DOMAIN,content-prod-live.cert.starbucks.com
@@ -807,6 +806,7 @@ DOMAIN,img.bigcloud.cyou
 DOMAIN,img.biguz.net
 DOMAIN,img.bttimg.com
 DOMAIN,img.clerk.com
+DOMAIN,img.community.ui.com
 DOMAIN,img.dlsite.jp
 DOMAIN,img.domaintools.com
 DOMAIN,img.foresightnews.pro
@@ -1002,7 +1002,6 @@ DOMAIN,objects.hit.moe
 DOMAIN,ocecdn.oraclecloud.com
 DOMAIN,ocsp.digicert.com
 DOMAIN,ocsp.godaddy.com
-DOMAIN,ocsp.r2m02.amazontrust.com
 DOMAIN,ocsp.sectigo.com
 DOMAIN,ocsp2.apple.com
 DOMAIN,ocvideo.apple.com
@@ -1064,6 +1063,7 @@ DOMAIN,player-frontend.cnevids.com
 DOMAIN,player.cnevids.com
 DOMAIN,player.h-cdn.com
 DOMAIN,player.louisvuitton.com
+DOMAIN,playgroundcdn.typescriptlang.org
 DOMAIN,playwright.azureedge.net
 DOMAIN,plugins.dprint.dev
 DOMAIN,plus.unsplash.com
@@ -1146,7 +1146,6 @@ DOMAIN,s.w.org
 DOMAIN,s.wsj.net
 DOMAIN,s0.wp.com
 DOMAIN,s1.feedly.com
-DOMAIN,s1.kwai.net
 DOMAIN,s1.qwant.com
 DOMAIN,s1.wp.com
 DOMAIN,s2.coinmarketcap.com
@@ -3399,6 +3398,7 @@ DOMAIN-SUFFIX,redditmedia.com
 DOMAIN-SUFFIX,redditstatic.com
 DOMAIN-SUFFIX,redtube.com
 DOMAIN-SUFFIX,registerhulu.com
+DOMAIN-SUFFIX,releases.hashicorp.com
 DOMAIN-SUFFIX,repo.anaconda.com
 DOMAIN-SUFFIX,repo.jing.rocks
 DOMAIN-SUFFIX,res.office365.com

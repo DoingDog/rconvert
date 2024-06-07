@@ -1,5 +1,5 @@
-# Quantumult total line 2394
-# Last updated Tue 06/04/2024 22:09:17.19
+# Quantumult total line 2393
+# Last updated Fri 06/07/2024 22:09:45.96
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -175,7 +175,6 @@ HOST,avatars.mds.yandex.net,LIST
 HOST,avatars.micro.blog,LIST
 HOST,avatars.plurk.com,LIST
 HOST,avts.wmlabs.net,LIST
-HOST,aws-static.kwai.net,LIST
 HOST,az700632.vo.msecnd.net,LIST
 HOST,badbits.dwebops.pub,LIST
 HOST,badge.buildkite.com,LIST
@@ -231,7 +230,6 @@ HOST,cdn-sellix.com,LIST
 HOST,cdn-service.jp.sumologic.com,LIST
 HOST,cdn-share-sprites.flaticon.com,LIST
 HOST,cdn-static-1.medium.com,LIST
-HOST,cdn-static.kwai.net,LIST
 HOST,cdn-static.talent.com,LIST
 HOST,cdn-thumbs.porntube.com,LIST
 HOST,cdn-txweb.transifex.com,LIST
@@ -493,6 +491,7 @@ HOST,confluence-v1.prod.atl-paas.net,LIST
 HOST,connect.facebook.net,LIST
 HOST,connectivitycheck.android.com,LIST
 HOST,connectivitycheck.gstatic.com,LIST
+HOST,consentdeliveryfd.azurefd.net,LIST
 HOST,consumersite-assets.trustpilot.net,LIST
 HOST,content-prod-live.cert.starbucks.com,LIST
 HOST,content.any.run,LIST
@@ -717,6 +716,7 @@ HOST,img.bigcloud.cyou,LIST
 HOST,img.biguz.net,LIST
 HOST,img.bttimg.com,LIST
 HOST,img.clerk.com,LIST
+HOST,img.community.ui.com,LIST
 HOST,img.connatix.com,LIST
 HOST,img.dlsite.jp,LIST
 HOST,img.domaintools.com,LIST
@@ -882,7 +882,6 @@ HOST,objects.hit.moe,LIST
 HOST,ocecdn.oraclecloud.com,LIST
 HOST,ocsp.digicert.com,LIST
 HOST,ocsp.godaddy.com,LIST
-HOST,ocsp.r2m02.amazontrust.com,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,ocsp2.apple.com,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
@@ -942,6 +941,7 @@ HOST,player.cnevids.com,LIST
 HOST,player.h-cdn.com,LIST
 HOST,player.louisvuitton.com,LIST
 HOST,player.vimeo.com,LIST
+HOST,playgroundcdn.typescriptlang.org,LIST
 HOST,plugins-artifacts.gradle.org,LIST
 HOST,plugins.dprint.dev,LIST
 HOST,plus.unsplash.com,LIST
@@ -1019,7 +1019,6 @@ HOST,s.w.org,LIST
 HOST,s.wsj.net,LIST
 HOST,s0.wp.com,LIST
 HOST,s1.feedly.com,LIST
-HOST,s1.kwai.net,LIST
 HOST,s1.qwant.com,LIST
 HOST,s1.wp.com,LIST
 HOST,s2.coinmarketcap.com,LIST
