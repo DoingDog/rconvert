@@ -1,5 +1,5 @@
-# Quantumult total line 4984
-# Last updated Fri 06/07/2024 22:09:55.88
+# Quantumult total line 4987
+# Last updated Mon 06/10/2024 22:11:40.56
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -1001,9 +1001,12 @@ HOST,objects.g0v.social,LIST
 HOST,objects.hit.moe,LIST
 HOST,ocecdn.oraclecloud.com,LIST
 HOST,ocsp.digicert.com,LIST
+HOST,ocsp.globalsign.com,LIST
 HOST,ocsp.godaddy.com,LIST
 HOST,ocsp.sectigo.com,LIST
+HOST,ocsp.usertrust.com,LIST
 HOST,ocsp2.apple.com,LIST
+HOST,ocsp2.globalsign.com,LIST
 HOST,ocvideo.apple.com,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
 HOST,ooo.0o0.ooo,LIST

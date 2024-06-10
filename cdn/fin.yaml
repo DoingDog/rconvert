@@ -1,5 +1,5 @@
-# Clash total line 2393
-# Last updated Fri 06/07/2024 22:09:45.99
+# Clash total line 2396
+# Last updated Mon 06/10/2024 22:11:31.12
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -882,9 +882,12 @@ payload:
   - DOMAIN,objects.hit.moe
   - DOMAIN,ocecdn.oraclecloud.com
   - DOMAIN,ocsp.digicert.com
+  - DOMAIN,ocsp.globalsign.com
   - DOMAIN,ocsp.godaddy.com
   - DOMAIN,ocsp.sectigo.com
+  - DOMAIN,ocsp.usertrust.com
   - DOMAIN,ocsp2.apple.com
+  - DOMAIN,ocsp2.globalsign.com
   - DOMAIN,ohttp-relay1.fastly-edge.com
   - DOMAIN,ooo.0o0.ooo
   - DOMAIN,ooo.o0o.ooo
