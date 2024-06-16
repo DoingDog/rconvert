@@ -1,5 +1,5 @@
-# Quantumult total line 4242
-# Last updated Thu 06/13/2024 22:11:01.69
+# Quantumult total line 4295
+# Last updated Sun 06/16/2024 22:10:37.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -9,10 +9,8 @@ HOST,client.amplifi.com,LIST
 HOST,cn.download.nvidia.com,LIST
 HOST,download.jetbrains.com,LIST
 HOST,images-cn.ssl-images-amazon.com,LIST
-HOST,injections.adguard.org,LIST
 HOST,ip.istatmenus.app,LIST
 HOST,kc.kexinshe.com,LIST
-HOST,local.adguard.org,LIST
 HOST,origin-a.akamaihd.ne,LIST
 HOST,origin-a.akamaihd.net,LIST
 HOST,p-bstarstatic.akamaized.net,LIST
@@ -317,6 +315,7 @@ HOST-SUFFIX,99fund.com,LIST
 HOST-SUFFIX,9ht.com,LIST
 HOST-SUFFIX,9xgame.com,LIST
 HOST-SUFFIX,9xu.com,LIST
+HOST-SUFFIX,_hotspot_.m2m,LIST
 HOST-SUFFIX,a9vg.com,LIST
 HOST-SUFFIX,aaplimg.com,LIST
 HOST-SUFFIX,aardio.com,LIST
@@ -367,6 +366,7 @@ HOST-SUFFIX,aipage.com,LIST
 HOST-SUFFIX,aipai.com,LIST
 HOST-SUFFIX,air-matters.com,LIST
 HOST-SUFFIX,air-matters.io,LIST
+HOST-SUFFIX,airbox.home,LIST
 HOST-SUFFIX,airchangan.com,LIST
 HOST-SUFFIX,airchinacargo.com,LIST
 HOST-SUFFIX,airguilin.com,LIST
@@ -438,6 +438,7 @@ HOST-SUFFIX,amap.com,LIST
 HOST-SUFFIX,amapauto.com,LIST
 HOST-SUFFIX,amd.com,LIST
 HOST-SUFFIX,amemv.com,LIST
+HOST-SUFFIX,amplifi.lan,LIST
 HOST-SUFFIX,ams.org,LIST
 HOST-SUFFIX,andfx.net,LIST
 HOST-SUFFIX,anfensi.com,LIST
@@ -475,6 +476,7 @@ HOST-SUFFIX,apk3.com,LIST
 HOST-SUFFIX,apk8.com,LIST
 HOST-SUFFIX,aplaybox.com,LIST
 HOST-SUFFIX,apollo.auto,LIST
+HOST-SUFFIX,app.plex.tv,LIST
 HOST-SUFFIX,appchina.com,LIST
 HOST-SUFFIX,appeeres.com,LIST
 HOST-SUFFIX,appinn.com,LIST
@@ -483,6 +485,7 @@ HOST-SUFFIX,applysquare.net,LIST
 HOST-SUFFIX,appshike.com,LIST
 HOST-SUFFIX,appsimg.com,LIST
 HOST-SUFFIX,aps.org,LIST
+HOST-SUFFIX,arcor.easybox,LIST
 HOST-SUFFIX,arpun.com,LIST
 HOST-SUFFIX,ascelibrary.org,LIST
 HOST-SUFFIX,asczwa.com,LIST
@@ -491,7 +494,9 @@ HOST-SUFFIX,asiancinema.me,LIST
 HOST-SUFFIX,asm.org,LIST
 HOST-SUFFIX,asme.org,LIST
 HOST-SUFFIX,astm.org,LIST
+HOST-SUFFIX,asusrouter.com,LIST
 HOST-SUFFIX,atatech.org,LIST
+HOST-SUFFIX,aterm.me,LIST
 HOST-SUFFIX,authing.co,LIST
 HOST-SUFFIX,autonavi.com,LIST
 HOST-SUFFIX,avgv.cc,LIST
@@ -643,6 +648,8 @@ HOST-SUFFIX,bstatic.com,LIST
 HOST-SUFFIX,btcfans.com,LIST
 HOST-SUFFIX,btgtravel.com,LIST
 HOST-SUFFIX,bthhotels.com,LIST
+HOST-SUFFIX,bthomehub.home,LIST
+HOST-SUFFIX,bthub.home,LIST
 HOST-SUFFIX,btime.com,LIST
 HOST-SUFFIX,btschool.club,LIST
 HOST-SUFFIX,build9s.io,LIST
@@ -1054,6 +1061,9 @@ HOST-SUFFIX,comicat.org,LIST
 HOST-SUFFIX,computeinit.com,LIST
 HOST-SUFFIX,comsenz.com,LIST
 HOST-SUFFIX,concertos.live,LIST
+HOST-SUFFIX,congstar.box,LIST
+HOST-SUFFIX,connect.box,LIST
+HOST-SUFFIX,console.gl-inet.com,LIST
 HOST-SUFFIX,contentchina.com,LIST
 HOST-SUFFIX,coolapk.com,LIST
 HOST-SUFFIX,coolapkmarket.com,LIST
@@ -1300,6 +1310,7 @@ HOST-SUFFIX,eastgame.org,LIST
 HOST-SUFFIX,eastmoney.com,LIST
 HOST-SUFFIX,eastmoneyfutures.com,LIST
 HOST-SUFFIX,eastsoo.com,LIST
+HOST-SUFFIX,easy.box,LIST
 HOST-SUFFIX,easytrip.com,LIST
 HOST-SUFFIX,eatuo.com,LIST
 HOST-SUFFIX,eayyou.com,LIST
@@ -1348,6 +1359,7 @@ HOST-SUFFIX,essurl.com,LIST
 HOST-SUFFIX,et8.org,LIST
 HOST-SUFFIX,etao.com,LIST
 HOST-SUFFIX,ets100.com,LIST
+HOST-SUFFIX,etxr,LIST
 HOST-SUFFIX,eu-west-0.myhuaweicloud.com,LIST
 HOST-SUFFIX,eudic.net,LIST
 HOST-SUFFIX,everbright.com,LIST
@@ -1427,6 +1439,9 @@ HOST-SUFFIX,frdic.com,LIST
 HOST-SUFFIX,freebuf.com,LIST
 HOST-SUFFIX,fresh-ideas.cc,LIST
 HOST-SUFFIX,freshhema.com,LIST
+HOST-SUFFIX,fritz.box,LIST
+HOST-SUFFIX,fritz.nas,LIST
+HOST-SUFFIX,fritz.repeater,LIST
 HOST-SUFFIX,frontjs.com,LIST
 HOST-SUFFIX,frontwize.com,LIST
 HOST-SUFFIX,fsfund.com,LIST
@@ -1508,6 +1523,7 @@ HOST-SUFFIX,gfund.com,LIST
 HOST-SUFFIX,gfxpeers.net,LIST
 HOST-SUFFIX,ghpym.com,LIST
 HOST-SUFFIX,gifshow.com,LIST
+HOST-SUFFIX,giga.cube,LIST
 HOST-SUFFIX,giocdn.com,LIST
 HOST-SUFFIX,gitcode.com,LIST
 HOST-SUFFIX,gitcode.net,LIST
@@ -1655,6 +1671,7 @@ HOST-SUFFIX,heytea.com,LIST
 HOST-SUFFIX,hftfund.com,LIST
 HOST-SUFFIX,hhtravel.com,LIST
 HOST-SUFFIX,hhtravel.com.tw,LIST
+HOST-SUFFIX,hi.link,LIST
 HOST-SUFFIX,hiascend.com,LIST
 HOST-SUFFIX,hichina.com,LIST
 HOST-SUFFIX,hiclc.com,LIST
@@ -1670,6 +1687,7 @@ HOST-SUFFIX,hikunpeng.net,LIST
 HOST-SUFFIX,hisilicon.com,LIST
 HOST-SUFFIX,hitpt.com,LIST
 HOST-SUFFIX,hitpt.org,LIST
+HOST-SUFFIX,hitronhub.home,LIST
 HOST-SUFFIX,hitv.com,LIST
 HOST-SUFFIX,hiwifi.com,LIST
 HOST-SUFFIX,hiyd.com,LIST
@@ -1688,6 +1706,7 @@ HOST-SUFFIX,hollisterco.com,LIST
 HOST-SUFFIX,hollycrm.com,LIST
 HOST-SUFFIX,homeinns.com,LIST
 HOST-SUFFIX,homekoo.com,LIST
+HOST-SUFFIX,homerouter.cpe,LIST
 HOST-SUFFIX,hongbo100.com,LIST
 HOST-SUFFIX,hongdefund.com,LIST
 HOST-SUFFIX,hongen.com,LIST
@@ -1699,6 +1718,7 @@ HOST-SUFFIX,honor.com,LIST
 HOST-SUFFIX,hori-gz.com,LIST
 HOST-SUFFIX,hostbuf.com,LIST
 HOST-SUFFIX,hotmail.com,LIST
+HOST-SUFFIX,hotspot.cslwifi.com,LIST
 HOST-SUFFIX,houdao.com,LIST
 HOST-SUFFIX,houyicaiji.com,LIST
 HOST-SUFFIX,houyuantuan.com,LIST
@@ -1727,6 +1747,7 @@ HOST-SUFFIX,huaweicloudapis.com,LIST
 HOST-SUFFIX,huaweicloudlive.com,LIST
 HOST-SUFFIX,huaweiief.com,LIST
 HOST-SUFFIX,huaweimarketplace.com,LIST
+HOST-SUFFIX,huaweimobilewifi.com,LIST
 HOST-SUFFIX,huaweistatic.com,LIST
 HOST-SUFFIX,huaweiyun.com,LIST
 HOST-SUFFIX,huaxiong.com,LIST
@@ -1882,6 +1903,8 @@ HOST-SUFFIX,infoq.com,LIST
 HOST-SUFFIX,infoqstatic.com,LIST
 HOST-SUFFIX,inftab.com,LIST
 HOST-SUFFIX,infzm.com,LIST
+HOST-SUFFIX,injections.adguard.org,LIST
+HOST-SUFFIX,instant.arubanetworks.com,LIST
 HOST-SUFFIX,interact.sh,LIST
 HOST-SUFFIX,intltencentcos.com,LIST
 HOST-SUFFIX,iop.org,LIST
@@ -2323,6 +2346,7 @@ HOST-SUFFIX,llsapp.com,LIST
 HOST-SUFFIX,llscdn.com,LIST
 HOST-SUFFIX,llsserver.com,LIST
 HOST-SUFFIX,lnlib.net,LIST
+HOST-SUFFIX,local.adguard.org,LIST
 HOST-SUFFIX,localizecdn.com,LIST
 HOST-SUFFIX,lofter.com,LIST
 HOST-SUFFIX,logiseasy.com,LIST
@@ -2471,6 +2495,7 @@ HOST-SUFFIX,mmstat.com,LIST
 HOST-SUFFIX,mndqlib.net,LIST
 HOST-SUFFIX,mob.com,LIST
 HOST-SUFFIX,mobike.com,LIST
+HOST-SUFFIX,mobile.hotspot,LIST
 HOST-SUFFIX,mobmore.com,LIST
 HOST-SUFFIX,moecat.best,LIST
 HOST-SUFFIX,mofang.com,LIST
@@ -2516,6 +2541,7 @@ HOST-SUFFIX,muyewx.com,LIST
 HOST-SUFFIX,muzhiwan.com,LIST
 HOST-SUFFIX,mxhichina.com,LIST
 HOST-SUFFIX,my-qcloud.com,LIST
+HOST-SUFFIX,my.router,LIST
 HOST-SUFFIX,my4399.com,LIST
 HOST-SUFFIX,myanonamouse.net,LIST
 HOST-SUFFIX,myapp.com,LIST
@@ -2523,6 +2549,7 @@ HOST-SUFFIX,mychinaunicom.com,LIST
 HOST-SUFFIX,mydown.com,LIST
 HOST-SUFFIX,mydrivers.com,LIST
 HOST-SUFFIX,myelasticsearch.com,LIST
+HOST-SUFFIX,myfritz.box,LIST
 HOST-SUFFIX,myhwcdn.com,LIST
 HOST-SUFFIX,myhwcloudlive.com,LIST
 HOST-SUFFIX,myhwclouds.com,LIST
@@ -2582,6 +2609,7 @@ HOST-SUFFIX,npmmirror.com,LIST
 HOST-SUFFIX,npupt.com,LIST
 HOST-SUFFIX,nruan.com,LIST
 HOST-SUFFIX,ntalker.com,LIST
+HOST-SUFFIX,ntt.setup,LIST
 HOST-SUFFIX,nubia.com,LIST
 HOST-SUFFIX,nuomi.com,LIST
 HOST-SUFFIX,nvsheng.com,LIST
@@ -2690,11 +2718,13 @@ HOST-SUFFIX,pglstatp-toutiao.com,LIST
 HOST-SUFFIX,pgyer.com,LIST
 HOST-SUFFIX,pgzs.com,LIST
 HOST-SUFFIX,pharmacodia.com,LIST
+HOST-SUFFIX,phicomm.me,LIST
 HOST-SUFFIX,philanthropy.xin,LIST
 HOST-SUFFIX,phpcomposer.com,LIST
 HOST-SUFFIX,phpweblog.net,LIST
 HOST-SUFFIX,phpwind.com,LIST
 HOST-SUFFIX,phpwind.net,LIST
+HOST-SUFFIX,pi.hole,LIST
 HOST-SUFFIX,piaoliang.com,LIST
 HOST-SUFFIX,pigai.org,LIST
 HOST-SUFFIX,pinduoduo.com,LIST
@@ -2709,6 +2739,7 @@ HOST-SUFFIX,pipaw.com,LIST
 HOST-SUFFIX,pipaw.net,LIST
 HOST-SUFFIX,pipix.com,LIST
 HOST-SUFFIX,pkoplink.com,LIST
+HOST-SUFFIX,plex.direct,LIST
 HOST-SUFFIX,pmphmooc.com,LIST
 HOST-SUFFIX,pn1waq.com,LIST
 HOST-SUFFIX,pnas.org,LIST
@@ -2879,6 +2910,7 @@ HOST-SUFFIX,redacted.ch,LIST
 HOST-SUFFIX,renren-inc.com,LIST
 HOST-SUFFIX,renren.com,LIST
 HOST-SUFFIX,repaik.com,LIST
+HOST-SUFFIX,repeater.asus.com,LIST
 HOST-SUFFIX,researchgate.net,LIST
 HOST-SUFFIX,resset.com,LIST
 HOST-SUFFIX,rfchost.com,LIST
@@ -2887,6 +2919,10 @@ HOST-SUFFIX,rockyenglish.com,LIST
 HOST-SUFFIX,rong360.com,LIST
 HOST-SUFFIX,rongechain.com,LIST
 HOST-SUFFIX,ronghub.com,LIST
+HOST-SUFFIX,router.asus.com,LIST
+HOST-SUFFIX,router.ctc,LIST
+HOST-SUFFIX,routerlogin.com,LIST
+HOST-SUFFIX,routerlogin.net,LIST
 HOST-SUFFIX,routewize.com,LIST
 HOST-SUFFIX,rrmj.tv,LIST
 HOST-SUFFIX,rsc.org,LIST
@@ -2907,6 +2943,7 @@ HOST-SUFFIX,saasops.tech,LIST
 HOST-SUFFIX,saayaa.com,LIST
 HOST-SUFFIX,sagepub.com,LIST
 HOST-SUFFIX,saibo.com,LIST
+HOST-SUFFIX,samsung.router,LIST
 HOST-SUFFIX,samsungcloudcn.com,LIST
 HOST-SUFFIX,sandai.net,LIST
 HOST-SUFFIX,sanguosha.com,LIST
@@ -2935,6 +2972,7 @@ HOST-SUFFIX,sencdn.com,LIST
 HOST-SUFFIX,seniverse.com,LIST
 HOST-SUFFIX,senlinjimore.com,LIST
 HOST-SUFFIX,servicewechat.com,LIST
+HOST-SUFFIX,setmeup.arubanetworks.com,LIST
 HOST-SUFFIX,sevencdn.com,LIST
 HOST-SUFFIX,sf-airlines.com,LIST
 HOST-SUFFIX,sf-cityrush.com,LIST
@@ -3049,6 +3087,7 @@ HOST-SUFFIX,spcdntip.com,LIST
 HOST-SUFFIX,spcdntipbak.com,LIST
 HOST-SUFFIX,spcloudhw.com,LIST
 HOST-SUFFIX,spcloudhw.net,LIST
+HOST-SUFFIX,speedport.ip,LIST
 HOST-SUFFIX,speedws.info,LIST
 HOST-SUFFIX,speedws.org,LIST
 HOST-SUFFIX,speiyou.com,LIST
@@ -3077,6 +3116,7 @@ HOST-SUFFIX,stcn.com,LIST
 HOST-SUFFIX,steam.clngaa.com,LIST
 HOST-SUFFIX,steam.ksyna.com,LIST
 HOST-SUFFIX,steamchina.com,LIST
+HOST-SUFFIX,steamloopback.host,LIST
 HOST-SUFFIX,steampp.net,LIST
 HOST-SUFFIX,steamserver.net,LIST
 HOST-SUFFIX,stockstar.com,LIST
@@ -3210,6 +3250,7 @@ HOST-SUFFIX,tencenttid.com,LIST
 HOST-SUFFIX,tencentwemeet.club,LIST
 HOST-SUFFIX,tencentwepark.com,LIST
 HOST-SUFFIX,tencentyun.com,LIST
+HOST-SUFFIX,tendawifi.com,LIST
 HOST-SUFFIX,tendbcluster.com,LIST
 HOST-SUFFIX,tendis.net,LIST
 HOST-SUFFIX,tenpay.com,LIST
@@ -3299,6 +3340,12 @@ HOST-SUFFIX,toutiaopage.com,LIST
 HOST-SUFFIX,toutiaostatic.com,LIST
 HOST-SUFFIX,toutiaovod.com,LIST
 HOST-SUFFIX,touzid.com,LIST
+HOST-SUFFIX,tplinkap.net,LIST
+HOST-SUFFIX,tplinkeap.net,LIST
+HOST-SUFFIX,tplinkmodem.net,LIST
+HOST-SUFFIX,tplinkplclogin.net,LIST
+HOST-SUFFIX,tplinkrepeater.net,LIST
+HOST-SUFFIX,tplinkwifi.net,LIST
 HOST-SUFFIX,tpyzq.com,LIST
 HOST-SUFFIX,tracup.com,LIST
 HOST-SUFFIX,travelsky.com,LIST
@@ -3310,6 +3357,7 @@ HOST-SUFFIX,trontv.com,LIST
 HOST-SUFFIX,trunktech.com,LIST
 HOST-SUFFIX,trustexporter.com,LIST
 HOST-SUFFIX,trustutn.org,LIST
+HOST-SUFFIX,ts.net,LIST
 HOST-SUFFIX,tsparkling.com,LIST
 HOST-SUFFIX,ttmeiju.com,LIST
 HOST-SUFFIX,ttpod.com,LIST
@@ -3378,6 +3426,7 @@ HOST-SUFFIX,ugslb.top,LIST
 HOST-SUFFIX,ugslb2.net,LIST
 HOST-SUFFIX,uhasadmin.com,LIST
 HOST-SUFFIX,uhdbits.org,LIST
+HOST-SUFFIX,ui.direct,LIST
 HOST-SUFFIX,uiwow.com,LIST
 HOST-SUFFIX,ulikecam.com,LIST
 HOST-SUFFIX,um.run,LIST
@@ -3391,6 +3440,7 @@ HOST-SUFFIX,un.org,LIST
 HOST-SUFFIX,unaming.info,LIST
 HOST-SUFFIX,unaming.net,LIST
 HOST-SUFFIX,uni-bielefeld.de,LIST
+HOST-SUFFIX,unifi,LIST
 HOST-SUFFIX,uning.com,LIST
 HOST-SUFFIX,unionpay.com,LIST
 HOST-SUFFIX,unionpay.net,LIST
@@ -3480,6 +3530,8 @@ HOST-SUFFIX,we4399.com,LIST
 HOST-SUFFIX,weand.com,LIST
 HOST-SUFFIX,weather.com,LIST
 HOST-SUFFIX,weathercn.com,LIST
+HOST-SUFFIX,web.setup,LIST
+HOST-SUFFIX,web.setup.home,LIST
 HOST-SUFFIX,webank.com,LIST
 HOST-SUFFIX,webankcdn.net,LIST
 HOST-SUFFIX,webgame163.com,LIST
@@ -3909,6 +3961,7 @@ HOST-SUFFIX,zpb365.com,LIST
 HOST-SUFFIX,zrblog.net,LIST
 HOST-SUFFIX,zsxq.com,LIST
 HOST-SUFFIX,zszq.com,LIST
+HOST-SUFFIX,zte.home,LIST
 HOST-SUFFIX,ztfsec.com,LIST
 HOST-SUFFIX,zuche.com,LIST
 HOST-SUFFIX,zuchecdn.com,LIST

@@ -1,5 +1,5 @@
-# Adblock total line 3944
-# Last updated Thu 06/13/2024 22:11:01.82
+# Adblock total line 3997
+# Last updated Sun 06/16/2024 22:10:37.19
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||a.iqmtp.live^
 ||analytics.strava.com^
@@ -9,10 +9,8 @@
 ||cn.download.nvidia.com^
 ||download.jetbrains.com^
 ||images-cn.ssl-images-amazon.com^
-||injections.adguard.org^
 ||ip.istatmenus.app^
 ||kc.kexinshe.com^
-||local.adguard.org^
 ||origin-a.akamaihd.ne^
 ||origin-a.akamaihd.net^
 ||p-bstarstatic.akamaized.net^
@@ -317,6 +315,7 @@
 ||9ht.com^
 ||9xgame.com^
 ||9xu.com^
+||_hotspot_.m2m^
 ||a9vg.com^
 ||aaplimg.com^
 ||aardio.com^
@@ -367,6 +366,7 @@
 ||aipai.com^
 ||air-matters.com^
 ||air-matters.io^
+||airbox.home^
 ||airchangan.com^
 ||airchinacargo.com^
 ||airguilin.com^
@@ -438,6 +438,7 @@
 ||amapauto.com^
 ||amd.com^
 ||amemv.com^
+||amplifi.lan^
 ||ams.org^
 ||andfx.net^
 ||anfensi.com^
@@ -475,6 +476,7 @@
 ||apk8.com^
 ||aplaybox.com^
 ||apollo.auto^
+||app.plex.tv^
 ||appchina.com^
 ||appeeres.com^
 ||appinn.com^
@@ -483,6 +485,7 @@
 ||appshike.com^
 ||appsimg.com^
 ||aps.org^
+||arcor.easybox^
 ||arpun.com^
 ||ascelibrary.org^
 ||asczwa.com^
@@ -491,7 +494,9 @@
 ||asm.org^
 ||asme.org^
 ||astm.org^
+||asusrouter.com^
 ||atatech.org^
+||aterm.me^
 ||authing.co^
 ||autonavi.com^
 ||avgv.cc^
@@ -643,6 +648,8 @@
 ||btcfans.com^
 ||btgtravel.com^
 ||bthhotels.com^
+||bthomehub.home^
+||bthub.home^
 ||btime.com^
 ||btschool.club^
 ||build9s.io^
@@ -1054,6 +1061,9 @@
 ||computeinit.com^
 ||comsenz.com^
 ||concertos.live^
+||congstar.box^
+||connect.box^
+||console.gl-inet.com^
 ||contentchina.com^
 ||coolapk.com^
 ||coolapkmarket.com^
@@ -1300,6 +1310,7 @@
 ||eastmoney.com^
 ||eastmoneyfutures.com^
 ||eastsoo.com^
+||easy.box^
 ||easytrip.com^
 ||eatuo.com^
 ||eayyou.com^
@@ -1348,6 +1359,7 @@
 ||et8.org^
 ||etao.com^
 ||ets100.com^
+||etxr^
 ||eu-west-0.myhuaweicloud.com^
 ||eudic.net^
 ||everbright.com^
@@ -1427,6 +1439,9 @@
 ||freebuf.com^
 ||fresh-ideas.cc^
 ||freshhema.com^
+||fritz.box^
+||fritz.nas^
+||fritz.repeater^
 ||frontjs.com^
 ||frontwize.com^
 ||fsfund.com^
@@ -1508,6 +1523,7 @@
 ||gfxpeers.net^
 ||ghpym.com^
 ||gifshow.com^
+||giga.cube^
 ||giocdn.com^
 ||gitcode.com^
 ||gitcode.net^
@@ -1655,6 +1671,7 @@
 ||hftfund.com^
 ||hhtravel.com^
 ||hhtravel.com.tw^
+||hi.link^
 ||hiascend.com^
 ||hichina.com^
 ||hiclc.com^
@@ -1670,6 +1687,7 @@
 ||hisilicon.com^
 ||hitpt.com^
 ||hitpt.org^
+||hitronhub.home^
 ||hitv.com^
 ||hiwifi.com^
 ||hiyd.com^
@@ -1688,6 +1706,7 @@
 ||hollycrm.com^
 ||homeinns.com^
 ||homekoo.com^
+||homerouter.cpe^
 ||hongbo100.com^
 ||hongdefund.com^
 ||hongen.com^
@@ -1699,6 +1718,7 @@
 ||hori-gz.com^
 ||hostbuf.com^
 ||hotmail.com^
+||hotspot.cslwifi.com^
 ||houdao.com^
 ||houyicaiji.com^
 ||houyuantuan.com^
@@ -1727,6 +1747,7 @@
 ||huaweicloudlive.com^
 ||huaweiief.com^
 ||huaweimarketplace.com^
+||huaweimobilewifi.com^
 ||huaweistatic.com^
 ||huaweiyun.com^
 ||huaxiong.com^
@@ -1882,6 +1903,8 @@
 ||infoqstatic.com^
 ||inftab.com^
 ||infzm.com^
+||injections.adguard.org^
+||instant.arubanetworks.com^
 ||interact.sh^
 ||intltencentcos.com^
 ||iop.org^
@@ -2323,6 +2346,7 @@
 ||llscdn.com^
 ||llsserver.com^
 ||lnlib.net^
+||local.adguard.org^
 ||localizecdn.com^
 ||lofter.com^
 ||logiseasy.com^
@@ -2471,6 +2495,7 @@
 ||mndqlib.net^
 ||mob.com^
 ||mobike.com^
+||mobile.hotspot^
 ||mobmore.com^
 ||moecat.best^
 ||mofang.com^
@@ -2516,6 +2541,7 @@
 ||muzhiwan.com^
 ||mxhichina.com^
 ||my-qcloud.com^
+||my.router^
 ||my4399.com^
 ||myanonamouse.net^
 ||myapp.com^
@@ -2523,6 +2549,7 @@
 ||mydown.com^
 ||mydrivers.com^
 ||myelasticsearch.com^
+||myfritz.box^
 ||myhwcdn.com^
 ||myhwcloudlive.com^
 ||myhwclouds.com^
@@ -2582,6 +2609,7 @@
 ||npupt.com^
 ||nruan.com^
 ||ntalker.com^
+||ntt.setup^
 ||nubia.com^
 ||nuomi.com^
 ||nvsheng.com^
@@ -2690,11 +2718,13 @@
 ||pgyer.com^
 ||pgzs.com^
 ||pharmacodia.com^
+||phicomm.me^
 ||philanthropy.xin^
 ||phpcomposer.com^
 ||phpweblog.net^
 ||phpwind.com^
 ||phpwind.net^
+||pi.hole^
 ||piaoliang.com^
 ||pigai.org^
 ||pinduoduo.com^
@@ -2709,6 +2739,7 @@
 ||pipaw.net^
 ||pipix.com^
 ||pkoplink.com^
+||plex.direct^
 ||pmphmooc.com^
 ||pn1waq.com^
 ||pnas.org^
@@ -2879,6 +2910,7 @@
 ||renren-inc.com^
 ||renren.com^
 ||repaik.com^
+||repeater.asus.com^
 ||researchgate.net^
 ||resset.com^
 ||rfchost.com^
@@ -2887,6 +2919,10 @@
 ||rong360.com^
 ||rongechain.com^
 ||ronghub.com^
+||router.asus.com^
+||router.ctc^
+||routerlogin.com^
+||routerlogin.net^
 ||routewize.com^
 ||rrmj.tv^
 ||rsc.org^
@@ -2907,6 +2943,7 @@
 ||saayaa.com^
 ||sagepub.com^
 ||saibo.com^
+||samsung.router^
 ||samsungcloudcn.com^
 ||sandai.net^
 ||sanguosha.com^
@@ -2935,6 +2972,7 @@
 ||seniverse.com^
 ||senlinjimore.com^
 ||servicewechat.com^
+||setmeup.arubanetworks.com^
 ||sevencdn.com^
 ||sf-airlines.com^
 ||sf-cityrush.com^
@@ -3049,6 +3087,7 @@
 ||spcdntipbak.com^
 ||spcloudhw.com^
 ||spcloudhw.net^
+||speedport.ip^
 ||speedws.info^
 ||speedws.org^
 ||speiyou.com^
@@ -3077,6 +3116,7 @@
 ||steam.clngaa.com^
 ||steam.ksyna.com^
 ||steamchina.com^
+||steamloopback.host^
 ||steampp.net^
 ||steamserver.net^
 ||stockstar.com^
@@ -3210,6 +3250,7 @@
 ||tencentwemeet.club^
 ||tencentwepark.com^
 ||tencentyun.com^
+||tendawifi.com^
 ||tendbcluster.com^
 ||tendis.net^
 ||tenpay.com^
@@ -3299,6 +3340,12 @@
 ||toutiaostatic.com^
 ||toutiaovod.com^
 ||touzid.com^
+||tplinkap.net^
+||tplinkeap.net^
+||tplinkmodem.net^
+||tplinkplclogin.net^
+||tplinkrepeater.net^
+||tplinkwifi.net^
 ||tpyzq.com^
 ||tracup.com^
 ||travelsky.com^
@@ -3310,6 +3357,7 @@
 ||trunktech.com^
 ||trustexporter.com^
 ||trustutn.org^
+||ts.net^
 ||tsparkling.com^
 ||ttmeiju.com^
 ||ttpod.com^
@@ -3378,6 +3426,7 @@
 ||ugslb2.net^
 ||uhasadmin.com^
 ||uhdbits.org^
+||ui.direct^
 ||uiwow.com^
 ||ulikecam.com^
 ||um.run^
@@ -3391,6 +3440,7 @@
 ||unaming.info^
 ||unaming.net^
 ||uni-bielefeld.de^
+||unifi^
 ||uning.com^
 ||unionpay.com^
 ||unionpay.net^
@@ -3480,6 +3530,8 @@
 ||weand.com^
 ||weather.com^
 ||weathercn.com^
+||web.setup^
+||web.setup.home^
 ||webank.com^
 ||webankcdn.net^
 ||webgame163.com^
@@ -3909,6 +3961,7 @@
 ||zrblog.net^
 ||zsxq.com^
 ||zszq.com^
+||zte.home^
 ||ztfsec.com^
 ||zuche.com^
 ||zuchecdn.com^

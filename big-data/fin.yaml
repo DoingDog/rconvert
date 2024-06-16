@@ -1,5 +1,5 @@
-# Clash total line 5002
-# Last updated Thu 06/13/2024 22:10:53.99
+# Clash total line 5004
+# Last updated Sun 06/16/2024 22:10:28.84
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -370,6 +370,7 @@ payload:
   - DOMAIN,cdn.pickystory.com
   - DOMAIN,cdn.pika.dev
   - DOMAIN,cdn.pixabay.com
+  - DOMAIN,cdn.pkg.svc.ui.com
   - DOMAIN,cdn.plaid.com
   - DOMAIN,cdn.player.fm
   - DOMAIN,cdn.plot.ly
@@ -895,6 +896,7 @@ payload:
   - DOMAIN,loutre.blockchair.io
   - DOMAIN,m-cdn.phonearena.com
   - DOMAIN,m.wsj.net
+  - DOMAIN,mac-release-static.stash.ws
   - DOMAIN,maps.geoapify.com
   - DOMAIN,mastodon-static.miao.dev
   - DOMAIN,maven.google.com
