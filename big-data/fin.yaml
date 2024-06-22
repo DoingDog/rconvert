@@ -1,5 +1,5 @@
-# Clash total line 5004
-# Last updated Wed 06/19/2024 22:10:56.77
+# Clash total line 5006
+# Last updated Sat 06/22/2024 22:07:53.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -90,6 +90,7 @@ payload:
   - DOMAIN,assets.convertkit.com
   - DOMAIN,assets.dnsfilter.com
   - DOMAIN,assets.dwncdn.net
+  - DOMAIN,assets.exercism.org
   - DOMAIN,assets.extension.grammarly.com
   - DOMAIN,assets.fastly.com
   - DOMAIN,assets.fireside.fm
@@ -145,6 +146,7 @@ payload:
   - DOMAIN,assets.time.com
   - DOMAIN,assets.toot.cafe
   - DOMAIN,assets.tumblr.com
+  - DOMAIN,assets.unifi-ai.com
   - DOMAIN,assets.upload.io
   - DOMAIN,assets.vercel.com
   - DOMAIN,assets.vidyard.com
