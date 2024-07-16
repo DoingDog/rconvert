@@ -1,5 +1,5 @@
-# Clash total line 5010
-# Last updated Sat 07/13/2024 22:08:14.07
+# Clash total line 5011
+# Last updated Tue 07/16/2024 22:10:38.70
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -915,6 +915,7 @@ payload:
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.contentapi.ea.com
   - DOMAIN,media.convertkit.com
+  - DOMAIN,media.dev.to
   - DOMAIN,media.discordapp.net
   - DOMAIN,media.dlsite.com
   - DOMAIN,media.e4le.me
@@ -3289,7 +3290,7 @@ payload:
   - DOMAIN-SUFFIX,plyr.io
   - DOMAIN-SUFFIX,pnpm.io
   - DOMAIN-SUFFIX,poecdn.net
-  - DOMAIN-SUFFIX,polyfill.io
+  - DOMAIN-SUFFIX,polyfill-fastly.io
   - DOMAIN-SUFFIX,polygon.com
   - DOMAIN-SUFFIX,porndudecdn.com
   - DOMAIN-SUFFIX,pornhub.com

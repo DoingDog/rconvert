@@ -1,5 +1,5 @@
-# Quantumult total line 2089
-# Last updated Sat 07/13/2024 22:08:04.50
+# Quantumult total line 2090
+# Last updated Tue 07/16/2024 22:10:30.17
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -394,7 +394,6 @@ HOST,cdn.softswiss.net,LIST
 HOST,cdn.solvvy.com,LIST
 HOST,cdn.split.io,LIST
 HOST,cdn.sprig.com,LIST
-HOST,cdn.sstatic.net,LIST
 HOST,cdn.stash.com,LIST
 HOST,cdn.substack.com,LIST
 HOST,cdn.sunofbeaches.com,LIST
@@ -821,6 +820,7 @@ HOST,media.cmx.edu.kg,LIST
 HOST,media.cnn.com,LIST
 HOST,media.contentapi.ea.com,LIST
 HOST,media.convertkit.com,LIST
+HOST,media.dev.to,LIST
 HOST,media.discordapp.net,LIST
 HOST,media.dlsite.com,LIST
 HOST,media.e4le.me,LIST
@@ -1873,7 +1873,7 @@ HOST-SUFFIX,placekitten.com,LIST
 HOST-SUFFIX,placewaifu.com,LIST
 HOST-SUFFIX,pnpm.io,LIST
 HOST-SUFFIX,poecdn.net,LIST
-HOST-SUFFIX,polyfill.io,LIST
+HOST-SUFFIX,polyfill-fastly.io,LIST
 HOST-SUFFIX,porndudecdn.com,LIST
 HOST-SUFFIX,pornimg.xyz,LIST
 HOST-SUFFIX,postimg.cc,LIST
@@ -1955,6 +1955,7 @@ HOST-SUFFIX,sqspcdn.com,LIST
 HOST-SUFFIX,squarespace-cdn.com,LIST
 HOST-SUFFIX,ss-cdn.com,LIST
 HOST-SUFFIX,ssl-images-amazon.com,LIST
+HOST-SUFFIX,sstatic.net,LIST
 HOST-SUFFIX,stack.imgur.com,LIST
 HOST-SUFFIX,stackblitz.io,LIST
 HOST-SUFFIX,static.domains,LIST

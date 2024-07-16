@@ -1,5 +1,5 @@
-# Clash total line 2089
-# Last updated Sat 07/13/2024 22:08:04.53
+# Clash total line 2090
+# Last updated Tue 07/16/2024 22:10:30.21
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -395,7 +395,6 @@ payload:
   - DOMAIN,cdn.solvvy.com
   - DOMAIN,cdn.split.io
   - DOMAIN,cdn.sprig.com
-  - DOMAIN,cdn.sstatic.net
   - DOMAIN,cdn.stash.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
@@ -822,6 +821,7 @@ payload:
   - DOMAIN,media.cnn.com
   - DOMAIN,media.contentapi.ea.com
   - DOMAIN,media.convertkit.com
+  - DOMAIN,media.dev.to
   - DOMAIN,media.discordapp.net
   - DOMAIN,media.dlsite.com
   - DOMAIN,media.e4le.me
@@ -1874,7 +1874,7 @@ payload:
   - DOMAIN-SUFFIX,placewaifu.com
   - DOMAIN-SUFFIX,pnpm.io
   - DOMAIN-SUFFIX,poecdn.net
-  - DOMAIN-SUFFIX,polyfill.io
+  - DOMAIN-SUFFIX,polyfill-fastly.io
   - DOMAIN-SUFFIX,porndudecdn.com
   - DOMAIN-SUFFIX,pornimg.xyz
   - DOMAIN-SUFFIX,postimg.cc
@@ -1956,6 +1956,7 @@ payload:
   - DOMAIN-SUFFIX,squarespace-cdn.com
   - DOMAIN-SUFFIX,ss-cdn.com
   - DOMAIN-SUFFIX,ssl-images-amazon.com
+  - DOMAIN-SUFFIX,sstatic.net
   - DOMAIN-SUFFIX,stack.imgur.com
   - DOMAIN-SUFFIX,stackblitz.io
   - DOMAIN-SUFFIX,static.domains
