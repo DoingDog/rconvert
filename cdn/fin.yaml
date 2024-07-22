@@ -1,5 +1,5 @@
-# Clash total line 2090
-# Last updated Fri 07/19/2024 22:12:18.79
+# Clash total line 2092
+# Last updated Mon 07/22/2024 22:10:36.86
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -656,6 +656,7 @@ payload:
   - DOMAIN,icons.ly
   - DOMAIN,iframe.nbcnews.com
   - DOMAIN,imag.malavida.com
+  - DOMAIN,image-forwarder.notaku.so
   - DOMAIN,image.civitai.com
   - DOMAIN,image.crisp.chat
   - DOMAIN,image.email.microsoftemail.com
@@ -898,6 +899,7 @@ payload:
   - DOMAIN,ooo.0o0.ooo
   - DOMAIN,ooo.o0o.ooo
   - DOMAIN,open-vsx.org
+  - DOMAIN,openapi.vercel.sh
   - DOMAIN,openseauserdata.com
   - DOMAIN,opensignal.cdnbye.com
   - DOMAIN,opt.moovweb.net
