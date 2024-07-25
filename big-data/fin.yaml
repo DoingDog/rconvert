@@ -1,5 +1,5 @@
-# Clash total line 5013
-# Last updated Mon 07/22/2024 22:10:45.98
+# Clash total line 5014
+# Last updated Thu 07/25/2024 22:11:20.46
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -704,6 +704,7 @@ payload:
   - DOMAIN,gog-cdn-fastly-cp77.gog.com
   - DOMAIN,gog-cdn-fastly.gog.com
   - DOMAIN,gog-cdn-lumen.secure2.footprint.net
+  - DOMAIN,google-ohttp-relay-safebrowsing.fastly-edge.com
   - DOMAIN,gopkg.in
   - DOMAIN,graph.facebook.com
   - DOMAIN,gravatar.cat.net

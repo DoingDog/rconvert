@@ -1,5 +1,5 @@
-# Quantumult total line 2092
-# Last updated Mon 07/22/2024 22:10:36.83
+# Quantumult total line 2089
+# Last updated Thu 07/25/2024 22:11:10.78
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -613,6 +613,7 @@ HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
 HOST,go.vercel.com,LIST
 HOST,godoc.org,LIST
+HOST,google-ohttp-relay-safebrowsing.fastly-edge.com,LIST
 HOST,gopkg.in,LIST
 HOST,graph.facebook.com,LIST
 HOST,gravatar.cat.net,LIST
@@ -1313,13 +1314,9 @@ HOST,stubdownloader.services.mozilla.com,LIST
 HOST,t.betterstack.com,LIST
 HOST,t.nhentai.net,LIST
 HOST,t1.picb.cc,LIST
-HOST,t2.nhentai.net,LIST
 HOST,t2.picb.cc,LIST
-HOST,t3.nhentai.net,LIST
 HOST,t3.picb.cc,LIST
 HOST,t4.picb.cc,LIST
-HOST,t5.nhentai.net,LIST
-HOST,t7.nhentai.net,LIST
 HOST,talk.hyvor.com,LIST
 HOST,talk.washingtonpost.com,LIST
 HOST,telemetry.nextjs.org,LIST
