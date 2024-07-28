@@ -1,5 +1,5 @@
-# Quantumult total line 4999
-# Last updated Thu 07/25/2024 22:11:20.41
+# Quantumult total line 5007
+# Last updated Sun 07/28/2024 22:10:58.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -89,6 +89,7 @@ HOST,assets.coingecko.com,LIST
 HOST,assets.convertkit.com,LIST
 HOST,assets.dnsfilter.com,LIST
 HOST,assets.dwncdn.net,LIST
+HOST,assets.ecomm.ui.com,LIST
 HOST,assets.exercism.org,LIST
 HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
@@ -269,6 +270,7 @@ HOST,cdn.arstechnica.net,LIST
 HOST,cdn.ashbyprd.com,LIST
 HOST,cdn.auth0.com,LIST
 HOST,cdn.autoketing.org,LIST
+HOST,cdn.babylonjs.com,LIST
 HOST,cdn.bfe.dev,LIST
 HOST,cdn.branch.io,LIST
 HOST,cdn.bsky.social,LIST
@@ -297,6 +299,7 @@ HOST,cdn.dotaoutpost.com,LIST
 HOST,cdn.download.it,LIST
 HOST,cdn.dribbble.com,LIST
 HOST,cdn.dynamicyield.com,LIST
+HOST,cdn.ecomm.ui.com,LIST
 HOST,cdn.embed.ly,LIST
 HOST,cdn.equalweb.com,LIST
 HOST,cdn.european-alternatives.eu,LIST
@@ -332,6 +335,7 @@ HOST,cdn.ipregistry.co,LIST
 HOST,cdn.jetboost.io,LIST
 HOST,cdn.jetphotos.com,LIST
 HOST,cdn.jifi.co,LIST
+HOST,cdn.joincommunity.xyz,LIST
 HOST,cdn.jolipage.co,LIST
 HOST,cdn.judge.me,LIST
 HOST,cdn.kagi.com,LIST
@@ -860,6 +864,7 @@ HOST,info.knak.com,LIST
 HOST,install.virtfusion.net,LIST
 HOST,interactive.guim.co.uk,LIST
 HOST,invent.kde.org,LIST
+HOST,ipe-plugins.js.org,LIST
 HOST,ipfs.d.tube,LIST
 HOST,irp-cdn.multiscreensite.com,LIST
 HOST,iterm2.com,LIST
@@ -1334,6 +1339,7 @@ HOST,static.missav.com,LIST
 HOST,static.mocortech.com,LIST
 HOST,static.monei.net,LIST
 HOST,static.mysph.sph.com.sg,LIST
+HOST,static.mytonwallet.io,LIST
 HOST,static.namebeta.com,LIST
 HOST,static.news.bitcoin.com,LIST
 HOST,static.nicehash.com,LIST
@@ -2758,6 +2764,7 @@ HOST-SUFFIX,imglink.win,LIST
 HOST-SUFFIX,imgmrplay.xyz,LIST
 HOST-SUFFIX,imgsmail.ru,LIST
 HOST-SUFFIX,imkan.tv,LIST
+HOST-SUFFIX,in.applicationinsights.azure.com,LIST
 HOST-SUFFIX,indazn.com,LIST
 HOST-SUFFIX,indaznlab.com,LIST
 HOST-SUFFIX,indishare.me,LIST
@@ -3324,6 +3331,7 @@ HOST-SUFFIX,proof.ovh.us,LIST
 HOST-SUFFIX,propvideo.net,LIST
 HOST-SUFFIX,proxy.startpage.com,LIST
 HOST-SUFFIX,proxy.ustclug.org,LIST
+HOST-SUFFIX,proxy2.startpage.com,LIST
 HOST-SUFFIX,pscdn.co,LIST
 HOST-SUFFIX,pscp.tv,LIST
 HOST-SUFFIX,psg.cdn.hgc.com.hk,LIST

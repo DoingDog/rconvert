@@ -1,5 +1,5 @@
-# Clash total line 4340
-# Last updated Thu 07/25/2024 22:11:28.45
+# Clash total line 4341
+# Last updated Sun 07/28/2024 22:11:05.83
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -584,6 +584,7 @@ payload:
   - DOMAIN-SUFFIX,bilicdn3.com
   - DOMAIN-SUFFIX,bilicdn4.com
   - DOMAIN-SUFFIX,bilicdn5.com
+  - DOMAIN-SUFFIX,bilicomic.com
   - DOMAIN-SUFFIX,bilicomics.com
   - DOMAIN-SUFFIX,biligame.co
   - DOMAIN-SUFFIX,biligame.com
