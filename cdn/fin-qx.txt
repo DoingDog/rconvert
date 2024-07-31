@@ -1,5 +1,5 @@
-# Quantumult total line 2097
-# Last updated Sun 07/28/2024 22:10:50.04
+# Quantumult total line 2103
+# Last updated Wed 07/31/2024 22:10:48.01
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -602,7 +602,6 @@ HOST,fonts.wp.com,LIST
 HOST,fonts.zapier.com,LIST
 HOST,fonts1.unidays.world,LIST
 HOST,forest-mt-s3.seekrtech.com,LIST
-HOST,formulae.brew.sh,LIST
 HOST,frames-commandbar-prod.commandbar.com,LIST
 HOST,freeshippingbar.herokuapp.com,LIST
 HOST,g-static.ap4r.com,LIST
@@ -739,6 +738,7 @@ HOST,img.itch.zone,LIST
 HOST,img.javstore.net,LIST
 HOST,img.kbhgames.com,LIST
 HOST,img.ltyears.com,LIST
+HOST,img.m.mw,LIST
 HOST,img.merch.cameo.com,LIST
 HOST,img.pawoo.net,LIST
 HOST,img.perfops.net,LIST
@@ -1316,6 +1316,7 @@ HOST,storageapi2.fleek.one,LIST
 HOST,store-images.microsoft.com,LIST
 HOST,store-images.s-microsoft.com,LIST
 HOST,stories.freepiklabs.com,LIST
+HOST,storybook.js.org,LIST
 HOST,stubdownloader.services.mozilla.com,LIST
 HOST,t.betterstack.com,LIST
 HOST,t.nhentai.net,LIST
@@ -1375,6 +1376,7 @@ HOST,utteranc.es,LIST
 HOST,v.hillwaver.com,LIST
 HOST,vanilla-extract.style,LIST
 HOST,versionbadg.es,LIST
+HOST,versioncheck-bg.addons.mozilla.org,LIST
 HOST,vetted.ai,LIST
 HOST,vice-prod.sdiapi.com,LIST
 HOST,vice-web-statics-cdn.vice.com,LIST
@@ -1705,6 +1707,7 @@ HOST-SUFFIX,imgmrplay.xyz,LIST
 HOST-SUFFIX,imgsmail.ru,LIST
 HOST-SUFFIX,in.applicationinsights.azure.com,LIST
 HOST-SUFFIX,infura-ipfs.io,LIST
+HOST-SUFFIX,ingest.sentry.io,LIST
 HOST-SUFFIX,instant.page,LIST
 HOST-SUFFIX,intercomassets.com,LIST
 HOST-SUFFIX,intercomcdn.com,LIST
@@ -1887,6 +1890,7 @@ HOST-SUFFIX,pplusstatic.com,LIST
 HOST-SUFFIX,pravatar.cc,LIST
 HOST-SUFFIX,prcdn.co,LIST
 HOST-SUFFIX,pressablecdn.com,LIST
+HOST-SUFFIX,privacy-gateway.cloudflare.com,LIST
 HOST-SUFFIX,prod.public.atl-paas.net,LIST
 HOST-SUFFIX,proxy.startpage.com,LIST
 HOST-SUFFIX,proxy.ustclug.org,LIST
@@ -2057,6 +2061,7 @@ HOST-SUFFIX,walmartimages.com,LIST
 HOST-SUFFIX,wdfiles.com,LIST
 HOST-SUFFIX,web.app,LIST
 HOST-SUFFIX,webp.se,LIST
+HOST-SUFFIX,webpkgcache.com,LIST
 HOST-SUFFIX,website-files.com,LIST
 HOST-SUFFIX,widget.clutch.co,LIST
 HOST-SUFFIX,wikia.nocookie.net,LIST
@@ -2088,6 +2093,7 @@ HOST-SUFFIX,zdassets.com,LIST
 HOST-SUFFIX,zdusercontent.com,LIST
 HOST-SUFFIX,zi-scripts.com,LIST
 HOST-SUFFIX,ziffstatic.com,LIST
+HOST-SUFFIX,ziglang.org,LIST
 HOST-SUFFIX,zippyshare.com,LIST
 HOST-SUFFIX,zohocdn.com,LIST
 HOST-SUFFIX,zohostatic.com,LIST

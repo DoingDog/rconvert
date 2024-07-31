@@ -1,5 +1,5 @@
-# Clash total line 2097
-# Last updated Sun 07/28/2024 22:10:50.07
+# Clash total line 2103
+# Last updated Wed 07/31/2024 22:10:48.04
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -603,7 +603,6 @@ payload:
   - DOMAIN,fonts.zapier.com
   - DOMAIN,fonts1.unidays.world
   - DOMAIN,forest-mt-s3.seekrtech.com
-  - DOMAIN,formulae.brew.sh
   - DOMAIN,frames-commandbar-prod.commandbar.com
   - DOMAIN,freeshippingbar.herokuapp.com
   - DOMAIN,g-static.ap4r.com
@@ -740,6 +739,7 @@ payload:
   - DOMAIN,img.javstore.net
   - DOMAIN,img.kbhgames.com
   - DOMAIN,img.ltyears.com
+  - DOMAIN,img.m.mw
   - DOMAIN,img.merch.cameo.com
   - DOMAIN,img.pawoo.net
   - DOMAIN,img.perfops.net
@@ -1317,6 +1317,7 @@ payload:
   - DOMAIN,store-images.microsoft.com
   - DOMAIN,store-images.s-microsoft.com
   - DOMAIN,stories.freepiklabs.com
+  - DOMAIN,storybook.js.org
   - DOMAIN,stubdownloader.services.mozilla.com
   - DOMAIN,t.betterstack.com
   - DOMAIN,t.nhentai.net
@@ -1376,6 +1377,7 @@ payload:
   - DOMAIN,v.hillwaver.com
   - DOMAIN,vanilla-extract.style
   - DOMAIN,versionbadg.es
+  - DOMAIN,versioncheck-bg.addons.mozilla.org
   - DOMAIN,vetted.ai
   - DOMAIN,vice-prod.sdiapi.com
   - DOMAIN,vice-web-statics-cdn.vice.com
@@ -1706,6 +1708,7 @@ payload:
   - DOMAIN-SUFFIX,imgsmail.ru
   - DOMAIN-SUFFIX,in.applicationinsights.azure.com
   - DOMAIN-SUFFIX,infura-ipfs.io
+  - DOMAIN-SUFFIX,ingest.sentry.io
   - DOMAIN-SUFFIX,instant.page
   - DOMAIN-SUFFIX,intercomassets.com
   - DOMAIN-SUFFIX,intercomcdn.com
@@ -1888,6 +1891,7 @@ payload:
   - DOMAIN-SUFFIX,pravatar.cc
   - DOMAIN-SUFFIX,prcdn.co
   - DOMAIN-SUFFIX,pressablecdn.com
+  - DOMAIN-SUFFIX,privacy-gateway.cloudflare.com
   - DOMAIN-SUFFIX,prod.public.atl-paas.net
   - DOMAIN-SUFFIX,proxy.startpage.com
   - DOMAIN-SUFFIX,proxy.ustclug.org
@@ -2058,6 +2062,7 @@ payload:
   - DOMAIN-SUFFIX,wdfiles.com
   - DOMAIN-SUFFIX,web.app
   - DOMAIN-SUFFIX,webp.se
+  - DOMAIN-SUFFIX,webpkgcache.com
   - DOMAIN-SUFFIX,website-files.com
   - DOMAIN-SUFFIX,widget.clutch.co
   - DOMAIN-SUFFIX,wikia.nocookie.net
@@ -2089,6 +2094,7 @@ payload:
   - DOMAIN-SUFFIX,zdusercontent.com
   - DOMAIN-SUFFIX,zi-scripts.com
   - DOMAIN-SUFFIX,ziffstatic.com
+  - DOMAIN-SUFFIX,ziglang.org
   - DOMAIN-SUFFIX,zippyshare.com
   - DOMAIN-SUFFIX,zohocdn.com
   - DOMAIN-SUFFIX,zohostatic.com
