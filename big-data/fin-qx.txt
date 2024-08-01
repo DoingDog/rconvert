@@ -1,5 +1,5 @@
-# Quantumult total line 5014
-# Last updated Wed 07/31/2024 22:10:57.94
+# Quantumult total line 5018
+# Last updated Thu 08/01/2024 22:10:28.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -227,6 +227,7 @@ HOST,cdn-a.sonyentertainmentnetwork.com,LIST
 HOST,cdn-app.pathfactory.com,LIST
 HOST,cdn-assets.circleci.com,LIST
 HOST,cdn-assets.porntube.com,LIST
+HOST,cdn-c.leavemealone.com,LIST
 HOST,cdn-client.medium.com,LIST
 HOST,cdn-cookieyes.com,LIST
 HOST,cdn-edge.karte.io,LIST
@@ -752,6 +753,7 @@ HOST,i3.wp.com,LIST
 HOST,ias.r10s.jp,LIST
 HOST,icons.buffer.com,LIST
 HOST,icons.duckduckgo.com,LIST
+HOST,icons.leavemealone.com,LIST
 HOST,icons.ly,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
@@ -912,6 +914,7 @@ HOST,maps.geoapify.com,LIST
 HOST,mastodon-static.miao.dev,LIST
 HOST,maven.google.com,LIST
 HOST,maven.kr328.app,LIST
+HOST,media-cdn.atlassian.com,LIST
 HOST,media-cdn.comfy.social,LIST
 HOST,media-cdn.epicgames.com,LIST
 HOST,media-s3-eu-west-1.ceros.com,LIST
@@ -3583,6 +3586,7 @@ HOST-SUFFIX,static.ctinets.com,LIST
 HOST-SUFFIX,static.domains,LIST
 HOST-SUFFIX,static.fun,LIST
 HOST-SUFFIX,static.gartner.com,LIST
+HOST-SUFFIX,static.microsoft,LIST
 HOST-SUFFIX,static.palgrave.com,LIST
 HOST-SUFFIX,static2cdn.hubspot.com,LIST
 HOST-SUFFIX,statically.io,LIST

@@ -1,5 +1,5 @@
-# Main total line 5029
-# Last updated Wed 07/31/2024 22:10:57.81
+# Main total line 5033
+# Last updated Thu 08/01/2024 22:10:28.36
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
@@ -227,6 +227,7 @@ DOMAIN,cdn-a.sonyentertainmentnetwork.com
 DOMAIN,cdn-app.pathfactory.com
 DOMAIN,cdn-assets.circleci.com
 DOMAIN,cdn-assets.porntube.com
+DOMAIN,cdn-c.leavemealone.com
 DOMAIN,cdn-client.medium.com
 DOMAIN,cdn-cookieyes.com
 DOMAIN,cdn-edge.karte.io
@@ -752,6 +753,7 @@ DOMAIN,i3.wp.com
 DOMAIN,ias.r10s.jp
 DOMAIN,icons.buffer.com
 DOMAIN,icons.duckduckgo.com
+DOMAIN,icons.leavemealone.com
 DOMAIN,icons.ly
 DOMAIN,imag.malavida.com
 DOMAIN,image-forwarder.notaku.so
@@ -912,6 +914,7 @@ DOMAIN,maps.geoapify.com
 DOMAIN,mastodon-static.miao.dev
 DOMAIN,maven.google.com
 DOMAIN,maven.kr328.app
+DOMAIN,media-cdn.atlassian.com
 DOMAIN,media-cdn.comfy.social
 DOMAIN,media-cdn.epicgames.com
 DOMAIN,media-s3-eu-west-1.ceros.com
@@ -3583,6 +3586,7 @@ DOMAIN-SUFFIX,static.ctinets.com
 DOMAIN-SUFFIX,static.domains
 DOMAIN-SUFFIX,static.fun
 DOMAIN-SUFFIX,static.gartner.com
+DOMAIN-SUFFIX,static.microsoft
 DOMAIN-SUFFIX,static.palgrave.com
 DOMAIN-SUFFIX,static2cdn.hubspot.com
 DOMAIN-SUFFIX,statically.io
