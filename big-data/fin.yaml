@@ -1,5 +1,5 @@
-# Clash total line 5033
-# Last updated Thu 08/01/2024 22:10:28.53
+# Clash total line 5043
+# Last updated Sun 08/04/2024 22:11:31.63
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -36,7 +36,6 @@ payload:
   - DOMAIN,api.pwnedpasswords.com
   - DOMAIN,api.qrserver.com
   - DOMAIN,api.roboflow.com
-  - DOMAIN,api.wakatime.com
   - DOMAIN,api.web3.storage
   - DOMAIN,apm-misaka.biliapi.net
   - DOMAIN,app-api.vidjet.io
@@ -96,6 +95,7 @@ payload:
   - DOMAIN,assets.fastly.com
   - DOMAIN,assets.fireside.fm
   - DOMAIN,assets.flodesk.com
+  - DOMAIN,assets.garr.it
   - DOMAIN,assets.gcore.pro
   - DOMAIN,assets.genius.com
   - DOMAIN,assets.getkirby.com
@@ -506,6 +506,7 @@ payload:
   - DOMAIN,code.iconify.design
   - DOMAIN,code.ionicframework.com
   - DOMAIN,code.jquery.com
+  - DOMAIN,codeload.github.com
   - DOMAIN,compass-ssl.xbox.com
   - DOMAIN,components.clever-cloud.com
   - DOMAIN,confluence-v1.prod.atl-paas.net
@@ -685,6 +686,7 @@ payload:
   - DOMAIN,fonts.codeberg.org
   - DOMAIN,fonts.googleapis.com
   - DOMAIN,fonts.gstatic.com
+  - DOMAIN,fonts.svc.ui.com
   - DOMAIN,fonts.twitter.com
   - DOMAIN,fonts.upset.dev
   - DOMAIN,fonts.wp.com
@@ -741,6 +743,7 @@ payload:
   - DOMAIN,i.jpg.dog
   - DOMAIN,i.loli.best
   - DOMAIN,i.mt.lv
+  - DOMAIN,i.mydramalist.com
   - DOMAIN,i.niupic.com
   - DOMAIN,i.pcmag.com
   - DOMAIN,i.snap.as
@@ -760,6 +763,7 @@ payload:
   - DOMAIN,image-forwarder.notaku.so
   - DOMAIN,image.civitai.com
   - DOMAIN,image.crisp.chat
+  - DOMAIN,image.dooo.ng
   - DOMAIN,image.email.microsoftemail.com
   - DOMAIN,image.freepik.com
   - DOMAIN,image.ibb.co
@@ -811,6 +815,7 @@ payload:
   - DOMAIN,images7.design-editor.com
   - DOMAIN,images8.design-editor.com
   - DOMAIN,imagizer.imageshack.com
+  - DOMAIN,img-cos.mandaoo.com
   - DOMAIN,img.announcekit.app
   - DOMAIN,img.applealmond.com
   - DOMAIN,img.apponic.com
@@ -1130,6 +1135,7 @@ payload:
   - DOMAIN,release.runcloud.io
   - DOMAIN,releases.arc.net
   - DOMAIN,releases.grapheneos.org
+  - DOMAIN,releases.obsidian.md
   - DOMAIN,releases.whatpulse.org
   - DOMAIN,renderer-assets.typeform.com
   - DOMAIN,replicate.npmjs.com
@@ -1225,6 +1231,7 @@ payload:
   - DOMAIN,security.debian.org
   - DOMAIN,security.ubuntu.com
   - DOMAIN,services.linkfire.com
+  - DOMAIN,sf-coze-web-cdn.coze.com
   - DOMAIN,sf-flow-web-cdn.ciciai.com
   - DOMAIN,share.riseup.net
   - DOMAIN,shell.cdn.office.net
@@ -1312,6 +1319,7 @@ payload:
   - DOMAIN,static.dw.com
   - DOMAIN,static.dynamicyield.com
   - DOMAIN,static.dzeninfra.ru
+  - DOMAIN,static.eroterest.net
   - DOMAIN,static.esimplus.net
   - DOMAIN,static.ettoday.net
   - DOMAIN,static.euronews.com
@@ -1412,6 +1420,7 @@ payload:
   - DOMAIN,statics-xbc-eas.xbox.com
   - DOMAIN,statics.goorm.io
   - DOMAIN,staticw2.yotpo.com
+  - DOMAIN,stats.snipaste.com
   - DOMAIN,steam.apac.qtlglb.com
   - DOMAIN,steam.eca.qtlglb.com
   - DOMAIN,steam.naeu.qtlglb.com
@@ -3430,6 +3439,7 @@ payload:
   - DOMAIN-SUFFIX,redtube.com
   - DOMAIN-SUFFIX,registerhulu.com
   - DOMAIN-SUFFIX,releases.hashicorp.com
+  - DOMAIN-SUFFIX,replicate.delivery
   - DOMAIN-SUFFIX,repo.anaconda.com
   - DOMAIN-SUFFIX,repo.jing.rocks
   - DOMAIN-SUFFIX,res.office365.com

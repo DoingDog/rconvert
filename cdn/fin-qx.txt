@@ -1,5 +1,5 @@
-# Quantumult total line 2106
-# Last updated Thu 08/01/2024 22:10:18.26
+# Quantumult total line 2109
+# Last updated Sun 08/04/2024 22:11:21.67
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -30,7 +30,6 @@ HOST,api.producthunt.com,LIST
 HOST,api.pwnedpasswords.com,LIST
 HOST,api.qrserver.com,LIST
 HOST,api.roboflow.com,LIST
-HOST,api.wakatime.com,LIST
 HOST,api.web3.storage,LIST
 HOST,app-api.vidjet.io,LIST
 HOST,app-spm.com,LIST
@@ -88,6 +87,7 @@ HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
 HOST,assets.fireside.fm,LIST
 HOST,assets.flodesk.com,LIST
+HOST,assets.garr.it,LIST
 HOST,assets.gcore.pro,LIST
 HOST,assets.genius.com,LIST
 HOST,assets.getkirby.com,LIST
@@ -375,6 +375,7 @@ HOST,cdn.rauno.me,LIST
 HOST,cdn.readme.io,LIST
 HOST,cdn.recovermycart.com,LIST
 HOST,cdn.redoc.ly,LIST
+HOST,cdn.registerdisney.go.com,LIST
 HOST,cdn.reimu.net,LIST
 HOST,cdn.rex.contents.rakuten.co.jp,LIST
 HOST,cdn.robinpro.gallery,LIST
@@ -596,6 +597,7 @@ HOST,fonts.cdnfonts.com,LIST
 HOST,fonts.codeberg.org,LIST
 HOST,fonts.googleapis.com,LIST
 HOST,fonts.gstatic.com,LIST
+HOST,fonts.svc.ui.com,LIST
 HOST,fonts.twitter.com,LIST
 HOST,fonts.upset.dev,LIST
 HOST,fonts.wp.com,LIST
@@ -641,6 +643,7 @@ HOST,i.iwara.tv,LIST
 HOST,i.jpg.dog,LIST
 HOST,i.loli.best,LIST
 HOST,i.mt.lv,LIST
+HOST,i.mydramalist.com,LIST
 HOST,i.nhentai.net,LIST
 HOST,i.niupic.com,LIST
 HOST,i.pcmag.com,LIST
@@ -663,6 +666,7 @@ HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
 HOST,image.civitai.com,LIST
 HOST,image.crisp.chat,LIST
+HOST,image.dooo.ng,LIST
 HOST,image.email.microsoftemail.com,LIST
 HOST,image.freepik.com,LIST
 HOST,image.ibb.co,LIST
@@ -715,6 +719,7 @@ HOST,images.wsj.net,LIST
 HOST,images7.design-editor.com,LIST
 HOST,images8.design-editor.com,LIST
 HOST,imagizer.imageshack.com,LIST
+HOST,img-cos.mandaoo.com,LIST
 HOST,img-prod-cms-rt-microsoft-com.akamaized.net,LIST
 HOST,img-s-msn-com.akamaized.net,LIST
 HOST,img.announcekit.app,LIST
@@ -1092,8 +1097,8 @@ HOST,secure.download.dm.origin.com,LIST
 HOST,secure.fanboy.co.nz,LIST
 HOST,secure.telegraph.co.uk,LIST
 HOST,services.linkfire.com,LIST
+HOST,sf-coze-web-cdn.coze.com,LIST
 HOST,sf-flow-web-cdn.ciciai.com,LIST
-HOST,share.riseup.net,LIST
 HOST,shell.cdn.office.net,LIST
 HOST,shopify.cleverecommerce.com,LIST
 HOST,shots.codepen.io,LIST
@@ -1189,6 +1194,7 @@ HOST,static.doujins.com,LIST
 HOST,static.dw.com,LIST
 HOST,static.dynamicyield.com,LIST
 HOST,static.dzeninfra.ru,LIST
+HOST,static.eroterest.net,LIST
 HOST,static.esimplus.net,LIST
 HOST,static.ettoday.net,LIST
 HOST,static.euronews.com,LIST
@@ -1501,7 +1507,6 @@ HOST-SUFFIX,bytebucket.org,LIST
 HOST-SUFFIX,bytedapm.com,LIST
 HOST-SUFFIX,c-dn.net,LIST
 HOST-SUFFIX,c.staticblitz.com,LIST
-HOST-SUFFIX,catbox.moe,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn-one.com,LIST
@@ -1617,8 +1622,6 @@ HOST-SUFFIX,fbcdn.com,LIST
 HOST-SUFFIX,fbcdn.net,LIST
 HOST-SUFFIX,fbsbx.com,LIST
 HOST-SUFFIX,file.core.windows.net,LIST
-HOST-SUFFIX,file.io,LIST
-HOST-SUFFIX,filebin.net,LIST
 HOST-SUFFIX,files.gitbook.io,LIST
 HOST-SUFFIX,files.wordpress.com,LIST
 HOST-SUFFIX,firebaseapp.com,LIST
@@ -1805,6 +1808,7 @@ HOST-SUFFIX,lowescdn.com,LIST
 HOST-SUFFIX,ltwebstatic.com,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
 HOST-SUFFIX,media-amazon.com,LIST
+HOST-SUFFIX,media-imdb.com,LIST
 HOST-SUFFIX,media.beeper.com,LIST
 HOST-SUFFIX,media.ci-en.jp,LIST
 HOST-SUFFIX,media.tumblr.com,LIST
@@ -1921,6 +1925,7 @@ HOST-SUFFIX,reasoningtheory.net,LIST
 HOST-SUFFIX,redd.it,LIST
 HOST-SUFFIX,redditmedia.com,LIST
 HOST-SUFFIX,redditstatic.com,LIST
+HOST-SUFFIX,replicate.delivery,LIST
 HOST-SUFFIX,repo.anaconda.com,LIST
 HOST-SUFFIX,res.office365.com,LIST
 HOST-SUFFIX,rocketcdn.me,LIST
@@ -2002,7 +2007,6 @@ HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,t.staticblitz.com,LIST
 HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,tedcdn.com,LIST
-HOST-SUFFIX,temp.sh,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
 HOST-SUFFIX,thirdwebcdn.com,LIST
 HOST-SUFFIX,thisiscdn.com,LIST
@@ -2012,7 +2016,6 @@ HOST-SUFFIX,tildacdn.com,LIST
 HOST-SUFFIX,tile.openstreetmap.org,LIST
 HOST-SUFFIX,tile.osm.org,LIST
 HOST-SUFFIX,tiqcdn.com,LIST
-HOST-SUFFIX,tmpfiles.org,LIST
 HOST-SUFFIX,tnastatic.com,LIST
 HOST-SUFFIX,trackerslist.com,LIST
 HOST-SUFFIX,transcend-cdn.com,LIST

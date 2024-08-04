@@ -1,5 +1,5 @@
-# Clash total line 4341
-# Last updated Thu 08/01/2024 22:10:36.66
+# Clash total line 4343
+# Last updated Sun 08/04/2024 22:11:39.73
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -2453,6 +2453,7 @@ payload:
   - DOMAIN-SUFFIX,metatrader5.com
   - DOMAIN-SUFFIX,mfcteda.com
   - DOMAIN-SUFFIX,mgtv.com
+  - DOMAIN-SUFFIX,mi-fds.com
   - DOMAIN-SUFFIX,mi-img.com
   - DOMAIN-SUFFIX,mi.com
   - DOMAIN-SUFFIX,miaobolive.com
@@ -3668,6 +3669,7 @@ payload:
   - DOMAIN-SUFFIX,xiaomi.com
   - DOMAIN-SUFFIX,xiaomi.net
   - DOMAIN-SUFFIX,xiaomicp.com
+  - DOMAIN-SUFFIX,xiaomiev.com
   - DOMAIN-SUFFIX,xiaomiflash.com
   - DOMAIN-SUFFIX,xiaomingtaiji.com
   - DOMAIN-SUFFIX,xiaomiyoupin.com

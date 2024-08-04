@@ -1,5 +1,5 @@
-# Quantumult total line 5018
-# Last updated Thu 08/01/2024 22:10:28.50
+# Quantumult total line 5028
+# Last updated Sun 08/04/2024 22:11:31.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -35,7 +35,6 @@ HOST,api.producthunt.com,LIST
 HOST,api.pwnedpasswords.com,LIST
 HOST,api.qrserver.com,LIST
 HOST,api.roboflow.com,LIST
-HOST,api.wakatime.com,LIST
 HOST,api.web3.storage,LIST
 HOST,apm-misaka.biliapi.net,LIST
 HOST,app-api.vidjet.io,LIST
@@ -95,6 +94,7 @@ HOST,assets.extension.grammarly.com,LIST
 HOST,assets.fastly.com,LIST
 HOST,assets.fireside.fm,LIST
 HOST,assets.flodesk.com,LIST
+HOST,assets.garr.it,LIST
 HOST,assets.gcore.pro,LIST
 HOST,assets.genius.com,LIST
 HOST,assets.getkirby.com,LIST
@@ -505,6 +505,7 @@ HOST,code.highcharts.com,LIST
 HOST,code.iconify.design,LIST
 HOST,code.ionicframework.com,LIST
 HOST,code.jquery.com,LIST
+HOST,codeload.github.com,LIST
 HOST,compass-ssl.xbox.com,LIST
 HOST,components.clever-cloud.com,LIST
 HOST,confluence-v1.prod.atl-paas.net,LIST
@@ -684,6 +685,7 @@ HOST,fonts.cdnfonts.com,LIST
 HOST,fonts.codeberg.org,LIST
 HOST,fonts.googleapis.com,LIST
 HOST,fonts.gstatic.com,LIST
+HOST,fonts.svc.ui.com,LIST
 HOST,fonts.twitter.com,LIST
 HOST,fonts.upset.dev,LIST
 HOST,fonts.wp.com,LIST
@@ -740,6 +742,7 @@ HOST,i.iwara.tv,LIST
 HOST,i.jpg.dog,LIST
 HOST,i.loli.best,LIST
 HOST,i.mt.lv,LIST
+HOST,i.mydramalist.com,LIST
 HOST,i.niupic.com,LIST
 HOST,i.pcmag.com,LIST
 HOST,i.snap.as,LIST
@@ -759,6 +762,7 @@ HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
 HOST,image.civitai.com,LIST
 HOST,image.crisp.chat,LIST
+HOST,image.dooo.ng,LIST
 HOST,image.email.microsoftemail.com,LIST
 HOST,image.freepik.com,LIST
 HOST,image.ibb.co,LIST
@@ -810,6 +814,7 @@ HOST,images.wsj.net,LIST
 HOST,images7.design-editor.com,LIST
 HOST,images8.design-editor.com,LIST
 HOST,imagizer.imageshack.com,LIST
+HOST,img-cos.mandaoo.com,LIST
 HOST,img.announcekit.app,LIST
 HOST,img.applealmond.com,LIST
 HOST,img.apponic.com,LIST
@@ -1129,6 +1134,7 @@ HOST,regmedia.co.uk,LIST
 HOST,release.runcloud.io,LIST
 HOST,releases.arc.net,LIST
 HOST,releases.grapheneos.org,LIST
+HOST,releases.obsidian.md,LIST
 HOST,releases.whatpulse.org,LIST
 HOST,renderer-assets.typeform.com,LIST
 HOST,replicate.npmjs.com,LIST
@@ -1224,6 +1230,7 @@ HOST,secure.telegraph.co.uk,LIST
 HOST,security.debian.org,LIST
 HOST,security.ubuntu.com,LIST
 HOST,services.linkfire.com,LIST
+HOST,sf-coze-web-cdn.coze.com,LIST
 HOST,sf-flow-web-cdn.ciciai.com,LIST
 HOST,share.riseup.net,LIST
 HOST,shell.cdn.office.net,LIST
@@ -1311,6 +1318,7 @@ HOST,static.doujins.com,LIST
 HOST,static.dw.com,LIST
 HOST,static.dynamicyield.com,LIST
 HOST,static.dzeninfra.ru,LIST
+HOST,static.eroterest.net,LIST
 HOST,static.esimplus.net,LIST
 HOST,static.ettoday.net,LIST
 HOST,static.euronews.com,LIST
@@ -1411,6 +1419,7 @@ HOST,staticmap.openstreetmap.de,LIST
 HOST,statics-xbc-eas.xbox.com,LIST
 HOST,statics.goorm.io,LIST
 HOST,staticw2.yotpo.com,LIST
+HOST,stats.snipaste.com,LIST
 HOST,steam.apac.qtlglb.com,LIST
 HOST,steam.eca.qtlglb.com,LIST
 HOST,steam.naeu.qtlglb.com,LIST
@@ -3429,6 +3438,7 @@ HOST-SUFFIX,redditstatic.com,LIST
 HOST-SUFFIX,redtube.com,LIST
 HOST-SUFFIX,registerhulu.com,LIST
 HOST-SUFFIX,releases.hashicorp.com,LIST
+HOST-SUFFIX,replicate.delivery,LIST
 HOST-SUFFIX,repo.anaconda.com,LIST
 HOST-SUFFIX,repo.jing.rocks,LIST
 HOST-SUFFIX,res.office365.com,LIST
