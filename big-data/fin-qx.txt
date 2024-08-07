@@ -1,5 +1,5 @@
-# Quantumult total line 5028
-# Last updated Sun 08/04/2024 22:11:31.60
+# Quantumult total line 5055
+# Last updated Wed 08/07/2024 22:10:39.69
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -149,6 +149,7 @@ HOST,assets.tumblr.com,LIST
 HOST,assets.unifi-ai.com,LIST
 HOST,assets.upload.io,LIST
 HOST,assets.vercel.com,LIST
+HOST,assets.videowise.com,LIST
 HOST,assets.vidyard.com,LIST
 HOST,assets.vogue.com,LIST
 HOST,assets.volvo.com,LIST
@@ -193,6 +194,7 @@ HOST,badges.crowdin.net,LIST
 HOST,badges.frapsoft.com,LIST
 HOST,badges.gitter.im,LIST
 HOST,badges.greenkeeper.io,LIST
+HOST,bcdn.starapps.studio,LIST
 HOST,binaries.prisma.sh,LIST
 HOST,binary-factory.kde.org,LIST
 HOST,blacklist.tampermonkey.net,LIST
@@ -207,6 +209,7 @@ HOST,builds.paranoidandroid.co,LIST
 HOST,builds.parsec.app,LIST
 HOST,bundle.trysavvy.com,LIST
 HOST,bundlephobia.com,LIST
+HOST,bundler.nice-team.net,LIST
 HOST,bundles.npr.org,LIST
 HOST,busuanzi.ibruce.info,LIST
 HOST,c.1password.com,LIST
@@ -227,6 +230,7 @@ HOST,cdn-a.sonyentertainmentnetwork.com,LIST
 HOST,cdn-app.pathfactory.com,LIST
 HOST,cdn-assets.circleci.com,LIST
 HOST,cdn-assets.porntube.com,LIST
+HOST,cdn-bundler.nice-team.net,LIST
 HOST,cdn-c.leavemealone.com,LIST
 HOST,cdn-client.medium.com,LIST
 HOST,cdn-cookieyes.com,LIST
@@ -412,6 +416,7 @@ HOST,cdn.softswiss.net,LIST
 HOST,cdn.solvvy.com,LIST
 HOST,cdn.split.io,LIST
 HOST,cdn.sprig.com,LIST
+HOST,cdn.starapps.studio,LIST
 HOST,cdn.stash.com,LIST
 HOST,cdn.substack.com,LIST
 HOST,cdn.sunofbeaches.com,LIST
@@ -422,6 +427,7 @@ HOST,cdn.transcend.io,LIST
 HOST,cdn.transifex.com,LIST
 HOST,cdn.travis-ci.com,LIST
 HOST,cdn.travis-ci.org,LIST
+HOST,cdn.trustedsite.com,LIST
 HOST,cdn.trustpilot.net,LIST
 HOST,cdn.ttgtmedia.com,LIST
 HOST,cdn.tuk.dev,LIST
@@ -430,6 +436,7 @@ HOST,cdn.up-timely.com,LIST
 HOST,cdn.usd.fan,LIST
 HOST,cdn.userreport.com,LIST
 HOST,cdn.v2ex.com,LIST
+HOST,cdn.verifypass.com,LIST
 HOST,cdn.vidyard.com,LIST
 HOST,cdn.viglink.com,LIST
 HOST,cdn.wccftech.com,LIST
@@ -437,6 +444,7 @@ HOST,cdn.weglot.com,LIST
 HOST,cdn.windowsreport.com,LIST
 HOST,cdn.wishpond.net,LIST
 HOST,cdn.writeas.net,LIST
+HOST,cdn.yinghuazy.xyz,LIST
 HOST,cdn.ywxi.net,LIST
 HOST,cdn.zapier.com,LIST
 HOST,cdn0.dan.com,LIST
@@ -822,6 +830,7 @@ HOST,img.badgesize.io,LIST
 HOST,img.bigcloud.cyou,LIST
 HOST,img.biguz.net,LIST
 HOST,img.bttimg.com,LIST
+HOST,img.catwvod.xyz,LIST
 HOST,img.clerk.com,LIST
 HOST,img.community.ui.com,LIST
 HOST,img.dlsite.jp,LIST
@@ -838,6 +847,7 @@ HOST,img.kbhgames.com,LIST
 HOST,img.ltyears.com,LIST
 HOST,img.m.mw,LIST
 HOST,img.merch.cameo.com,LIST
+HOST,img.mresou.com,LIST
 HOST,img.pawoo.net,LIST
 HOST,img.perfops.net,LIST
 HOST,img.picacomic.com,LIST
@@ -909,6 +919,7 @@ HOST,linkstorage.linkfire.com,LIST
 HOST,linuxiac.b-cdn.net,LIST
 HOST,live.fanmingming.com,LIST
 HOST,livedoor.blogimg.jp,LIST
+HOST,load.csell.co,LIST
 HOST,logo.clearbit.com,LIST
 HOST,logos.speedtestcustom.com,LIST
 HOST,loutre.blockchair.io,LIST
@@ -1072,8 +1083,11 @@ HOST,photos5.appleinsider.com,LIST
 HOST,pic.7mmtv.me,LIST
 HOST,pic.cangku.moe,LIST
 HOST,pic.cdnclouder.com,LIST
+HOST,pic.imge.cc,LIST
+HOST,pic.libilibi.top,LIST
 HOST,pic.onlinewebfonts.com,LIST
 HOST,pic.skk.moe,LIST
+HOST,pic.ziyuan.wang,LIST
 HOST,piccdn.7mmtv.sx,LIST
 HOST,pics.paypal.com,LIST
 HOST,pics.vpdmm.cc,LIST
@@ -1466,6 +1480,7 @@ HOST,ui.trailhead.com,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,update.code.visualstudio.com,LIST
 HOST,update.googleapis.com,LIST
+HOST,update.sleazyfork.org,LIST
 HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
@@ -1760,6 +1775,8 @@ HOST-SUFFIX,beautyandthebeastmusical.co.uk,LIST
 HOST-SUFFIX,bentobox.tv,LIST
 HOST-SUFFIX,bestjavcdn.com,LIST
 HOST-SUFFIX,bezsms.org,LIST
+HOST-SUFFIX,bftuvip.com,LIST
+HOST-SUFFIX,bfzypic.com,LIST
 HOST-SUFFIX,bidi.net.uk,LIST
 HOST-SUFFIX,bigbigchannel.com.hk,LIST
 HOST-SUFFIX,bigbigshop.com,LIST
@@ -2239,6 +2256,7 @@ HOST-SUFFIX,embyplus.club,LIST
 HOST-SUFFIX,embyplus.org,LIST
 HOST-SUFFIX,embyserver.ga,LIST
 HOST-SUFFIX,emload.com,LIST
+HOST-SUFFIX,emotivecdn.io,LIST
 HOST-SUFFIX,encoretvb.com,LIST
 HOST-SUFFIX,envato-static.com,LIST
 HOST-SUFFIX,envatousercontent.com,LIST
@@ -2763,6 +2781,7 @@ HOST-SUFFIX,ilovepdf.com,LIST
 HOST-SUFFIX,imagebam.com,LIST
 HOST-SUFFIX,imageban.ru,LIST
 HOST-SUFFIX,imagedelivery.net,LIST
+HOST-SUFFIX,imagehub.cc,LIST
 HOST-SUFFIX,images-amazon.com,LIST
 HOST-SUFFIX,images-iherb.com,LIST
 HOST-SUFFIX,images.arcpublishing.com,LIST
@@ -2778,6 +2797,7 @@ HOST-SUFFIX,imglarger.com,LIST
 HOST-SUFFIX,imglink.win,LIST
 HOST-SUFFIX,imgmrplay.xyz,LIST
 HOST-SUFFIX,imgsmail.ru,LIST
+HOST-SUFFIX,imgyzzy.com,LIST
 HOST-SUFFIX,imkan.tv,LIST
 HOST-SUFFIX,in.applicationinsights.azure.com,LIST
 HOST-SUFFIX,indazn.com,LIST
@@ -2872,6 +2892,8 @@ HOST-SUFFIX,jbkcdn.io,LIST
 HOST-SUFFIX,jetbrains.com,LIST
 HOST-SUFFIX,jetbrains.team,LIST
 HOST-SUFFIX,jetload.net,LIST
+HOST-SUFFIX,jinyingimage.com,LIST
+HOST-SUFFIX,jisuimage.com,LIST
 HOST-SUFFIX,jitpack.io,LIST
 HOST-SUFFIX,jmaooo.com,LIST
 HOST-SUFFIX,jmsooo.com,LIST
@@ -2941,6 +2963,7 @@ HOST-SUFFIX,letsupload.co,LIST
 HOST-SUFFIX,letsupload.io,LIST
 HOST-SUFFIX,lf16-geckocdn.bytegecko-i18n.com,LIST
 HOST-SUFFIX,lf16-pkgcdn.pitaya-clientai.com,LIST
+HOST-SUFFIX,liangzipic.com,LIST
 HOST-SUFFIX,libsyn.com,LIST
 HOST-SUFFIX,licdn.com,LIST
 HOST-SUFFIX,licensebuttons.net,LIST
@@ -2971,6 +2994,8 @@ HOST-SUFFIX,lookscanned.io,LIST
 HOST-SUFFIX,lowendbox.com,LIST
 HOST-SUFFIX,lowescdn.com,LIST
 HOST-SUFFIX,ltwebstatic.com,LIST
+HOST-SUFFIX,lzzyimg.com,LIST
+HOST-SUFFIX,lzzypic.com,LIST
 HOST-SUFFIX,macupload.net,LIST
 HOST-SUFFIX,maker.tv,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
@@ -3540,6 +3565,7 @@ HOST-SUFFIX,smassets.net,LIST
 HOST-SUFFIX,smilecdn.co,LIST
 HOST-SUFFIX,sndcdn.com,LIST
 HOST-SUFFIX,snowfiles.com,LIST
+HOST-SUFFIX,snzypic.com,LIST
 HOST-SUFFIX,soccermatchpass.com,LIST
 HOST-SUFFIX,socdm.com,LIST
 HOST-SUFFIX,software-download.microsoft.com,LIST
@@ -3585,6 +3611,7 @@ HOST-SUFFIX,st.dl.pinyuncloud.com,LIST
 HOST-SUFFIX,stack.imgur.com,LIST
 HOST-SUFFIX,stackblitz.io,LIST
 HOST-SUFFIX,stackpathcdn.com,LIST
+HOST-SUFFIX,stapecdn.com,LIST
 HOST-SUFFIX,star-brasil.com,LIST
 HOST-SUFFIX,star-latam.com,LIST
 HOST-SUFFIX,starwars.com,LIST

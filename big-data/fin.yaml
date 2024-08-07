@@ -1,5 +1,5 @@
-# Clash total line 5043
-# Last updated Sun 08/04/2024 22:11:31.63
+# Clash total line 5070
+# Last updated Wed 08/07/2024 22:10:39.74
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -150,6 +150,7 @@ payload:
   - DOMAIN,assets.unifi-ai.com
   - DOMAIN,assets.upload.io
   - DOMAIN,assets.vercel.com
+  - DOMAIN,assets.videowise.com
   - DOMAIN,assets.vidyard.com
   - DOMAIN,assets.vogue.com
   - DOMAIN,assets.volvo.com
@@ -194,6 +195,7 @@ payload:
   - DOMAIN,badges.frapsoft.com
   - DOMAIN,badges.gitter.im
   - DOMAIN,badges.greenkeeper.io
+  - DOMAIN,bcdn.starapps.studio
   - DOMAIN,binaries.prisma.sh
   - DOMAIN,binary-factory.kde.org
   - DOMAIN,blacklist.tampermonkey.net
@@ -208,6 +210,7 @@ payload:
   - DOMAIN,builds.parsec.app
   - DOMAIN,bundle.trysavvy.com
   - DOMAIN,bundlephobia.com
+  - DOMAIN,bundler.nice-team.net
   - DOMAIN,bundles.npr.org
   - DOMAIN,busuanzi.ibruce.info
   - DOMAIN,c.1password.com
@@ -228,6 +231,7 @@ payload:
   - DOMAIN,cdn-app.pathfactory.com
   - DOMAIN,cdn-assets.circleci.com
   - DOMAIN,cdn-assets.porntube.com
+  - DOMAIN,cdn-bundler.nice-team.net
   - DOMAIN,cdn-c.leavemealone.com
   - DOMAIN,cdn-client.medium.com
   - DOMAIN,cdn-cookieyes.com
@@ -413,6 +417,7 @@ payload:
   - DOMAIN,cdn.solvvy.com
   - DOMAIN,cdn.split.io
   - DOMAIN,cdn.sprig.com
+  - DOMAIN,cdn.starapps.studio
   - DOMAIN,cdn.stash.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
@@ -423,6 +428,7 @@ payload:
   - DOMAIN,cdn.transifex.com
   - DOMAIN,cdn.travis-ci.com
   - DOMAIN,cdn.travis-ci.org
+  - DOMAIN,cdn.trustedsite.com
   - DOMAIN,cdn.trustpilot.net
   - DOMAIN,cdn.ttgtmedia.com
   - DOMAIN,cdn.tuk.dev
@@ -431,6 +437,7 @@ payload:
   - DOMAIN,cdn.usd.fan
   - DOMAIN,cdn.userreport.com
   - DOMAIN,cdn.v2ex.com
+  - DOMAIN,cdn.verifypass.com
   - DOMAIN,cdn.vidyard.com
   - DOMAIN,cdn.viglink.com
   - DOMAIN,cdn.wccftech.com
@@ -438,6 +445,7 @@ payload:
   - DOMAIN,cdn.windowsreport.com
   - DOMAIN,cdn.wishpond.net
   - DOMAIN,cdn.writeas.net
+  - DOMAIN,cdn.yinghuazy.xyz
   - DOMAIN,cdn.ywxi.net
   - DOMAIN,cdn.zapier.com
   - DOMAIN,cdn0.dan.com
@@ -823,6 +831,7 @@ payload:
   - DOMAIN,img.bigcloud.cyou
   - DOMAIN,img.biguz.net
   - DOMAIN,img.bttimg.com
+  - DOMAIN,img.catwvod.xyz
   - DOMAIN,img.clerk.com
   - DOMAIN,img.community.ui.com
   - DOMAIN,img.dlsite.jp
@@ -839,6 +848,7 @@ payload:
   - DOMAIN,img.ltyears.com
   - DOMAIN,img.m.mw
   - DOMAIN,img.merch.cameo.com
+  - DOMAIN,img.mresou.com
   - DOMAIN,img.pawoo.net
   - DOMAIN,img.perfops.net
   - DOMAIN,img.picacomic.com
@@ -910,6 +920,7 @@ payload:
   - DOMAIN,linuxiac.b-cdn.net
   - DOMAIN,live.fanmingming.com
   - DOMAIN,livedoor.blogimg.jp
+  - DOMAIN,load.csell.co
   - DOMAIN,logo.clearbit.com
   - DOMAIN,logos.speedtestcustom.com
   - DOMAIN,loutre.blockchair.io
@@ -1073,8 +1084,11 @@ payload:
   - DOMAIN,pic.7mmtv.me
   - DOMAIN,pic.cangku.moe
   - DOMAIN,pic.cdnclouder.com
+  - DOMAIN,pic.imge.cc
+  - DOMAIN,pic.libilibi.top
   - DOMAIN,pic.onlinewebfonts.com
   - DOMAIN,pic.skk.moe
+  - DOMAIN,pic.ziyuan.wang
   - DOMAIN,piccdn.7mmtv.sx
   - DOMAIN,pics.paypal.com
   - DOMAIN,pics.vpdmm.cc
@@ -1467,6 +1481,7 @@ payload:
   - DOMAIN,unlimited-cdn.waifu2x.net
   - DOMAIN,update.code.visualstudio.com
   - DOMAIN,update.googleapis.com
+  - DOMAIN,update.sleazyfork.org
   - DOMAIN,updates.istatmenus.app
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
@@ -1761,6 +1776,8 @@ payload:
   - DOMAIN-SUFFIX,bentobox.tv
   - DOMAIN-SUFFIX,bestjavcdn.com
   - DOMAIN-SUFFIX,bezsms.org
+  - DOMAIN-SUFFIX,bftuvip.com
+  - DOMAIN-SUFFIX,bfzypic.com
   - DOMAIN-SUFFIX,bidi.net.uk
   - DOMAIN-SUFFIX,bigbigchannel.com.hk
   - DOMAIN-SUFFIX,bigbigshop.com
@@ -2240,6 +2257,7 @@ payload:
   - DOMAIN-SUFFIX,embyplus.org
   - DOMAIN-SUFFIX,embyserver.ga
   - DOMAIN-SUFFIX,emload.com
+  - DOMAIN-SUFFIX,emotivecdn.io
   - DOMAIN-SUFFIX,encoretvb.com
   - DOMAIN-SUFFIX,envato-static.com
   - DOMAIN-SUFFIX,envatousercontent.com
@@ -2764,6 +2782,7 @@ payload:
   - DOMAIN-SUFFIX,imagebam.com
   - DOMAIN-SUFFIX,imageban.ru
   - DOMAIN-SUFFIX,imagedelivery.net
+  - DOMAIN-SUFFIX,imagehub.cc
   - DOMAIN-SUFFIX,images-amazon.com
   - DOMAIN-SUFFIX,images-iherb.com
   - DOMAIN-SUFFIX,images.arcpublishing.com
@@ -2779,6 +2798,7 @@ payload:
   - DOMAIN-SUFFIX,imglink.win
   - DOMAIN-SUFFIX,imgmrplay.xyz
   - DOMAIN-SUFFIX,imgsmail.ru
+  - DOMAIN-SUFFIX,imgyzzy.com
   - DOMAIN-SUFFIX,imkan.tv
   - DOMAIN-SUFFIX,in.applicationinsights.azure.com
   - DOMAIN-SUFFIX,indazn.com
@@ -2873,6 +2893,8 @@ payload:
   - DOMAIN-SUFFIX,jetbrains.com
   - DOMAIN-SUFFIX,jetbrains.team
   - DOMAIN-SUFFIX,jetload.net
+  - DOMAIN-SUFFIX,jinyingimage.com
+  - DOMAIN-SUFFIX,jisuimage.com
   - DOMAIN-SUFFIX,jitpack.io
   - DOMAIN-SUFFIX,jmaooo.com
   - DOMAIN-SUFFIX,jmsooo.com
@@ -2942,6 +2964,7 @@ payload:
   - DOMAIN-SUFFIX,letsupload.io
   - DOMAIN-SUFFIX,lf16-geckocdn.bytegecko-i18n.com
   - DOMAIN-SUFFIX,lf16-pkgcdn.pitaya-clientai.com
+  - DOMAIN-SUFFIX,liangzipic.com
   - DOMAIN-SUFFIX,libsyn.com
   - DOMAIN-SUFFIX,licdn.com
   - DOMAIN-SUFFIX,licensebuttons.net
@@ -2972,6 +2995,8 @@ payload:
   - DOMAIN-SUFFIX,lowendbox.com
   - DOMAIN-SUFFIX,lowescdn.com
   - DOMAIN-SUFFIX,ltwebstatic.com
+  - DOMAIN-SUFFIX,lzzyimg.com
+  - DOMAIN-SUFFIX,lzzypic.com
   - DOMAIN-SUFFIX,macupload.net
   - DOMAIN-SUFFIX,maker.tv
   - DOMAIN-SUFFIX,makeuseofimages.com
@@ -3541,6 +3566,7 @@ payload:
   - DOMAIN-SUFFIX,smilecdn.co
   - DOMAIN-SUFFIX,sndcdn.com
   - DOMAIN-SUFFIX,snowfiles.com
+  - DOMAIN-SUFFIX,snzypic.com
   - DOMAIN-SUFFIX,soccermatchpass.com
   - DOMAIN-SUFFIX,socdm.com
   - DOMAIN-SUFFIX,software-download.microsoft.com
@@ -3586,6 +3612,7 @@ payload:
   - DOMAIN-SUFFIX,stack.imgur.com
   - DOMAIN-SUFFIX,stackblitz.io
   - DOMAIN-SUFFIX,stackpathcdn.com
+  - DOMAIN-SUFFIX,stapecdn.com
   - DOMAIN-SUFFIX,star-brasil.com
   - DOMAIN-SUFFIX,star-latam.com
   - DOMAIN-SUFFIX,starwars.com
