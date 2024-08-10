@@ -1,5 +1,5 @@
-# Quantumult total line 5055
-# Last updated Wed 08/07/2024 22:10:39.69
+# Quantumult total line 5054
+# Last updated Sat 08/10/2024 22:11:09.79
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -595,7 +595,6 @@ HOST,download.anydesk.com,LIST
 HOST,download.beeper.com,LIST
 HOST,download.cpuid.com,LIST
 HOST,download.dlsite.com,LIST
-HOST,download.dm.origin.com,LIST
 HOST,download.docker.com,LIST
 HOST,download.gigabyte.com,LIST
 HOST,download.gimp.org,LIST
@@ -1238,7 +1237,6 @@ HOST,searchserverapi.com,LIST
 HOST,seccdn.libravatar.org,LIST
 HOST,secure-uploads.ui.com,LIST
 HOST,secure.beer7live.com,LIST
-HOST,secure.download.dm.origin.com,LIST
 HOST,secure.fanboy.co.nz,LIST
 HOST,secure.telegraph.co.uk,LIST
 HOST,security.debian.org,LIST
@@ -2190,6 +2188,7 @@ HOST-SUFFIX,downace.com,LIST
 HOST-SUFFIX,downfile.site,LIST
 HOST-SUFFIX,download,LIST
 HOST-SUFFIX,download.cdp.bethesda.net,LIST
+HOST-SUFFIX,download.dm.origin.com,LIST
 HOST-SUFFIX,download.epicgames.com,LIST
 HOST-SUFFIX,download.gg,LIST
 HOST-SUFFIX,download.mokeedev.com,LIST
