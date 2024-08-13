@@ -1,5 +1,5 @@
-# Adblock total line 4118
-# Last updated Sat 08/10/2024 22:11:09.92
+# Adblock total line 4144
+# Last updated Tue 08/13/2024 22:11:58.71
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||9191.ga^
@@ -10,6 +10,7 @@
 ||account-cdn.svc.ui.com^
 ||accounts-cdn.9gag.com^
 ||aff.equalweb.com^
+||aimg.fc2.com^
 ||ajax.cat.net^
 ||ajax.cdnjs.com^
 ||ajax.cloudflare.com^
@@ -39,6 +40,7 @@
 ||apm-misaka.biliapi.net^
 ||app-api.vidjet.io^
 ||app-spm.com^
+||app-static.turtl.co^
 ||app-updates.agilebits.com^
 ||app.backinstock.org^
 ||app.chatwoot.com^
@@ -130,6 +132,7 @@
 ||assets.poool.fr^
 ||assets.positional-bucket.com^
 ||assets.prowritingaid.com^
+||assets.queue-it.net^
 ||assets.quillbot.com^
 ||assets.repair.org^
 ||assets.safing.io^
@@ -210,6 +213,7 @@
 ||bundle.trysavvy.com^
 ||bundlephobia.com^
 ||bundler.nice-team.net^
+||bundler.wix-code.com^
 ||bundles.npr.org^
 ||busuanzi.ibruce.info^
 ||c.1password.com^
@@ -261,6 +265,7 @@
 ||cdn-updates.orbstack.dev^
 ||cdn-www.bluestacks.com^
 ||cdn-yotpo-images-production.yotpo.com^
+||cdn.18jav.tv^
 ||cdn.9to5terminal.com^
 ||cdn.accounts.nintendo.com^
 ||cdn.adguard.com^
@@ -300,6 +305,7 @@
 ||cdn.datdota.com^
 ||cdn.db-ip.com^
 ||cdn.dnsimple.com^
+||cdn.donmai.us^
 ||cdn.dotaoutpost.com^
 ||cdn.download.it^
 ||cdn.dribbble.com^
@@ -444,6 +450,7 @@
 ||cdn.windowsreport.com^
 ||cdn.wishpond.net^
 ||cdn.writeas.net^
+||cdn.xeiaso.net^
 ||cdn.yinghuazy.xyz^
 ||cdn.ywxi.net^
 ||cdn.zapier.com^
@@ -577,7 +584,7 @@
 ||dl.nwjs.io^
 ||dl.pstmn.io^
 ||dl.snipaste.com^
-||dl.ubnt.com^
+||dl.ui.com^
 ||dl2.nwjs.io^
 ||dl2.xmind.net^
 ||dl3.xmind.net^
@@ -627,6 +634,7 @@
 ||downloads.xrite.com^
 ||drscdn.500px.org^
 ||dynamic-assets.mobilius.top^
+||e.deviantart.net^
 ||e3.365dm.com^
 ||easylist-downloads.adblockplus.org^
 ||ec-prod.scene7.com^
@@ -666,6 +674,7 @@
 ||f004.backblazeb2.com^
 ||fast.wistia.com^
 ||fastly-download.epicgames.com^
+||fastporndelivery.hqporner.com^
 ||favicon.yandex.net^
 ||favicons.nextdns.io^
 ||favicons.teams.cloudflare.com^
@@ -801,7 +810,9 @@
 ||images.g2crowd.com^
 ||images.idgesg.net^
 ||images.macrumors.com^
+||images.moegoat.com^
 ||images.moovitapp.com^
+||images.nvidia.com^
 ||images.opencollective.com^
 ||images.pexels.com^
 ||images.plurk.com^
@@ -945,6 +956,7 @@
 ||media.dlsite.com^
 ||media.e4le.me^
 ||media.evolv.ai^
+||media.fc2.com^
 ||media.flaticon.com^
 ||media.gettr.com^
 ||media.gettyimages.com^
@@ -1010,6 +1022,7 @@
 ||mirrors.xtom.us^
 ||mixin-images.zeromesh.net^
 ||mobilecenter.azureedge.net^
+||momentjs.com^
 ||mstdn-s3.o3o.studio^
 ||mw1.google.com^
 ||na-library.klarnaservices.com^
@@ -1026,6 +1039,7 @@
 ||nodei.co^
 ||np-edge.itunes.apple.com^
 ||npm.antfu.dev^
+||npm.im^
 ||npm.jsr.io^
 ||npmgraph.js.org^
 ||nr.staticblitz.com^
@@ -1088,6 +1102,7 @@
 ||pic.skk.moe^
 ||pic.ziyuan.wang^
 ||piccdn.7mmtv.sx^
+||pics.hentai.name^
 ||pics.paypal.com^
 ||pics.vpdmm.cc^
 ||pics.x-n-x-x.pro^
@@ -1335,6 +1350,7 @@
 ||static.ettoday.net^
 ||static.euronews.com^
 ||static.fasthosts.co.uk^
+||static.fc2.com^
 ||static.figma.com^
 ||static.filestackapi.com^
 ||static.freeimages.com^
@@ -1361,6 +1377,7 @@
 ||static.mendeley.com^
 ||static.missav.com^
 ||static.mocortech.com^
+||static.moegoat.com^
 ||static.monei.net^
 ||static.mysph.sph.com.sg^
 ||static.mytonwallet.io^
@@ -1379,6 +1396,7 @@
 ||static.playstation.com^
 ||static.plus.net^
 ||static.probit.com^
+||static.queue-it.net^
 ||static.rakuten.com^
 ||static.redhat.com^
 ||static.reo.dev^
@@ -1466,6 +1484,8 @@
 ||thumbs.onlyfans.com^
 ||thumbsnap.com^
 ||tiles.stadiamaps.com^
+||time.cloudflare.com^
+||tn.vjav.com^
 ||ton.local.twitter.com^
 ||topbar-static.piano.io^
 ||torrindex.net^
@@ -1906,6 +1926,7 @@
 ||characterai.io^
 ||charontv.com^
 ||chasecdn.com^
+||chcdn.xyz^
 ||chedrive.com^
 ||chedrive.net^
 ||chesscomfiles.com^
@@ -2327,6 +2348,7 @@
 ||filecat.net^
 ||filecloud.io^
 ||filecloud.me^
+||filecunhua.top^
 ||filedot.xyz^
 ||filedown.com^
 ||filedown.net^
@@ -2888,6 +2910,7 @@
 ||javtxt.com^
 ||jazzradio.com^
 ||jbkcdn.io^
+||jdbstatic.com^
 ||jetbrains.com^
 ||jetbrains.team^
 ||jetload.net^
@@ -3341,6 +3364,7 @@
 ||poecdn.net^
 ||polyfill-fastly.io^
 ||polygon.com^
+||porn5.asia^
 ||porndudecdn.com^
 ||pornhub.com^
 ||pornhubpremium.com^
@@ -3650,6 +3674,7 @@
 ||streamango.com^
 ||streamcherry.com^
 ||streamhentai.org^
+||streamhk.com^
 ||streamingdisney.net^
 ||streamsb.com^
 ||streamtape.com^
@@ -3715,6 +3740,7 @@
 ||tile.openstreetmap.org^
 ||tile.osm.org^
 ||timestalks.com^
+||timg135.top^
 ||tinypass.com^
 ||tinyupload.com^
 ||tiqcdn.com^
