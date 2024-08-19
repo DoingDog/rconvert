@@ -1,5 +1,5 @@
 # Quantumult total line 4297
-# Last updated Fri 08/16/2024 22:11:38.33
+# Last updated Mon 08/19/2024 22:11:54.73
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -1211,6 +1211,7 @@ HOST-SUFFIX,discfan.net,LIST
 HOST-SUFFIX,discuz.net,LIST
 HOST-SUFFIX,discuz.org,LIST
 HOST-SUFFIX,diyiyou.com,LIST
+HOST-SUFFIX,dizzylab.net,LIST
 HOST-SUFFIX,dj99.com,LIST
 HOST-SUFFIX,dl.bscstorage.net,LIST
 HOST-SUFFIX,dl.eccdnx.com,LIST
@@ -3111,7 +3112,6 @@ HOST-SUFFIX,starbaby.com,LIST
 HOST-SUFFIX,starlakelab.com,LIST
 HOST-SUFFIX,startssl.com,LIST
 HOST-SUFFIX,staticdn.net,LIST
-HOST-SUFFIX,staticfile.net,LIST
 HOST-SUFFIX,staticfile.org,LIST
 HOST-SUFFIX,stcn.com,LIST
 HOST-SUFFIX,steam.clngaa.com,LIST
