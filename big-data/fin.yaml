@@ -1,5 +1,5 @@
-# Clash total line 5100
-# Last updated Mon 08/19/2024 22:11:46.54
+# Clash total line 5115
+# Last updated Thu 08/22/2024 22:11:45.25
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -57,6 +57,7 @@ payload:
   - DOMAIN,asset-cdn.uscardforum.com
   - DOMAIN,asset.booth.pm
   - DOMAIN,asset.mansionglobal.com
+  - DOMAIN,assets-cdn.123rf.com
   - DOMAIN,assets-cdn.abcnews.com
   - DOMAIN,assets-cdn.jable.tv
   - DOMAIN,assets-cms.kraken.com
@@ -377,6 +378,7 @@ payload:
   - DOMAIN,cdn.neverbounce.com
   - DOMAIN,cdn.now.gg
   - DOMAIN,cdn.onesignal.com
+  - DOMAIN,cdn.onetime.dog
   - DOMAIN,cdn.osxdaily.com
   - DOMAIN,cdn.paddle.com
   - DOMAIN,cdn.pagefly.io
@@ -430,6 +432,7 @@ payload:
   - DOMAIN,cdn.tailwindcss.com
   - DOMAIN,cdn.termius.com
   - DOMAIN,cdn.thisav.com
+  - DOMAIN,cdn.tolt.io
   - DOMAIN,cdn.transcend.io
   - DOMAIN,cdn.transifex.com
   - DOMAIN,cdn.travis-ci.com
@@ -877,6 +880,7 @@ payload:
   - DOMAIN,img.vim-cn.com
   - DOMAIN,img.xhacgn.com
   - DOMAIN,img.xjh.me
+  - DOMAIN,img1.ak.crunchyroll.com
   - DOMAIN,img2.tnaflix.com
   - DOMAIN,img2.xiangbinjun.com
   - DOMAIN,img3.lltaohuaxiang.com
@@ -887,6 +891,7 @@ payload:
   - DOMAIN,imgs.plurk.com
   - DOMAIN,imgs.search.brave.com
   - DOMAIN,imgs.xkcd.com
+  - DOMAIN,imgsrv.crunchyroll.com
   - DOMAIN,imgssl.constantcontact.com
   - DOMAIN,imgur.dcard.tw
   - DOMAIN,info.cloudflare.com
@@ -978,6 +983,7 @@ payload:
   - DOMAIN,media.shopimind.com
   - DOMAIN,media.smooch.io
   - DOMAIN,media.tenor.com
+  - DOMAIN,media.themoviedb.org
   - DOMAIN,media.theporndude.com
   - DOMAIN,media.user.com
   - DOMAIN,media.webtoo.ls
@@ -1075,6 +1081,8 @@ payload:
   - DOMAIN,oss.moe.cat
   - DOMAIN,ovo.wxw.moe
   - DOMAIN,p-smith.com
+  - DOMAIN,p.inari.site
+  - DOMAIN,p.sda1.dev
   - DOMAIN,p.typekit.com
   - DOMAIN,p.typekit.net
   - DOMAIN,pacdn.500px.org
@@ -1132,6 +1140,7 @@ payload:
   - DOMAIN,ppa.launchpad.net
   - DOMAIN,practicaldev-herokuapp-com.freetls.fastly.net
   - DOMAIN,prego-cache.prod.sketch.com
+  - DOMAIN,previews.123rf.com
   - DOMAIN,previews.fleek.co
   - DOMAIN,pro2-ui-assets-s3-fy.myportfolio.com
   - DOMAIN,prod-packager-packages.codesandbox.io
@@ -1248,6 +1257,7 @@ payload:
   - DOMAIN,scripts.webeo.com
   - DOMAIN,sdk.qikify.com
   - DOMAIN,sdk.snapkit.com
+  - DOMAIN,sdk.split.io
   - DOMAIN,seal-newyork.bbb.org
   - DOMAIN,searchanise-ef84.kxcdn.com
   - DOMAIN,searchserverapi.com
@@ -1303,6 +1313,7 @@ payload:
   - DOMAIN,static-assets.freeanimehentai.net
   - DOMAIN,static-assets.mapbox.com
   - DOMAIN,static-assets.npr.org
+  - DOMAIN,static-cdn.123rf.com
   - DOMAIN,static-cdn.mastodon.social
   - DOMAIN,static-cdn.osdn.net
   - DOMAIN,static-cdn.spot.im
@@ -1327,6 +1338,7 @@ payload:
   - DOMAIN,static.agilebits.com
   - DOMAIN,static.arxiv.org
   - DOMAIN,static.assetlab.io
+  - DOMAIN,static.bangumi.moe
   - DOMAIN,static.bit.cloud
   - DOMAIN,static.bit.dev
   - DOMAIN,static.bitfinex.com
@@ -1341,6 +1353,7 @@ payload:
   - DOMAIN,static.corp.google.com
   - DOMAIN,static.cracked.io
   - DOMAIN,static.cracked.to
+  - DOMAIN,static.crunchyroll.com
   - DOMAIN,static.crypto.com
   - DOMAIN,static.dash.cloudflare.com
   - DOMAIN,static.deepl.com
@@ -1471,6 +1484,7 @@ payload:
   - DOMAIN,store.setapp.com
   - DOMAIN,stories.freepiklabs.com
   - DOMAIN,storybook.js.org
+  - DOMAIN,streaming.split.io
   - DOMAIN,streetviewpixels-pa.googleapis.com
   - DOMAIN,stubdownloader.services.mozilla.com
   - DOMAIN,t.betterstack.com
@@ -3806,6 +3820,7 @@ payload:
   - DOMAIN-SUFFIX,uloz.to
   - DOMAIN-SUFFIX,ulozto.net
   - DOMAIN-SUFFIX,ulozto.sk
+  - DOMAIN-SUFFIX,ungh.cc
   - DOMAIN-SUFFIX,ungrounded.net
   - DOMAIN-SUFFIX,universalkids.com
   - DOMAIN-SUFFIX,unlimitzone.com

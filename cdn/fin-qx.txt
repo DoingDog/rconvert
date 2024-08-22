@@ -1,5 +1,5 @@
-# Quantumult total line 2165
-# Last updated Mon 08/19/2024 22:11:36.89
+# Quantumult total line 2177
+# Last updated Thu 08/22/2024 22:11:35.91
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -35,7 +35,6 @@ HOST,api.web3.storage,LIST
 HOST,app-api.vidjet.io,LIST
 HOST,app-spm.com,LIST
 HOST,app-static.turtl.co,LIST
-HOST,app-updates.agilebits.com,LIST
 HOST,app.backinstock.org,LIST
 HOST,app.chatwoot.com,LIST
 HOST,app.cookieyes.com,LIST
@@ -48,6 +47,7 @@ HOST,artworks.thetvdb.com,LIST
 HOST,asset-cdn.uscardforum.com,LIST
 HOST,asset.booth.pm,LIST
 HOST,asset.mansionglobal.com,LIST
+HOST,assets-cdn.123rf.com,LIST
 HOST,assets-cdn.abcnews.com,LIST
 HOST,assets-cdn.jable.tv,LIST
 HOST,assets-cms.kraken.com,LIST
@@ -360,6 +360,7 @@ HOST,cdn.nerdschalk.com,LIST
 HOST,cdn.neverbounce.com,LIST
 HOST,cdn.now.gg,LIST
 HOST,cdn.onesignal.com,LIST
+HOST,cdn.onetime.dog,LIST
 HOST,cdn.osxdaily.com,LIST
 HOST,cdn.paddle.com,LIST
 HOST,cdn.pagefly.io,LIST
@@ -417,6 +418,7 @@ HOST,cdn.tailwindcss.com,LIST
 HOST,cdn.termius.com,LIST
 HOST,cdn.thisav.com,LIST
 HOST,cdn.tinypass.com,LIST
+HOST,cdn.tolt.io,LIST
 HOST,cdn.transcend.io,LIST
 HOST,cdn.transifex.com,LIST
 HOST,cdn.travis-ci.com,LIST
@@ -547,9 +549,7 @@ HOST,dl2.nwjs.io,LIST
 HOST,docs.rs,LIST
 HOST,doppler-config.cbsivideo.com,LIST
 HOST,doujin-assets.dmm.co.jp,LIST
-HOST,download.maxmind.com,LIST
 HOST,downloads.coindesk.com,LIST
-HOST,downloads.wordpress.org,LIST
 HOST,drscdn.500px.org,LIST
 HOST,dynamic-assets.mobilius.top,LIST
 HOST,e.deviantart.net,LIST
@@ -689,6 +689,7 @@ HOST,image.freepik.com,LIST
 HOST,image.ibb.co,LIST
 HOST,image.lichess1.org,LIST
 HOST,image.nmb.best,LIST
+HOST,image.p-c2-x.abema-tv.com,LIST
 HOST,image.send.grammarly.com,LIST
 HOST,image.ship.vercel.com,LIST
 HOST,image.shutterstock.com,LIST
@@ -785,6 +786,7 @@ HOST,img.vim-cn.com,LIST
 HOST,img.xhacgn.com,LIST
 HOST,img.xjh.me,LIST
 HOST,img.youtube.com,LIST
+HOST,img1.ak.crunchyroll.com,LIST
 HOST,img2.tnaflix.com,LIST
 HOST,img2.xiangbinjun.com,LIST
 HOST,img3.lltaohuaxiang.com,LIST
@@ -795,6 +797,7 @@ HOST,imgrs.apkcombo.com,LIST
 HOST,imgs.plurk.com,LIST
 HOST,imgs.search.brave.com,LIST
 HOST,imgs.xkcd.com,LIST
+HOST,imgsrv.crunchyroll.com,LIST
 HOST,imgssl.constantcontact.com,LIST
 HOST,imgur.dcard.tw,LIST
 HOST,info.cloudflare.com,LIST
@@ -882,6 +885,7 @@ HOST,media.ra.kroll.com,LIST
 HOST,media.shopimind.com,LIST
 HOST,media.smooch.io,LIST
 HOST,media.tenor.com,LIST
+HOST,media.themoviedb.org,LIST
 HOST,media.theporndude.com,LIST
 HOST,media.user.com,LIST
 HOST,media.webtoo.ls,LIST
@@ -948,6 +952,8 @@ HOST,oss-binaries.phusionpassenger.com,LIST
 HOST,oss.moe.cat,LIST
 HOST,ovo.wxw.moe,LIST
 HOST,p-smith.com,LIST
+HOST,p.inari.site,LIST
+HOST,p.sda1.dev,LIST
 HOST,p.typekit.com,LIST
 HOST,p.typekit.net,LIST
 HOST,pacdn.500px.org,LIST
@@ -1005,6 +1011,7 @@ HOST,pomf2.lain.la,LIST
 HOST,pool.jortage.com,LIST
 HOST,practicaldev-herokuapp-com.freetls.fastly.net,LIST
 HOST,prego-cache.prod.sketch.com,LIST
+HOST,previews.123rf.com,LIST
 HOST,previews.fleek.co,LIST
 HOST,pro2-ui-assets-s3-fy.myportfolio.com,LIST
 HOST,prod-packager-packages.codesandbox.io,LIST
@@ -1117,6 +1124,7 @@ HOST,scripts.dailymail.co.uk,LIST
 HOST,scripts.webeo.com,LIST
 HOST,sdk.qikify.com,LIST
 HOST,sdk.snapkit.com,LIST
+HOST,sdk.split.io,LIST
 HOST,seal-newyork.bbb.org,LIST
 HOST,searchanise-ef84.kxcdn.com,LIST
 HOST,searchserverapi.com,LIST
@@ -1172,6 +1180,7 @@ HOST,static-assets.mapbox.com,LIST
 HOST,static-assets.npr.org,LIST
 HOST,static-cache.fboom.me,LIST
 HOST,static-cache.k2s.cc,LIST
+HOST,static-cdn.123rf.com,LIST
 HOST,static-cdn.jtvnw.net,LIST
 HOST,static-cdn.mastodon.social,LIST
 HOST,static-cdn.osdn.net,LIST
@@ -1203,6 +1212,7 @@ HOST,static.agilebits.com,LIST
 HOST,static.apkpure.com,LIST
 HOST,static.arxiv.org,LIST
 HOST,static.assetlab.io,LIST
+HOST,static.bangumi.moe,LIST
 HOST,static.bit.cloud,LIST
 HOST,static.bit.dev,LIST
 HOST,static.bitfinex.com,LIST
@@ -1217,6 +1227,7 @@ HOST,static.coingecko.com,LIST
 HOST,static.corp.google.com,LIST
 HOST,static.cracked.io,LIST
 HOST,static.cracked.to,LIST
+HOST,static.crunchyroll.com,LIST
 HOST,static.crypto.com,LIST
 HOST,static.dash.cloudflare.com,LIST
 HOST,static.deepl.com,LIST
@@ -1359,6 +1370,7 @@ HOST,store-images.microsoft.com,LIST
 HOST,store-images.s-microsoft.com,LIST
 HOST,stories.freepiklabs.com,LIST
 HOST,storybook.js.org,LIST
+HOST,streaming.split.io,LIST
 HOST,stubdownloader.services.mozilla.com,LIST
 HOST,t.betterstack.com,LIST
 HOST,t.nhentai.net,LIST
@@ -1395,7 +1407,6 @@ HOST,ubistatic2-a.ubisoft.com,LIST
 HOST,ui-cdn.digitalocean.com,LIST
 HOST,ui.trailhead.com,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
-HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
 HOST,upload.filebase.com,LIST
@@ -2085,6 +2096,7 @@ HOST-SUFFIX,typography.com,LIST
 HOST-SUFFIX,ubembed.com,LIST
 HOST-SUFFIX,uber-assets.com,LIST
 HOST-SUFFIX,ucarecdn.com,LIST
+HOST-SUFFIX,ungh.cc,LIST
 HOST-SUFFIX,ungrounded.net,LIST
 HOST-SUFFIX,unpkg.co,LIST
 HOST-SUFFIX,unpkg.com,LIST
