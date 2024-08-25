@@ -1,5 +1,5 @@
-# Clash total line 5115
-# Last updated Thu 08/22/2024 22:11:45.25
+# Clash total line 5129
+# Last updated Sun 08/25/2024 22:10:25.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -156,6 +156,7 @@ payload:
   - DOMAIN,assets.vercel.com
   - DOMAIN,assets.videowise.com
   - DOMAIN,assets.vidyard.com
+  - DOMAIN,assets.visioncritical.net
   - DOMAIN,assets.vogue.com
   - DOMAIN,assets.volvo.com
   - DOMAIN,assets.xbox.com
@@ -314,6 +315,7 @@ payload:
   - DOMAIN,cdn.dynamicyield.com
   - DOMAIN,cdn.ecomm.ui.com
   - DOMAIN,cdn.embed.ly
+  - DOMAIN,cdn.embedly.com
   - DOMAIN,cdn.equalweb.com
   - DOMAIN,cdn.european-alternatives.eu
   - DOMAIN,cdn.faire.com
@@ -1159,6 +1161,7 @@ payload:
   - DOMAIN,quriobot.com
   - DOMAIN,r.r10s.jp
   - DOMAIN,raw.github.com
+  - DOMAIN,rawmarkdown.cloudflareaccess.org
   - DOMAIN,re.reimu.net
   - DOMAIN,rebound.postmarkapp.com
   - DOMAIN,redircdn.com
@@ -1213,6 +1216,7 @@ payload:
   - DOMAIN,s.w.org
   - DOMAIN,s.wsj.net
   - DOMAIN,s0.wp.com
+  - DOMAIN,s1.divhunt.com
   - DOMAIN,s1.feedly.com
   - DOMAIN,s1.qwant.com
   - DOMAIN,s1.wp.com
@@ -1373,6 +1377,7 @@ payload:
   - DOMAIN,static.frostming.com
   - DOMAIN,static.getbutton.io
   - DOMAIN,static.gettyimages.com
+  - DOMAIN,static.global.visioncritical.com
   - DOMAIN,static.gnome.org
   - DOMAIN,static.gopro.com
   - DOMAIN,static.grammarly.com
@@ -1445,6 +1450,7 @@ payload:
   - DOMAIN,static.vocadb.net
   - DOMAIN,static.whatsapp.net
   - DOMAIN,static.zaobao.com
+  - DOMAIN,static.zaobao.com.sg
   - DOMAIN,static0.lottiefiles.com
   - DOMAIN,static1.lottiefiles.com
   - DOMAIN,static1.smartbear.co
@@ -2628,6 +2634,7 @@ payload:
   - DOMAIN-SUFFIX,gateway.originprotocol.com
   - DOMAIN-SUFFIX,gateway.serph.network
   - DOMAIN-SUFFIX,gcr.io
+  - DOMAIN-SUFFIX,gcr.si
   - DOMAIN-SUFFIX,gcx920110.com
   - DOMAIN-SUFFIX,ge.tt
   - DOMAIN-SUFFIX,geekprank.com
@@ -2837,6 +2844,8 @@ payload:
   - DOMAIN-SUFFIX,imglink.win
   - DOMAIN-SUFFIX,imgmrplay.xyz
   - DOMAIN-SUFFIX,imgsmail.ru
+  - DOMAIN-SUFFIX,imgtbl.com
+  - DOMAIN-SUFFIX,imgtp.com
   - DOMAIN-SUFFIX,imgyzzy.com
   - DOMAIN-SUFFIX,imkan.tv
   - DOMAIN-SUFFIX,in.applicationinsights.azure.com
@@ -2942,6 +2951,7 @@ payload:
   - DOMAIN-SUFFIX,joinmaidez.com
   - DOMAIN-SUFFIX,joox.com
   - DOMAIN-SUFFIX,js-agent.newrelic.com
+  - DOMAIN-SUFFIX,js.hubspot.com
   - DOMAIN-SUFFIX,js.hubspotfeedback.com
   - DOMAIN-SUFFIX,js.usemessages.com
   - DOMAIN-SUFFIX,jscloud.net
@@ -3505,6 +3515,7 @@ payload:
   - DOMAIN-SUFFIX,redditstatic.com
   - DOMAIN-SUFFIX,redtube.com
   - DOMAIN-SUFFIX,registerhulu.com
+  - DOMAIN-SUFFIX,registry.gitplac.si
   - DOMAIN-SUFFIX,releases.hashicorp.com
   - DOMAIN-SUFFIX,replicate.delivery
   - DOMAIN-SUFFIX,repo.anaconda.com
@@ -3606,6 +3617,7 @@ payload:
   - DOMAIN-SUFFIX,smartmediarep.com
   - DOMAIN-SUFFIX,smassets.net
   - DOMAIN-SUFFIX,smilecdn.co
+  - DOMAIN-SUFFIX,smushcdn.com
   - DOMAIN-SUFFIX,sndcdn.com
   - DOMAIN-SUFFIX,snowfiles.com
   - DOMAIN-SUFFIX,snzypic.com
@@ -3887,6 +3899,7 @@ payload:
   - DOMAIN-SUFFIX,usersfiles.com
   - DOMAIN-SUFFIX,userupload.in
   - DOMAIN-SUFFIX,userupload.net
+  - DOMAIN-SUFFIX,ut-assets.com
   - DOMAIN-SUFFIX,uuu.glass
   - DOMAIN-SUFFIX,uvcdn.com
   - DOMAIN-SUFFIX,v-cdn.net
@@ -4055,6 +4068,7 @@ payload:
   - DOMAIN-SUFFIX,world-files.com
   - DOMAIN-SUFFIX,worldbytez.com
   - DOMAIN-SUFFIX,wpcomstaging.com
+  - DOMAIN-SUFFIX,wpmucdn.com
   - DOMAIN-SUFFIX,wrzuta.pl
   - DOMAIN-SUFFIX,wsimg.com
   - DOMAIN-SUFFIX,wupfile.com

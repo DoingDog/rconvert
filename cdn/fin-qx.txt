@@ -1,5 +1,5 @@
-# Quantumult total line 2177
-# Last updated Thu 08/22/2024 22:11:35.91
+# Quantumult total line 2191
+# Last updated Sun 08/25/2024 22:10:15.85
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -148,6 +148,7 @@ HOST,assets.vercel.com,LIST
 HOST,assets.video.yahoo.net,LIST
 HOST,assets.videowise.com,LIST
 HOST,assets.vidyard.com,LIST
+HOST,assets.visioncritical.net,LIST
 HOST,assets.vogue.com,LIST
 HOST,assets.volvo.com,LIST
 HOST,assets.xbox.com,LIST
@@ -297,6 +298,7 @@ HOST,cdn.dribbble.com,LIST
 HOST,cdn.dynamicyield.com,LIST
 HOST,cdn.ecomm.ui.com,LIST
 HOST,cdn.embed.ly,LIST
+HOST,cdn.embedly.com,LIST
 HOST,cdn.equalweb.com,LIST
 HOST,cdn.european-alternatives.eu,LIST
 HOST,cdn.faire.com,LIST
@@ -1031,6 +1033,7 @@ HOST,publicsuffix.org,LIST
 HOST,quriobot.com,LIST
 HOST,r.r10s.jp,LIST
 HOST,raw.github.com,LIST
+HOST,rawmarkdown.cloudflareaccess.org,LIST
 HOST,re.reimu.net,LIST
 HOST,rebound.postmarkapp.com,LIST
 HOST,redircdn.com,LIST
@@ -1080,6 +1083,7 @@ HOST,s.w-x.co,LIST
 HOST,s.w.org,LIST
 HOST,s.wsj.net,LIST
 HOST,s0.wp.com,LIST
+HOST,s1.divhunt.com,LIST
 HOST,s1.feedly.com,LIST
 HOST,s1.qwant.com,LIST
 HOST,s1.wp.com,LIST
@@ -1250,6 +1254,7 @@ HOST,static.freeimages.com,LIST
 HOST,static.frostming.com,LIST
 HOST,static.getbutton.io,LIST
 HOST,static.gettyimages.com,LIST
+HOST,static.global.visioncritical.com,LIST
 HOST,static.gnome.org,LIST
 HOST,static.gopro.com,LIST
 HOST,static.grammarly.com,LIST
@@ -1329,6 +1334,7 @@ HOST,static.v2ex.com,LIST
 HOST,static.vocadb.net,LIST
 HOST,static.whatsapp.net,LIST
 HOST,static.zaobao.com,LIST
+HOST,static.zaobao.com.sg,LIST
 HOST,static0.lottiefiles.com,LIST
 HOST,static01.nyt.com,LIST
 HOST,static02.nyt.com,LIST
@@ -1700,6 +1706,7 @@ HOST-SUFFIX,gateway.originprotocol.com,LIST
 HOST-SUFFIX,gateway.pinata.cloud,LIST
 HOST-SUFFIX,gateway.serph.network,LIST
 HOST-SUFFIX,gcr.io,LIST
+HOST-SUFFIX,gcr.si,LIST
 HOST-SUFFIX,gentcdn.com,LIST
 HOST-SUFFIX,getcomposer.org,LIST
 HOST-SUFFIX,ggpht.com,LIST
@@ -1765,6 +1772,8 @@ HOST-SUFFIX,imgix.net,LIST
 HOST-SUFFIX,imglink.win,LIST
 HOST-SUFFIX,imgmrplay.xyz,LIST
 HOST-SUFFIX,imgsmail.ru,LIST
+HOST-SUFFIX,imgtbl.com,LIST
+HOST-SUFFIX,imgtp.com,LIST
 HOST-SUFFIX,imgyzzy.com,LIST
 HOST-SUFFIX,in.applicationinsights.azure.com,LIST
 HOST-SUFFIX,infura-ipfs.io,LIST
@@ -1831,6 +1840,7 @@ HOST-SUFFIX,jdbstatic.com,LIST
 HOST-SUFFIX,jinyingimage.com,LIST
 HOST-SUFFIX,jisuimage.com,LIST
 HOST-SUFFIX,jitpack.io,LIST
+HOST-SUFFIX,js.hubspot.com,LIST
 HOST-SUFFIX,js.hubspotfeedback.com,LIST
 HOST-SUFFIX,js.usemessages.com,LIST
 HOST-SUFFIX,jscloud.net,LIST
@@ -1989,6 +1999,7 @@ HOST-SUFFIX,reasoningtheory.net,LIST
 HOST-SUFFIX,redd.it,LIST
 HOST-SUFFIX,redditmedia.com,LIST
 HOST-SUFFIX,redditstatic.com,LIST
+HOST-SUFFIX,registry.gitplac.si,LIST
 HOST-SUFFIX,replicate.delivery,LIST
 HOST-SUFFIX,repo.anaconda.com,LIST
 HOST-SUFFIX,res.office365.com,LIST
@@ -2029,6 +2040,7 @@ HOST-SUFFIX,slack-imgs.com,LIST
 HOST-SUFFIX,slidesharecdn.com,LIST
 HOST-SUFFIX,smassets.net,LIST
 HOST-SUFFIX,smilecdn.co,LIST
+HOST-SUFFIX,smushcdn.com,LIST
 HOST-SUFFIX,sndcdn.com,LIST
 HOST-SUFFIX,snzypic.com,LIST
 HOST-SUFFIX,someonewhocares.org,LIST
@@ -2107,6 +2119,7 @@ HOST-SUFFIX,usercontent.dev,LIST
 HOST-SUFFIX,usercontent.goog,LIST
 HOST-SUFFIX,usercontent.google.com,LIST
 HOST-SUFFIX,usercontent.one,LIST
+HOST-SUFFIX,ut-assets.com,LIST
 HOST-SUFFIX,uvcdn.com,LIST
 HOST-SUFFIX,v-cdn.net,LIST
 HOST-SUFFIX,v-corp.staticblitz.com,LIST
@@ -2145,6 +2158,7 @@ HOST-SUFFIX,wixmp.com,LIST
 HOST-SUFFIX,wixstatic.com,LIST
 HOST-SUFFIX,workers.dev,LIST
 HOST-SUFFIX,wpcomstaging.com,LIST
+HOST-SUFFIX,wpmucdn.com,LIST
 HOST-SUFFIX,wsimg.com,LIST
 HOST-SUFFIX,www.s81c.com,LIST
 HOST-SUFFIX,xda-cdn.com,LIST
