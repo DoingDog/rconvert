@@ -1,5 +1,5 @@
-# Clash total line 5129
-# Last updated Sun 08/25/2024 22:10:25.59
+# Clash total line 5131
+# Last updated Tue 08/27/2024  2:33:35.25
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -388,6 +388,7 @@ payload:
   - DOMAIN,cdn.parsely.com
   - DOMAIN,cdn.pathfactory.com
   - DOMAIN,cdn.perfops.net
+  - DOMAIN,cdn.permutive.com
   - DOMAIN,cdn.piano.io
   - DOMAIN,cdn.pickystory.com
   - DOMAIN,cdn.pika.dev
@@ -804,6 +805,7 @@ payload:
   - DOMAIN,images-ext-1.discordapp.net
   - DOMAIN,images-ext-2.discordapp.net
   - DOMAIN,images.arigatotravel.com
+  - DOMAIN,images.bfmtv.com
   - DOMAIN,images.contentful.com
   - DOMAIN,images.design-editor.com
   - DOMAIN,images.dmca.com

@@ -1,5 +1,5 @@
-# Clash total line 4344
-# Last updated Sun 08/25/2024 22:10:34.00
+# Clash total line 4345
+# Last updated Tue 08/27/2024  2:33:42.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -9,6 +9,7 @@ payload:
   - DOMAIN,client.amplifi.com
   - DOMAIN,cn.download.nvidia.com
   - DOMAIN,download.jetbrains.com
+  - DOMAIN,gstore.val.manlaxy.com
   - DOMAIN,images-cn.ssl-images-amazon.com
   - DOMAIN,ip.istatmenus.app
   - DOMAIN,kc.kexinshe.com
