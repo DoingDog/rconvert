@@ -1,5 +1,5 @@
-# Clash total line 2193
-# Last updated Tue 08/27/2024  2:33:26.57
+# Clash total line 2199
+# Last updated Wed 08/28/2024 22:10:34.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -59,6 +59,7 @@ payload:
   - DOMAIN,assets-s3-us-east-1.ceros.com
   - DOMAIN,assets-v2.super.so
   - DOMAIN,assets-www.xbox.com
+  - DOMAIN,assets.aboutamazon.com
   - DOMAIN,assets.adobedtm.com
   - DOMAIN,assets.apilayer.com
   - DOMAIN,assets.auth.magic.link
@@ -81,6 +82,7 @@ payload:
   - DOMAIN,assets.codepen.io
   - DOMAIN,assets.coinbase.com
   - DOMAIN,assets.coingecko.com
+  - DOMAIN,assets.context.ly
   - DOMAIN,assets.convertkit.com
   - DOMAIN,assets.dnsfilter.com
   - DOMAIN,assets.dwncdn.net
@@ -701,6 +703,7 @@ payload:
   - DOMAIN,image.theblockbeats.info
   - DOMAIN,image.thefly.com
   - DOMAIN,image.tmdb.org
+  - DOMAIN,image.westinyou.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
   - DOMAIN,images-assets.nasa.gov
@@ -795,7 +798,6 @@ payload:
   - DOMAIN,img2.tnaflix.com
   - DOMAIN,img2.xiangbinjun.com
   - DOMAIN,img3.lltaohuaxiang.com
-  - DOMAIN,imgcdn.91pic.org
   - DOMAIN,imgix.setapp.com
   - DOMAIN,imgproxy.fourthwall.com
   - DOMAIN,imgrs.apkcombo.com
@@ -1507,6 +1509,7 @@ payload:
   - DOMAIN-SUFFIX,4cdn.org
   - DOMAIN-SUFFIX,4everland.io
   - DOMAIN-SUFFIX,7mmtv.tv
+  - DOMAIN-SUFFIX,91pic.org
   - DOMAIN-SUFFIX,98avcdn.xyz
   - DOMAIN-SUFFIX,99av.tv
   - DOMAIN-SUFFIX,9cache.com
@@ -1532,6 +1535,7 @@ payload:
   - DOMAIN-SUFFIX,aspnetcdn.com
   - DOMAIN-SUFFIX,assets-servd.host
   - DOMAIN-SUFFIX,assets-yammer.com
+  - DOMAIN-SUFFIX,assets.adidas.com
   - DOMAIN-SUFFIX,assets.digitalocean.com
   - DOMAIN-SUFFIX,assets.getpocket.com
   - DOMAIN-SUFFIX,assets.heroku.com
@@ -1726,6 +1730,7 @@ payload:
   - DOMAIN-SUFFIX,gitlab-static.net
   - DOMAIN-SUFFIX,gitlab.io
   - DOMAIN-SUFFIX,gitpage.si
+  - DOMAIN-SUFFIX,glass.adidas.com
   - DOMAIN-SUFFIX,glbimg.com
   - DOMAIN-SUFFIX,googleusercontent.com
   - DOMAIN-SUFFIX,gravatar.com
@@ -1767,6 +1772,7 @@ payload:
   - DOMAIN-SUFFIX,images.androeed.ru
   - DOMAIN-SUFFIX,images.arcpublishing.com
   - DOMAIN-SUFFIX,imageshack.us
+  - DOMAIN-SUFFIX,img-dpreview.com
   - DOMAIN-SUFFIX,img1.acsta.net
   - DOMAIN-SUFFIX,img2.acsta.net
   - DOMAIN-SUFFIX,img3.acsta.net

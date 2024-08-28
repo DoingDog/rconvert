@@ -1,5 +1,5 @@
-# Clash total line 4345
-# Last updated Tue 08/27/2024  2:33:42.37
+# Clash total line 4346
+# Last updated Wed 08/28/2024 22:10:49.80
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -2186,6 +2186,7 @@ payload:
   - DOMAIN-SUFFIX,kouclo.com
   - DOMAIN-SUFFIX,koudai.com
   - DOMAIN-SUFFIX,koudai8.com
+  - DOMAIN-SUFFIX,koyso.com
   - DOMAIN-SUFFIX,kq7.com
   - DOMAIN-SUFFIX,ks-cdn.com
   - DOMAIN-SUFFIX,ks-cdn1.com

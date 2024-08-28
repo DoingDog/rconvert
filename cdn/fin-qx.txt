@@ -1,5 +1,5 @@
-# Quantumult total line 2193
-# Last updated Tue 08/27/2024  2:33:26.54
+# Quantumult total line 2199
+# Last updated Wed 08/28/2024 22:10:34.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -58,6 +58,7 @@ HOST,assets-production.packagecloud.io,LIST
 HOST,assets-s3-us-east-1.ceros.com,LIST
 HOST,assets-v2.super.so,LIST
 HOST,assets-www.xbox.com,LIST
+HOST,assets.aboutamazon.com,LIST
 HOST,assets.adobedtm.com,LIST
 HOST,assets.apilayer.com,LIST
 HOST,assets.auth.magic.link,LIST
@@ -80,6 +81,7 @@ HOST,assets.clever-cloud.com,LIST
 HOST,assets.codepen.io,LIST
 HOST,assets.coinbase.com,LIST
 HOST,assets.coingecko.com,LIST
+HOST,assets.context.ly,LIST
 HOST,assets.convertkit.com,LIST
 HOST,assets.dnsfilter.com,LIST
 HOST,assets.dwncdn.net,LIST
@@ -700,6 +702,7 @@ HOST,image.status.io,LIST
 HOST,image.theblockbeats.info,LIST
 HOST,image.thefly.com,LIST
 HOST,image.tmdb.org,LIST
+HOST,image.westinyou.com,LIST
 HOST,imagehost.player.fm,LIST
 HOST,imageio.forbes.com,LIST
 HOST,images-assets.nasa.gov,LIST
@@ -794,7 +797,6 @@ HOST,img1.ak.crunchyroll.com,LIST
 HOST,img2.tnaflix.com,LIST
 HOST,img2.xiangbinjun.com,LIST
 HOST,img3.lltaohuaxiang.com,LIST
-HOST,imgcdn.91pic.org,LIST
 HOST,imgix.setapp.com,LIST
 HOST,imgproxy.fourthwall.com,LIST
 HOST,imgrs.apkcombo.com,LIST
@@ -1506,6 +1508,7 @@ HOST-SUFFIX,1passwordusercontent.eu,LIST
 HOST-SUFFIX,4cdn.org,LIST
 HOST-SUFFIX,4everland.io,LIST
 HOST-SUFFIX,7mmtv.tv,LIST
+HOST-SUFFIX,91pic.org,LIST
 HOST-SUFFIX,98avcdn.xyz,LIST
 HOST-SUFFIX,99av.tv,LIST
 HOST-SUFFIX,9cache.com,LIST
@@ -1531,6 +1534,7 @@ HOST-SUFFIX,archive.org,LIST
 HOST-SUFFIX,aspnetcdn.com,LIST
 HOST-SUFFIX,assets-servd.host,LIST
 HOST-SUFFIX,assets-yammer.com,LIST
+HOST-SUFFIX,assets.adidas.com,LIST
 HOST-SUFFIX,assets.digitalocean.com,LIST
 HOST-SUFFIX,assets.getpocket.com,LIST
 HOST-SUFFIX,assets.heroku.com,LIST
@@ -1725,6 +1729,7 @@ HOST-SUFFIX,githubusercontent.com,LIST
 HOST-SUFFIX,gitlab-static.net,LIST
 HOST-SUFFIX,gitlab.io,LIST
 HOST-SUFFIX,gitpage.si,LIST
+HOST-SUFFIX,glass.adidas.com,LIST
 HOST-SUFFIX,glbimg.com,LIST
 HOST-SUFFIX,googleusercontent.com,LIST
 HOST-SUFFIX,gravatar.com,LIST
@@ -1766,6 +1771,7 @@ HOST-SUFFIX,images-iherb.com,LIST
 HOST-SUFFIX,images.androeed.ru,LIST
 HOST-SUFFIX,images.arcpublishing.com,LIST
 HOST-SUFFIX,imageshack.us,LIST
+HOST-SUFFIX,img-dpreview.com,LIST
 HOST-SUFFIX,img1.acsta.net,LIST
 HOST-SUFFIX,img2.acsta.net,LIST
 HOST-SUFFIX,img3.acsta.net,LIST
