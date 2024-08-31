@@ -1,5 +1,5 @@
-# Quantumult total line 5121
-# Last updated Wed 08/28/2024 22:10:42.62
+# Quantumult total line 5119
+# Last updated Sat 08/31/2024 22:12:18.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -724,7 +724,6 @@ HOST,geoip-js.com,LIST
 HOST,get.pixelexperience.org,LIST
 HOST,gfonts.jifi.co,LIST
 HOST,gfx-data.news-engineering.aws.wapo.pub,LIST
-HOST,ghavatars.staticblitz.com,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
 HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
@@ -1053,7 +1052,6 @@ HOST,npm.antfu.dev,LIST
 HOST,npm.im,LIST
 HOST,npm.jsr.io,LIST
 HOST,npmgraph.js.org,LIST
-HOST,nr.staticblitz.com,LIST
 HOST,o.n1mp.org,LIST
 HOST,object.innei.in,LIST
 HOST,objects.g0v.social,LIST
@@ -1472,6 +1470,7 @@ HOST,staticctf.ubisoft.com,LIST
 HOST,staticmap.openstreetmap.de,LIST
 HOST,statics-xbc-eas.xbox.com,LIST
 HOST,statics.goorm.io,LIST
+HOST,statics.teams.cdn.office.net,LIST
 HOST,staticw2.yotpo.com,LIST
 HOST,stats.snipaste.com,LIST
 HOST,steam.apac.qtlglb.com,LIST
@@ -1501,6 +1500,7 @@ HOST,t3.picb.cc,LIST
 HOST,t4.picb.cc,LIST
 HOST,talk.hyvor.com,LIST
 HOST,talk.washingtonpost.com,LIST
+HOST,telemetry.vercel.com,LIST
 HOST,th.bing.com,LIST
 HOST,themes.fourthwall.com,LIST
 HOST,thumbnail.missav.com,LIST
@@ -1515,6 +1515,7 @@ HOST,ton.local.twitter.com,LIST
 HOST,topbar-static.piano.io,LIST
 HOST,torrindex.net,LIST
 HOST,tracker.cdnbye.com,LIST
+HOST,typescript-eslint.io,LIST
 HOST,typescript.azureedge.net,LIST
 HOST,typescript.visualstudio.com,LIST
 HOST,ubistatic-a.ubisoft.com,LIST
@@ -1861,7 +1862,6 @@ HOST-SUFFIX,bytebucket.org,LIST
 HOST-SUFFIX,bytedapm.com,LIST
 HOST-SUFFIX,byteoversea.com,LIST
 HOST-SUFFIX,c-dn.net,LIST
-HOST-SUFFIX,c.staticblitz.com,LIST
 HOST-SUFFIX,c4assets.com,LIST
 HOST-SUFFIX,cabletv.com.hk,LIST
 HOST-SUFFIX,callhulu.com,LIST
@@ -2990,6 +2990,7 @@ HOST-SUFFIX,kingfiles.net,LIST
 HOST-SUFFIX,kinja-img.com,LIST
 HOST-SUFFIX,kinja-static.com,LIST
 HOST-SUFFIX,kinsta.page,LIST
+HOST-SUFFIX,kirafile.com,LIST
 HOST-SUFFIX,kk.stream,LIST
 HOST-SUFFIX,kkbox-prime.com,LIST
 HOST-SUFFIX,kkbox.com,LIST
@@ -3270,7 +3271,6 @@ HOST-SUFFIX,nowe.com,LIST
 HOST-SUFFIX,nowe.hk,LIST
 HOST-SUFFIX,nowestatic.com,LIST
 HOST-SUFFIX,nowvideo.club,LIST
-HOST-SUFFIX,npm.staticblitz.com,LIST
 HOST-SUFFIX,npmfs.com,LIST
 HOST-SUFFIX,nsstatic.net,LIST
 HOST-SUFFIX,nypost.com,LIST
@@ -3431,6 +3431,7 @@ HOST-SUFFIX,proof.ovh.us,LIST
 HOST-SUFFIX,propvideo.net,LIST
 HOST-SUFFIX,proxy.startpage.com,LIST
 HOST-SUFFIX,proxy.ustclug.org,LIST
+HOST-SUFFIX,proxy1.startpage.com,LIST
 HOST-SUFFIX,proxy2.startpage.com,LIST
 HOST-SUFFIX,pscdn.co,LIST
 HOST-SUFFIX,pscp.tv,LIST
@@ -3689,6 +3690,7 @@ HOST-SUFFIX,static.palgrave.com,LIST
 HOST-SUFFIX,static2cdn.hubspot.com,LIST
 HOST-SUFFIX,statically.io,LIST
 HOST-SUFFIX,staticaly.com,LIST
+HOST-SUFFIX,staticblitz.com,LIST
 HOST-SUFFIX,staticflickr.com,LIST
 HOST-SUFFIX,staticimgly.com,LIST
 HOST-SUFFIX,staticworld.net,LIST
@@ -3731,7 +3733,6 @@ HOST-SUFFIX,swiftypecdn.com,LIST
 HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,syfy.com,LIST
 HOST-SUFFIX,syncs.online,LIST
-HOST-SUFFIX,t.staticblitz.com,LIST
 HOST-SUFFIX,takefile.link,LIST
 HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,tdesktop.com,LIST
@@ -3909,7 +3910,6 @@ HOST-SUFFIX,ut-assets.com,LIST
 HOST-SUFFIX,uuu.glass,LIST
 HOST-SUFFIX,uvcdn.com,LIST
 HOST-SUFFIX,v-cdn.net,LIST
-HOST-SUFFIX,v-corp.staticblitz.com,LIST
 HOST-SUFFIX,v.smtcdns.com,LIST
 HOST-SUFFIX,v.smtcdns.net,LIST
 HOST-SUFFIX,v2ex.co,LIST
@@ -4025,10 +4025,8 @@ HOST-SUFFIX,vultrobjects.com,LIST
 HOST-SUFFIX,vusercontent.net,LIST
 HOST-SUFFIX,vx-cdn.com,LIST
 HOST-SUFFIX,vzw.com,LIST
-HOST-SUFFIX,w-corp.staticblitz.com,LIST
+HOST-SUFFIX,w-corp-staticblitz.com,LIST
 HOST-SUFFIX,w-credentialless-staticblitz.com,LIST
-HOST-SUFFIX,w-credentialless.staticblitz.com,LIST
-HOST-SUFFIX,w.staticblitz.com,LIST
 HOST-SUFFIX,w3s.link,LIST
 HOST-SUFFIX,wallhaven.cc,LIST
 HOST-SUFFIX,walmartimages.com,LIST

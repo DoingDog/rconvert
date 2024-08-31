@@ -1,5 +1,5 @@
-# Quantumult total line 2199
-# Last updated Wed 08/28/2024 22:10:34.14
+# Quantumult total line 2197
+# Last updated Sat 08/31/2024 22:12:09.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -634,7 +634,6 @@ HOST,genesis-cdn.ff.com,LIST
 HOST,geoip-js.com,LIST
 HOST,gfonts.jifi.co,LIST
 HOST,gfx-data.news-engineering.aws.wapo.pub,LIST
-HOST,ghavatars.staticblitz.com,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
 HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
@@ -929,7 +928,6 @@ HOST,npm.antfu.dev,LIST
 HOST,npm.im,LIST
 HOST,npm.jsr.io,LIST
 HOST,npmgraph.js.org,LIST
-HOST,nr.staticblitz.com,LIST
 HOST,o.n1mp.org,LIST
 HOST,object.innei.in,LIST
 HOST,objects.g0v.social,LIST
@@ -1363,6 +1361,7 @@ HOST,staticmap.openstreetmap.de,LIST
 HOST,statics-marketingsites-eas-ms-com.akamaized.net,LIST
 HOST,statics-xbc-eas.xbox.com,LIST
 HOST,statics.goorm.io,LIST
+HOST,statics.teams.cdn.office.net,LIST
 HOST,staticw2.yotpo.com,LIST
 HOST,steamcdn-a.akamaihd.net,LIST
 HOST,steamusercontent-a.akamaihd.net,LIST
@@ -1391,6 +1390,7 @@ HOST,t4.picb.cc,LIST
 HOST,talk.hyvor.com,LIST
 HOST,talk.washingtonpost.com,LIST
 HOST,telemetry.nextjs.org,LIST
+HOST,telemetry.vercel.com,LIST
 HOST,th.bing.com,LIST
 HOST,themes.fourthwall.com,LIST
 HOST,thumbnail.missav.com,LIST
@@ -1409,6 +1409,7 @@ HOST,tracker.cdnbye.com,LIST
 HOST,tvdownloaddw-a.akamaihd.net,LIST
 HOST,twemoji.maxcdn.com,LIST
 HOST,typeface.nyt.com,LIST
+HOST,typescript-eslint.io,LIST
 HOST,typescript.azureedge.net,LIST
 HOST,typescript.visualstudio.com,LIST
 HOST,ubistatic-a.ubisoft.com,LIST
@@ -1568,7 +1569,6 @@ HOST-SUFFIX,bundle.thimatic-apps.com,LIST
 HOST-SUFFIX,bytebucket.org,LIST
 HOST-SUFFIX,bytedapm.com,LIST
 HOST-SUFFIX,c-dn.net,LIST
-HOST-SUFFIX,c.staticblitz.com,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn-one.com,LIST
@@ -1863,6 +1863,7 @@ HOST-SUFFIX,kc-usercontent.com,LIST
 HOST-SUFFIX,kinja-img.com,LIST
 HOST-SUFFIX,kinja-static.com,LIST
 HOST-SUFFIX,kinsta.page,LIST
+HOST-SUFFIX,kirafile.com,LIST
 HOST-SUFFIX,klarnacdn.net,LIST
 HOST-SUFFIX,kuaikan-cdn4.com,LIST
 HOST-SUFFIX,kwcdn.com,LIST
@@ -1926,7 +1927,6 @@ HOST-SUFFIX,nordcdn.com,LIST
 HOST-SUFFIX,notion-static.com,LIST
 HOST-SUFFIX,now.sh,LIST
 HOST-SUFFIX,nowestatic.com,LIST
-HOST-SUFFIX,npm.staticblitz.com,LIST
 HOST-SUFFIX,npmfs.com,LIST
 HOST-SUFFIX,oaistatic.com,LIST
 HOST-SUFFIX,oaiusercontent.com,LIST
@@ -1981,6 +1981,7 @@ HOST-SUFFIX,privacy-gateway.cloudflare.com,LIST
 HOST-SUFFIX,prod.public.atl-paas.net,LIST
 HOST-SUFFIX,proxy.startpage.com,LIST
 HOST-SUFFIX,proxy.ustclug.org,LIST
+HOST-SUFFIX,proxy1.startpage.com,LIST
 HOST-SUFFIX,proxy2.startpage.com,LIST
 HOST-SUFFIX,pstatic.net,LIST
 HOST-SUFFIX,pstorage.space,LIST
@@ -2067,6 +2068,7 @@ HOST-SUFFIX,static.microsoft,LIST
 HOST-SUFFIX,static2cdn.hubspot.com,LIST
 HOST-SUFFIX,statically.io,LIST
 HOST-SUFFIX,staticaly.com,LIST
+HOST-SUFFIX,staticblitz.com,LIST
 HOST-SUFFIX,staticflickr.com,LIST
 HOST-SUFFIX,staticimgly.com,LIST
 HOST-SUFFIX,staticworld.net,LIST
@@ -2090,7 +2092,6 @@ HOST-SUFFIX,surrit.com,LIST
 HOST-SUFFIX,susercontent.com,LIST
 HOST-SUFFIX,swiftypecdn.com,LIST
 HOST-SUFFIX,sxccdn.com,LIST
-HOST-SUFFIX,t.staticblitz.com,LIST
 HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,tedcdn.com,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
@@ -2130,7 +2131,6 @@ HOST-SUFFIX,usercontent.one,LIST
 HOST-SUFFIX,ut-assets.com,LIST
 HOST-SUFFIX,uvcdn.com,LIST
 HOST-SUFFIX,v-cdn.net,LIST
-HOST-SUFFIX,v-corp.staticblitz.com,LIST
 HOST-SUFFIX,v2ex.co,LIST
 HOST-SUFFIX,vanillicon.com,LIST
 HOST-SUFFIX,vercel.app,LIST
@@ -2147,10 +2147,8 @@ HOST-SUFFIX,vscode-unpkg.net,LIST
 HOST-SUFFIX,vsmarketplacebadges.dev,LIST
 HOST-SUFFIX,vusercontent.net,LIST
 HOST-SUFFIX,vx-cdn.com,LIST
-HOST-SUFFIX,w-corp.staticblitz.com,LIST
+HOST-SUFFIX,w-corp-staticblitz.com,LIST
 HOST-SUFFIX,w-credentialless-staticblitz.com,LIST
-HOST-SUFFIX,w-credentialless.staticblitz.com,LIST
-HOST-SUFFIX,w.staticblitz.com,LIST
 HOST-SUFFIX,w3s.link,LIST
 HOST-SUFFIX,walmartimages.com,LIST
 HOST-SUFFIX,wdfiles.com,LIST

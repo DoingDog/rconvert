@@ -1,5 +1,5 @@
-# Clash total line 5136
-# Last updated Wed 08/28/2024 22:10:42.67
+# Clash total line 5134
+# Last updated Sat 08/31/2024 22:12:18.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -725,7 +725,6 @@ payload:
   - DOMAIN,get.pixelexperience.org
   - DOMAIN,gfonts.jifi.co
   - DOMAIN,gfx-data.news-engineering.aws.wapo.pub
-  - DOMAIN,ghavatars.staticblitz.com
   - DOMAIN,gitpkg-fork.vercel.sh
   - DOMAIN,glyph.medium.com
   - DOMAIN,gmedia.playstation.com
@@ -1054,7 +1053,6 @@ payload:
   - DOMAIN,npm.im
   - DOMAIN,npm.jsr.io
   - DOMAIN,npmgraph.js.org
-  - DOMAIN,nr.staticblitz.com
   - DOMAIN,o.n1mp.org
   - DOMAIN,object.innei.in
   - DOMAIN,objects.g0v.social
@@ -1473,6 +1471,7 @@ payload:
   - DOMAIN,staticmap.openstreetmap.de
   - DOMAIN,statics-xbc-eas.xbox.com
   - DOMAIN,statics.goorm.io
+  - DOMAIN,statics.teams.cdn.office.net
   - DOMAIN,staticw2.yotpo.com
   - DOMAIN,stats.snipaste.com
   - DOMAIN,steam.apac.qtlglb.com
@@ -1502,6 +1501,7 @@ payload:
   - DOMAIN,t4.picb.cc
   - DOMAIN,talk.hyvor.com
   - DOMAIN,talk.washingtonpost.com
+  - DOMAIN,telemetry.vercel.com
   - DOMAIN,th.bing.com
   - DOMAIN,themes.fourthwall.com
   - DOMAIN,thumbnail.missav.com
@@ -1516,6 +1516,7 @@ payload:
   - DOMAIN,topbar-static.piano.io
   - DOMAIN,torrindex.net
   - DOMAIN,tracker.cdnbye.com
+  - DOMAIN,typescript-eslint.io
   - DOMAIN,typescript.azureedge.net
   - DOMAIN,typescript.visualstudio.com
   - DOMAIN,ubistatic-a.ubisoft.com
@@ -1862,7 +1863,6 @@ payload:
   - DOMAIN-SUFFIX,bytedapm.com
   - DOMAIN-SUFFIX,byteoversea.com
   - DOMAIN-SUFFIX,c-dn.net
-  - DOMAIN-SUFFIX,c.staticblitz.com
   - DOMAIN-SUFFIX,c4assets.com
   - DOMAIN-SUFFIX,cabletv.com.hk
   - DOMAIN-SUFFIX,callhulu.com
@@ -2991,6 +2991,7 @@ payload:
   - DOMAIN-SUFFIX,kinja-img.com
   - DOMAIN-SUFFIX,kinja-static.com
   - DOMAIN-SUFFIX,kinsta.page
+  - DOMAIN-SUFFIX,kirafile.com
   - DOMAIN-SUFFIX,kk.stream
   - DOMAIN-SUFFIX,kkbox-prime.com
   - DOMAIN-SUFFIX,kkbox.com
@@ -3271,7 +3272,6 @@ payload:
   - DOMAIN-SUFFIX,nowe.hk
   - DOMAIN-SUFFIX,nowestatic.com
   - DOMAIN-SUFFIX,nowvideo.club
-  - DOMAIN-SUFFIX,npm.staticblitz.com
   - DOMAIN-SUFFIX,npmfs.com
   - DOMAIN-SUFFIX,nsstatic.net
   - DOMAIN-SUFFIX,nypost.com
@@ -3432,6 +3432,7 @@ payload:
   - DOMAIN-SUFFIX,propvideo.net
   - DOMAIN-SUFFIX,proxy.startpage.com
   - DOMAIN-SUFFIX,proxy.ustclug.org
+  - DOMAIN-SUFFIX,proxy1.startpage.com
   - DOMAIN-SUFFIX,proxy2.startpage.com
   - DOMAIN-SUFFIX,pscdn.co
   - DOMAIN-SUFFIX,pscp.tv
@@ -3690,6 +3691,7 @@ payload:
   - DOMAIN-SUFFIX,static2cdn.hubspot.com
   - DOMAIN-SUFFIX,statically.io
   - DOMAIN-SUFFIX,staticaly.com
+  - DOMAIN-SUFFIX,staticblitz.com
   - DOMAIN-SUFFIX,staticflickr.com
   - DOMAIN-SUFFIX,staticimgly.com
   - DOMAIN-SUFFIX,staticworld.net
@@ -3732,7 +3734,6 @@ payload:
   - DOMAIN-SUFFIX,sxccdn.com
   - DOMAIN-SUFFIX,syfy.com
   - DOMAIN-SUFFIX,syncs.online
-  - DOMAIN-SUFFIX,t.staticblitz.com
   - DOMAIN-SUFFIX,takefile.link
   - DOMAIN-SUFFIX,tapecontent.net
   - DOMAIN-SUFFIX,tdesktop.com
@@ -3910,7 +3911,6 @@ payload:
   - DOMAIN-SUFFIX,uuu.glass
   - DOMAIN-SUFFIX,uvcdn.com
   - DOMAIN-SUFFIX,v-cdn.net
-  - DOMAIN-SUFFIX,v-corp.staticblitz.com
   - DOMAIN-SUFFIX,v.smtcdns.com
   - DOMAIN-SUFFIX,v.smtcdns.net
   - DOMAIN-SUFFIX,v2ex.co
@@ -4026,10 +4026,8 @@ payload:
   - DOMAIN-SUFFIX,vusercontent.net
   - DOMAIN-SUFFIX,vx-cdn.com
   - DOMAIN-SUFFIX,vzw.com
-  - DOMAIN-SUFFIX,w-corp.staticblitz.com
+  - DOMAIN-SUFFIX,w-corp-staticblitz.com
   - DOMAIN-SUFFIX,w-credentialless-staticblitz.com
-  - DOMAIN-SUFFIX,w-credentialless.staticblitz.com
-  - DOMAIN-SUFFIX,w.staticblitz.com
   - DOMAIN-SUFFIX,w3s.link
   - DOMAIN-SUFFIX,wallhaven.cc
   - DOMAIN-SUFFIX,walmartimages.com
