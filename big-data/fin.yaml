@@ -1,5 +1,5 @@
-# Clash total line 5134
-# Last updated Sat 08/31/2024 22:12:18.18
+# Clash total line 5139
+# Last updated Sun 09/01/2024 22:11:37.41
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -241,7 +241,6 @@ payload:
   - DOMAIN,cdn-bundler.nice-team.net
   - DOMAIN,cdn-c.leavemealone.com
   - DOMAIN,cdn-client.medium.com
-  - DOMAIN,cdn-cookieyes.com
   - DOMAIN,cdn-edge.karte.io
   - DOMAIN,cdn-eu.dynamicyield.com
   - DOMAIN,cdn-fck.tnaflix.com
@@ -521,6 +520,7 @@ payload:
   - DOMAIN,client.px-cloud.net
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloudflare.tv
+  - DOMAIN,cms-assets.nodecraft.com
   - DOMAIN,cms-assets.webediamovies.pro
   - DOMAIN,cms-cdn.now.gg
   - DOMAIN,code.benco.io
@@ -531,6 +531,7 @@ payload:
   - DOMAIN,codeload.github.com
   - DOMAIN,compass-ssl.xbox.com
   - DOMAIN,components.clever-cloud.com
+  - DOMAIN,config.extension.grammarly.com
   - DOMAIN,confluence-v1.prod.atl-paas.net
   - DOMAIN,connect.facebook.net
   - DOMAIN,connectivitycheck.android.com
@@ -1892,6 +1893,7 @@ payload:
   - DOMAIN-SUFFIX,cbssvideo.com
   - DOMAIN-SUFFIX,cbstelevisioncity.com
   - DOMAIN-SUFFIX,cdkworkshop.com
+  - DOMAIN-SUFFIX,cdn-cookieyes.com
   - DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co
   - DOMAIN-SUFFIX,cdn-lfs.huggingface.co
   - DOMAIN-SUFFIX,cdn-one.com
@@ -3477,6 +3479,8 @@ payload:
   - DOMAIN-SUFFIX,qobuz.tv
   - DOMAIN-SUFFIX,qobuz.us
   - DOMAIN-SUFFIX,qooqlevideo.com
+  - DOMAIN-SUFFIX,quip-cdn.com
+  - DOMAIN-SUFFIX,quip-marketing.com
   - DOMAIN-SUFFIX,quobuz.com
   - DOMAIN-SUFFIX,quobuz.fr
   - DOMAIN-SUFFIX,quoracdn.net
@@ -3619,6 +3623,7 @@ payload:
   - DOMAIN-SUFFIX,skygo.co.nz
   - DOMAIN-SUFFIX,skyking.com.tw
   - DOMAIN-SUFFIX,skypack.dev
+  - DOMAIN-SUFFIX,skypeassets.com
   - DOMAIN-SUFFIX,slack-edge.com
   - DOMAIN-SUFFIX,slack-imgs.com
   - DOMAIN-SUFFIX,slidesharecdn.com
