@@ -1,5 +1,5 @@
-# Clash total line 4346
-# Last updated Sun 09/01/2024 22:11:45.76
+# Clash total line 4347
+# Last updated Wed 09/04/2024 22:11:08.52
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -459,6 +459,7 @@ payload:
   - DOMAIN-SUFFIX,antgroup.com
   - DOMAIN-SUFFIX,anthelion.me
   - DOMAIN-SUFFIX,anticheatexpert.com
+  - DOMAIN-SUFFIX,antpcdn.com
   - DOMAIN-SUFFIX,antutu.com
   - DOMAIN-SUFFIX,anxia.com
   - DOMAIN-SUFFIX,aotrip.net

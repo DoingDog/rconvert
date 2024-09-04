@@ -1,5 +1,5 @@
-# Quantumult total line 5124
-# Last updated Sun 09/01/2024 22:11:37.38
+# Quantumult total line 5130
+# Last updated Wed 09/04/2024 22:11:00.72
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -353,6 +353,7 @@ HOST,cdn.joincommunity.xyz,LIST
 HOST,cdn.jolipage.co,LIST
 HOST,cdn.judge.me,LIST
 HOST,cdn.kagi.com,LIST
+HOST,cdn.kinopio.club,LIST
 HOST,cdn.kinsta.com,LIST
 HOST,cdn.koala.live,LIST
 HOST,cdn.kobo.com,LIST
@@ -700,6 +701,7 @@ HOST,files.slack.com,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
 HOST,filestore.fortinet.com,LIST
+HOST,firefox.settings.services.mozilla.com,LIST
 HOST,flows.trysavvy.com,LIST
 HOST,fontbit.io,LIST
 HOST,fonts-api.wp.com,LIST
@@ -1074,6 +1076,7 @@ HOST,openapi.vercel.sh,LIST
 HOST,openseauserdata.com,LIST
 HOST,opensignal.cdnbye.com,LIST
 HOST,opt.moovweb.net,LIST
+HOST,optimizationguide-pa.googleapis.com,LIST
 HOST,optimizely.com,LIST
 HOST,optimizely.wsj.net,LIST
 HOST,organizer.bizzabo.com,LIST
@@ -1388,6 +1391,7 @@ HOST,static.ietf.org,LIST
 HOST,static.incapsula.com,LIST
 HOST,static.independent.co.uk,LIST
 HOST,static.infomaniak.ch,LIST
+HOST,static.institution.grammarly.com,LIST
 HOST,static.itch.io,LIST
 HOST,static.killedbygoogle.com,LIST
 HOST,static.klaviyo.com,LIST
@@ -1501,6 +1505,7 @@ HOST,t3.picb.cc,LIST
 HOST,t4.picb.cc,LIST
 HOST,talk.hyvor.com,LIST
 HOST,talk.washingtonpost.com,LIST
+HOST,telemetry.1passwordservices.com,LIST
 HOST,telemetry.vercel.com,LIST
 HOST,th.bing.com,LIST
 HOST,themes.fourthwall.com,LIST
@@ -2872,6 +2877,7 @@ HOST-SUFFIX,intl-rcd.iqiyi.com,LIST
 HOST-SUFFIX,intl-subscription.iqiyi.com,LIST
 HOST-SUFFIX,intl.iqiyi.com,LIST
 HOST-SUFFIX,intoupload.net,LIST
+HOST-SUFFIX,intuitcdn.net,LIST
 HOST-SUFFIX,invisionapp-cdn.com,LIST
 HOST-SUFFIX,iole.tv,LIST
 HOST-SUFFIX,ipfs-gateway.cloud,LIST
