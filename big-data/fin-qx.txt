@@ -1,5 +1,5 @@
-# Quantumult total line 5130
-# Last updated Wed 09/04/2024 22:11:00.72
+# Quantumult total line 5143
+# Last updated Sat 09/07/2024 22:10:15.35
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -48,6 +48,8 @@ HOST,app.cookieyes.com,LIST
 HOST,app.roboflow.com,LIST
 HOST,app.viral-loops.com,LIST
 HOST,appassets.mvtdev.com,LIST
+HOST,apple-relay.cloudflare.com,LIST
+HOST,apple-relay.fastly-edge.com,LIST
 HOST,apple.comscoreresearch.com,LIST
 HOST,apps.profitihub.com,LIST
 HOST,archive.mozilla.org,LIST
@@ -551,6 +553,9 @@ HOST,content6.steampowered.com,LIST
 HOST,content7.steampowered.com,LIST
 HOST,content8.steampowered.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
+HOST,cp2.cloudflare.com,LIST
+HOST,cp3.cloudflare.com,LIST
+HOST,cp4.cloudflare.com,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,creativajs.altervista.org,LIST
 HOST,crl.usertrust.com,LIST
@@ -789,6 +794,8 @@ HOST,image.crisp.chat,LIST
 HOST,image.dooo.ng,LIST
 HOST,image.email.microsoftemail.com,LIST
 HOST,image.freepik.com,LIST
+HOST,image.gyutto.com,LIST
+HOST,image.gyutto.jp,LIST
 HOST,image.ibb.co,LIST
 HOST,image.lichess1.org,LIST
 HOST,image.nmb.best,LIST
@@ -839,6 +846,7 @@ HOST,images.web3.storage,LIST
 HOST,images.weserv.nl,LIST
 HOST,images.wikia.com,LIST
 HOST,images.wsj.net,LIST
+HOST,images1.vinted.net,LIST
 HOST,images7.design-editor.com,LIST
 HOST,images8.design-editor.com,LIST
 HOST,imagizer.imageshack.com,LIST
@@ -877,6 +885,7 @@ HOST,img.reimu.net,LIST
 HOST,img.represent.com,LIST
 HOST,img.riskified.com,LIST
 HOST,img.shana-laopo.xyz,LIST
+HOST,img.shoplineapp.com,LIST
 HOST,img.skk.moe,LIST
 HOST,img.sparknotes.com,LIST
 HOST,img.supjav.com,LIST
@@ -949,6 +958,7 @@ HOST,m-cdn.phonearena.com,LIST
 HOST,m.wsj.net,LIST
 HOST,mac-release-static.stash.ws,LIST
 HOST,maps.geoapify.com,LIST
+HOST,marketplace-web-assets.vinted.com,LIST
 HOST,mastodon-static.miao.dev,LIST
 HOST,maven.google.com,LIST
 HOST,maven.kr328.app,LIST
@@ -1124,6 +1134,7 @@ HOST,pics.x-n-x-x.pro,LIST
 HOST,pkg-size.dev,LIST
 HOST,pkg.cloudflareclient.com,LIST
 HOST,pkg.csb.dev,LIST
+HOST,pkgs.dev.azure.com,LIST
 HOST,pl.ea.com,LIST
 HOST,placeimg.com,LIST
 HOST,platform.twitter.com,LIST
@@ -1320,6 +1331,7 @@ HOST,static-assets.coinbase.com,LIST
 HOST,static-assets.freeanimehentai.net,LIST
 HOST,static-assets.mapbox.com,LIST
 HOST,static-assets.npr.org,LIST
+HOST,static-assets.vinted.com,LIST
 HOST,static-cdn.123rf.com,LIST
 HOST,static-cdn.mastodon.social,LIST
 HOST,static-cdn.osdn.net,LIST
@@ -1451,6 +1463,7 @@ HOST,static.typingclub.com,LIST
 HOST,static.ui.com,LIST
 HOST,static.underhentai.net,LIST
 HOST,static.v2ex.com,LIST
+HOST,static.vinted.com,LIST
 HOST,static.vocadb.net,LIST
 HOST,static.whatsapp.net,LIST
 HOST,static.zaobao.com,LIST

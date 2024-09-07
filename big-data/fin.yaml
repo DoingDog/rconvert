@@ -1,5 +1,5 @@
-# Clash total line 5145
-# Last updated Wed 09/04/2024 22:11:00.75
+# Clash total line 5158
+# Last updated Sat 09/07/2024 22:10:15.39
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -49,6 +49,8 @@ payload:
   - DOMAIN,app.roboflow.com
   - DOMAIN,app.viral-loops.com
   - DOMAIN,appassets.mvtdev.com
+  - DOMAIN,apple-relay.cloudflare.com
+  - DOMAIN,apple-relay.fastly-edge.com
   - DOMAIN,apple.comscoreresearch.com
   - DOMAIN,apps.profitihub.com
   - DOMAIN,archive.mozilla.org
@@ -552,6 +554,9 @@ payload:
   - DOMAIN,content7.steampowered.com
   - DOMAIN,content8.steampowered.com
   - DOMAIN,cookie-cdn.cookiepro.com
+  - DOMAIN,cp2.cloudflare.com
+  - DOMAIN,cp3.cloudflare.com
+  - DOMAIN,cp4.cloudflare.com
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,creativajs.altervista.org
   - DOMAIN,crl.usertrust.com
@@ -790,6 +795,8 @@ payload:
   - DOMAIN,image.dooo.ng
   - DOMAIN,image.email.microsoftemail.com
   - DOMAIN,image.freepik.com
+  - DOMAIN,image.gyutto.com
+  - DOMAIN,image.gyutto.jp
   - DOMAIN,image.ibb.co
   - DOMAIN,image.lichess1.org
   - DOMAIN,image.nmb.best
@@ -840,6 +847,7 @@ payload:
   - DOMAIN,images.weserv.nl
   - DOMAIN,images.wikia.com
   - DOMAIN,images.wsj.net
+  - DOMAIN,images1.vinted.net
   - DOMAIN,images7.design-editor.com
   - DOMAIN,images8.design-editor.com
   - DOMAIN,imagizer.imageshack.com
@@ -878,6 +886,7 @@ payload:
   - DOMAIN,img.represent.com
   - DOMAIN,img.riskified.com
   - DOMAIN,img.shana-laopo.xyz
+  - DOMAIN,img.shoplineapp.com
   - DOMAIN,img.skk.moe
   - DOMAIN,img.sparknotes.com
   - DOMAIN,img.supjav.com
@@ -950,6 +959,7 @@ payload:
   - DOMAIN,m.wsj.net
   - DOMAIN,mac-release-static.stash.ws
   - DOMAIN,maps.geoapify.com
+  - DOMAIN,marketplace-web-assets.vinted.com
   - DOMAIN,mastodon-static.miao.dev
   - DOMAIN,maven.google.com
   - DOMAIN,maven.kr328.app
@@ -1125,6 +1135,7 @@ payload:
   - DOMAIN,pkg-size.dev
   - DOMAIN,pkg.cloudflareclient.com
   - DOMAIN,pkg.csb.dev
+  - DOMAIN,pkgs.dev.azure.com
   - DOMAIN,pl.ea.com
   - DOMAIN,placeimg.com
   - DOMAIN,platform.twitter.com
@@ -1321,6 +1332,7 @@ payload:
   - DOMAIN,static-assets.freeanimehentai.net
   - DOMAIN,static-assets.mapbox.com
   - DOMAIN,static-assets.npr.org
+  - DOMAIN,static-assets.vinted.com
   - DOMAIN,static-cdn.123rf.com
   - DOMAIN,static-cdn.mastodon.social
   - DOMAIN,static-cdn.osdn.net
@@ -1452,6 +1464,7 @@ payload:
   - DOMAIN,static.ui.com
   - DOMAIN,static.underhentai.net
   - DOMAIN,static.v2ex.com
+  - DOMAIN,static.vinted.com
   - DOMAIN,static.vocadb.net
   - DOMAIN,static.whatsapp.net
   - DOMAIN,static.zaobao.com
