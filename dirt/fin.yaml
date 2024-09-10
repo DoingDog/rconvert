@@ -1,5 +1,5 @@
-# Clash total line 4347
-# Last updated Sat 09/07/2024 22:10:22.86
+# Clash total line 4346
+# Last updated Tue 09/10/2024 22:11:30.89
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -1331,7 +1331,6 @@ payload:
   - DOMAIN-SUFFIX,ebscn.com
   - DOMAIN-SUFFIX,ebscohost.com
   - DOMAIN-SUFFIX,ebtrust.com
-  - DOMAIN-SUFFIX,ec2-reachability.amazonaws.com
   - DOMAIN-SUFFIX,ecitic.com
   - DOMAIN-SUFFIX,ecitic.net
   - DOMAIN-SUFFIX,ecjobhome.com

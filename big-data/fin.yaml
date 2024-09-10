@@ -1,5 +1,5 @@
-# Clash total line 5158
-# Last updated Sat 09/07/2024 22:10:15.39
+# Clash total line 5195
+# Last updated Tue 09/10/2024 22:11:22.44
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -10,6 +10,7 @@ payload:
   - DOMAIN,academy-public.coinmarketcap.com
   - DOMAIN,account-cdn.svc.ui.com
   - DOMAIN,accounts-cdn.9gag.com
+  - DOMAIN,adkit.9pub.io
   - DOMAIN,aff.equalweb.com
   - DOMAIN,aimg.fc2.com
   - DOMAIN,ajax.cat.net
@@ -61,6 +62,7 @@ payload:
   - DOMAIN,asset.mansionglobal.com
   - DOMAIN,assets-cdn.123rf.com
   - DOMAIN,assets-cdn.abcnews.com
+  - DOMAIN,assets-cdn.abcotvs.net
   - DOMAIN,assets-cdn.jable.tv
   - DOMAIN,assets-cms.kraken.com
   - DOMAIN,assets-fe.change.org
@@ -71,6 +73,7 @@ payload:
   - DOMAIN,assets-v2.super.so
   - DOMAIN,assets-www.xbox.com
   - DOMAIN,assets.apilayer.com
+  - DOMAIN,assets.apnews.com
   - DOMAIN,assets.auth.magic.link
   - DOMAIN,assets.awwwards.com
   - DOMAIN,assets.bbhub.io
@@ -106,6 +109,7 @@ payload:
   - DOMAIN,assets.genius.com
   - DOMAIN,assets.getkirby.com
   - DOMAIN,assets.grammarly.com
+  - DOMAIN,assets.guim.co.uk
   - DOMAIN,assets.gumroad.com
   - DOMAIN,assets.habr.com
   - DOMAIN,assets.hearstapps.com
@@ -183,6 +187,8 @@ payload:
   - DOMAIN,assetscdn-wchat.eu.freshchat.com
   - DOMAIN,assetscdn.jable.tv
   - DOMAIN,at.adtech.redventures.io
+  - DOMAIN,aus2-community.mozilla.org
+  - DOMAIN,aus5.mozilla.org
   - DOMAIN,autoupdate.termius.com
   - DOMAIN,avatar.freepik.com
   - DOMAIN,avatar.stefanjudis.com
@@ -288,6 +294,7 @@ payload:
   - DOMAIN,cdn.babylonjs.com
   - DOMAIN,cdn.bfe.dev
   - DOMAIN,cdn.branch.io
+  - DOMAIN,cdn.britannica.com
   - DOMAIN,cdn.bsky.social
   - DOMAIN,cdn.builder.io
   - DOMAIN,cdn.calibermind.com
@@ -539,6 +546,9 @@ payload:
   - DOMAIN,connect.facebook.net
   - DOMAIN,connectivitycheck.android.com
   - DOMAIN,connectivitycheck.gstatic.com
+  - DOMAIN,consent-manager.ft.com
+  - DOMAIN,consent-notice.ft.com
+  - DOMAIN,consent.dw.com
   - DOMAIN,consentdeliveryfd.azurefd.net
   - DOMAIN,consumersite-assets.trustpilot.net
   - DOMAIN,content-origin.steampowered.com
@@ -585,6 +595,7 @@ payload:
   - DOMAIN,detectportal.firefox.com
   - DOMAIN,devimages-cdn.apple.com
   - DOMAIN,devstreaming-cdn.apple.com
+  - DOMAIN,dims.apnews.com
   - DOMAIN,disco.headliner.link
   - DOMAIN,dl-cdn.alpinelinux.org
   - DOMAIN,dl-portal.iina.io
@@ -769,6 +780,7 @@ payload:
   - DOMAIN,i.ibb.co
   - DOMAIN,i.imgflip.com
   - DOMAIN,i.imgur.com
+  - DOMAIN,i.insider.com
   - DOMAIN,i.jpg.dog
   - DOMAIN,i.loli.best
   - DOMAIN,i.mt.lv
@@ -787,6 +799,7 @@ payload:
   - DOMAIN,icons.buffer.com
   - DOMAIN,icons.duckduckgo.com
   - DOMAIN,icons.leavemealone.com
+  - DOMAIN,icons.llamao.fi
   - DOMAIN,icons.ly
   - DOMAIN,imag.malavida.com
   - DOMAIN,image-forwarder.notaku.so
@@ -815,6 +828,7 @@ payload:
   - DOMAIN,images-ext-1.discordapp.net
   - DOMAIN,images-ext-2.discordapp.net
   - DOMAIN,images.arigatotravel.com
+  - DOMAIN,images.axios.com
   - DOMAIN,images.bfmtv.com
   - DOMAIN,images.contentful.com
   - DOMAIN,images.design-editor.com
@@ -823,6 +837,7 @@ payload:
   - DOMAIN,images.emojiterra.com
   - DOMAIN,images.everyplate.com
   - DOMAIN,images.fandango.com
+  - DOMAIN,images.financemagnates.com
   - DOMAIN,images.flightradar24.com
   - DOMAIN,images.freeimages.com
   - DOMAIN,images.g2crowd.com
@@ -894,6 +909,7 @@ payload:
   - DOMAIN,img.urlnode.com
   - DOMAIN,img.utdstc.com
   - DOMAIN,img.vim-cn.com
+  - DOMAIN,img.washingtonpost.com
   - DOMAIN,img.xhacgn.com
   - DOMAIN,img.xjh.me
   - DOMAIN,img1.ak.crunchyroll.com
@@ -939,6 +955,7 @@ payload:
   - DOMAIN,js.upload.io
   - DOMAIN,js.userflow.com
   - DOMAIN,kdata1.com
+  - DOMAIN,keyframe-cdn.abcnews.com
   - DOMAIN,kh.google.com
   - DOMAIN,ktpx.amazon.com
   - DOMAIN,lain.bgm.tv
@@ -952,12 +969,14 @@ payload:
   - DOMAIN,live.fanmingming.com
   - DOMAIN,livedoor.blogimg.jp
   - DOMAIN,load.csell.co
+  - DOMAIN,loader.mantis-intelligence.com
   - DOMAIN,logo.clearbit.com
   - DOMAIN,logos.speedtestcustom.com
   - DOMAIN,loutre.blockchair.io
   - DOMAIN,m-cdn.phonearena.com
   - DOMAIN,m.wsj.net
   - DOMAIN,mac-release-static.stash.ws
+  - DOMAIN,mantisloader.mantis-awx.com
   - DOMAIN,maps.geoapify.com
   - DOMAIN,marketplace-web-assets.vinted.com
   - DOMAIN,mastodon-static.miao.dev
@@ -1114,6 +1133,7 @@ payload:
   - DOMAIN,participants.evolv.ai
   - DOMAIN,parts.blog.livedoor.jp
   - DOMAIN,pba.apple.com
+  - DOMAIN,pbc.wsj.com
   - DOMAIN,pcz.javidol.org
   - DOMAIN,pengtu.cc
   - DOMAIN,pf-cdn-content-prod.azureedge.net
@@ -1170,6 +1190,7 @@ payload:
   - DOMAIN,public-assets.typeform.com
   - DOMAIN,public-files.gumroad.com
   - DOMAIN,public-pages.cbinsights.com
+  - DOMAIN,public.flourish.studio
   - DOMAIN,public.mocortech.com
   - DOMAIN,public.saasexch.com
   - DOMAIN,publicsuffix.org
@@ -1246,6 +1267,7 @@ payload:
   - DOMAIN,s3.arkjp.net
   - DOMAIN,s3.c.im
   - DOMAIN,s3.coinmarketcap.com
+  - DOMAIN,s3.cointelegraph.com
   - DOMAIN,s3.dzeninfra.ru
   - DOMAIN,s3.envato.com
   - DOMAIN,s3.eu-central-003.backblazeb2.com
@@ -1358,6 +1380,7 @@ payload:
   - DOMAIN,static.agilebits.com
   - DOMAIN,static.arxiv.org
   - DOMAIN,static.assetlab.io
+  - DOMAIN,static.axios.com
   - DOMAIN,static.bangumi.moe
   - DOMAIN,static.bit.cloud
   - DOMAIN,static.bit.dev
@@ -1387,6 +1410,7 @@ payload:
   - DOMAIN,static.euronews.com
   - DOMAIN,static.fasthosts.co.uk
   - DOMAIN,static.fc2.com
+  - DOMAIN,static.ffx.io
   - DOMAIN,static.figma.com
   - DOMAIN,static.filestackapi.com
   - DOMAIN,static.freeimages.com
@@ -1397,6 +1421,7 @@ payload:
   - DOMAIN,static.gnome.org
   - DOMAIN,static.gopro.com
   - DOMAIN,static.grammarly.com
+  - DOMAIN,static.guim.co.uk
   - DOMAIN,static.heavy-r.com
   - DOMAIN,static.helpjuice.com
   - DOMAIN,static.hotjar.com
@@ -1434,6 +1459,7 @@ payload:
   - DOMAIN,static.osdn.net
   - DOMAIN,static.playstation.com
   - DOMAIN,static.plus.net
+  - DOMAIN,static.politico.com
   - DOMAIN,static.probit.com
   - DOMAIN,static.queue-it.net
   - DOMAIN,static.rakuten.com
@@ -1511,12 +1537,15 @@ payload:
   - DOMAIN,storybook.js.org
   - DOMAIN,streaming.split.io
   - DOMAIN,streetviewpixels-pa.googleapis.com
+  - DOMAIN,sts3.wsj.net
   - DOMAIN,stubdownloader.services.mozilla.com
+  - DOMAIN,sync.getpublica.com
   - DOMAIN,t.betterstack.com
   - DOMAIN,t1.picb.cc
   - DOMAIN,t2.picb.cc
   - DOMAIN,t3.picb.cc
   - DOMAIN,t4.picb.cc
+  - DOMAIN,tags.bkrtx.com
   - DOMAIN,talk.hyvor.com
   - DOMAIN,talk.washingtonpost.com
   - DOMAIN,telemetry.1passwordservices.com
@@ -1525,6 +1554,7 @@ payload:
   - DOMAIN,themes.fourthwall.com
   - DOMAIN,thumbnail.missav.com
   - DOMAIN,thumbnailer.mixcloud.com
+  - DOMAIN,thumbor.forbes.com
   - DOMAIN,thumbs.gfycat.com
   - DOMAIN,thumbs.onlyfans.com
   - DOMAIN,thumbsnap.com
@@ -1594,6 +1624,7 @@ payload:
   - DOMAIN,waitlisted.co
   - DOMAIN,wandi-6402.kxcdn.com
   - DOMAIN,wcpstatic.microsoft.com
+  - DOMAIN,web-assets.esetstatic.com
   - DOMAIN,web-assets.ifttt.com
   - DOMAIN,web-assets.otogi-frontier.com
   - DOMAIN,web-assets.strava.com
@@ -1671,8 +1702,10 @@ payload:
   - DOMAIN-SUFFIX,aaa.ax
   - DOMAIN-SUFFIX,aacdn.nagich.com
   - DOMAIN-SUFFIX,abc-cdn.net
+  - DOMAIN-SUFFIX,abc-cdn.net.au
   - DOMAIN-SUFFIX,abc-studios.com
   - DOMAIN-SUFFIX,abc.com
+  - DOMAIN-SUFFIX,abcnewsfe.com
   - DOMAIN-SUFFIX,abcvg.info
   - DOMAIN-SUFFIX,abema-tv.com
   - DOMAIN-SUFFIX,abema.io
@@ -1901,6 +1934,7 @@ payload:
   - DOMAIN-SUFFIX,cbsistatic.com
   - DOMAIN-SUFFIX,cbsivideo.com
   - DOMAIN-SUFFIX,cbsnews.com
+  - DOMAIN-SUFFIX,cbsnewsstatic.com
   - DOMAIN-SUFFIX,cbsplaylistserver.aws.syncbak.com
   - DOMAIN-SUFFIX,cbspressexpress.com
   - DOMAIN-SUFFIX,cbsradio.com
@@ -2295,6 +2329,7 @@ payload:
   - DOMAIN-SUFFIX,dubox.com
   - DOMAIN-SUFFIX,duboxcdn.com
   - DOMAIN-SUFFIX,dummyimage.com
+  - DOMAIN-SUFFIX,dwcdn.net
   - DOMAIN-SUFFIX,dweb.eu.org
   - DOMAIN-SUFFIX,dweb.link
   - DOMAIN-SUFFIX,dzcdn.net
@@ -3247,6 +3282,7 @@ payload:
   - DOMAIN-SUFFIX,newpppp.com
   - DOMAIN-SUFFIX,newsnowfox.com
   - DOMAIN-SUFFIX,nextjs.org
+  - DOMAIN-SUFFIX,nextui.org
   - DOMAIN-SUFFIX,nexus-cdn.com
   - DOMAIN-SUFFIX,nexusmods.com
   - DOMAIN-SUFFIX,nflxext.com
@@ -3509,6 +3545,7 @@ payload:
   - DOMAIN-SUFFIX,racaty.net
   - DOMAIN-SUFFIX,racked.com
   - DOMAIN-SUFFIX,radiotunes.com
+  - DOMAIN-SUFFIX,radix-ui.com
   - DOMAIN-SUFFIX,radiyoyacuvoa.com
   - DOMAIN-SUFFIX,randomuser.me
   - DOMAIN-SUFFIX,rapidgator.asia
