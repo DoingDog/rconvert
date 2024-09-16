@@ -1,5 +1,5 @@
-# Adblock total line 2279
-# Last updated Fri 09/13/2024 22:11:27.88
+# Adblock total line 2307
+# Last updated Mon 09/16/2024 22:10:29.48
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||4gtvimg2.4gtv.tv^
@@ -19,12 +19,14 @@
 ||ajax.cloudflare.com^
 ||ajax.googleapis.com^
 ||ajax.microsoft.com^
+||ak.sail-horizon.com^
 ||akidoo.top^
 ||alt-images.codestream.com^
 ||alt.idgesg.net^
 ||amp.azure.net^
 ||anchor.digitalocean.com^
 ||api-frameworks.vercel.sh^
+||api.allorigins.win^
 ||api.bintray.com^
 ||api.iconify.design^
 ||api.mintlify.com^
@@ -205,6 +207,7 @@
 ||bcdn.starapps.studio^
 ||binaries.prisma.sh^
 ||blacklist.tampermonkey.net^
+||blade-public-static.blade-group.com^
 ||boards.greenhouse.io^
 ||bot.ivy.ai^
 ||brick.a.ssl.fastly.net^
@@ -289,6 +292,7 @@
 ||cdn.cliqz.com^
 ||cdn.cloudcraft.co^
 ||cdn.cms-twdigitalassets.com^
+||cdn.cnn.com^
 ||cdn.cnx-software.com^
 ||cdn.cocoapods.org^
 ||cdn.codeblackbelt.com^
@@ -530,6 +534,7 @@
 ||code.jquery.com^
 ||compass-ssl.xbox.com^
 ||components.clever-cloud.com^
+||components.justanswer.com^
 ||config.extension.grammarly.com^
 ||confluence-v1.prod.atl-paas.net^
 ||connect.facebook.net^
@@ -545,6 +550,7 @@
 ||content.jwplatform.com^
 ||content.wepik.com^
 ||cookie-cdn.cookiepro.com^
+||cors-proxy.htmldriven.com^
 ||cp2.cloudflare.com^
 ||cp3.cloudflare.com^
 ||cp4.cloudflare.com^
@@ -572,11 +578,13 @@
 ||disco.headliner.link^
 ||dl.nwjs.io^
 ||dl2.nwjs.io^
+||docker.cloudsmith.io^
 ||docs.rs^
 ||doppler-config.cbsivideo.com^
 ||doujin-assets.dmm.co.jp^
 ||downloads.coindesk.com^
 ||drscdn.500px.org^
+||dynamic-assets.coinbase.com^
 ||dynamic-assets.mobilius.top^
 ||e.deviantart.net^
 ||e3.365dm.com^
@@ -603,6 +611,7 @@
 ||emp.bbci.co.uk^
 ||epic-social-social-modules-prod.ol.epicgames.com^
 ||error.rakuten.co.jp^
+||eu-images.contentstack.com^
 ||eu.hamreus.com^
 ||euc-widget.freshworks.com^
 ||events-delivery.apple.com^
@@ -742,6 +751,7 @@
 ||images.axios.com^
 ||images.bfmtv.com^
 ||images.contentful.com^
+||images.contentstack.io^
 ||images.design-editor.com^
 ||images.dmca.com^
 ||images.ecomm.microsoft.com^
@@ -943,6 +953,7 @@
 ||media4.giphy.com^
 ||medias.meow.social^
 ||megapx-assets.dcard.tw^
+||micro.rubiconproject.com^
 ||minotar.net^
 ||mir-s3-cdn-cf.behance.net^
 ||miro.medium.com^
@@ -955,6 +966,7 @@
 ||mwf-service.akamaized.net^
 ||mycommerce.akamaized.net^
 ||na-library.klarnaservices.com^
+||nav.files.bbci.co.uk^
 ||navismithapis-cdn.com^
 ||nbcnewsdigital-static.nbcuni.com^
 ||net-fe-static-assets.network-controller.svc.ui.com^
@@ -1017,6 +1029,7 @@
 ||pcdn-www.pcloud.com^
 ||pcz.javidol.org^
 ||pengtu.cc^
+||pg2dhpc3p5ec22g3.jkforum.net^
 ||phishing.army^
 ||photos5.appleinsider.com^
 ||pic-bstarstatic.akamaized.net^
@@ -1046,7 +1059,6 @@
 ||play.vidyard.com^
 ||player-frontend.cnevids.com^
 ||player.cnevids.com^
-||player.h-cdn.com^
 ||player.louisvuitton.com^
 ||player.vimeo.com^
 ||players.brightcove.net^
@@ -1071,6 +1083,7 @@
 ||production-cmp.isgprivacy.cbsi.com^
 ||profile-images.xing.com^
 ||proxy.beyondwords.io^
+||proxy.cors.sh^
 ||proxy.golang.org^
 ||proxy.joinmastodon.org^
 ||ps.w.org^
@@ -1078,6 +1091,7 @@
 ||public-files.gumroad.com^
 ||public-pages.cbinsights.com^
 ||public.flourish.studio^
+||public.hare200.com^
 ||public.mocortech.com^
 ||public.saasexch.com^
 ||publicsuffix.org^
@@ -1134,6 +1148,7 @@
 ||s.w.org^
 ||s.wsj.net^
 ||s0.wp.com^
+||s1.coincarp.com^
 ||s1.divhunt.com^
 ||s1.feedly.com^
 ||s1.qwant.com^
@@ -1264,7 +1279,6 @@
 ||static.4shared.com^
 ||static.ada.support^
 ||static.addtoany.com^
-||static.adguard.com^
 ||static.adguardvpn.com^
 ||static.agilebits.com^
 ||static.apkpure.com^
@@ -1325,6 +1339,7 @@
 ||static.independent.co.uk^
 ||static.infomaniak.ch^
 ||static.institution.grammarly.com^
+||static.iris.informa.com^
 ||static.itch.io^
 ||static.javcdn.info^
 ||static.killedbygoogle.com^
@@ -1423,6 +1438,7 @@
 ||statics.goorm.io^
 ||statics.teams.cdn.office.net^
 ||staticw2.yotpo.com^
+||stats.setapp.com^
 ||steamcdn-a.akamaihd.net^
 ||steamusercontent-a.akamaihd.net^
 ||steamuserimages-a.akamaihd.net^
@@ -1453,9 +1469,11 @@
 ||talk.washingtonpost.com^
 ||telemetry.1passwordservices.com^
 ||telemetry.nextjs.org^
+||telemetry.split.io^
 ||telemetry.vercel.com^
 ||th.bing.com^
 ||themes.fourthwall.com^
+||thingproxy.freeboard.io^
 ||thumbnail.missav.com^
 ||thumbnailer.mixcloud.com^
 ||thumbor.forbes.com^
@@ -1470,6 +1488,8 @@
 ||topbar-static.piano.io^
 ||torrindex.net^
 ||tracker.cdnbye.com^
+||tuf-repo-cdn.sigstore.dev^
+||tuf-repo.github.com^
 ||tvdownloaddw-a.akamaihd.net^
 ||twemoji.maxcdn.com^
 ||typeface.nyt.com^
@@ -1480,6 +1500,7 @@
 ||ubistatic2-a.akamaihd.net^
 ||ubistatic2-a.ubisoft.com^
 ||ui-cdn.digitalocean.com^
+||ui.contentstack.com^
 ||ui.trailhead.com^
 ||unlimited-cdn.waifu2x.net^
 ||updates.signal.org^
@@ -1555,6 +1576,8 @@
 ||wp.salesforce.com^
 ||wpmedia.tealium.com^
 ||ws-assets.zoominfo.com^
+||ww2-secure.justanswer.com^
+||ww2.justanswer.com^
 ||www-static.ripe.net^
 ||www.10086.win^
 ||www.bbthat.com^
@@ -1594,6 +1617,7 @@
 ||amaicdn.com^
 ||ampproject.org^
 ||anpoimages.com^
+||app-analytics-services.com^
 ||app.gitbook.com^
 ||app.render.com^
 ||appmifile.com^
@@ -1687,7 +1711,6 @@
 ||cloud2.influxdata.com^
 ||cloudflare-ipfs.com^
 ||cloudflare.docker.com^
-||cloudflarestorage.com^
 ||cloudflarestream.com^
 ||cloudfront.net^
 ||cloudimg.io^
@@ -1701,6 +1724,7 @@
 ||content-storage-upload.googleapis.com^
 ||content001.bet365.com^
 ||coral.coralproject.net^
+||corsproxy.io^
 ||crates.io^
 ||crossbell.io^
 ||csb.app^
@@ -1711,7 +1735,6 @@
 ||delvenetworks.com^
 ||deno.land^
 ||denopkg.com^
-||desktop.docker.com^
 ||devrum.uptime.com^
 ||dilcdn.com^
 ||disconnect.me^
@@ -1768,6 +1791,7 @@
 ||fivetiu.com^
 ||flagcdn.com^
 ||flagpedia.net^
+||fncstatic.com^
 ||fontawesome.com^
 ||fonts.com^
 ||fonts.net^
@@ -1806,6 +1830,7 @@
 ||gravity.jup.io^
 ||gw3.io^
 ||h-cdn.co^
+||h-cdn.com^
 ||hackerone-user-content.com^
 ||hardbin.com^
 ||hbfile.net^
@@ -1953,6 +1978,7 @@
 ||llnwd.net^
 ||llnwi.net^
 ||local.webcontainer.io^
+||localizecdn.com^
 ||loli.net^
 ||lowendbox.com^
 ||lowescdn.com^
@@ -1980,6 +2006,7 @@
 ||mvnrepository.com^
 ||myavlive.com^
 ||mycdn.me^
+||myfilebase.com^
 ||mypinata.cloud^
 ||myshopapps.com^
 ||nel.cloudflare.com^
@@ -2060,17 +2087,18 @@
 ||pstatic.net^
 ||pstorage.space^
 ||public.cdn.office.net^
+||public.ecr.aws^
 ||pxgcdn.com^
 ||pypi.org^
 ||pythonhosted.org^
 ||pztv.ca^
 ||pzvcdn.com^
 ||qooqlevideo.com^
+||quay.io^
 ||quip-cdn.com^
 ||quip-marketing.com^
 ||quoracdn.net^
 ||qy0.ru^
-||r2.dev^
 ||radix-ui.com^
 ||randomuser.me^
 ||ravencoinipfs-gateway.com^
