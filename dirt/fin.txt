@@ -1,5 +1,5 @@
 # Main total line 4346
-# Last updated Mon 09/16/2024 22:10:45.47
+# Last updated Thu 09/19/2024 22:11:27.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,a.iqmtp.live
 DOMAIN,analytics.strava.com
@@ -4307,9 +4307,9 @@ PROCESS-NAME,BitComet
 PROCESS-NAME,ClashX
 PROCESS-NAME,DownloadService
 PROCESS-NAME,Folx
+PROCESS-NAME,LocalSend
 PROCESS-NAME,LogiOptions
 PROCESS-NAME,LogiOptionsDaemon
-PROCESS-NAME,Motrix.app
 PROCESS-NAME,NetTransport
 PROCESS-NAME,SunloginClient_Desktop
 PROCESS-NAME,SunloginClient_Helper

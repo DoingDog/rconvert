@@ -1,5 +1,5 @@
 # Clash total line 4346
-# Last updated Mon 09/16/2024 22:10:45.63
+# Last updated Thu 09/19/2024 22:11:27.23
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -4308,9 +4308,9 @@ payload:
   - PROCESS-NAME,ClashX
   - PROCESS-NAME,DownloadService
   - PROCESS-NAME,Folx
+  - PROCESS-NAME,LocalSend
   - PROCESS-NAME,LogiOptions
   - PROCESS-NAME,LogiOptionsDaemon
-  - PROCESS-NAME,Motrix.app
   - PROCESS-NAME,NetTransport
   - PROCESS-NAME,SunloginClient_Desktop
   - PROCESS-NAME,SunloginClient_Helper

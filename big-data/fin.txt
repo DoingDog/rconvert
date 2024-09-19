@@ -1,5 +1,5 @@
-# Main total line 5236
-# Last updated Mon 09/16/2024 22:10:37.91
+# Main total line 5255
+# Last updated Thu 09/19/2024 22:11:19.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
@@ -610,6 +610,7 @@ DOMAIN,dl.cloudsmith.io
 DOMAIN,dl.devmate.com
 DOMAIN,dl.discordapp.net
 DOMAIN,dl.flathub.org
+DOMAIN,dl.getaurora.dev
 DOMAIN,dl.google.com
 DOMAIN,dl.iina.io
 DOMAIN,dl.l.google.com
@@ -634,6 +635,7 @@ DOMAIN,down.filen.io
 DOMAIN,down.filen.net
 DOMAIN,download-core.sys.truenas.net
 DOMAIN,download.anydesk.com
+DOMAIN,download.bazzite.gg
 DOMAIN,download.beeper.com
 DOMAIN,download.cpuid.com
 DOMAIN,download.dlsite.com
@@ -650,6 +652,7 @@ DOMAIN,download.nektony.com
 DOMAIN,download.opensuse.org
 DOMAIN,download.parallels.com
 DOMAIN,download.pixelexperience.org
+DOMAIN,download.projectbluefin.io
 DOMAIN,download.sketch.com
 DOMAIN,download.snipaste.com
 DOMAIN,download.tensorflow.google.com
@@ -694,6 +697,10 @@ DOMAIN,embed.ted.com
 DOMAIN,embed.typeform.com
 DOMAIN,emoji-css.afeld.me
 DOMAIN,emos.plurk.com
+DOMAIN,encrypted-tbn0.gstatic.com
+DOMAIN,encrypted-tbn1.gstatic.com
+DOMAIN,encrypted-tbn2.gstatic.com
+DOMAIN,encrypted-tbn3.gstatic.com
 DOMAIN,enterprise.proxmox.com
 DOMAIN,epic-social-social-modules-prod.ol.epicgames.com
 DOMAIN,error.rakuten.co.jp
@@ -750,6 +757,7 @@ DOMAIN,fonts1.unidays.world
 DOMAIN,forest-mt-s3.seekrtech.com
 DOMAIN,formulae.brew.sh
 DOMAIN,frames-commandbar-prod.commandbar.com
+DOMAIN,front-resource.fs.com
 DOMAIN,ftp.gnu.org
 DOMAIN,g-static.ap4r.com
 DOMAIN,genesis-cdn.ff.com
@@ -881,6 +889,7 @@ DOMAIN,images7.design-editor.com
 DOMAIN,images8.design-editor.com
 DOMAIN,imagizer.imageshack.com
 DOMAIN,img-cos.mandaoo.com
+DOMAIN,img-en.fs.com
 DOMAIN,img.announcekit.app
 DOMAIN,img.applealmond.com
 DOMAIN,img.apponic.com
@@ -1095,6 +1104,7 @@ DOMAIN,newsletter.postmarkapp.com
 DOMAIN,next-images.opencollective.com
 DOMAIN,ni-assets.azureedge.net
 DOMAIN,nightly.link
+DOMAIN,nobara-images.nobaraproject.org
 DOMAIN,nodei.co
 DOMAIN,np-edge.itunes.apple.com
 DOMAIN,npm.antfu.dev
@@ -1249,6 +1259,7 @@ DOMAIN,res2.weblium.site
 DOMAIN,resize.blogsys.jp
 DOMAIN,resize.yandex.net
 DOMAIN,resizing.flixster.com
+DOMAIN,resource.fs.com
 DOMAIN,resources-cache.prod.sketch.com
 DOMAIN,resources-live.sketch.cloud
 DOMAIN,resources.help.salesforce.com
@@ -1849,6 +1860,7 @@ DOMAIN-SUFFIX,atv-ps-fe.amazon.co.jp
 DOMAIN-SUFFIX,atv-ps-fe.amazon.com
 DOMAIN-SUFFIX,atv-ps.amazon.com
 DOMAIN-SUFFIX,ausfile.com
+DOMAIN-SUFFIX,autoupdatesvc.delivery.autodesk.com
 DOMAIN-SUFFIX,av01.tv
 DOMAIN-SUFFIX,avdocker.com
 DOMAIN-SUFFIX,avdocker3.com
@@ -2123,6 +2135,7 @@ DOMAIN-SUFFIX,cristiamo.xyz
 DOMAIN-SUFFIX,crocko.com
 DOMAIN-SUFFIX,crossbell.io
 DOMAIN-SUFFIX,csb.app
+DOMAIN-SUFFIX,csp.withgoogle.com
 DOMAIN-SUFFIX,cstatic.net
 DOMAIN-SUFFIX,ctfassets.net
 DOMAIN-SUFFIX,cthd.icu
@@ -2321,6 +2334,7 @@ DOMAIN-SUFFIX,down.mdiaload.com
 DOMAIN-SUFFIX,downace.com
 DOMAIN-SUFFIX,downfile.site
 DOMAIN-SUFFIX,download
+DOMAIN-SUFFIX,download.autodesk.com
 DOMAIN-SUFFIX,download.cdp.bethesda.net
 DOMAIN-SUFFIX,download.dm.origin.com
 DOMAIN-SUFFIX,download.epicgames.com
@@ -2710,6 +2724,7 @@ DOMAIN-SUFFIX,fssta.com
 DOMAIN-SUFFIX,ftcdn.net
 DOMAIN-SUFFIX,ftp-master.debian.org
 DOMAIN-SUFFIX,ftp.debian.org
+DOMAIN-SUFFIX,ftp2.de.debian.org
 DOMAIN-SUFFIX,fubo.tv
 DOMAIN-SUFFIX,fubotv.com
 DOMAIN-SUFFIX,funnyordie.com
@@ -3780,6 +3795,7 @@ DOMAIN-SUFFIX,starwarsgalacticstarcruiser.com
 DOMAIN-SUFFIX,starwarskids.com
 DOMAIN-SUFFIX,static-qobuz.com
 DOMAIN-SUFFIX,static-verizon.com
+DOMAIN-SUFFIX,static.chaosgroup.com
 DOMAIN-SUFFIX,static.ctinets.com
 DOMAIN-SUFFIX,static.domains
 DOMAIN-SUFFIX,static.fun
@@ -3830,6 +3846,9 @@ DOMAIN-SUFFIX,surrit.com
 DOMAIN-SUFFIX,susercontent.com
 DOMAIN-SUFFIX,swiftupload.com
 DOMAIN-SUFFIX,swiftypecdn.com
+DOMAIN-SUFFIX,swupdate.chaos.com
+DOMAIN-SUFFIX,swupdate.chaosgroup.com
+DOMAIN-SUFFIX,swupdate.vray.com
 DOMAIN-SUFFIX,sxccdn.com
 DOMAIN-SUFFIX,syfy.com
 DOMAIN-SUFFIX,syncs.online

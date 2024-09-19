@@ -1,5 +1,5 @@
-# Quantumult total line 5221
-# Last updated Mon 09/16/2024 22:10:38.04
+# Quantumult total line 5240
+# Last updated Thu 09/19/2024 22:11:19.71
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -610,6 +610,7 @@ HOST,dl.cloudsmith.io,LIST
 HOST,dl.devmate.com,LIST
 HOST,dl.discordapp.net,LIST
 HOST,dl.flathub.org,LIST
+HOST,dl.getaurora.dev,LIST
 HOST,dl.google.com,LIST
 HOST,dl.iina.io,LIST
 HOST,dl.l.google.com,LIST
@@ -634,6 +635,7 @@ HOST,down.filen.io,LIST
 HOST,down.filen.net,LIST
 HOST,download-core.sys.truenas.net,LIST
 HOST,download.anydesk.com,LIST
+HOST,download.bazzite.gg,LIST
 HOST,download.beeper.com,LIST
 HOST,download.cpuid.com,LIST
 HOST,download.dlsite.com,LIST
@@ -650,6 +652,7 @@ HOST,download.nektony.com,LIST
 HOST,download.opensuse.org,LIST
 HOST,download.parallels.com,LIST
 HOST,download.pixelexperience.org,LIST
+HOST,download.projectbluefin.io,LIST
 HOST,download.sketch.com,LIST
 HOST,download.snipaste.com,LIST
 HOST,download.tensorflow.google.com,LIST
@@ -694,6 +697,10 @@ HOST,embed.ted.com,LIST
 HOST,embed.typeform.com,LIST
 HOST,emoji-css.afeld.me,LIST
 HOST,emos.plurk.com,LIST
+HOST,encrypted-tbn0.gstatic.com,LIST
+HOST,encrypted-tbn1.gstatic.com,LIST
+HOST,encrypted-tbn2.gstatic.com,LIST
+HOST,encrypted-tbn3.gstatic.com,LIST
 HOST,enterprise.proxmox.com,LIST
 HOST,epic-social-social-modules-prod.ol.epicgames.com,LIST
 HOST,error.rakuten.co.jp,LIST
@@ -750,6 +757,7 @@ HOST,fonts1.unidays.world,LIST
 HOST,forest-mt-s3.seekrtech.com,LIST
 HOST,formulae.brew.sh,LIST
 HOST,frames-commandbar-prod.commandbar.com,LIST
+HOST,front-resource.fs.com,LIST
 HOST,ftp.gnu.org,LIST
 HOST,g-static.ap4r.com,LIST
 HOST,genesis-cdn.ff.com,LIST
@@ -881,6 +889,7 @@ HOST,images7.design-editor.com,LIST
 HOST,images8.design-editor.com,LIST
 HOST,imagizer.imageshack.com,LIST
 HOST,img-cos.mandaoo.com,LIST
+HOST,img-en.fs.com,LIST
 HOST,img.announcekit.app,LIST
 HOST,img.applealmond.com,LIST
 HOST,img.apponic.com,LIST
@@ -1095,6 +1104,7 @@ HOST,newsletter.postmarkapp.com,LIST
 HOST,next-images.opencollective.com,LIST
 HOST,ni-assets.azureedge.net,LIST
 HOST,nightly.link,LIST
+HOST,nobara-images.nobaraproject.org,LIST
 HOST,nodei.co,LIST
 HOST,np-edge.itunes.apple.com,LIST
 HOST,npm.antfu.dev,LIST
@@ -1249,6 +1259,7 @@ HOST,res2.weblium.site,LIST
 HOST,resize.blogsys.jp,LIST
 HOST,resize.yandex.net,LIST
 HOST,resizing.flixster.com,LIST
+HOST,resource.fs.com,LIST
 HOST,resources-cache.prod.sketch.com,LIST
 HOST,resources-live.sketch.cloud,LIST
 HOST,resources.help.salesforce.com,LIST
@@ -1849,6 +1860,7 @@ HOST-SUFFIX,atv-ps-fe.amazon.co.jp,LIST
 HOST-SUFFIX,atv-ps-fe.amazon.com,LIST
 HOST-SUFFIX,atv-ps.amazon.com,LIST
 HOST-SUFFIX,ausfile.com,LIST
+HOST-SUFFIX,autoupdatesvc.delivery.autodesk.com,LIST
 HOST-SUFFIX,av01.tv,LIST
 HOST-SUFFIX,avdocker.com,LIST
 HOST-SUFFIX,avdocker3.com,LIST
@@ -2123,6 +2135,7 @@ HOST-SUFFIX,cristiamo.xyz,LIST
 HOST-SUFFIX,crocko.com,LIST
 HOST-SUFFIX,crossbell.io,LIST
 HOST-SUFFIX,csb.app,LIST
+HOST-SUFFIX,csp.withgoogle.com,LIST
 HOST-SUFFIX,cstatic.net,LIST
 HOST-SUFFIX,ctfassets.net,LIST
 HOST-SUFFIX,cthd.icu,LIST
@@ -2321,6 +2334,7 @@ HOST-SUFFIX,down.mdiaload.com,LIST
 HOST-SUFFIX,downace.com,LIST
 HOST-SUFFIX,downfile.site,LIST
 HOST-SUFFIX,download,LIST
+HOST-SUFFIX,download.autodesk.com,LIST
 HOST-SUFFIX,download.cdp.bethesda.net,LIST
 HOST-SUFFIX,download.dm.origin.com,LIST
 HOST-SUFFIX,download.epicgames.com,LIST
@@ -2710,6 +2724,7 @@ HOST-SUFFIX,fssta.com,LIST
 HOST-SUFFIX,ftcdn.net,LIST
 HOST-SUFFIX,ftp-master.debian.org,LIST
 HOST-SUFFIX,ftp.debian.org,LIST
+HOST-SUFFIX,ftp2.de.debian.org,LIST
 HOST-SUFFIX,fubo.tv,LIST
 HOST-SUFFIX,fubotv.com,LIST
 HOST-SUFFIX,funnyordie.com,LIST
@@ -3780,6 +3795,7 @@ HOST-SUFFIX,starwarsgalacticstarcruiser.com,LIST
 HOST-SUFFIX,starwarskids.com,LIST
 HOST-SUFFIX,static-qobuz.com,LIST
 HOST-SUFFIX,static-verizon.com,LIST
+HOST-SUFFIX,static.chaosgroup.com,LIST
 HOST-SUFFIX,static.ctinets.com,LIST
 HOST-SUFFIX,static.domains,LIST
 HOST-SUFFIX,static.fun,LIST
@@ -3830,6 +3846,9 @@ HOST-SUFFIX,surrit.com,LIST
 HOST-SUFFIX,susercontent.com,LIST
 HOST-SUFFIX,swiftupload.com,LIST
 HOST-SUFFIX,swiftypecdn.com,LIST
+HOST-SUFFIX,swupdate.chaos.com,LIST
+HOST-SUFFIX,swupdate.chaosgroup.com,LIST
+HOST-SUFFIX,swupdate.vray.com,LIST
 HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,syfy.com,LIST
 HOST-SUFFIX,syncs.online,LIST
