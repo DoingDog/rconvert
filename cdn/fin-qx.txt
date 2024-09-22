@@ -1,5 +1,5 @@
-# Quantumult total line 2317
-# Last updated Thu 09/19/2024 22:11:10.45
+# Quantumult total line 2350
+# Last updated Sun 09/22/2024 22:10:24.21
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -240,6 +240,7 @@ HOST,cdn-client.medium.com,LIST
 HOST,cdn-edge.karte.io,LIST
 HOST,cdn-eu.dynamicyield.com,LIST
 HOST,cdn-fck.tnaflix.com,LIST
+HOST,cdn-forum.networklessons.com,LIST
 HOST,cdn-images-1.medium.com,LIST
 HOST,cdn-images.mailchimp.com,LIST
 HOST,cdn-live.foreignaffairs.com,LIST
@@ -298,6 +299,7 @@ HOST,cdn.cocoapods.org,LIST
 HOST,cdn.codeblackbelt.com,LIST
 HOST,cdn.commento.io,LIST
 HOST,cdn.concert.io,LIST
+HOST,cdn.contentful.com,LIST
 HOST,cdn.css.net,LIST
 HOST,cdn.cxense.com,LIST
 HOST,cdn.dap.dmm.co.jp,LIST
@@ -315,6 +317,7 @@ HOST,cdn.ecomm.ui.com,LIST
 HOST,cdn.embed.ly,LIST
 HOST,cdn.embedly.com,LIST
 HOST,cdn.equalweb.com,LIST
+HOST,cdn.eu.contentful.com,LIST
 HOST,cdn.european-alternatives.eu,LIST
 HOST,cdn.faire.com,LIST
 HOST,cdn.faveohelpdesk.com,LIST
@@ -376,6 +379,7 @@ HOST,cdn.modrinth.com,LIST
 HOST,cdn.myfonts.net,LIST
 HOST,cdn.myportfolio.com,LIST
 HOST,cdn.nerdschalk.com,LIST
+HOST,cdn.networklessons.com,LIST
 HOST,cdn.neverbounce.com,LIST
 HOST,cdn.now.gg,LIST
 HOST,cdn.onesignal.com,LIST
@@ -527,6 +531,7 @@ HOST,cloudflare.tv,LIST
 HOST,cms-assets.nodecraft.com,LIST
 HOST,cms-assets.webediamovies.pro,LIST
 HOST,cms-cdn.now.gg,LIST
+HOST,cms.payloadcms.com,LIST
 HOST,code.benco.io,LIST
 HOST,code.highcharts.com,LIST
 HOST,code.iconify.design,LIST
@@ -549,6 +554,7 @@ HOST,content-prod-live.cert.starbucks.com,LIST
 HOST,content.any.run,LIST
 HOST,content.jwplatform.com,LIST
 HOST,content.wepik.com,LIST
+HOST,contents-thumbnail2.fc2.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
 HOST,cors-proxy.htmldriven.com,LIST
 HOST,cp2.cloudflare.com,LIST
@@ -574,8 +580,11 @@ HOST,design-system.yext.com,LIST
 HOST,design.mayoclinic.org,LIST
 HOST,designsystem.brevo.com,LIST
 HOST,detectportal.firefox.com,LIST
+HOST,dh-site.b-cdn.net,LIST
 HOST,dims.apnews.com,LIST
 HOST,disco.headliner.link,LIST
+HOST,divhunt-site.b-cdn.net,LIST
+HOST,divhunt.b-cdn.net,LIST
 HOST,dl.nwjs.io,LIST
 HOST,dl2.nwjs.io,LIST
 HOST,docker.cloudsmith.io,LIST
@@ -613,6 +622,10 @@ HOST,encrypted-tbn0.gstatic.com,LIST
 HOST,encrypted-tbn1.gstatic.com,LIST
 HOST,encrypted-tbn2.gstatic.com,LIST
 HOST,encrypted-tbn3.gstatic.com,LIST
+HOST,encrypted-vtbn0.gstatic.com,LIST
+HOST,encrypted-vtbn1.gstatic.com,LIST
+HOST,encrypted-vtbn2.gstatic.com,LIST
+HOST,encrypted-vtbn3.gstatic.com,LIST
 HOST,epic-social-social-modules-prod.ol.epicgames.com,LIST
 HOST,error.rakuten.co.jp,LIST
 HOST,eu-images.contentstack.com,LIST
@@ -673,6 +686,7 @@ HOST,geoip-js.com,LIST
 HOST,gfonts.jifi.co,LIST
 HOST,gfx-data.news-engineering.aws.wapo.pub,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
+HOST,global.divhunt.com,LIST
 HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
 HOST,gn-web-assets.api.bbc.com,LIST
@@ -757,6 +771,7 @@ HOST,images.axios.com,LIST
 HOST,images.bfmtv.com,LIST
 HOST,images.contentful.com,LIST
 HOST,images.contentstack.io,LIST
+HOST,images.crunchbase.com,LIST
 HOST,images.design-editor.com,LIST
 HOST,images.dmca.com,LIST
 HOST,images.ecomm.microsoft.com,LIST
@@ -789,6 +804,7 @@ HOST,images.web3.storage,LIST
 HOST,images.weserv.nl,LIST
 HOST,images.wikia.com,LIST
 HOST,images.wsj.net,LIST
+HOST,images.youracclaim.com,LIST
 HOST,images1.vinted.net,LIST
 HOST,images7.design-editor.com,LIST
 HOST,images8.design-editor.com,LIST
@@ -821,6 +837,7 @@ HOST,img.javstore.net,LIST
 HOST,img.kbhgames.com,LIST
 HOST,img.kemono.su,LIST
 HOST,img.ltyears.com,LIST
+HOST,img.lvv2.com,LIST
 HOST,img.m.mw,LIST
 HOST,img.merch.cameo.com,LIST
 HOST,img.mresou.com,LIST
@@ -831,6 +848,7 @@ HOST,img.reg.ru,LIST
 HOST,img.reimu.net,LIST
 HOST,img.represent.com,LIST
 HOST,img.riskified.com,LIST
+HOST,img.sflix.to,LIST
 HOST,img.shoplineapp.com,LIST
 HOST,img.skk.moe,LIST
 HOST,img.sparknotes.com,LIST
@@ -880,6 +898,7 @@ HOST,js.short.io,LIST
 HOST,js.smile.io,LIST
 HOST,js.upload.io,LIST
 HOST,js.userflow.com,LIST
+HOST,js.verygoodvault.com,LIST
 HOST,kdata1.com,LIST
 HOST,keyframe-cdn.abcnews.com,LIST
 HOST,lain.bgm.tv,LIST
@@ -891,6 +910,7 @@ HOST,libs.quillbot.com,LIST
 HOST,link.storjshare.io,LIST
 HOST,linkstorage.linkfire.com,LIST
 HOST,linuxiac.b-cdn.net,LIST
+HOST,live-storage.fc2.com,LIST
 HOST,live.fanmingming.com,LIST
 HOST,livedoor.blogimg.jp,LIST
 HOST,load.csell.co,LIST
@@ -1076,6 +1096,7 @@ HOST,polyfill.bbhub.io,LIST
 HOST,polyfill.mailchimp.com,LIST
 HOST,pomf2.lain.la,LIST
 HOST,pool.jortage.com,LIST
+HOST,pplx-next-static-public.perplexity.ai,LIST
 HOST,practicaldev-herokuapp-com.freetls.fastly.net,LIST
 HOST,prego-cache.prod.sketch.com,LIST
 HOST,previews.123rf.com,LIST
@@ -1124,10 +1145,8 @@ HOST,repo.nextdns.io,LIST
 HOST,repo1.maven.org,LIST
 HOST,repos.danosproject.org,LIST
 HOST,repository.jboss.org,LIST
-HOST,res-1.cdn.office.net,LIST
 HOST,res-geo.cdn.office.net,LIST
 HOST,res.abc.net.au,LIST
-HOST,res.cdn.office.net,LIST
 HOST,res.cloudinary.com,LIST
 HOST,res2.weblium.site,LIST
 HOST,resize.blogsys.jp,LIST
@@ -1267,11 +1286,14 @@ HOST,static-cdn.spot.im,LIST
 HOST,static-clst.avgle.com,LIST
 HOST,static-community.tp-link.com,LIST
 HOST,static-dm.ubisoft.com,LIST
+HOST,static-e.live.fc2.com,LIST
 HOST,static-effect.reg.ru,LIST
 HOST,static-exp1.licdn.com,LIST
 HOST,static-exp2.licdn.com,LIST
 HOST,static-exp3.licdn.com,LIST
+HOST,static-forms.klaviyo.com,LIST
 HOST,static-gcp.freepikcompany.com,LIST
+HOST,static-id.fc2.com,LIST
 HOST,static-landing.probit.com,LIST
 HOST,static-lccn.leetcode.com,LIST
 HOST,static-main.moovit.com,LIST
@@ -1281,6 +1303,7 @@ HOST,static-production.npmjs.com,LIST
 HOST,static-r.kamihimeproject.net,LIST
 HOST,static-redesign.cnbcfm.com,LIST
 HOST,static-resource.np.community.playstation.net,LIST
+HOST,static-sv.fc2.com,LIST
 HOST,static-web-prod.skillshare.com,LIST
 HOST,static-web.grammarly.com,LIST
 HOST,static.4shared.com,LIST
@@ -1323,6 +1346,7 @@ HOST,static.ettoday.net,LIST
 HOST,static.euronews.com,LIST
 HOST,static.fasthosts.co.uk,LIST
 HOST,static.fc2.com,LIST
+HOST,static.fc2cn.com,LIST
 HOST,static.ffx.io,LIST
 HOST,static.figma.com,LIST
 HOST,static.files.bbci.co.uk,LIST
@@ -1352,6 +1376,7 @@ HOST,static.javcdn.info,LIST
 HOST,static.killedbygoogle.com,LIST
 HOST,static.klaviyo.com,LIST
 HOST,static.kobo.com,LIST
+HOST,static.launchdarkly.com,LIST
 HOST,static.licdn.com,LIST
 HOST,static.linear.app,LIST
 HOST,static.maxmind.com,LIST
@@ -1363,6 +1388,7 @@ HOST,static.missav.com,LIST
 HOST,static.mocortech.com,LIST
 HOST,static.moegoat.com,LIST
 HOST,static.monei.net,LIST
+HOST,static.moonpay.com,LIST
 HOST,static.mysph.sph.com.sg,LIST
 HOST,static.mytonwallet.io,LIST
 HOST,static.namebeta.com,LIST
@@ -1404,6 +1430,7 @@ HOST,static.start.me,LIST
 HOST,static.status.io,LIST
 HOST,static.t-ru.org,LIST
 HOST,static.telegraph.co.uk,LIST
+HOST,static.test-beta.com,LIST
 HOST,static.theguardian.com,LIST
 HOST,static.tokenview.io,LIST
 HOST,static.tradingview.com,LIST
@@ -1443,7 +1470,6 @@ HOST,staticmap.openstreetmap.de,LIST
 HOST,statics-marketingsites-eas-ms-com.akamaized.net,LIST
 HOST,statics-xbc-eas.xbox.com,LIST
 HOST,statics.goorm.io,LIST
-HOST,statics.teams.cdn.office.net,LIST
 HOST,staticw2.yotpo.com,LIST
 HOST,stats.setapp.com,LIST
 HOST,steamcdn-a.akamaihd.net,LIST
@@ -1467,8 +1493,12 @@ HOST,stubdownloader.services.mozilla.com,LIST
 HOST,sync.getpublica.com,LIST
 HOST,t.betterstack.com,LIST
 HOST,t.nhentai.net,LIST
+HOST,t0.gstatic.com,LIST
+HOST,t1.gstatic.com,LIST
 HOST,t1.picb.cc,LIST
+HOST,t2.gstatic.com,LIST
 HOST,t2.picb.cc,LIST
+HOST,t3.gstatic.com,LIST
 HOST,t3.picb.cc,LIST
 HOST,t4.picb.cc,LIST
 HOST,tags.bkrtx.com,LIST
@@ -1730,6 +1760,7 @@ HOST-SUFFIX,codepenassets.com,LIST
 HOST-SUFFIX,combinatronics.io,LIST
 HOST-SUFFIX,content-storage-upload.googleapis.com,LIST
 HOST-SUFFIX,content001.bet365.com,LIST
+HOST-SUFFIX,contents.fc2.com,LIST
 HOST-SUFFIX,coral.coralproject.net,LIST
 HOST-SUFFIX,corsproxy.io,LIST
 HOST-SUFFIX,crates.io,LIST
@@ -1971,7 +2002,6 @@ HOST-SUFFIX,kinja-static.com,LIST
 HOST-SUFFIX,kinsta.page,LIST
 HOST-SUFFIX,kirafile.com,LIST
 HOST-SUFFIX,klarnacdn.net,LIST
-HOST-SUFFIX,kuaikan-cdn4.com,LIST
 HOST-SUFFIX,kwcdn.com,LIST
 HOST-SUFFIX,kym-cdn.com,LIST
 HOST-SUFFIX,lencr.org,LIST
@@ -2054,6 +2084,7 @@ HOST-SUFFIX,pagecdn.io,LIST
 HOST-SUFFIX,pages.dev,LIST
 HOST-SUFFIX,parastorage.com,LIST
 HOST-SUFFIX,pastebin.com,LIST
+HOST-SUFFIX,payloadcms.app,LIST
 HOST-SUFFIX,permaweb.eu.org,LIST
 HOST-SUFFIX,permaweb.io,LIST
 HOST-SUFFIX,pgl.yoyo.org,LIST
@@ -2097,6 +2128,7 @@ HOST-SUFFIX,pstatic.net,LIST
 HOST-SUFFIX,pstorage.space,LIST
 HOST-SUFFIX,public.cdn.office.net,LIST
 HOST-SUFFIX,public.ecr.aws,LIST
+HOST-SUFFIX,push.services.mozilla.com,LIST
 HOST-SUFFIX,pxgcdn.com,LIST
 HOST-SUFFIX,pypi.org,LIST
 HOST-SUFFIX,pythonhosted.org,LIST
@@ -2212,6 +2244,7 @@ HOST-SUFFIX,swiftypecdn.com,LIST
 HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,tedcdn.com,LIST
+HOST-SUFFIX,telemetry.services.yofi.ai,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
 HOST-SUFFIX,thirdwebcdn.com,LIST
 HOST-SUFFIX,thisiscdn.com,LIST

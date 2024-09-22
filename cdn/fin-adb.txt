@@ -1,5 +1,5 @@
-# Adblock total line 2317
-# Last updated Thu 09/19/2024 22:11:10.56
+# Adblock total line 2350
+# Last updated Sun 09/22/2024 22:10:24.32
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||4gtvimg2.4gtv.tv^
@@ -240,6 +240,7 @@
 ||cdn-edge.karte.io^
 ||cdn-eu.dynamicyield.com^
 ||cdn-fck.tnaflix.com^
+||cdn-forum.networklessons.com^
 ||cdn-images-1.medium.com^
 ||cdn-images.mailchimp.com^
 ||cdn-live.foreignaffairs.com^
@@ -298,6 +299,7 @@
 ||cdn.codeblackbelt.com^
 ||cdn.commento.io^
 ||cdn.concert.io^
+||cdn.contentful.com^
 ||cdn.css.net^
 ||cdn.cxense.com^
 ||cdn.dap.dmm.co.jp^
@@ -315,6 +317,7 @@
 ||cdn.embed.ly^
 ||cdn.embedly.com^
 ||cdn.equalweb.com^
+||cdn.eu.contentful.com^
 ||cdn.european-alternatives.eu^
 ||cdn.faire.com^
 ||cdn.faveohelpdesk.com^
@@ -376,6 +379,7 @@
 ||cdn.myfonts.net^
 ||cdn.myportfolio.com^
 ||cdn.nerdschalk.com^
+||cdn.networklessons.com^
 ||cdn.neverbounce.com^
 ||cdn.now.gg^
 ||cdn.onesignal.com^
@@ -527,6 +531,7 @@
 ||cms-assets.nodecraft.com^
 ||cms-assets.webediamovies.pro^
 ||cms-cdn.now.gg^
+||cms.payloadcms.com^
 ||code.benco.io^
 ||code.highcharts.com^
 ||code.iconify.design^
@@ -549,6 +554,7 @@
 ||content.any.run^
 ||content.jwplatform.com^
 ||content.wepik.com^
+||contents-thumbnail2.fc2.com^
 ||cookie-cdn.cookiepro.com^
 ||cors-proxy.htmldriven.com^
 ||cp2.cloudflare.com^
@@ -574,8 +580,11 @@
 ||design.mayoclinic.org^
 ||designsystem.brevo.com^
 ||detectportal.firefox.com^
+||dh-site.b-cdn.net^
 ||dims.apnews.com^
 ||disco.headliner.link^
+||divhunt-site.b-cdn.net^
+||divhunt.b-cdn.net^
 ||dl.nwjs.io^
 ||dl2.nwjs.io^
 ||docker.cloudsmith.io^
@@ -613,6 +622,10 @@
 ||encrypted-tbn1.gstatic.com^
 ||encrypted-tbn2.gstatic.com^
 ||encrypted-tbn3.gstatic.com^
+||encrypted-vtbn0.gstatic.com^
+||encrypted-vtbn1.gstatic.com^
+||encrypted-vtbn2.gstatic.com^
+||encrypted-vtbn3.gstatic.com^
 ||epic-social-social-modules-prod.ol.epicgames.com^
 ||error.rakuten.co.jp^
 ||eu-images.contentstack.com^
@@ -673,6 +686,7 @@
 ||gfonts.jifi.co^
 ||gfx-data.news-engineering.aws.wapo.pub^
 ||gitpkg-fork.vercel.sh^
+||global.divhunt.com^
 ||glyph.medium.com^
 ||gmedia.playstation.com^
 ||gn-web-assets.api.bbc.com^
@@ -757,6 +771,7 @@
 ||images.bfmtv.com^
 ||images.contentful.com^
 ||images.contentstack.io^
+||images.crunchbase.com^
 ||images.design-editor.com^
 ||images.dmca.com^
 ||images.ecomm.microsoft.com^
@@ -789,6 +804,7 @@
 ||images.weserv.nl^
 ||images.wikia.com^
 ||images.wsj.net^
+||images.youracclaim.com^
 ||images1.vinted.net^
 ||images7.design-editor.com^
 ||images8.design-editor.com^
@@ -821,6 +837,7 @@
 ||img.kbhgames.com^
 ||img.kemono.su^
 ||img.ltyears.com^
+||img.lvv2.com^
 ||img.m.mw^
 ||img.merch.cameo.com^
 ||img.mresou.com^
@@ -831,6 +848,7 @@
 ||img.reimu.net^
 ||img.represent.com^
 ||img.riskified.com^
+||img.sflix.to^
 ||img.shoplineapp.com^
 ||img.skk.moe^
 ||img.sparknotes.com^
@@ -880,6 +898,7 @@
 ||js.smile.io^
 ||js.upload.io^
 ||js.userflow.com^
+||js.verygoodvault.com^
 ||kdata1.com^
 ||keyframe-cdn.abcnews.com^
 ||lain.bgm.tv^
@@ -891,6 +910,7 @@
 ||link.storjshare.io^
 ||linkstorage.linkfire.com^
 ||linuxiac.b-cdn.net^
+||live-storage.fc2.com^
 ||live.fanmingming.com^
 ||livedoor.blogimg.jp^
 ||load.csell.co^
@@ -1076,6 +1096,7 @@
 ||polyfill.mailchimp.com^
 ||pomf2.lain.la^
 ||pool.jortage.com^
+||pplx-next-static-public.perplexity.ai^
 ||practicaldev-herokuapp-com.freetls.fastly.net^
 ||prego-cache.prod.sketch.com^
 ||previews.123rf.com^
@@ -1124,10 +1145,8 @@
 ||repo1.maven.org^
 ||repos.danosproject.org^
 ||repository.jboss.org^
-||res-1.cdn.office.net^
 ||res-geo.cdn.office.net^
 ||res.abc.net.au^
-||res.cdn.office.net^
 ||res.cloudinary.com^
 ||res2.weblium.site^
 ||resize.blogsys.jp^
@@ -1267,11 +1286,14 @@
 ||static-clst.avgle.com^
 ||static-community.tp-link.com^
 ||static-dm.ubisoft.com^
+||static-e.live.fc2.com^
 ||static-effect.reg.ru^
 ||static-exp1.licdn.com^
 ||static-exp2.licdn.com^
 ||static-exp3.licdn.com^
+||static-forms.klaviyo.com^
 ||static-gcp.freepikcompany.com^
+||static-id.fc2.com^
 ||static-landing.probit.com^
 ||static-lccn.leetcode.com^
 ||static-main.moovit.com^
@@ -1281,6 +1303,7 @@
 ||static-r.kamihimeproject.net^
 ||static-redesign.cnbcfm.com^
 ||static-resource.np.community.playstation.net^
+||static-sv.fc2.com^
 ||static-web-prod.skillshare.com^
 ||static-web.grammarly.com^
 ||static.4shared.com^
@@ -1323,6 +1346,7 @@
 ||static.euronews.com^
 ||static.fasthosts.co.uk^
 ||static.fc2.com^
+||static.fc2cn.com^
 ||static.ffx.io^
 ||static.figma.com^
 ||static.files.bbci.co.uk^
@@ -1352,6 +1376,7 @@
 ||static.killedbygoogle.com^
 ||static.klaviyo.com^
 ||static.kobo.com^
+||static.launchdarkly.com^
 ||static.licdn.com^
 ||static.linear.app^
 ||static.maxmind.com^
@@ -1363,6 +1388,7 @@
 ||static.mocortech.com^
 ||static.moegoat.com^
 ||static.monei.net^
+||static.moonpay.com^
 ||static.mysph.sph.com.sg^
 ||static.mytonwallet.io^
 ||static.namebeta.com^
@@ -1404,6 +1430,7 @@
 ||static.status.io^
 ||static.t-ru.org^
 ||static.telegraph.co.uk^
+||static.test-beta.com^
 ||static.theguardian.com^
 ||static.tokenview.io^
 ||static.tradingview.com^
@@ -1443,7 +1470,6 @@
 ||statics-marketingsites-eas-ms-com.akamaized.net^
 ||statics-xbc-eas.xbox.com^
 ||statics.goorm.io^
-||statics.teams.cdn.office.net^
 ||staticw2.yotpo.com^
 ||stats.setapp.com^
 ||steamcdn-a.akamaihd.net^
@@ -1467,8 +1493,12 @@
 ||sync.getpublica.com^
 ||t.betterstack.com^
 ||t.nhentai.net^
+||t0.gstatic.com^
+||t1.gstatic.com^
 ||t1.picb.cc^
+||t2.gstatic.com^
 ||t2.picb.cc^
+||t3.gstatic.com^
 ||t3.picb.cc^
 ||t4.picb.cc^
 ||tags.bkrtx.com^
@@ -1730,6 +1760,7 @@
 ||combinatronics.io^
 ||content-storage-upload.googleapis.com^
 ||content001.bet365.com^
+||contents.fc2.com^
 ||coral.coralproject.net^
 ||corsproxy.io^
 ||crates.io^
@@ -1971,7 +2002,6 @@
 ||kinsta.page^
 ||kirafile.com^
 ||klarnacdn.net^
-||kuaikan-cdn4.com^
 ||kwcdn.com^
 ||kym-cdn.com^
 ||lencr.org^
@@ -2054,6 +2084,7 @@
 ||pages.dev^
 ||parastorage.com^
 ||pastebin.com^
+||payloadcms.app^
 ||permaweb.eu.org^
 ||permaweb.io^
 ||pgl.yoyo.org^
@@ -2097,6 +2128,7 @@
 ||pstorage.space^
 ||public.cdn.office.net^
 ||public.ecr.aws^
+||push.services.mozilla.com^
 ||pxgcdn.com^
 ||pypi.org^
 ||pythonhosted.org^
@@ -2212,6 +2244,7 @@
 ||sxccdn.com^
 ||tapecontent.net^
 ||tedcdn.com^
+||telemetry.services.yofi.ai^
 ||teraboxcdn.com^
 ||thirdwebcdn.com^
 ||thisiscdn.com^
