@@ -1,5 +1,5 @@
-# Main total line 5289
-# Last updated Sun 09/22/2024 22:10:33.16
+# Main total line 5306
+# Last updated Wed 09/25/2024 22:11:20.68
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,9191.ga
@@ -28,6 +28,7 @@ DOMAIN,amupdatedl2.microsoft.com
 DOMAIN,amupdatedl3.microsoft.com
 DOMAIN,amupdatedl4.microsoft.com
 DOMAIN,amupdatedl5.microsoft.com
+DOMAIN,android-safebrowsing.google.com
 DOMAIN,api-frameworks.vercel.sh
 DOMAIN,api-updates.orbstack.dev
 DOMAIN,api.allorigins.win
@@ -149,6 +150,7 @@ DOMAIN,assets.safing.io
 DOMAIN,assets.scaleflex.com
 DOMAIN,assets.scroll.com
 DOMAIN,assets.sendinblue.com
+DOMAIN,assets.shazam.com
 DOMAIN,assets.squarespace.com
 DOMAIN,assets.st-note.com
 DOMAIN,assets.stash.com
@@ -358,6 +360,7 @@ DOMAIN,cdn.hentaibomb.com
 DOMAIN,cdn.heysavvy.com
 DOMAIN,cdn.hongkongcard.com
 DOMAIN,cdn.hyperbeam.com
+DOMAIN,cdn.hypershort.com
 DOMAIN,cdn.imageengine.io
 DOMAIN,cdn.img.ly
 DOMAIN,cdn.ip2location.io
@@ -399,6 +402,7 @@ DOMAIN,cdn.neverbounce.com
 DOMAIN,cdn.now.gg
 DOMAIN,cdn.onesignal.com
 DOMAIN,cdn.onetime.dog
+DOMAIN,cdn.onlyhentaistuff.com
 DOMAIN,cdn.osxdaily.com
 DOMAIN,cdn.paddle.com
 DOMAIN,cdn.pagefly.io
@@ -461,6 +465,7 @@ DOMAIN,cdn.travis-ci.org
 DOMAIN,cdn.trustedsite.com
 DOMAIN,cdn.trustpilot.net
 DOMAIN,cdn.ttgtmedia.com
+DOMAIN,cdn.ttloli.com
 DOMAIN,cdn.tuk.dev
 DOMAIN,cdn.unwire.hk
 DOMAIN,cdn.up-timely.com
@@ -475,6 +480,7 @@ DOMAIN,cdn.weglot.com
 DOMAIN,cdn.windowsreport.com
 DOMAIN,cdn.winget.microsoft.com
 DOMAIN,cdn.wishpond.net
+DOMAIN,cdn.worldvectorlogo.com
 DOMAIN,cdn.writeas.net
 DOMAIN,cdn.xeiaso.net
 DOMAIN,cdn.yinghuazy.xyz
@@ -502,6 +508,7 @@ DOMAIN,cdn2.macpaw.com
 DOMAIN,cdn2.onlyfans.com
 DOMAIN,cdn2.stamped.io
 DOMAIN,cdn2.sysgears.com
+DOMAIN,cdn2.ttloli.com
 DOMAIN,cdn2.unrealengine.com
 DOMAIN,cdn3.dan.com
 DOMAIN,cdn3.hextom.com
@@ -539,6 +546,7 @@ DOMAIN,client.hikarifield.co.jp
 DOMAIN,client.px-cloud.net
 DOMAIN,cloud.redhat.com
 DOMAIN,cloudflare.tv
+DOMAIN,cloudfront.barilliance.com
 DOMAIN,cms-assets.nodecraft.com
 DOMAIN,cms-assets.webediamovies.pro
 DOMAIN,cms-cdn.now.gg
@@ -586,6 +594,7 @@ DOMAIN,crl.usertrust.com
 DOMAIN,crl.verisign.com
 DOMAIN,crt.comodoca.com
 DOMAIN,crt.usertrust.com
+DOMAIN,css.blackmagicdesign.com
 DOMAIN,css.createsend1.com
 DOMAIN,ctldl.windowsupdate.com
 DOMAIN,curl.se
@@ -772,6 +781,7 @@ DOMAIN,forest-mt-s3.seekrtech.com
 DOMAIN,formulae.brew.sh
 DOMAIN,frames-commandbar-prod.commandbar.com
 DOMAIN,front-resource.fs.com
+DOMAIN,fs2.onlyhentaistuff.com
 DOMAIN,ftp.gnu.org
 DOMAIN,g-static.ap4r.com
 DOMAIN,genesis-cdn.ff.com
@@ -793,6 +803,7 @@ DOMAIN,gopkg.in
 DOMAIN,graph.facebook.com
 DOMAIN,gravatar.cat.net
 DOMAIN,gspe1-ssl.ls.apple.com
+DOMAIN,gt1.onlyhentaistuff.com
 DOMAIN,gtranslate.io
 DOMAIN,h-dazn.online-metrix.net
 DOMAIN,h-netflix.online-metrix.net
@@ -811,6 +822,7 @@ DOMAIN,i.dailymail.co.uk
 DOMAIN,i.geekflare.com
 DOMAIN,i.giphy.com
 DOMAIN,i.guim.co.uk
+DOMAIN,i.gzn.jp
 DOMAIN,i.hamreus.com
 DOMAIN,i.hentaifox.com
 DOMAIN,i.ibb.co
@@ -866,6 +878,7 @@ DOMAIN,images-ext-2.discordapp.net
 DOMAIN,images.arigatotravel.com
 DOMAIN,images.axios.com
 DOMAIN,images.bfmtv.com
+DOMAIN,images.blackmagicdesign.com
 DOMAIN,images.contentful.com
 DOMAIN,images.contentstack.io
 DOMAIN,images.crunchbase.com
@@ -873,6 +886,7 @@ DOMAIN,images.design-editor.com
 DOMAIN,images.dmca.com
 DOMAIN,images.ecomm.microsoft.com
 DOMAIN,images.emojiterra.com
+DOMAIN,images.en.aptoide.com
 DOMAIN,images.everyplate.com
 DOMAIN,images.fandango.com
 DOMAIN,images.financemagnates.com
@@ -996,6 +1010,7 @@ DOMAIN,js.smile.io
 DOMAIN,js.upload.io
 DOMAIN,js.userflow.com
 DOMAIN,js.verygoodvault.com
+DOMAIN,jslibs.blackmagicdesign.com
 DOMAIN,kdata1.com
 DOMAIN,keyframe-cdn.abcnews.com
 DOMAIN,kh.google.com
@@ -1360,6 +1375,7 @@ DOMAIN,secure.telegraph.co.uk
 DOMAIN,security.debian.org
 DOMAIN,security.ubuntu.com
 DOMAIN,services.linkfire.com
+DOMAIN,sessions.bugsnag.com
 DOMAIN,sf-coze-web-cdn.coze.com
 DOMAIN,sf-flow-web-cdn.ciciai.com
 DOMAIN,share.riseup.net
@@ -1716,6 +1732,7 @@ DOMAIN,wl-apps.yourwebsite.life
 DOMAIN,wp.salesforce.com
 DOMAIN,wpmedia.tealium.com
 DOMAIN,ws-assets.zoominfo.com
+DOMAIN,ws2-cache.aptoide.com
 DOMAIN,ww2-secure.justanswer.com
 DOMAIN,ww2.justanswer.com
 DOMAIN,www-static.ripe.net

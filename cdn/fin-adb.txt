@@ -1,5 +1,5 @@
-# Adblock total line 2350
-# Last updated Sun 09/22/2024 22:10:24.32
+# Adblock total line 2366
+# Last updated Wed 09/25/2024 22:11:12.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||4gtvimg2.4gtv.tv^
@@ -25,6 +25,7 @@
 ||alt.idgesg.net^
 ||amp.azure.net^
 ||anchor.digitalocean.com^
+||android-safebrowsing.google.com^
 ||api-frameworks.vercel.sh^
 ||api.allorigins.win^
 ||api.bintray.com^
@@ -142,6 +143,7 @@
 ||assets.scaleflex.com^
 ||assets.scroll.com^
 ||assets.sendinblue.com^
+||assets.shazam.com^
 ||assets.squarespace.com^
 ||assets.st-note.com^
 ||assets.stash.com^
@@ -343,6 +345,7 @@
 ||cdn.hentaibomb.com^
 ||cdn.heysavvy.com^
 ||cdn.hongkongcard.com^
+||cdn.hypershort.com^
 ||cdn.imageengine.io^
 ||cdn.img.ly^
 ||cdn.ip2location.io^
@@ -384,6 +387,7 @@
 ||cdn.now.gg^
 ||cdn.onesignal.com^
 ||cdn.onetime.dog^
+||cdn.onlyhentaistuff.com^
 ||cdn.osxdaily.com^
 ||cdn.paddle.com^
 ||cdn.pagefly.io^
@@ -451,6 +455,7 @@
 ||cdn.trustedsite.com^
 ||cdn.trustpilot.net^
 ||cdn.ttgtmedia.com^
+||cdn.ttloli.com^
 ||cdn.tuk.dev^
 ||cdn.unwire.hk^
 ||cdn.up-timely.com^
@@ -465,6 +470,7 @@
 ||cdn.weglot.com^
 ||cdn.windowsreport.com^
 ||cdn.wishpond.net^
+||cdn.worldvectorlogo.com^
 ||cdn.writeas.net^
 ||cdn.xeiaso.net^
 ||cdn.yinghuazy.xyz^
@@ -492,6 +498,7 @@
 ||cdn2.onlyfans.com^
 ||cdn2.stamped.io^
 ||cdn2.sysgears.com^
+||cdn2.ttloli.com^
 ||cdn2.unrealengine.com^
 ||cdn3.dan.com^
 ||cdn3.hextom.com^
@@ -528,6 +535,7 @@
 ||clips-media-assets2.twitch.tv^
 ||cloud.redhat.com^
 ||cloudflare.tv^
+||cloudfront.barilliance.com^
 ||cms-assets.nodecraft.com^
 ||cms-assets.webediamovies.pro^
 ||cms-cdn.now.gg^
@@ -566,6 +574,7 @@
 ||crl.verisign.com^
 ||crt.comodoca.com^
 ||crt.usertrust.com^
+||css.blackmagicdesign.com^
 ||css.createsend1.com^
 ||curl.se^
 ||d4.alternativeto.net^
@@ -679,6 +688,7 @@
 ||frames-commandbar-prod.commandbar.com^
 ||freeshippingbar.herokuapp.com^
 ||front-resource.fs.com^
+||fs2.onlyhentaistuff.com^
 ||g-static.ap4r.com^
 ||g1.nyt.com^
 ||genesis-cdn.ff.com^
@@ -696,6 +706,7 @@
 ||gopkg.in^
 ||graph.facebook.com^
 ||gravatar.cat.net^
+||gt1.onlyhentaistuff.com^
 ||gtranslate.io^
 ||hawk.tomsguide.com^
 ||headway-widget.net^
@@ -708,6 +719,7 @@
 ||i.geekflare.com^
 ||i.giphy.com^
 ||i.guim.co.uk^
+||i.gzn.jp^
 ||i.hamreus.com^
 ||i.hentaifox.com^
 ||i.ibb.co^
@@ -769,6 +781,7 @@
 ||images.arigatotravel.com^
 ||images.axios.com^
 ||images.bfmtv.com^
+||images.blackmagicdesign.com^
 ||images.contentful.com^
 ||images.contentstack.io^
 ||images.crunchbase.com^
@@ -776,6 +789,7 @@
 ||images.dmca.com^
 ||images.ecomm.microsoft.com^
 ||images.emojiterra.com^
+||images.en.aptoide.com^
 ||images.everyplate.com^
 ||images.fandango.com^
 ||images.financemagnates.com^
@@ -899,6 +913,7 @@
 ||js.upload.io^
 ||js.userflow.com^
 ||js.verygoodvault.com^
+||jslibs.blackmagicdesign.com^
 ||kdata1.com^
 ||keyframe-cdn.abcnews.com^
 ||lain.bgm.tv^
@@ -992,7 +1007,6 @@
 ||mwf-service.akamaized.net^
 ||mycommerce.akamaized.net^
 ||na-library.klarnaservices.com^
-||nav.files.bbci.co.uk^
 ||navismithapis-cdn.com^
 ||nbcnewsdigital-static.nbcuni.com^
 ||net-fe-static-assets.network-controller.svc.ui.com^
@@ -1231,6 +1245,7 @@
 ||secure.fanboy.co.nz^
 ||secure.telegraph.co.uk^
 ||services.linkfire.com^
+||sessions.bugsnag.com^
 ||sf-coze-web-cdn.coze.com^
 ||sf-flow-web-cdn.ciciai.com^
 ||shell.cdn.office.net^
@@ -1349,7 +1364,6 @@
 ||static.fc2cn.com^
 ||static.ffx.io^
 ||static.figma.com^
-||static.files.bbci.co.uk^
 ||static.filestackapi.com^
 ||static.foxbusiness.com^
 ||static.foxnews.com^
@@ -1613,6 +1627,7 @@
 ||wp.salesforce.com^
 ||wpmedia.tealium.com^
 ||ws-assets.zoominfo.com^
+||ws2-cache.aptoide.com^
 ||ww2-secure.justanswer.com^
 ||ww2.justanswer.com^
 ||www-static.ripe.net^
@@ -1821,6 +1836,7 @@
 ||fbsbx.com^
 ||file.core.windows.net^
 ||filecunhua.top^
+||files.bbci.co.uk^
 ||files.gitbook.io^
 ||files.wordpress.com^
 ||firebaseapp.com^

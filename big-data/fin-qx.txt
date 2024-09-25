@@ -1,5 +1,5 @@
-# Quantumult total line 5274
-# Last updated Sun 09/22/2024 22:10:33.30
+# Quantumult total line 5291
+# Last updated Wed 09/25/2024 22:11:20.82
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,9191.ga,LIST
@@ -28,6 +28,7 @@ HOST,amupdatedl2.microsoft.com,LIST
 HOST,amupdatedl3.microsoft.com,LIST
 HOST,amupdatedl4.microsoft.com,LIST
 HOST,amupdatedl5.microsoft.com,LIST
+HOST,android-safebrowsing.google.com,LIST
 HOST,api-frameworks.vercel.sh,LIST
 HOST,api-updates.orbstack.dev,LIST
 HOST,api.allorigins.win,LIST
@@ -149,6 +150,7 @@ HOST,assets.safing.io,LIST
 HOST,assets.scaleflex.com,LIST
 HOST,assets.scroll.com,LIST
 HOST,assets.sendinblue.com,LIST
+HOST,assets.shazam.com,LIST
 HOST,assets.squarespace.com,LIST
 HOST,assets.st-note.com,LIST
 HOST,assets.stash.com,LIST
@@ -358,6 +360,7 @@ HOST,cdn.hentaibomb.com,LIST
 HOST,cdn.heysavvy.com,LIST
 HOST,cdn.hongkongcard.com,LIST
 HOST,cdn.hyperbeam.com,LIST
+HOST,cdn.hypershort.com,LIST
 HOST,cdn.imageengine.io,LIST
 HOST,cdn.img.ly,LIST
 HOST,cdn.ip2location.io,LIST
@@ -399,6 +402,7 @@ HOST,cdn.neverbounce.com,LIST
 HOST,cdn.now.gg,LIST
 HOST,cdn.onesignal.com,LIST
 HOST,cdn.onetime.dog,LIST
+HOST,cdn.onlyhentaistuff.com,LIST
 HOST,cdn.osxdaily.com,LIST
 HOST,cdn.paddle.com,LIST
 HOST,cdn.pagefly.io,LIST
@@ -461,6 +465,7 @@ HOST,cdn.travis-ci.org,LIST
 HOST,cdn.trustedsite.com,LIST
 HOST,cdn.trustpilot.net,LIST
 HOST,cdn.ttgtmedia.com,LIST
+HOST,cdn.ttloli.com,LIST
 HOST,cdn.tuk.dev,LIST
 HOST,cdn.unwire.hk,LIST
 HOST,cdn.up-timely.com,LIST
@@ -475,6 +480,7 @@ HOST,cdn.weglot.com,LIST
 HOST,cdn.windowsreport.com,LIST
 HOST,cdn.winget.microsoft.com,LIST
 HOST,cdn.wishpond.net,LIST
+HOST,cdn.worldvectorlogo.com,LIST
 HOST,cdn.writeas.net,LIST
 HOST,cdn.xeiaso.net,LIST
 HOST,cdn.yinghuazy.xyz,LIST
@@ -502,6 +508,7 @@ HOST,cdn2.macpaw.com,LIST
 HOST,cdn2.onlyfans.com,LIST
 HOST,cdn2.stamped.io,LIST
 HOST,cdn2.sysgears.com,LIST
+HOST,cdn2.ttloli.com,LIST
 HOST,cdn2.unrealengine.com,LIST
 HOST,cdn3.dan.com,LIST
 HOST,cdn3.hextom.com,LIST
@@ -539,6 +546,7 @@ HOST,client.hikarifield.co.jp,LIST
 HOST,client.px-cloud.net,LIST
 HOST,cloud.redhat.com,LIST
 HOST,cloudflare.tv,LIST
+HOST,cloudfront.barilliance.com,LIST
 HOST,cms-assets.nodecraft.com,LIST
 HOST,cms-assets.webediamovies.pro,LIST
 HOST,cms-cdn.now.gg,LIST
@@ -586,6 +594,7 @@ HOST,crl.usertrust.com,LIST
 HOST,crl.verisign.com,LIST
 HOST,crt.comodoca.com,LIST
 HOST,crt.usertrust.com,LIST
+HOST,css.blackmagicdesign.com,LIST
 HOST,css.createsend1.com,LIST
 HOST,ctldl.windowsupdate.com,LIST
 HOST,curl.se,LIST
@@ -772,6 +781,7 @@ HOST,forest-mt-s3.seekrtech.com,LIST
 HOST,formulae.brew.sh,LIST
 HOST,frames-commandbar-prod.commandbar.com,LIST
 HOST,front-resource.fs.com,LIST
+HOST,fs2.onlyhentaistuff.com,LIST
 HOST,ftp.gnu.org,LIST
 HOST,g-static.ap4r.com,LIST
 HOST,genesis-cdn.ff.com,LIST
@@ -793,6 +803,7 @@ HOST,gopkg.in,LIST
 HOST,graph.facebook.com,LIST
 HOST,gravatar.cat.net,LIST
 HOST,gspe1-ssl.ls.apple.com,LIST
+HOST,gt1.onlyhentaistuff.com,LIST
 HOST,gtranslate.io,LIST
 HOST,h-dazn.online-metrix.net,LIST
 HOST,h-netflix.online-metrix.net,LIST
@@ -811,6 +822,7 @@ HOST,i.dailymail.co.uk,LIST
 HOST,i.geekflare.com,LIST
 HOST,i.giphy.com,LIST
 HOST,i.guim.co.uk,LIST
+HOST,i.gzn.jp,LIST
 HOST,i.hamreus.com,LIST
 HOST,i.hentaifox.com,LIST
 HOST,i.ibb.co,LIST
@@ -866,6 +878,7 @@ HOST,images-ext-2.discordapp.net,LIST
 HOST,images.arigatotravel.com,LIST
 HOST,images.axios.com,LIST
 HOST,images.bfmtv.com,LIST
+HOST,images.blackmagicdesign.com,LIST
 HOST,images.contentful.com,LIST
 HOST,images.contentstack.io,LIST
 HOST,images.crunchbase.com,LIST
@@ -873,6 +886,7 @@ HOST,images.design-editor.com,LIST
 HOST,images.dmca.com,LIST
 HOST,images.ecomm.microsoft.com,LIST
 HOST,images.emojiterra.com,LIST
+HOST,images.en.aptoide.com,LIST
 HOST,images.everyplate.com,LIST
 HOST,images.fandango.com,LIST
 HOST,images.financemagnates.com,LIST
@@ -996,6 +1010,7 @@ HOST,js.smile.io,LIST
 HOST,js.upload.io,LIST
 HOST,js.userflow.com,LIST
 HOST,js.verygoodvault.com,LIST
+HOST,jslibs.blackmagicdesign.com,LIST
 HOST,kdata1.com,LIST
 HOST,keyframe-cdn.abcnews.com,LIST
 HOST,kh.google.com,LIST
@@ -1360,6 +1375,7 @@ HOST,secure.telegraph.co.uk,LIST
 HOST,security.debian.org,LIST
 HOST,security.ubuntu.com,LIST
 HOST,services.linkfire.com,LIST
+HOST,sessions.bugsnag.com,LIST
 HOST,sf-coze-web-cdn.coze.com,LIST
 HOST,sf-flow-web-cdn.ciciai.com,LIST
 HOST,share.riseup.net,LIST
@@ -1716,6 +1732,7 @@ HOST,wl-apps.yourwebsite.life,LIST
 HOST,wp.salesforce.com,LIST
 HOST,wpmedia.tealium.com,LIST
 HOST,ws-assets.zoominfo.com,LIST
+HOST,ws2-cache.aptoide.com,LIST
 HOST,ww2-secure.justanswer.com,LIST
 HOST,ww2.justanswer.com,LIST
 HOST,www-static.ripe.net,LIST

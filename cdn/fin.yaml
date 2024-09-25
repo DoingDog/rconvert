@@ -1,5 +1,5 @@
-# Clash total line 2350
-# Last updated Sun 09/22/2024 22:10:24.24
+# Clash total line 2366
+# Last updated Wed 09/25/2024 22:11:12.08
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -26,6 +26,7 @@ payload:
   - DOMAIN,alt.idgesg.net
   - DOMAIN,amp.azure.net
   - DOMAIN,anchor.digitalocean.com
+  - DOMAIN,android-safebrowsing.google.com
   - DOMAIN,api-frameworks.vercel.sh
   - DOMAIN,api.allorigins.win
   - DOMAIN,api.bintray.com
@@ -143,6 +144,7 @@ payload:
   - DOMAIN,assets.scaleflex.com
   - DOMAIN,assets.scroll.com
   - DOMAIN,assets.sendinblue.com
+  - DOMAIN,assets.shazam.com
   - DOMAIN,assets.squarespace.com
   - DOMAIN,assets.st-note.com
   - DOMAIN,assets.stash.com
@@ -344,6 +346,7 @@ payload:
   - DOMAIN,cdn.hentaibomb.com
   - DOMAIN,cdn.heysavvy.com
   - DOMAIN,cdn.hongkongcard.com
+  - DOMAIN,cdn.hypershort.com
   - DOMAIN,cdn.imageengine.io
   - DOMAIN,cdn.img.ly
   - DOMAIN,cdn.ip2location.io
@@ -385,6 +388,7 @@ payload:
   - DOMAIN,cdn.now.gg
   - DOMAIN,cdn.onesignal.com
   - DOMAIN,cdn.onetime.dog
+  - DOMAIN,cdn.onlyhentaistuff.com
   - DOMAIN,cdn.osxdaily.com
   - DOMAIN,cdn.paddle.com
   - DOMAIN,cdn.pagefly.io
@@ -452,6 +456,7 @@ payload:
   - DOMAIN,cdn.trustedsite.com
   - DOMAIN,cdn.trustpilot.net
   - DOMAIN,cdn.ttgtmedia.com
+  - DOMAIN,cdn.ttloli.com
   - DOMAIN,cdn.tuk.dev
   - DOMAIN,cdn.unwire.hk
   - DOMAIN,cdn.up-timely.com
@@ -466,6 +471,7 @@ payload:
   - DOMAIN,cdn.weglot.com
   - DOMAIN,cdn.windowsreport.com
   - DOMAIN,cdn.wishpond.net
+  - DOMAIN,cdn.worldvectorlogo.com
   - DOMAIN,cdn.writeas.net
   - DOMAIN,cdn.xeiaso.net
   - DOMAIN,cdn.yinghuazy.xyz
@@ -493,6 +499,7 @@ payload:
   - DOMAIN,cdn2.onlyfans.com
   - DOMAIN,cdn2.stamped.io
   - DOMAIN,cdn2.sysgears.com
+  - DOMAIN,cdn2.ttloli.com
   - DOMAIN,cdn2.unrealengine.com
   - DOMAIN,cdn3.dan.com
   - DOMAIN,cdn3.hextom.com
@@ -529,6 +536,7 @@ payload:
   - DOMAIN,clips-media-assets2.twitch.tv
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloudflare.tv
+  - DOMAIN,cloudfront.barilliance.com
   - DOMAIN,cms-assets.nodecraft.com
   - DOMAIN,cms-assets.webediamovies.pro
   - DOMAIN,cms-cdn.now.gg
@@ -567,6 +575,7 @@ payload:
   - DOMAIN,crl.verisign.com
   - DOMAIN,crt.comodoca.com
   - DOMAIN,crt.usertrust.com
+  - DOMAIN,css.blackmagicdesign.com
   - DOMAIN,css.createsend1.com
   - DOMAIN,curl.se
   - DOMAIN,d4.alternativeto.net
@@ -680,6 +689,7 @@ payload:
   - DOMAIN,frames-commandbar-prod.commandbar.com
   - DOMAIN,freeshippingbar.herokuapp.com
   - DOMAIN,front-resource.fs.com
+  - DOMAIN,fs2.onlyhentaistuff.com
   - DOMAIN,g-static.ap4r.com
   - DOMAIN,g1.nyt.com
   - DOMAIN,genesis-cdn.ff.com
@@ -697,6 +707,7 @@ payload:
   - DOMAIN,gopkg.in
   - DOMAIN,graph.facebook.com
   - DOMAIN,gravatar.cat.net
+  - DOMAIN,gt1.onlyhentaistuff.com
   - DOMAIN,gtranslate.io
   - DOMAIN,hawk.tomsguide.com
   - DOMAIN,headway-widget.net
@@ -709,6 +720,7 @@ payload:
   - DOMAIN,i.geekflare.com
   - DOMAIN,i.giphy.com
   - DOMAIN,i.guim.co.uk
+  - DOMAIN,i.gzn.jp
   - DOMAIN,i.hamreus.com
   - DOMAIN,i.hentaifox.com
   - DOMAIN,i.ibb.co
@@ -770,6 +782,7 @@ payload:
   - DOMAIN,images.arigatotravel.com
   - DOMAIN,images.axios.com
   - DOMAIN,images.bfmtv.com
+  - DOMAIN,images.blackmagicdesign.com
   - DOMAIN,images.contentful.com
   - DOMAIN,images.contentstack.io
   - DOMAIN,images.crunchbase.com
@@ -777,6 +790,7 @@ payload:
   - DOMAIN,images.dmca.com
   - DOMAIN,images.ecomm.microsoft.com
   - DOMAIN,images.emojiterra.com
+  - DOMAIN,images.en.aptoide.com
   - DOMAIN,images.everyplate.com
   - DOMAIN,images.fandango.com
   - DOMAIN,images.financemagnates.com
@@ -900,6 +914,7 @@ payload:
   - DOMAIN,js.upload.io
   - DOMAIN,js.userflow.com
   - DOMAIN,js.verygoodvault.com
+  - DOMAIN,jslibs.blackmagicdesign.com
   - DOMAIN,kdata1.com
   - DOMAIN,keyframe-cdn.abcnews.com
   - DOMAIN,lain.bgm.tv
@@ -993,7 +1008,6 @@ payload:
   - DOMAIN,mwf-service.akamaized.net
   - DOMAIN,mycommerce.akamaized.net
   - DOMAIN,na-library.klarnaservices.com
-  - DOMAIN,nav.files.bbci.co.uk
   - DOMAIN,navismithapis-cdn.com
   - DOMAIN,nbcnewsdigital-static.nbcuni.com
   - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
@@ -1232,6 +1246,7 @@ payload:
   - DOMAIN,secure.fanboy.co.nz
   - DOMAIN,secure.telegraph.co.uk
   - DOMAIN,services.linkfire.com
+  - DOMAIN,sessions.bugsnag.com
   - DOMAIN,sf-coze-web-cdn.coze.com
   - DOMAIN,sf-flow-web-cdn.ciciai.com
   - DOMAIN,shell.cdn.office.net
@@ -1350,7 +1365,6 @@ payload:
   - DOMAIN,static.fc2cn.com
   - DOMAIN,static.ffx.io
   - DOMAIN,static.figma.com
-  - DOMAIN,static.files.bbci.co.uk
   - DOMAIN,static.filestackapi.com
   - DOMAIN,static.foxbusiness.com
   - DOMAIN,static.foxnews.com
@@ -1614,6 +1628,7 @@ payload:
   - DOMAIN,wp.salesforce.com
   - DOMAIN,wpmedia.tealium.com
   - DOMAIN,ws-assets.zoominfo.com
+  - DOMAIN,ws2-cache.aptoide.com
   - DOMAIN,ww2-secure.justanswer.com
   - DOMAIN,ww2.justanswer.com
   - DOMAIN,www-static.ripe.net
@@ -1822,6 +1837,7 @@ payload:
   - DOMAIN-SUFFIX,fbsbx.com
   - DOMAIN-SUFFIX,file.core.windows.net
   - DOMAIN-SUFFIX,filecunhua.top
+  - DOMAIN-SUFFIX,files.bbci.co.uk
   - DOMAIN-SUFFIX,files.gitbook.io
   - DOMAIN-SUFFIX,files.wordpress.com
   - DOMAIN-SUFFIX,firebaseapp.com
