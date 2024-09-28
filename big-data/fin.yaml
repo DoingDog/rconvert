@@ -1,8 +1,9 @@
-# Clash total line 5306
-# Last updated Wed 09/25/2024 22:11:20.87
+# Clash total line 5333
+# Last updated Sat 09/28/2024 22:10:41.97
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
+  - DOMAIN,2mdn.net
   - DOMAIN,9191.ga
   - DOMAIN,a.deviantart.net
   - DOMAIN,a.fireside.fm
@@ -29,6 +30,7 @@ payload:
   - DOMAIN,amupdatedl3.microsoft.com
   - DOMAIN,amupdatedl4.microsoft.com
   - DOMAIN,amupdatedl5.microsoft.com
+  - DOMAIN,analytics.welcomesoftware.com
   - DOMAIN,android-safebrowsing.google.com
   - DOMAIN,api-frameworks.vercel.sh
   - DOMAIN,api-updates.orbstack.dev
@@ -41,6 +43,7 @@ payload:
   - DOMAIN,api.pwnedpasswords.com
   - DOMAIN,api.qrserver.com
   - DOMAIN,api.roboflow.com
+  - DOMAIN,api.weather.com
   - DOMAIN,api.web3.storage
   - DOMAIN,apm-misaka.biliapi.net
   - DOMAIN,app-api.vidjet.io
@@ -203,6 +206,7 @@ payload:
   - DOMAIN,avatars.micro.blog
   - DOMAIN,avatars.plurk.com
   - DOMAIN,avts.wmlabs.net
+  - DOMAIN,axiecdn.axieinfinity.com
   - DOMAIN,az700632.vo.msecnd.net
   - DOMAIN,az764295.vo.msecnd.net
   - DOMAIN,badbits.dwebops.pub
@@ -294,6 +298,7 @@ payload:
   - DOMAIN,cdn.apple-cloudkit.com
   - DOMAIN,cdn.apponic.com
   - DOMAIN,cdn.arcade.software
+  - DOMAIN,cdn.arduino.cc
   - DOMAIN,cdn.arstechnica.net
   - DOMAIN,cdn.ashbyprd.com
   - DOMAIN,cdn.auth0.com
@@ -324,6 +329,7 @@ payload:
   - DOMAIN,cdn.datatables.net
   - DOMAIN,cdn.datdota.com
   - DOMAIN,cdn.db-ip.com
+  - DOMAIN,cdn.decrypt.co
   - DOMAIN,cdn.dnsimple.com
   - DOMAIN,cdn.donmai.us
   - DOMAIN,cdn.dotaoutpost.com
@@ -574,6 +580,8 @@ payload:
   - DOMAIN,content-origin.steampowered.com
   - DOMAIN,content-prod-live.cert.starbucks.com
   - DOMAIN,content.any.run
+  - DOMAIN,content.arduino.cc
+  - DOMAIN,content.product.glitch.com
   - DOMAIN,content.wepik.com
   - DOMAIN,content1.steampowered.com
   - DOMAIN,content2.steampowered.com
@@ -734,6 +742,7 @@ payload:
   - DOMAIN,events-delivery.apple.com
   - DOMAIN,events-live.apple.com
   - DOMAIN,events.tableplus.com
+  - DOMAIN,explorer-api.walletconnect.com
   - DOMAIN,external-content.duckduckgo.com
   - DOMAIN,f.convertkit.com
   - DOMAIN,f.start.me
@@ -861,6 +870,7 @@ payload:
   - DOMAIN,image.gyutto.jp
   - DOMAIN,image.ibb.co
   - DOMAIN,image.lichess1.org
+  - DOMAIN,image.mux.com
   - DOMAIN,image.nmb.best
   - DOMAIN,image.send.grammarly.com
   - DOMAIN,image.ship.vercel.com
@@ -932,6 +942,7 @@ payload:
   - DOMAIN,img.catwvod.xyz
   - DOMAIN,img.clerk.com
   - DOMAIN,img.community.ui.com
+  - DOMAIN,img.decrypt.co
   - DOMAIN,img.dlsite.jp
   - DOMAIN,img.domaintools.com
   - DOMAIN,img.foresightnews.pro
@@ -985,6 +996,9 @@ payload:
   - DOMAIN,info.cloudflare.com
   - DOMAIN,info.knak.com
   - DOMAIN,install.virtfusion.net
+  - DOMAIN,int.mwbbiz.com
+  - DOMAIN,int.qiniuyun15.xyz
+  - DOMAIN,interactive-examples.mdn.mozilla.net
   - DOMAIN,interactive.guim.co.uk
   - DOMAIN,invent.kde.org
   - DOMAIN,ipfs.d.tube
@@ -1018,6 +1032,7 @@ payload:
   - DOMAIN,ktpx.amazon.com
   - DOMAIN,lain.bgm.tv
   - DOMAIN,lcdn-locator.apple.com
+  - DOMAIN,learn.optimizely.com
   - DOMAIN,ledger-wp-website-s3-prd.ledger.com
   - DOMAIN,level3.blizzard.com
   - DOMAIN,lib.arvancloud.com
@@ -1036,6 +1051,8 @@ payload:
   - DOMAIN,m-cdn.phonearena.com
   - DOMAIN,m.wsj.net
   - DOMAIN,mac-release-static.stash.ws
+  - DOMAIN,mangaz-books.j-comi.jp
+  - DOMAIN,mangaz-static.j-comi.jp
   - DOMAIN,mantisloader.mantis-awx.com
   - DOMAIN,maps.geoapify.com
   - DOMAIN,marketplace-web-assets.vinted.com
@@ -1125,8 +1142,10 @@ payload:
   - DOMAIN,mirrors.xtom.sg
   - DOMAIN,mirrors.xtom.us
   - DOMAIN,mixin-images.zeromesh.net
+  - DOMAIN,mkt-site-asset.crypto.com
   - DOMAIN,mobilecenter.azureedge.net
   - DOMAIN,momentjs.com
+  - DOMAIN,mparticle.weather.com
   - DOMAIN,mstdn-s3.o3o.studio
   - DOMAIN,mui.com
   - DOMAIN,mw1.google.com
@@ -1244,6 +1263,7 @@ payload:
   - DOMAIN,previews.fleek.co
   - DOMAIN,pro2-ui-assets-s3-fy.myportfolio.com
   - DOMAIN,prod-packager-packages.codesandbox.io
+  - DOMAIN,prod.addictinggames.com
   - DOMAIN,prod.msocdn.com
   - DOMAIN,product-downloads.atlassian.com
   - DOMAIN,profile-images.xing.com
@@ -1388,6 +1408,7 @@ payload:
   - DOMAIN,sigma9.zokhoi.com
   - DOMAIN,signal.cdnbye.com
   - DOMAIN,signalcloud.cdnbye.com
+  - DOMAIN,siloh-ns1.plutotv.net
   - DOMAIN,simpleicons.org
   - DOMAIN,simplicity.trustpilot.com
   - DOMAIN,sites.super.so
@@ -1684,6 +1705,7 @@ payload:
   - DOMAIN,uts-api.itunes.apple.com
   - DOMAIN,utteranc.es
   - DOMAIN,v.hillwaver.com
+  - DOMAIN,v.w-x.co
   - DOMAIN,vanilla-extract.style
   - DOMAIN,versionbadg.es
   - DOMAIN,versioncheck-bg.addons.mozilla.org
@@ -1723,10 +1745,13 @@ payload:
   - DOMAIN,widget.trustpilot.com
   - DOMAIN,widget.user.com
   - DOMAIN,widget.uservoice.com
+  - DOMAIN,widgets-red.media.weather.com
+  - DOMAIN,widgets.media.weather.com
   - DOMAIN,widgets.outbrain.com
   - DOMAIN,widgets.tree-nation.com
   - DOMAIN,widgets.wp.com
   - DOMAIN,widgets.zohosalesiq.com
+  - DOMAIN,wikiless.chaosmos.io
   - DOMAIN,wikiwandv2-19431.kxcdn.com
   - DOMAIN,wimg.rule34.xxx
   - DOMAIN,wl-apps.yourwebsite.life
@@ -1788,6 +1813,7 @@ payload:
   - DOMAIN-SUFFIX,a24films.com
   - DOMAIN-SUFFIX,aaa.ax
   - DOMAIN-SUFFIX,aacdn.nagich.com
+  - DOMAIN-SUFFIX,aayinltcs.arduino.cc
   - DOMAIN-SUFFIX,abc-cdn.net
   - DOMAIN-SUFFIX,abc-cdn.net.au
   - DOMAIN-SUFFIX,abc-studios.com
@@ -3705,6 +3731,7 @@ payload:
   - DOMAIN-SUFFIX,rosefile.net
   - DOMAIN-SUFFIX,rprimelab.com
   - DOMAIN-SUFFIX,rsb.net
+  - DOMAIN-SUFFIX,rspcdn.net
   - DOMAIN-SUFFIX,rss3.dev
   - DOMAIN-SUFFIX,rthk.hk
   - DOMAIN-SUFFIX,rthk.org.hk

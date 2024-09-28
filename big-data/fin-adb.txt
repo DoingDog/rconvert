@@ -1,7 +1,8 @@
-# Adblock total line 4355
-# Last updated Wed 09/25/2024 22:11:20.96
+# Adblock total line 4382
+# Last updated Sat 09/28/2024 22:10:42.08
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
+||2mdn.net^
 ||9191.ga^
 ||a.deviantart.net^
 ||a.fireside.fm^
@@ -28,6 +29,7 @@
 ||amupdatedl3.microsoft.com^
 ||amupdatedl4.microsoft.com^
 ||amupdatedl5.microsoft.com^
+||analytics.welcomesoftware.com^
 ||android-safebrowsing.google.com^
 ||api-frameworks.vercel.sh^
 ||api-updates.orbstack.dev^
@@ -40,6 +42,7 @@
 ||api.pwnedpasswords.com^
 ||api.qrserver.com^
 ||api.roboflow.com^
+||api.weather.com^
 ||api.web3.storage^
 ||apm-misaka.biliapi.net^
 ||app-api.vidjet.io^
@@ -202,6 +205,7 @@
 ||avatars.micro.blog^
 ||avatars.plurk.com^
 ||avts.wmlabs.net^
+||axiecdn.axieinfinity.com^
 ||az700632.vo.msecnd.net^
 ||az764295.vo.msecnd.net^
 ||badbits.dwebops.pub^
@@ -293,6 +297,7 @@
 ||cdn.apple-cloudkit.com^
 ||cdn.apponic.com^
 ||cdn.arcade.software^
+||cdn.arduino.cc^
 ||cdn.arstechnica.net^
 ||cdn.ashbyprd.com^
 ||cdn.auth0.com^
@@ -323,6 +328,7 @@
 ||cdn.datatables.net^
 ||cdn.datdota.com^
 ||cdn.db-ip.com^
+||cdn.decrypt.co^
 ||cdn.dnsimple.com^
 ||cdn.donmai.us^
 ||cdn.dotaoutpost.com^
@@ -573,6 +579,8 @@
 ||content-origin.steampowered.com^
 ||content-prod-live.cert.starbucks.com^
 ||content.any.run^
+||content.arduino.cc^
+||content.product.glitch.com^
 ||content.wepik.com^
 ||content1.steampowered.com^
 ||content2.steampowered.com^
@@ -733,6 +741,7 @@
 ||events-delivery.apple.com^
 ||events-live.apple.com^
 ||events.tableplus.com^
+||explorer-api.walletconnect.com^
 ||external-content.duckduckgo.com^
 ||f.convertkit.com^
 ||f.start.me^
@@ -860,6 +869,7 @@
 ||image.gyutto.jp^
 ||image.ibb.co^
 ||image.lichess1.org^
+||image.mux.com^
 ||image.nmb.best^
 ||image.send.grammarly.com^
 ||image.ship.vercel.com^
@@ -931,6 +941,7 @@
 ||img.catwvod.xyz^
 ||img.clerk.com^
 ||img.community.ui.com^
+||img.decrypt.co^
 ||img.dlsite.jp^
 ||img.domaintools.com^
 ||img.foresightnews.pro^
@@ -984,6 +995,9 @@
 ||info.cloudflare.com^
 ||info.knak.com^
 ||install.virtfusion.net^
+||int.mwbbiz.com^
+||int.qiniuyun15.xyz^
+||interactive-examples.mdn.mozilla.net^
 ||interactive.guim.co.uk^
 ||invent.kde.org^
 ||ipfs.d.tube^
@@ -1017,6 +1031,7 @@
 ||ktpx.amazon.com^
 ||lain.bgm.tv^
 ||lcdn-locator.apple.com^
+||learn.optimizely.com^
 ||ledger-wp-website-s3-prd.ledger.com^
 ||level3.blizzard.com^
 ||lib.arvancloud.com^
@@ -1035,6 +1050,8 @@
 ||m-cdn.phonearena.com^
 ||m.wsj.net^
 ||mac-release-static.stash.ws^
+||mangaz-books.j-comi.jp^
+||mangaz-static.j-comi.jp^
 ||mantisloader.mantis-awx.com^
 ||maps.geoapify.com^
 ||marketplace-web-assets.vinted.com^
@@ -1124,8 +1141,10 @@
 ||mirrors.xtom.sg^
 ||mirrors.xtom.us^
 ||mixin-images.zeromesh.net^
+||mkt-site-asset.crypto.com^
 ||mobilecenter.azureedge.net^
 ||momentjs.com^
+||mparticle.weather.com^
 ||mstdn-s3.o3o.studio^
 ||mui.com^
 ||mw1.google.com^
@@ -1243,6 +1262,7 @@
 ||previews.fleek.co^
 ||pro2-ui-assets-s3-fy.myportfolio.com^
 ||prod-packager-packages.codesandbox.io^
+||prod.addictinggames.com^
 ||prod.msocdn.com^
 ||product-downloads.atlassian.com^
 ||profile-images.xing.com^
@@ -1387,6 +1407,7 @@
 ||sigma9.zokhoi.com^
 ||signal.cdnbye.com^
 ||signalcloud.cdnbye.com^
+||siloh-ns1.plutotv.net^
 ||simpleicons.org^
 ||simplicity.trustpilot.com^
 ||sites.super.so^
@@ -1683,6 +1704,7 @@
 ||uts-api.itunes.apple.com^
 ||utteranc.es^
 ||v.hillwaver.com^
+||v.w-x.co^
 ||vanilla-extract.style^
 ||versionbadg.es^
 ||versioncheck-bg.addons.mozilla.org^
@@ -1722,10 +1744,13 @@
 ||widget.trustpilot.com^
 ||widget.user.com^
 ||widget.uservoice.com^
+||widgets-red.media.weather.com^
+||widgets.media.weather.com^
 ||widgets.outbrain.com^
 ||widgets.tree-nation.com^
 ||widgets.wp.com^
 ||widgets.zohosalesiq.com^
+||wikiless.chaosmos.io^
 ||wikiwandv2-19431.kxcdn.com^
 ||wimg.rule34.xxx^
 ||wl-apps.yourwebsite.life^
@@ -1787,6 +1812,7 @@
 ||a24films.com^
 ||aaa.ax^
 ||aacdn.nagich.com^
+||aayinltcs.arduino.cc^
 ||abc-cdn.net^
 ||abc-cdn.net.au^
 ||abc-studios.com^
@@ -3704,6 +3730,7 @@
 ||rosefile.net^
 ||rprimelab.com^
 ||rsb.net^
+||rspcdn.net^
 ||rss3.dev^
 ||rthk.hk^
 ||rthk.org.hk^

@@ -1,7 +1,8 @@
-# Adblock total line 2366
-# Last updated Wed 09/25/2024 22:11:12.16
+# Adblock total line 2395
+# Last updated Sat 09/28/2024 22:10:32.93
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
+||2mdn.net^
 ||4gtvimg2.4gtv.tv^
 ||9191.ga^
 ||a.deviantart.net^
@@ -24,6 +25,7 @@
 ||alt-images.codestream.com^
 ||alt.idgesg.net^
 ||amp.azure.net^
+||analytics.welcomesoftware.com^
 ||anchor.digitalocean.com^
 ||android-safebrowsing.google.com^
 ||api-frameworks.vercel.sh^
@@ -35,6 +37,7 @@
 ||api.pwnedpasswords.com^
 ||api.qrserver.com^
 ||api.roboflow.com^
+||api.weather.com^
 ||api.web3.storage^
 ||app-api.vidjet.io^
 ||app-spm.com^
@@ -197,6 +200,7 @@
 ||avatars.micro.blog^
 ||avatars.plurk.com^
 ||avts.wmlabs.net^
+||axiecdn.axieinfinity.com^
 ||az700632.vo.msecnd.net^
 ||badbits.dwebops.pub^
 ||badge.buildkite.com^
@@ -275,6 +279,7 @@
 ||cdn.apkmonk.com^
 ||cdn.apponic.com^
 ||cdn.arcade.software^
+||cdn.arduino.cc^
 ||cdn.arstechnica.net^
 ||cdn.ashbyprd.com^
 ||cdn.assets.as2.amazonaws.com^
@@ -309,6 +314,7 @@
 ||cdn.datatables.net^
 ||cdn.datdota.com^
 ||cdn.db-ip.com^
+||cdn.decrypt.co^
 ||cdn.dnsimple.com^
 ||cdn.donmai.us^
 ||cdn.dotaoutpost.com^
@@ -560,7 +566,9 @@
 ||consumersite-assets.trustpilot.net^
 ||content-prod-live.cert.starbucks.com^
 ||content.any.run^
+||content.arduino.cc^
 ||content.jwplatform.com^
+||content.product.glitch.com^
 ||content.wepik.com^
 ||contents-thumbnail2.fc2.com^
 ||cookie-cdn.cookiepro.com^
@@ -643,6 +651,7 @@
 ||events-delivery.apple.com^
 ||events-live.apple.com^
 ||events.tableplus.com^
+||explorer-api.walletconnect.com^
 ||external-content.duckduckgo.com^
 ||f.convertkit.com^
 ||f.start.me^
@@ -762,6 +771,7 @@
 ||image.gyutto.jp^
 ||image.ibb.co^
 ||image.lichess1.org^
+||image.mux.com^
 ||image.nmb.best^
 ||image.p-c2-x.abema-tv.com^
 ||image.send.grammarly.com^
@@ -805,6 +815,7 @@
 ||images.opencollective.com^
 ||images.pexels.com^
 ||images.plurk.com^
+||images.pluto.tv^
 ||images.prismic.io^
 ||images.ptt.cc^
 ||images.purevpn-tools.com^
@@ -838,6 +849,7 @@
 ||img.clerk.com^
 ||img.community.ui.com^
 ||img.connatix.com^
+||img.decrypt.co^
 ||img.dlsite.jp^
 ||img.domaintools.com^
 ||img.foresightnews.pro^
@@ -890,6 +902,9 @@
 ||imgur.dcard.tw^
 ||info.cloudflare.com^
 ||info.knak.com^
+||int.mwbbiz.com^
+||int.qiniuyun15.xyz^
+||interactive-examples.mdn.mozilla.net^
 ||interactive.guim.co.uk^
 ||ipfs.d.tube^
 ||irp-cdn.multiscreensite.com^
@@ -919,6 +934,7 @@
 ||lain.bgm.tv^
 ||launchercontent.mojang.com^
 ||lcdn-locator.apple.com^
+||learn.optimizely.com^
 ||ledger-wp-website-s3-prd.ledger.com^
 ||lib.arvancloud.com^
 ||libs.quillbot.com^
@@ -936,6 +952,8 @@
 ||lumiere-a.akamaihd.net^
 ||m-cdn.phonearena.com^
 ||m.wsj.net^
+||mangaz-books.j-comi.jp^
+||mangaz-static.j-comi.jp^
 ||mantisloader.mantis-awx.com^
 ||maps.geoapify.com^
 ||marketplace-web-assets.vinted.com^
@@ -999,8 +1017,10 @@
 ||mir-s3-cdn-cf.behance.net^
 ||miro.medium.com^
 ||mixin-images.zeromesh.net^
+||mkt-site-asset.crypto.com^
 ||mobilecenter.azureedge.net^
 ||momentjs.com^
+||mparticle.weather.com^
 ||mstdn-s3.o3o.studio^
 ||mui.com^
 ||mwcm.nyt.com^
@@ -1119,6 +1139,7 @@
 ||prod-packager-packages.codesandbox.io^
 ||prod-streaming-video-msn-com.akamaized.net^
 ||prod-video-cms-amp-microsoft-com.akamaized.net^
+||prod.addictinggames.com^
 ||prod.msocdn.com^
 ||prodamdnewsencoding.akamaized.net^
 ||production-cmp.isgprivacy.cbsi.com^
@@ -1256,6 +1277,7 @@
 ||sigma9.zokhoi.com^
 ||signal.cdnbye.com^
 ||signalcloud.cdnbye.com^
+||siloh-ns1.plutotv.net^
 ||simpleicons.org^
 ||simplicity.trustpilot.com^
 ||sites.super.so^
@@ -1576,6 +1598,7 @@
 ||useruploads.visualwebsiteoptimizer.com^
 ||utteranc.es^
 ||v.hillwaver.com^
+||v.w-x.co^
 ||vanilla-extract.style^
 ||versionbadg.es^
 ||vetted.ai^
@@ -1617,10 +1640,13 @@
 ||widget.trustpilot.com^
 ||widget.user.com^
 ||widget.uservoice.com^
+||widgets-red.media.weather.com^
+||widgets.media.weather.com^
 ||widgets.outbrain.com^
 ||widgets.tree-nation.com^
 ||widgets.wp.com^
 ||widgets.zohosalesiq.com^
+||wikiless.chaosmos.io^
 ||wikiwandv2-19431.kxcdn.com^
 ||wimg.rule34.xxx^
 ||wl-apps.yourwebsite.life^
@@ -1654,6 +1680,7 @@
 ||9cache.com^
 ||a.storyblok.com^
 ||aacdn.nagich.com^
+||aayinltcs.arduino.cc^
 ||abc-cdn.net^
 ||abc-cdn.net.au^
 ||abcnewsfe.com^
@@ -1705,6 +1732,7 @@
 ||botsrv2.com^
 ||boxcdn.net^
 ||bp.blogspot.com^
+||bstarstatic.com^
 ||bstatic.com^
 ||bundle.run^
 ||bundle.thimatic-apps.com^
@@ -2178,6 +2206,7 @@
 ||rocketcdn.me^
 ||rollupjs.org^
 ||rsb.net^
+||rspcdn.net^
 ||rss3.dev^
 ||ruleset.skk.moe^
 ||runkitcdn.com^
