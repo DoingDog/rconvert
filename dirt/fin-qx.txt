@@ -1,5 +1,5 @@
-# Quantumult total line 4300
-# Last updated Sat 09/28/2024 22:10:49.53
+# Quantumult total line 4303
+# Last updated Tue 10/01/2024 22:11:51.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -316,6 +316,7 @@ HOST-SUFFIX,99fund.com,LIST
 HOST-SUFFIX,9ht.com,LIST
 HOST-SUFFIX,9xgame.com,LIST
 HOST-SUFFIX,9xu.com,LIST
+HOST-SUFFIX,_adb-tls-connect._tcp,LIST
 HOST-SUFFIX,_hotspot_.m2m,LIST
 HOST-SUFFIX,a9vg.com,LIST
 HOST-SUFFIX,aaplimg.com,LIST
@@ -699,6 +700,7 @@ HOST-SUFFIX,camscanner.com,LIST
 HOST-SUFFIX,cang.com,LIST
 HOST-SUFFIX,cankaoxiaoxi.com,LIST
 HOST-SUFFIX,capitalonline.net,LIST
+HOST-SUFFIX,captive.apple.com,LIST
 HOST-SUFFIX,cardbaobao.com,LIST
 HOST-SUFFIX,carnoc.com,LIST
 HOST-SUFFIX,cas.org,LIST
@@ -2977,6 +2979,7 @@ HOST-SUFFIX,sencdn.com,LIST
 HOST-SUFFIX,seniverse.com,LIST
 HOST-SUFFIX,senlinjimore.com,LIST
 HOST-SUFFIX,servicewechat.com,LIST
+HOST-SUFFIX,setapp.click,LIST
 HOST-SUFFIX,setmeup.arubanetworks.com,LIST
 HOST-SUFFIX,sevencdn.com,LIST
 HOST-SUFFIX,sf-airlines.com,LIST

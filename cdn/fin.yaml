@@ -1,5 +1,5 @@
-# Clash total line 2395
-# Last updated Sat 09/28/2024 22:10:32.85
+# Clash total line 2410
+# Last updated Tue 10/01/2024 22:11:33.93
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -98,6 +98,7 @@ payload:
   - DOMAIN,assets.dnsfilter.com
   - DOMAIN,assets.dwncdn.net
   - DOMAIN,assets.ecomm.ui.com
+  - DOMAIN,assets.euractiv.com
   - DOMAIN,assets.exercism.org
   - DOMAIN,assets.extension.grammarly.com
   - DOMAIN,assets.fastly.com
@@ -130,6 +131,7 @@ payload:
   - DOMAIN,assets.mozilla.social
   - DOMAIN,assets.msn.com
   - DOMAIN,assets.nationbuilder.com
+  - DOMAIN,assets.newrepublic.com
   - DOMAIN,assets.nintendo.com
   - DOMAIN,assets.onestore.ms
   - DOMAIN,assets.ontrack.com
@@ -251,6 +253,7 @@ payload:
   - DOMAIN,cdn-images-1.medium.com
   - DOMAIN,cdn-images.mailchimp.com
   - DOMAIN,cdn-live.foreignaffairs.com
+  - DOMAIN,cdn-longterm.mee6.xyz
   - DOMAIN,cdn-media-1.freecodecamp.org
   - DOMAIN,cdn-media-2.freecodecamp.org
   - DOMAIN,cdn-mobile.aptoide.com
@@ -307,6 +310,7 @@ payload:
   - DOMAIN,cdn.codeblackbelt.com
   - DOMAIN,cdn.commento.io
   - DOMAIN,cdn.concert.io
+  - DOMAIN,cdn.consentmanager.net
   - DOMAIN,cdn.contentful.com
   - DOMAIN,cdn.css.net
   - DOMAIN,cdn.cxense.com
@@ -316,6 +320,7 @@ payload:
   - DOMAIN,cdn.datdota.com
   - DOMAIN,cdn.db-ip.com
   - DOMAIN,cdn.decrypt.co
+  - DOMAIN,cdn.deta.space
   - DOMAIN,cdn.dnsimple.com
   - DOMAIN,cdn.donmai.us
   - DOMAIN,cdn.dotaoutpost.com
@@ -416,6 +421,7 @@ payload:
   - DOMAIN,cdn.pricespider.com
   - DOMAIN,cdn.privacy-mgmt.com
   - DOMAIN,cdn.privacy.paramount.com
+  - DOMAIN,cdn.prod.www.spiegel.de
   - DOMAIN,cdn.prowritingaid.com
   - DOMAIN,cdn.quadpay.com
   - DOMAIN,cdn.rauno.me
@@ -811,6 +817,7 @@ payload:
   - DOMAIN,images.macrumors.com
   - DOMAIN,images.moegoat.com
   - DOMAIN,images.moovitapp.com
+  - DOMAIN,images.newrepublic.com
   - DOMAIN,images.now-tv.com
   - DOMAIN,images.nvidia.com
   - DOMAIN,images.opencollective.com
@@ -957,6 +964,7 @@ payload:
   - DOMAIN,mangaz-static.j-comi.jp
   - DOMAIN,mantisloader.mantis-awx.com
   - DOMAIN,maps.geoapify.com
+  - DOMAIN,maps.gstatic.com
   - DOMAIN,marketplace-web-assets.vinted.com
   - DOMAIN,mastodon-static.miao.dev
   - DOMAIN,maven.google.com
@@ -1134,6 +1142,7 @@ payload:
   - DOMAIN,pplx-next-static-public.perplexity.ai
   - DOMAIN,practicaldev-herokuapp-com.freetls.fastly.net
   - DOMAIN,prego-cache.prod.sketch.com
+  - DOMAIN,prettier.io
   - DOMAIN,previews.123rf.com
   - DOMAIN,previews.fleek.co
   - DOMAIN,pro2-ui-assets-s3-fy.myportfolio.com
@@ -1293,6 +1302,7 @@ payload:
   - DOMAIN,social-cdn.vivaldi.net
   - DOMAIN,source.domaintools.com
   - DOMAIN,sourcepoint.theguardian.com
+  - DOMAIN,sp-spiegel-de.spiegel.de
   - DOMAIN,sp.replit.com
   - DOMAIN,spcdn.incartupsell.com
   - DOMAIN,sponsor.ajay.app
@@ -1509,6 +1519,7 @@ payload:
   - DOMAIN,statics.goorm.io
   - DOMAIN,staticw2.yotpo.com
   - DOMAIN,stats.setapp.com
+  - DOMAIN,stats.setapp.macpaw.dev
   - DOMAIN,steamcdn-a.akamaihd.net
   - DOMAIN,steamusercontent-a.akamaihd.net
   - DOMAIN,steamuserimages-a.akamaihd.net
@@ -1517,6 +1528,7 @@ payload:
   - DOMAIN,storage.crisp.chat
   - DOMAIN,storage.gra.cloud.ovh.net
   - DOMAIN,storage.sciencecast.org
+  - DOMAIN,storage.withfabric.xyz
   - DOMAIN,storageapi.fleek.co
   - DOMAIN,storageapi.fleek.one
   - DOMAIN,storageapi2.fleek.co
@@ -1810,6 +1822,7 @@ payload:
   - DOMAIN-SUFFIX,crates.io
   - DOMAIN-SUFFIX,crossbell.io
   - DOMAIN-SUFFIX,csb.app
+  - DOMAIN-SUFFIX,csp-reporting.cloudflare.com
   - DOMAIN-SUFFIX,csp.withgoogle.com
   - DOMAIN-SUFFIX,ctfassets.net
   - DOMAIN-SUFFIX,cthd.icu
@@ -1910,6 +1923,7 @@ payload:
   - DOMAIN-SUFFIX,gitpage.si
   - DOMAIN-SUFFIX,glass.adidas.com
   - DOMAIN-SUFFIX,glbimg.com
+  - DOMAIN-SUFFIX,googleadservices.com
   - DOMAIN-SUFFIX,googleusercontent.com
   - DOMAIN-SUFFIX,gravatar.com
   - DOMAIN-SUFFIX,gravity.jup.io
@@ -2029,6 +2043,7 @@ payload:
   - DOMAIN-SUFFIX,jinyingimage.com
   - DOMAIN-SUFFIX,jisuimage.com
   - DOMAIN-SUFFIX,jitpack.io
+  - DOMAIN-SUFFIX,js-eu1.hubspot.com
   - DOMAIN-SUFFIX,js.hubspot.com
   - DOMAIN-SUFFIX,js.hubspotfeedback.com
   - DOMAIN-SUFFIX,js.org
