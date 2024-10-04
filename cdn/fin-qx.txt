@@ -1,5 +1,5 @@
-# Quantumult total line 2410
-# Last updated Tue 10/01/2024 22:11:33.90
+# Quantumult total line 2426
+# Last updated Fri 10/04/2024 22:11:13.05
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -14,6 +14,7 @@ HOST,account-cdn.svc.ui.com,LIST
 HOST,accounts-cdn.9gag.com,LIST
 HOST,adkit.9pub.io,LIST
 HOST,aff.equalweb.com,LIST
+HOST,agi.armorgames.com,LIST
 HOST,aimg.fc2.com,LIST
 HOST,ajax.cat.net,LIST
 HOST,ajax.cdnjs.com,LIST
@@ -237,6 +238,8 @@ HOST,c0.wp.com,LIST
 HOST,ca.nfs.pub,LIST
 HOST,cacerts.digicert.com,LIST
 HOST,cache-05.filehippo.net,LIST
+HOST,cache.armorgames.com,LIST
+HOST,cache.hackedfreegames.com,LIST
 HOST,cdn-1.ggjav.com,LIST
 HOST,cdn-a.sonyentertainmentnetwork.com,LIST
 HOST,cdn-app.pathfactory.com,LIST
@@ -295,6 +298,7 @@ HOST,cdn.britannica.com,LIST
 HOST,cdn.bsky.social,LIST
 HOST,cdn.builder.io,LIST
 HOST,cdn.calibermind.com,LIST
+HOST,cdn.cameo.com,LIST
 HOST,cdn.ceres9350.com,LIST
 HOST,cdn.channel.io,LIST
 HOST,cdn.chess24.com,LIST
@@ -414,6 +418,7 @@ HOST,cdn.pixabay.com,LIST
 HOST,cdn.pkg.svc.ui.com,LIST
 HOST,cdn.plaid.com,LIST
 HOST,cdn.player.fm,LIST
+HOST,cdn.playwire.com,LIST
 HOST,cdn.plot.ly,LIST
 HOST,cdn.plu.mx,LIST
 HOST,cdn.plyr.io,LIST
@@ -674,6 +679,7 @@ HOST,favicons.teams.cloudflare.com,LIST
 HOST,fiddle.fastly.dev,LIST
 HOST,fiddle.jshell.net,LIST
 HOST,file.tktube.com,LIST
+HOST,files.armorgames.com,LIST
 HOST,files.mastodon.ktachibana.party,LIST
 HOST,files.mastodon.online,LIST
 HOST,files.mastodon.social,LIST
@@ -913,6 +919,7 @@ HOST,int.mwbbiz.com,LIST
 HOST,int.qiniuyun15.xyz,LIST
 HOST,interactive-examples.mdn.mozilla.net,LIST
 HOST,interactive.guim.co.uk,LIST
+HOST,ip-ranges.amazonaws.com,LIST
 HOST,ipfs.d.tube,LIST
 HOST,irp-cdn.multiscreensite.com,LIST
 HOST,j.udn.com.tw,LIST
@@ -987,6 +994,7 @@ HOST,media.e4le.me,LIST
 HOST,media.evolv.ai,LIST
 HOST,media.fc2.com,LIST
 HOST,media.flaticon.com,LIST
+HOST,media.fs.com,LIST
 HOST,media.gettr.com,LIST
 HOST,media.gettyimages.com,LIST
 HOST,media.giphy.com,LIST
@@ -1028,6 +1036,8 @@ HOST,mixin-images.zeromesh.net,LIST
 HOST,mkt-site-asset.crypto.com,LIST
 HOST,mobilecenter.azureedge.net,LIST
 HOST,momentjs.com,LIST
+HOST,mosaic-blender.fxtwitter.com,LIST
+HOST,mosaic.fxtwitter.com,LIST
 HOST,mparticle.weather.com,LIST
 HOST,mstdn-s3.o3o.studio,LIST
 HOST,mui.com,LIST
@@ -1159,6 +1169,7 @@ HOST,proxy.golang.org,LIST
 HOST,proxy.joinmastodon.org,LIST
 HOST,ps.w.org,LIST
 HOST,public-assets.typeform.com,LIST
+HOST,public-cdn.bblmw.com,LIST
 HOST,public-files.gumroad.com,LIST
 HOST,public-pages.cbinsights.com,LIST
 HOST,public.flourish.studio,LIST
@@ -1536,6 +1547,7 @@ HOST,store-images.microsoft.com,LIST
 HOST,store-images.s-microsoft.com,LIST
 HOST,stories.freepiklabs.com,LIST
 HOST,streaming.split.io,LIST
+HOST,sts.online.visualstudio.com,LIST
 HOST,sts3.wsj.net,LIST
 HOST,stubdownloader.services.mozilla.com,LIST
 HOST,sync.getpublica.com,LIST
@@ -1651,6 +1663,7 @@ HOST,widget.freshworks.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.trustpilot.com,LIST
 HOST,widget.user.com,LIST
+HOST,widget.usersnap.com,LIST
 HOST,widget.uservoice.com,LIST
 HOST,widgets-red.media.weather.com,LIST
 HOST,widgets.media.weather.com,LIST
@@ -2084,6 +2097,7 @@ HOST-SUFFIX,ltwebstatic.com,LIST
 HOST-SUFFIX,lzzyimg.com,LIST
 HOST-SUFFIX,lzzypic.com,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
+HOST-SUFFIX,mangadex.network,LIST
 HOST-SUFFIX,media-amazon.com,LIST
 HOST-SUFFIX,media-imdb.com,LIST
 HOST-SUFFIX,media.beeper.com,LIST
@@ -2091,6 +2105,7 @@ HOST-SUFFIX,media.ci-en.jp,LIST
 HOST-SUFFIX,media.tumblr.com,LIST
 HOST-SUFFIX,meetupstatic.com,LIST
 HOST-SUFFIX,mercdn.net,LIST
+HOST-SUFFIX,metric.gstatic.com,LIST
 HOST-SUFFIX,mfcimg.com,LIST
 HOST-SUFFIX,mirrors.utermux.dev,LIST
 HOST-SUFFIX,misskeyusercontent.com,LIST
@@ -2123,6 +2138,7 @@ HOST-SUFFIX,nitrocdn.com,LIST
 HOST-SUFFIX,nodejs.org,LIST
 HOST-SUFFIX,nordcdn.com,LIST
 HOST-SUFFIX,notion-static.com,LIST
+HOST-SUFFIX,notionusercontent.com,LIST
 HOST-SUFFIX,now.sh,LIST
 HOST-SUFFIX,nowestatic.com,LIST
 HOST-SUFFIX,npmfs.com,LIST

@@ -1,5 +1,5 @@
-# Main total line 5348
-# Last updated Tue 10/01/2024 22:11:43.23
+# Main total line 5363
+# Last updated Fri 10/04/2024 22:11:22.87
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,2mdn.net
@@ -12,6 +12,7 @@ DOMAIN,account-cdn.svc.ui.com
 DOMAIN,accounts-cdn.9gag.com
 DOMAIN,adkit.9pub.io
 DOMAIN,aff.equalweb.com
+DOMAIN,agi.armorgames.com
 DOMAIN,aimg.fc2.com
 DOMAIN,ajax.cat.net
 DOMAIN,ajax.cdnjs.com
@@ -249,6 +250,8 @@ DOMAIN,ca.nfs.pub
 DOMAIN,cacerts.digicert.com
 DOMAIN,cache-05.filehippo.net
 DOMAIN,cache.agilebits.com
+DOMAIN,cache.armorgames.com
+DOMAIN,cache.hackedfreegames.com
 DOMAIN,cache.pack.google.com
 DOMAIN,cache.video.iqiyi.com
 DOMAIN,cdimage.kali.org
@@ -312,6 +315,7 @@ DOMAIN,cdn.britannica.com
 DOMAIN,cdn.bsky.social
 DOMAIN,cdn.builder.io
 DOMAIN,cdn.calibermind.com
+DOMAIN,cdn.cameo.com
 DOMAIN,cdn.ceres9350.com
 DOMAIN,cdn.channel.io
 DOMAIN,cdn.chess24.com
@@ -429,6 +433,7 @@ DOMAIN,cdn.pixabay.com
 DOMAIN,cdn.pkg.svc.ui.com
 DOMAIN,cdn.plaid.com
 DOMAIN,cdn.player.fm
+DOMAIN,cdn.playwire.com
 DOMAIN,cdn.plot.ly
 DOMAIN,cdn.plu.mx
 DOMAIN,cdn.pricespider.com
@@ -767,6 +772,7 @@ DOMAIN,fiddle.fastly.dev
 DOMAIN,fiddle.jshell.net
 DOMAIN,file.tktube.com
 DOMAIN,file24-d.kuku.lu
+DOMAIN,files.armorgames.com
 DOMAIN,files.mastodon.ktachibana.party
 DOMAIN,files.mastodon.online
 DOMAIN,files.mastodon.social
@@ -1084,6 +1090,7 @@ DOMAIN,media.e4le.me
 DOMAIN,media.evolv.ai
 DOMAIN,media.fc2.com
 DOMAIN,media.flaticon.com
+DOMAIN,media.fs.com
 DOMAIN,media.gettr.com
 DOMAIN,media.gettyimages.com
 DOMAIN,media.giphy.com
@@ -1152,6 +1159,8 @@ DOMAIN,mixin-images.zeromesh.net
 DOMAIN,mkt-site-asset.crypto.com
 DOMAIN,mobilecenter.azureedge.net
 DOMAIN,momentjs.com
+DOMAIN,mosaic-blender.fxtwitter.com
+DOMAIN,mosaic.fxtwitter.com
 DOMAIN,mparticle.weather.com
 DOMAIN,mstdn-s3.o3o.studio
 DOMAIN,mui.com
@@ -1280,6 +1289,7 @@ DOMAIN,proxy.cors.sh
 DOMAIN,proxy.joinmastodon.org
 DOMAIN,ps.w.org
 DOMAIN,public-assets.typeform.com
+DOMAIN,public-cdn.bblmw.com
 DOMAIN,public-files.gumroad.com
 DOMAIN,public-pages.cbinsights.com
 DOMAIN,public.flourish.studio
@@ -1645,6 +1655,7 @@ DOMAIN,store.setapp.com
 DOMAIN,stories.freepiklabs.com
 DOMAIN,streaming.split.io
 DOMAIN,streetviewpixels-pa.googleapis.com
+DOMAIN,sts.online.visualstudio.com
 DOMAIN,sts3.wsj.net
 DOMAIN,stubdownloader.services.mozilla.com
 DOMAIN,sync.getpublica.com
@@ -1755,6 +1766,7 @@ DOMAIN,widget.freshworks.com
 DOMAIN,widget.intercom.io
 DOMAIN,widget.trustpilot.com
 DOMAIN,widget.user.com
+DOMAIN,widget.usersnap.com
 DOMAIN,widget.uservoice.com
 DOMAIN,widgets-red.media.weather.com
 DOMAIN,widgets.media.weather.com
@@ -3252,6 +3264,7 @@ DOMAIN-SUFFIX,lzzypic.com
 DOMAIN-SUFFIX,macupload.net
 DOMAIN-SUFFIX,maker.tv
 DOMAIN-SUFFIX,makeuseofimages.com
+DOMAIN-SUFFIX,mangadex.network
 DOMAIN-SUFFIX,manifest.prod.boltdns.net
 DOMAIN-SUFFIX,marvel.com
 DOMAIN-SUFFIX,marvel10thanniversary.com
@@ -3289,6 +3302,7 @@ DOMAIN-SUFFIX,megaupload.com
 DOMAIN-SUFFIX,mercdn.net
 DOMAIN-SUFFIX,meridian.net
 DOMAIN-SUFFIX,mesfichiers.org
+DOMAIN-SUFFIX,metric.gstatic.com
 DOMAIN-SUFFIX,mewatch.sg
 DOMAIN-SUFFIX,mexa.sh
 DOMAIN-SUFFIX,mexashare.com
@@ -3457,6 +3471,7 @@ DOMAIN-SUFFIX,nomadlandmovie.ch
 DOMAIN-SUFFIX,nordcdn.com
 DOMAIN-SUFFIX,notion-static.com
 DOMAIN-SUFFIX,notion.so
+DOMAIN-SUFFIX,notionusercontent.com
 DOMAIN-SUFFIX,novafile.com
 DOMAIN-SUFFIX,now-ashare.com
 DOMAIN-SUFFIX,now-tv.com

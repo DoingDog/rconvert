@@ -1,5 +1,5 @@
-# Quantumult total line 5333
-# Last updated Tue 10/01/2024 22:11:43.37
+# Quantumult total line 5348
+# Last updated Fri 10/04/2024 22:11:23.01
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -12,6 +12,7 @@ HOST,account-cdn.svc.ui.com,LIST
 HOST,accounts-cdn.9gag.com,LIST
 HOST,adkit.9pub.io,LIST
 HOST,aff.equalweb.com,LIST
+HOST,agi.armorgames.com,LIST
 HOST,aimg.fc2.com,LIST
 HOST,ajax.cat.net,LIST
 HOST,ajax.cdnjs.com,LIST
@@ -249,6 +250,8 @@ HOST,ca.nfs.pub,LIST
 HOST,cacerts.digicert.com,LIST
 HOST,cache-05.filehippo.net,LIST
 HOST,cache.agilebits.com,LIST
+HOST,cache.armorgames.com,LIST
+HOST,cache.hackedfreegames.com,LIST
 HOST,cache.pack.google.com,LIST
 HOST,cache.video.iqiyi.com,LIST
 HOST,cdimage.kali.org,LIST
@@ -312,6 +315,7 @@ HOST,cdn.britannica.com,LIST
 HOST,cdn.bsky.social,LIST
 HOST,cdn.builder.io,LIST
 HOST,cdn.calibermind.com,LIST
+HOST,cdn.cameo.com,LIST
 HOST,cdn.ceres9350.com,LIST
 HOST,cdn.channel.io,LIST
 HOST,cdn.chess24.com,LIST
@@ -429,6 +433,7 @@ HOST,cdn.pixabay.com,LIST
 HOST,cdn.pkg.svc.ui.com,LIST
 HOST,cdn.plaid.com,LIST
 HOST,cdn.player.fm,LIST
+HOST,cdn.playwire.com,LIST
 HOST,cdn.plot.ly,LIST
 HOST,cdn.plu.mx,LIST
 HOST,cdn.pricespider.com,LIST
@@ -767,6 +772,7 @@ HOST,fiddle.fastly.dev,LIST
 HOST,fiddle.jshell.net,LIST
 HOST,file.tktube.com,LIST
 HOST,file24-d.kuku.lu,LIST
+HOST,files.armorgames.com,LIST
 HOST,files.mastodon.ktachibana.party,LIST
 HOST,files.mastodon.online,LIST
 HOST,files.mastodon.social,LIST
@@ -1084,6 +1090,7 @@ HOST,media.e4le.me,LIST
 HOST,media.evolv.ai,LIST
 HOST,media.fc2.com,LIST
 HOST,media.flaticon.com,LIST
+HOST,media.fs.com,LIST
 HOST,media.gettr.com,LIST
 HOST,media.gettyimages.com,LIST
 HOST,media.giphy.com,LIST
@@ -1152,6 +1159,8 @@ HOST,mixin-images.zeromesh.net,LIST
 HOST,mkt-site-asset.crypto.com,LIST
 HOST,mobilecenter.azureedge.net,LIST
 HOST,momentjs.com,LIST
+HOST,mosaic-blender.fxtwitter.com,LIST
+HOST,mosaic.fxtwitter.com,LIST
 HOST,mparticle.weather.com,LIST
 HOST,mstdn-s3.o3o.studio,LIST
 HOST,mui.com,LIST
@@ -1280,6 +1289,7 @@ HOST,proxy.cors.sh,LIST
 HOST,proxy.joinmastodon.org,LIST
 HOST,ps.w.org,LIST
 HOST,public-assets.typeform.com,LIST
+HOST,public-cdn.bblmw.com,LIST
 HOST,public-files.gumroad.com,LIST
 HOST,public-pages.cbinsights.com,LIST
 HOST,public.flourish.studio,LIST
@@ -1645,6 +1655,7 @@ HOST,store.setapp.com,LIST
 HOST,stories.freepiklabs.com,LIST
 HOST,streaming.split.io,LIST
 HOST,streetviewpixels-pa.googleapis.com,LIST
+HOST,sts.online.visualstudio.com,LIST
 HOST,sts3.wsj.net,LIST
 HOST,stubdownloader.services.mozilla.com,LIST
 HOST,sync.getpublica.com,LIST
@@ -1755,6 +1766,7 @@ HOST,widget.freshworks.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.trustpilot.com,LIST
 HOST,widget.user.com,LIST
+HOST,widget.usersnap.com,LIST
 HOST,widget.uservoice.com,LIST
 HOST,widgets-red.media.weather.com,LIST
 HOST,widgets.media.weather.com,LIST
@@ -3252,6 +3264,7 @@ HOST-SUFFIX,lzzypic.com,LIST
 HOST-SUFFIX,macupload.net,LIST
 HOST-SUFFIX,maker.tv,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
+HOST-SUFFIX,mangadex.network,LIST
 HOST-SUFFIX,manifest.prod.boltdns.net,LIST
 HOST-SUFFIX,marvel.com,LIST
 HOST-SUFFIX,marvel10thanniversary.com,LIST
@@ -3289,6 +3302,7 @@ HOST-SUFFIX,megaupload.com,LIST
 HOST-SUFFIX,mercdn.net,LIST
 HOST-SUFFIX,meridian.net,LIST
 HOST-SUFFIX,mesfichiers.org,LIST
+HOST-SUFFIX,metric.gstatic.com,LIST
 HOST-SUFFIX,mewatch.sg,LIST
 HOST-SUFFIX,mexa.sh,LIST
 HOST-SUFFIX,mexashare.com,LIST
@@ -3457,6 +3471,7 @@ HOST-SUFFIX,nomadlandmovie.ch,LIST
 HOST-SUFFIX,nordcdn.com,LIST
 HOST-SUFFIX,notion-static.com,LIST
 HOST-SUFFIX,notion.so,LIST
+HOST-SUFFIX,notionusercontent.com,LIST
 HOST-SUFFIX,novafile.com,LIST
 HOST-SUFFIX,now-ashare.com,LIST
 HOST-SUFFIX,now-tv.com,LIST
