@@ -1,5 +1,5 @@
-# Quantumult total line 4303
-# Last updated Sat 10/05/2024 15:59:30.37
+# Quantumult total line 4306
+# Last updated Mon 10/07/2024 22:11:49.88
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -7,6 +7,8 @@ HOST,blzddist1-a.akamaihd.net,LIST
 HOST,cdn.angruo.com,LIST
 HOST,client.amplifi.com,LIST
 HOST,cn.download.nvidia.com,LIST
+HOST,config.ubnt.com,LIST
+HOST,dl.ubnt.com,LIST
 HOST,download.jetbrains.com,LIST
 HOST,gstore.val.manlaxy.com,LIST
 HOST,images-cn.ssl-images-amazon.com,LIST
@@ -1254,6 +1256,7 @@ HOST-SUFFIX,dongchediapp.com,LIST
 HOST-SUFFIX,dongguantoday.com,LIST
 HOST-SUFFIX,dongting.com,LIST
 HOST-SUFFIX,dopa.com,LIST
+HOST-SUFFIX,dot.pub,LIST
 HOST-SUFFIX,doticloud.com,LIST
 HOST-SUFFIX,douban.com,LIST
 HOST-SUFFIX,douban.fm,LIST

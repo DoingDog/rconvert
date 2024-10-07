@@ -1,5 +1,5 @@
-# Adblock total line 4415
-# Last updated Sat 10/05/2024 15:59:21.92
+# Adblock total line 4445
+# Last updated Mon 10/07/2024 22:11:41.30
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||2mdn.net^
@@ -459,7 +459,6 @@
 ||cdn.sheetjs.com^
 ||cdn.shopify.com^
 ||cdn.shoppinggives.com^
-||cdn.signalfx.com^
 ||cdn.simpleicons.org^
 ||cdn.sketch.com^
 ||cdn.smooch.io^
@@ -1413,7 +1412,6 @@
 ||security.debian.org^
 ||security.ubuntu.com^
 ||services.linkfire.com^
-||sessions.bugsnag.com^
 ||sf-coze-web-cdn.coze.com^
 ||sf-flow-web-cdn.ciciai.com^
 ||share.riseup.net^
@@ -1752,6 +1750,7 @@
 ||waitlisted.co^
 ||wandi-6402.kxcdn.com^
 ||wcpstatic.microsoft.com^
+||weather.istatmenus.app^
 ||web-assets.esetstatic.com^
 ||web-assets.ifttt.com^
 ||web-assets.otogi-frontier.com^
@@ -1920,6 +1919,8 @@
 ||aol.fr^
 ||aolcdn.com^
 ||apache.org^
+||api.instabug.com^
+||api.loganalytics.io^
 ||api.tv.colnv.com^
 ||apkadmin.com^
 ||apkpure.com^
@@ -1929,6 +1930,7 @@
 ||app.render.com^
 ||apple.news^
 ||applemusic.com^
+||applicationinsights.azure.com^
 ||appmifile.com^
 ||apranet.eu.org^
 ||archive.debian.org^
@@ -2045,6 +2047,7 @@
 ||bstatic.com^
 ||btafile.com^
 ||bucketeer.jp^
+||bugly.qcloud.com^
 ||bundle.run^
 ||bundle.thimatic-apps.com^
 ||buyvm.net^
@@ -2090,6 +2093,7 @@
 ||cdn-uploads.huggingface.co^
 ||cdn-website.com^
 ||cdn.angruo.com^
+||cdn.applicationinsights.io^
 ||cdn.blizzard.com^
 ||cdn.cloudflare.net^
 ||cdn.cwinfo.net^
@@ -2113,10 +2117,13 @@
 ||cdn.plus500.com^
 ||cdn.printfriendly.com^
 ||cdn.prismic.io^
+||cdn.pubnub.com^
 ||cdn.replit.com^
+||cdn.rollbar.com^
 ||cdn.runcloud.io^
 ||cdn.s7s.ai^
 ||cdn.segment.com^
+||cdn.signalfx.com^
 ||cdn.skk.moe^
 ||cdn.survey.medallia.com^
 ||cdn.tophatch.com^
@@ -2229,6 +2236,9 @@
 ||cos.na-toronto.myqcloud.com^
 ||cos.sa-saopaulo.myqcloud.com^
 ||cosmobox.org^
+||crash-reports.browser.yandex.net^
+||crashlytics2.l.google.com^
+||crashlyticsreports-pa.googleapis.com^
 ||crates.io^
 ||cristiamo.xyz^
 ||crocko.com^
@@ -2252,6 +2262,7 @@
 ||dandalinvoa.com^
 ||daofile.com^
 ||darivoa.com^
+||data.debugbear.com^
 ||data.hu^
 ||datafile.com.au^
 ||datafilehost.com^
@@ -2478,6 +2489,7 @@
 ||dweb.link^
 ||dzcdn.net^
 ||e-hentai.org^
+||e.crashlytics.com^
 ||earth.google.com^
 ||easybytez.com^
 ||easylist.to^
@@ -2506,6 +2518,7 @@
 ||emload.com^
 ||emotivecdn.io^
 ||encoretvb.com^
+||ensighten.com^
 ||envato-static.com^
 ||envatousercontent.com^
 ||eonline.com^
@@ -2523,6 +2536,8 @@
 ||eu-browse.startpage.com^
 ||eu-proxy.startpage.com^
 ||europeup.com^
+||events.backtrace.io^
+||events.split.io^
 ||ews-assets.apple.com^
 ||ex-load.com^
 ||ex.ua^
@@ -2935,6 +2950,7 @@
 ||hetzner.com^
 ||hetzner.de^
 ||hexupload.net^
+||hgagecdn.com^
 ||highwinds-cdn.com^
 ||himalaya.com^
 ||himg.nl^
@@ -3057,7 +3073,7 @@
 ||imgtp.com^
 ||imgyzzy.com^
 ||imkan.tv^
-||in.applicationinsights.azure.com^
+||in.appcenter.ms^
 ||indazn.com^
 ||indaznlab.com^
 ||indishare.me^
@@ -3253,12 +3269,15 @@
 ||load.to^
 ||local.webcontainer.io^
 ||localizecdn.com^
+||loggly.com^
 ||logx.optimizely.com^
+||logz.io^
 ||loli.net^
 ||londonreal.tv^
 ||lookscanned.io^
 ||lowendbox.com^
 ||lowescdn.com^
+||lr-ingest.com^
 ||ltwebstatic.com^
 ||lzzyimg.com^
 ||lzzypic.com^
@@ -3267,6 +3286,7 @@
 ||makeuseofimages.com^
 ||mangadex.network^
 ||manifest.prod.boltdns.net^
+||marketing.aws.dev^
 ||marvel.com^
 ||marvel10thanniversary.com^
 ||marveldimensionofheroes.com^
@@ -3470,6 +3490,7 @@
 ||noki.eu.org^
 ||nomadlandmovie.ch^
 ||nordcdn.com^
+||notify.bugsnag.com^
 ||notion-static.com^
 ||notion.so^
 ||notionusercontent.com^
@@ -3518,6 +3539,7 @@
 ||onetrust.com^
 ||onrender.com^
 ||openload.co^
+||opentelemetry.io^
 ||operacdn.com^
 ||optifine.net^
 ||oracle.com^
@@ -3722,6 +3744,7 @@
 ||rawgit.com^
 ||rawgit.org^
 ||raxcdn.com^
+||raygun.io^
 ||rbxcdn.com^
 ||rdtcdn.com^
 ||react.dev^
@@ -3767,6 +3790,7 @@
 ||rthk.hk^
 ||rthk.org.hk^
 ||ruleset.skk.moe^
+||rum.cronitor.io^
 ||runkitcdn.com^
 ||s-nbcnews.com^
 ||s3-website.fr-par.scw.cloud^
@@ -3807,6 +3831,8 @@
 ||sendvid.com^
 ||senja.io^
 ||sentry-cdn.com^
+||sessions.bugsnag.com^
+||settings.crashlytics.com^
 ||sf.net^
 ||sfdcstatic.com^
 ||sftcdn.net^
@@ -3851,6 +3877,7 @@
 ||smushcdn.com^
 ||sndcdn.com^
 ||snowfiles.com^
+||sny.monosnap.com^
 ||snzypic.com^
 ||soccermatchpass.com^
 ||socdm.com^
@@ -3874,6 +3901,7 @@
 ||speedrun.com^
 ||speedxtra.com^
 ||spicyfile.com^
+||splunkcloud.com^
 ||spoti.fi^
 ||spotify-everywhere.com^
 ||spotify.design^
@@ -4021,6 +4049,7 @@
 ||tln4.ru^
 ||tmp.link^
 ||tmpfiles.org^
+||tmsimg.com^
 ||tnastatic.com^
 ||top4top.net^
 ||trackerslist.com^
@@ -4050,6 +4079,7 @@
 ||tvbweekly.com^
 ||tver.co.jp^
 ||tver.jp^
+||tvlicensing.co.uk^
 ||tvmedia.net.au^
 ||twemoji.maxcdn.com^
 ||twimg.co^

@@ -1,5 +1,5 @@
-# Clash total line 2429
-# Last updated Sat 10/05/2024 15:59:13.06
+# Clash total line 2468
+# Last updated Mon 10/07/2024 22:11:32.19
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -103,8 +103,10 @@ payload:
   - DOMAIN,assets.exercism.org
   - DOMAIN,assets.extension.grammarly.com
   - DOMAIN,assets.fastly.com
+  - DOMAIN,assets.fe.itv.com
   - DOMAIN,assets.fireside.fm
   - DOMAIN,assets.flodesk.com
+  - DOMAIN,assets.foxdcg.com
   - DOMAIN,assets.garr.it
   - DOMAIN,assets.gcore.pro
   - DOMAIN,assets.genius.com
@@ -197,6 +199,7 @@ payload:
   - DOMAIN,autoupdate.termius.com
   - DOMAIN,avatar.freepik.com
   - DOMAIN,avatar.stefanjudis.com
+  - DOMAIN,avatar2.bahamut.com.tw
   - DOMAIN,avatars.dicebear.com
   - DOMAIN,avatars.dzeninfra.ru
   - DOMAIN,avatars.hubspot.net
@@ -449,7 +452,6 @@ payload:
   - DOMAIN,cdn.sheetjs.com
   - DOMAIN,cdn.shopify.com
   - DOMAIN,cdn.shoppinggives.com
-  - DOMAIN,cdn.signalfx.com
   - DOMAIN,cdn.simpleicons.org
   - DOMAIN,cdn.sketch.com
   - DOMAIN,cdn.smooch.io
@@ -761,6 +763,7 @@ payload:
   - DOMAIN,i.xozilla.xxx
   - DOMAIN,i0.wp.com
   - DOMAIN,i1.wp.com
+  - DOMAIN,i2.bahamut.com.tw
   - DOMAIN,i2.hentaifox.com
   - DOMAIN,i2.wp.com
   - DOMAIN,i3.wp.com
@@ -1087,11 +1090,13 @@ payload:
   - DOMAIN,oss-binaries.phusionpassenger.com
   - DOMAIN,oss.moe.cat
   - DOMAIN,ovo.wxw.moe
+  - DOMAIN,ovp.itv.com
   - DOMAIN,p-smith.com
   - DOMAIN,p.inari.site
   - DOMAIN,p.sda1.dev
   - DOMAIN,p.typekit.com
   - DOMAIN,p.typekit.net
+  - DOMAIN,p2.bahamut.com.tw
   - DOMAIN,pacdn.500px.org
   - DOMAIN,packages-cf.termux.dev
   - DOMAIN,packages.argotunnel.com
@@ -1287,7 +1292,6 @@ payload:
   - DOMAIN,secure.fanboy.co.nz
   - DOMAIN,secure.telegraph.co.uk
   - DOMAIN,services.linkfire.com
-  - DOMAIN,sessions.bugsnag.com
   - DOMAIN,sf-coze-web-cdn.coze.com
   - DOMAIN,sf-flow-web-cdn.ciciai.com
   - DOMAIN,shell.cdn.office.net
@@ -1356,6 +1360,7 @@ payload:
   - DOMAIN,static-landing.probit.com
   - DOMAIN,static-lccn.leetcode.com
   - DOMAIN,static-main.moovit.com
+  - DOMAIN,static-media.fox.com
   - DOMAIN,static-mh.content.disney.io
   - DOMAIN,static-overlay.ubisoft.com
   - DOMAIN,static-production.npmjs.com
@@ -1375,6 +1380,7 @@ payload:
   - DOMAIN,static.assetlab.io
   - DOMAIN,static.axios.com
   - DOMAIN,static.bangumi.moe
+  - DOMAIN,static.bbc.co.uk
   - DOMAIN,static.bbci.co.uk
   - DOMAIN,static.bit.cloud
   - DOMAIN,static.bit.dev
@@ -1586,6 +1592,7 @@ payload:
   - DOMAIN,topbar-static.piano.io
   - DOMAIN,torrindex.net
   - DOMAIN,tracker.cdnbye.com
+  - DOMAIN,truth.bahamut.com.tw
   - DOMAIN,tuf-repo-cdn.sigstore.dev
   - DOMAIN,tuf-repo.github.com
   - DOMAIN,tvdownloaddw-a.akamaihd.net
@@ -1651,6 +1658,7 @@ payload:
   - DOMAIN,waitlisted.co
   - DOMAIN,wandi-6402.kxcdn.com
   - DOMAIN,wcpstatic.microsoft.com
+  - DOMAIN,weather.istatmenus.app
   - DOMAIN,web-assets.esetstatic.com
   - DOMAIN,web-assets.ifttt.com
   - DOMAIN,web-assets.otogi-frontier.com
@@ -1722,9 +1730,12 @@ payload:
   - DOMAIN-SUFFIX,amaicdn.com
   - DOMAIN-SUFFIX,ampproject.org
   - DOMAIN-SUFFIX,anpoimages.com
+  - DOMAIN-SUFFIX,api.instabug.com
+  - DOMAIN-SUFFIX,api.loganalytics.io
   - DOMAIN-SUFFIX,app-analytics-services.com
   - DOMAIN-SUFFIX,app.gitbook.com
   - DOMAIN-SUFFIX,app.render.com
+  - DOMAIN-SUFFIX,applicationinsights.azure.com
   - DOMAIN-SUFFIX,appmifile.com
   - DOMAIN-SUFFIX,archive.org
   - DOMAIN-SUFFIX,aspnetcdn.com
@@ -1760,6 +1771,7 @@ payload:
   - DOMAIN-SUFFIX,bp.blogspot.com
   - DOMAIN-SUFFIX,bstarstatic.com
   - DOMAIN-SUFFIX,bstatic.com
+  - DOMAIN-SUFFIX,bugly.qcloud.com
   - DOMAIN-SUFFIX,bundle.run
   - DOMAIN-SUFFIX,bundle.thimatic-apps.com
   - DOMAIN-SUFFIX,bytebucket.org
@@ -1773,6 +1785,7 @@ payload:
   - DOMAIN-SUFFIX,cdn-spurit.com
   - DOMAIN-SUFFIX,cdn-uploads.huggingface.co
   - DOMAIN-SUFFIX,cdn-website.com
+  - DOMAIN-SUFFIX,cdn.applicationinsights.io
   - DOMAIN-SUFFIX,cdn.cookielaw.org
   - DOMAIN-SUFFIX,cdn.cwinfo.net
   - DOMAIN-SUFFIX,cdn.discordapp.com
@@ -1789,9 +1802,12 @@ payload:
   - DOMAIN-SUFFIX,cdn.nintendo.net
   - DOMAIN-SUFFIX,cdn.printfriendly.com
   - DOMAIN-SUFFIX,cdn.prismic.io
+  - DOMAIN-SUFFIX,cdn.pubnub.com
   - DOMAIN-SUFFIX,cdn.replit.com
+  - DOMAIN-SUFFIX,cdn.rollbar.com
   - DOMAIN-SUFFIX,cdn.runcloud.io
   - DOMAIN-SUFFIX,cdn.s7s.ai
+  - DOMAIN-SUFFIX,cdn.signalfx.com
   - DOMAIN-SUFFIX,cdn.skk.moe
   - DOMAIN-SUFFIX,cdn.survey.medallia.com
   - DOMAIN-SUFFIX,cdn.turner.com
@@ -1833,6 +1849,9 @@ payload:
   - DOMAIN-SUFFIX,contents.fc2.com
   - DOMAIN-SUFFIX,coral.coralproject.net
   - DOMAIN-SUFFIX,corsproxy.io
+  - DOMAIN-SUFFIX,crash-reports.browser.yandex.net
+  - DOMAIN-SUFFIX,crashlytics2.l.google.com
+  - DOMAIN-SUFFIX,crashlyticsreports-pa.googleapis.com
   - DOMAIN-SUFFIX,crates.io
   - DOMAIN-SUFFIX,crossbell.io
   - DOMAIN-SUFFIX,csb.app
@@ -1841,6 +1860,7 @@ payload:
   - DOMAIN-SUFFIX,ctfassets.net
   - DOMAIN-SUFFIX,cthd.icu
   - DOMAIN-SUFFIX,cwwcdn.com
+  - DOMAIN-SUFFIX,data.debugbear.com
   - DOMAIN-SUFFIX,daumcdn.net
   - DOMAIN-SUFFIX,delvenetworks.com
   - DOMAIN-SUFFIX,deno.land
@@ -1864,6 +1884,7 @@ payload:
   - DOMAIN-SUFFIX,dwcdn.net
   - DOMAIN-SUFFIX,dweb.eu.org
   - DOMAIN-SUFFIX,dweb.link
+  - DOMAIN-SUFFIX,e.crashlytics.com
   - DOMAIN-SUFFIX,easylist.to
   - DOMAIN-SUFFIX,ebayimg.com
   - DOMAIN-SUFFIX,ebaystatic.com
@@ -1872,6 +1893,7 @@ payload:
   - DOMAIN-SUFFIX,els-cdn.com
   - DOMAIN-SUFFIX,embedgram.com
   - DOMAIN-SUFFIX,emotivecdn.io
+  - DOMAIN-SUFFIX,ensighten.com
   - DOMAIN-SUFFIX,envato-static.com
   - DOMAIN-SUFFIX,envatousercontent.com
   - DOMAIN-SUFFIX,eroimg.net
@@ -1880,6 +1902,8 @@ payload:
   - DOMAIN-SUFFIX,espncdn.com
   - DOMAIN-SUFFIX,eu-browse.startpage.com
   - DOMAIN-SUFFIX,eu-proxy.startpage.com
+  - DOMAIN-SUFFIX,events.backtrace.io
+  - DOMAIN-SUFFIX,events.split.io
   - DOMAIN-SUFFIX,exp-tas.com
   - DOMAIN-SUFFIX,ezocdn.com
   - DOMAIN-SUFFIX,ezocdn.net
@@ -1948,6 +1972,7 @@ payload:
   - DOMAIN-SUFFIX,hardbin.com
   - DOMAIN-SUFFIX,hbfile.net
   - DOMAIN-SUFFIX,hembed.com
+  - DOMAIN-SUFFIX,hgagecdn.com
   - DOMAIN-SUFFIX,highwinds-cdn.com
   - DOMAIN-SUFFIX,himg.nl
   - DOMAIN-SUFFIX,hits.b3log.org
@@ -1991,7 +2016,7 @@ payload:
   - DOMAIN-SUFFIX,imgtbl.com
   - DOMAIN-SUFFIX,imgtp.com
   - DOMAIN-SUFFIX,imgyzzy.com
-  - DOMAIN-SUFFIX,in.applicationinsights.azure.com
+  - DOMAIN-SUFFIX,in.appcenter.ms
   - DOMAIN-SUFFIX,infura-ipfs.io
   - DOMAIN-SUFFIX,ingest.sentry.io
   - DOMAIN-SUFFIX,instant.page
@@ -2050,6 +2075,7 @@ payload:
   - DOMAIN-SUFFIX,ipfsgateway.makersplace.com
   - DOMAIN-SUFFIX,ipns.co
   - DOMAIN-SUFFIX,itsre-sumo.mozilla.net
+  - DOMAIN-SUFFIX,itvstatic.com
   - DOMAIN-SUFFIX,javplayer.me
   - DOMAIN-SUFFIX,javtxt.com
   - DOMAIN-SUFFIX,jbkcdn.com
@@ -2093,14 +2119,18 @@ payload:
   - DOMAIN-SUFFIX,llnwi.net
   - DOMAIN-SUFFIX,local.webcontainer.io
   - DOMAIN-SUFFIX,localizecdn.com
+  - DOMAIN-SUFFIX,loggly.com
+  - DOMAIN-SUFFIX,logz.io
   - DOMAIN-SUFFIX,loli.net
   - DOMAIN-SUFFIX,lowendbox.com
   - DOMAIN-SUFFIX,lowescdn.com
+  - DOMAIN-SUFFIX,lr-ingest.com
   - DOMAIN-SUFFIX,ltwebstatic.com
   - DOMAIN-SUFFIX,lzzyimg.com
   - DOMAIN-SUFFIX,lzzypic.com
   - DOMAIN-SUFFIX,makeuseofimages.com
   - DOMAIN-SUFFIX,mangadex.network
+  - DOMAIN-SUFFIX,marketing.aws.dev
   - DOMAIN-SUFFIX,media-amazon.com
   - DOMAIN-SUFFIX,media-imdb.com
   - DOMAIN-SUFFIX,media.beeper.com
@@ -2140,6 +2170,7 @@ payload:
   - DOMAIN-SUFFIX,nitrocdn.com
   - DOMAIN-SUFFIX,nodejs.org
   - DOMAIN-SUFFIX,nordcdn.com
+  - DOMAIN-SUFFIX,notify.bugsnag.com
   - DOMAIN-SUFFIX,notion-static.com
   - DOMAIN-SUFFIX,notionusercontent.com
   - DOMAIN-SUFFIX,now.sh
@@ -2154,6 +2185,7 @@ payload:
   - DOMAIN-SUFFIX,ominisrc.com
   - DOMAIN-SUFFIX,omnisnippet1.com
   - DOMAIN-SUFFIX,onrender.com
+  - DOMAIN-SUFFIX,opentelemetry.io
   - DOMAIN-SUFFIX,operacdn.com
   - DOMAIN-SUFFIX,oreillystatic.com
   - DOMAIN-SUFFIX,packagist.org
@@ -2224,6 +2256,7 @@ payload:
   - DOMAIN-SUFFIX,ravenjs.com
   - DOMAIN-SUFFIX,rawgit.com
   - DOMAIN-SUFFIX,rawgit.org
+  - DOMAIN-SUFFIX,raygun.io
   - DOMAIN-SUFFIX,rbxcdn.com
   - DOMAIN-SUFFIX,rdtcdn.com
   - DOMAIN-SUFFIX,react.dev
@@ -2244,6 +2277,7 @@ payload:
   - DOMAIN-SUFFIX,rspcdn.net
   - DOMAIN-SUFFIX,rss3.dev
   - DOMAIN-SUFFIX,ruleset.skk.moe
+  - DOMAIN-SUFFIX,rum.cronitor.io
   - DOMAIN-SUFFIX,runkitcdn.com
   - DOMAIN-SUFFIX,s3.wasabisys.com
   - DOMAIN-SUFFIX,safebrowsing.apple
@@ -2258,6 +2292,8 @@ payload:
   - DOMAIN-SUFFIX,sendspace.com
   - DOMAIN-SUFFIX,senja.io
   - DOMAIN-SUFFIX,sentry-cdn.com
+  - DOMAIN-SUFFIX,sessions.bugsnag.com
+  - DOMAIN-SUFFIX,settings.crashlytics.com
   - DOMAIN-SUFFIX,sfdcstatic.com
   - DOMAIN-SUFFIX,sftcdn.net
   - DOMAIN-SUFFIX,shgcdn.com
@@ -2279,9 +2315,11 @@ payload:
   - DOMAIN-SUFFIX,smilecdn.co
   - DOMAIN-SUFFIX,smushcdn.com
   - DOMAIN-SUFFIX,sndcdn.com
+  - DOMAIN-SUFFIX,sny.monosnap.com
   - DOMAIN-SUFFIX,snzypic.com
   - DOMAIN-SUFFIX,someonewhocares.org
   - DOMAIN-SUFFIX,sourceforge.io
+  - DOMAIN-SUFFIX,splunkcloud.com
   - DOMAIN-SUFFIX,sqspcdn.com
   - DOMAIN-SUFFIX,squarespace-cdn.com
   - DOMAIN-SUFFIX,ss-cdn.com
@@ -2336,6 +2374,7 @@ payload:
   - DOMAIN-SUFFIX,tile.osm.org
   - DOMAIN-SUFFIX,timg135.top
   - DOMAIN-SUFFIX,tiqcdn.com
+  - DOMAIN-SUFFIX,tmsimg.com
   - DOMAIN-SUFFIX,tnastatic.com
   - DOMAIN-SUFFIX,trackerslist.com
   - DOMAIN-SUFFIX,transcend-cdn.com

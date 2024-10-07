@@ -1,5 +1,5 @@
-# Clash total line 4349
-# Last updated Sat 10/05/2024 15:59:30.40
+# Clash total line 4352
+# Last updated Mon 10/07/2024 22:11:49.91
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -8,6 +8,8 @@ payload:
   - DOMAIN,cdn.angruo.com
   - DOMAIN,client.amplifi.com
   - DOMAIN,cn.download.nvidia.com
+  - DOMAIN,config.ubnt.com
+  - DOMAIN,dl.ubnt.com
   - DOMAIN,download.jetbrains.com
   - DOMAIN,gstore.val.manlaxy.com
   - DOMAIN,images-cn.ssl-images-amazon.com
@@ -1255,6 +1257,7 @@ payload:
   - DOMAIN-SUFFIX,dongguantoday.com
   - DOMAIN-SUFFIX,dongting.com
   - DOMAIN-SUFFIX,dopa.com
+  - DOMAIN-SUFFIX,dot.pub
   - DOMAIN-SUFFIX,doticloud.com
   - DOMAIN-SUFFIX,douban.com
   - DOMAIN-SUFFIX,douban.fm

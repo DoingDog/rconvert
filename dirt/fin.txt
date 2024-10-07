@@ -1,5 +1,5 @@
-# Main total line 4349
-# Last updated Sat 10/05/2024 15:59:30.24
+# Main total line 4352
+# Last updated Mon 10/07/2024 22:11:49.75
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,a.iqmtp.live
 DOMAIN,analytics.strava.com
@@ -7,6 +7,8 @@ DOMAIN,blzddist1-a.akamaihd.net
 DOMAIN,cdn.angruo.com
 DOMAIN,client.amplifi.com
 DOMAIN,cn.download.nvidia.com
+DOMAIN,config.ubnt.com
+DOMAIN,dl.ubnt.com
 DOMAIN,download.jetbrains.com
 DOMAIN,gstore.val.manlaxy.com
 DOMAIN,images-cn.ssl-images-amazon.com
@@ -1254,6 +1256,7 @@ DOMAIN-SUFFIX,dongchediapp.com
 DOMAIN-SUFFIX,dongguantoday.com
 DOMAIN-SUFFIX,dongting.com
 DOMAIN-SUFFIX,dopa.com
+DOMAIN-SUFFIX,dot.pub
 DOMAIN-SUFFIX,doticloud.com
 DOMAIN-SUFFIX,douban.com
 DOMAIN-SUFFIX,douban.fm

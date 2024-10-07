@@ -1,5 +1,5 @@
-# Quantumult total line 5351
-# Last updated Sat 10/05/2024 15:59:21.78
+# Quantumult total line 5381
+# Last updated Mon 10/07/2024 22:11:41.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -459,7 +459,6 @@ HOST,cdn.setapp.com,LIST
 HOST,cdn.sheetjs.com,LIST
 HOST,cdn.shopify.com,LIST
 HOST,cdn.shoppinggives.com,LIST
-HOST,cdn.signalfx.com,LIST
 HOST,cdn.simpleicons.org,LIST
 HOST,cdn.sketch.com,LIST
 HOST,cdn.smooch.io,LIST
@@ -1413,7 +1412,6 @@ HOST,secure.telegraph.co.uk,LIST
 HOST,security.debian.org,LIST
 HOST,security.ubuntu.com,LIST
 HOST,services.linkfire.com,LIST
-HOST,sessions.bugsnag.com,LIST
 HOST,sf-coze-web-cdn.coze.com,LIST
 HOST,sf-flow-web-cdn.ciciai.com,LIST
 HOST,share.riseup.net,LIST
@@ -1752,6 +1750,7 @@ HOST,wac-cdn.atlassian.com,LIST
 HOST,waitlisted.co,LIST
 HOST,wandi-6402.kxcdn.com,LIST
 HOST,wcpstatic.microsoft.com,LIST
+HOST,weather.istatmenus.app,LIST
 HOST,web-assets.esetstatic.com,LIST
 HOST,web-assets.ifttt.com,LIST
 HOST,web-assets.otogi-frontier.com,LIST
@@ -1920,6 +1919,8 @@ HOST-SUFFIX,aol.de,LIST
 HOST-SUFFIX,aol.fr,LIST
 HOST-SUFFIX,aolcdn.com,LIST
 HOST-SUFFIX,apache.org,LIST
+HOST-SUFFIX,api.instabug.com,LIST
+HOST-SUFFIX,api.loganalytics.io,LIST
 HOST-SUFFIX,api.tv.colnv.com,LIST
 HOST-SUFFIX,apkadmin.com,LIST
 HOST-SUFFIX,apkpure.com,LIST
@@ -1929,6 +1930,7 @@ HOST-SUFFIX,app.gitbook.com,LIST
 HOST-SUFFIX,app.render.com,LIST
 HOST-SUFFIX,apple.news,LIST
 HOST-SUFFIX,applemusic.com,LIST
+HOST-SUFFIX,applicationinsights.azure.com,LIST
 HOST-SUFFIX,appmifile.com,LIST
 HOST-SUFFIX,apranet.eu.org,LIST
 HOST-SUFFIX,archive.debian.org,LIST
@@ -2045,6 +2047,7 @@ HOST-SUFFIX,bstarstatic.com,LIST
 HOST-SUFFIX,bstatic.com,LIST
 HOST-SUFFIX,btafile.com,LIST
 HOST-SUFFIX,bucketeer.jp,LIST
+HOST-SUFFIX,bugly.qcloud.com,LIST
 HOST-SUFFIX,bundle.run,LIST
 HOST-SUFFIX,bundle.thimatic-apps.com,LIST
 HOST-SUFFIX,buyvm.net,LIST
@@ -2090,6 +2093,7 @@ HOST-SUFFIX,cdn-spurit.com,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn-website.com,LIST
 HOST-SUFFIX,cdn.angruo.com,LIST
+HOST-SUFFIX,cdn.applicationinsights.io,LIST
 HOST-SUFFIX,cdn.blizzard.com,LIST
 HOST-SUFFIX,cdn.cloudflare.net,LIST
 HOST-SUFFIX,cdn.cwinfo.net,LIST
@@ -2113,10 +2117,13 @@ HOST-SUFFIX,cdn.optimizely.com,LIST
 HOST-SUFFIX,cdn.plus500.com,LIST
 HOST-SUFFIX,cdn.printfriendly.com,LIST
 HOST-SUFFIX,cdn.prismic.io,LIST
+HOST-SUFFIX,cdn.pubnub.com,LIST
 HOST-SUFFIX,cdn.replit.com,LIST
+HOST-SUFFIX,cdn.rollbar.com,LIST
 HOST-SUFFIX,cdn.runcloud.io,LIST
 HOST-SUFFIX,cdn.s7s.ai,LIST
 HOST-SUFFIX,cdn.segment.com,LIST
+HOST-SUFFIX,cdn.signalfx.com,LIST
 HOST-SUFFIX,cdn.skk.moe,LIST
 HOST-SUFFIX,cdn.survey.medallia.com,LIST
 HOST-SUFFIX,cdn.tophatch.com,LIST
@@ -2229,6 +2236,9 @@ HOST-SUFFIX,cos.na-siliconvalley.myqcloud.com,LIST
 HOST-SUFFIX,cos.na-toronto.myqcloud.com,LIST
 HOST-SUFFIX,cos.sa-saopaulo.myqcloud.com,LIST
 HOST-SUFFIX,cosmobox.org,LIST
+HOST-SUFFIX,crash-reports.browser.yandex.net,LIST
+HOST-SUFFIX,crashlytics2.l.google.com,LIST
+HOST-SUFFIX,crashlyticsreports-pa.googleapis.com,LIST
 HOST-SUFFIX,crates.io,LIST
 HOST-SUFFIX,cristiamo.xyz,LIST
 HOST-SUFFIX,crocko.com,LIST
@@ -2252,6 +2262,7 @@ HOST-SUFFIX,dailyuploads.net,LIST
 HOST-SUFFIX,dandalinvoa.com,LIST
 HOST-SUFFIX,daofile.com,LIST
 HOST-SUFFIX,darivoa.com,LIST
+HOST-SUFFIX,data.debugbear.com,LIST
 HOST-SUFFIX,data.hu,LIST
 HOST-SUFFIX,datafile.com.au,LIST
 HOST-SUFFIX,datafilehost.com,LIST
@@ -2478,6 +2489,7 @@ HOST-SUFFIX,dweb.eu.org,LIST
 HOST-SUFFIX,dweb.link,LIST
 HOST-SUFFIX,dzcdn.net,LIST
 HOST-SUFFIX,e-hentai.org,LIST
+HOST-SUFFIX,e.crashlytics.com,LIST
 HOST-SUFFIX,earth.google.com,LIST
 HOST-SUFFIX,easybytez.com,LIST
 HOST-SUFFIX,easylist.to,LIST
@@ -2506,6 +2518,7 @@ HOST-SUFFIX,embyserver.ga,LIST
 HOST-SUFFIX,emload.com,LIST
 HOST-SUFFIX,emotivecdn.io,LIST
 HOST-SUFFIX,encoretvb.com,LIST
+HOST-SUFFIX,ensighten.com,LIST
 HOST-SUFFIX,envato-static.com,LIST
 HOST-SUFFIX,envatousercontent.com,LIST
 HOST-SUFFIX,eonline.com,LIST
@@ -2523,6 +2536,8 @@ HOST-SUFFIX,espnqa.com,LIST
 HOST-SUFFIX,eu-browse.startpage.com,LIST
 HOST-SUFFIX,eu-proxy.startpage.com,LIST
 HOST-SUFFIX,europeup.com,LIST
+HOST-SUFFIX,events.backtrace.io,LIST
+HOST-SUFFIX,events.split.io,LIST
 HOST-SUFFIX,ews-assets.apple.com,LIST
 HOST-SUFFIX,ex-load.com,LIST
 HOST-SUFFIX,ex.ua,LIST
@@ -2935,6 +2950,7 @@ HOST-SUFFIX,heroupload.com,LIST
 HOST-SUFFIX,hetzner.com,LIST
 HOST-SUFFIX,hetzner.de,LIST
 HOST-SUFFIX,hexupload.net,LIST
+HOST-SUFFIX,hgagecdn.com,LIST
 HOST-SUFFIX,highwinds-cdn.com,LIST
 HOST-SUFFIX,himalaya.com,LIST
 HOST-SUFFIX,himg.nl,LIST
@@ -3057,7 +3073,7 @@ HOST-SUFFIX,imgtbl.com,LIST
 HOST-SUFFIX,imgtp.com,LIST
 HOST-SUFFIX,imgyzzy.com,LIST
 HOST-SUFFIX,imkan.tv,LIST
-HOST-SUFFIX,in.applicationinsights.azure.com,LIST
+HOST-SUFFIX,in.appcenter.ms,LIST
 HOST-SUFFIX,indazn.com,LIST
 HOST-SUFFIX,indaznlab.com,LIST
 HOST-SUFFIX,indishare.me,LIST
@@ -3253,12 +3269,15 @@ HOST-SUFFIX,llnwi.net,LIST
 HOST-SUFFIX,load.to,LIST
 HOST-SUFFIX,local.webcontainer.io,LIST
 HOST-SUFFIX,localizecdn.com,LIST
+HOST-SUFFIX,loggly.com,LIST
 HOST-SUFFIX,logx.optimizely.com,LIST
+HOST-SUFFIX,logz.io,LIST
 HOST-SUFFIX,loli.net,LIST
 HOST-SUFFIX,londonreal.tv,LIST
 HOST-SUFFIX,lookscanned.io,LIST
 HOST-SUFFIX,lowendbox.com,LIST
 HOST-SUFFIX,lowescdn.com,LIST
+HOST-SUFFIX,lr-ingest.com,LIST
 HOST-SUFFIX,ltwebstatic.com,LIST
 HOST-SUFFIX,lzzyimg.com,LIST
 HOST-SUFFIX,lzzypic.com,LIST
@@ -3267,6 +3286,7 @@ HOST-SUFFIX,maker.tv,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
 HOST-SUFFIX,mangadex.network,LIST
 HOST-SUFFIX,manifest.prod.boltdns.net,LIST
+HOST-SUFFIX,marketing.aws.dev,LIST
 HOST-SUFFIX,marvel.com,LIST
 HOST-SUFFIX,marvel10thanniversary.com,LIST
 HOST-SUFFIX,marveldimensionofheroes.com,LIST
@@ -3470,6 +3490,7 @@ HOST-SUFFIX,nodejs.org,LIST
 HOST-SUFFIX,noki.eu.org,LIST
 HOST-SUFFIX,nomadlandmovie.ch,LIST
 HOST-SUFFIX,nordcdn.com,LIST
+HOST-SUFFIX,notify.bugsnag.com,LIST
 HOST-SUFFIX,notion-static.com,LIST
 HOST-SUFFIX,notion.so,LIST
 HOST-SUFFIX,notionusercontent.com,LIST
@@ -3518,6 +3539,7 @@ HOST-SUFFIX,oneclient.sfx.ms,LIST
 HOST-SUFFIX,onetrust.com,LIST
 HOST-SUFFIX,onrender.com,LIST
 HOST-SUFFIX,openload.co,LIST
+HOST-SUFFIX,opentelemetry.io,LIST
 HOST-SUFFIX,operacdn.com,LIST
 HOST-SUFFIX,optifine.net,LIST
 HOST-SUFFIX,oracle.com,LIST
@@ -3722,6 +3744,7 @@ HOST-SUFFIX,ravenjs.com,LIST
 HOST-SUFFIX,rawgit.com,LIST
 HOST-SUFFIX,rawgit.org,LIST
 HOST-SUFFIX,raxcdn.com,LIST
+HOST-SUFFIX,raygun.io,LIST
 HOST-SUFFIX,rbxcdn.com,LIST
 HOST-SUFFIX,rdtcdn.com,LIST
 HOST-SUFFIX,react.dev,LIST
@@ -3767,6 +3790,7 @@ HOST-SUFFIX,rss3.dev,LIST
 HOST-SUFFIX,rthk.hk,LIST
 HOST-SUFFIX,rthk.org.hk,LIST
 HOST-SUFFIX,ruleset.skk.moe,LIST
+HOST-SUFFIX,rum.cronitor.io,LIST
 HOST-SUFFIX,runkitcdn.com,LIST
 HOST-SUFFIX,s-nbcnews.com,LIST
 HOST-SUFFIX,s3-website.fr-par.scw.cloud,LIST
@@ -3807,6 +3831,8 @@ HOST-SUFFIX,sendspace.com,LIST
 HOST-SUFFIX,sendvid.com,LIST
 HOST-SUFFIX,senja.io,LIST
 HOST-SUFFIX,sentry-cdn.com,LIST
+HOST-SUFFIX,sessions.bugsnag.com,LIST
+HOST-SUFFIX,settings.crashlytics.com,LIST
 HOST-SUFFIX,sf.net,LIST
 HOST-SUFFIX,sfdcstatic.com,LIST
 HOST-SUFFIX,sftcdn.net,LIST
@@ -3851,6 +3877,7 @@ HOST-SUFFIX,smilecdn.co,LIST
 HOST-SUFFIX,smushcdn.com,LIST
 HOST-SUFFIX,sndcdn.com,LIST
 HOST-SUFFIX,snowfiles.com,LIST
+HOST-SUFFIX,sny.monosnap.com,LIST
 HOST-SUFFIX,snzypic.com,LIST
 HOST-SUFFIX,soccermatchpass.com,LIST
 HOST-SUFFIX,socdm.com,LIST
@@ -3874,6 +3901,7 @@ HOST-SUFFIX,speedracegear.com,LIST
 HOST-SUFFIX,speedrun.com,LIST
 HOST-SUFFIX,speedxtra.com,LIST
 HOST-SUFFIX,spicyfile.com,LIST
+HOST-SUFFIX,splunkcloud.com,LIST
 HOST-SUFFIX,spoti.fi,LIST
 HOST-SUFFIX,spotify-everywhere.com,LIST
 HOST-SUFFIX,spotify.design,LIST
@@ -4021,6 +4049,7 @@ HOST-SUFFIX,tlauncherrepo.com,LIST
 HOST-SUFFIX,tln4.ru,LIST
 HOST-SUFFIX,tmp.link,LIST
 HOST-SUFFIX,tmpfiles.org,LIST
+HOST-SUFFIX,tmsimg.com,LIST
 HOST-SUFFIX,tnastatic.com,LIST
 HOST-SUFFIX,top4top.net,LIST
 HOST-SUFFIX,trackerslist.com,LIST
@@ -4050,6 +4079,7 @@ HOST-SUFFIX,tvbusa.com,LIST
 HOST-SUFFIX,tvbweekly.com,LIST
 HOST-SUFFIX,tver.co.jp,LIST
 HOST-SUFFIX,tver.jp,LIST
+HOST-SUFFIX,tvlicensing.co.uk,LIST
 HOST-SUFFIX,tvmedia.net.au,LIST
 HOST-SUFFIX,twemoji.maxcdn.com,LIST
 HOST-SUFFIX,twimg.co,LIST
