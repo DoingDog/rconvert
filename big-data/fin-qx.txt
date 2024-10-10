@@ -1,5 +1,5 @@
-# Quantumult total line 5381
-# Last updated Mon 10/07/2024 22:11:41.16
+# Quantumult total line 5390
+# Last updated Thu 10/10/2024 22:11:48.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -367,6 +367,7 @@ HOST,cdn.glitch.global,LIST
 HOST,cdn.glitch.me,LIST
 HOST,cdn.gofundme.com,LIST
 HOST,cdn.graph.office.net,LIST
+HOST,cdn.growthbook.io,LIST
 HOST,cdn.hackernoon.com,LIST
 HOST,cdn.hashnode.com,LIST
 HOST,cdn.headwayapp.co,LIST
@@ -392,6 +393,7 @@ HOST,cdn.kinsta.com,LIST
 HOST,cdn.koala.live,LIST
 HOST,cdn.kobo.com,LIST
 HOST,cdn.langshop.app,LIST
+HOST,cdn.libravatar.org,LIST
 HOST,cdn.linearicons.com,LIST
 HOST,cdn.linkmink.com,LIST
 HOST,cdn.livechatinc.com,LIST
@@ -560,6 +562,7 @@ HOST,ciscobinary.openh264.org,LIST
 HOST,claritystatic.azureedge.net,LIST
 HOST,client.hikarifield.co.jp,LIST
 HOST,client.px-cloud.net,LIST
+HOST,clientmetrics-pa.googleapis.com,LIST
 HOST,cloud.redhat.com,LIST
 HOST,cloudflare.tv,LIST
 HOST,cloudfront.barilliance.com,LIST
@@ -607,6 +610,7 @@ HOST,cp2.cloudflare.com,LIST
 HOST,cp3.cloudflare.com,LIST
 HOST,cp4.cloudflare.com,LIST
 HOST,cpwebassets.codepen.io,LIST
+HOST,craftassets.unraid.net,LIST
 HOST,creativajs.altervista.org,LIST
 HOST,crl.usertrust.com,LIST
 HOST,crl.verisign.com,LIST
@@ -781,6 +785,9 @@ HOST,files.slack.com,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
 HOST,filestore.fortinet.com,LIST
+HOST,firebase-settings.crashlytics.com,LIST
+HOST,firebaselogging-pa.googleapis.com,LIST
+HOST,firebaselogging.googleapis.com,LIST
 HOST,firefox.settings.services.mozilla.com,LIST
 HOST,flows.trysavvy.com,LIST
 HOST,fontbit.io,LIST
@@ -3506,6 +3513,8 @@ HOST-SUFFIX,nowestatic.com,LIST
 HOST-SUFFIX,nowvideo.club,LIST
 HOST-SUFFIX,npmfs.com,LIST
 HOST-SUFFIX,nsstatic.net,LIST
+HOST-SUFFIX,nxcli.io,LIST
+HOST-SUFFIX,nxedge.io,LIST
 HOST-SUFFIX,nypost.com,LIST
 HOST-SUFFIX,nypost.help,LIST
 HOST-SUFFIX,nypostreprints.com,LIST

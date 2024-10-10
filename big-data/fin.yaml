@@ -1,5 +1,5 @@
-# Clash total line 5396
-# Last updated Mon 10/07/2024 22:11:41.19
+# Clash total line 5405
+# Last updated Thu 10/10/2024 22:11:48.65
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -368,6 +368,7 @@ payload:
   - DOMAIN,cdn.glitch.me
   - DOMAIN,cdn.gofundme.com
   - DOMAIN,cdn.graph.office.net
+  - DOMAIN,cdn.growthbook.io
   - DOMAIN,cdn.hackernoon.com
   - DOMAIN,cdn.hashnode.com
   - DOMAIN,cdn.headwayapp.co
@@ -393,6 +394,7 @@ payload:
   - DOMAIN,cdn.koala.live
   - DOMAIN,cdn.kobo.com
   - DOMAIN,cdn.langshop.app
+  - DOMAIN,cdn.libravatar.org
   - DOMAIN,cdn.linearicons.com
   - DOMAIN,cdn.linkmink.com
   - DOMAIN,cdn.livechatinc.com
@@ -561,6 +563,7 @@ payload:
   - DOMAIN,claritystatic.azureedge.net
   - DOMAIN,client.hikarifield.co.jp
   - DOMAIN,client.px-cloud.net
+  - DOMAIN,clientmetrics-pa.googleapis.com
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloudflare.tv
   - DOMAIN,cloudfront.barilliance.com
@@ -608,6 +611,7 @@ payload:
   - DOMAIN,cp3.cloudflare.com
   - DOMAIN,cp4.cloudflare.com
   - DOMAIN,cpwebassets.codepen.io
+  - DOMAIN,craftassets.unraid.net
   - DOMAIN,creativajs.altervista.org
   - DOMAIN,crl.usertrust.com
   - DOMAIN,crl.verisign.com
@@ -782,6 +786,9 @@ payload:
   - DOMAIN,files.writefreely.org
   - DOMAIN,files.yande.re
   - DOMAIN,filestore.fortinet.com
+  - DOMAIN,firebase-settings.crashlytics.com
+  - DOMAIN,firebaselogging-pa.googleapis.com
+  - DOMAIN,firebaselogging.googleapis.com
   - DOMAIN,firefox.settings.services.mozilla.com
   - DOMAIN,flows.trysavvy.com
   - DOMAIN,fontbit.io
@@ -3507,6 +3514,8 @@ payload:
   - DOMAIN-SUFFIX,nowvideo.club
   - DOMAIN-SUFFIX,npmfs.com
   - DOMAIN-SUFFIX,nsstatic.net
+  - DOMAIN-SUFFIX,nxcli.io
+  - DOMAIN-SUFFIX,nxedge.io
   - DOMAIN-SUFFIX,nypost.com
   - DOMAIN-SUFFIX,nypost.help
   - DOMAIN-SUFFIX,nypostreprints.com
