@@ -1,5 +1,5 @@
-# Quantumult total line 2477
-# Last updated Thu 10/10/2024 22:11:39.73
+# Quantumult total line 2489
+# Last updated Sun 10/13/2024 22:10:51.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -170,6 +170,7 @@ HOST,assets.video.yahoo.net,LIST
 HOST,assets.videowise.com,LIST
 HOST,assets.vidyard.com,LIST
 HOST,assets.visioncritical.net,LIST
+HOST,assets.vodafone.co.uk,LIST
 HOST,assets.vogue.com,LIST
 HOST,assets.volvo.com,LIST
 HOST,assets.xbox.com,LIST
@@ -435,11 +436,13 @@ HOST,cdn.prowritingaid.com,LIST
 HOST,cdn.quadpay.com,LIST
 HOST,cdn.rauno.me,LIST
 HOST,cdn.readme.io,LIST
+HOST,cdn.ready-market.com.tw,LIST
 HOST,cdn.recovermycart.com,LIST
 HOST,cdn.redoc.ly,LIST
 HOST,cdn.registerdisney.go.com,LIST
 HOST,cdn.reimu.net,LIST
 HOST,cdn.rex.contents.rakuten.co.jp,LIST
+HOST,cdn.rive.app,LIST
 HOST,cdn.robinpro.gallery,LIST
 HOST,cdn.roboflow.com,LIST
 HOST,cdn.safecharge.com,LIST
@@ -553,7 +556,6 @@ HOST,checkout.stripe.com,LIST
 HOST,ci.testling.com,LIST
 HOST,claritystatic.azureedge.net,LIST
 HOST,client.px-cloud.net,LIST
-HOST,clientmetrics-pa.googleapis.com,LIST
 HOST,clips-media-assets2.twitch.tv,LIST
 HOST,cloud.redhat.com,LIST
 HOST,cloudflare.tv,LIST
@@ -830,6 +832,7 @@ HOST,images.freeimages.com,LIST
 HOST,images.g2crowd.com,LIST
 HOST,images.idgesg.net,LIST
 HOST,images.macrumors.com,LIST
+HOST,images.microcms-assets.io,LIST
 HOST,images.moegoat.com,LIST
 HOST,images.moovitapp.com,LIST
 HOST,images.newrepublic.com,LIST
@@ -1215,6 +1218,7 @@ HOST,repository.jboss.org,LIST
 HOST,res-geo.cdn.office.net,LIST
 HOST,res.abc.net.au,LIST
 HOST,res.cloudinary.com,LIST
+HOST,res.craft.do,LIST
 HOST,res2.weblium.site,LIST
 HOST,resize.blogsys.jp,LIST
 HOST,resize.yandex.net,LIST
@@ -1293,6 +1297,7 @@ HOST,seal-newyork.bbb.org,LIST
 HOST,searchanise-ef84.kxcdn.com,LIST
 HOST,searchserverapi.com,LIST
 HOST,seccdn.libravatar.org,LIST
+HOST,secure-res.craft.do,LIST
 HOST,secure-uploads.ui.com,LIST
 HOST,secure.beer7live.com,LIST
 HOST,secure.fanboy.co.nz,LIST
@@ -1330,6 +1335,7 @@ HOST,sponsor.ajay.app,LIST
 HOST,spoppe-b.azureedge.net,LIST
 HOST,spoprod-a.akamaihd.net,LIST
 HOST,st-eu.dynamicyield.com,LIST
+HOST,st.agrd.eu,LIST
 HOST,st.deviantart.net,LIST
 HOST,st.dynamicyield.com,LIST
 HOST,st1.zoom.us,LIST
@@ -1500,6 +1506,7 @@ HOST,static.start.me,LIST
 HOST,static.status.io,LIST
 HOST,static.t-ru.org,LIST
 HOST,static.telegraph.co.uk,LIST
+HOST,static.tenki.jp,LIST
 HOST,static.test-beta.com,LIST
 HOST,static.theguardian.com,LIST
 HOST,static.tokenview.io,LIST
@@ -1621,6 +1628,7 @@ HOST,upload.wikimedia.org,LIST
 HOST,uploads.codesandbox.io,LIST
 HOST,uploads.guim.co.uk,LIST
 HOST,uploads.sitepoint.com,LIST
+HOST,upos-sz-mirroralibstar1.bilivideo.com,LIST
 HOST,us.hamreus.com,LIST
 HOST,use.typekit.com,LIST
 HOST,use.typekit.net,LIST
@@ -1834,6 +1842,7 @@ HOST-SUFFIX,characterai.io,LIST
 HOST-SUFFIX,chasecdn.com,LIST
 HOST-SUFFIX,chcdn.xyz,LIST
 HOST-SUFFIX,chesscomfiles.com,LIST
+HOST-SUFFIX,clientmetrics-pa.googleapis.com,LIST
 HOST-SUFFIX,cloud.influxdata.com,LIST
 HOST-SUFFIX,cloud1.influxdata.com,LIST
 HOST-SUFFIX,cloud2.influxdata.com,LIST
@@ -2146,6 +2155,7 @@ HOST-SUFFIX,meetupstatic.com,LIST
 HOST-SUFFIX,mercdn.net,LIST
 HOST-SUFFIX,metric.gstatic.com,LIST
 HOST-SUFFIX,mfcimg.com,LIST
+HOST-SUFFIX,mirror-media.xyz,LIST
 HOST-SUFFIX,mirrors.utermux.dev,LIST
 HOST-SUFFIX,misskeyusercontent.com,LIST
 HOST-SUFFIX,misskeyusercontent.jp,LIST
@@ -2188,6 +2198,8 @@ HOST-SUFFIX,oaistatic.com,LIST
 HOST-SUFFIX,oaiusercontent.com,LIST
 HOST-SUFFIX,oculuscdn.com,LIST
 HOST-SUFFIX,odycdn.com,LIST
+HOST-SUFFIX,ogads-pa.clients6.google.com,LIST
+HOST-SUFFIX,ogads-pa.googleapis.com,LIST
 HOST-SUFFIX,oktacdn.com,LIST
 HOST-SUFFIX,olemovienews.com,LIST
 HOST-SUFFIX,ominisrc.com,LIST

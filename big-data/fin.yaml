@@ -1,5 +1,5 @@
-# Clash total line 5405
-# Last updated Thu 10/10/2024 22:11:48.65
+# Clash total line 5417
+# Last updated Sun 10/13/2024 22:11:01.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -174,6 +174,7 @@ payload:
   - DOMAIN,assets.videowise.com
   - DOMAIN,assets.vidyard.com
   - DOMAIN,assets.visioncritical.net
+  - DOMAIN,assets.vodafone.co.uk
   - DOMAIN,assets.vogue.com
   - DOMAIN,assets.volvo.com
   - DOMAIN,assets.xbox.com
@@ -446,10 +447,12 @@ payload:
   - DOMAIN,cdn.quadpay.com
   - DOMAIN,cdn.rauno.me
   - DOMAIN,cdn.readme.io
+  - DOMAIN,cdn.ready-market.com.tw
   - DOMAIN,cdn.recovermycart.com
   - DOMAIN,cdn.redoc.ly
   - DOMAIN,cdn.reimu.net
   - DOMAIN,cdn.rex.contents.rakuten.co.jp
+  - DOMAIN,cdn.rive.app
   - DOMAIN,cdn.robinpro.gallery
   - DOMAIN,cdn.roboflow.com
   - DOMAIN,cdn.safecharge.com
@@ -563,7 +566,6 @@ payload:
   - DOMAIN,claritystatic.azureedge.net
   - DOMAIN,client.hikarifield.co.jp
   - DOMAIN,client.px-cloud.net
-  - DOMAIN,clientmetrics-pa.googleapis.com
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloudflare.tv
   - DOMAIN,cloudfront.barilliance.com
@@ -924,6 +926,7 @@ payload:
   - DOMAIN,images.g2crowd.com
   - DOMAIN,images.idgesg.net
   - DOMAIN,images.macrumors.com
+  - DOMAIN,images.microcms-assets.io
   - DOMAIN,images.moegoat.com
   - DOMAIN,images.moovitapp.com
   - DOMAIN,images.newrepublic.com
@@ -1336,6 +1339,7 @@ payload:
   - DOMAIN,res-geo.cdn.office.net
   - DOMAIN,res.abc.net.au
   - DOMAIN,res.cloudinary.com
+  - DOMAIN,res.craft.do
   - DOMAIN,res2.weblium.site
   - DOMAIN,resize.blogsys.jp
   - DOMAIN,resize.yandex.net
@@ -1413,6 +1417,7 @@ payload:
   - DOMAIN,searchanise-ef84.kxcdn.com
   - DOMAIN,searchserverapi.com
   - DOMAIN,seccdn.libravatar.org
+  - DOMAIN,secure-res.craft.do
   - DOMAIN,secure-uploads.ui.com
   - DOMAIN,secure.beer7live.com
   - DOMAIN,secure.fanboy.co.nz
@@ -1452,6 +1457,7 @@ payload:
   - DOMAIN,sponsor.ajay.app
   - DOMAIN,spoppe-b.azureedge.net
   - DOMAIN,st-eu.dynamicyield.com
+  - DOMAIN,st.agrd.eu
   - DOMAIN,st.deviantart.net
   - DOMAIN,st.dynamicyield.com
   - DOMAIN,st1.zoom.us
@@ -1602,6 +1608,7 @@ payload:
   - DOMAIN,static.status.io
   - DOMAIN,static.t-ru.org
   - DOMAIN,static.telegraph.co.uk
+  - DOMAIN,static.tenki.jp
   - DOMAIN,static.test-beta.com
   - DOMAIN,static.theguardian.com
   - DOMAIN,static.tokenview.io
@@ -1716,6 +1723,7 @@ payload:
   - DOMAIN,uploads.codesandbox.io
   - DOMAIN,uploads.guim.co.uk
   - DOMAIN,uploads.sitepoint.com
+  - DOMAIN,upos-sz-mirroralibstar1.bilivideo.com
   - DOMAIN,us.hamreus.com
   - DOMAIN,use.typekit.com
   - DOMAIN,use.typekit.net
@@ -2178,6 +2186,7 @@ payload:
   - DOMAIN-SUFFIX,clicknupload.me
   - DOMAIN-SUFFIX,clicknupload.org
   - DOMAIN-SUFFIX,clicknupload.to
+  - DOMAIN-SUFFIX,clientmetrics-pa.googleapis.com
   - DOMAIN-SUFFIX,clipwatching.com
   - DOMAIN-SUFFIX,cloud.influxdata.com
   - DOMAIN-SUFFIX,cloud1.influxdata.com
@@ -3341,6 +3350,7 @@ payload:
   - DOMAIN-SUFFIX,mightyupload.com
   - DOMAIN-SUFFIX,minecraft.net
   - DOMAIN-SUFFIX,minecraftforge.net
+  - DOMAIN-SUFFIX,mirror-media.xyz
   - DOMAIN-SUFFIX,mirror.clarkson.edu
   - DOMAIN-SUFFIX,mirror.constant.com
   - DOMAIN-SUFFIX,mirrorcreator.com
@@ -3538,6 +3548,8 @@ payload:
   - DOMAIN-SUFFIX,ocnttv.com
   - DOMAIN-SUFFIX,oculuscdn.com
   - DOMAIN-SUFFIX,odycdn.com
+  - DOMAIN-SUFFIX,ogads-pa.clients6.google.com
+  - DOMAIN-SUFFIX,ogads-pa.googleapis.com
   - DOMAIN-SUFFIX,oktacdn.com
   - DOMAIN-SUFFIX,olehd.com
   - DOMAIN-SUFFIX,olelive.com

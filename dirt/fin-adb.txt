@@ -1,5 +1,5 @@
-# Adblock total line 4008
-# Last updated Thu 10/10/2024 22:11:57.07
+# Adblock total line 3981
+# Last updated Sun 10/13/2024 22:11:10.69
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||a.iqmtp.live^
 ||analytics.strava.com^
@@ -318,8 +318,8 @@
 ||9ht.com^
 ||9xgame.com^
 ||9xu.com^
-||_adb-tls-connect._tcp^
-||_hotspot_.m2m^
+||_msdcs^
+||_tcp^
 ||a9vg.com^
 ||aaplimg.com^
 ||aardio.com^
@@ -370,7 +370,6 @@
 ||aipai.com^
 ||air-matters.com^
 ||air-matters.io^
-||airbox.home^
 ||airchangan.com^
 ||airchinacargo.com^
 ||airguilin.com^
@@ -442,7 +441,6 @@
 ||amapauto.com^
 ||amd.com^
 ||amemv.com^
-||amplifi.lan^
 ||ams.org^
 ||andfx.net^
 ||anfensi.com^
@@ -481,7 +479,6 @@
 ||apk8.com^
 ||aplaybox.com^
 ||apollo.auto^
-||app.plex.tv^
 ||appchina.com^
 ||appeeres.com^
 ||appinn.com^
@@ -490,7 +487,6 @@
 ||appshike.com^
 ||appsimg.com^
 ||aps.org^
-||arcor.easybox^
 ||arpun.com^
 ||ascelibrary.org^
 ||asczwa.com^
@@ -639,6 +635,7 @@
 ||bocifunds.com^
 ||bocigroup.com^
 ||bocim.com^
+||bogon^
 ||bohejiasuqi.com^
 ||bojianger.com^
 ||bokecc.com^
@@ -653,8 +650,6 @@
 ||btcfans.com^
 ||btgtravel.com^
 ||bthhotels.com^
-||bthomehub.home^
-||bthub.home^
 ||btime.com^
 ||btschool.club^
 ||build9s.io^
@@ -1067,8 +1062,6 @@
 ||computeinit.com^
 ||comsenz.com^
 ||concertos.live^
-||congstar.box^
-||connect.box^
 ||console.gl-inet.com^
 ||contentchina.com^
 ||coolapk.com^
@@ -1319,7 +1312,6 @@
 ||eastmoney.com^
 ||eastmoneyfutures.com^
 ||eastsoo.com^
-||easy.box^
 ||easytrip.com^
 ||eatuo.com^
 ||eayyou.com^
@@ -1367,7 +1359,6 @@
 ||et8.org^
 ||etao.com^
 ||ets100.com^
-||etxr^
 ||eu-west-0.myhuaweicloud.com^
 ||eudic.net^
 ||everbright.com^
@@ -1447,9 +1438,6 @@
 ||freebuf.com^
 ||fresh-ideas.cc^
 ||freshhema.com^
-||fritz.box^
-||fritz.nas^
-||fritz.repeater^
 ||frontjs.com^
 ||frontwize.com^
 ||fsfund.com^
@@ -1531,7 +1519,6 @@
 ||gfxpeers.net^
 ||ghpym.com^
 ||gifshow.com^
-||giga.cube^
 ||giocdn.com^
 ||gitcode.com^
 ||gitcode.net^
@@ -1679,7 +1666,6 @@
 ||hftfund.com^
 ||hhtravel.com^
 ||hhtravel.com.tw^
-||hi.link^
 ||hiascend.com^
 ||hichina.com^
 ||hiclc.com^
@@ -1695,7 +1681,6 @@
 ||hisilicon.com^
 ||hitpt.com^
 ||hitpt.org^
-||hitronhub.home^
 ||hitv.com^
 ||hiwifi.com^
 ||hiyd.com^
@@ -1712,6 +1697,7 @@
 ||hnyuyuhui.com^
 ||hollisterco.com^
 ||hollycrm.com^
+||home^
 ||homeinns.com^
 ||homekoo.com^
 ||homerouter.cpe^
@@ -2396,6 +2382,7 @@
 ||m-team.cc^
 ||m1.run^
 ||m1905.com^
+||m2m^
 ||m6.run^
 ||m9.run^
 ||ma.run^
@@ -2551,7 +2538,6 @@
 ||muzhiwan.com^
 ||mxhichina.com^
 ||my-qcloud.com^
-||my.router^
 ||my4399.com^
 ||myanonamouse.net^
 ||myapp.com^
@@ -2559,7 +2545,6 @@
 ||mydown.com^
 ||mydrivers.com^
 ||myelasticsearch.com^
-||myfritz.box^
 ||myhwcdn.com^
 ||myhwcloudlive.com^
 ||myhwclouds.com^
@@ -2728,7 +2713,6 @@
 ||pgyer.com^
 ||pgzs.com^
 ||pharmacodia.com^
-||phicomm.me^
 ||philanthropy.xin^
 ||phpcomposer.com^
 ||phpweblog.net^
@@ -2814,6 +2798,7 @@
 ||qh-cdn.com^
 ||qh24.com^
 ||qhimg.com^
+||qhimgs.com^
 ||qhimgs0.com^
 ||qhimgs1.com^
 ||qhimgs2.com^
@@ -2821,15 +2806,10 @@
 ||qhimgs4.com^
 ||qhimgs5.com^
 ||qhimgs6.com^
+||qhimgs?.com^
 ||qhmsg.com^
 ||qhres.com^
-||qhres0.com^
-||qhres1.com^
 ||qhres2.com^
-||qhres3.com^
-||qhres4.com^
-||qhres5.com^
-||qhres6.com^
 ||qhstatic.com^
 ||qhupdate.com^
 ||qiangbus.com^
@@ -2929,8 +2909,9 @@
 ||rong360.com^
 ||rongechain.com^
 ||ronghub.com^
+||router^
 ||router.asus.com^
-||router.ctc^
+||router.com^
 ||routerlogin.com^
 ||routerlogin.net^
 ||routewize.com^
@@ -2953,7 +2934,6 @@
 ||saayaa.com^
 ||sagepub.com^
 ||saibo.com^
-||samsung.router^
 ||samsungcloudcn.com^
 ||sandai.net^
 ||sanguosha.com^
@@ -2982,7 +2962,6 @@
 ||seniverse.com^
 ||senlinjimore.com^
 ||servicewechat.com^
-||setapp.click^
 ||setmeup.arubanetworks.com^
 ||sevencdn.com^
 ||sf-airlines.com^
@@ -3098,7 +3077,6 @@
 ||spcdntipbak.com^
 ||spcloudhw.com^
 ||spcloudhw.net^
-||speedport.ip^
 ||speedws.info^
 ||speedws.org^
 ||speiyou.com^
@@ -3126,7 +3104,6 @@
 ||steam.clngaa.com^
 ||steam.ksyna.com^
 ||steamchina.com^
-||steamloopback.host^
 ||steampp.net^
 ||steamserver.net^
 ||stockstar.com^
@@ -3351,7 +3328,6 @@
 ||toutiaovod.com^
 ||touzid.com^
 ||tplinkap.net^
-||tplinkeap.net^
 ||tplinkmodem.net^
 ||tplinkplclogin.net^
 ||tplinkrepeater.net^
@@ -3540,8 +3516,6 @@
 ||weand.com^
 ||weather.com^
 ||weathercn.com^
-||web.setup^
-||web.setup.home^
 ||webank.com^
 ||webankcdn.net^
 ||webgame163.com^
@@ -3972,7 +3946,6 @@
 ||zrblog.net^
 ||zsxq.com^
 ||zszq.com^
-||zte.home^
 ||ztfsec.com^
 ||zuche.com^
 ||zuchecdn.com^
