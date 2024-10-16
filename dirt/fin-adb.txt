@@ -1,27 +1,43 @@
-# Adblock total line 3981
-# Last updated Sun 10/13/2024 22:11:10.69
+# Adblock total line 4003
+# Last updated Wed 10/16/2024 22:12:05.70
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||a.iqmtp.live^
 ||analytics.strava.com^
+||aterm.me^
 ||blzddist1-a.akamaihd.net^
+||captive.apple.com^
 ||cdn.angruo.com^
 ||client.amplifi.com^
 ||cn.download.nvidia.com^
 ||config.ubnt.com^
+||console.gl-inet.com^
 ||dl.ubnt.com^
 ||download.jetbrains.com^
 ||gstore.val.manlaxy.com^
+||homerouter.cpe^
+||hotspot.cslwifi.com^
 ||images-cn.ssl-images-amazon.com^
+||injections.adguard.org^
+||instant.arubanetworks.com^
 ||ip.istatmenus.app^
 ||kc.kexinshe.com^
+||local.adguard.org^
+||mobile.hotspot^
+||ntt.setup^
 ||origin-a.akamaihd.ne^
 ||origin-a.akamaihd.net^
 ||p-bstarstatic.akamaized.net^
 ||p.bstarstatic.com^
+||pi.hole^
 ||raw.iqiq.io^
+||repeater.asus.com^
+||router.asus.com^
+||router.com^
+||setmeup.arubanetworks.com^
 ||sms.imagetasks.com^
 ||steamcommunity-a.akamaihd.net^
 ||this_ruleset_is_made_by_sukkaw.ruleset.skk.moe^
+||unifi^
 ||upos-bstar-mirrorakam.akamaized.net^
 ||upos-bstar1-mirrorakam.akamaized.net^
 ||www.layuicdn.com^
@@ -34,6 +50,7 @@
 ||05sun.com^
 ||0759job.com^
 ||1.letvlive.com^
+||10.in-addr.arpa^
 ||10010.com^
 ||100bt.com^
 ||100offer.com^
@@ -60,6 +77,7 @@
 ||127.com^
 ||127.net^
 ||139.com^
+||16.172.in-addr.arpa^
 ||163.com^
 ||1637.com^
 ||163cn.tv^
@@ -70,9 +88,11 @@
 ||163yun.com^
 ||166.com^
 ||166.net^
+||168.192.in-addr.arpa^
 ||1688.com^
 ||16888.com^
 ||16rd.com^
+||17.172.in-addr.arpa^
 ||17173.com^
 ||178.com^
 ||178linux.com^
@@ -87,8 +107,10 @@
 ||17usoft.net^
 ||17zuoye.com^
 ||17zuoye.net^
+||18.172.in-addr.arpa^
 ||18183.com^
 ||188.com^
+||19.172.in-addr.arpa^
 ||1905.com^
 ||19yxw.com^
 ||1huizhan.com^
@@ -96,18 +118,31 @@
 ||1ting.com^
 ||1zhe.com^
 ||2.letvlive.com^
+||20.172.in-addr.arpa^
+||21.172.in-addr.arpa^
 ||21cn.com^
 ||21jingji.com^
+||22.172.in-addr.arpa^
 ||2265.com^
 ||2288.org^
+||23.172.in-addr.arpa^
 ||2345.com^
+||24.172.in-addr.arpa^
+||25.172.in-addr.arpa^
+||254.169.in-addr.arpa^
 ||258.com^
 ||25pp.com^
+||26.172.in-addr.arpa^
 ||263.net^
+||27.172.in-addr.arpa^
+||28.172.in-addr.arpa^
 ||289.com^
+||29.172.in-addr.arpa^
 ||2cto.com^
+||30.172.in-addr.arpa^
 ||3000.com^
 ||300hu.com^
+||31.172.in-addr.arpa^
 ||310win.com^
 ||315che.com^
 ||321fenx.com^
@@ -497,7 +532,6 @@
 ||astm.org^
 ||asusrouter.com^
 ||atatech.org^
-||aterm.me^
 ||authing.co^
 ||autonavi.com^
 ||avgv.cc^
@@ -656,6 +690,7 @@
 ||bx1k.com^
 ||byodonline.com^
 ||bystack.com^
+||byteacctimg.com^
 ||byted-static.com^
 ||byted.org^
 ||bytedance.com^
@@ -697,7 +732,6 @@
 ||cang.com^
 ||cankaoxiaoxi.com^
 ||capitalonline.net^
-||captive.apple.com^
 ||cardbaobao.com^
 ||carnoc.com^
 ||cas.org^
@@ -1062,7 +1096,6 @@
 ||computeinit.com^
 ||comsenz.com^
 ||concertos.live^
-||console.gl-inet.com^
 ||contentchina.com^
 ||coolapk.com^
 ||coolapkmarket.com^
@@ -1249,7 +1282,6 @@
 ||dongguantoday.com^
 ||dongting.com^
 ||dopa.com^
-||dot.pub^
 ||doticloud.com^
 ||douban.com^
 ||douban.fm^
@@ -1698,9 +1730,9 @@
 ||hollisterco.com^
 ||hollycrm.com^
 ||home^
+||home.arpa^
 ||homeinns.com^
 ||homekoo.com^
-||homerouter.cpe^
 ||hongbo100.com^
 ||hongdefund.com^
 ||hongen.com^
@@ -1712,7 +1744,6 @@
 ||hori-gz.com^
 ||hostbuf.com^
 ||hotmail.com^
-||hotspot.cslwifi.com^
 ||houdao.com^
 ||houyicaiji.com^
 ||houyuantuan.com^
@@ -1897,8 +1928,6 @@
 ||infoqstatic.com^
 ||inftab.com^
 ||infzm.com^
-||injections.adguard.org^
-||instant.arubanetworks.com^
 ||interact.sh^
 ||intltencentcos.com^
 ||iop.org^
@@ -2235,6 +2264,7 @@
 ||lagou.com^
 ||laiqukankan.com^
 ||laiwang.com^
+||lan^
 ||lancdn.com^
 ||lancdns.com^
 ||landian.vip^
@@ -2341,7 +2371,7 @@
 ||llscdn.com^
 ||llsserver.com^
 ||lnlib.net^
-||local.adguard.org^
+||localdomain^
 ||localizecdn.com^
 ||lofter.com^
 ||logiseasy.com^
@@ -2449,6 +2479,7 @@
 ||mfcteda.com^
 ||mgtv.com^
 ||mi-fds.com^
+||mi-idc.com^
 ||mi-img.com^
 ||mi.com^
 ||miaobolive.com^
@@ -2492,7 +2523,6 @@
 ||mndqlib.net^
 ||mob.com^
 ||mobike.com^
-||mobile.hotspot^
 ||mobmore.com^
 ||moecat.best^
 ||mofang.com^
@@ -2604,7 +2634,6 @@
 ||npupt.com^
 ||nruan.com^
 ||ntalker.com^
-||ntt.setup^
 ||nubia.com^
 ||nuomi.com^
 ||nvsheng.com^
@@ -2718,7 +2747,6 @@
 ||phpweblog.net^
 ||phpwind.com^
 ||phpwind.net^
-||pi.hole^
 ||piaoliang.com^
 ||pigai.org^
 ||pinduoduo.com^
@@ -2806,7 +2834,6 @@
 ||qhimgs4.com^
 ||qhimgs5.com^
 ||qhimgs6.com^
-||qhimgs?.com^
 ||qhmsg.com^
 ||qhres.com^
 ||qhres2.com^
@@ -2828,6 +2855,7 @@
 ||qihoo.net^
 ||qihucdn.com^
 ||qijiayoudao.net^
+||qiku.com^
 ||qikucdn.com^
 ||qin.io^
 ||qingcache.com^
@@ -2900,7 +2928,6 @@
 ||renren-inc.com^
 ||renren.com^
 ||repaik.com^
-||repeater.asus.com^
 ||researchgate.net^
 ||resset.com^
 ||rfchost.com^
@@ -2910,8 +2937,6 @@
 ||rongechain.com^
 ||ronghub.com^
 ||router^
-||router.asus.com^
-||router.com^
 ||routerlogin.com^
 ||routerlogin.net^
 ||routewize.com^
@@ -2962,7 +2987,6 @@
 ||seniverse.com^
 ||senlinjimore.com^
 ||servicewechat.com^
-||setmeup.arubanetworks.com^
 ||sevencdn.com^
 ||sf-airlines.com^
 ||sf-cityrush.com^
@@ -3343,7 +3367,6 @@
 ||trunktech.com^
 ||trustexporter.com^
 ||trustutn.org^
-||ts.net^
 ||tsparkling.com^
 ||ttmeiju.com^
 ||ttpod.com^
@@ -3426,7 +3449,6 @@
 ||unaming.info^
 ||unaming.net^
 ||uni-bielefeld.de^
-||unifi^
 ||uning.com^
 ||unionpay.com^
 ||unionpay.net^

@@ -1,5 +1,5 @@
-# Quantumult total line 2489
-# Last updated Sun 10/13/2024 22:10:51.61
+# Quantumult total line 2494
+# Last updated Wed 10/16/2024 22:11:47.78
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -303,6 +303,7 @@ HOST,cdn.bsky.social,LIST
 HOST,cdn.builder.io,LIST
 HOST,cdn.calibermind.com,LIST
 HOST,cdn.cameo.com,LIST
+HOST,cdn.cbd.int,LIST
 HOST,cdn.ceres9350.com,LIST
 HOST,cdn.channel.io,LIST
 HOST,cdn.chess24.com,LIST
@@ -512,6 +513,7 @@ HOST,cdn1.sysgears.com,LIST
 HOST,cdn1.unrealengine.com,LIST
 HOST,cdn10.hiftporn.fun,LIST
 HOST,cdn2-imgix.macpaw.com,LIST
+HOST,cdn2.abiresearch.com,LIST
 HOST,cdn2.dan.com,LIST
 HOST,cdn2.downdetector.com,LIST
 HOST,cdn2.editmysite.com,LIST
@@ -1232,6 +1234,7 @@ HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
 HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rules.ac,LIST
+HOST,rum-agent.na-01.cloud.solarwinds.com,LIST
 HOST,runkit-packages-static-executables.com,LIST
 HOST,runkit-packages-static.com,LIST
 HOST,s-cdn.anthropic.com,LIST
@@ -1279,6 +1282,7 @@ HOST,s3.us-west-002.backblazeb2.com,LIST
 HOST,s3.us-west-004.backblazeb2.com,LIST
 HOST,s3.wp.com,LIST
 HOST,s3media.squarespace.com,LIST
+HOST,s7d1.scene7.com,LIST
 HOST,safebrowsing.google.com,LIST
 HOST,safebrowsing.googleapis.com,LIST
 HOST,sandpack-cdn-staging.blazingly.io,LIST
@@ -1685,6 +1689,7 @@ HOST,widget.cluster.groovehq.com,LIST
 HOST,widget.freshworks.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.trustpilot.com,LIST
+HOST,widget.usepylon.com,LIST
 HOST,widget.user.com,LIST
 HOST,widget.usersnap.com,LIST
 HOST,widget.uservoice.com,LIST

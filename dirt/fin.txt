@@ -1,27 +1,43 @@
-# Main total line 4325
-# Last updated Sun 10/13/2024 22:11:10.42
+# Main total line 4345
+# Last updated Wed 10/16/2024 22:12:05.45
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,a.iqmtp.live
 DOMAIN,analytics.strava.com
+DOMAIN,aterm.me
 DOMAIN,blzddist1-a.akamaihd.net
+DOMAIN,captive.apple.com
 DOMAIN,cdn.angruo.com
 DOMAIN,client.amplifi.com
 DOMAIN,cn.download.nvidia.com
 DOMAIN,config.ubnt.com
+DOMAIN,console.gl-inet.com
 DOMAIN,dl.ubnt.com
 DOMAIN,download.jetbrains.com
 DOMAIN,gstore.val.manlaxy.com
+DOMAIN,homerouter.cpe
+DOMAIN,hotspot.cslwifi.com
 DOMAIN,images-cn.ssl-images-amazon.com
+DOMAIN,injections.adguard.org
+DOMAIN,instant.arubanetworks.com
 DOMAIN,ip.istatmenus.app
 DOMAIN,kc.kexinshe.com
+DOMAIN,local.adguard.org
+DOMAIN,mobile.hotspot
+DOMAIN,ntt.setup
 DOMAIN,origin-a.akamaihd.ne
 DOMAIN,origin-a.akamaihd.net
 DOMAIN,p-bstarstatic.akamaized.net
 DOMAIN,p.bstarstatic.com
+DOMAIN,pi.hole
 DOMAIN,raw.iqiq.io
+DOMAIN,repeater.asus.com
+DOMAIN,router.asus.com
+DOMAIN,router.com
+DOMAIN,setmeup.arubanetworks.com
 DOMAIN,sms.imagetasks.com
 DOMAIN,steamcommunity-a.akamaihd.net
 DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
+DOMAIN,unifi
 DOMAIN,upos-bstar-mirrorakam.akamaized.net
 DOMAIN,upos-bstar1-mirrorakam.akamaized.net
 DOMAIN,www.layuicdn.com
@@ -34,6 +50,7 @@ DOMAIN-SUFFIX,055110.com
 DOMAIN-SUFFIX,05sun.com
 DOMAIN-SUFFIX,0759job.com
 DOMAIN-SUFFIX,1.letvlive.com
+DOMAIN-SUFFIX,10.in-addr.arpa
 DOMAIN-SUFFIX,10010.com
 DOMAIN-SUFFIX,100bt.com
 DOMAIN-SUFFIX,100offer.com
@@ -60,6 +77,7 @@ DOMAIN-SUFFIX,126.net
 DOMAIN-SUFFIX,127.com
 DOMAIN-SUFFIX,127.net
 DOMAIN-SUFFIX,139.com
+DOMAIN-SUFFIX,16.172.in-addr.arpa
 DOMAIN-SUFFIX,163.com
 DOMAIN-SUFFIX,1637.com
 DOMAIN-SUFFIX,163cn.tv
@@ -70,9 +88,11 @@ DOMAIN-SUFFIX,163qiyukf.com
 DOMAIN-SUFFIX,163yun.com
 DOMAIN-SUFFIX,166.com
 DOMAIN-SUFFIX,166.net
+DOMAIN-SUFFIX,168.192.in-addr.arpa
 DOMAIN-SUFFIX,1688.com
 DOMAIN-SUFFIX,16888.com
 DOMAIN-SUFFIX,16rd.com
+DOMAIN-SUFFIX,17.172.in-addr.arpa
 DOMAIN-SUFFIX,17173.com
 DOMAIN-SUFFIX,178.com
 DOMAIN-SUFFIX,178linux.com
@@ -87,8 +107,10 @@ DOMAIN-SUFFIX,17usoft.com
 DOMAIN-SUFFIX,17usoft.net
 DOMAIN-SUFFIX,17zuoye.com
 DOMAIN-SUFFIX,17zuoye.net
+DOMAIN-SUFFIX,18.172.in-addr.arpa
 DOMAIN-SUFFIX,18183.com
 DOMAIN-SUFFIX,188.com
+DOMAIN-SUFFIX,19.172.in-addr.arpa
 DOMAIN-SUFFIX,1905.com
 DOMAIN-SUFFIX,19yxw.com
 DOMAIN-SUFFIX,1huizhan.com
@@ -96,18 +118,31 @@ DOMAIN-SUFFIX,1nongjing.com
 DOMAIN-SUFFIX,1ting.com
 DOMAIN-SUFFIX,1zhe.com
 DOMAIN-SUFFIX,2.letvlive.com
+DOMAIN-SUFFIX,20.172.in-addr.arpa
+DOMAIN-SUFFIX,21.172.in-addr.arpa
 DOMAIN-SUFFIX,21cn.com
 DOMAIN-SUFFIX,21jingji.com
+DOMAIN-SUFFIX,22.172.in-addr.arpa
 DOMAIN-SUFFIX,2265.com
 DOMAIN-SUFFIX,2288.org
+DOMAIN-SUFFIX,23.172.in-addr.arpa
 DOMAIN-SUFFIX,2345.com
+DOMAIN-SUFFIX,24.172.in-addr.arpa
+DOMAIN-SUFFIX,25.172.in-addr.arpa
+DOMAIN-SUFFIX,254.169.in-addr.arpa
 DOMAIN-SUFFIX,258.com
 DOMAIN-SUFFIX,25pp.com
+DOMAIN-SUFFIX,26.172.in-addr.arpa
 DOMAIN-SUFFIX,263.net
+DOMAIN-SUFFIX,27.172.in-addr.arpa
+DOMAIN-SUFFIX,28.172.in-addr.arpa
 DOMAIN-SUFFIX,289.com
+DOMAIN-SUFFIX,29.172.in-addr.arpa
 DOMAIN-SUFFIX,2cto.com
+DOMAIN-SUFFIX,30.172.in-addr.arpa
 DOMAIN-SUFFIX,3000.com
 DOMAIN-SUFFIX,300hu.com
+DOMAIN-SUFFIX,31.172.in-addr.arpa
 DOMAIN-SUFFIX,310win.com
 DOMAIN-SUFFIX,315che.com
 DOMAIN-SUFFIX,321fenx.com
@@ -497,7 +532,6 @@ DOMAIN-SUFFIX,asme.org
 DOMAIN-SUFFIX,astm.org
 DOMAIN-SUFFIX,asusrouter.com
 DOMAIN-SUFFIX,atatech.org
-DOMAIN-SUFFIX,aterm.me
 DOMAIN-SUFFIX,authing.co
 DOMAIN-SUFFIX,autonavi.com
 DOMAIN-SUFFIX,avgv.cc
@@ -656,6 +690,7 @@ DOMAIN-SUFFIX,build9s.io
 DOMAIN-SUFFIX,bx1k.com
 DOMAIN-SUFFIX,byodonline.com
 DOMAIN-SUFFIX,bystack.com
+DOMAIN-SUFFIX,byteacctimg.com
 DOMAIN-SUFFIX,byted-static.com
 DOMAIN-SUFFIX,byted.org
 DOMAIN-SUFFIX,bytedance.com
@@ -697,7 +732,6 @@ DOMAIN-SUFFIX,camscanner.com
 DOMAIN-SUFFIX,cang.com
 DOMAIN-SUFFIX,cankaoxiaoxi.com
 DOMAIN-SUFFIX,capitalonline.net
-DOMAIN-SUFFIX,captive.apple.com
 DOMAIN-SUFFIX,cardbaobao.com
 DOMAIN-SUFFIX,carnoc.com
 DOMAIN-SUFFIX,cas.org
@@ -1062,7 +1096,6 @@ DOMAIN-SUFFIX,comicat.org
 DOMAIN-SUFFIX,computeinit.com
 DOMAIN-SUFFIX,comsenz.com
 DOMAIN-SUFFIX,concertos.live
-DOMAIN-SUFFIX,console.gl-inet.com
 DOMAIN-SUFFIX,contentchina.com
 DOMAIN-SUFFIX,coolapk.com
 DOMAIN-SUFFIX,coolapkmarket.com
@@ -1249,7 +1282,6 @@ DOMAIN-SUFFIX,dongchediapp.com
 DOMAIN-SUFFIX,dongguantoday.com
 DOMAIN-SUFFIX,dongting.com
 DOMAIN-SUFFIX,dopa.com
-DOMAIN-SUFFIX,dot.pub
 DOMAIN-SUFFIX,doticloud.com
 DOMAIN-SUFFIX,douban.com
 DOMAIN-SUFFIX,douban.fm
@@ -1698,9 +1730,9 @@ DOMAIN-SUFFIX,hnyuyuhui.com
 DOMAIN-SUFFIX,hollisterco.com
 DOMAIN-SUFFIX,hollycrm.com
 DOMAIN-SUFFIX,home
+DOMAIN-SUFFIX,home.arpa
 DOMAIN-SUFFIX,homeinns.com
 DOMAIN-SUFFIX,homekoo.com
-DOMAIN-SUFFIX,homerouter.cpe
 DOMAIN-SUFFIX,hongbo100.com
 DOMAIN-SUFFIX,hongdefund.com
 DOMAIN-SUFFIX,hongen.com
@@ -1712,7 +1744,6 @@ DOMAIN-SUFFIX,honor.com
 DOMAIN-SUFFIX,hori-gz.com
 DOMAIN-SUFFIX,hostbuf.com
 DOMAIN-SUFFIX,hotmail.com
-DOMAIN-SUFFIX,hotspot.cslwifi.com
 DOMAIN-SUFFIX,houdao.com
 DOMAIN-SUFFIX,houyicaiji.com
 DOMAIN-SUFFIX,houyuantuan.com
@@ -1897,8 +1928,6 @@ DOMAIN-SUFFIX,infoq.com
 DOMAIN-SUFFIX,infoqstatic.com
 DOMAIN-SUFFIX,inftab.com
 DOMAIN-SUFFIX,infzm.com
-DOMAIN-SUFFIX,injections.adguard.org
-DOMAIN-SUFFIX,instant.arubanetworks.com
 DOMAIN-SUFFIX,interact.sh
 DOMAIN-SUFFIX,intltencentcos.com
 DOMAIN-SUFFIX,iop.org
@@ -2235,6 +2264,7 @@ DOMAIN-SUFFIX,lady8844.com
 DOMAIN-SUFFIX,lagou.com
 DOMAIN-SUFFIX,laiqukankan.com
 DOMAIN-SUFFIX,laiwang.com
+DOMAIN-SUFFIX,lan
 DOMAIN-SUFFIX,lancdn.com
 DOMAIN-SUFFIX,lancdns.com
 DOMAIN-SUFFIX,landian.vip
@@ -2341,7 +2371,7 @@ DOMAIN-SUFFIX,llsapp.com
 DOMAIN-SUFFIX,llscdn.com
 DOMAIN-SUFFIX,llsserver.com
 DOMAIN-SUFFIX,lnlib.net
-DOMAIN-SUFFIX,local.adguard.org
+DOMAIN-SUFFIX,localdomain
 DOMAIN-SUFFIX,localizecdn.com
 DOMAIN-SUFFIX,lofter.com
 DOMAIN-SUFFIX,logiseasy.com
@@ -2449,6 +2479,7 @@ DOMAIN-SUFFIX,metatrader5.com
 DOMAIN-SUFFIX,mfcteda.com
 DOMAIN-SUFFIX,mgtv.com
 DOMAIN-SUFFIX,mi-fds.com
+DOMAIN-SUFFIX,mi-idc.com
 DOMAIN-SUFFIX,mi-img.com
 DOMAIN-SUFFIX,mi.com
 DOMAIN-SUFFIX,miaobolive.com
@@ -2492,7 +2523,6 @@ DOMAIN-SUFFIX,mmstat.com
 DOMAIN-SUFFIX,mndqlib.net
 DOMAIN-SUFFIX,mob.com
 DOMAIN-SUFFIX,mobike.com
-DOMAIN-SUFFIX,mobile.hotspot
 DOMAIN-SUFFIX,mobmore.com
 DOMAIN-SUFFIX,moecat.best
 DOMAIN-SUFFIX,mofang.com
@@ -2604,7 +2634,6 @@ DOMAIN-SUFFIX,npmmirror.com
 DOMAIN-SUFFIX,npupt.com
 DOMAIN-SUFFIX,nruan.com
 DOMAIN-SUFFIX,ntalker.com
-DOMAIN-SUFFIX,ntt.setup
 DOMAIN-SUFFIX,nubia.com
 DOMAIN-SUFFIX,nuomi.com
 DOMAIN-SUFFIX,nvsheng.com
@@ -2718,7 +2747,6 @@ DOMAIN-SUFFIX,phpcomposer.com
 DOMAIN-SUFFIX,phpweblog.net
 DOMAIN-SUFFIX,phpwind.com
 DOMAIN-SUFFIX,phpwind.net
-DOMAIN-SUFFIX,pi.hole
 DOMAIN-SUFFIX,piaoliang.com
 DOMAIN-SUFFIX,pigai.org
 DOMAIN-SUFFIX,pinduoduo.com
@@ -2806,7 +2834,6 @@ DOMAIN-SUFFIX,qhimgs3.com
 DOMAIN-SUFFIX,qhimgs4.com
 DOMAIN-SUFFIX,qhimgs5.com
 DOMAIN-SUFFIX,qhimgs6.com
-DOMAIN-SUFFIX,qhimgs?.com
 DOMAIN-SUFFIX,qhmsg.com
 DOMAIN-SUFFIX,qhres.com
 DOMAIN-SUFFIX,qhres2.com
@@ -2828,6 +2855,7 @@ DOMAIN-SUFFIX,qihoo.com
 DOMAIN-SUFFIX,qihoo.net
 DOMAIN-SUFFIX,qihucdn.com
 DOMAIN-SUFFIX,qijiayoudao.net
+DOMAIN-SUFFIX,qiku.com
 DOMAIN-SUFFIX,qikucdn.com
 DOMAIN-SUFFIX,qin.io
 DOMAIN-SUFFIX,qingcache.com
@@ -2900,7 +2928,6 @@ DOMAIN-SUFFIX,redacted.ch
 DOMAIN-SUFFIX,renren-inc.com
 DOMAIN-SUFFIX,renren.com
 DOMAIN-SUFFIX,repaik.com
-DOMAIN-SUFFIX,repeater.asus.com
 DOMAIN-SUFFIX,researchgate.net
 DOMAIN-SUFFIX,resset.com
 DOMAIN-SUFFIX,rfchost.com
@@ -2910,8 +2937,6 @@ DOMAIN-SUFFIX,rong360.com
 DOMAIN-SUFFIX,rongechain.com
 DOMAIN-SUFFIX,ronghub.com
 DOMAIN-SUFFIX,router
-DOMAIN-SUFFIX,router.asus.com
-DOMAIN-SUFFIX,router.com
 DOMAIN-SUFFIX,routerlogin.com
 DOMAIN-SUFFIX,routerlogin.net
 DOMAIN-SUFFIX,routewize.com
@@ -2962,7 +2987,6 @@ DOMAIN-SUFFIX,sencdn.com
 DOMAIN-SUFFIX,seniverse.com
 DOMAIN-SUFFIX,senlinjimore.com
 DOMAIN-SUFFIX,servicewechat.com
-DOMAIN-SUFFIX,setmeup.arubanetworks.com
 DOMAIN-SUFFIX,sevencdn.com
 DOMAIN-SUFFIX,sf-airlines.com
 DOMAIN-SUFFIX,sf-cityrush.com
@@ -3343,7 +3367,6 @@ DOMAIN-SUFFIX,trontv.com
 DOMAIN-SUFFIX,trunktech.com
 DOMAIN-SUFFIX,trustexporter.com
 DOMAIN-SUFFIX,trustutn.org
-DOMAIN-SUFFIX,ts.net
 DOMAIN-SUFFIX,tsparkling.com
 DOMAIN-SUFFIX,ttmeiju.com
 DOMAIN-SUFFIX,ttpod.com
@@ -3426,7 +3449,6 @@ DOMAIN-SUFFIX,un.org
 DOMAIN-SUFFIX,unaming.info
 DOMAIN-SUFFIX,unaming.net
 DOMAIN-SUFFIX,uni-bielefeld.de
-DOMAIN-SUFFIX,unifi
 DOMAIN-SUFFIX,uning.com
 DOMAIN-SUFFIX,unionpay.com
 DOMAIN-SUFFIX,unionpay.net
@@ -4296,8 +4318,6 @@ PROCESS-NAME,Thunder
 PROCESS-NAME,ThunderVIP
 PROCESS-NAME,Transmission
 PROCESS-NAME,UUBooster
-PROCESS-NAME,WeChat
-PROCESS-NAME,WeCom
 PROCESS-NAME,WebTorrent
 PROCESS-NAME,WebTorrentHelper
 PROCESS-NAME,amuled

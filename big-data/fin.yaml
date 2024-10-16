@@ -1,5 +1,5 @@
-# Clash total line 5417
-# Last updated Sun 10/13/2024 22:11:01.18
+# Clash total line 5424
+# Last updated Wed 10/16/2024 22:11:56.78
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -318,6 +318,7 @@ payload:
   - DOMAIN,cdn.builder.io
   - DOMAIN,cdn.calibermind.com
   - DOMAIN,cdn.cameo.com
+  - DOMAIN,cdn.cbd.int
   - DOMAIN,cdn.ceres9350.com
   - DOMAIN,cdn.channel.io
   - DOMAIN,cdn.chess24.com
@@ -508,6 +509,7 @@ payload:
   - DOMAIN,cdn.yinghuazy.xyz
   - DOMAIN,cdn.ywxi.net
   - DOMAIN,cdn.zapier.com
+  - DOMAIN,cdn.zoom.us
   - DOMAIN,cdn0.dan.com
   - DOMAIN,cdn01.jotfor.ms
   - DOMAIN,cdn02.jotfor.ms
@@ -520,6 +522,7 @@ payload:
   - DOMAIN,cdn1.unrealengine.com
   - DOMAIN,cdn10.hiftporn.fun
   - DOMAIN,cdn2-imgix.macpaw.com
+  - DOMAIN,cdn2.abiresearch.com
   - DOMAIN,cdn2.dan.com
   - DOMAIN,cdn2.downdetector.com
   - DOMAIN,cdn2.editmysite.com
@@ -1264,6 +1267,7 @@ payload:
   - DOMAIN,pkg.cloudflareclient.com
   - DOMAIN,pkg.csb.dev
   - DOMAIN,pkgs.dev.azure.com
+  - DOMAIN,pkgs.tailscale.com
   - DOMAIN,pl.ea.com
   - DOMAIN,placeimg.com
   - DOMAIN,platform.twitter.com
@@ -1353,6 +1357,7 @@ payload:
   - DOMAIN,rsms.me
   - DOMAIN,rts-static-prod.freshworksapi.com
   - DOMAIN,rules.ac
+  - DOMAIN,rum-agent.na-01.cloud.solarwinds.com
   - DOMAIN,runkit-packages-static-executables.com
   - DOMAIN,runkit-packages-static.com
   - DOMAIN,s-cdn.anthropic.com
@@ -1399,6 +1404,7 @@ payload:
   - DOMAIN,s3.us-west-004.backblazeb2.com
   - DOMAIN,s3.wp.com
   - DOMAIN,s3media.squarespace.com
+  - DOMAIN,s7d1.scene7.com
   - DOMAIN,safebrowsing.google.com
   - DOMAIN,safebrowsing.googleapis.com
   - DOMAIN,sandpack-cdn-staging.blazingly.io
@@ -1779,6 +1785,7 @@ payload:
   - DOMAIN,widget.freshworks.com
   - DOMAIN,widget.intercom.io
   - DOMAIN,widget.trustpilot.com
+  - DOMAIN,widget.usepylon.com
   - DOMAIN,widget.user.com
   - DOMAIN,widget.usersnap.com
   - DOMAIN,widget.uservoice.com
