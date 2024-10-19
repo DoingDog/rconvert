@@ -1,5 +1,5 @@
-# Adblock total line 2494
-# Last updated Wed 10/16/2024 22:11:47.89
+# Adblock total line 2509
+# Last updated Sat 10/19/2024 22:12:05.21
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||2mdn.net^
@@ -29,11 +29,13 @@
 ||analytics.welcomesoftware.com^
 ||anchor.digitalocean.com^
 ||android-safebrowsing.google.com^
+||api-eu.mixpanel.com^
 ||api-frameworks.vercel.sh^
 ||api.allorigins.win^
 ||api.bintray.com^
 ||api.iconify.design^
 ||api.mintlify.com^
+||api.mixpanel.com^
 ||api.producthunt.com^
 ||api.pwnedpasswords.com^
 ||api.qrserver.com^
@@ -80,6 +82,7 @@
 ||assets.bnidx.com^
 ||assets.braintreegateway.com^
 ||assets.bravenet.com^
+||assets.brevo.com^
 ||assets.buttondown.email^
 ||assets.bwbx.io^
 ||assets.byteplus.com^
@@ -146,6 +149,7 @@
 ||assets.prowritingaid.com^
 ||assets.queue-it.net^
 ||assets.quillbot.com^
+||assets.raspberrypi.com^
 ||assets.repair.org^
 ||assets.safing.io^
 ||assets.scaleflex.com^
@@ -196,6 +200,7 @@
 ||assetscdn.jable.tv^
 ||at.adtech.redventures.io^
 ||at.cbsi.com^
+||auth.split.io^
 ||autoupdate.termius.com^
 ||avatar.freepik.com^
 ||avatar.stefanjudis.com^
@@ -592,6 +597,7 @@
 ||content.wepik.com^
 ||contents-thumbnail2.fc2.com^
 ||cookie-cdn.cookiepro.com^
+||corp-backend.brevo.com^
 ||cors-proxy.htmldriven.com^
 ||cp2.cloudflare.com^
 ||cp3.cloudflare.com^
@@ -611,7 +617,6 @@
 ||david-dm.org^
 ||db.onlinewebfonts.com^
 ||ddcdn.comtucdncom.com^
-||dearrow-thumb.ajay.app^
 ||demo.unified-streaming.com^
 ||denali-static.grammarly.com^
 ||design-system.yext.com^
@@ -671,6 +676,7 @@
 ||euc-widget.freshworks.com^
 ||events-delivery.apple.com^
 ||events-live.apple.com^
+||events.split.io^
 ||events.tableplus.com^
 ||explorer-api.walletconnect.com^
 ||external-content.duckduckgo.com^
@@ -710,6 +716,7 @@
 ||fonts.cat.net^
 ||fonts.cdnfonts.com^
 ||fonts.codeberg.org^
+||fonts.gishan.cc^
 ||fonts.googleapis.com^
 ||fonts.gstatic.com^
 ||fonts.svc.ui.com^
@@ -757,6 +764,7 @@
 ||i.hamreus.com^
 ||i.hentaifox.com^
 ||i.ibb.co^
+||i.iheart.com^
 ||i.imgflip.com^
 ||i.imgur.com^
 ||i.insider.com^
@@ -866,6 +874,7 @@
 ||img-en.fs.com^
 ||img-prod-cms-rt-microsoft-com.akamaized.net^
 ||img-s-msn-com.akamaized.net^
+||img.agrd.eu^
 ||img.announcekit.app^
 ||img.applealmond.com^
 ||img.apponic.com^
@@ -1149,6 +1158,7 @@
 ||pkgs.dev.azure.com^
 ||pl.ea.com^
 ||placeimg.com^
+||platform.instagram.com^
 ||platform.twitter.com^
 ||play.publicradio.org^
 ||play.vidyard.com^
@@ -1240,6 +1250,7 @@
 ||s-cdn.anthropic.com^
 ||s-cdn.phonearena.com^
 ||s.abcnews.com^
+||s.gishan.cc^
 ||s.namemc.com^
 ||s.plurk.com^
 ||s.rfi.fr^
@@ -1283,6 +1294,7 @@
 ||s3.wp.com^
 ||s3media.squarespace.com^
 ||s7d1.scene7.com^
+||safebrowsing.brave.com^
 ||safebrowsing.google.com^
 ||safebrowsing.googleapis.com^
 ||sandpack-cdn-staging.blazingly.io^
@@ -1335,7 +1347,6 @@
 ||sp-spiegel-de.spiegel.de^
 ||sp.replit.com^
 ||spcdn.incartupsell.com^
-||sponsor.ajay.app^
 ||spoppe-b.azureedge.net^
 ||spoprod-a.akamaihd.net^
 ||st-eu.dynamicyield.com^
@@ -1448,6 +1459,7 @@
 ||static.ietf.org^
 ||static.incapsula.com^
 ||static.independent.co.uk^
+||static.inferno.iheart.com^
 ||static.infomaniak.ch^
 ||static.institution.grammarly.com^
 ||static.iris.informa.com^
@@ -1681,6 +1693,7 @@
 ||web-assets.ifttt.com^
 ||web-assets.otogi-frontier.com^
 ||web-assets.strava.com^
+||web-static.pages.iheart.com^
 ||web-toolbar.playstation.com^
 ||web.onekey-asset.com^
 ||webfonts.zoho.com^
@@ -1754,6 +1767,7 @@
 ||app-analytics-services.com^
 ||app.gitbook.com^
 ||app.render.com^
+||applicationinsights.azure.cn^
 ||applicationinsights.azure.com^
 ||appmifile.com^
 ||archive.org^
@@ -1923,7 +1937,6 @@
 ||eu-browse.startpage.com^
 ||eu-proxy.startpage.com^
 ||events.backtrace.io^
-||events.split.io^
 ||exp-tas.com^
 ||ezocdn.com^
 ||ezocdn.net^
@@ -2028,6 +2041,7 @@
 ||img1.acsta.net^
 ||img2.acsta.net^
 ||img3.acsta.net^
+||imgair.net^
 ||imgbox.com^
 ||imgix.net^
 ||imglink.win^
@@ -2171,6 +2185,7 @@
 ||motherlessmedia.com^
 ||muscache.com^
 ||mvnrepository.com^
+||myanalytics.cdn.office.net^
 ||myavlive.com^
 ||mycdn.me^
 ||myfilebase.com^

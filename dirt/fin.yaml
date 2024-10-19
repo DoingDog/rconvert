@@ -1,5 +1,5 @@
-# Clash total line 4345
-# Last updated Wed 10/16/2024 22:12:05.61
+# Clash total line 4344
+# Last updated Sat 10/19/2024 22:12:21.77
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -13,6 +13,7 @@ payload:
   - DOMAIN,config.ubnt.com
   - DOMAIN,console.gl-inet.com
   - DOMAIN,dl.ubnt.com
+  - DOMAIN,dot.pub
   - DOMAIN,download.jetbrains.com
   - DOMAIN,gstore.val.manlaxy.com
   - DOMAIN,homerouter.cpe
@@ -33,7 +34,6 @@ payload:
   - DOMAIN,raw.iqiq.io
   - DOMAIN,repeater.asus.com
   - DOMAIN,router.asus.com
-  - DOMAIN,router.com
   - DOMAIN,setmeup.arubanetworks.com
   - DOMAIN,sms.imagetasks.com
   - DOMAIN,steamcommunity-a.akamaihd.net
@@ -3262,7 +3262,6 @@ payload:
   - DOMAIN-SUFFIX,tencentwemeet.club
   - DOMAIN-SUFFIX,tencentwepark.com
   - DOMAIN-SUFFIX,tencentyun.com
-  - DOMAIN-SUFFIX,tendawifi.com
   - DOMAIN-SUFFIX,tendbcluster.com
   - DOMAIN-SUFFIX,tendis.net
   - DOMAIN-SUFFIX,tenpay.com

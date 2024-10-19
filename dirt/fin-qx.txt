@@ -1,5 +1,5 @@
-# Quantumult total line 4301
-# Last updated Wed 10/16/2024 22:12:05.57
+# Quantumult total line 4300
+# Last updated Sat 10/19/2024 22:12:21.74
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -12,6 +12,7 @@ HOST,cn.download.nvidia.com,LIST
 HOST,config.ubnt.com,LIST
 HOST,console.gl-inet.com,LIST
 HOST,dl.ubnt.com,LIST
+HOST,dot.pub,LIST
 HOST,download.jetbrains.com,LIST
 HOST,gstore.val.manlaxy.com,LIST
 HOST,homerouter.cpe,LIST
@@ -32,7 +33,6 @@ HOST,pi.hole,LIST
 HOST,raw.iqiq.io,LIST
 HOST,repeater.asus.com,LIST
 HOST,router.asus.com,LIST
-HOST,router.com,LIST
 HOST,setmeup.arubanetworks.com,LIST
 HOST,sms.imagetasks.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
@@ -3261,7 +3261,6 @@ HOST-SUFFIX,tencenttid.com,LIST
 HOST-SUFFIX,tencentwemeet.club,LIST
 HOST-SUFFIX,tencentwepark.com,LIST
 HOST-SUFFIX,tencentyun.com,LIST
-HOST-SUFFIX,tendawifi.com,LIST
 HOST-SUFFIX,tendbcluster.com,LIST
 HOST-SUFFIX,tendis.net,LIST
 HOST-SUFFIX,tenpay.com,LIST

@@ -1,5 +1,5 @@
-# Main total line 5424
-# Last updated Wed 10/16/2024 22:11:56.59
+# Main total line 5441
+# Last updated Sat 10/19/2024 22:12:13.29
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,2mdn.net
@@ -32,12 +32,14 @@ DOMAIN,amupdatedl4.microsoft.com
 DOMAIN,amupdatedl5.microsoft.com
 DOMAIN,analytics.welcomesoftware.com
 DOMAIN,android-safebrowsing.google.com
+DOMAIN,api-eu.mixpanel.com
 DOMAIN,api-frameworks.vercel.sh
 DOMAIN,api-updates.orbstack.dev
 DOMAIN,api.allorigins.win
 DOMAIN,api.bintray.com
 DOMAIN,api.iconify.design
 DOMAIN,api.mintlify.com
+DOMAIN,api.mixpanel.com
 DOMAIN,api.okzy.tv
 DOMAIN,api.producthunt.com
 DOMAIN,api.pwnedpasswords.com
@@ -87,6 +89,7 @@ DOMAIN,assets.bitstamp.net
 DOMAIN,assets.bnidx.com
 DOMAIN,assets.braintreegateway.com
 DOMAIN,assets.bravenet.com
+DOMAIN,assets.brevo.com
 DOMAIN,assets.buttondown.email
 DOMAIN,assets.bwbx.io
 DOMAIN,assets.byteplus.com
@@ -151,6 +154,7 @@ DOMAIN,assets.positional-bucket.com
 DOMAIN,assets.prowritingaid.com
 DOMAIN,assets.queue-it.net
 DOMAIN,assets.quillbot.com
+DOMAIN,assets.raspberrypi.com
 DOMAIN,assets.repair.org
 DOMAIN,assets.safing.io
 DOMAIN,assets.scaleflex.com
@@ -199,6 +203,7 @@ DOMAIN,assetscdn.jable.tv
 DOMAIN,at.adtech.redventures.io
 DOMAIN,aus2-community.mozilla.org
 DOMAIN,aus5.mozilla.org
+DOMAIN,auth.split.io
 DOMAIN,autoupdate.termius.com
 DOMAIN,avatar.freepik.com
 DOMAIN,avatar.stefanjudis.com
@@ -610,6 +615,7 @@ DOMAIN,content7.steampowered.com
 DOMAIN,content8.steampowered.com
 DOMAIN,contents-thumbnail2.fc2.com
 DOMAIN,cookie-cdn.cookiepro.com
+DOMAIN,corp-backend.brevo.com
 DOMAIN,cors-proxy.htmldriven.com
 DOMAIN,cp2.cloudflare.com
 DOMAIN,cp3.cloudflare.com
@@ -633,7 +639,6 @@ DOMAIN,daznfeeds.com.edgekey.net
 DOMAIN,db.onlinewebfonts.com
 DOMAIN,dca-lm-livedazn.secure.footprint.net
 DOMAIN,ddcdn.comtucdncom.com
-DOMAIN,dearrow-thumb.ajay.app
 DOMAIN,deb.nodesource.com
 DOMAIN,demo.unified-streaming.com
 DOMAIN,denali-static.grammarly.com
@@ -759,6 +764,7 @@ DOMAIN,eu.hamreus.com
 DOMAIN,euc-widget.freshworks.com
 DOMAIN,events-delivery.apple.com
 DOMAIN,events-live.apple.com
+DOMAIN,events.split.io
 DOMAIN,events.tableplus.com
 DOMAIN,explorer-api.walletconnect.com
 DOMAIN,external-content.duckduckgo.com
@@ -801,6 +807,7 @@ DOMAIN,fonts.bunny.net
 DOMAIN,fonts.cat.net
 DOMAIN,fonts.cdnfonts.com
 DOMAIN,fonts.codeberg.org
+DOMAIN,fonts.gishan.cc
 DOMAIN,fonts.googleapis.com
 DOMAIN,fonts.gstatic.com
 DOMAIN,fonts.svc.ui.com
@@ -858,6 +865,7 @@ DOMAIN,i.gzn.jp
 DOMAIN,i.hamreus.com
 DOMAIN,i.hentaifox.com
 DOMAIN,i.ibb.co
+DOMAIN,i.iheart.com
 DOMAIN,i.imgflip.com
 DOMAIN,i.imgur.com
 DOMAIN,i.insider.com
@@ -956,6 +964,7 @@ DOMAIN,images8.design-editor.com
 DOMAIN,imagizer.imageshack.com
 DOMAIN,img-cos.mandaoo.com
 DOMAIN,img-en.fs.com
+DOMAIN,img.agrd.eu
 DOMAIN,img.announcekit.app
 DOMAIN,img.applealmond.com
 DOMAIN,img.apponic.com
@@ -1269,6 +1278,7 @@ DOMAIN,pkgs.dev.azure.com
 DOMAIN,pkgs.tailscale.com
 DOMAIN,pl.ea.com
 DOMAIN,placeimg.com
+DOMAIN,platform.instagram.com
 DOMAIN,platform.twitter.com
 DOMAIN,play-edge.itunes.apple.com
 DOMAIN,play.publicradio.org
@@ -1362,6 +1372,7 @@ DOMAIN,runkit-packages-static.com
 DOMAIN,s-cdn.anthropic.com
 DOMAIN,s-cdn.phonearena.com
 DOMAIN,s.abcnews.com
+DOMAIN,s.gishan.cc
 DOMAIN,s.namemc.com
 DOMAIN,s.plurk.com
 DOMAIN,s.rfi.fr
@@ -1404,6 +1415,7 @@ DOMAIN,s3.us-west-004.backblazeb2.com
 DOMAIN,s3.wp.com
 DOMAIN,s3media.squarespace.com
 DOMAIN,s7d1.scene7.com
+DOMAIN,safebrowsing.brave.com
 DOMAIN,safebrowsing.google.com
 DOMAIN,safebrowsing.googleapis.com
 DOMAIN,sandpack-cdn-staging.blazingly.io
@@ -1459,7 +1471,6 @@ DOMAIN,sourcepoint.theguardian.com
 DOMAIN,sp-spiegel-de.spiegel.de
 DOMAIN,sp.replit.com
 DOMAIN,spcdn.incartupsell.com
-DOMAIN,sponsor.ajay.app
 DOMAIN,spoppe-b.azureedge.net
 DOMAIN,st-eu.dynamicyield.com
 DOMAIN,st.agrd.eu
@@ -1557,6 +1568,7 @@ DOMAIN,static.hotjar.com
 DOMAIN,static.ietf.org
 DOMAIN,static.incapsula.com
 DOMAIN,static.independent.co.uk
+DOMAIN,static.inferno.iheart.com
 DOMAIN,static.infomaniak.ch
 DOMAIN,static.institution.grammarly.com
 DOMAIN,static.iris.informa.com
@@ -1720,6 +1732,7 @@ DOMAIN,unlimited-cdn.waifu2x.net
 DOMAIN,update.code.visualstudio.com
 DOMAIN,update.googleapis.com
 DOMAIN,update.sleazyfork.org
+DOMAIN,updates-cdn.bravesoftware.com
 DOMAIN,updates.istatmenus.app
 DOMAIN,updates.signal.org
 DOMAIN,updates2.signal.org
@@ -1776,6 +1789,7 @@ DOMAIN,web-assets.esetstatic.com
 DOMAIN,web-assets.ifttt.com
 DOMAIN,web-assets.otogi-frontier.com
 DOMAIN,web-assets.strava.com
+DOMAIN,web-static.pages.iheart.com
 DOMAIN,web-toolbar.playstation.com
 DOMAIN,web.onekey-asset.com
 DOMAIN,webfonts.zoho.com
@@ -1952,12 +1966,14 @@ DOMAIN-SUFFIX,app.gitbook.com
 DOMAIN-SUFFIX,app.render.com
 DOMAIN-SUFFIX,apple.news
 DOMAIN-SUFFIX,applemusic.com
+DOMAIN-SUFFIX,applicationinsights.azure.cn
 DOMAIN-SUFFIX,applicationinsights.azure.com
 DOMAIN-SUFFIX,appmifile.com
 DOMAIN-SUFFIX,apranet.eu.org
 DOMAIN-SUFFIX,archive.debian.org
 DOMAIN-SUFFIX,archive.org
 DOMAIN-SUFFIX,archive.ubuntu.com
+DOMAIN-SUFFIX,artifacts.ui.com
 DOMAIN-SUFFIX,asmfile.com
 DOMAIN-SUFFIX,asmr.one
 DOMAIN-SUFFIX,aspnetcdn.com
@@ -2560,7 +2576,6 @@ DOMAIN-SUFFIX,eu-browse.startpage.com
 DOMAIN-SUFFIX,eu-proxy.startpage.com
 DOMAIN-SUFFIX,europeup.com
 DOMAIN-SUFFIX,events.backtrace.io
-DOMAIN-SUFFIX,events.split.io
 DOMAIN-SUFFIX,ews-assets.apple.com
 DOMAIN-SUFFIX,ex-load.com
 DOMAIN-SUFFIX,ex.ua
@@ -3086,6 +3101,7 @@ DOMAIN-SUFFIX,img.myflixer.pw
 DOMAIN-SUFFIX,img1.acsta.net
 DOMAIN-SUFFIX,img2.acsta.net
 DOMAIN-SUFFIX,img3.acsta.net
+DOMAIN-SUFFIX,imgair.net
 DOMAIN-SUFFIX,imgbox.com
 DOMAIN-SUFFIX,imgix.net
 DOMAIN-SUFFIX,imglarger.com
@@ -3401,6 +3417,7 @@ DOMAIN-SUFFIX,my45.com
 DOMAIN-SUFFIX,my5.tv
 DOMAIN-SUFFIX,my9nj.com
 DOMAIN-SUFFIX,myairbridge.com
+DOMAIN-SUFFIX,myanalytics.cdn.office.net
 DOMAIN-SUFFIX,myavlive.com
 DOMAIN-SUFFIX,mycdn.me
 DOMAIN-SUFFIX,myfilebase.com

@@ -1,5 +1,5 @@
-# Quantumult total line 5409
-# Last updated Wed 10/16/2024 22:11:56.74
+# Quantumult total line 5426
+# Last updated Sat 10/19/2024 22:12:13.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -32,12 +32,14 @@ HOST,amupdatedl4.microsoft.com,LIST
 HOST,amupdatedl5.microsoft.com,LIST
 HOST,analytics.welcomesoftware.com,LIST
 HOST,android-safebrowsing.google.com,LIST
+HOST,api-eu.mixpanel.com,LIST
 HOST,api-frameworks.vercel.sh,LIST
 HOST,api-updates.orbstack.dev,LIST
 HOST,api.allorigins.win,LIST
 HOST,api.bintray.com,LIST
 HOST,api.iconify.design,LIST
 HOST,api.mintlify.com,LIST
+HOST,api.mixpanel.com,LIST
 HOST,api.okzy.tv,LIST
 HOST,api.producthunt.com,LIST
 HOST,api.pwnedpasswords.com,LIST
@@ -87,6 +89,7 @@ HOST,assets.bitstamp.net,LIST
 HOST,assets.bnidx.com,LIST
 HOST,assets.braintreegateway.com,LIST
 HOST,assets.bravenet.com,LIST
+HOST,assets.brevo.com,LIST
 HOST,assets.buttondown.email,LIST
 HOST,assets.bwbx.io,LIST
 HOST,assets.byteplus.com,LIST
@@ -151,6 +154,7 @@ HOST,assets.positional-bucket.com,LIST
 HOST,assets.prowritingaid.com,LIST
 HOST,assets.queue-it.net,LIST
 HOST,assets.quillbot.com,LIST
+HOST,assets.raspberrypi.com,LIST
 HOST,assets.repair.org,LIST
 HOST,assets.safing.io,LIST
 HOST,assets.scaleflex.com,LIST
@@ -199,6 +203,7 @@ HOST,assetscdn.jable.tv,LIST
 HOST,at.adtech.redventures.io,LIST
 HOST,aus2-community.mozilla.org,LIST
 HOST,aus5.mozilla.org,LIST
+HOST,auth.split.io,LIST
 HOST,autoupdate.termius.com,LIST
 HOST,avatar.freepik.com,LIST
 HOST,avatar.stefanjudis.com,LIST
@@ -610,6 +615,7 @@ HOST,content7.steampowered.com,LIST
 HOST,content8.steampowered.com,LIST
 HOST,contents-thumbnail2.fc2.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
+HOST,corp-backend.brevo.com,LIST
 HOST,cors-proxy.htmldriven.com,LIST
 HOST,cp2.cloudflare.com,LIST
 HOST,cp3.cloudflare.com,LIST
@@ -633,7 +639,6 @@ HOST,daznfeeds.com.edgekey.net,LIST
 HOST,db.onlinewebfonts.com,LIST
 HOST,dca-lm-livedazn.secure.footprint.net,LIST
 HOST,ddcdn.comtucdncom.com,LIST
-HOST,dearrow-thumb.ajay.app,LIST
 HOST,deb.nodesource.com,LIST
 HOST,demo.unified-streaming.com,LIST
 HOST,denali-static.grammarly.com,LIST
@@ -759,6 +764,7 @@ HOST,eu.hamreus.com,LIST
 HOST,euc-widget.freshworks.com,LIST
 HOST,events-delivery.apple.com,LIST
 HOST,events-live.apple.com,LIST
+HOST,events.split.io,LIST
 HOST,events.tableplus.com,LIST
 HOST,explorer-api.walletconnect.com,LIST
 HOST,external-content.duckduckgo.com,LIST
@@ -801,6 +807,7 @@ HOST,fonts.bunny.net,LIST
 HOST,fonts.cat.net,LIST
 HOST,fonts.cdnfonts.com,LIST
 HOST,fonts.codeberg.org,LIST
+HOST,fonts.gishan.cc,LIST
 HOST,fonts.googleapis.com,LIST
 HOST,fonts.gstatic.com,LIST
 HOST,fonts.svc.ui.com,LIST
@@ -858,6 +865,7 @@ HOST,i.gzn.jp,LIST
 HOST,i.hamreus.com,LIST
 HOST,i.hentaifox.com,LIST
 HOST,i.ibb.co,LIST
+HOST,i.iheart.com,LIST
 HOST,i.imgflip.com,LIST
 HOST,i.imgur.com,LIST
 HOST,i.insider.com,LIST
@@ -956,6 +964,7 @@ HOST,images8.design-editor.com,LIST
 HOST,imagizer.imageshack.com,LIST
 HOST,img-cos.mandaoo.com,LIST
 HOST,img-en.fs.com,LIST
+HOST,img.agrd.eu,LIST
 HOST,img.announcekit.app,LIST
 HOST,img.applealmond.com,LIST
 HOST,img.apponic.com,LIST
@@ -1269,6 +1278,7 @@ HOST,pkgs.dev.azure.com,LIST
 HOST,pkgs.tailscale.com,LIST
 HOST,pl.ea.com,LIST
 HOST,placeimg.com,LIST
+HOST,platform.instagram.com,LIST
 HOST,platform.twitter.com,LIST
 HOST,play-edge.itunes.apple.com,LIST
 HOST,play.publicradio.org,LIST
@@ -1362,6 +1372,7 @@ HOST,runkit-packages-static.com,LIST
 HOST,s-cdn.anthropic.com,LIST
 HOST,s-cdn.phonearena.com,LIST
 HOST,s.abcnews.com,LIST
+HOST,s.gishan.cc,LIST
 HOST,s.namemc.com,LIST
 HOST,s.plurk.com,LIST
 HOST,s.rfi.fr,LIST
@@ -1404,6 +1415,7 @@ HOST,s3.us-west-004.backblazeb2.com,LIST
 HOST,s3.wp.com,LIST
 HOST,s3media.squarespace.com,LIST
 HOST,s7d1.scene7.com,LIST
+HOST,safebrowsing.brave.com,LIST
 HOST,safebrowsing.google.com,LIST
 HOST,safebrowsing.googleapis.com,LIST
 HOST,sandpack-cdn-staging.blazingly.io,LIST
@@ -1459,7 +1471,6 @@ HOST,sourcepoint.theguardian.com,LIST
 HOST,sp-spiegel-de.spiegel.de,LIST
 HOST,sp.replit.com,LIST
 HOST,spcdn.incartupsell.com,LIST
-HOST,sponsor.ajay.app,LIST
 HOST,spoppe-b.azureedge.net,LIST
 HOST,st-eu.dynamicyield.com,LIST
 HOST,st.agrd.eu,LIST
@@ -1557,6 +1568,7 @@ HOST,static.hotjar.com,LIST
 HOST,static.ietf.org,LIST
 HOST,static.incapsula.com,LIST
 HOST,static.independent.co.uk,LIST
+HOST,static.inferno.iheart.com,LIST
 HOST,static.infomaniak.ch,LIST
 HOST,static.institution.grammarly.com,LIST
 HOST,static.iris.informa.com,LIST
@@ -1720,6 +1732,7 @@ HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,update.code.visualstudio.com,LIST
 HOST,update.googleapis.com,LIST
 HOST,update.sleazyfork.org,LIST
+HOST,updates-cdn.bravesoftware.com,LIST
 HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
@@ -1776,6 +1789,7 @@ HOST,web-assets.esetstatic.com,LIST
 HOST,web-assets.ifttt.com,LIST
 HOST,web-assets.otogi-frontier.com,LIST
 HOST,web-assets.strava.com,LIST
+HOST,web-static.pages.iheart.com,LIST
 HOST,web-toolbar.playstation.com,LIST
 HOST,web.onekey-asset.com,LIST
 HOST,webfonts.zoho.com,LIST
@@ -1952,12 +1966,14 @@ HOST-SUFFIX,app.gitbook.com,LIST
 HOST-SUFFIX,app.render.com,LIST
 HOST-SUFFIX,apple.news,LIST
 HOST-SUFFIX,applemusic.com,LIST
+HOST-SUFFIX,applicationinsights.azure.cn,LIST
 HOST-SUFFIX,applicationinsights.azure.com,LIST
 HOST-SUFFIX,appmifile.com,LIST
 HOST-SUFFIX,apranet.eu.org,LIST
 HOST-SUFFIX,archive.debian.org,LIST
 HOST-SUFFIX,archive.org,LIST
 HOST-SUFFIX,archive.ubuntu.com,LIST
+HOST-SUFFIX,artifacts.ui.com,LIST
 HOST-SUFFIX,asmfile.com,LIST
 HOST-SUFFIX,asmr.one,LIST
 HOST-SUFFIX,aspnetcdn.com,LIST
@@ -2560,7 +2576,6 @@ HOST-SUFFIX,eu-browse.startpage.com,LIST
 HOST-SUFFIX,eu-proxy.startpage.com,LIST
 HOST-SUFFIX,europeup.com,LIST
 HOST-SUFFIX,events.backtrace.io,LIST
-HOST-SUFFIX,events.split.io,LIST
 HOST-SUFFIX,ews-assets.apple.com,LIST
 HOST-SUFFIX,ex-load.com,LIST
 HOST-SUFFIX,ex.ua,LIST
@@ -3086,6 +3101,7 @@ HOST-SUFFIX,img.myflixer.pw,LIST
 HOST-SUFFIX,img1.acsta.net,LIST
 HOST-SUFFIX,img2.acsta.net,LIST
 HOST-SUFFIX,img3.acsta.net,LIST
+HOST-SUFFIX,imgair.net,LIST
 HOST-SUFFIX,imgbox.com,LIST
 HOST-SUFFIX,imgix.net,LIST
 HOST-SUFFIX,imglarger.com,LIST
@@ -3401,6 +3417,7 @@ HOST-SUFFIX,my45.com,LIST
 HOST-SUFFIX,my5.tv,LIST
 HOST-SUFFIX,my9nj.com,LIST
 HOST-SUFFIX,myairbridge.com,LIST
+HOST-SUFFIX,myanalytics.cdn.office.net,LIST
 HOST-SUFFIX,myavlive.com,LIST
 HOST-SUFFIX,mycdn.me,LIST
 HOST-SUFFIX,myfilebase.com,LIST

@@ -1,5 +1,5 @@
-# Main total line 4345
-# Last updated Wed 10/16/2024 22:12:05.45
+# Main total line 4344
+# Last updated Sat 10/19/2024 22:12:21.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,a.iqmtp.live
 DOMAIN,analytics.strava.com
@@ -12,6 +12,7 @@ DOMAIN,cn.download.nvidia.com
 DOMAIN,config.ubnt.com
 DOMAIN,console.gl-inet.com
 DOMAIN,dl.ubnt.com
+DOMAIN,dot.pub
 DOMAIN,download.jetbrains.com
 DOMAIN,gstore.val.manlaxy.com
 DOMAIN,homerouter.cpe
@@ -32,7 +33,6 @@ DOMAIN,pi.hole
 DOMAIN,raw.iqiq.io
 DOMAIN,repeater.asus.com
 DOMAIN,router.asus.com
-DOMAIN,router.com
 DOMAIN,setmeup.arubanetworks.com
 DOMAIN,sms.imagetasks.com
 DOMAIN,steamcommunity-a.akamaihd.net
@@ -3261,7 +3261,6 @@ DOMAIN-SUFFIX,tencenttid.com
 DOMAIN-SUFFIX,tencentwemeet.club
 DOMAIN-SUFFIX,tencentwepark.com
 DOMAIN-SUFFIX,tencentyun.com
-DOMAIN-SUFFIX,tendawifi.com
 DOMAIN-SUFFIX,tendbcluster.com
 DOMAIN-SUFFIX,tendis.net
 DOMAIN-SUFFIX,tenpay.com

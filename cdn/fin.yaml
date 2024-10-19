@@ -1,5 +1,5 @@
-# Clash total line 2494
-# Last updated Wed 10/16/2024 22:11:47.81
+# Clash total line 2509
+# Last updated Sat 10/19/2024 22:12:05.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -30,11 +30,13 @@ payload:
   - DOMAIN,analytics.welcomesoftware.com
   - DOMAIN,anchor.digitalocean.com
   - DOMAIN,android-safebrowsing.google.com
+  - DOMAIN,api-eu.mixpanel.com
   - DOMAIN,api-frameworks.vercel.sh
   - DOMAIN,api.allorigins.win
   - DOMAIN,api.bintray.com
   - DOMAIN,api.iconify.design
   - DOMAIN,api.mintlify.com
+  - DOMAIN,api.mixpanel.com
   - DOMAIN,api.producthunt.com
   - DOMAIN,api.pwnedpasswords.com
   - DOMAIN,api.qrserver.com
@@ -81,6 +83,7 @@ payload:
   - DOMAIN,assets.bnidx.com
   - DOMAIN,assets.braintreegateway.com
   - DOMAIN,assets.bravenet.com
+  - DOMAIN,assets.brevo.com
   - DOMAIN,assets.buttondown.email
   - DOMAIN,assets.bwbx.io
   - DOMAIN,assets.byteplus.com
@@ -147,6 +150,7 @@ payload:
   - DOMAIN,assets.prowritingaid.com
   - DOMAIN,assets.queue-it.net
   - DOMAIN,assets.quillbot.com
+  - DOMAIN,assets.raspberrypi.com
   - DOMAIN,assets.repair.org
   - DOMAIN,assets.safing.io
   - DOMAIN,assets.scaleflex.com
@@ -197,6 +201,7 @@ payload:
   - DOMAIN,assetscdn.jable.tv
   - DOMAIN,at.adtech.redventures.io
   - DOMAIN,at.cbsi.com
+  - DOMAIN,auth.split.io
   - DOMAIN,autoupdate.termius.com
   - DOMAIN,avatar.freepik.com
   - DOMAIN,avatar.stefanjudis.com
@@ -593,6 +598,7 @@ payload:
   - DOMAIN,content.wepik.com
   - DOMAIN,contents-thumbnail2.fc2.com
   - DOMAIN,cookie-cdn.cookiepro.com
+  - DOMAIN,corp-backend.brevo.com
   - DOMAIN,cors-proxy.htmldriven.com
   - DOMAIN,cp2.cloudflare.com
   - DOMAIN,cp3.cloudflare.com
@@ -612,7 +618,6 @@ payload:
   - DOMAIN,david-dm.org
   - DOMAIN,db.onlinewebfonts.com
   - DOMAIN,ddcdn.comtucdncom.com
-  - DOMAIN,dearrow-thumb.ajay.app
   - DOMAIN,demo.unified-streaming.com
   - DOMAIN,denali-static.grammarly.com
   - DOMAIN,design-system.yext.com
@@ -672,6 +677,7 @@ payload:
   - DOMAIN,euc-widget.freshworks.com
   - DOMAIN,events-delivery.apple.com
   - DOMAIN,events-live.apple.com
+  - DOMAIN,events.split.io
   - DOMAIN,events.tableplus.com
   - DOMAIN,explorer-api.walletconnect.com
   - DOMAIN,external-content.duckduckgo.com
@@ -711,6 +717,7 @@ payload:
   - DOMAIN,fonts.cat.net
   - DOMAIN,fonts.cdnfonts.com
   - DOMAIN,fonts.codeberg.org
+  - DOMAIN,fonts.gishan.cc
   - DOMAIN,fonts.googleapis.com
   - DOMAIN,fonts.gstatic.com
   - DOMAIN,fonts.svc.ui.com
@@ -758,6 +765,7 @@ payload:
   - DOMAIN,i.hamreus.com
   - DOMAIN,i.hentaifox.com
   - DOMAIN,i.ibb.co
+  - DOMAIN,i.iheart.com
   - DOMAIN,i.imgflip.com
   - DOMAIN,i.imgur.com
   - DOMAIN,i.insider.com
@@ -867,6 +875,7 @@ payload:
   - DOMAIN,img-en.fs.com
   - DOMAIN,img-prod-cms-rt-microsoft-com.akamaized.net
   - DOMAIN,img-s-msn-com.akamaized.net
+  - DOMAIN,img.agrd.eu
   - DOMAIN,img.announcekit.app
   - DOMAIN,img.applealmond.com
   - DOMAIN,img.apponic.com
@@ -1150,6 +1159,7 @@ payload:
   - DOMAIN,pkgs.dev.azure.com
   - DOMAIN,pl.ea.com
   - DOMAIN,placeimg.com
+  - DOMAIN,platform.instagram.com
   - DOMAIN,platform.twitter.com
   - DOMAIN,play.publicradio.org
   - DOMAIN,play.vidyard.com
@@ -1241,6 +1251,7 @@ payload:
   - DOMAIN,s-cdn.anthropic.com
   - DOMAIN,s-cdn.phonearena.com
   - DOMAIN,s.abcnews.com
+  - DOMAIN,s.gishan.cc
   - DOMAIN,s.namemc.com
   - DOMAIN,s.plurk.com
   - DOMAIN,s.rfi.fr
@@ -1284,6 +1295,7 @@ payload:
   - DOMAIN,s3.wp.com
   - DOMAIN,s3media.squarespace.com
   - DOMAIN,s7d1.scene7.com
+  - DOMAIN,safebrowsing.brave.com
   - DOMAIN,safebrowsing.google.com
   - DOMAIN,safebrowsing.googleapis.com
   - DOMAIN,sandpack-cdn-staging.blazingly.io
@@ -1336,7 +1348,6 @@ payload:
   - DOMAIN,sp-spiegel-de.spiegel.de
   - DOMAIN,sp.replit.com
   - DOMAIN,spcdn.incartupsell.com
-  - DOMAIN,sponsor.ajay.app
   - DOMAIN,spoppe-b.azureedge.net
   - DOMAIN,spoprod-a.akamaihd.net
   - DOMAIN,st-eu.dynamicyield.com
@@ -1449,6 +1460,7 @@ payload:
   - DOMAIN,static.ietf.org
   - DOMAIN,static.incapsula.com
   - DOMAIN,static.independent.co.uk
+  - DOMAIN,static.inferno.iheart.com
   - DOMAIN,static.infomaniak.ch
   - DOMAIN,static.institution.grammarly.com
   - DOMAIN,static.iris.informa.com
@@ -1682,6 +1694,7 @@ payload:
   - DOMAIN,web-assets.ifttt.com
   - DOMAIN,web-assets.otogi-frontier.com
   - DOMAIN,web-assets.strava.com
+  - DOMAIN,web-static.pages.iheart.com
   - DOMAIN,web-toolbar.playstation.com
   - DOMAIN,web.onekey-asset.com
   - DOMAIN,webfonts.zoho.com
@@ -1755,6 +1768,7 @@ payload:
   - DOMAIN-SUFFIX,app-analytics-services.com
   - DOMAIN-SUFFIX,app.gitbook.com
   - DOMAIN-SUFFIX,app.render.com
+  - DOMAIN-SUFFIX,applicationinsights.azure.cn
   - DOMAIN-SUFFIX,applicationinsights.azure.com
   - DOMAIN-SUFFIX,appmifile.com
   - DOMAIN-SUFFIX,archive.org
@@ -1924,7 +1938,6 @@ payload:
   - DOMAIN-SUFFIX,eu-browse.startpage.com
   - DOMAIN-SUFFIX,eu-proxy.startpage.com
   - DOMAIN-SUFFIX,events.backtrace.io
-  - DOMAIN-SUFFIX,events.split.io
   - DOMAIN-SUFFIX,exp-tas.com
   - DOMAIN-SUFFIX,ezocdn.com
   - DOMAIN-SUFFIX,ezocdn.net
@@ -2029,6 +2042,7 @@ payload:
   - DOMAIN-SUFFIX,img1.acsta.net
   - DOMAIN-SUFFIX,img2.acsta.net
   - DOMAIN-SUFFIX,img3.acsta.net
+  - DOMAIN-SUFFIX,imgair.net
   - DOMAIN-SUFFIX,imgbox.com
   - DOMAIN-SUFFIX,imgix.net
   - DOMAIN-SUFFIX,imglink.win
@@ -2172,6 +2186,7 @@ payload:
   - DOMAIN-SUFFIX,motherlessmedia.com
   - DOMAIN-SUFFIX,muscache.com
   - DOMAIN-SUFFIX,mvnrepository.com
+  - DOMAIN-SUFFIX,myanalytics.cdn.office.net
   - DOMAIN-SUFFIX,myavlive.com
   - DOMAIN-SUFFIX,mycdn.me
   - DOMAIN-SUFFIX,myfilebase.com
