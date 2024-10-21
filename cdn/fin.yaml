@@ -1,5 +1,5 @@
-# Clash total line 2509
-# Last updated Sat 10/19/2024 22:12:05.13
+# Clash total line 2510
+# Last updated Mon 10/21/2024  0:34:24.65
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -605,6 +605,7 @@ payload:
   - DOMAIN,cp4.cloudflare.com
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,craftassets.unraid.net
+  - DOMAIN,cravatar.eu
   - DOMAIN,creativajs.altervista.org
   - DOMAIN,crl.usertrust.com
   - DOMAIN,crl.verisign.com

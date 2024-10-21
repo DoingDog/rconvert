@@ -1,5 +1,5 @@
-# Clash total line 4344
-# Last updated Sat 10/19/2024 22:12:21.77
+# Clash total line 4349
+# Last updated Mon 10/21/2024  0:34:44.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -36,6 +36,7 @@ payload:
   - DOMAIN,router.asus.com
   - DOMAIN,setmeup.arubanetworks.com
   - DOMAIN,sms.imagetasks.com
+  - DOMAIN,speedtest.macpaw.com
   - DOMAIN,steamcommunity-a.akamaihd.net
   - DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
   - DOMAIN,unifi
@@ -2606,6 +2607,7 @@ payload:
   - DOMAIN-SUFFIX,netease-inc.com
   - DOMAIN-SUFFIX,netease.com
   - DOMAIN-SUFFIX,netease.im
+  - DOMAIN-SUFFIX,netspeedtestmaster.com
   - DOMAIN-SUFFIX,netstatic.net
   - DOMAIN-SUFFIX,newasp.net
   - DOMAIN-SUFFIX,newbandeng.com
@@ -3424,6 +3426,7 @@ payload:
   - DOMAIN-SUFFIX,ucweb.com
   - DOMAIN-SUFFIX,udache.com
   - DOMAIN-SUFFIX,udacity.com
+  - DOMAIN-SUFFIX,udqqimg.com
   - DOMAIN-SUFFIX,uewaf.com
   - DOMAIN-SUFFIX,ufileos.com
   - DOMAIN-SUFFIX,ugdtimg.com
@@ -3580,6 +3583,7 @@ payload:
   - DOMAIN-SUFFIX,whccb.com
   - DOMAIN-SUFFIX,whlovehome.com
   - DOMAIN-SUFFIX,wicresoft.com
+  - DOMAIN-SUFFIX,wifi8.com
   - DOMAIN-SUFFIX,wiley.com
   - DOMAIN-SUFFIX,win007.com
   - DOMAIN-SUFFIX,win7china.com
@@ -3711,6 +3715,7 @@ payload:
   - DOMAIN-SUFFIX,xn--io0a7i
   - DOMAIN-SUFFIX,xnpic.com
   - DOMAIN-SUFFIX,xoyo.com
+  - DOMAIN-SUFFIX,xoyocdn.com
   - DOMAIN-SUFFIX,xpgod.com
   - DOMAIN-SUFFIX,xqfunds.com
   - DOMAIN-SUFFIX,xqymuy.com

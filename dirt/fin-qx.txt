@@ -1,5 +1,5 @@
-# Quantumult total line 4300
-# Last updated Sat 10/19/2024 22:12:21.74
+# Quantumult total line 4305
+# Last updated Mon 10/21/2024  0:34:44.58
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -35,6 +35,7 @@ HOST,repeater.asus.com,LIST
 HOST,router.asus.com,LIST
 HOST,setmeup.arubanetworks.com,LIST
 HOST,sms.imagetasks.com,LIST
+HOST,speedtest.macpaw.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
 HOST,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe,LIST
 HOST,unifi,LIST
@@ -2605,6 +2606,7 @@ HOST-SUFFIX,netbian.com,LIST
 HOST-SUFFIX,netease-inc.com,LIST
 HOST-SUFFIX,netease.com,LIST
 HOST-SUFFIX,netease.im,LIST
+HOST-SUFFIX,netspeedtestmaster.com,LIST
 HOST-SUFFIX,netstatic.net,LIST
 HOST-SUFFIX,newasp.net,LIST
 HOST-SUFFIX,newbandeng.com,LIST
@@ -3423,6 +3425,7 @@ HOST-SUFFIX,ucnaming.net,LIST
 HOST-SUFFIX,ucweb.com,LIST
 HOST-SUFFIX,udache.com,LIST
 HOST-SUFFIX,udacity.com,LIST
+HOST-SUFFIX,udqqimg.com,LIST
 HOST-SUFFIX,uewaf.com,LIST
 HOST-SUFFIX,ufileos.com,LIST
 HOST-SUFFIX,ugdtimg.com,LIST
@@ -3579,6 +3582,7 @@ HOST-SUFFIX,whatismyip.com,LIST
 HOST-SUFFIX,whccb.com,LIST
 HOST-SUFFIX,whlovehome.com,LIST
 HOST-SUFFIX,wicresoft.com,LIST
+HOST-SUFFIX,wifi8.com,LIST
 HOST-SUFFIX,wiley.com,LIST
 HOST-SUFFIX,win007.com,LIST
 HOST-SUFFIX,win7china.com,LIST
@@ -3710,6 +3714,7 @@ HOST-SUFFIX,xn--fiqs8s,LIST
 HOST-SUFFIX,xn--io0a7i,LIST
 HOST-SUFFIX,xnpic.com,LIST
 HOST-SUFFIX,xoyo.com,LIST
+HOST-SUFFIX,xoyocdn.com,LIST
 HOST-SUFFIX,xpgod.com,LIST
 HOST-SUFFIX,xqfunds.com,LIST
 HOST-SUFFIX,xqymuy.com,LIST

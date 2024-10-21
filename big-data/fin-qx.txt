@@ -1,5 +1,5 @@
-# Quantumult total line 5426
-# Last updated Sat 10/19/2024 22:12:13.43
+# Quantumult total line 5430
+# Last updated Mon 10/21/2024  0:34:34.27
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -187,9 +187,11 @@ HOST,assets.zerohedge.com,LIST
 HOST,assets0.headwayapp.co,LIST
 HOST,assets0.lottiefiles.com,LIST
 HOST,assets1.lottiefiles.com,LIST
+HOST,assets1.xboxlive.com,LIST
 HOST,assets10.lottiefiles.com,LIST
 HOST,assets2.canny.io,LIST
 HOST,assets2.lottiefiles.com,LIST
+HOST,assets2.xboxlive.com,LIST
 HOST,assets3.lottiefiles.com,LIST
 HOST,assets4.lottiefiles.com,LIST
 HOST,assets4.mist-train-girls.com,LIST
@@ -622,6 +624,7 @@ HOST,cp3.cloudflare.com,LIST
 HOST,cp4.cloudflare.com,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,craftassets.unraid.net,LIST
+HOST,cravatar.eu,LIST
 HOST,creativajs.altervista.org,LIST
 HOST,crl.usertrust.com,LIST
 HOST,crl.verisign.com,LIST
@@ -2542,6 +2545,7 @@ HOST-SUFFIX,edgedatg.com,LIST
 HOST-SUFFIX,edgestorewebcdn.azureedge.net,LIST
 HOST-SUFFIX,edis.at,LIST
 HOST-SUFFIX,edx-cdn.org,LIST
+HOST-SUFFIX,egdownload.fastly-edge.com,LIST
 HOST-SUFFIX,ehgt.org,LIST
 HOST-SUFFIX,ehwiki.org,LIST
 HOST-SUFFIX,elitefile.net,LIST
