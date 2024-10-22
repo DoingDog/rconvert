@@ -1,5 +1,5 @@
-# Quantumult total line 5430
-# Last updated Mon 10/21/2024  0:34:34.27
+# Quantumult total line 5442
+# Last updated Tue 10/22/2024 22:11:55.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -55,6 +55,8 @@ HOST,app-updates.agilebits.com,LIST
 HOST,app.backinstock.org,LIST
 HOST,app.chatwoot.com,LIST
 HOST,app.cookieyes.com,LIST
+HOST,app.groove.cm,LIST
+HOST,app.groovefunnels.com,LIST
 HOST,app.roboflow.com,LIST
 HOST,app.viral-loops.com,LIST
 HOST,appassets.mvtdev.com,LIST
@@ -100,6 +102,7 @@ HOST,assets.change.org,LIST
 HOST,assets.chaos.social,LIST
 HOST,assets.chess24.com,LIST
 HOST,assets.clever-cloud.com,LIST
+HOST,assets.clickfunnels.com,LIST
 HOST,assets.codepen.io,LIST
 HOST,assets.coinbase.com,LIST
 HOST,assets.coingecko.com,LIST
@@ -119,6 +122,7 @@ HOST,assets.gcore.pro,LIST
 HOST,assets.genius.com,LIST
 HOST,assets.getkirby.com,LIST
 HOST,assets.grammarly.com,LIST
+HOST,assets.grooveapps.com,LIST
 HOST,assets.guim.co.uk,LIST
 HOST,assets.gumroad.com,LIST
 HOST,assets.habr.com,LIST
@@ -341,6 +345,7 @@ HOST,cdn.consentmanager.net,LIST
 HOST,cdn.contentful.com,LIST
 HOST,cdn.css.net,LIST
 HOST,cdn.cxense.com,LIST
+HOST,cdn.cypress.io,LIST
 HOST,cdn.datacamp.com,LIST
 HOST,cdn.datatables.net,LIST
 HOST,cdn.datdota.com,LIST
@@ -616,6 +621,7 @@ HOST,content6.steampowered.com,LIST
 HOST,content7.steampowered.com,LIST
 HOST,content8.steampowered.com,LIST
 HOST,contents-thumbnail2.fc2.com,LIST
+HOST,conversiongorilla.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
 HOST,corp-backend.brevo.com,LIST
 HOST,cors-proxy.htmldriven.com,LIST
@@ -692,6 +698,7 @@ HOST,download.anydesk.com,LIST
 HOST,download.bazzite.gg,LIST
 HOST,download.beeper.com,LIST
 HOST,download.cpuid.com,LIST
+HOST,download.cypress.io,LIST
 HOST,download.dlsite.com,LIST
 HOST,download.docker.com,LIST
 HOST,download.gigabyte.com,LIST
@@ -1369,6 +1376,8 @@ HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
 HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rules.ac,LIST
+HOST,rules1.clearurls.xyz,LIST
+HOST,rules2.clearurls.xyz,LIST
 HOST,rum-agent.na-01.cloud.solarwinds.com,LIST
 HOST,runkit-packages-static-executables.com,LIST
 HOST,runkit-packages-static.com,LIST
@@ -1735,6 +1744,7 @@ HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,update.code.visualstudio.com,LIST
 HOST,update.googleapis.com,LIST
 HOST,update.sleazyfork.org,LIST
+HOST,updater.snipaste.com,LIST
 HOST,updates-cdn.bravesoftware.com,LIST
 HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
@@ -1797,7 +1807,6 @@ HOST,web-toolbar.playstation.com,LIST
 HOST,web.onekey-asset.com,LIST
 HOST,webfonts.zoho.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
-HOST,widget.cluster.groovehq.com,LIST
 HOST,widget.freshworks.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.trustpilot.com,LIST
@@ -3631,6 +3640,7 @@ HOST-SUFFIX,paramountplus.com,LIST
 HOST-SUFFIX,parastorage.com,LIST
 HOST-SUFFIX,pashtovoa.com,LIST
 HOST-SUFFIX,pastebin.com,LIST
+HOST-SUFFIX,patientpop.com,LIST
 HOST-SUFFIX,patreonusercontent.com,LIST
 HOST-SUFFIX,payhulu.com,LIST
 HOST-SUFFIX,payloadcms.app,LIST
@@ -4363,6 +4373,7 @@ HOST-SUFFIX,wetv.vip,LIST
 HOST-SUFFIX,wetvinfo.com,LIST
 HOST-SUFFIX,whatthefox.com,LIST
 HOST-SUFFIX,whosthehost.com,LIST
+HOST-SUFFIX,widget.cluster.groovehq.com,LIST
 HOST-SUFFIX,widget.clutch.co,LIST
 HOST-SUFFIX,wikia.nocookie.net,LIST
 HOST-SUFFIX,wikifortio.com,LIST
@@ -4375,6 +4386,7 @@ HOST-SUFFIX,winudf.com,LIST
 HOST-SUFFIX,wipfiles.net,LIST
 HOST-SUFFIX,wixmp.com,LIST
 HOST-SUFFIX,wixstatic.com,LIST
+HOST-SUFFIX,wixstudio.io,LIST
 HOST-SUFFIX,wofl.tv,LIST
 HOST-SUFFIX,woflthenewsstation.com,LIST
 HOST-SUFFIX,wogx.com,LIST

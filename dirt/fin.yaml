@@ -1,5 +1,5 @@
-# Clash total line 4349
-# Last updated Mon 10/21/2024  0:34:44.61
+# Clash total line 4354
+# Last updated Tue 10/22/2024 22:12:05.40
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -354,6 +354,7 @@ payload:
   - DOMAIN-SUFFIX,99fund.com
   - DOMAIN-SUFFIX,9ht.com
   - DOMAIN-SUFFIX,9xgame.com
+  - DOMAIN-SUFFIX,9xiu.com
   - DOMAIN-SUFFIX,9xu.com
   - DOMAIN-SUFFIX,_msdcs
   - DOMAIN-SUFFIX,_tcp
@@ -1456,6 +1457,7 @@ payload:
   - DOMAIN-SUFFIX,flxdns.com
   - DOMAIN-SUFFIX,flycua.com
   - DOMAIN-SUFFIX,flyert.com
+  - DOMAIN-SUFFIX,flyme.com
   - DOMAIN-SUFFIX,fm3838.com
   - DOMAIN-SUFFIX,fofa.info
   - DOMAIN-SUFFIX,fofa.so
@@ -2501,6 +2503,7 @@ payload:
   - DOMAIN-SUFFIX,mihoyogift.com
   - DOMAIN-SUFFIX,mihoyomall.com
   - DOMAIN-SUFFIX,mihuashi.com
+  - DOMAIN-SUFFIX,mijia.tech
   - DOMAIN-SUFFIX,mijisou.com
   - DOMAIN-SUFFIX,mikecrm.com
   - DOMAIN-SUFFIX,minapp.com
@@ -3664,6 +3667,7 @@ payload:
   - DOMAIN-SUFFIX,xiami.net
   - DOMAIN-SUFFIX,xianfae.com
   - DOMAIN-SUFFIX,xianjiqun.com
+  - DOMAIN-SUFFIX,xiaoaisound.com
   - DOMAIN-SUFFIX,xiaobaixitong.com
   - DOMAIN-SUFFIX,xiaodutv.com
   - DOMAIN-SUFFIX,xiaoe-tech.com
@@ -3680,6 +3684,7 @@ payload:
   - DOMAIN-SUFFIX,xiaomiev.com
   - DOMAIN-SUFFIX,xiaomiflash.com
   - DOMAIN-SUFFIX,xiaomingtaiji.com
+  - DOMAIN-SUFFIX,xiaomixiaoai.com
   - DOMAIN-SUFFIX,xiaomiyoupin.com
   - DOMAIN-SUFFIX,xiaote.net
   - DOMAIN-SUFFIX,xiaoxiongxitong.com

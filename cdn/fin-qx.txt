@@ -1,5 +1,5 @@
-# Quantumult total line 2510
-# Last updated Mon 10/21/2024  0:34:24.62
+# Quantumult total line 2519
+# Last updated Tue 10/22/2024 22:11:46.87
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -48,6 +48,8 @@ HOST,app-static.turtl.co,LIST
 HOST,app.backinstock.org,LIST
 HOST,app.chatwoot.com,LIST
 HOST,app.cookieyes.com,LIST
+HOST,app.groove.cm,LIST
+HOST,app.groovefunnels.com,LIST
 HOST,app.roboflow.com,LIST
 HOST,app.viral-loops.com,LIST
 HOST,appassets.mvtdev.com,LIST
@@ -93,6 +95,7 @@ HOST,assets.change.org,LIST
 HOST,assets.chaos.social,LIST
 HOST,assets.chess24.com,LIST
 HOST,assets.clever-cloud.com,LIST
+HOST,assets.clickfunnels.com,LIST
 HOST,assets.codepen.io,LIST
 HOST,assets.coinbase.com,LIST
 HOST,assets.coingecko.com,LIST
@@ -114,6 +117,7 @@ HOST,assets.gcore.pro,LIST
 HOST,assets.genius.com,LIST
 HOST,assets.getkirby.com,LIST
 HOST,assets.grammarly.com,LIST
+HOST,assets.grooveapps.com,LIST
 HOST,assets.guim.co.uk,LIST
 HOST,assets.gumroad.com,LIST
 HOST,assets.habr.com,LIST
@@ -596,6 +600,7 @@ HOST,content.jwplatform.com,LIST
 HOST,content.product.glitch.com,LIST
 HOST,content.wepik.com,LIST
 HOST,contents-thumbnail2.fc2.com,LIST
+HOST,conversiongorilla.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
 HOST,corp-backend.brevo.com,LIST
 HOST,cors-proxy.htmldriven.com,LIST
@@ -1245,6 +1250,8 @@ HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
 HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rules.ac,LIST
+HOST,rules1.clearurls.xyz,LIST
+HOST,rules2.clearurls.xyz,LIST
 HOST,rum-agent.na-01.cloud.solarwinds.com,LIST
 HOST,runkit-packages-static-executables.com,LIST
 HOST,runkit-packages-static.com,LIST
@@ -1699,7 +1706,6 @@ HOST,web-toolbar.playstation.com,LIST
 HOST,web.onekey-asset.com,LIST
 HOST,webfonts.zoho.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
-HOST,widget.cluster.groovehq.com,LIST
 HOST,widget.freshworks.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.trustpilot.com,LIST
@@ -2235,6 +2241,7 @@ HOST-SUFFIX,pagecdn.io,LIST
 HOST-SUFFIX,pages.dev,LIST
 HOST-SUFFIX,parastorage.com,LIST
 HOST-SUFFIX,pastebin.com,LIST
+HOST-SUFFIX,patientpop.com,LIST
 HOST-SUFFIX,payloadcms.app,LIST
 HOST-SUFFIX,permaweb.eu.org,LIST
 HOST-SUFFIX,permaweb.io,LIST
@@ -2469,12 +2476,14 @@ HOST-SUFFIX,web.app,LIST
 HOST-SUFFIX,webp.se,LIST
 HOST-SUFFIX,webpkgcache.com,LIST
 HOST-SUFFIX,website-files.com,LIST
+HOST-SUFFIX,widget.cluster.groovehq.com,LIST
 HOST-SUFFIX,widget.clutch.co,LIST
 HOST-SUFFIX,wikia.nocookie.net,LIST
 HOST-SUFFIX,wikiplus-app.com,LIST
 HOST-SUFFIX,winudf.com,LIST
 HOST-SUFFIX,wixmp.com,LIST
 HOST-SUFFIX,wixstatic.com,LIST
+HOST-SUFFIX,wixstudio.io,LIST
 HOST-SUFFIX,workers.dev,LIST
 HOST-SUFFIX,wpcomstaging.com,LIST
 HOST-SUFFIX,wpmucdn.com,LIST

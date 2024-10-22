@@ -1,5 +1,5 @@
-# Main total line 5445
-# Last updated Mon 10/21/2024  0:34:34.12
+# Main total line 5457
+# Last updated Tue 10/22/2024 22:11:55.45
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,2mdn.net
@@ -55,6 +55,8 @@ DOMAIN,app-updates.agilebits.com
 DOMAIN,app.backinstock.org
 DOMAIN,app.chatwoot.com
 DOMAIN,app.cookieyes.com
+DOMAIN,app.groove.cm
+DOMAIN,app.groovefunnels.com
 DOMAIN,app.roboflow.com
 DOMAIN,app.viral-loops.com
 DOMAIN,appassets.mvtdev.com
@@ -100,6 +102,7 @@ DOMAIN,assets.change.org
 DOMAIN,assets.chaos.social
 DOMAIN,assets.chess24.com
 DOMAIN,assets.clever-cloud.com
+DOMAIN,assets.clickfunnels.com
 DOMAIN,assets.codepen.io
 DOMAIN,assets.coinbase.com
 DOMAIN,assets.coingecko.com
@@ -119,6 +122,7 @@ DOMAIN,assets.gcore.pro
 DOMAIN,assets.genius.com
 DOMAIN,assets.getkirby.com
 DOMAIN,assets.grammarly.com
+DOMAIN,assets.grooveapps.com
 DOMAIN,assets.guim.co.uk
 DOMAIN,assets.gumroad.com
 DOMAIN,assets.habr.com
@@ -341,6 +345,7 @@ DOMAIN,cdn.consentmanager.net
 DOMAIN,cdn.contentful.com
 DOMAIN,cdn.css.net
 DOMAIN,cdn.cxense.com
+DOMAIN,cdn.cypress.io
 DOMAIN,cdn.datacamp.com
 DOMAIN,cdn.datatables.net
 DOMAIN,cdn.datdota.com
@@ -616,6 +621,7 @@ DOMAIN,content6.steampowered.com
 DOMAIN,content7.steampowered.com
 DOMAIN,content8.steampowered.com
 DOMAIN,contents-thumbnail2.fc2.com
+DOMAIN,conversiongorilla.com
 DOMAIN,cookie-cdn.cookiepro.com
 DOMAIN,corp-backend.brevo.com
 DOMAIN,cors-proxy.htmldriven.com
@@ -692,6 +698,7 @@ DOMAIN,download.anydesk.com
 DOMAIN,download.bazzite.gg
 DOMAIN,download.beeper.com
 DOMAIN,download.cpuid.com
+DOMAIN,download.cypress.io
 DOMAIN,download.dlsite.com
 DOMAIN,download.docker.com
 DOMAIN,download.gigabyte.com
@@ -1369,6 +1376,8 @@ DOMAIN,rsi.grafana.com
 DOMAIN,rsms.me
 DOMAIN,rts-static-prod.freshworksapi.com
 DOMAIN,rules.ac
+DOMAIN,rules1.clearurls.xyz
+DOMAIN,rules2.clearurls.xyz
 DOMAIN,rum-agent.na-01.cloud.solarwinds.com
 DOMAIN,runkit-packages-static-executables.com
 DOMAIN,runkit-packages-static.com
@@ -1735,6 +1744,7 @@ DOMAIN,unlimited-cdn.waifu2x.net
 DOMAIN,update.code.visualstudio.com
 DOMAIN,update.googleapis.com
 DOMAIN,update.sleazyfork.org
+DOMAIN,updater.snipaste.com
 DOMAIN,updates-cdn.bravesoftware.com
 DOMAIN,updates.istatmenus.app
 DOMAIN,updates.signal.org
@@ -1797,7 +1807,6 @@ DOMAIN,web-toolbar.playstation.com
 DOMAIN,web.onekey-asset.com
 DOMAIN,webfonts.zoho.com
 DOMAIN,website-cdn.ipinfo.io
-DOMAIN,widget.cluster.groovehq.com
 DOMAIN,widget.freshworks.com
 DOMAIN,widget.intercom.io
 DOMAIN,widget.trustpilot.com
@@ -3631,6 +3640,7 @@ DOMAIN-SUFFIX,paramountplus.com
 DOMAIN-SUFFIX,parastorage.com
 DOMAIN-SUFFIX,pashtovoa.com
 DOMAIN-SUFFIX,pastebin.com
+DOMAIN-SUFFIX,patientpop.com
 DOMAIN-SUFFIX,patreonusercontent.com
 DOMAIN-SUFFIX,payhulu.com
 DOMAIN-SUFFIX,payloadcms.app
@@ -4363,6 +4373,7 @@ DOMAIN-SUFFIX,wetv.vip
 DOMAIN-SUFFIX,wetvinfo.com
 DOMAIN-SUFFIX,whatthefox.com
 DOMAIN-SUFFIX,whosthehost.com
+DOMAIN-SUFFIX,widget.cluster.groovehq.com
 DOMAIN-SUFFIX,widget.clutch.co
 DOMAIN-SUFFIX,wikia.nocookie.net
 DOMAIN-SUFFIX,wikifortio.com
@@ -4375,6 +4386,7 @@ DOMAIN-SUFFIX,winudf.com
 DOMAIN-SUFFIX,wipfiles.net
 DOMAIN-SUFFIX,wixmp.com
 DOMAIN-SUFFIX,wixstatic.com
+DOMAIN-SUFFIX,wixstudio.io
 DOMAIN-SUFFIX,wofl.tv
 DOMAIN-SUFFIX,woflthenewsstation.com
 DOMAIN-SUFFIX,wogx.com
