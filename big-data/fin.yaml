@@ -1,5 +1,5 @@
-# Clash total line 5457
-# Last updated Tue 10/22/2024 22:11:55.64
+# Clash total line 5478
+# Last updated Fri 10/25/2024 22:11:35.67
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -54,6 +54,7 @@ payload:
   - DOMAIN,app-static.turtl.co
   - DOMAIN,app-updates.agilebits.com
   - DOMAIN,app.backinstock.org
+  - DOMAIN,app.brightback.com
   - DOMAIN,app.chatwoot.com
   - DOMAIN,app.cookieyes.com
   - DOMAIN,app.groove.cm
@@ -208,6 +209,7 @@ payload:
   - DOMAIN,assetscdn-wchat.eu.freshchat.com
   - DOMAIN,assetscdn.jable.tv
   - DOMAIN,at.adtech.redventures.io
+  - DOMAIN,atn.hitomi.la
   - DOMAIN,aus2-community.mozilla.org
   - DOMAIN,aus5.mozilla.org
   - DOMAIN,auth.split.io
@@ -244,6 +246,7 @@ payload:
   - DOMAIN,brick.a.ssl.fastly.net
   - DOMAIN,brick.freetls.fastly.net
   - DOMAIN,bst.icons8.com
+  - DOMAIN,btn.hitomi.la
   - DOMAIN,builds.paranoidandroid.co
   - DOMAIN,builds.parsec.app
   - DOMAIN,bundle.trysavvy.com
@@ -474,6 +477,7 @@ payload:
   - DOMAIN,cdn.sciencecast.org
   - DOMAIN,cdn.search.brave.com
   - DOMAIN,cdn.sellix.io
+  - DOMAIN,cdn.seondf.com
   - DOMAIN,cdn.setapp.com
   - DOMAIN,cdn.sheetjs.com
   - DOMAIN,cdn.shopify.com
@@ -821,6 +825,7 @@ payload:
   - DOMAIN,fonts.gishan.cc
   - DOMAIN,fonts.googleapis.com
   - DOMAIN,fonts.gstatic.com
+  - DOMAIN,fonts.sony.net
   - DOMAIN,fonts.svc.ui.com
   - DOMAIN,fonts.twitter.com
   - DOMAIN,fonts.upset.dev
@@ -923,6 +928,7 @@ payload:
   - DOMAIN,image.westinyou.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
+  - DOMAIN,imageproxy.ifunny.co
   - DOMAIN,images-assets.nasa.gov
   - DOMAIN,images-eds-ssl.xboxlive.com
   - DOMAIN,images-ext-1.discordapp.net
@@ -973,6 +979,7 @@ payload:
   - DOMAIN,images7.design-editor.com
   - DOMAIN,images8.design-editor.com
   - DOMAIN,imagizer.imageshack.com
+  - DOMAIN,img-api.mac4ever.com
   - DOMAIN,img-cos.mandaoo.com
   - DOMAIN,img-en.fs.com
   - DOMAIN,img.agrd.eu
@@ -995,6 +1002,8 @@ payload:
   - DOMAIN,img.hellofresh.com
   - DOMAIN,img.hentaihaven.xxx
   - DOMAIN,img.icons8.com
+  - DOMAIN,img.ifunny.co
+  - DOMAIN,img.informer.com
   - DOMAIN,img.itch.zone
   - DOMAIN,img.javstore.net
   - DOMAIN,img.kbhgames.com
@@ -1070,6 +1079,7 @@ payload:
   - DOMAIN,js.userflow.com
   - DOMAIN,js.verygoodvault.com
   - DOMAIN,jslibs.blackmagicdesign.com
+  - DOMAIN,jsonplaceholder.typicode.com
   - DOMAIN,kdata1.com
   - DOMAIN,keyframe-cdn.abcnews.com
   - DOMAIN,kh.google.com
@@ -1090,8 +1100,10 @@ payload:
   - DOMAIN,load.csell.co
   - DOMAIN,loader.mantis-intelligence.com
   - DOMAIN,logo.clearbit.com
+  - DOMAIN,logos.kiwibrowser.com
   - DOMAIN,logos.speedtestcustom.com
   - DOMAIN,loutre.blockchair.io
+  - DOMAIN,ltn.hitomi.la
   - DOMAIN,m-cdn.phonearena.com
   - DOMAIN,m.wsj.net
   - DOMAIN,mac-release-static.stash.ws
@@ -1160,6 +1172,7 @@ payload:
   - DOMAIN,mir-s3-cdn-cf.behance.net
   - DOMAIN,miro.medium.com
   - DOMAIN,mirror-cdn.xtom.com
+  - DOMAIN,mirror.apad.pro
   - DOMAIN,mirror.cat.net
   - DOMAIN,mirror.ghproxy.com
   - DOMAIN,mirror.navercorp.com
@@ -1197,6 +1210,7 @@ payload:
   - DOMAIN,mstdn-s3.o3o.studio
   - DOMAIN,mui.com
   - DOMAIN,mw1.google.com
+  - DOMAIN,my-json-server.typicode.com
   - DOMAIN,na-library.klarnaservices.com
   - DOMAIN,navismithapis-cdn.com
   - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
@@ -1382,6 +1396,7 @@ payload:
   - DOMAIN,rum-agent.na-01.cloud.solarwinds.com
   - DOMAIN,runkit-packages-static-executables.com
   - DOMAIN,runkit-packages-static.com
+  - DOMAIN,rv-assets.softonic.com
   - DOMAIN,s-cdn.anthropic.com
   - DOMAIN,s-cdn.phonearena.com
   - DOMAIN,s.abcnews.com
@@ -1406,6 +1421,7 @@ payload:
   - DOMAIN,s3-alpha.figma.com
   - DOMAIN,s3-figma-plugin-images-production-sig.figma.com
   - DOMAIN,s3-symbol-logo.tradingview.com
+  - DOMAIN,s3.aaaaa.io
   - DOMAIN,s3.acg.mn
   - DOMAIN,s3.arkjp.net
   - DOMAIN,s3.c.im
@@ -1455,6 +1471,7 @@ payload:
   - DOMAIN,security.debian.org
   - DOMAIN,security.ubuntu.com
   - DOMAIN,services.linkfire.com
+  - DOMAIN,settings.kiwibrowser.com
   - DOMAIN,sf-coze-web-cdn.coze.com
   - DOMAIN,sf-flow-web-cdn.ciciai.com
   - DOMAIN,share.riseup.net
@@ -1579,6 +1596,7 @@ payload:
   - DOMAIN,static.helpjuice.com
   - DOMAIN,static.hotjar.com
   - DOMAIN,static.ietf.org
+  - DOMAIN,static.ifunny.co
   - DOMAIN,static.incapsula.com
   - DOMAIN,static.independent.co.uk
   - DOMAIN,static.inferno.iheart.com
@@ -1803,6 +1821,7 @@ payload:
   - DOMAIN,web-assets.ifttt.com
   - DOMAIN,web-assets.otogi-frontier.com
   - DOMAIN,web-assets.strava.com
+  - DOMAIN,web-cdn.bitrise.io
   - DOMAIN,web-static.pages.iheart.com
   - DOMAIN,web-toolbar.playstation.com
   - DOMAIN,web.onekey-asset.com
@@ -2536,6 +2555,7 @@ payload:
   - DOMAIN-SUFFIX,dubox.com
   - DOMAIN-SUFFIX,duboxcdn.com
   - DOMAIN-SUFFIX,dummyimage.com
+  - DOMAIN-SUFFIX,dummyjson.com
   - DOMAIN-SUFFIX,dwcdn.net
   - DOMAIN-SUFFIX,dweb.eu.org
   - DOMAIN-SUFFIX,dweb.link
@@ -2606,6 +2626,7 @@ payload:
   - DOMAIN-SUFFIX,f1manager.com
   - DOMAIN-SUFFIX,f1play.com
   - DOMAIN-SUFFIX,fabricmc.net
+  - DOMAIN-SUFFIX,fakestoreapi.com
   - DOMAIN-SUFFIX,fast.com
   - DOMAIN-SUFFIX,fastbit.cc
   - DOMAIN-SUFFIX,fastclick.to
