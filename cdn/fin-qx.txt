@@ -1,5 +1,5 @@
-# Quantumult total line 2539
-# Last updated Fri 10/25/2024 22:11:26.29
+# Quantumult total line 2549
+# Last updated Mon 10/28/2024 22:11:43.65
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -102,6 +102,7 @@ HOST,assets.coinbase.com,LIST
 HOST,assets.coingecko.com,LIST
 HOST,assets.context.ly,LIST
 HOST,assets.convertkit.com,LIST
+HOST,assets.dify.ai,LIST
 HOST,assets.dnsfilter.com,LIST
 HOST,assets.dwncdn.net,LIST
 HOST,assets.ecomm.ui.com,LIST
@@ -117,6 +118,7 @@ HOST,assets.garr.it,LIST
 HOST,assets.gcore.pro,LIST
 HOST,assets.genius.com,LIST
 HOST,assets.getkirby.com,LIST
+HOST,assets.github.dev,LIST
 HOST,assets.grammarly.com,LIST
 HOST,assets.grooveapps.com,LIST
 HOST,assets.guim.co.uk,LIST
@@ -174,6 +176,7 @@ HOST,assets.tumblr.com,LIST
 HOST,assets.twitch.tv,LIST
 HOST,assets.unifi-ai.com,LIST
 HOST,assets.upload.io,LIST
+HOST,assets.vantage.sh,LIST
 HOST,assets.vercel.com,LIST
 HOST,assets.video.yahoo.net,LIST
 HOST,assets.videowise.com,LIST
@@ -329,6 +332,7 @@ HOST,cdn.cnx-software.com,LIST
 HOST,cdn.cocoapods.org,LIST
 HOST,cdn.codeblackbelt.com,LIST
 HOST,cdn.commento.io,LIST
+HOST,cdn.comparitech.com,LIST
 HOST,cdn.concert.io,LIST
 HOST,cdn.consentmanager.net,LIST
 HOST,cdn.contentful.com,LIST
@@ -432,6 +436,7 @@ HOST,cdn.perfops.net,LIST
 HOST,cdn.permutive.com,LIST
 HOST,cdn.piano.io,LIST
 HOST,cdn.pickystory.com,LIST
+HOST,cdn.picrew.me,LIST
 HOST,cdn.pika.dev,LIST
 HOST,cdn.pixabay.com,LIST
 HOST,cdn.pkg.svc.ui.com,LIST
@@ -1161,6 +1166,7 @@ HOST,pic.cangku.moe,LIST
 HOST,pic.cdnclouder.com,LIST
 HOST,pic.imge.cc,LIST
 HOST,pic.libilibi.top,LIST
+HOST,pic.macked.app,LIST
 HOST,pic.onlinewebfonts.com,LIST
 HOST,pic.skk.moe,LIST
 HOST,pic.ziyuan.wang,LIST
@@ -1441,6 +1447,7 @@ HOST,static.bytepan.com,LIST
 HOST,static.chaika.moe,LIST
 HOST,static.change.org,LIST
 HOST,static.cloud.coveo.com,LIST
+HOST,static.cloudcachetci.com,LIST
 HOST,static.cnbeta.com.tw,LIST
 HOST,static.codepen.io,LIST
 HOST,static.coinall.ltd,LIST
@@ -1662,6 +1669,7 @@ HOST,ui-cdn.digitalocean.com,LIST
 HOST,ui.contentstack.com,LIST
 HOST,ui.trailhead.com,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
+HOST,update.greasyfork.org,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
 HOST,upload.filebase.com,LIST
@@ -1992,6 +2000,7 @@ HOST-SUFFIX,fontawesome.com,LIST
 HOST-SUFFIX,fonts.com,LIST
 HOST-SUFFIX,fonts.net,LIST
 HOST-SUFFIX,forbesimg.com,LIST
+HOST-SUFFIX,framercdn.com,LIST
 HOST-SUFFIX,framerstatic.com,LIST
 HOST-SUFFIX,framerusercontent.com,LIST
 HOST-SUFFIX,fsdn.com,LIST
@@ -2274,7 +2283,6 @@ HOST-SUFFIX,pinimg.com,LIST
 HOST-SUFFIX,pixelcdn.net,LIST
 HOST-SUFFIX,pixfs.net,LIST
 HOST-SUFFIX,pixhost.to,LIST
-HOST-SUFFIX,piximg.net,LIST
 HOST-SUFFIX,pixiv.cat,LIST
 HOST-SUFFIX,pixiv.nl,LIST
 HOST-SUFFIX,pixiv.re,LIST
@@ -2308,6 +2316,7 @@ HOST-SUFFIX,public.cdn.office.net,LIST
 HOST-SUFFIX,public.ecr.aws,LIST
 HOST-SUFFIX,push.services.mozilla.com,LIST
 HOST-SUFFIX,pxgcdn.com,LIST
+HOST-SUFFIX,pximg.net,LIST
 HOST-SUFFIX,pypi.org,LIST
 HOST-SUFFIX,pythonhosted.org,LIST
 HOST-SUFFIX,pztv.ca,LIST
@@ -2456,6 +2465,7 @@ HOST-SUFFIX,typography.com,LIST
 HOST-SUFFIX,ubembed.com,LIST
 HOST-SUFFIX,uber-assets.com,LIST
 HOST-SUFFIX,ucarecdn.com,LIST
+HOST-SUFFIX,udify.app,LIST
 HOST-SUFFIX,ungh.cc,LIST
 HOST-SUFFIX,ungrounded.net,LIST
 HOST-SUFFIX,unpkg.co,LIST

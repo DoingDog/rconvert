@@ -1,5 +1,5 @@
-# Clash total line 2539
-# Last updated Fri 10/25/2024 22:11:26.32
+# Clash total line 2549
+# Last updated Mon 10/28/2024 22:11:43.68
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -103,6 +103,7 @@ payload:
   - DOMAIN,assets.coingecko.com
   - DOMAIN,assets.context.ly
   - DOMAIN,assets.convertkit.com
+  - DOMAIN,assets.dify.ai
   - DOMAIN,assets.dnsfilter.com
   - DOMAIN,assets.dwncdn.net
   - DOMAIN,assets.ecomm.ui.com
@@ -118,6 +119,7 @@ payload:
   - DOMAIN,assets.gcore.pro
   - DOMAIN,assets.genius.com
   - DOMAIN,assets.getkirby.com
+  - DOMAIN,assets.github.dev
   - DOMAIN,assets.grammarly.com
   - DOMAIN,assets.grooveapps.com
   - DOMAIN,assets.guim.co.uk
@@ -175,6 +177,7 @@ payload:
   - DOMAIN,assets.twitch.tv
   - DOMAIN,assets.unifi-ai.com
   - DOMAIN,assets.upload.io
+  - DOMAIN,assets.vantage.sh
   - DOMAIN,assets.vercel.com
   - DOMAIN,assets.video.yahoo.net
   - DOMAIN,assets.videowise.com
@@ -330,6 +333,7 @@ payload:
   - DOMAIN,cdn.cocoapods.org
   - DOMAIN,cdn.codeblackbelt.com
   - DOMAIN,cdn.commento.io
+  - DOMAIN,cdn.comparitech.com
   - DOMAIN,cdn.concert.io
   - DOMAIN,cdn.consentmanager.net
   - DOMAIN,cdn.contentful.com
@@ -433,6 +437,7 @@ payload:
   - DOMAIN,cdn.permutive.com
   - DOMAIN,cdn.piano.io
   - DOMAIN,cdn.pickystory.com
+  - DOMAIN,cdn.picrew.me
   - DOMAIN,cdn.pika.dev
   - DOMAIN,cdn.pixabay.com
   - DOMAIN,cdn.pkg.svc.ui.com
@@ -1162,6 +1167,7 @@ payload:
   - DOMAIN,pic.cdnclouder.com
   - DOMAIN,pic.imge.cc
   - DOMAIN,pic.libilibi.top
+  - DOMAIN,pic.macked.app
   - DOMAIN,pic.onlinewebfonts.com
   - DOMAIN,pic.skk.moe
   - DOMAIN,pic.ziyuan.wang
@@ -1442,6 +1448,7 @@ payload:
   - DOMAIN,static.chaika.moe
   - DOMAIN,static.change.org
   - DOMAIN,static.cloud.coveo.com
+  - DOMAIN,static.cloudcachetci.com
   - DOMAIN,static.cnbeta.com.tw
   - DOMAIN,static.codepen.io
   - DOMAIN,static.coinall.ltd
@@ -1663,6 +1670,7 @@ payload:
   - DOMAIN,ui.contentstack.com
   - DOMAIN,ui.trailhead.com
   - DOMAIN,unlimited-cdn.waifu2x.net
+  - DOMAIN,update.greasyfork.org
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
   - DOMAIN,upload.filebase.com
@@ -1993,6 +2001,7 @@ payload:
   - DOMAIN-SUFFIX,fonts.com
   - DOMAIN-SUFFIX,fonts.net
   - DOMAIN-SUFFIX,forbesimg.com
+  - DOMAIN-SUFFIX,framercdn.com
   - DOMAIN-SUFFIX,framerstatic.com
   - DOMAIN-SUFFIX,framerusercontent.com
   - DOMAIN-SUFFIX,fsdn.com
@@ -2275,7 +2284,6 @@ payload:
   - DOMAIN-SUFFIX,pixelcdn.net
   - DOMAIN-SUFFIX,pixfs.net
   - DOMAIN-SUFFIX,pixhost.to
-  - DOMAIN-SUFFIX,piximg.net
   - DOMAIN-SUFFIX,pixiv.cat
   - DOMAIN-SUFFIX,pixiv.nl
   - DOMAIN-SUFFIX,pixiv.re
@@ -2309,6 +2317,7 @@ payload:
   - DOMAIN-SUFFIX,public.ecr.aws
   - DOMAIN-SUFFIX,push.services.mozilla.com
   - DOMAIN-SUFFIX,pxgcdn.com
+  - DOMAIN-SUFFIX,pximg.net
   - DOMAIN-SUFFIX,pypi.org
   - DOMAIN-SUFFIX,pythonhosted.org
   - DOMAIN-SUFFIX,pztv.ca
@@ -2457,6 +2466,7 @@ payload:
   - DOMAIN-SUFFIX,ubembed.com
   - DOMAIN-SUFFIX,uber-assets.com
   - DOMAIN-SUFFIX,ucarecdn.com
+  - DOMAIN-SUFFIX,udify.app
   - DOMAIN-SUFFIX,ungh.cc
   - DOMAIN-SUFFIX,ungrounded.net
   - DOMAIN-SUFFIX,unpkg.co

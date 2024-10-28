@@ -1,5 +1,5 @@
-# Quantumult total line 4311
-# Last updated Fri 10/25/2024 22:11:46.08
+# Quantumult total line 4312
+# Last updated Mon 10/28/2024 22:12:02.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -12,7 +12,6 @@ HOST,cn.download.nvidia.com,LIST
 HOST,config.ubnt.com,LIST
 HOST,console.gl-inet.com,LIST
 HOST,dl.ubnt.com,LIST
-HOST,dot.pub,LIST
 HOST,download.jetbrains.com,LIST
 HOST,gstore.val.manlaxy.com,LIST
 HOST,homerouter.cpe,LIST
@@ -1580,6 +1579,7 @@ HOST-SUFFIX,goodread.com,LIST
 HOST-SUFFIX,goofish.com,LIST
 HOST-SUFFIX,goosail.com,LIST
 HOST-SUFFIX,goproxy.io,LIST
+HOST-SUFFIX,gorouter.info,LIST
 HOST-SUFFIX,goselling.com,LIST
 HOST-SUFFIX,goto-game.com,LIST
 HOST-SUFFIX,goto-game.mobi,LIST
@@ -2511,6 +2511,7 @@ HOST-SUFFIX,mincdn.com,LIST
 HOST-SUFFIX,mingyuanyun.com,LIST
 HOST-SUFFIX,minhangshi.com,LIST
 HOST-SUFFIX,minitiao.com,LIST
+HOST-SUFFIX,miot-spec.org,LIST
 HOST-SUFFIX,mipcdn.com,LIST
 HOST-SUFFIX,mirrors.yun-idc.com,LIST
 HOST-SUFFIX,missjia.net,LIST

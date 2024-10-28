@@ -1,5 +1,5 @@
-# Clash total line 4355
-# Last updated Fri 10/25/2024 22:11:46.11
+# Clash total line 4356
+# Last updated Mon 10/28/2024 22:12:02.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -13,7 +13,6 @@ payload:
   - DOMAIN,config.ubnt.com
   - DOMAIN,console.gl-inet.com
   - DOMAIN,dl.ubnt.com
-  - DOMAIN,dot.pub
   - DOMAIN,download.jetbrains.com
   - DOMAIN,gstore.val.manlaxy.com
   - DOMAIN,homerouter.cpe
@@ -1581,6 +1580,7 @@ payload:
   - DOMAIN-SUFFIX,goofish.com
   - DOMAIN-SUFFIX,goosail.com
   - DOMAIN-SUFFIX,goproxy.io
+  - DOMAIN-SUFFIX,gorouter.info
   - DOMAIN-SUFFIX,goselling.com
   - DOMAIN-SUFFIX,goto-game.com
   - DOMAIN-SUFFIX,goto-game.mobi
@@ -2512,6 +2512,7 @@ payload:
   - DOMAIN-SUFFIX,mingyuanyun.com
   - DOMAIN-SUFFIX,minhangshi.com
   - DOMAIN-SUFFIX,minitiao.com
+  - DOMAIN-SUFFIX,miot-spec.org
   - DOMAIN-SUFFIX,mipcdn.com
   - DOMAIN-SUFFIX,mirrors.yun-idc.com
   - DOMAIN-SUFFIX,missjia.net
