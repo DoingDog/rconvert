@@ -1,5 +1,5 @@
-# Clash total line 2549
-# Last updated Mon 10/28/2024 22:11:43.68
+# Clash total line 2561
+# Last updated Thu 10/31/2024 22:11:54.15
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -34,6 +34,7 @@ payload:
   - DOMAIN,api-frameworks.vercel.sh
   - DOMAIN,api.allorigins.win
   - DOMAIN,api.bintray.com
+  - DOMAIN,api.crashguard.me
   - DOMAIN,api.iconify.design
   - DOMAIN,api.mintlify.com
   - DOMAIN,api.mixpanel.com
@@ -311,6 +312,7 @@ payload:
   - DOMAIN,cdn.assets.as2.amazonaws.com
   - DOMAIN,cdn.auth0.com
   - DOMAIN,cdn.autoketing.org
+  - DOMAIN,cdn.axieinfinity.com
   - DOMAIN,cdn.babylonjs.com
   - DOMAIN,cdn.bfe.dev
   - DOMAIN,cdn.branch.io
@@ -382,6 +384,7 @@ payload:
   - DOMAIN,cdn.hellofresh.com
   - DOMAIN,cdn.hentaibomb.com
   - DOMAIN,cdn.heysavvy.com
+  - DOMAIN,cdn.hinative.com
   - DOMAIN,cdn.hongkongcard.com
   - DOMAIN,cdn.hypershort.com
   - DOMAIN,cdn.imageengine.io
@@ -478,6 +481,7 @@ payload:
   - DOMAIN,cdn.shoppinggives.com
   - DOMAIN,cdn.simpleicons.org
   - DOMAIN,cdn.sketch.com
+  - DOMAIN,cdn.skymavis.com
   - DOMAIN,cdn.smooch.io
   - DOMAIN,cdn.softswiss.net
   - DOMAIN,cdn.solvvy.com
@@ -634,6 +638,7 @@ payload:
   - DOMAIN,db.onlinewebfonts.com
   - DOMAIN,ddcdn.comtucdncom.com
   - DOMAIN,demo.unified-streaming.com
+  - DOMAIN,demotiles.maplibre.org
   - DOMAIN,denali-static.grammarly.com
   - DOMAIN,design-system.yext.com
   - DOMAIN,design.mayoclinic.org
@@ -725,6 +730,7 @@ payload:
   - DOMAIN,firebaselogging-pa.googleapis.com
   - DOMAIN,firebaselogging.googleapis.com
   - DOMAIN,firefox.settings.services.mozilla.com
+  - DOMAIN,flo.uri.sh
   - DOMAIN,flows.trysavvy.com
   - DOMAIN,fontbit.io
   - DOMAIN,fonts-api.wp.com
@@ -897,6 +903,7 @@ payload:
   - DOMAIN,img.announcekit.app
   - DOMAIN,img.applealmond.com
   - DOMAIN,img.apponic.com
+  - DOMAIN,img.atwiki.jp
   - DOMAIN,img.badgesize.io
   - DOMAIN,img.bigcloud.cyou
   - DOMAIN,img.biguz.net
@@ -1227,6 +1234,7 @@ payload:
   - DOMAIN,public-pages.cbinsights.com
   - DOMAIN,public.flourish.studio
   - DOMAIN,public.hare200.com
+  - DOMAIN,public.linear.app
   - DOMAIN,public.mocortech.com
   - DOMAIN,public.saasexch.com
   - DOMAIN,publicsuffix.org
@@ -1657,6 +1665,7 @@ payload:
   - DOMAIN,truth.bahamut.com.tw
   - DOMAIN,tuf-repo-cdn.sigstore.dev
   - DOMAIN,tuf-repo.github.com
+  - DOMAIN,turbo.build
   - DOMAIN,tvdownloaddw-a.akamaihd.net
   - DOMAIN,twemoji.maxcdn.com
   - DOMAIN,typeface.nyt.com
@@ -2016,7 +2025,6 @@ payload:
   - DOMAIN-SUFFIX,gentcdn.com
   - DOMAIN-SUFFIX,getcomposer.org
   - DOMAIN-SUFFIX,ggpht.com
-  - DOMAIN-SUFFIX,ghcr.io
   - DOMAIN-SUFFIX,giscus.app
   - DOMAIN-SUFFIX,gitapp.si
   - DOMAIN-SUFFIX,gitcdn.link
@@ -2080,6 +2088,8 @@ payload:
   - DOMAIN-SUFFIX,img3.acsta.net
   - DOMAIN-SUFFIX,imgair.net
   - DOMAIN-SUFFIX,imgbox.com
+  - DOMAIN-SUFFIX,imgikuncdn.com
+  - DOMAIN-SUFFIX,imgikzy.com
   - DOMAIN-SUFFIX,imgix.net
   - DOMAIN-SUFFIX,imglink.win
   - DOMAIN-SUFFIX,imgmrplay.xyz
@@ -2202,6 +2212,7 @@ payload:
   - DOMAIN-SUFFIX,makeuseofimages.com
   - DOMAIN-SUFFIX,mangadex.network
   - DOMAIN-SUFFIX,marketing.aws.dev
+  - DOMAIN-SUFFIX,mcusercontent.com
   - DOMAIN-SUFFIX,media-amazon.com
   - DOMAIN-SUFFIX,media-imdb.com
   - DOMAIN-SUFFIX,media.beeper.com
@@ -2410,6 +2421,7 @@ payload:
   - DOMAIN-SUFFIX,static.domains
   - DOMAIN-SUFFIX,static.gartner.com
   - DOMAIN-SUFFIX,static.microsoft
+  - DOMAIN-SUFFIX,static.skymavis.com
   - DOMAIN-SUFFIX,static2cdn.hubspot.com
   - DOMAIN-SUFFIX,statically.io
   - DOMAIN-SUFFIX,staticaly.com

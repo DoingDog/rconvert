@@ -1,5 +1,5 @@
-# Quantumult total line 5471
-# Last updated Mon 10/28/2024 22:11:52.29
+# Quantumult total line 5484
+# Last updated Thu 10/31/2024 22:12:03.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -37,6 +37,7 @@ HOST,api-frameworks.vercel.sh,LIST
 HOST,api-updates.orbstack.dev,LIST
 HOST,api.allorigins.win,LIST
 HOST,api.bintray.com,LIST
+HOST,api.crashguard.me,LIST
 HOST,api.iconify.design,LIST
 HOST,api.mintlify.com,LIST
 HOST,api.mixpanel.com,LIST
@@ -325,6 +326,7 @@ HOST,cdn.arstechnica.net,LIST
 HOST,cdn.ashbyprd.com,LIST
 HOST,cdn.auth0.com,LIST
 HOST,cdn.autoketing.org,LIST
+HOST,cdn.axieinfinity.com,LIST
 HOST,cdn.babylonjs.com,LIST
 HOST,cdn.bfe.dev,LIST
 HOST,cdn.branch.io,LIST
@@ -487,6 +489,7 @@ HOST,cdn.shopify.com,LIST
 HOST,cdn.shoppinggives.com,LIST
 HOST,cdn.simpleicons.org,LIST
 HOST,cdn.sketch.com,LIST
+HOST,cdn.skymavis.com,LIST
 HOST,cdn.smooch.io,LIST
 HOST,cdn.softswiss.net,LIST
 HOST,cdn.solvvy.com,LIST
@@ -658,6 +661,7 @@ HOST,dca-lm-livedazn.secure.footprint.net,LIST
 HOST,ddcdn.comtucdncom.com,LIST
 HOST,deb.nodesource.com,LIST
 HOST,demo.unified-streaming.com,LIST
+HOST,demotiles.maplibre.org,LIST
 HOST,denali-static.grammarly.com,LIST
 HOST,design-system.yext.com,LIST
 HOST,design.mayoclinic.org,LIST
@@ -740,6 +744,7 @@ HOST,downloads.openwrt.org,LIST
 HOST,downloads.raspberrypi.com,LIST
 HOST,downloads.wordpress.org,LIST
 HOST,downloads.xrite.com,LIST
+HOST,drive.massgrave.dev,LIST
 HOST,drscdn.500px.org,LIST
 HOST,dynamic-assets.coinbase.com,LIST
 HOST,dynamic-assets.mobilius.top,LIST
@@ -818,6 +823,7 @@ HOST,firebase-settings.crashlytics.com,LIST
 HOST,firebaselogging-pa.googleapis.com,LIST
 HOST,firebaselogging.googleapis.com,LIST
 HOST,firefox.settings.services.mozilla.com,LIST
+HOST,flo.uri.sh,LIST
 HOST,flows.trysavvy.com,LIST
 HOST,fontbit.io,LIST
 HOST,fonts-api.wp.com,LIST
@@ -989,6 +995,7 @@ HOST,img.agrd.eu,LIST
 HOST,img.announcekit.app,LIST
 HOST,img.applealmond.com,LIST
 HOST,img.apponic.com,LIST
+HOST,img.atwiki.jp,LIST
 HOST,img.badgesize.io,LIST
 HOST,img.bigcloud.cyou,LIST
 HOST,img.biguz.net,LIST
@@ -1346,6 +1353,7 @@ HOST,public-files.gumroad.com,LIST
 HOST,public-pages.cbinsights.com,LIST
 HOST,public.flourish.studio,LIST
 HOST,public.hare200.com,LIST
+HOST,public.linear.app,LIST
 HOST,public.mocortech.com,LIST
 HOST,public.saasexch.com,LIST
 HOST,publicsuffix.org,LIST
@@ -1757,6 +1765,7 @@ HOST,torrindex.net,LIST
 HOST,tracker.cdnbye.com,LIST
 HOST,tuf-repo-cdn.sigstore.dev,LIST
 HOST,tuf-repo.github.com,LIST
+HOST,turbo.build,LIST
 HOST,typescript-eslint.io,LIST
 HOST,typescript.azureedge.net,LIST
 HOST,typescript.visualstudio.com,LIST
@@ -3145,6 +3154,8 @@ HOST-SUFFIX,img2.acsta.net,LIST
 HOST-SUFFIX,img3.acsta.net,LIST
 HOST-SUFFIX,imgair.net,LIST
 HOST-SUFFIX,imgbox.com,LIST
+HOST-SUFFIX,imgikuncdn.com,LIST
+HOST-SUFFIX,imgikzy.com,LIST
 HOST-SUFFIX,imgix.net,LIST
 HOST-SUFFIX,imglarger.com,LIST
 HOST-SUFFIX,imglink.win,LIST
@@ -3381,6 +3392,7 @@ HOST-SUFFIX,maskedsingerfox.com,LIST
 HOST-SUFFIX,max.com,LIST
 HOST-SUFFIX,maxgo.com,LIST
 HOST-SUFFIX,mbamupdates.com,LIST
+HOST-SUFFIX,mcusercontent.com,LIST
 HOST-SUFFIX,media-amazon.com,LIST
 HOST-SUFFIX,media-imdb.com,LIST
 HOST-SUFFIX,media.beeper.com,LIST
@@ -4027,6 +4039,7 @@ HOST-SUFFIX,static.fun,LIST
 HOST-SUFFIX,static.gartner.com,LIST
 HOST-SUFFIX,static.microsoft,LIST
 HOST-SUFFIX,static.palgrave.com,LIST
+HOST-SUFFIX,static.skymavis.com,LIST
 HOST-SUFFIX,static2cdn.hubspot.com,LIST
 HOST-SUFFIX,statically.io,LIST
 HOST-SUFFIX,staticaly.com,LIST
