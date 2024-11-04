@@ -1,5 +1,5 @@
-# Clash total line 4358
-# Last updated Fri 11/01/2024 22:12:08.64
+# Clash total line 4359
+# Last updated Mon 11/04/2024 22:11:43.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -697,6 +697,7 @@ payload:
   - DOMAIN-SUFFIX,byted-static.com
   - DOMAIN-SUFFIX,byted.org
   - DOMAIN-SUFFIX,bytedance.com
+  - DOMAIN-SUFFIX,bytedance.com.com
   - DOMAIN-SUFFIX,bytedance.net
   - DOMAIN-SUFFIX,bytedanceapi.com
   - DOMAIN-SUFFIX,bytedapm.com

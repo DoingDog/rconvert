@@ -1,5 +1,5 @@
-# Quantumult total line 5558
-# Last updated Fri 11/01/2024 22:11:57.69
+# Quantumult total line 5565
+# Last updated Mon 11/04/2024 22:11:34.01
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,2mdn.net,LIST
@@ -60,6 +60,7 @@ HOST,app.chatwoot.com,LIST
 HOST,app.cookieyes.com,LIST
 HOST,app.groove.cm,LIST
 HOST,app.groovefunnels.com,LIST
+HOST,app.moegirl.tw,LIST
 HOST,app.roboflow.com,LIST
 HOST,app.viral-loops.com,LIST
 HOST,appassets.mvtdev.com,LIST
@@ -803,6 +804,7 @@ HOST,encrypted-vtbn3.gstatic.com,LIST
 HOST,enterprise.proxmox.com,LIST
 HOST,epic-social-social-modules-prod.ol.epicgames.com,LIST
 HOST,error.rakuten.co.jp,LIST
+HOST,eslint.style,LIST
 HOST,eu-images.contentstack.com,LIST
 HOST,eu.hamreus.com,LIST
 HOST,euc-widget.freshworks.com,LIST
@@ -1017,6 +1019,7 @@ HOST,img-cos.mandaoo.com,LIST
 HOST,img-en.fs.com,LIST
 HOST,img.agrd.eu,LIST
 HOST,img.announcekit.app,LIST
+HOST,img.api.video,LIST
 HOST,img.applealmond.com,LIST
 HOST,img.apponic.com,LIST
 HOST,img.atwiki.jp,LIST
@@ -1046,6 +1049,7 @@ HOST,img.ltyears.com,LIST
 HOST,img.lvv2.com,LIST
 HOST,img.m.mw,LIST
 HOST,img.merch.cameo.com,LIST
+HOST,img.moegirl.tw,LIST
 HOST,img.mresou.com,LIST
 HOST,img.pawoo.net,LIST
 HOST,img.perfops.net,LIST
@@ -1196,6 +1200,7 @@ HOST,media.pullopen.xyz,LIST
 HOST,media.ra.kroll.com,LIST
 HOST,media.shopimind.com,LIST
 HOST,media.smooch.io,LIST
+HOST,media.steampowered.com,LIST
 HOST,media.tenor.com,LIST
 HOST,media.themoviedb.org,LIST
 HOST,media.theporndude.com,LIST
@@ -1763,6 +1768,7 @@ HOST,steam.ru.qtlglb.com,LIST
 HOST,storage-b.picacomic.com,LIST
 HOST,storage.crisp.chat,LIST
 HOST,storage.gra.cloud.ovh.net,LIST
+HOST,storage.moegirl.tw,LIST
 HOST,storage.sciencecast.org,LIST
 HOST,storage.withfabric.xyz,LIST
 HOST,storageapi.fleek.co,LIST
@@ -2315,6 +2321,7 @@ HOST-SUFFIX,clicknupload.org,LIST
 HOST-SUFFIX,clicknupload.to,LIST
 HOST-SUFFIX,clientmetrics-pa.googleapis.com,LIST
 HOST-SUFFIX,clipwatching.com,LIST
+HOST-SUFFIX,cloud-object-storage.appdomain.cloud,LIST
 HOST-SUFFIX,cloud.influxdata.com,LIST
 HOST-SUFFIX,cloud1.influxdata.com,LIST
 HOST-SUFFIX,cloud2.influxdata.com,LIST
