@@ -1,5 +1,5 @@
-# Adblock total line 2624
-# Last updated Thu 11/07/2024 22:11:38.33
+# Adblock total line 2640
+# Last updated Sun 11/10/2024 22:10:45.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -316,8 +316,10 @@
 ||cdn.axieinfinity.com^
 ||cdn.babylonjs.com^
 ||cdn.bfe.dev^
+||cdn.birdie.so^
 ||cdn.branch.io^
 ||cdn.britannica.com^
+||cdn.bsky.app^
 ||cdn.bsky.social^
 ||cdn.builder.io^
 ||cdn.c1.amplience.net^
@@ -830,6 +832,7 @@
 ||iframe.nbcnews.com^
 ||imag.malavida.com^
 ||image-forwarder.notaku.so^
+||image.4fuk.org^
 ||image.civitai.com^
 ||image.cnbcfm.com^
 ||image.crisp.chat^
@@ -1072,6 +1075,7 @@
 ||media.cnn.com^
 ||media.contentapi.ea.com^
 ||media.convertkit.com^
+||media.datacenterdynamics.com^
 ||media.dev.to^
 ||media.discordapp.net^
 ||media.dlsite.com^
@@ -1260,6 +1264,7 @@
 ||proxy.golang.org^
 ||proxy.joinmastodon.org^
 ||ps.w.org^
+||psp-logos.uptimerobot.com^
 ||public-assets.typeform.com^
 ||public-cdn.bblmw.com^
 ||public-files.gumroad.com^
@@ -1372,6 +1377,7 @@
 ||screenshots.codesandbox.io^
 ||screenshots.debian.net^
 ||screenshots.downloadtorrentfile.com^
+||screenshots.webflow.com^
 ||scripts.dailymail.co.uk^
 ||scripts.webeo.com^
 ||sdata.ndtv.com^
@@ -1474,6 +1480,7 @@
 ||static.addtoany.com^
 ||static.adguardvpn.com^
 ||static.agilebits.com^
+||static.ahrefs.com^
 ||static.apkpure.com^
 ||static.arxiv.org^
 ||static.assetlab.io^
@@ -1511,6 +1518,7 @@
 ||static.ettoday.net^
 ||static.euronews.com^
 ||static.fasthosts.co.uk^
+||static.fboom.me^
 ||static.fc2.com^
 ||static.fc2cn.com^
 ||static.ffx.io^
@@ -1541,6 +1549,7 @@
 ||static.itch.io^
 ||static.javcdn.info^
 ||static.javhd.com^
+||static.k2s.cc^
 ||static.killedbygoogle.com^
 ||static.klaviyo.com^
 ||static.kobo.com^
@@ -1551,7 +1560,6 @@
 ||static.mediafire.com^
 ||static.meiguo.com^
 ||static.mendeley.com^
-||static.mikuclub.fun^
 ||static.missav.com^
 ||static.mocortech.com^
 ||static.moegoat.com^
@@ -1753,6 +1761,7 @@
 ||video2.7mmtv.sx^
 ||videos.elephas.app^
 ||videos2-h.sendvid.com^
+||videos2.edclub.com^
 ||vir.wsj.net^
 ||viu-static.akamaized.net^
 ||vjs.zencdn.net^
@@ -1779,6 +1788,7 @@
 ||web-static.pages.iheart.com^
 ||web-toolbar.playstation.com^
 ||web.onekey-asset.com^
+||webassets.linear.app^
 ||webfonts.zoho.com^
 ||website-cdn.ipinfo.io^
 ||widget.freshworks.com^
@@ -1951,6 +1961,7 @@
 ||cloud.influxdata.com^
 ||cloud1.influxdata.com^
 ||cloud2.influxdata.com^
+||cloudatacdn.com^
 ||cloudflare-ipfs.com^
 ||cloudflare.docker.com^
 ||cloudflare.ltd^
@@ -1983,6 +1994,7 @@
 ||data.debugbear.com^
 ||datocms-assets.com^
 ||daumcdn.net^
+||delegated-ipfs.dev^
 ||delvenetworks.com^
 ||deno.land^
 ||denopkg.com^
@@ -1995,6 +2007,7 @@
 ||dmcdn.net^
 ||docker.io^
 ||dogehls.xyz^
+||doodcdn.co^
 ||doppiocdn.com^
 ||doppiocdn.live^
 ||doppiocdn.net^
@@ -2033,6 +2046,7 @@
 ||f.hubspotfree.net^
 ||fakestoreapi.com^
 ||fastly.docker.com^
+||fastlycdn.com^
 ||favicone.com^
 ||fbcdn.com^
 ||fbcdn.net^
@@ -2050,6 +2064,7 @@
 ||fivetiu.com^
 ||flagcdn.com^
 ||flagpedia.net^
+||flk-ipfs.xyz^
 ||fncstatic.com^
 ||fontawesome.com^
 ||fonts.com^
@@ -2062,7 +2077,6 @@
 ||ftcdn.net^
 ||futurecdn.net^
 ||gadgets360cdn.com^
-||gateway.ipfs.io^
 ||gateway.originprotocol.com^
 ||gateway.pinata.cloud^
 ||gateway.serph.network^
@@ -2155,12 +2169,11 @@
 ||ipfs-gateway.cloud^
 ||ipfs.1-2.dev^
 ||ipfs.4everland.xyz^
-||ipfs.alloyxuast.tk^
 ||ipfs.anonymize.com^
 ||ipfs.arching-kaos.com^
 ||ipfs.best-practice.se^
 ||ipfs.busy.org^
-||ipfs.chisdealhd.co.uk^
+||ipfs.cyou^
 ||ipfs.decoo.io^
 ||ipfs.denarius.io^
 ||ipfs.drink.cafe^
@@ -2173,6 +2186,7 @@
 ||ipfs.greyh.at^
 ||ipfs.infura.io^
 ||ipfs.ink^
+||ipfs.io^
 ||ipfs.jbb.one^
 ||ipfs.kaleido.art^
 ||ipfs.kavin.rocks^
@@ -2493,6 +2507,7 @@
 ||storage.infomaniak.com^
 ||storage.yandexcloud.net^
 ||storjipfs-gateway.com^
+||storry.tv^
 ||stream.publicradio.org^
 ||streamhentai.org^
 ||streamhk.com^
@@ -2527,6 +2542,7 @@
 ||tpdfiles.com^
 ||trackerslist.com^
 ||transcend-cdn.com^
+||trustless-gateway.link^
 ||ttcache.com^
 ||tth-ipfs.com^
 ||ttl.sh^

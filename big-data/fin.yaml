@@ -1,5 +1,5 @@
-# Clash total line 5555
-# Last updated Thu 11/07/2024 22:11:47.38
+# Clash total line 5570
+# Last updated Sun 11/10/2024 22:10:54.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -332,8 +332,10 @@ payload:
   - DOMAIN,cdn.axieinfinity.com
   - DOMAIN,cdn.babylonjs.com
   - DOMAIN,cdn.bfe.dev
+  - DOMAIN,cdn.birdie.so
   - DOMAIN,cdn.branch.io
   - DOMAIN,cdn.britannica.com
+  - DOMAIN,cdn.bsky.app
   - DOMAIN,cdn.bsky.social
   - DOMAIN,cdn.builder.io
   - DOMAIN,cdn.c1.amplience.net
@@ -701,6 +703,7 @@ payload:
   - DOMAIN,dl.nwjs.io
   - DOMAIN,dl.pstmn.io
   - DOMAIN,dl.snipaste.com
+  - DOMAIN,dl.tailscale.com
   - DOMAIN,dl.ui.com
   - DOMAIN,dl2.nwjs.io
   - DOMAIN,dl2.xmind.net
@@ -921,6 +924,7 @@ payload:
   - DOMAIN,icons.ly
   - DOMAIN,imag.malavida.com
   - DOMAIN,image-forwarder.notaku.so
+  - DOMAIN,image.4fuk.org
   - DOMAIN,image.civitai.com
   - DOMAIN,image.crisp.chat
   - DOMAIN,image.dooo.ng
@@ -1160,6 +1164,7 @@ payload:
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.contentapi.ea.com
   - DOMAIN,media.convertkit.com
+  - DOMAIN,media.datacenterdynamics.com
   - DOMAIN,media.dev.to
   - DOMAIN,media.discordapp.net
   - DOMAIN,media.dlsite.com
@@ -1372,6 +1377,7 @@ payload:
   - DOMAIN,proxy.cors.sh
   - DOMAIN,proxy.joinmastodon.org
   - DOMAIN,ps.w.org
+  - DOMAIN,psp-logos.uptimerobot.com
   - DOMAIN,public-assets.typeform.com
   - DOMAIN,public-cdn.bblmw.com
   - DOMAIN,public-files.gumroad.com
@@ -1489,6 +1495,7 @@ payload:
   - DOMAIN,screenshots.codesandbox.io
   - DOMAIN,screenshots.debian.net
   - DOMAIN,screenshots.downloadtorrentfile.com
+  - DOMAIN,screenshots.webflow.com
   - DOMAIN,scripts.dailymail.co.uk
   - DOMAIN,scripts.webeo.com
   - DOMAIN,sdata.ndtv.com
@@ -1584,6 +1591,7 @@ payload:
   - DOMAIN,static.adguard.com
   - DOMAIN,static.adguardvpn.com
   - DOMAIN,static.agilebits.com
+  - DOMAIN,static.ahrefs.com
   - DOMAIN,static.arxiv.org
   - DOMAIN,static.assetlab.io
   - DOMAIN,static.axios.com
@@ -1653,7 +1661,6 @@ payload:
   - DOMAIN,static.maxmind.com
   - DOMAIN,static.meiguo.com
   - DOMAIN,static.mendeley.com
-  - DOMAIN,static.mikuclub.fun
   - DOMAIN,static.missav.com
   - DOMAIN,static.mocortech.com
   - DOMAIN,static.moegoat.com
@@ -1847,6 +1854,7 @@ payload:
   - DOMAIN,video1.7mmtv.sx
   - DOMAIN,video2.7mmtv.sx
   - DOMAIN,videos.elephas.app
+  - DOMAIN,videos2.edclub.com
   - DOMAIN,vir.wsj.net
   - DOMAIN,vjs.zencdn.net
   - DOMAIN,vscode-sync-insiders.trafficmanager.net
@@ -1870,6 +1878,7 @@ payload:
   - DOMAIN,web-static.pages.iheart.com
   - DOMAIN,web-toolbar.playstation.com
   - DOMAIN,web.onekey-asset.com
+  - DOMAIN,webassets.linear.app
   - DOMAIN,webfonts.zoho.com
   - DOMAIN,website-cdn.ipinfo.io
   - DOMAIN,widget.freshworks.com
@@ -2296,6 +2305,7 @@ payload:
   - DOMAIN-SUFFIX,cloud.influxdata.com
   - DOMAIN-SUFFIX,cloud1.influxdata.com
   - DOMAIN-SUFFIX,cloud2.influxdata.com
+  - DOMAIN-SUFFIX,cloudatacdn.com
   - DOMAIN-SUFFIX,cloudconvert.com
   - DOMAIN-SUFFIX,cloudflare-ipfs.com
   - DOMAIN-SUFFIX,cloudflare.docker.com
@@ -2410,6 +2420,7 @@ payload:
   - DOMAIN-SUFFIX,deb.debian.org
   - DOMAIN-SUFFIX,debian.map.fastlydns.net
   - DOMAIN-SUFFIX,deezer.com
+  - DOMAIN-SUFFIX,delegated-ipfs.dev
   - DOMAIN-SUFFIX,deliver.vkcdnservice.com
   - DOMAIN-SUFFIX,delivery.mp.microsoft.com
   - DOMAIN-SUFFIX,delvenetworks.com
@@ -2556,6 +2567,7 @@ payload:
   - DOMAIN-SUFFIX,dogatch.jp
   - DOMAIN-SUFFIX,dogehls.xyz
   - DOMAIN-SUFFIX,dokusho-ojikan.jp
+  - DOMAIN-SUFFIX,doodcdn.co
   - DOMAIN-SUFFIX,doodrive.com
   - DOMAIN-SUFFIX,doodstream.com
   - DOMAIN-SUFFIX,doppiocdn.com
@@ -2686,6 +2698,7 @@ payload:
   - DOMAIN-SUFFIX,fastclick.to
   - DOMAIN-SUFFIX,fastfile.cc
   - DOMAIN-SUFFIX,fastly.docker.com
+  - DOMAIN-SUFFIX,fastlycdn.com
   - DOMAIN-SUFFIX,faststore.org
   - DOMAIN-SUFFIX,favicone.com
   - DOMAIN-SUFFIX,fbcdn.com
@@ -2768,6 +2781,7 @@ payload:
   - DOMAIN-SUFFIX,flashx.tv
   - DOMAIN-SUFFIX,flickr.com
   - DOMAIN-SUFFIX,flickr.net
+  - DOMAIN-SUFFIX,flk-ipfs.xyz
   - DOMAIN-SUFFIX,florenfile.com
   - DOMAIN-SUFFIX,fls-na.amazon.com
   - DOMAIN-SUFFIX,flxvpn.net
@@ -3229,12 +3243,11 @@ payload:
   - DOMAIN-SUFFIX,ipfs-gateway.cloud
   - DOMAIN-SUFFIX,ipfs.1-2.dev
   - DOMAIN-SUFFIX,ipfs.4everland.xyz
-  - DOMAIN-SUFFIX,ipfs.alloyxuast.tk
   - DOMAIN-SUFFIX,ipfs.anonymize.com
   - DOMAIN-SUFFIX,ipfs.arching-kaos.com
   - DOMAIN-SUFFIX,ipfs.best-practice.se
   - DOMAIN-SUFFIX,ipfs.busy.org
-  - DOMAIN-SUFFIX,ipfs.chisdealhd.co.uk
+  - DOMAIN-SUFFIX,ipfs.cyou
   - DOMAIN-SUFFIX,ipfs.decoo.io
   - DOMAIN-SUFFIX,ipfs.denarius.io
   - DOMAIN-SUFFIX,ipfs.drink.cafe
@@ -4112,6 +4125,7 @@ payload:
   - DOMAIN-SUFFIX,storage.msn.com
   - DOMAIN-SUFFIX,storage.yandexcloud.net
   - DOMAIN-SUFFIX,storjipfs-gateway.com
+  - DOMAIN-SUFFIX,storry.tv
   - DOMAIN-SUFFIX,streaks.jp
   - DOMAIN-SUFFIX,stream.publicradio.org
   - DOMAIN-SUFFIX,streamango.com
@@ -4205,6 +4219,7 @@ payload:
   - DOMAIN-SUFFIX,tpdfiles.com
   - DOMAIN-SUFFIX,trackerslist.com
   - DOMAIN-SUFFIX,transcend-cdn.com
+  - DOMAIN-SUFFIX,trustless-gateway.link
   - DOMAIN-SUFFIX,ttcache.com
   - DOMAIN-SUFFIX,tth-ipfs.com
   - DOMAIN-SUFFIX,ttl.sh

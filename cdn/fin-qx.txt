@@ -1,5 +1,5 @@
-# Quantumult total line 2624
-# Last updated Thu 11/07/2024 22:11:38.21
+# Quantumult total line 2640
+# Last updated Sun 11/10/2024 22:10:45.48
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -316,8 +316,10 @@ HOST,cdn.autoketing.org,LIST
 HOST,cdn.axieinfinity.com,LIST
 HOST,cdn.babylonjs.com,LIST
 HOST,cdn.bfe.dev,LIST
+HOST,cdn.birdie.so,LIST
 HOST,cdn.branch.io,LIST
 HOST,cdn.britannica.com,LIST
+HOST,cdn.bsky.app,LIST
 HOST,cdn.bsky.social,LIST
 HOST,cdn.builder.io,LIST
 HOST,cdn.c1.amplience.net,LIST
@@ -830,6 +832,7 @@ HOST,icons.ly,LIST
 HOST,iframe.nbcnews.com,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
+HOST,image.4fuk.org,LIST
 HOST,image.civitai.com,LIST
 HOST,image.cnbcfm.com,LIST
 HOST,image.crisp.chat,LIST
@@ -1072,6 +1075,7 @@ HOST,media.cmx.edu.kg,LIST
 HOST,media.cnn.com,LIST
 HOST,media.contentapi.ea.com,LIST
 HOST,media.convertkit.com,LIST
+HOST,media.datacenterdynamics.com,LIST
 HOST,media.dev.to,LIST
 HOST,media.discordapp.net,LIST
 HOST,media.dlsite.com,LIST
@@ -1260,6 +1264,7 @@ HOST,proxy.cors.sh,LIST
 HOST,proxy.golang.org,LIST
 HOST,proxy.joinmastodon.org,LIST
 HOST,ps.w.org,LIST
+HOST,psp-logos.uptimerobot.com,LIST
 HOST,public-assets.typeform.com,LIST
 HOST,public-cdn.bblmw.com,LIST
 HOST,public-files.gumroad.com,LIST
@@ -1372,6 +1377,7 @@ HOST,scontent.whatsapp.net,LIST
 HOST,screenshots.codesandbox.io,LIST
 HOST,screenshots.debian.net,LIST
 HOST,screenshots.downloadtorrentfile.com,LIST
+HOST,screenshots.webflow.com,LIST
 HOST,scripts.dailymail.co.uk,LIST
 HOST,scripts.webeo.com,LIST
 HOST,sdata.ndtv.com,LIST
@@ -1474,6 +1480,7 @@ HOST,static.ada.support,LIST
 HOST,static.addtoany.com,LIST
 HOST,static.adguardvpn.com,LIST
 HOST,static.agilebits.com,LIST
+HOST,static.ahrefs.com,LIST
 HOST,static.apkpure.com,LIST
 HOST,static.arxiv.org,LIST
 HOST,static.assetlab.io,LIST
@@ -1511,6 +1518,7 @@ HOST,static.esimplus.net,LIST
 HOST,static.ettoday.net,LIST
 HOST,static.euronews.com,LIST
 HOST,static.fasthosts.co.uk,LIST
+HOST,static.fboom.me,LIST
 HOST,static.fc2.com,LIST
 HOST,static.fc2cn.com,LIST
 HOST,static.ffx.io,LIST
@@ -1541,6 +1549,7 @@ HOST,static.iris.informa.com,LIST
 HOST,static.itch.io,LIST
 HOST,static.javcdn.info,LIST
 HOST,static.javhd.com,LIST
+HOST,static.k2s.cc,LIST
 HOST,static.killedbygoogle.com,LIST
 HOST,static.klaviyo.com,LIST
 HOST,static.kobo.com,LIST
@@ -1551,7 +1560,6 @@ HOST,static.maxmind.com,LIST
 HOST,static.mediafire.com,LIST
 HOST,static.meiguo.com,LIST
 HOST,static.mendeley.com,LIST
-HOST,static.mikuclub.fun,LIST
 HOST,static.missav.com,LIST
 HOST,static.mocortech.com,LIST
 HOST,static.moegoat.com,LIST
@@ -1753,6 +1761,7 @@ HOST,video1.7mmtv.sx,LIST
 HOST,video2.7mmtv.sx,LIST
 HOST,videos.elephas.app,LIST
 HOST,videos2-h.sendvid.com,LIST
+HOST,videos2.edclub.com,LIST
 HOST,vir.wsj.net,LIST
 HOST,viu-static.akamaized.net,LIST
 HOST,vjs.zencdn.net,LIST
@@ -1779,6 +1788,7 @@ HOST,web-static.archive.org,LIST
 HOST,web-static.pages.iheart.com,LIST
 HOST,web-toolbar.playstation.com,LIST
 HOST,web.onekey-asset.com,LIST
+HOST,webassets.linear.app,LIST
 HOST,webfonts.zoho.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
 HOST,widget.freshworks.com,LIST
@@ -1951,6 +1961,7 @@ HOST-SUFFIX,clientmetrics-pa.googleapis.com,LIST
 HOST-SUFFIX,cloud.influxdata.com,LIST
 HOST-SUFFIX,cloud1.influxdata.com,LIST
 HOST-SUFFIX,cloud2.influxdata.com,LIST
+HOST-SUFFIX,cloudatacdn.com,LIST
 HOST-SUFFIX,cloudflare-ipfs.com,LIST
 HOST-SUFFIX,cloudflare.docker.com,LIST
 HOST-SUFFIX,cloudflare.ltd,LIST
@@ -1983,6 +1994,7 @@ HOST-SUFFIX,cwwcdn.com,LIST
 HOST-SUFFIX,data.debugbear.com,LIST
 HOST-SUFFIX,datocms-assets.com,LIST
 HOST-SUFFIX,daumcdn.net,LIST
+HOST-SUFFIX,delegated-ipfs.dev,LIST
 HOST-SUFFIX,delvenetworks.com,LIST
 HOST-SUFFIX,deno.land,LIST
 HOST-SUFFIX,denopkg.com,LIST
@@ -1995,6 +2007,7 @@ HOST-SUFFIX,divio-media.net,LIST
 HOST-SUFFIX,dmcdn.net,LIST
 HOST-SUFFIX,docker.io,LIST
 HOST-SUFFIX,dogehls.xyz,LIST
+HOST-SUFFIX,doodcdn.co,LIST
 HOST-SUFFIX,doppiocdn.com,LIST
 HOST-SUFFIX,doppiocdn.live,LIST
 HOST-SUFFIX,doppiocdn.net,LIST
@@ -2033,6 +2046,7 @@ HOST-SUFFIX,f-droid.org,LIST
 HOST-SUFFIX,f.hubspotfree.net,LIST
 HOST-SUFFIX,fakestoreapi.com,LIST
 HOST-SUFFIX,fastly.docker.com,LIST
+HOST-SUFFIX,fastlycdn.com,LIST
 HOST-SUFFIX,favicone.com,LIST
 HOST-SUFFIX,fbcdn.com,LIST
 HOST-SUFFIX,fbcdn.net,LIST
@@ -2050,6 +2064,7 @@ HOST-SUFFIX,fiverrcdn.com,LIST
 HOST-SUFFIX,fivetiu.com,LIST
 HOST-SUFFIX,flagcdn.com,LIST
 HOST-SUFFIX,flagpedia.net,LIST
+HOST-SUFFIX,flk-ipfs.xyz,LIST
 HOST-SUFFIX,fncstatic.com,LIST
 HOST-SUFFIX,fontawesome.com,LIST
 HOST-SUFFIX,fonts.com,LIST
@@ -2062,7 +2077,6 @@ HOST-SUFFIX,fsdn.com,LIST
 HOST-SUFFIX,ftcdn.net,LIST
 HOST-SUFFIX,futurecdn.net,LIST
 HOST-SUFFIX,gadgets360cdn.com,LIST
-HOST-SUFFIX,gateway.ipfs.io,LIST
 HOST-SUFFIX,gateway.originprotocol.com,LIST
 HOST-SUFFIX,gateway.pinata.cloud,LIST
 HOST-SUFFIX,gateway.serph.network,LIST
@@ -2155,12 +2169,11 @@ HOST-SUFFIX,invisionapp-cdn.com,LIST
 HOST-SUFFIX,ipfs-gateway.cloud,LIST
 HOST-SUFFIX,ipfs.1-2.dev,LIST
 HOST-SUFFIX,ipfs.4everland.xyz,LIST
-HOST-SUFFIX,ipfs.alloyxuast.tk,LIST
 HOST-SUFFIX,ipfs.anonymize.com,LIST
 HOST-SUFFIX,ipfs.arching-kaos.com,LIST
 HOST-SUFFIX,ipfs.best-practice.se,LIST
 HOST-SUFFIX,ipfs.busy.org,LIST
-HOST-SUFFIX,ipfs.chisdealhd.co.uk,LIST
+HOST-SUFFIX,ipfs.cyou,LIST
 HOST-SUFFIX,ipfs.decoo.io,LIST
 HOST-SUFFIX,ipfs.denarius.io,LIST
 HOST-SUFFIX,ipfs.drink.cafe,LIST
@@ -2173,6 +2186,7 @@ HOST-SUFFIX,ipfs.genenetwork.org,LIST
 HOST-SUFFIX,ipfs.greyh.at,LIST
 HOST-SUFFIX,ipfs.infura.io,LIST
 HOST-SUFFIX,ipfs.ink,LIST
+HOST-SUFFIX,ipfs.io,LIST
 HOST-SUFFIX,ipfs.jbb.one,LIST
 HOST-SUFFIX,ipfs.kaleido.art,LIST
 HOST-SUFFIX,ipfs.kavin.rocks,LIST
@@ -2493,6 +2507,7 @@ HOST-SUFFIX,storage.googleapis.com,LIST
 HOST-SUFFIX,storage.infomaniak.com,LIST
 HOST-SUFFIX,storage.yandexcloud.net,LIST
 HOST-SUFFIX,storjipfs-gateway.com,LIST
+HOST-SUFFIX,storry.tv,LIST
 HOST-SUFFIX,stream.publicradio.org,LIST
 HOST-SUFFIX,streamhentai.org,LIST
 HOST-SUFFIX,streamhk.com,LIST
@@ -2527,6 +2542,7 @@ HOST-SUFFIX,tnastatic.com,LIST
 HOST-SUFFIX,tpdfiles.com,LIST
 HOST-SUFFIX,trackerslist.com,LIST
 HOST-SUFFIX,transcend-cdn.com,LIST
+HOST-SUFFIX,trustless-gateway.link,LIST
 HOST-SUFFIX,ttcache.com,LIST
 HOST-SUFFIX,tth-ipfs.com,LIST
 HOST-SUFFIX,ttl.sh,LIST

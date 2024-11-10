@@ -1,5 +1,5 @@
-# Adblock total line 4604
-# Last updated Thu 11/07/2024 22:11:47.49
+# Adblock total line 4619
+# Last updated Sun 11/10/2024 22:10:54.69
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -331,8 +331,10 @@
 ||cdn.axieinfinity.com^
 ||cdn.babylonjs.com^
 ||cdn.bfe.dev^
+||cdn.birdie.so^
 ||cdn.branch.io^
 ||cdn.britannica.com^
+||cdn.bsky.app^
 ||cdn.bsky.social^
 ||cdn.builder.io^
 ||cdn.c1.amplience.net^
@@ -700,6 +702,7 @@
 ||dl.nwjs.io^
 ||dl.pstmn.io^
 ||dl.snipaste.com^
+||dl.tailscale.com^
 ||dl.ui.com^
 ||dl2.nwjs.io^
 ||dl2.xmind.net^
@@ -920,6 +923,7 @@
 ||icons.ly^
 ||imag.malavida.com^
 ||image-forwarder.notaku.so^
+||image.4fuk.org^
 ||image.civitai.com^
 ||image.crisp.chat^
 ||image.dooo.ng^
@@ -1159,6 +1163,7 @@
 ||media.cmx.edu.kg^
 ||media.contentapi.ea.com^
 ||media.convertkit.com^
+||media.datacenterdynamics.com^
 ||media.dev.to^
 ||media.discordapp.net^
 ||media.dlsite.com^
@@ -1371,6 +1376,7 @@
 ||proxy.cors.sh^
 ||proxy.joinmastodon.org^
 ||ps.w.org^
+||psp-logos.uptimerobot.com^
 ||public-assets.typeform.com^
 ||public-cdn.bblmw.com^
 ||public-files.gumroad.com^
@@ -1488,6 +1494,7 @@
 ||screenshots.codesandbox.io^
 ||screenshots.debian.net^
 ||screenshots.downloadtorrentfile.com^
+||screenshots.webflow.com^
 ||scripts.dailymail.co.uk^
 ||scripts.webeo.com^
 ||sdata.ndtv.com^
@@ -1583,6 +1590,7 @@
 ||static.adguard.com^
 ||static.adguardvpn.com^
 ||static.agilebits.com^
+||static.ahrefs.com^
 ||static.arxiv.org^
 ||static.assetlab.io^
 ||static.axios.com^
@@ -1652,7 +1660,6 @@
 ||static.maxmind.com^
 ||static.meiguo.com^
 ||static.mendeley.com^
-||static.mikuclub.fun^
 ||static.missav.com^
 ||static.mocortech.com^
 ||static.moegoat.com^
@@ -1846,6 +1853,7 @@
 ||video1.7mmtv.sx^
 ||video2.7mmtv.sx^
 ||videos.elephas.app^
+||videos2.edclub.com^
 ||vir.wsj.net^
 ||vjs.zencdn.net^
 ||vscode-sync-insiders.trafficmanager.net^
@@ -1869,6 +1877,7 @@
 ||web-static.pages.iheart.com^
 ||web-toolbar.playstation.com^
 ||web.onekey-asset.com^
+||webassets.linear.app^
 ||webfonts.zoho.com^
 ||website-cdn.ipinfo.io^
 ||widget.freshworks.com^
@@ -2295,6 +2304,7 @@
 ||cloud.influxdata.com^
 ||cloud1.influxdata.com^
 ||cloud2.influxdata.com^
+||cloudatacdn.com^
 ||cloudconvert.com^
 ||cloudflare-ipfs.com^
 ||cloudflare.docker.com^
@@ -2409,6 +2419,7 @@
 ||deb.debian.org^
 ||debian.map.fastlydns.net^
 ||deezer.com^
+||delegated-ipfs.dev^
 ||deliver.vkcdnservice.com^
 ||delivery.mp.microsoft.com^
 ||delvenetworks.com^
@@ -2555,6 +2566,7 @@
 ||dogatch.jp^
 ||dogehls.xyz^
 ||dokusho-ojikan.jp^
+||doodcdn.co^
 ||doodrive.com^
 ||doodstream.com^
 ||doppiocdn.com^
@@ -2685,6 +2697,7 @@
 ||fastclick.to^
 ||fastfile.cc^
 ||fastly.docker.com^
+||fastlycdn.com^
 ||faststore.org^
 ||favicone.com^
 ||fbcdn.com^
@@ -2767,6 +2780,7 @@
 ||flashx.tv^
 ||flickr.com^
 ||flickr.net^
+||flk-ipfs.xyz^
 ||florenfile.com^
 ||fls-na.amazon.com^
 ||flxvpn.net^
@@ -3228,12 +3242,11 @@
 ||ipfs-gateway.cloud^
 ||ipfs.1-2.dev^
 ||ipfs.4everland.xyz^
-||ipfs.alloyxuast.tk^
 ||ipfs.anonymize.com^
 ||ipfs.arching-kaos.com^
 ||ipfs.best-practice.se^
 ||ipfs.busy.org^
-||ipfs.chisdealhd.co.uk^
+||ipfs.cyou^
 ||ipfs.decoo.io^
 ||ipfs.denarius.io^
 ||ipfs.drink.cafe^
@@ -4111,6 +4124,7 @@
 ||storage.msn.com^
 ||storage.yandexcloud.net^
 ||storjipfs-gateway.com^
+||storry.tv^
 ||streaks.jp^
 ||stream.publicradio.org^
 ||streamango.com^
@@ -4204,6 +4218,7 @@
 ||tpdfiles.com^
 ||trackerslist.com^
 ||transcend-cdn.com^
+||trustless-gateway.link^
 ||ttcache.com^
 ||tth-ipfs.com^
 ||ttl.sh^
