@@ -1,5 +1,5 @@
-# Clash total line 5570
-# Last updated Sun 11/10/2024 22:10:54.59
+# Clash total line 5586
+# Last updated Wed 11/13/2024 22:14:12.35
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -51,6 +51,7 @@ payload:
   - DOMAIN,apm-misaka.biliapi.net
   - DOMAIN,app-api.vidjet.io
   - DOMAIN,app-spm.com
+  - DOMAIN,app-static.eu.posthog.com
   - DOMAIN,app-static.turtl.co
   - DOMAIN,app-updates.agilebits.com
   - DOMAIN,app.backinstock.org
@@ -112,6 +113,7 @@ payload:
   - DOMAIN,assets.coingecko.com
   - DOMAIN,assets.context.ly
   - DOMAIN,assets.convertkit.com
+  - DOMAIN,assets.dev.to
   - DOMAIN,assets.dify.ai
   - DOMAIN,assets.dnsfilter.com
   - DOMAIN,assets.documentcloud.org
@@ -171,9 +173,11 @@ payload:
   - DOMAIN,assets.repair.org
   - DOMAIN,assets.safing.io
   - DOMAIN,assets.scaleflex.com
+  - DOMAIN,assets.science.nasa.gov
   - DOMAIN,assets.scroll.com
   - DOMAIN,assets.sendinblue.com
   - DOMAIN,assets.shazam.com
+  - DOMAIN,assets.sololearn.com
   - DOMAIN,assets.squarespace.com
   - DOMAIN,assets.st-note.com
   - DOMAIN,assets.stash.com
@@ -245,6 +249,7 @@ payload:
   - DOMAIN,blacklist.tampermonkey.net
   - DOMAIN,blade-public-static.blade-group.com
   - DOMAIN,blizzard.gcdn.cloudn.co.kr
+  - DOMAIN,blob.sololearn.com
   - DOMAIN,boards.greenhouse.io
   - DOMAIN,boot.netboot.xyz
   - DOMAIN,bot.ivy.ai
@@ -261,6 +266,7 @@ payload:
   - DOMAIN,bundles.npr.org
   - DOMAIN,busuanzi.ibruce.info
   - DOMAIN,c.1password.com
+  - DOMAIN,c.fantia.jp
   - DOMAIN,c.marsflag.com
   - DOMAIN,c.navattic.com
   - DOMAIN,c.s-microsoft.com
@@ -355,6 +361,7 @@ payload:
   - DOMAIN,cdn.commento.io
   - DOMAIN,cdn.comparitech.com
   - DOMAIN,cdn.concert.io
+  - DOMAIN,cdn.configcat.com
   - DOMAIN,cdn.consentmanager.net
   - DOMAIN,cdn.contentful.com
   - DOMAIN,cdn.credible.com
@@ -403,6 +410,7 @@ payload:
   - DOMAIN,cdn.hongkongcard.com
   - DOMAIN,cdn.hyperbeam.com
   - DOMAIN,cdn.hypershort.com
+  - DOMAIN,cdn.icomoon.io
   - DOMAIN,cdn.imageengine.io
   - DOMAIN,cdn.img.ly
   - DOMAIN,cdn.ip2location.io
@@ -421,7 +429,6 @@ payload:
   - DOMAIN,cdn.langshop.app
   - DOMAIN,cdn.libravatar.org
   - DOMAIN,cdn.linearicons.com
-  - DOMAIN,cdn.linkmink.com
   - DOMAIN,cdn.livechatinc.com
   - DOMAIN,cdn.loom.com
   - DOMAIN,cdn.manageengine.com
@@ -503,12 +510,14 @@ payload:
   - DOMAIN,cdn.sprig.com
   - DOMAIN,cdn.starapps.studio
   - DOMAIN,cdn.stash.com
+  - DOMAIN,cdn.stellarhosted.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
   - DOMAIN,cdn.tailwindcss.com
   - DOMAIN,cdn.termius.com
   - DOMAIN,cdn.thisav.com
   - DOMAIN,cdn.tolt.io
+  - DOMAIN,cdn.tracxn.com
   - DOMAIN,cdn.transcend.io
   - DOMAIN,cdn.transifex.com
   - DOMAIN,cdn.travis-ci.com
@@ -637,6 +646,7 @@ payload:
   - DOMAIN,content.any.run
   - DOMAIN,content.api.news
   - DOMAIN,content.arduino.cc
+  - DOMAIN,content.invisioncic.com
   - DOMAIN,content.product.glitch.com
   - DOMAIN,content.wepik.com
   - DOMAIN,contents-thumbnail2.fc2.com
@@ -763,6 +773,7 @@ payload:
   - DOMAIN,dynamic-assets.coinbase.com
   - DOMAIN,dynamic-assets.mobilius.top
   - DOMAIN,e.deviantart.net
+  - DOMAIN,e.linear.app
   - DOMAIN,e3.365dm.com
   - DOMAIN,easylist-downloads.adblockplus.org
   - DOMAIN,ec-prod.scene7.com
@@ -1123,6 +1134,7 @@ payload:
   - DOMAIN,launcher.spot.im
   - DOMAIN,lcdn-locator.apple.com
   - DOMAIN,learn.optimizely.com
+  - DOMAIN,lecontent.sololearn.com
   - DOMAIN,ledger-wp-website-s3-prd.ledger.com
   - DOMAIN,level3.blizzard.com
   - DOMAIN,lib.arvancloud.ir
@@ -1203,6 +1215,7 @@ payload:
   - DOMAIN,media0.giphy.com
   - DOMAIN,media1.giphy.com
   - DOMAIN,media1.tenor.com
+  - DOMAIN,media2.dev.to
   - DOMAIN,media2.giphy.com
   - DOMAIN,media3.giphy.com
   - DOMAIN,media4.giphy.com
@@ -1534,6 +1547,7 @@ payload:
   - DOMAIN,skills-assets.pstmn.io
   - DOMAIN,skimdb.npmjs.com
   - DOMAIN,sm.ign.com
+  - DOMAIN,smd-cms.nasa.gov
   - DOMAIN,sn-s3-cdn.angry.im
   - DOMAIN,snippet.growsumo.com
   - DOMAIN,snippet.maze.co
@@ -1709,6 +1723,7 @@ payload:
   - DOMAIN,static.test-beta.com
   - DOMAIN,static.theguardian.com
   - DOMAIN,static.tokenview.io
+  - DOMAIN,static.tp-link.com
   - DOMAIN,static.tradingview.com
   - DOMAIN,static.tronscan.org
   - DOMAIN,static.tumblr.com
@@ -1823,8 +1838,10 @@ payload:
   - DOMAIN,upload.wikimedia.org
   - DOMAIN,uploads.codesandbox.io
   - DOMAIN,uploads.guim.co.uk
+  - DOMAIN,uploads.linear.app
   - DOMAIN,uploads.sitepoint.com
   - DOMAIN,upos-sz-mirroralibstar1.bilivideo.com
+  - DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
   - DOMAIN,us.hamreus.com
   - DOMAIN,use.typekit.com
   - DOMAIN,use.typekit.net
@@ -1877,7 +1894,6 @@ payload:
   - DOMAIN,web-cdn.bitrise.io
   - DOMAIN,web-static.pages.iheart.com
   - DOMAIN,web-toolbar.playstation.com
-  - DOMAIN,web.onekey-asset.com
   - DOMAIN,webassets.linear.app
   - DOMAIN,webfonts.zoho.com
   - DOMAIN,website-cdn.ipinfo.io
@@ -3696,6 +3712,7 @@ payload:
   - DOMAIN-SUFFIX,ominisrc.com
   - DOMAIN-SUFFIX,omnisnippet1.com
   - DOMAIN-SUFFIX,oneclient.sfx.ms
+  - DOMAIN-SUFFIX,onekey-asset.com
   - DOMAIN-SUFFIX,onetrust.com
   - DOMAIN-SUFFIX,onrender.com
   - DOMAIN-SUFFIX,openload.co
@@ -4221,7 +4238,6 @@ payload:
   - DOMAIN-SUFFIX,transcend-cdn.com
   - DOMAIN-SUFFIX,trustless-gateway.link
   - DOMAIN-SUFFIX,ttcache.com
-  - DOMAIN-SUFFIX,tth-ipfs.com
   - DOMAIN-SUFFIX,ttl.sh
   - DOMAIN-SUFFIX,ttwstatic.com
   - DOMAIN-SUFFIX,turb.cc

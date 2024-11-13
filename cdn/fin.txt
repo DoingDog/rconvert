@@ -1,5 +1,5 @@
-# Main total line 2640
-# Last updated Sun 11/10/2024 22:10:45.37
+# Main total line 2660
+# Last updated Wed 11/13/2024 22:14:03.66
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -44,6 +44,7 @@ DOMAIN,api.weather.com
 DOMAIN,api.web3.storage
 DOMAIN,app-api.vidjet.io
 DOMAIN,app-spm.com
+DOMAIN,app-static.eu.posthog.com
 DOMAIN,app-static.turtl.co
 DOMAIN,app.backinstock.org
 DOMAIN,app.brightback.com
@@ -104,6 +105,7 @@ DOMAIN,assets.coinbase.com
 DOMAIN,assets.coingecko.com
 DOMAIN,assets.context.ly
 DOMAIN,assets.convertkit.com
+DOMAIN,assets.dev.to
 DOMAIN,assets.dify.ai
 DOMAIN,assets.dnsfilter.com
 DOMAIN,assets.documentcloud.org
@@ -166,9 +168,11 @@ DOMAIN,assets.raspberrypi.com
 DOMAIN,assets.repair.org
 DOMAIN,assets.safing.io
 DOMAIN,assets.scaleflex.com
+DOMAIN,assets.science.nasa.gov
 DOMAIN,assets.scroll.com
 DOMAIN,assets.sendinblue.com
 DOMAIN,assets.shazam.com
+DOMAIN,assets.sololearn.com
 DOMAIN,assets.squarespace.com
 DOMAIN,assets.st-note.com
 DOMAIN,assets.stash.com
@@ -239,6 +243,7 @@ DOMAIN,bcdn.starapps.studio
 DOMAIN,binaries.prisma.sh
 DOMAIN,blacklist.tampermonkey.net
 DOMAIN,blade-public-static.blade-group.com
+DOMAIN,blob.sololearn.com
 DOMAIN,boards.greenhouse.io
 DOMAIN,bot.ivy.ai
 DOMAIN,brick.a.ssl.fastly.net
@@ -252,6 +257,7 @@ DOMAIN,bundler.wix-code.com
 DOMAIN,bundles.npr.org
 DOMAIN,busuanzi.ibruce.info
 DOMAIN,c.1password.com
+DOMAIN,c.fantia.jp
 DOMAIN,c.marsflag.com
 DOMAIN,c.navattic.com
 DOMAIN,c.s-microsoft.com
@@ -341,6 +347,7 @@ DOMAIN,cdn.codeblackbelt.com
 DOMAIN,cdn.commento.io
 DOMAIN,cdn.comparitech.com
 DOMAIN,cdn.concert.io
+DOMAIN,cdn.configcat.com
 DOMAIN,cdn.consentmanager.net
 DOMAIN,cdn.contentful.com
 DOMAIN,cdn.credible.com
@@ -389,6 +396,7 @@ DOMAIN,cdn.hellofresh.com
 DOMAIN,cdn.hinative.com
 DOMAIN,cdn.hongkongcard.com
 DOMAIN,cdn.hypershort.com
+DOMAIN,cdn.icomoon.io
 DOMAIN,cdn.imageengine.io
 DOMAIN,cdn.img.ly
 DOMAIN,cdn.ip2location.io
@@ -406,7 +414,6 @@ DOMAIN,cdn.kobo.com
 DOMAIN,cdn.langshop.app
 DOMAIN,cdn.libravatar.org
 DOMAIN,cdn.linearicons.com
-DOMAIN,cdn.linkmink.com
 DOMAIN,cdn.livechatinc.com
 DOMAIN,cdn.loom.com
 DOMAIN,cdn.manageengine.com
@@ -492,6 +499,7 @@ DOMAIN,cdn.split.io
 DOMAIN,cdn.sprig.com
 DOMAIN,cdn.starapps.studio
 DOMAIN,cdn.stash.com
+DOMAIN,cdn.stellarhosted.com
 DOMAIN,cdn.substack.com
 DOMAIN,cdn.sunofbeaches.com
 DOMAIN,cdn.tailwindcss.com
@@ -499,6 +507,7 @@ DOMAIN,cdn.termius.com
 DOMAIN,cdn.thisav.com
 DOMAIN,cdn.tinypass.com
 DOMAIN,cdn.tolt.io
+DOMAIN,cdn.tracxn.com
 DOMAIN,cdn.transcend.io
 DOMAIN,cdn.transifex.com
 DOMAIN,cdn.travis-ci.com
@@ -605,6 +614,7 @@ DOMAIN,code.iconify.design
 DOMAIN,code.ionicframework.com
 DOMAIN,code.jquery.com
 DOMAIN,code.piano.io
+DOMAIN,common-header.nimg.jp
 DOMAIN,compass-ssl.xbox.com
 DOMAIN,components.clever-cloud.com
 DOMAIN,components.justanswer.com
@@ -623,6 +633,7 @@ DOMAIN,content-prod-live.cert.starbucks.com
 DOMAIN,content.any.run
 DOMAIN,content.api.news
 DOMAIN,content.arduino.cc
+DOMAIN,content.invisioncic.com
 DOMAIN,content.jwplatform.com
 DOMAIN,content.product.glitch.com
 DOMAIN,content.wepik.com
@@ -677,6 +688,7 @@ DOMAIN,drscdn.500px.org
 DOMAIN,dynamic-assets.coinbase.com
 DOMAIN,dynamic-assets.mobilius.top
 DOMAIN,e.deviantart.net
+DOMAIN,e.linear.app
 DOMAIN,e3.365dm.com
 DOMAIN,eaassets-a.akamaihd.net
 DOMAIN,easylist-downloads.adblockplus.org
@@ -1034,12 +1046,14 @@ DOMAIN,launcher.spot.im
 DOMAIN,launchercontent.mojang.com
 DOMAIN,lcdn-locator.apple.com
 DOMAIN,learn.optimizely.com
+DOMAIN,lecontent.sololearn.com
 DOMAIN,ledger-wp-website-s3-prd.ledger.com
 DOMAIN,lib.arvancloud.ir
 DOMAIN,libs.quillbot.com
 DOMAIN,link.storjshare.io
 DOMAIN,linkstorage.linkfire.com
 DOMAIN,linuxiac.b-cdn.net
+DOMAIN,listing-thumbnail.live.nicovideo.jp
 DOMAIN,live-storage.fc2.com
 DOMAIN,live.fanmingming.com
 DOMAIN,livedoor.blogimg.jp
@@ -1115,6 +1129,7 @@ DOMAIN,media.yukimochi.jp
 DOMAIN,media0.giphy.com
 DOMAIN,media1.giphy.com
 DOMAIN,media1.tenor.com
+DOMAIN,media2.dev.to
 DOMAIN,media2.giphy.com
 DOMAIN,media3.giphy.com
 DOMAIN,media4.giphy.com
@@ -1303,6 +1318,7 @@ DOMAIN,res2.weblium.site
 DOMAIN,resize.blogsys.jp
 DOMAIN,resize.yandex.net
 DOMAIN,resizing.flixster.com
+DOMAIN,resource.akashic.coe.nicovideo.jp
 DOMAIN,resource.fs.com
 DOMAIN,resource.video.nimg.jp
 DOMAIN,resources-cache.prod.sketch.com
@@ -1393,6 +1409,7 @@ DOMAIN,secure-uploads.ui.com
 DOMAIN,secure.beer7live.com
 DOMAIN,secure.fanboy.co.nz
 DOMAIN,secure.telegraph.co.uk
+DOMAIN,segment.digitalocean.com
 DOMAIN,services.linkfire.com
 DOMAIN,settings.kiwibrowser.com
 DOMAIN,sf-coze-web-cdn.coze.com
@@ -1413,6 +1430,7 @@ DOMAIN,sites.super.so
 DOMAIN,skills-assets.pstmn.io
 DOMAIN,skimdb.npmjs.com
 DOMAIN,sm.ign.com
+DOMAIN,smd-cms.nasa.gov
 DOMAIN,sn-s3-cdn.angry.im
 DOMAIN,snippet.growsumo.com
 DOMAIN,snippet.maze.co
@@ -1611,6 +1629,7 @@ DOMAIN,static.tenki.jp
 DOMAIN,static.test-beta.com
 DOMAIN,static.theguardian.com
 DOMAIN,static.tokenview.io
+DOMAIN,static.tp-link.com
 DOMAIN,static.tradingview.com
 DOMAIN,static.tronscan.org
 DOMAIN,static.tumblr.com
@@ -1731,8 +1750,10 @@ DOMAIN,upload.filebase.com
 DOMAIN,upload.wikimedia.org
 DOMAIN,uploads.codesandbox.io
 DOMAIN,uploads.guim.co.uk
+DOMAIN,uploads.linear.app
 DOMAIN,uploads.sitepoint.com
 DOMAIN,upos-sz-mirroralibstar1.bilivideo.com
+DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
 DOMAIN,us.hamreus.com
 DOMAIN,use.typekit.com
 DOMAIN,use.typekit.net
@@ -1787,7 +1808,6 @@ DOMAIN,web-cdn.bitrise.io
 DOMAIN,web-static.archive.org
 DOMAIN,web-static.pages.iheart.com
 DOMAIN,web-toolbar.playstation.com
-DOMAIN,web.onekey-asset.com
 DOMAIN,webassets.linear.app
 DOMAIN,webfonts.zoho.com
 DOMAIN,website-cdn.ipinfo.io
@@ -2340,6 +2360,7 @@ DOMAIN-SUFFIX,oktacdn.com
 DOMAIN-SUFFIX,olemovienews.com
 DOMAIN-SUFFIX,ominisrc.com
 DOMAIN-SUFFIX,omnisnippet1.com
+DOMAIN-SUFFIX,onekey-asset.com
 DOMAIN-SUFFIX,onrender.com
 DOMAIN-SUFFIX,opentelemetry.io
 DOMAIN-SUFFIX,operacdn.com
@@ -2544,7 +2565,6 @@ DOMAIN-SUFFIX,trackerslist.com
 DOMAIN-SUFFIX,transcend-cdn.com
 DOMAIN-SUFFIX,trustless-gateway.link
 DOMAIN-SUFFIX,ttcache.com
-DOMAIN-SUFFIX,tth-ipfs.com
 DOMAIN-SUFFIX,ttl.sh
 DOMAIN-SUFFIX,ttwstatic.com
 DOMAIN-SUFFIX,turboimg.net

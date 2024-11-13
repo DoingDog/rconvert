@@ -1,5 +1,5 @@
-# Adblock total line 2640
-# Last updated Sun 11/10/2024 22:10:45.61
+# Adblock total line 2660
+# Last updated Wed 11/13/2024 22:14:03.87
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -44,6 +44,7 @@
 ||api.web3.storage^
 ||app-api.vidjet.io^
 ||app-spm.com^
+||app-static.eu.posthog.com^
 ||app-static.turtl.co^
 ||app.backinstock.org^
 ||app.brightback.com^
@@ -104,6 +105,7 @@
 ||assets.coingecko.com^
 ||assets.context.ly^
 ||assets.convertkit.com^
+||assets.dev.to^
 ||assets.dify.ai^
 ||assets.dnsfilter.com^
 ||assets.documentcloud.org^
@@ -166,9 +168,11 @@
 ||assets.repair.org^
 ||assets.safing.io^
 ||assets.scaleflex.com^
+||assets.science.nasa.gov^
 ||assets.scroll.com^
 ||assets.sendinblue.com^
 ||assets.shazam.com^
+||assets.sololearn.com^
 ||assets.squarespace.com^
 ||assets.st-note.com^
 ||assets.stash.com^
@@ -239,6 +243,7 @@
 ||binaries.prisma.sh^
 ||blacklist.tampermonkey.net^
 ||blade-public-static.blade-group.com^
+||blob.sololearn.com^
 ||boards.greenhouse.io^
 ||bot.ivy.ai^
 ||brick.a.ssl.fastly.net^
@@ -252,6 +257,7 @@
 ||bundles.npr.org^
 ||busuanzi.ibruce.info^
 ||c.1password.com^
+||c.fantia.jp^
 ||c.marsflag.com^
 ||c.navattic.com^
 ||c.s-microsoft.com^
@@ -341,6 +347,7 @@
 ||cdn.commento.io^
 ||cdn.comparitech.com^
 ||cdn.concert.io^
+||cdn.configcat.com^
 ||cdn.consentmanager.net^
 ||cdn.contentful.com^
 ||cdn.credible.com^
@@ -389,6 +396,7 @@
 ||cdn.hinative.com^
 ||cdn.hongkongcard.com^
 ||cdn.hypershort.com^
+||cdn.icomoon.io^
 ||cdn.imageengine.io^
 ||cdn.img.ly^
 ||cdn.ip2location.io^
@@ -406,7 +414,6 @@
 ||cdn.langshop.app^
 ||cdn.libravatar.org^
 ||cdn.linearicons.com^
-||cdn.linkmink.com^
 ||cdn.livechatinc.com^
 ||cdn.loom.com^
 ||cdn.manageengine.com^
@@ -492,6 +499,7 @@
 ||cdn.sprig.com^
 ||cdn.starapps.studio^
 ||cdn.stash.com^
+||cdn.stellarhosted.com^
 ||cdn.substack.com^
 ||cdn.sunofbeaches.com^
 ||cdn.tailwindcss.com^
@@ -499,6 +507,7 @@
 ||cdn.thisav.com^
 ||cdn.tinypass.com^
 ||cdn.tolt.io^
+||cdn.tracxn.com^
 ||cdn.transcend.io^
 ||cdn.transifex.com^
 ||cdn.travis-ci.com^
@@ -605,6 +614,7 @@
 ||code.ionicframework.com^
 ||code.jquery.com^
 ||code.piano.io^
+||common-header.nimg.jp^
 ||compass-ssl.xbox.com^
 ||components.clever-cloud.com^
 ||components.justanswer.com^
@@ -623,6 +633,7 @@
 ||content.any.run^
 ||content.api.news^
 ||content.arduino.cc^
+||content.invisioncic.com^
 ||content.jwplatform.com^
 ||content.product.glitch.com^
 ||content.wepik.com^
@@ -677,6 +688,7 @@
 ||dynamic-assets.coinbase.com^
 ||dynamic-assets.mobilius.top^
 ||e.deviantart.net^
+||e.linear.app^
 ||e3.365dm.com^
 ||eaassets-a.akamaihd.net^
 ||easylist-downloads.adblockplus.org^
@@ -1034,12 +1046,14 @@
 ||launchercontent.mojang.com^
 ||lcdn-locator.apple.com^
 ||learn.optimizely.com^
+||lecontent.sololearn.com^
 ||ledger-wp-website-s3-prd.ledger.com^
 ||lib.arvancloud.ir^
 ||libs.quillbot.com^
 ||link.storjshare.io^
 ||linkstorage.linkfire.com^
 ||linuxiac.b-cdn.net^
+||listing-thumbnail.live.nicovideo.jp^
 ||live-storage.fc2.com^
 ||live.fanmingming.com^
 ||livedoor.blogimg.jp^
@@ -1115,6 +1129,7 @@
 ||media0.giphy.com^
 ||media1.giphy.com^
 ||media1.tenor.com^
+||media2.dev.to^
 ||media2.giphy.com^
 ||media3.giphy.com^
 ||media4.giphy.com^
@@ -1303,6 +1318,7 @@
 ||resize.blogsys.jp^
 ||resize.yandex.net^
 ||resizing.flixster.com^
+||resource.akashic.coe.nicovideo.jp^
 ||resource.fs.com^
 ||resource.video.nimg.jp^
 ||resources-cache.prod.sketch.com^
@@ -1393,6 +1409,7 @@
 ||secure.beer7live.com^
 ||secure.fanboy.co.nz^
 ||secure.telegraph.co.uk^
+||segment.digitalocean.com^
 ||services.linkfire.com^
 ||settings.kiwibrowser.com^
 ||sf-coze-web-cdn.coze.com^
@@ -1413,6 +1430,7 @@
 ||skills-assets.pstmn.io^
 ||skimdb.npmjs.com^
 ||sm.ign.com^
+||smd-cms.nasa.gov^
 ||sn-s3-cdn.angry.im^
 ||snippet.growsumo.com^
 ||snippet.maze.co^
@@ -1611,6 +1629,7 @@
 ||static.test-beta.com^
 ||static.theguardian.com^
 ||static.tokenview.io^
+||static.tp-link.com^
 ||static.tradingview.com^
 ||static.tronscan.org^
 ||static.tumblr.com^
@@ -1731,8 +1750,10 @@
 ||upload.wikimedia.org^
 ||uploads.codesandbox.io^
 ||uploads.guim.co.uk^
+||uploads.linear.app^
 ||uploads.sitepoint.com^
 ||upos-sz-mirroralibstar1.bilivideo.com^
+||upos-sz-mirrorcosbstar1.bilivideo.com^
 ||us.hamreus.com^
 ||use.typekit.com^
 ||use.typekit.net^
@@ -1787,7 +1808,6 @@
 ||web-static.archive.org^
 ||web-static.pages.iheart.com^
 ||web-toolbar.playstation.com^
-||web.onekey-asset.com^
 ||webassets.linear.app^
 ||webfonts.zoho.com^
 ||website-cdn.ipinfo.io^
@@ -2340,6 +2360,7 @@
 ||olemovienews.com^
 ||ominisrc.com^
 ||omnisnippet1.com^
+||onekey-asset.com^
 ||onrender.com^
 ||opentelemetry.io^
 ||operacdn.com^
@@ -2544,7 +2565,6 @@
 ||transcend-cdn.com^
 ||trustless-gateway.link^
 ||ttcache.com^
-||tth-ipfs.com^
 ||ttl.sh^
 ||ttwstatic.com^
 ||turboimg.net^
