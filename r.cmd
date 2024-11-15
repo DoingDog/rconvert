@@ -210,6 +210,28 @@ echo # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*->>
 type fn.txt>>fnr.txt
 copy /y fnr.txt ..\fin-adb.txt
 
+::generate Surge rule type
+echo ###Start generate Surge rule type
+copy /y bn.txt surge.txt
+busybox sed -n "/DOMAIN,/p" surge.txt > surge-domain.txt
+busybox sed -n "/DOMAIN-SUFFIX,/p" surge.txt >> surge-domain.txt
+busybox sed -i "/DOMAIN,/d" surge.txt
+busybox sed -i "/DOMAIN-SUFFIX,/d" surge.txt
+busybox sed -i -E "s/^DOMAIN-SUFFIX,/./g" surge-domain.txt
+busybox sed -i -E "s/^DOMAIN,//g" surge-domain.txt
+for /f "tokens=2 delims=:" %%a in ('find /c /v "" surge-domain.txt')do set/a sdrnum=%%a
+for /f "tokens=2 delims=:" %%a in ('find /c /v "" surge.txt')do set/a strnum=%%a
+echo # Surge Domain total line %sdrnum%>fsurge-domain.txt
+echo # Surge Rules total line %strnum%>fsurge.txt
+echo # Last updated %date% %time%>>fsurge-domain.txt
+echo # Last updated %date% %time%>>fsurge.txt
+type fsurge-domain.txt
+type fsurge.txt
+type surge.txt>>fsurge.txt
+type surge-domain.txt>>fsurge-domain.txt
+copy /y surge-domain.txt ..\fin-surge-ds.txt
+copy /y surge.txt ..\fin-surge.txt
+
 ::clean
 if %bnrnum% gtr 20 echo ### -*- -*- -*- -*- -*- -*- %MAINFOLD% File completely processed -*- -*- -*- -*- -*- -*-
 del /f /q *.txt>nul 2>nul
