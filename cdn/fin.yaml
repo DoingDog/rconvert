@@ -1,5 +1,5 @@
-# Clash total line 2660
-# Last updated Thu 11/14/2024  2:12:46.04
+# Clash total line 2677
+# Last updated Fri 11/15/2024  1:32:08.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -394,6 +394,7 @@ payload:
   - DOMAIN,cdn.hashnode.com
   - DOMAIN,cdn.headwayapp.co
   - DOMAIN,cdn.hellofresh.com
+  - DOMAIN,cdn.hiive.space
   - DOMAIN,cdn.hinative.com
   - DOMAIN,cdn.hongkongcard.com
   - DOMAIN,cdn.hypershort.com
@@ -599,9 +600,9 @@ payload:
   - DOMAIN,checkout.stripe.com
   - DOMAIN,ci.testling.com
   - DOMAIN,claritystatic.azureedge.net
-  - DOMAIN,client.px-cloud.net
   - DOMAIN,clips-media-assets2.twitch.tv
   - DOMAIN,cloud.redhat.com
+  - DOMAIN,cloud.typenetwork.com
   - DOMAIN,cloudflare.tv
   - DOMAIN,cloudfront.barilliance.com
   - DOMAIN,cms-assets.nodecraft.com
@@ -609,6 +610,7 @@ payload:
   - DOMAIN,cms-assets.xboxservices.com
   - DOMAIN,cms-cdn.now.gg
   - DOMAIN,cms.payloadcms.com
+  - DOMAIN,cms.typenetwork.com
   - DOMAIN,code.benco.io
   - DOMAIN,code.highcharts.com
   - DOMAIN,code.iconify.design
@@ -743,6 +745,7 @@ payload:
   - DOMAIN,f003.backblazeb2.com
   - DOMAIN,f004.backblazeb2.com
   - DOMAIN,fast.wistia.com
+  - DOMAIN,fastly-cloud.typenetwork.com
   - DOMAIN,fastporndelivery.hqporner.com
   - DOMAIN,favicon.yandex.net
   - DOMAIN,favicons.nextdns.io
@@ -805,6 +808,7 @@ payload:
   - DOMAIN,gtranslate.io
   - DOMAIN,hawk.tomsguide.com
   - DOMAIN,headway-widget.net
+  - DOMAIN,home.integrate.com
   - DOMAIN,hp.foxnews.com
   - DOMAIN,hub-assets.displaycal.net
   - DOMAIN,hv-monsterdb-data.skk.moe
@@ -855,6 +859,7 @@ payload:
   - DOMAIN,image.gyutto.com
   - DOMAIN,image.gyutto.jp
   - DOMAIN,image.ibb.co
+  - DOMAIN,image.jnislniv.xyz
   - DOMAIN,image.lichess1.org
   - DOMAIN,image.mux.com
   - DOMAIN,image.nmb.best
@@ -1084,6 +1089,7 @@ payload:
   - DOMAIN,media-s3-eu-west-1.ceros.com
   - DOMAIN,media-s3-us-east-1.ceros.com
   - DOMAIN,media-s3-us-west-1.ceros.com
+  - DOMAIN,media.beehiiv.com
   - DOMAIN,media.breitbart.com
   - DOMAIN,media.cleanshot.cloud
   - DOMAIN,media.cmx.edu.kg
@@ -1163,6 +1169,7 @@ payload:
   - DOMAIN,next-images.opencollective.com
   - DOMAIN,ni-assets.azureedge.net
   - DOMAIN,nightly.link
+  - DOMAIN,no-cache.hubspot.com
   - DOMAIN,nodeassets.nbcnews.com
   - DOMAIN,nodei.co
   - DOMAIN,npm.antfu.dev
@@ -1208,6 +1215,7 @@ payload:
   - DOMAIN,panel-production-libs.b-cdn.net
   - DOMAIN,participants.evolv.ai
   - DOMAIN,parts.blog.livedoor.jp
+  - DOMAIN,patterns.hiive.cloud
   - DOMAIN,pba.apple.com
   - DOMAIN,pbc.nypost.com
   - DOMAIN,pbc.wsj.com
@@ -1411,6 +1419,7 @@ payload:
   - DOMAIN,secure.fanboy.co.nz
   - DOMAIN,secure.telegraph.co.uk
   - DOMAIN,segment.digitalocean.com
+  - DOMAIN,sentry.ainopara.com
   - DOMAIN,services.linkfire.com
   - DOMAIN,settings.kiwibrowser.com
   - DOMAIN,sf-coze-web-cdn.coze.com
@@ -1740,6 +1749,7 @@ payload:
   - DOMAIN,ubistatic-a.ubisoft.com
   - DOMAIN,ubistatic2-a.akamaihd.net
   - DOMAIN,ubistatic2-a.ubisoft.com
+  - DOMAIN,udata.namespace.so
   - DOMAIN,ui-cdn.digitalocean.com
   - DOMAIN,ui.contentstack.com
   - DOMAIN,ui.trailhead.com
@@ -1771,6 +1781,7 @@ payload:
   - DOMAIN,utteranc.es
   - DOMAIN,v.hillwaver.com
   - DOMAIN,v.w-x.co
+  - DOMAIN,v2.listenloop.com
   - DOMAIN,vanilla-extract.style
   - DOMAIN,versionbadg.es
   - DOMAIN,vetted.ai
@@ -1905,6 +1916,7 @@ payload:
   - DOMAIN-SUFFIX,bfzypic.com
   - DOMAIN-SUFFIX,bigcontent.io
   - DOMAIN-SUFFIX,bitbucket.io
+  - DOMAIN-SUFFIX,blackbaudcdn.net
   - DOMAIN-SUFFIX,bleepstatic.com
   - DOMAIN-SUFFIX,blob.core.windows.net
   - DOMAIN-SUFFIX,blobcdn.com
@@ -1948,6 +1960,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.nintendo.net
   - DOMAIN-SUFFIX,cdn.printfriendly.com
   - DOMAIN-SUFFIX,cdn.prismic.io
+  - DOMAIN-SUFFIX,cdn.prod.atlassian-dev.net
   - DOMAIN-SUFFIX,cdn.pubnub.com
   - DOMAIN-SUFFIX,cdn.replit.com
   - DOMAIN-SUFFIX,cdn.rollbar.com
@@ -2171,9 +2184,11 @@ payload:
   - DOMAIN-SUFFIX,imgbox.com
   - DOMAIN-SUFFIX,imgikuncdn.com
   - DOMAIN-SUFFIX,imgikzy.com
+  - DOMAIN-SUFFIX,imgimg.cc
   - DOMAIN-SUFFIX,imgix.net
   - DOMAIN-SUFFIX,imglink.win
   - DOMAIN-SUFFIX,imgmrplay.xyz
+  - DOMAIN-SUFFIX,imgpng.xyz
   - DOMAIN-SUFFIX,imgsmail.ru
   - DOMAIN-SUFFIX,imgtbl.com
   - DOMAIN-SUFFIX,imgtp.com
@@ -2419,6 +2434,7 @@ payload:
   - DOMAIN-SUFFIX,public.cdn.office.net
   - DOMAIN-SUFFIX,public.ecr.aws
   - DOMAIN-SUFFIX,push.services.mozilla.com
+  - DOMAIN-SUFFIX,px-cloud.net
   - DOMAIN-SUFFIX,pxgcdn.com
   - DOMAIN-SUFFIX,pximg.net
   - DOMAIN-SUFFIX,pypi.org
@@ -2570,6 +2586,7 @@ payload:
   - DOMAIN-SUFFIX,ttwstatic.com
   - DOMAIN-SUFFIX,turboimg.net
   - DOMAIN-SUFFIX,twimg.com
+  - DOMAIN-SUFFIX,typedoc.org
   - DOMAIN-SUFFIX,typography.com
   - DOMAIN-SUFFIX,ubembed.com
   - DOMAIN-SUFFIX,uber-assets.com

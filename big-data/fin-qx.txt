@@ -1,5 +1,5 @@
-# Quantumult total line 5573
-# Last updated Thu 11/14/2024  2:12:56.09
+# Quantumult total line 5592
+# Last updated Fri 11/15/2024  1:32:18.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -406,6 +406,7 @@ HOST,cdn.hackernoon.com,LIST
 HOST,cdn.hashnode.com,LIST
 HOST,cdn.headwayapp.co,LIST
 HOST,cdn.hellofresh.com,LIST
+HOST,cdn.hiive.space,LIST
 HOST,cdn.hongkongcard.com,LIST
 HOST,cdn.hyperbeam.com,LIST
 HOST,cdn.hypershort.com,LIST
@@ -610,8 +611,8 @@ HOST,ci.testling.com,LIST
 HOST,ciscobinary.openh264.org,LIST
 HOST,claritystatic.azureedge.net,LIST
 HOST,client.hikarifield.co.jp,LIST
-HOST,client.px-cloud.net,LIST
 HOST,cloud.redhat.com,LIST
+HOST,cloud.typenetwork.com,LIST
 HOST,cloudflare.tv,LIST
 HOST,cloudfront.barilliance.com,LIST
 HOST,cms-assets.nodecraft.com,LIST
@@ -619,6 +620,7 @@ HOST,cms-assets.webediamovies.pro,LIST
 HOST,cms-assets.xboxservices.com,LIST
 HOST,cms-cdn.now.gg,LIST
 HOST,cms.payloadcms.com,LIST
+HOST,cms.typenetwork.com,LIST
 HOST,code.benco.io,LIST
 HOST,code.highcharts.com,LIST
 HOST,code.iconify.design,LIST
@@ -693,6 +695,7 @@ HOST,devstreaming-cdn.apple.com,LIST
 HOST,dh-site.b-cdn.net,LIST
 HOST,dims.apnews.com,LIST
 HOST,disco.headliner.link,LIST
+HOST,disks.webvm.io,LIST
 HOST,dist.blizzard.com,LIST
 HOST,divhunt-site.b-cdn.net,LIST
 HOST,divhunt.b-cdn.net,LIST
@@ -826,6 +829,7 @@ HOST,f002.backblazeb2.com,LIST
 HOST,f003.backblazeb2.com,LIST
 HOST,f004.backblazeb2.com,LIST
 HOST,fast.wistia.com,LIST
+HOST,fastly-cloud.typenetwork.com,LIST
 HOST,fastly-download.epicgames.com,LIST
 HOST,fastporndelivery.hqporner.com,LIST
 HOST,favicon.yandex.net,LIST
@@ -898,6 +902,7 @@ HOST,hawk.tomsguide.com,LIST
 HOST,headway-widget.net,LIST
 HOST,hls-amt.itunes.apple.com,LIST
 HOST,hls.itunes.apple.com,LIST
+HOST,home.integrate.com,LIST
 HOST,hub-assets.displaycal.net,LIST
 HOST,hulu.com.c.footprint.net,LIST
 HOST,hulu.map.fastly.net,LIST
@@ -943,6 +948,7 @@ HOST,image.freepik.com,LIST
 HOST,image.gyutto.com,LIST
 HOST,image.gyutto.jp,LIST
 HOST,image.ibb.co,LIST
+HOST,image.jnislniv.xyz,LIST
 HOST,image.lichess1.org,LIST
 HOST,image.mux.com,LIST
 HOST,image.nmb.best,LIST
@@ -1170,6 +1176,7 @@ HOST,media-cdn.epicgames.com,LIST
 HOST,media-s3-eu-west-1.ceros.com,LIST
 HOST,media-s3-us-east-1.ceros.com,LIST
 HOST,media-s3-us-west-1.ceros.com,LIST
+HOST,media.beehiiv.com,LIST
 HOST,media.breitbart.com,LIST
 HOST,media.cleanshot.cloud,LIST
 HOST,media.cmx.edu.kg,LIST
@@ -1276,6 +1283,7 @@ HOST,newsletter.postmarkapp.com,LIST
 HOST,next-images.opencollective.com,LIST
 HOST,ni-assets.azureedge.net,LIST
 HOST,nightly.link,LIST
+HOST,no-cache.hubspot.com,LIST
 HOST,nobara-images.nobaraproject.org,LIST
 HOST,nodei.co,LIST
 HOST,np-edge.itunes.apple.com,LIST
@@ -1325,6 +1333,7 @@ HOST,packagespc.xboxlive.com,LIST
 HOST,panel-production-libs.b-cdn.net,LIST
 HOST,participants.evolv.ai,LIST
 HOST,parts.blog.livedoor.jp,LIST
+HOST,patterns.hiive.cloud,LIST
 HOST,pba.apple.com,LIST
 HOST,pbc.wsj.com,LIST
 HOST,pcz.javidol.org,LIST
@@ -1525,6 +1534,7 @@ HOST,secure.fanboy.co.nz,LIST
 HOST,secure.telegraph.co.uk,LIST
 HOST,security.debian.org,LIST
 HOST,security.ubuntu.com,LIST
+HOST,sentry.ainopara.com,LIST
 HOST,services.linkfire.com,LIST
 HOST,settings.kiwibrowser.com,LIST
 HOST,sf-coze-web-cdn.coze.com,LIST
@@ -1821,6 +1831,7 @@ HOST,typescript.azureedge.net,LIST
 HOST,typescript.visualstudio.com,LIST
 HOST,ubistatic-a.ubisoft.com,LIST
 HOST,ubistatic2-a.ubisoft.com,LIST
+HOST,udata.namespace.so,LIST
 HOST,ui.contentstack.com,LIST
 HOST,ui.trailhead.com,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
@@ -1858,6 +1869,7 @@ HOST,uts-api.itunes.apple.com,LIST
 HOST,utteranc.es,LIST
 HOST,v.hillwaver.com,LIST
 HOST,v.w-x.co,LIST
+HOST,v2.listenloop.com,LIST
 HOST,vanilla-extract.style,LIST
 HOST,versionbadg.es,LIST
 HOST,versioncheck-bg.addons.mozilla.org,LIST
@@ -2168,6 +2180,7 @@ HOST-SUFFIX,bilibili.tv,LIST
 HOST-SUFFIX,biliintl.com,LIST
 HOST-SUFFIX,bitbucket.io,LIST
 HOST-SUFFIX,bitmovin.com,LIST
+HOST-SUFFIX,blackbaudcdn.net,LIST
 HOST-SUFFIX,bleepstatic.com,LIST
 HOST-SUFFIX,blip.tv,LIST
 HOST-SUFFIX,blobcdn.com,LIST
@@ -2259,6 +2272,7 @@ HOST-SUFFIX,cdn.optimizely.com,LIST
 HOST-SUFFIX,cdn.plus500.com,LIST
 HOST-SUFFIX,cdn.printfriendly.com,LIST
 HOST-SUFFIX,cdn.prismic.io,LIST
+HOST-SUFFIX,cdn.prod.atlassian-dev.net,LIST
 HOST-SUFFIX,cdn.pubnub.com,LIST
 HOST-SUFFIX,cdn.replit.com,LIST
 HOST-SUFFIX,cdn.rollbar.com,LIST
@@ -2278,6 +2292,7 @@ HOST-SUFFIX,cdn.vidcrunch.com,LIST
 HOST-SUFFIX,cdn1122.com,LIST
 HOST-SUFFIX,cdn2.hubspot.net,LIST
 HOST-SUFFIX,cdn2020.com,LIST
+HOST-SUFFIX,cdn77-storage.com,LIST
 HOST-SUFFIX,cdnbf.net,LIST
 HOST-SUFFIX,cdnclouder.com,LIST
 HOST-SUFFIX,cdninstagram.com,LIST
@@ -3227,10 +3242,12 @@ HOST-SUFFIX,imgair.net,LIST
 HOST-SUFFIX,imgbox.com,LIST
 HOST-SUFFIX,imgikuncdn.com,LIST
 HOST-SUFFIX,imgikzy.com,LIST
+HOST-SUFFIX,imgimg.cc,LIST
 HOST-SUFFIX,imgix.net,LIST
 HOST-SUFFIX,imglarger.com,LIST
 HOST-SUFFIX,imglink.win,LIST
 HOST-SUFFIX,imgmrplay.xyz,LIST
+HOST-SUFFIX,imgpng.xyz,LIST
 HOST-SUFFIX,imgsmail.ru,LIST
 HOST-SUFFIX,imgtbl.com,LIST
 HOST-SUFFIX,imgtp.com,LIST
@@ -3859,6 +3876,7 @@ HOST-SUFFIX,push.services.mozilla.com,LIST
 HOST-SUFFIX,put.re,LIST
 HOST-SUFFIX,putlockertv.to,LIST
 HOST-SUFFIX,pv-cdn.net,LIST
+HOST-SUFFIX,px-cloud.net,LIST
 HOST-SUFFIX,pxgcdn.com,LIST
 HOST-SUFFIX,pximg.net,LIST
 HOST-SUFFIX,pypi.org,LIST
@@ -4273,6 +4291,7 @@ HOST-SUFFIX,twitch.tv,LIST
 HOST-SUFFIX,twitchcdn.net,LIST
 HOST-SUFFIX,twitchsvc.net,LIST
 HOST-SUFFIX,tynt.com,LIST
+HOST-SUFFIX,typedoc.org,LIST
 HOST-SUFFIX,typography.com,LIST
 HOST-SUFFIX,uafile.com,LIST
 HOST-SUFFIX,ubembed.com,LIST
