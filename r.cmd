@@ -229,8 +229,8 @@ type fsurge-domain.txt
 type fsurge.txt
 type surge.txt>>fsurge.txt
 type surge-domain.txt>>fsurge-domain.txt
-copy /y surge-domain.txt ..\fin-surge-ds.txt
-copy /y surge.txt ..\fin-surge.txt
+copy /y fsurge-domain.txt ..\fin-surge-ds.txt
+copy /y fsurge.txt ..\fin-surge.txt
 
 ::clean
 if %bnrnum% gtr 20 echo ### -*- -*- -*- -*- -*- -*- %MAINFOLD% File completely processed -*- -*- -*- -*- -*- -*-
