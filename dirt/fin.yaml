@@ -1,5 +1,5 @@
-# Clash total line 4361
-# Last updated Fri 11/15/2024  1:42:03.55
+# Clash total line 4362
+# Last updated Sat 11/16/2024 22:13:51.02
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -3854,6 +3854,7 @@ payload:
   - DOMAIN-SUFFIX,yrz.name
   - DOMAIN-SUFFIX,ys168.com
   - DOMAIN-SUFFIX,ys7.com
+  - DOMAIN-SUFFIX,ysepay.com
   - DOMAIN-SUFFIX,yslyhr.com
   - DOMAIN-SUFFIX,ysten.com
   - DOMAIN-SUFFIX,ytzq.com

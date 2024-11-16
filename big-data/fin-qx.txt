@@ -1,5 +1,5 @@
-# Quantumult total line 5592
-# Last updated Fri 11/15/2024  1:41:53.78
+# Quantumult total line 5583
+# Last updated Sat 11/16/2024 22:13:40.21
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -4100,15 +4100,6 @@ HOST-SUFFIX,speedxtra.com,LIST
 HOST-SUFFIX,spicyfile.com,LIST
 HOST-SUFFIX,splunkcloud.com,LIST
 HOST-SUFFIX,spoti.fi,LIST
-HOST-SUFFIX,spotify-everywhere.com,LIST
-HOST-SUFFIX,spotify.design,LIST
-HOST-SUFFIX,spotifycdn.com,LIST
-HOST-SUFFIX,spotifycdn.net,LIST
-HOST-SUFFIX,spotifycharts.com,LIST
-HOST-SUFFIX,spotifycodes.com,LIST
-HOST-SUFFIX,spotifyforbrands.com,LIST
-HOST-SUFFIX,spotifyjobs.com,LIST
-HOST-SUFFIX,spotifynewsroom.jp,LIST
 HOST-SUFFIX,spotilocal.com,LIST
 HOST-SUFFIX,sqspcdn.com,LIST
 HOST-SUFFIX,squarespace-cdn.com,LIST
@@ -4614,7 +4605,7 @@ HOST-SUFFIX,zorocdn.xyz,LIST
 HOST-SUFFIX,zype.com,LIST
 HOST-KEYWORD,-files.gitbook.io,LIST
 HOST-KEYWORD,-res.cloudinary.com,LIST
-HOST-KEYWORD,-spotify-,LIST
+HOST-KEYWORD,-spotify-com,LIST
 HOST-KEYWORD,-tiktokcdn-com,LIST
 HOST-KEYWORD,.hbogoasia.,LIST
 HOST-KEYWORD,1drv,LIST
@@ -4646,7 +4637,7 @@ HOST-KEYWORD,onedrive,LIST
 HOST-KEYWORD,rthklive,LIST
 HOST-KEYWORD,server30cdn1,LIST
 HOST-KEYWORD,skydrive,LIST
-HOST-KEYWORD,spotify.com,LIST
+HOST-KEYWORD,spotify,LIST
 HOST-KEYWORD,steamuserimages,LIST
 HOST-KEYWORD,strntt00,LIST
 HOST-KEYWORD,tiktokcdn,LIST
