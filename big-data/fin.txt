@@ -1,5 +1,5 @@
-# Main total line 5597
-# Last updated Sat 11/16/2024 22:13:40.06
+# Main total line 5615
+# Last updated Tue 11/19/2024 22:14:21.98
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -37,6 +37,7 @@ DOMAIN,api-updates.orbstack.dev
 DOMAIN,api.allorigins.win
 DOMAIN,api.bintray.com
 DOMAIN,api.crashguard.me
+DOMAIN,api.dicebear.com
 DOMAIN,api.iconify.design
 DOMAIN,api.mintlify.com
 DOMAIN,api.mixpanel.com
@@ -88,6 +89,7 @@ DOMAIN,assets-v2.super.so
 DOMAIN,assets-www.xbox.com
 DOMAIN,assets.apilayer.com
 DOMAIN,assets.apnews.com
+DOMAIN,assets.atlasobscura.com
 DOMAIN,assets.auth.magic.link
 DOMAIN,assets.awwwards.com
 DOMAIN,assets.bbhub.io
@@ -187,7 +189,6 @@ DOMAIN,assets.the-independent.com
 DOMAIN,assets.time.com
 DOMAIN,assets.tokopedia.net
 DOMAIN,assets.toot.cafe
-DOMAIN,assets.tumblr.com
 DOMAIN,assets.unifi-ai.com
 DOMAIN,assets.upload.io
 DOMAIN,assets.vantage.sh
@@ -357,6 +358,7 @@ DOMAIN,cdn.cloudcraft.co
 DOMAIN,cdn.cnx-software.com
 DOMAIN,cdn.cocoapods.org
 DOMAIN,cdn.codeblackbelt.com
+DOMAIN,cdn.commandbar.com
 DOMAIN,cdn.commento.io
 DOMAIN,cdn.comparitech.com
 DOMAIN,cdn.concert.io
@@ -451,6 +453,7 @@ DOMAIN,cdn.ndtv.com
 DOMAIN,cdn.nerdschalk.com
 DOMAIN,cdn.networklessons.com
 DOMAIN,cdn.neverbounce.com
+DOMAIN,cdn.nolt.io
 DOMAIN,cdn.now.gg
 DOMAIN,cdn.onesignal.com
 DOMAIN,cdn.onetime.dog
@@ -494,6 +497,7 @@ DOMAIN,cdn.sanity.io
 DOMAIN,cdn.sc.gl
 DOMAIN,cdn.sciencecast.org
 DOMAIN,cdn.search.brave.com
+DOMAIN,cdn.sedo.com
 DOMAIN,cdn.sellix.io
 DOMAIN,cdn.seondf.com
 DOMAIN,cdn.setapp.com
@@ -874,6 +878,7 @@ DOMAIN,formulae.brew.sh
 DOMAIN,frames-commandbar-prod.commandbar.com
 DOMAIN,front-resource.fs.com
 DOMAIN,fs2.onlyhentaistuff.com
+DOMAIN,fscdn.eppo.cloud
 DOMAIN,ftp.gnu.org
 DOMAIN,g-static.ap4r.com
 DOMAIN,genesis-cdn.ff.com
@@ -1028,6 +1033,7 @@ DOMAIN,img.announcekit.app
 DOMAIN,img.api.video
 DOMAIN,img.applealmond.com
 DOMAIN,img.apponic.com
+DOMAIN,img.atlasobscura.com
 DOMAIN,img.atwiki.jp
 DOMAIN,img.badgesize.io
 DOMAIN,img.biguz.net
@@ -1067,6 +1073,7 @@ DOMAIN,img.sflix.to
 DOMAIN,img.shana-laopo.xyz
 DOMAIN,img.shoplineapp.com
 DOMAIN,img.skk.moe
+DOMAIN,img.sparemin.com
 DOMAIN,img.sparknotes.com
 DOMAIN,img.supjav.com
 DOMAIN,img.timero.xyz
@@ -1107,6 +1114,7 @@ DOMAIN,irp-cdn.multiscreensite.com
 DOMAIN,iterm2.com
 DOMAIN,j.udn.com.tw
 DOMAIN,jac.yahoosandbox.com
+DOMAIN,jfe-cdn.qualtrics.com
 DOMAIN,jira-frontend-bifrost.prod-east.frontend.public.atl-paas.net
 DOMAIN,js-1-cdn.airdroid.com
 DOMAIN,js-cdn.blockchair.io
@@ -1126,6 +1134,7 @@ DOMAIN,js.qualified.com
 DOMAIN,js.recurly.com
 DOMAIN,js.short.io
 DOMAIN,js.smile.io
+DOMAIN,js.stripe.com
 DOMAIN,js.upload.io
 DOMAIN,js.userflow.com
 DOMAIN,js.verygoodvault.com
@@ -1227,6 +1236,7 @@ DOMAIN,media3.giphy.com
 DOMAIN,media4.giphy.com
 DOMAIN,medias.meow.social
 DOMAIN,megapx-assets.dcard.tw
+DOMAIN,metrics.kapa.ai
 DOMAIN,micro.rubiconproject.com
 DOMAIN,minotar.net
 DOMAIN,mir-s3-cdn-cf.behance.net
@@ -1295,12 +1305,9 @@ DOMAIN,object.innei.in
 DOMAIN,objects.g0v.social
 DOMAIN,objects.hit.moe
 DOMAIN,ocsp.digicert.com
-DOMAIN,ocsp.globalsign.com
 DOMAIN,ocsp.godaddy.com
 DOMAIN,ocsp.sectigo.com
 DOMAIN,ocsp.usertrust.com
-DOMAIN,ocsp2.apple.com
-DOMAIN,ocsp2.globalsign.com
 DOMAIN,ocvideo.apple.com
 DOMAIN,ohttp-relay1.fastly-edge.com
 DOMAIN,ooo.0o0.ooo
@@ -1322,6 +1329,7 @@ DOMAIN,p.inari.site
 DOMAIN,p.sda1.dev
 DOMAIN,p.typekit.net
 DOMAIN,pacdn.500px.org
+DOMAIN,packagecloud.io
 DOMAIN,packages-cf.termux.dev
 DOMAIN,packages.argotunnel.com
 DOMAIN,packages.httpie.io
@@ -1563,6 +1571,7 @@ DOMAIN,snippet.maze.co
 DOMAIN,snippets.freshchat.com
 DOMAIN,social-cdn.vivaldi.net
 DOMAIN,softwareupdate.pilotmoon.com
+DOMAIN,softwareupdate.vmware.com
 DOMAIN,source.domaintools.com
 DOMAIN,sourcepoint.theguardian.com
 DOMAIN,sp-spiegel-de.spiegel.de
@@ -1644,6 +1653,7 @@ DOMAIN,static.deepl.com
 DOMAIN,static.doujins.com
 DOMAIN,static.dw.com
 DOMAIN,static.dzeninfra.ru
+DOMAIN,static.edge.microsoftapp.net
 DOMAIN,static.eroterest.net
 DOMAIN,static.esimplus.net
 DOMAIN,static.ettoday.net
@@ -1910,6 +1920,7 @@ DOMAIN,webfonts.zoho.com
 DOMAIN,website-cdn.ipinfo.io
 DOMAIN,widget.freshworks.com
 DOMAIN,widget.intercom.io
+DOMAIN,widget.kapa.ai
 DOMAIN,widget.trustpilot.com
 DOMAIN,widget.usepylon.com
 DOMAIN,widget.user.com
@@ -2058,6 +2069,7 @@ DOMAIN-SUFFIX,androidfilehost.com
 DOMAIN-SUFFIX,anidom.com
 DOMAIN-SUFFIX,anonfiles.com
 DOMAIN-SUFFIX,anpoimages.com
+DOMAIN-SUFFIX,ant.design
 DOMAIN-SUFFIX,anzfile.net
 DOMAIN-SUFFIX,aol.co.uk
 DOMAIN-SUFFIX,aol.com
@@ -2095,6 +2107,7 @@ DOMAIN-SUFFIX,assets.adidas.com
 DOMAIN-SUFFIX,assets.getpocket.com
 DOMAIN-SUFFIX,assets.heroku.com
 DOMAIN-SUFFIX,assets.pinterest.com
+DOMAIN-SUFFIX,assets.tumblr.com
 DOMAIN-SUFFIX,assets.ubuntu.com
 DOMAIN-SUFFIX,assets.xboxservices.com
 DOMAIN-SUFFIX,assettype.com
@@ -3459,6 +3472,7 @@ DOMAIN-SUFFIX,lookscanned.io
 DOMAIN-SUFFIX,lowendbox.com
 DOMAIN-SUFFIX,lowescdn.com
 DOMAIN-SUFFIX,lr-ingest.com
+DOMAIN-SUFFIX,lsposed.org
 DOMAIN-SUFFIX,ltwebstatic.com
 DOMAIN-SUFFIX,lzzyimg.com
 DOMAIN-SUFFIX,lzzypic.com
@@ -3486,6 +3500,7 @@ DOMAIN-SUFFIX,media-amazon.com
 DOMAIN-SUFFIX,media-imdb.com
 DOMAIN-SUFFIX,media.beeper.com
 DOMAIN-SUFFIX,media.ci-en.jp
+DOMAIN-SUFFIX,media.strapiapp.com
 DOMAIN-SUFFIX,media.tumblr.com
 DOMAIN-SUFFIX,media.zestyio.com
 DOMAIN-SUFFIX,mediafire.com
@@ -3543,6 +3558,7 @@ DOMAIN-SUFFIX,moviesanywhere.com
 DOMAIN-SUFFIX,movshare.net
 DOMAIN-SUFFIX,mox.moe
 DOMAIN-SUFFIX,mp4upload.com
+DOMAIN-SUFFIX,msftconnecttest.com
 DOMAIN-SUFFIX,mshare.io
 DOMAIN-SUFFIX,msnbc.com
 DOMAIN-SUFFIX,mtvnservices.com
@@ -3909,6 +3925,7 @@ DOMAIN-SUFFIX,qobuz.ro
 DOMAIN-SUFFIX,qobuz.se
 DOMAIN-SUFFIX,qobuz.tv
 DOMAIN-SUFFIX,qobuz.us
+DOMAIN-SUFFIX,qoocdn.com
 DOMAIN-SUFFIX,qooqlevideo.com
 DOMAIN-SUFFIX,quay.io
 DOMAIN-SUFFIX,quip-cdn.com
@@ -4069,6 +4086,7 @@ DOMAIN-SUFFIX,slack-edge.com
 DOMAIN-SUFFIX,slack-imgs.com
 DOMAIN-SUFFIX,slidesharecdn.com
 DOMAIN-SUFFIX,smartmediarep.com
+DOMAIN-SUFFIX,smartscreen.microsoft.com
 DOMAIN-SUFFIX,smassets.net
 DOMAIN-SUFFIX,smilecdn.co
 DOMAIN-SUFFIX,smushcdn.com

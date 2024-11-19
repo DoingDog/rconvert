@@ -1,5 +1,5 @@
-# Adblock total line 4020
-# Last updated Sat 11/16/2024 22:13:51.12
+# Adblock total line 4022
+# Last updated Tue 11/19/2024 22:14:33.02
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||a.iqmtp.live^
 ||analytics.strava.com^
@@ -25,6 +25,8 @@
 ||media.cdn.queniuqe.com^
 ||mobile.hotspot^
 ||ntt.setup^
+||ocsp.globalsign.com^
+||ocsp2.globalsign.com^
 ||origin-a.akamaihd.ne^
 ||origin-a.akamaihd.net^
 ||p-bstarstatic.akamaized.net^

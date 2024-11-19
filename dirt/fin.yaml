@@ -1,5 +1,5 @@
-# Clash total line 4362
-# Last updated Sat 11/16/2024 22:13:51.02
+# Clash total line 4364
+# Last updated Tue 11/19/2024 22:14:32.93
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -26,6 +26,8 @@ payload:
   - DOMAIN,media.cdn.queniuqe.com
   - DOMAIN,mobile.hotspot
   - DOMAIN,ntt.setup
+  - DOMAIN,ocsp.globalsign.com
+  - DOMAIN,ocsp2.globalsign.com
   - DOMAIN,origin-a.akamaihd.ne
   - DOMAIN,origin-a.akamaihd.net
   - DOMAIN,p-bstarstatic.akamaized.net

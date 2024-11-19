@@ -1,5 +1,5 @@
-# Quantumult total line 4318
-# Last updated Sat 11/16/2024 22:13:50.99
+# Quantumult total line 4320
+# Last updated Tue 11/19/2024 22:14:32.90
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -25,6 +25,8 @@ HOST,local.adguard.org,LIST
 HOST,media.cdn.queniuqe.com,LIST
 HOST,mobile.hotspot,LIST
 HOST,ntt.setup,LIST
+HOST,ocsp.globalsign.com,LIST
+HOST,ocsp2.globalsign.com,LIST
 HOST,origin-a.akamaihd.ne,LIST
 HOST,origin-a.akamaihd.net,LIST
 HOST,p-bstarstatic.akamaized.net,LIST
