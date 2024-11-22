@@ -1,5 +1,5 @@
-# Main total line 2692
-# Last updated Tue 11/19/2024 22:14:12.10
+# Main total line 2715
+# Last updated Fri 11/22/2024 22:14:14.63
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -122,6 +122,7 @@ DOMAIN,assets.fireside.fm
 DOMAIN,assets.flodesk.com
 DOMAIN,assets.fonts.adobe.com
 DOMAIN,assets.foxdcg.com
+DOMAIN,assets.frontegg.com
 DOMAIN,assets.garr.it
 DOMAIN,assets.gcore.pro
 DOMAIN,assets.genius.com
@@ -201,6 +202,7 @@ DOMAIN,assets.xboxservices.com
 DOMAIN,assets.xmind.net
 DOMAIN,assets.yande.re
 DOMAIN,assets.zerohedge.com
+DOMAIN,assets.zilliz.com
 DOMAIN,assets0.headwayapp.co
 DOMAIN,assets1.lottiefiles.com
 DOMAIN,assets10.lottiefiles.com
@@ -406,6 +408,7 @@ DOMAIN,cdn.ip2location.io
 DOMAIN,cdn.ipregistry.co
 DOMAIN,cdn.jetboost.io
 DOMAIN,cdn.jetphotos.com
+DOMAIN,cdn.jitbit.com
 DOMAIN,cdn.joincommunity.xyz
 DOMAIN,cdn.jolipage.co
 DOMAIN,cdn.judge.me
@@ -415,6 +418,7 @@ DOMAIN,cdn.kinsta.com
 DOMAIN,cdn.koala.live
 DOMAIN,cdn.kobo.com
 DOMAIN,cdn.langshop.app
+DOMAIN,cdn.leandata.com
 DOMAIN,cdn.libravatar.org
 DOMAIN,cdn.linearicons.com
 DOMAIN,cdn.livechatinc.com
@@ -499,7 +503,6 @@ DOMAIN,cdn.sketch.com
 DOMAIN,cdn.skymavis.com
 DOMAIN,cdn.smooch.io
 DOMAIN,cdn.softswiss.net
-DOMAIN,cdn.solvvy.com
 DOMAIN,cdn.split.io
 DOMAIN,cdn.sprig.com
 DOMAIN,cdn.starapps.studio
@@ -542,6 +545,7 @@ DOMAIN,cdn.xeiaso.net
 DOMAIN,cdn.yinghuazy.xyz
 DOMAIN,cdn.ywxi.net
 DOMAIN,cdn.zapier.com
+DOMAIN,cdn.zhujiwiki.com
 DOMAIN,cdn0.dan.com
 DOMAIN,cdn01.jotfor.ms
 DOMAIN,cdn02.jotfor.ms
@@ -550,12 +554,14 @@ DOMAIN,cdn1.airdroid.com
 DOMAIN,cdn1.dan.com
 DOMAIN,cdn1.epicgames.com
 DOMAIN,cdn1.identitymind.com
+DOMAIN,cdn1.plesk.com
 DOMAIN,cdn1.stamped.io
 DOMAIN,cdn1.sysgears.com
 DOMAIN,cdn1.unrealengine.com
 DOMAIN,cdn2-imgix.macpaw.com
 DOMAIN,cdn2.abiresearch.com
 DOMAIN,cdn2.airdroid.com
+DOMAIN,cdn2.auth0.com
 DOMAIN,cdn2.dan.com
 DOMAIN,cdn2.downdetector.com
 DOMAIN,cdn2.editmysite.com
@@ -669,6 +675,7 @@ DOMAIN,dam.freshworks.com
 DOMAIN,david-dm.org
 DOMAIN,db.onlinewebfonts.com
 DOMAIN,ddcdn.comtucdncom.com
+DOMAIN,decart-oasis.azureedge.net
 DOMAIN,demo.unified-streaming.com
 DOMAIN,demotiles.maplibre.org
 DOMAIN,denali-static.grammarly.com
@@ -709,6 +716,7 @@ DOMAIN,edgestatic.azureedge.net
 DOMAIN,eep.io
 DOMAIN,eightcha.com
 DOMAIN,embed-ssl.wistia.com
+DOMAIN,embed.reddit.com
 DOMAIN,embed.runkit.com
 DOMAIN,embed.savvycal.com
 DOMAIN,embed.tawk.to
@@ -731,6 +739,7 @@ DOMAIN,error.rakuten.co.jp
 DOMAIN,eslint.style
 DOMAIN,eu-images.contentstack.com
 DOMAIN,eu.hamreus.com
+DOMAIN,eu01ccistatic.zoom.us
 DOMAIN,euc-widget.freshworks.com
 DOMAIN,event.ithome.com.tw
 DOMAIN,events-delivery.apple.com
@@ -775,7 +784,6 @@ DOMAIN,flo.uri.sh
 DOMAIN,flows.trysavvy.com
 DOMAIN,fonts.bunny.net
 DOMAIN,fonts.cat.net
-DOMAIN,fonts.cdnfonts.com
 DOMAIN,fonts.codeberg.org
 DOMAIN,fonts.gishan.cc
 DOMAIN,fonts.googleapis.com
@@ -929,7 +937,15 @@ DOMAIN,images.wikia.com
 DOMAIN,images.wsj.net
 DOMAIN,images.wsjcommerce.net
 DOMAIN,images.youracclaim.com
+DOMAIN,images1.cmp.optimizely.com
 DOMAIN,images1.vinted.net
+DOMAIN,images1.welcomesoftware.com
+DOMAIN,images2.cmp.optimizely.com
+DOMAIN,images2.welcomesoftware.com
+DOMAIN,images3.cmp.optimizely.com
+DOMAIN,images3.welcomesoftware.com
+DOMAIN,images4.cmp.optimizely.com
+DOMAIN,images4.welcomesoftware.com
 DOMAIN,images7.design-editor.com
 DOMAIN,images8.design-editor.com
 DOMAIN,imagizer.imageshack.com
@@ -1051,6 +1067,7 @@ DOMAIN,js.stripe.com
 DOMAIN,js.upload.io
 DOMAIN,js.userflow.com
 DOMAIN,js.verygoodvault.com
+DOMAIN,js1.chargebee.com
 DOMAIN,jslibs.blackmagicdesign.com
 DOMAIN,jsonplaceholder.typicode.com
 DOMAIN,kdata1.com
@@ -1141,6 +1158,7 @@ DOMAIN,media.user.com
 DOMAIN,media.webtoo.ls
 DOMAIN,media.wired.com
 DOMAIN,media.yukimochi.jp
+DOMAIN,media.zoom.us
 DOMAIN,media0.giphy.com
 DOMAIN,media1.giphy.com
 DOMAIN,media1.tenor.com
@@ -1307,6 +1325,7 @@ DOMAIN,public.saasexch.com
 DOMAIN,publicsuffix.org
 DOMAIN,quriobot.com
 DOMAIN,r.r10s.jp
+DOMAIN,r2.leadsy.ai
 DOMAIN,raw.github.com
 DOMAIN,rawmarkdown.cloudflareaccess.org
 DOMAIN,rebound.postmarkapp.com
@@ -1403,7 +1422,6 @@ DOMAIN,safebrowsing.googleapis.com
 DOMAIN,sandpack-cdn-staging.blazingly.io
 DOMAIN,sbl.onfastspring.com
 DOMAIN,scdn.clerk.com
-DOMAIN,scdn1.plesk.com
 DOMAIN,scontent.whatsapp.net
 DOMAIN,screenshots.codesandbox.io
 DOMAIN,screenshots.debian.net
@@ -1716,6 +1734,7 @@ DOMAIN,t2.picb.cc
 DOMAIN,t3.gstatic.com
 DOMAIN,t3.picb.cc
 DOMAIN,t4.picb.cc
+DOMAIN,tag.trovo-tag.com
 DOMAIN,tags.bkrtx.com
 DOMAIN,tags.nationwide.com
 DOMAIN,tags.news.com.au
@@ -1761,7 +1780,6 @@ DOMAIN,ui-cdn.digitalocean.com
 DOMAIN,ui.contentstack.com
 DOMAIN,ui.trailhead.com
 DOMAIN,unlimited-cdn.waifu2x.net
-DOMAIN,update.greasyfork.org
 DOMAIN,updates.signal.org
 DOMAIN,updates2.signal.org
 DOMAIN,upload.filebase.com
@@ -1773,6 +1791,7 @@ DOMAIN,uploads.sitepoint.com
 DOMAIN,upos-sz-mirroralibstar1.bilivideo.com
 DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
 DOMAIN,us.hamreus.com
+DOMAIN,us01ccistatic.zoom.us
 DOMAIN,use.typekit.com
 DOMAIN,use.typekit.net
 DOMAIN,user-images.trustpilot.com
@@ -1807,7 +1826,6 @@ DOMAIN,viu-static.akamaized.net
 DOMAIN,vjs.zencdn.net
 DOMAIN,vscode-sync-insiders.trafficmanager.net
 DOMAIN,vscode-sync.trafficmanager.net
-DOMAIN,vscodeexperiments.azureedge.net
 DOMAIN,vuejs.org
 DOMAIN,w.chatlio.com
 DOMAIN,w.soundcloud.com
@@ -1918,6 +1936,7 @@ DOMAIN-SUFFIX,avximg.com
 DOMAIN-SUFFIX,awsstatic.com
 DOMAIN-SUFFIX,ax1x.com
 DOMAIN-SUFFIX,azurestaticapps.net
+DOMAIN-SUFFIX,b2c-contenthub.com
 DOMAIN-SUFFIX,badgen.net
 DOMAIN-SUFFIX,badoocdn.com
 DOMAIN-SUFFIX,bdzybf7.com
@@ -1953,6 +1972,7 @@ DOMAIN-SUFFIX,cdn-one.com
 DOMAIN-SUFFIX,cdn-spurit.com
 DOMAIN-SUFFIX,cdn-uploads.huggingface.co
 DOMAIN-SUFFIX,cdn-website.com
+DOMAIN-SUFFIX,cdn-zlib.sk
 DOMAIN-SUFFIX,cdn.applicationinsights.io
 DOMAIN-SUFFIX,cdn.cookielaw.org
 DOMAIN-SUFFIX,cdn.cwinfo.net
@@ -1986,6 +2006,7 @@ DOMAIN-SUFFIX,cdn2.hubspot.net
 DOMAIN-SUFFIX,cdn2020.com
 DOMAIN-SUFFIX,cdnbf.net
 DOMAIN-SUFFIX,cdnclouder.com
+DOMAIN-SUFFIX,cdnfonts.com
 DOMAIN-SUFFIX,cdninstagram.com
 DOMAIN-SUFFIX,cdnjhd.com
 DOMAIN-SUFFIX,cdnjs.network
@@ -1998,6 +2019,7 @@ DOMAIN-SUFFIX,cdntrex.com
 DOMAIN-SUFFIX,cf-ipfs.com
 DOMAIN-SUFFIX,cfcdn.mux.com
 DOMAIN-SUFFIX,characterai.io
+DOMAIN-SUFFIX,chargebeestaticv2.com
 DOMAIN-SUFFIX,chasecdn.com
 DOMAIN-SUFFIX,chcdn.xyz
 DOMAIN-SUFFIX,chesscomfiles.com
@@ -2575,6 +2597,7 @@ DOMAIN-SUFFIX,susercontent.com
 DOMAIN-SUFFIX,swiftypecdn.com
 DOMAIN-SUFFIX,sxccdn.com
 DOMAIN-SUFFIX,tapecontent.net
+DOMAIN-SUFFIX,teamtailor-cdn.com
 DOMAIN-SUFFIX,tedcdn.com
 DOMAIN-SUFFIX,telemetry.services.yofi.ai
 DOMAIN-SUFFIX,teraboxcdn.com
