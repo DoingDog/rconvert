@@ -1,5 +1,5 @@
-# Quantumult total line 5626
-# Last updated Fri 11/22/2024 22:14:24.97
+# Quantumult total line 5642
+# Last updated Mon 11/25/2024 22:14:48.53
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -113,6 +113,7 @@ HOST,assets.codepen.io,LIST
 HOST,assets.coinbase.com,LIST
 HOST,assets.coingecko.com,LIST
 HOST,assets.context.ly,LIST
+HOST,assets.controld.com,LIST
 HOST,assets.convertkit.com,LIST
 HOST,assets.dev.to,LIST
 HOST,assets.dify.ai,LIST
@@ -520,6 +521,7 @@ HOST,cdn.stash.com,LIST
 HOST,cdn.stellarhosted.com,LIST
 HOST,cdn.substack.com,LIST
 HOST,cdn.sunofbeaches.com,LIST
+HOST,cdn.svgator.com,LIST
 HOST,cdn.tailwindcss.com,LIST
 HOST,cdn.termius.com,LIST
 HOST,cdn.thisav.com,LIST
@@ -755,6 +757,7 @@ HOST,download.gimp.org,LIST
 HOST,download.hikarifield.co.jp,LIST
 HOST,download.iboysoft.com,LIST
 HOST,download.maxmind.com,LIST
+HOST,download.mersenne.ca,LIST
 HOST,download.mikrotik.com,LIST
 HOST,download.mlcc.google.com,LIST
 HOST,download.mozilla.org,LIST
@@ -803,6 +806,7 @@ HOST,edgestatic.azureedge.net,LIST
 HOST,eep.io,LIST
 HOST,eightcha.com,LIST
 HOST,embed-ssl.wistia.com,LIST
+HOST,embed-v2.testimonial.to,LIST
 HOST,embed.reddit.com,LIST
 HOST,embed.runkit.com,LIST
 HOST,embed.savvycal.com,LIST
@@ -853,6 +857,7 @@ HOST,fedorapeople.org,LIST
 HOST,fesdk.nexon.com,LIST
 HOST,fiddle.fastly.dev,LIST
 HOST,fiddle.jshell.net,LIST
+HOST,file.izanmei.net,LIST
 HOST,files.armorgames.com,LIST
 HOST,files.jotform.com,LIST
 HOST,files.mastodon.ktachibana.party,LIST
@@ -935,6 +940,7 @@ HOST,i.iheart.com,LIST
 HOST,i.imgflip.com,LIST
 HOST,i.imgur.com,LIST
 HOST,i.insider.com,LIST
+HOST,i.ioiox.com,LIST
 HOST,i.jpg.dog,LIST
 HOST,i.loli.best,LIST
 HOST,i.mt.lv,LIST
@@ -1108,6 +1114,7 @@ HOST,img3.airdroid.com,LIST
 HOST,img3.lltaohuaxiang.com,LIST
 HOST,img4.airdroid.com,LIST
 HOST,img6.airdroid.com,LIST
+HOST,imgcdn.cna.com.tw,LIST
 HOST,imgix.setapp.com,LIST
 HOST,imgproxy.fourthwall.com,LIST
 HOST,imgrs.apkcombo.com,LIST
@@ -1156,6 +1163,7 @@ HOST,js.upload.io,LIST
 HOST,js.userflow.com,LIST
 HOST,js.verygoodvault.com,LIST
 HOST,js1.chargebee.com,LIST
+HOST,jsdelivr.ioiox.net,LIST
 HOST,jslibs.blackmagicdesign.com,LIST
 HOST,jsonplaceholder.typicode.com,LIST
 HOST,kdata1.com,LIST
@@ -1241,6 +1249,7 @@ HOST,media.steampowered.com,LIST
 HOST,media.tenor.com,LIST
 HOST,media.themoviedb.org,LIST
 HOST,media.theporndude.com,LIST
+HOST,media.theresanaiforthat.com,LIST
 HOST,media.user.com,LIST
 HOST,media.webtoo.ls,LIST
 HOST,media.wired.com,LIST
@@ -1393,6 +1402,7 @@ HOST,platform.instagram.com,LIST
 HOST,platform.twitter.com,LIST
 HOST,platforms.makemytrip.com,LIST
 HOST,play-edge.itunes.apple.com,LIST
+HOST,play.izanmei.net,LIST
 HOST,play.publicradio.org,LIST
 HOST,play.vidyard.com,LIST
 HOST,player-frontend.cnevids.com,LIST
@@ -1611,6 +1621,7 @@ HOST,static-act.imoim.net,LIST
 HOST,static-assets-prod.epicgames.com,LIST
 HOST,static-assets-web.flixcart.com,LIST
 HOST,static-assets.clubhouseapi.com,LIST
+HOST,static-assets.codecademy.com,LIST
 HOST,static-assets.coinbase.com,LIST
 HOST,static-assets.freeanimehentai.net,LIST
 HOST,static-assets.mapbox.com,LIST
@@ -1643,6 +1654,7 @@ HOST,static.adguard.com,LIST
 HOST,static.adguardvpn.com,LIST
 HOST,static.agilebits.com,LIST
 HOST,static.ahrefs.com,LIST
+HOST,static.aizanmei.org,LIST
 HOST,static.arxiv.org,LIST
 HOST,static.assetlab.io,LIST
 HOST,static.axios.com,LIST
@@ -1704,6 +1716,8 @@ HOST,static.infomaniak.ch,LIST
 HOST,static.institution.grammarly.com,LIST
 HOST,static.iris.informa.com,LIST
 HOST,static.itch.io,LIST
+HOST,static.izanmei.net,LIST
+HOST,static.j51.net,LIST
 HOST,static.javhd.com,LIST
 HOST,static.killedbygoogle.com,LIST
 HOST,static.klaviyo.com,LIST
@@ -1850,6 +1864,7 @@ HOST,tiles.stadiamaps.com,LIST
 HOST,tiles.windy.com,LIST
 HOST,time.cloudflare.com,LIST
 HOST,tn.vjav.com,LIST
+HOST,ton.local.twitter.com,LIST
 HOST,topbar-static.piano.io,LIST
 HOST,torrindex.net,LIST
 HOST,tracker.cdnbye.com,LIST
@@ -1904,6 +1919,7 @@ HOST,v2.listenloop.com,LIST
 HOST,vanilla-extract.style,LIST
 HOST,versionbadg.es,LIST
 HOST,versioncheck-bg.addons.mozilla.org,LIST
+HOST,versioncheck.addons.mozilla.org,LIST
 HOST,vetted.ai,LIST
 HOST,vice-prod.sdiapi.com,LIST
 HOST,vice-web-statics-cdn.vice.com,LIST
