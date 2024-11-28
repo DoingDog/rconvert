@@ -1,5 +1,5 @@
-# Quantumult total line 2729
-# Last updated Mon 11/25/2024 22:14:38.32
+# Quantumult total line 2739
+# Last updated Thu 11/28/2024 22:14:20.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -547,6 +547,7 @@ HOST,cdn.xeiaso.net,LIST
 HOST,cdn.yinghuazy.xyz,LIST
 HOST,cdn.ywxi.net,LIST
 HOST,cdn.zapier.com,LIST
+HOST,cdn.zeabur.com,LIST
 HOST,cdn.zhujiwiki.com,LIST
 HOST,cdn0.dan.com,LIST
 HOST,cdn01.jotfor.ms,LIST
@@ -711,6 +712,7 @@ HOST,ec-prod.scene7.com,LIST
 HOST,edata.ndtv.com,LIST
 HOST,edge-consumer-static.azureedge.net,LIST
 HOST,edge-mobile-static.azureedge.net,LIST
+HOST,edge.marker.io,LIST
 HOST,edge.personalizer.io,LIST
 HOST,edge1.certona.net,LIST
 HOST,edgeassetservice.azureedge.net,LIST
@@ -863,6 +865,7 @@ HOST,icons.duckduckgo.com,LIST
 HOST,icons.leavemealone.com,LIST
 HOST,icons.llamao.fi,LIST
 HOST,icons.ly,LIST
+HOST,icons.zeabur.com,LIST
 HOST,iframe.nbcnews.com,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
@@ -1210,6 +1213,7 @@ HOST,nodei.co,LIST
 HOST,npm.antfu.dev,LIST
 HOST,npm.im,LIST
 HOST,npm.jsr.io,LIST
+HOST,null.jsbin.com,LIST
 HOST,o.n1mp.org,LIST
 HOST,object.innei.in,LIST
 HOST,objects.g0v.social,LIST
@@ -1366,6 +1370,7 @@ HOST,resource.fs.com,LIST
 HOST,resource.video.nimg.jp,LIST
 HOST,resources-cache.prod.sketch.com,LIST
 HOST,resources-live.sketch.cloud,LIST
+HOST,resources.esportsinsider.com,LIST
 HOST,resources.help.salesforce.com,LIST
 HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
@@ -1453,6 +1458,7 @@ HOST,secure.fanboy.co.nz,LIST
 HOST,secure.telegraph.co.uk,LIST
 HOST,segment.digitalocean.com,LIST
 HOST,sentry.ainopara.com,LIST
+HOST,service-icons.zeabur.com,LIST
 HOST,services.linkfire.com,LIST
 HOST,settings.kiwibrowser.com,LIST
 HOST,sf-coze-web-cdn.coze.com,LIST
@@ -1615,6 +1621,7 @@ HOST,static.izanmei.net,LIST
 HOST,static.j51.net,LIST
 HOST,static.javcdn.info,LIST
 HOST,static.javhd.com,LIST
+HOST,static.jsbin.com,LIST
 HOST,static.k2s.cc,LIST
 HOST,static.killedbygoogle.com,LIST
 HOST,static.klaviyo.com,LIST
@@ -1690,6 +1697,7 @@ HOST,static.vinted.com,LIST
 HOST,static.vocadb.net,LIST
 HOST,static.whatsapp.net,LIST
 HOST,static.workday.com,LIST
+HOST,static.xns.one,LIST
 HOST,static.zaobao.com,LIST
 HOST,static.zaobao.com.sg,LIST
 HOST,static01.nyt.com,LIST
@@ -2131,6 +2139,7 @@ HOST-SUFFIX,favicone.com,LIST
 HOST-SUFFIX,fbcdn.com,LIST
 HOST-SUFFIX,fbcdn.net,LIST
 HOST-SUFFIX,fbsbx.com,LIST
+HOST-SUFFIX,featureassets.org,LIST
 HOST-SUFFIX,file.core.windows.net,LIST
 HOST-SUFFIX,filecunhua.top,LIST
 HOST-SUFFIX,files.bbci.co.uk,LIST
@@ -2678,6 +2687,7 @@ HOST-SUFFIX,w-corp-staticblitz.com,LIST
 HOST-SUFFIX,w-credentialless-staticblitz.com,LIST
 HOST-SUFFIX,w3s.link,LIST
 HOST-SUFFIX,walmartimages.com,LIST
+HOST-SUFFIX,warnermediacdn.com,LIST
 HOST-SUFFIX,wdfiles.com,LIST
 HOST-SUFFIX,web.app,LIST
 HOST-SUFFIX,webp.se,LIST

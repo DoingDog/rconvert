@@ -1,5 +1,5 @@
-# Quantumult total line 5642
-# Last updated Mon 11/25/2024 22:14:48.53
+# Quantumult total line 5654
+# Last updated Thu 11/28/2024 22:14:29.02
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -556,6 +556,7 @@ HOST,cdn.xeiaso.net,LIST
 HOST,cdn.yinghuazy.xyz,LIST
 HOST,cdn.ywxi.net,LIST
 HOST,cdn.zapier.com,LIST
+HOST,cdn.zeabur.com,LIST
 HOST,cdn.zhujiwiki.com,LIST
 HOST,cdn.zoom.us,LIST
 HOST,cdn0.dan.com,LIST
@@ -798,6 +799,7 @@ HOST,edata.ndtv.com,LIST
 HOST,edge-consumer-static.azureedge.net,LIST
 HOST,edge-mobile-static.azureedge.net,LIST
 HOST,edge.cwtv-vod-ext.top.comcast.net,LIST
+HOST,edge.marker.io,LIST
 HOST,edge.personalizer.io,LIST
 HOST,edge.steam-dns.top.comcast.net,LIST
 HOST,edge1.certona.net,LIST
@@ -957,6 +959,7 @@ HOST,icons.duckduckgo.com,LIST
 HOST,icons.leavemealone.com,LIST
 HOST,icons.llamao.fi,LIST
 HOST,icons.ly,LIST
+HOST,icons.zeabur.com,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
 HOST,image.4fuk.org,LIST
@@ -1328,6 +1331,7 @@ HOST,np-edge.itunes.apple.com,LIST
 HOST,npm.antfu.dev,LIST
 HOST,npm.im,LIST
 HOST,npm.jsr.io,LIST
+HOST,null.jsbin.com,LIST
 HOST,o.n1mp.org,LIST
 HOST,object.innei.in,LIST
 HOST,objects.g0v.social,LIST
@@ -1484,6 +1488,7 @@ HOST,resizing.flixster.com,LIST
 HOST,resource.fs.com,LIST
 HOST,resources-cache.prod.sketch.com,LIST
 HOST,resources-live.sketch.cloud,LIST
+HOST,resources.esportsinsider.com,LIST
 HOST,resources.help.salesforce.com,LIST
 HOST,rpg.pic-imges.com,LIST
 HOST,rsi.grafana.com,LIST
@@ -1572,6 +1577,7 @@ HOST,secure.telegraph.co.uk,LIST
 HOST,security.debian.org,LIST
 HOST,security.ubuntu.com,LIST
 HOST,sentry.ainopara.com,LIST
+HOST,service-icons.zeabur.com,LIST
 HOST,services.linkfire.com,LIST
 HOST,settings.kiwibrowser.com,LIST
 HOST,sf-coze-web-cdn.coze.com,LIST
@@ -1719,6 +1725,7 @@ HOST,static.itch.io,LIST
 HOST,static.izanmei.net,LIST
 HOST,static.j51.net,LIST
 HOST,static.javhd.com,LIST
+HOST,static.jsbin.com,LIST
 HOST,static.killedbygoogle.com,LIST
 HOST,static.klaviyo.com,LIST
 HOST,static.kobo.com,LIST
@@ -1787,6 +1794,7 @@ HOST,static.vinted.com,LIST
 HOST,static.vocadb.net,LIST
 HOST,static.whatsapp.net,LIST
 HOST,static.workday.com,LIST
+HOST,static.xns.one,LIST
 HOST,static.zaobao.com,LIST
 HOST,static.zaobao.com.sg,LIST
 HOST,static1.lottiefiles.com,LIST
@@ -2289,6 +2297,7 @@ HOST-SUFFIX,cbsstatic.com,LIST
 HOST-SUFFIX,cbsstore.com,LIST
 HOST-SUFFIX,cbssvideo.com,LIST
 HOST-SUFFIX,cbstelevisioncity.com,LIST
+HOST-SUFFIX,cd4o.com,LIST
 HOST-SUFFIX,cdkworkshop.com,LIST
 HOST-SUFFIX,cdn-cookieyes.com,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
@@ -2790,6 +2799,7 @@ HOST-SUFFIX,fbcdn.com,LIST
 HOST-SUFFIX,fbcdn.net,LIST
 HOST-SUFFIX,fboom.me,LIST
 HOST-SUFFIX,fbsbx.com,LIST
+HOST-SUFFIX,featureassets.org,LIST
 HOST-SUFFIX,feetcdn.com,LIST
 HOST-SUFFIX,femefun.com,LIST
 HOST-SUFFIX,fetnet.net,LIST
@@ -4408,6 +4418,7 @@ HOST-SUFFIX,uptotal.com,LIST
 HOST-SUFFIX,upvast.com,LIST
 HOST-SUFFIX,upvid.co,LIST
 HOST-SUFFIX,urduvoa.com,LIST
+HOST-SUFFIX,urleecher.com,LIST
 HOST-SUFFIX,usanetwork.com,LIST
 HOST-SUFFIX,uschovna.cz,LIST
 HOST-SUFFIX,usemet.nl,LIST
@@ -4546,6 +4557,7 @@ HOST-SUFFIX,w-credentialless-staticblitz.com,LIST
 HOST-SUFFIX,w3s.link,LIST
 HOST-SUFFIX,wallhaven.cc,LIST
 HOST-SUFFIX,walmartimages.com,LIST
+HOST-SUFFIX,warnermediacdn.com,LIST
 HOST-SUFFIX,wat.tv,LIST
 HOST-SUFFIX,watchdisneyfe.com,LIST
 HOST-SUFFIX,watchespn.com,LIST
