@@ -1349,7 +1349,7 @@ USER-AGENT,archero*
 USER-AGENT,battleroyale*
 USER-AGENT,coffee%20corp*
 USER-AGENT,coffeecorp*
-USER-AGENT,com.apple.trustd*
+#USER-AGENT,com.apple.trustd*
 USER-AGENT,com.google.ios.youtube*
 USER-AGENT,com.google.ios.youtubemusic*
 USER-AGENT,com.kktv.ios.kktv*
