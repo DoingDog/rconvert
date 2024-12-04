@@ -1,10 +1,11 @@
-# Quantumult total line 5665
-# Last updated Sun 12/01/2024 22:14:06.34
+# Quantumult total line 5682
+# Last updated Wed 12/04/2024 22:14:58.71
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
 HOST,a.deviantart.net,LIST
 HOST,a.fireside.fm,LIST
+HOST,a.gawby.com,LIST
 HOST,a5.behance.net,LIST
 HOST,academy-public.coinmarketcap.com,LIST
 HOST,account-cdn.svc.ui.com,LIST
@@ -48,6 +49,7 @@ HOST,api.qrserver.com,LIST
 HOST,api.roboflow.com,LIST
 HOST,api.weather.com,LIST
 HOST,api.web3.storage,LIST
+HOST,apichatwidget.usepylon.com,LIST
 HOST,apm-misaka.biliapi.net,LIST
 HOST,app-api.vidjet.io,LIST
 HOST,app-spm.com,LIST
@@ -225,6 +227,7 @@ HOST,assetscdn-wchat.eu.freshchat.com,LIST
 HOST,assetscdn.jable.tv,LIST
 HOST,at.adtech.redventures.io,LIST
 HOST,atn.hitomi.la,LIST
+HOST,attachments.office.net,LIST
 HOST,aus2-community.mozilla.org,LIST
 HOST,aus5.mozilla.org,LIST
 HOST,auth.split.io,LIST
@@ -241,6 +244,7 @@ HOST,avts.wmlabs.net,LIST
 HOST,axiecdn.axieinfinity.com,LIST
 HOST,az700632.vo.msecnd.net,LIST
 HOST,az764295.vo.msecnd.net,LIST
+HOST,b.sf-syn.com,LIST
 HOST,badbits.dwebops.pub,LIST
 HOST,badge.buildkite.com,LIST
 HOST,badge.fury.io,LIST
@@ -544,6 +548,7 @@ HOST,cdn.up-timely.com,LIST
 HOST,cdn.usd.fan,LIST
 HOST,cdn.userreport.com,LIST
 HOST,cdn.v2ex.com,LIST
+HOST,cdn.vector.co,LIST
 HOST,cdn.verifypass.com,LIST
 HOST,cdn.vidyard.com,LIST
 HOST,cdn.viglink.com,LIST
@@ -646,6 +651,7 @@ HOST,codeload.github.com,LIST
 HOST,compass-ssl.xbox.com,LIST
 HOST,components.clever-cloud.com,LIST
 HOST,components.justanswer.com,LIST
+HOST,componentupdater.brave.com,LIST
 HOST,config.extension.grammarly.com,LIST
 HOST,confluence-v1.prod.atl-paas.net,LIST
 HOST,connect.facebook.net,LIST
@@ -898,6 +904,7 @@ HOST,front-resource.fs.com,LIST
 HOST,fs2.onlyhentaistuff.com,LIST
 HOST,fscdn.eppo.cloud,LIST
 HOST,ftp.gnu.org,LIST
+HOST,ftp.gwdg.de,LIST
 HOST,g-static.ap4r.com,LIST
 HOST,genesis-cdn.ff.com,LIST
 HOST,geoip-js.com,LIST
@@ -908,6 +915,7 @@ HOST,gitpkg-fork.vercel.sh,LIST
 HOST,global.divhunt.com,LIST
 HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
+HOST,go-updater.brave.com,LIST
 HOST,go.vercel.com,LIST
 HOST,godoc.org,LIST
 HOST,gog-cdn-fastly-cp77.gog.com,LIST
@@ -934,6 +942,7 @@ HOST,hv-monsterdb-data.skk.moe,LIST
 HOST,i.1password.com,LIST
 HOST,i.creativecommons.org,LIST
 HOST,i.dailymail.co.uk,LIST
+HOST,i.gawby.com,LIST
 HOST,i.geekflare.com,LIST
 HOST,i.giphy.com,LIST
 HOST,i.guim.co.uk,LIST
@@ -1075,6 +1084,7 @@ HOST,img.decrypt.co,LIST
 HOST,img.dlsite.jp,LIST
 HOST,img.domaintools.com,LIST
 HOST,img.foresightnews.pro,LIST
+HOST,img.fortawesome.com,LIST
 HOST,img.freepik.com,LIST
 HOST,img.hcloud.lat,LIST
 HOST,img.hellofresh.com,LIST
@@ -1089,6 +1099,7 @@ HOST,img.kemono.su,LIST
 HOST,img.ltyears.com,LIST
 HOST,img.lvv2.com,LIST
 HOST,img.m.mw,LIST
+HOST,img.majors.im,LIST
 HOST,img.moedog.org,LIST
 HOST,img.moegirl.tw,LIST
 HOST,img.mresou.com,LIST
@@ -1397,6 +1408,7 @@ HOST,pic.skk.moe,LIST
 HOST,piccdn.7mmtv.sx,LIST
 HOST,pics.hentai.name,LIST
 HOST,pics.javhd.today,LIST
+HOST,pics.mf8.biz,LIST
 HOST,pics.paypal.com,LIST
 HOST,pics.vpdmm.cc,LIST
 HOST,pics.x-n-x-x.pro,LIST
@@ -1640,6 +1652,7 @@ HOST,static-assets.freeanimehentai.net,LIST
 HOST,static-assets.mapbox.com,LIST
 HOST,static-assets.npr.org,LIST
 HOST,static-assets.vinted.com,LIST
+HOST,static-ca-cdn.eporner.com,LIST
 HOST,static-cdn.123rf.com,LIST
 HOST,static-cdn.osdn.net,LIST
 HOST,static-cdn.spot.im,LIST
@@ -1898,9 +1911,11 @@ HOST,udata.namespace.so,LIST
 HOST,ui.contentstack.com,LIST
 HOST,ui.trailhead.com,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
+HOST,unsubscribe-imgs.leavemealone.com,LIST
 HOST,update.code.visualstudio.com,LIST
 HOST,update.googleapis.com,LIST
 HOST,update.greasyfork.org,LIST
+HOST,update.kiwibrowser.com,LIST
 HOST,update.sleazyfork.org,LIST
 HOST,updater.snipaste.com,LIST
 HOST,updates-cdn.bravesoftware.com,LIST
@@ -1917,6 +1932,7 @@ HOST,upos-sz-mirroralibstar1.bilivideo.com,LIST
 HOST,upos-sz-mirrorcosbstar1.bilivideo.com,LIST
 HOST,us.hamreus.com,LIST
 HOST,us01ccistatic.zoom.us,LIST
+HOST,use.fortawesome.com,LIST
 HOST,use.typekit.com,LIST
 HOST,use.typekit.net,LIST
 HOST,user-images.trustpilot.com,LIST
@@ -4071,6 +4087,7 @@ HOST-SUFFIX,s-nbcnews.com,LIST
 HOST-SUFFIX,s3-website.fr-par.scw.cloud,LIST
 HOST-SUFFIX,s3-website.nl-ams.scw.cloud,LIST
 HOST-SUFFIX,s3-website.pl-waw.scw.cloud,LIST
+HOST-SUFFIX,s3.brave.com,LIST
 HOST-SUFFIX,s3.fr-par.scw.cloud,LIST
 HOST-SUFFIX,s3.isk01.sakurastorage.jp,LIST
 HOST-SUFFIX,s3.isk02.sakurastorage.jp,LIST

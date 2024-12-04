@@ -1,10 +1,11 @@
-# Main total line 5679
-# Last updated Sun 12/01/2024 22:14:06.20
+# Main total line 5696
+# Last updated Wed 12/04/2024 22:14:58.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
 DOMAIN,a.deviantart.net
 DOMAIN,a.fireside.fm
+DOMAIN,a.gawby.com
 DOMAIN,a5.behance.net
 DOMAIN,academy-public.coinmarketcap.com
 DOMAIN,account-cdn.svc.ui.com
@@ -48,6 +49,7 @@ DOMAIN,api.qrserver.com
 DOMAIN,api.roboflow.com
 DOMAIN,api.weather.com
 DOMAIN,api.web3.storage
+DOMAIN,apichatwidget.usepylon.com
 DOMAIN,apm-misaka.biliapi.net
 DOMAIN,app-api.vidjet.io
 DOMAIN,app-spm.com
@@ -225,6 +227,7 @@ DOMAIN,assetscdn-wchat.eu.freshchat.com
 DOMAIN,assetscdn.jable.tv
 DOMAIN,at.adtech.redventures.io
 DOMAIN,atn.hitomi.la
+DOMAIN,attachments.office.net
 DOMAIN,aus2-community.mozilla.org
 DOMAIN,aus5.mozilla.org
 DOMAIN,auth.split.io
@@ -241,6 +244,7 @@ DOMAIN,avts.wmlabs.net
 DOMAIN,axiecdn.axieinfinity.com
 DOMAIN,az700632.vo.msecnd.net
 DOMAIN,az764295.vo.msecnd.net
+DOMAIN,b.sf-syn.com
 DOMAIN,badbits.dwebops.pub
 DOMAIN,badge.buildkite.com
 DOMAIN,badge.fury.io
@@ -544,6 +548,7 @@ DOMAIN,cdn.up-timely.com
 DOMAIN,cdn.usd.fan
 DOMAIN,cdn.userreport.com
 DOMAIN,cdn.v2ex.com
+DOMAIN,cdn.vector.co
 DOMAIN,cdn.verifypass.com
 DOMAIN,cdn.vidyard.com
 DOMAIN,cdn.viglink.com
@@ -646,6 +651,7 @@ DOMAIN,codeload.github.com
 DOMAIN,compass-ssl.xbox.com
 DOMAIN,components.clever-cloud.com
 DOMAIN,components.justanswer.com
+DOMAIN,componentupdater.brave.com
 DOMAIN,config.extension.grammarly.com
 DOMAIN,confluence-v1.prod.atl-paas.net
 DOMAIN,connect.facebook.net
@@ -898,6 +904,7 @@ DOMAIN,front-resource.fs.com
 DOMAIN,fs2.onlyhentaistuff.com
 DOMAIN,fscdn.eppo.cloud
 DOMAIN,ftp.gnu.org
+DOMAIN,ftp.gwdg.de
 DOMAIN,g-static.ap4r.com
 DOMAIN,genesis-cdn.ff.com
 DOMAIN,geoip-js.com
@@ -908,6 +915,7 @@ DOMAIN,gitpkg-fork.vercel.sh
 DOMAIN,global.divhunt.com
 DOMAIN,glyph.medium.com
 DOMAIN,gmedia.playstation.com
+DOMAIN,go-updater.brave.com
 DOMAIN,go.vercel.com
 DOMAIN,godoc.org
 DOMAIN,gog-cdn-fastly-cp77.gog.com
@@ -934,6 +942,7 @@ DOMAIN,hv-monsterdb-data.skk.moe
 DOMAIN,i.1password.com
 DOMAIN,i.creativecommons.org
 DOMAIN,i.dailymail.co.uk
+DOMAIN,i.gawby.com
 DOMAIN,i.geekflare.com
 DOMAIN,i.giphy.com
 DOMAIN,i.guim.co.uk
@@ -1075,6 +1084,7 @@ DOMAIN,img.decrypt.co
 DOMAIN,img.dlsite.jp
 DOMAIN,img.domaintools.com
 DOMAIN,img.foresightnews.pro
+DOMAIN,img.fortawesome.com
 DOMAIN,img.freepik.com
 DOMAIN,img.hcloud.lat
 DOMAIN,img.hellofresh.com
@@ -1089,6 +1099,7 @@ DOMAIN,img.kemono.su
 DOMAIN,img.ltyears.com
 DOMAIN,img.lvv2.com
 DOMAIN,img.m.mw
+DOMAIN,img.majors.im
 DOMAIN,img.moedog.org
 DOMAIN,img.moegirl.tw
 DOMAIN,img.mresou.com
@@ -1397,6 +1408,7 @@ DOMAIN,pic.skk.moe
 DOMAIN,piccdn.7mmtv.sx
 DOMAIN,pics.hentai.name
 DOMAIN,pics.javhd.today
+DOMAIN,pics.mf8.biz
 DOMAIN,pics.paypal.com
 DOMAIN,pics.vpdmm.cc
 DOMAIN,pics.x-n-x-x.pro
@@ -1640,6 +1652,7 @@ DOMAIN,static-assets.freeanimehentai.net
 DOMAIN,static-assets.mapbox.com
 DOMAIN,static-assets.npr.org
 DOMAIN,static-assets.vinted.com
+DOMAIN,static-ca-cdn.eporner.com
 DOMAIN,static-cdn.123rf.com
 DOMAIN,static-cdn.osdn.net
 DOMAIN,static-cdn.spot.im
@@ -1898,9 +1911,11 @@ DOMAIN,udata.namespace.so
 DOMAIN,ui.contentstack.com
 DOMAIN,ui.trailhead.com
 DOMAIN,unlimited-cdn.waifu2x.net
+DOMAIN,unsubscribe-imgs.leavemealone.com
 DOMAIN,update.code.visualstudio.com
 DOMAIN,update.googleapis.com
 DOMAIN,update.greasyfork.org
+DOMAIN,update.kiwibrowser.com
 DOMAIN,update.sleazyfork.org
 DOMAIN,updater.snipaste.com
 DOMAIN,updates-cdn.bravesoftware.com
@@ -1917,6 +1932,7 @@ DOMAIN,upos-sz-mirroralibstar1.bilivideo.com
 DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
 DOMAIN,us.hamreus.com
 DOMAIN,us01ccistatic.zoom.us
+DOMAIN,use.fortawesome.com
 DOMAIN,use.typekit.com
 DOMAIN,use.typekit.net
 DOMAIN,user-images.trustpilot.com
@@ -4071,6 +4087,7 @@ DOMAIN-SUFFIX,s-nbcnews.com
 DOMAIN-SUFFIX,s3-website.fr-par.scw.cloud
 DOMAIN-SUFFIX,s3-website.nl-ams.scw.cloud
 DOMAIN-SUFFIX,s3-website.pl-waw.scw.cloud
+DOMAIN-SUFFIX,s3.brave.com
 DOMAIN-SUFFIX,s3.fr-par.scw.cloud
 DOMAIN-SUFFIX,s3.isk01.sakurastorage.jp
 DOMAIN-SUFFIX,s3.isk02.sakurastorage.jp

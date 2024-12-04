@@ -1,5 +1,5 @@
-# Clash total line 2749
-# Last updated Sun 12/01/2024 22:13:56.56
+# Clash total line 2761
+# Last updated Wed 12/04/2024 22:14:49.88
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -7,6 +7,7 @@ payload:
   - DOMAIN,4gtvimg2.4gtv.tv
   - DOMAIN,a.deviantart.net
   - DOMAIN,a.fireside.fm
+  - DOMAIN,a.gawby.com
   - DOMAIN,a5.behance.net
   - DOMAIN,a57.foxnews.com
   - DOMAIN,academy-public.coinmarketcap.com
@@ -44,6 +45,7 @@ payload:
   - DOMAIN,api.roboflow.com
   - DOMAIN,api.weather.com
   - DOMAIN,api.web3.storage
+  - DOMAIN,apichatwidget.usepylon.com
   - DOMAIN,app-api.vidjet.io
   - DOMAIN,app-spm.com
   - DOMAIN,app-static.eu.posthog.com
@@ -224,6 +226,7 @@ payload:
   - DOMAIN,at.adtech.redventures.io
   - DOMAIN,at.cbsi.com
   - DOMAIN,atn.hitomi.la
+  - DOMAIN,attachments.office.net
   - DOMAIN,auth.split.io
   - DOMAIN,autoupdate.termius.com
   - DOMAIN,avatar.freepik.com
@@ -238,6 +241,7 @@ payload:
   - DOMAIN,avts.wmlabs.net
   - DOMAIN,axiecdn.axieinfinity.com
   - DOMAIN,az700632.vo.msecnd.net
+  - DOMAIN,b.sf-syn.com
   - DOMAIN,badbits.dwebops.pub
   - DOMAIN,badge.buildkite.com
   - DOMAIN,badge.fury.io
@@ -536,6 +540,7 @@ payload:
   - DOMAIN,cdn.usd.fan
   - DOMAIN,cdn.userreport.com
   - DOMAIN,cdn.v2ex.com
+  - DOMAIN,cdn.vector.co
   - DOMAIN,cdn.verifypass.com
   - DOMAIN,cdn.vidible.tv
   - DOMAIN,cdn.vidyard.com
@@ -836,6 +841,7 @@ payload:
   - DOMAIN,i.1password.com
   - DOMAIN,i.creativecommons.org
   - DOMAIN,i.dailymail.co.uk
+  - DOMAIN,i.gawby.com
   - DOMAIN,i.geekflare.com
   - DOMAIN,i.giphy.com
   - DOMAIN,i.guim.co.uk
@@ -989,6 +995,7 @@ payload:
   - DOMAIN,img.dlsite.jp
   - DOMAIN,img.domaintools.com
   - DOMAIN,img.foresightnews.pro
+  - DOMAIN,img.fortawesome.com
   - DOMAIN,img.freepik.com
   - DOMAIN,img.hcloud.lat
   - DOMAIN,img.hellofresh.com
@@ -1003,6 +1010,7 @@ payload:
   - DOMAIN,img.ltyears.com
   - DOMAIN,img.lvv2.com
   - DOMAIN,img.m.mw
+  - DOMAIN,img.majors.im
   - DOMAIN,img.moedog.org
   - DOMAIN,img.moegirl.tw
   - DOMAIN,img.mresou.com
@@ -1279,6 +1287,7 @@ payload:
   - DOMAIN,pics.dmm.co.jp
   - DOMAIN,pics.hentai.name
   - DOMAIN,pics.javhd.today
+  - DOMAIN,pics.mf8.biz
   - DOMAIN,pics.paypal.com
   - DOMAIN,pics.vpdmm.cc
   - DOMAIN,pics.x-n-x-x.pro
@@ -1520,6 +1529,7 @@ payload:
   - DOMAIN,static-assets.mapbox.com
   - DOMAIN,static-assets.npr.org
   - DOMAIN,static-assets.vinted.com
+  - DOMAIN,static-ca-cdn.eporner.com
   - DOMAIN,static-cache.fboom.me
   - DOMAIN,static-cache.k2s.cc
   - DOMAIN,static-cdn.123rf.com
@@ -1812,6 +1822,7 @@ payload:
   - DOMAIN,ui.contentstack.com
   - DOMAIN,ui.trailhead.com
   - DOMAIN,unlimited-cdn.waifu2x.net
+  - DOMAIN,unsubscribe-imgs.leavemealone.com
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
   - DOMAIN,upload.filebase.com
@@ -1824,6 +1835,7 @@ payload:
   - DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
   - DOMAIN,us.hamreus.com
   - DOMAIN,us01ccistatic.zoom.us
+  - DOMAIN,use.fortawesome.com
   - DOMAIN,use.typekit.com
   - DOMAIN,use.typekit.net
   - DOMAIN,user-images.trustpilot.com
