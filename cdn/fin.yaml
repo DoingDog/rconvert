@@ -1,5 +1,5 @@
-# Clash total line 2761
-# Last updated Wed 12/04/2024 22:14:49.88
+# Clash total line 2767
+# Last updated Sat 12/07/2024 22:14:00.29
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -319,6 +319,7 @@ payload:
   - DOMAIN,cdn.adguard.info
   - DOMAIN,cdn.amcharts.com
   - DOMAIN,cdn.announcekit.app
+  - DOMAIN,cdn.answeroverflow.com
   - DOMAIN,cdn.apkmonk.com
   - DOMAIN,cdn.apponic.com
   - DOMAIN,cdn.arcade.software
@@ -787,6 +788,7 @@ payload:
   - DOMAIN,files.readme.io
   - DOMAIN,files.reg.ru
   - DOMAIN,files.slack.com
+  - DOMAIN,files.smashing.media
   - DOMAIN,files.writefreely.org
   - DOMAIN,files.yande.re
   - DOMAIN,filestore.fortinet.com
@@ -1127,6 +1129,7 @@ payload:
   - DOMAIN,mantisloader.mantis-awx.com
   - DOMAIN,maps.geoapify.com
   - DOMAIN,maps.gstatic.com
+  - DOMAIN,marketing.figma.com
   - DOMAIN,marketplace-web-assets.vinted.com
   - DOMAIN,mastodon-static.miao.dev
   - DOMAIN,maven.google.com
@@ -1536,6 +1539,7 @@ payload:
   - DOMAIN,static-cdn.jtvnw.net
   - DOMAIN,static-cdn.osdn.net
   - DOMAIN,static-cdn.spot.im
+  - DOMAIN,static-cdn.usertesting.com
   - DOMAIN,static-clst.avgle.com
   - DOMAIN,static-community.tp-link.com
   - DOMAIN,static-dm.ubisoft.com
@@ -2135,6 +2139,7 @@ payload:
   - DOMAIN-SUFFIX,ebayimg.com
   - DOMAIN-SUFFIX,ebaystatic.com
   - DOMAIN-SUFFIX,edgestorewebcdn.azureedge.net
+  - DOMAIN-SUFFIX,eggjs.org
   - DOMAIN-SUFFIX,ehgt.org
   - DOMAIN-SUFFIX,els-cdn.com
   - DOMAIN-SUFFIX,embedgram.com
@@ -2636,6 +2641,7 @@ payload:
   - DOMAIN-SUFFIX,stripecdn.com
   - DOMAIN-SUFFIX,stripst.com
   - DOMAIN-SUFFIX,strpst.com
+  - DOMAIN-SUFFIX,stylexjs.com
   - DOMAIN-SUFFIX,substackcdn.com
   - DOMAIN-SUFFIX,surge.sh
   - DOMAIN-SUFFIX,surrit.com

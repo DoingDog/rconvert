@@ -1,5 +1,5 @@
-# Surge Rules total line 995
-# Last updated Wed 12/04/2024 22:14:58.96
+# Surge Rules total line 999
+# Last updated Sat 12/07/2024 22:14:09.86
 DOMAIN-KEYWORD,-files.gitbook.io
 DOMAIN-KEYWORD,-res.cloudinary.com
 DOMAIN-KEYWORD,-spotify-com
@@ -102,6 +102,7 @@ IP-CIDR,149.255.128.1/32,no-resolve
 IP-CIDR,150.109.28.51/32,no-resolve
 IP-CIDR,151.5.17.19/32,no-resolve
 IP-CIDR,151.5.17.43/32,no-resolve
+IP-CIDR,152.53.67.239/32,no-resolve
 IP-CIDR,159.138.102.146/32,no-resolve
 IP-CIDR,161.0.157.195/32,no-resolve
 IP-CIDR,161.0.157.73/32,no-resolve
@@ -310,6 +311,7 @@ IP-CIDR,186.177.100.2/32,no-resolve
 IP-CIDR,186.177.66.50/32,no-resolve
 IP-CIDR,186.179.71.154/32,no-resolve
 IP-CIDR,186.96.222.38/32,no-resolve
+IP-CIDR,188.172.228.49/32,no-resolve
 IP-CIDR,188.47.194.235/32,no-resolve
 IP-CIDR,188.47.194.243/32,no-resolve
 IP-CIDR,188.47.194.244/31,no-resolve
@@ -424,6 +426,7 @@ IP-CIDR,201.174.249.34/32,no-resolve
 IP-CIDR,201.174.48.130/32,no-resolve
 IP-CIDR,202.188.117.43/32,no-resolve
 IP-CIDR,202.188.117.45/32,no-resolve
+IP-CIDR,202.61.255.248/32,no-resolve
 IP-CIDR,203.116.0.0/16,no-resolve
 IP-CIDR,203.177.54.2/32,no-resolve
 IP-CIDR,203.198.0.0/20,no-resolve
@@ -507,6 +510,7 @@ IP-CIDR,212.113.160.242/32,no-resolve
 IP-CIDR,212.230.122.34/32,no-resolve
 IP-CIDR,212.6.80.20/32,no-resolve
 IP-CIDR,212.6.80.4/32,no-resolve
+IP-CIDR,212.90.120.164/32,no-resolve
 IP-CIDR,213.140.51.111/32,no-resolve
 IP-CIDR,213.158.201.180/32,no-resolve
 IP-CIDR,216.183.33.177/32,no-resolve

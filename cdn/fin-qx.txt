@@ -1,5 +1,5 @@
-# Quantumult total line 2761
-# Last updated Wed 12/04/2024 22:14:49.85
+# Quantumult total line 2767
+# Last updated Sat 12/07/2024 22:14:00.27
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -318,6 +318,7 @@ HOST,cdn.adguard.com,LIST
 HOST,cdn.adguard.info,LIST
 HOST,cdn.amcharts.com,LIST
 HOST,cdn.announcekit.app,LIST
+HOST,cdn.answeroverflow.com,LIST
 HOST,cdn.apkmonk.com,LIST
 HOST,cdn.apponic.com,LIST
 HOST,cdn.arcade.software,LIST
@@ -786,6 +787,7 @@ HOST,files.mastodon.social,LIST
 HOST,files.readme.io,LIST
 HOST,files.reg.ru,LIST
 HOST,files.slack.com,LIST
+HOST,files.smashing.media,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
 HOST,filestore.fortinet.com,LIST
@@ -1126,6 +1128,7 @@ HOST,mangaz-static.j-comi.jp,LIST
 HOST,mantisloader.mantis-awx.com,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
+HOST,marketing.figma.com,LIST
 HOST,marketplace-web-assets.vinted.com,LIST
 HOST,mastodon-static.miao.dev,LIST
 HOST,maven.google.com,LIST
@@ -1535,6 +1538,7 @@ HOST,static-cdn.123rf.com,LIST
 HOST,static-cdn.jtvnw.net,LIST
 HOST,static-cdn.osdn.net,LIST
 HOST,static-cdn.spot.im,LIST
+HOST,static-cdn.usertesting.com,LIST
 HOST,static-clst.avgle.com,LIST
 HOST,static-community.tp-link.com,LIST
 HOST,static-dm.ubisoft.com,LIST
@@ -2134,6 +2138,7 @@ HOST-SUFFIX,easylist.to,LIST
 HOST-SUFFIX,ebayimg.com,LIST
 HOST-SUFFIX,ebaystatic.com,LIST
 HOST-SUFFIX,edgestorewebcdn.azureedge.net,LIST
+HOST-SUFFIX,eggjs.org,LIST
 HOST-SUFFIX,ehgt.org,LIST
 HOST-SUFFIX,els-cdn.com,LIST
 HOST-SUFFIX,embedgram.com,LIST
@@ -2635,6 +2640,7 @@ HOST-SUFFIX,stripeassets.com,LIST
 HOST-SUFFIX,stripecdn.com,LIST
 HOST-SUFFIX,stripst.com,LIST
 HOST-SUFFIX,strpst.com,LIST
+HOST-SUFFIX,stylexjs.com,LIST
 HOST-SUFFIX,substackcdn.com,LIST
 HOST-SUFFIX,surge.sh,LIST
 HOST-SUFFIX,surrit.com,LIST

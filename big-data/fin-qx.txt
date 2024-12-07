@@ -1,5 +1,5 @@
-# Quantumult total line 5682
-# Last updated Wed 12/04/2024 22:14:58.71
+# Quantumult total line 5775
+# Last updated Sat 12/07/2024 22:14:09.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -289,6 +289,7 @@ HOST,cache.hackedfreegames.com,LIST
 HOST,cache.pack.google.com,LIST
 HOST,cache.video.iqiyi.com,LIST
 HOST,cc.boyfriendtv.com,LIST
+HOST,cc.coemn.com,LIST
 HOST,cdimage.kali.org,LIST
 HOST,cdn-1.ggjav.com,LIST
 HOST,cdn-a.sonyentertainmentnetwork.com,LIST
@@ -333,6 +334,7 @@ HOST,cdn.adguard.com,LIST
 HOST,cdn.adguard.info,LIST
 HOST,cdn.amcharts.com,LIST
 HOST,cdn.announcekit.app,LIST
+HOST,cdn.answeroverflow.com,LIST
 HOST,cdn.apkmonk.com,LIST
 HOST,cdn.apple-cloudkit.com,LIST
 HOST,cdn.apponic.com,LIST
@@ -635,6 +637,7 @@ HOST,cloud.redhat.com,LIST
 HOST,cloud.typenetwork.com,LIST
 HOST,cloudflare.tv,LIST
 HOST,cloudfront.barilliance.com,LIST
+HOST,cminf.sfcat.link,LIST
 HOST,cms-assets.nodecraft.com,LIST
 HOST,cms-assets.webediamovies.pro,LIST
 HOST,cms-assets.xboxservices.com,LIST
@@ -692,6 +695,7 @@ HOST,css-1-cdn.airdroid.com,LIST
 HOST,css.blackmagicdesign.com,LIST
 HOST,css.createsend1.com,LIST
 HOST,ctldl.windowsupdate.com,LIST
+HOST,cuinf.sfcat.link,LIST
 HOST,curl.se,LIST
 HOST,d4.alternativeto.net,LIST
 HOST,dam.freshworks.com,LIST
@@ -876,6 +880,7 @@ HOST,files.mastodon.social,LIST
 HOST,files.readme.io,LIST
 HOST,files.reg.ru,LIST
 HOST,files.slack.com,LIST
+HOST,files.smashing.media,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
 HOST,filestore.fortinet.com,LIST
@@ -1220,6 +1225,7 @@ HOST,mangaz-static.j-comi.jp,LIST
 HOST,mantisloader.mantis-awx.com,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
+HOST,marketing.figma.com,LIST
 HOST,marketplace-web-assets.vinted.com,LIST
 HOST,mastodon-static.miao.dev,LIST
 HOST,maven.google.com,LIST
@@ -1343,6 +1349,7 @@ HOST,nightly.link,LIST
 HOST,no-cache.hubspot.com,LIST
 HOST,nobara-images.nobaraproject.org,LIST
 HOST,nodei.co,LIST
+HOST,notnetflix.cos.cat,LIST
 HOST,np-edge.itunes.apple.com,LIST
 HOST,npm.antfu.dev,LIST
 HOST,npm.im,LIST
@@ -1371,6 +1378,7 @@ HOST,os-cdn.virtfusion.net,LIST
 HOST,osint.digitalside.it,LIST
 HOST,oss-binaries.phusionpassenger.com,LIST
 HOST,oss.moe.cat,LIST
+HOST,oversea.alphatvapp.top,LIST
 HOST,ovo.wxw.moe,LIST
 HOST,p-smith.com,LIST
 HOST,p.inari.site,LIST
@@ -1656,6 +1664,7 @@ HOST,static-ca-cdn.eporner.com,LIST
 HOST,static-cdn.123rf.com,LIST
 HOST,static-cdn.osdn.net,LIST
 HOST,static-cdn.spot.im,LIST
+HOST,static-cdn.usertesting.com,LIST
 HOST,static-clst.avgle.com,LIST
 HOST,static-community.tp-link.com,LIST
 HOST,static-dm.ubisoft.com,LIST
@@ -1985,6 +1994,7 @@ HOST,web-assets.waze.com,LIST
 HOST,web-cdn.bitrise.io,LIST
 HOST,web-static.pages.iheart.com,LIST
 HOST,web-toolbar.playstation.com,LIST
+HOST,web.nebula-media.org,LIST
 HOST,webassets.linear.app,LIST
 HOST,webfonts.zoho.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
@@ -2024,6 +2034,8 @@ HOST,xvcf2.xboxlive.com,LIST
 HOST,yummlystatic.com,LIST
 HOST-SUFFIX,10musume.com,LIST
 HOST-SUFFIX,112263.com,LIST
+HOST-SUFFIX,123456.al,LIST
+HOST-SUFFIX,16bit.cfd,LIST
 HOST-SUFFIX,1fhjlv1.oloadcdn.net,LIST
 HOST-SUFFIX,1fichier.com,LIST
 HOST-SUFFIX,1fichier.info,LIST
@@ -2033,9 +2045,12 @@ HOST-SUFFIX,1lib.cz,LIST
 HOST-SUFFIX,1passwordusercontent.ca,LIST
 HOST-SUFFIX,1passwordusercontent.com,LIST
 HOST-SUFFIX,1passwordusercontent.eu,LIST
+HOST-SUFFIX,20120714.xyz,LIST
 HOST-SUFFIX,20thcenturystudios.com.au,LIST
 HOST-SUFFIX,20thcenturystudios.com.br,LIST
 HOST-SUFFIX,20thcenturystudios.jp,LIST
+HOST-SUFFIX,252798.xyz,LIST
+HOST-SUFFIX,285286.xyz,LIST
 HOST-SUFFIX,2mdn.net,LIST
 HOST-SUFFIX,2shared.com,LIST
 HOST-SUFFIX,404.sb,LIST
@@ -2045,10 +2060,14 @@ HOST-SUFFIX,4everland.io,LIST
 HOST-SUFFIX,4gtv.tv,LIST
 HOST-SUFFIX,4nlt.com,LIST
 HOST-SUFFIX,4shared.com,LIST
+HOST-SUFFIX,581658.best,LIST
 HOST-SUFFIX,5itv.tv,LIST
 HOST-SUFFIX,5play.ru,LIST
 HOST-SUFFIX,5playdisk.ru,LIST
+HOST-SUFFIX,7777777.buzz,LIST
 HOST-SUFFIX,7mmtv.tv,LIST
+HOST-SUFFIX,9191001.xyz,LIST
+HOST-SUFFIX,91ai.de,LIST
 HOST-SUFFIX,91cdn.cc,LIST
 HOST-SUFFIX,91pic.org,LIST
 HOST-SUFFIX,933.moe,LIST
@@ -2086,8 +2105,10 @@ HOST-SUFFIX,afcdn.net,LIST
 HOST-SUFFIX,afewmomentswith.com,LIST
 HOST-SUFFIX,afp.com,LIST
 HOST-SUFFIX,afpforum.com,LIST
+HOST-SUFFIX,agan2.vip,LIST
 HOST-SUFFIX,agechecker-northern-apps.com,LIST
 HOST-SUFFIX,agechecker.northern-apps.com,LIST
+HOST-SUFFIX,agon.cf,LIST
 HOST-SUFFIX,ahcdn.com,LIST
 HOST-SUFFIX,aiv-cdn.net,LIST
 HOST-SUFFIX,aiv-delivery.net,LIST
@@ -2227,9 +2248,11 @@ HOST-SUFFIX,backup.bz,LIST
 HOST-SUFFIX,badgen.net,LIST
 HOST-SUFFIX,badoocdn.com,LIST
 HOST-SUFFIX,bahamut.com.tw,LIST
+HOST-SUFFIX,baisi.pro,LIST
 HOST-SUFFIX,bam.nr-data.net,LIST
 HOST-SUFFIX,bam.nr-date.net,LIST
 HOST-SUFFIX,bamgrid.com,LIST
+HOST-SUFFIX,bangumi.ca,LIST
 HOST-SUFFIX,bayfiles.com,LIST
 HOST-SUFFIX,bbc.co,LIST
 HOST-SUFFIX,bbc.co.uk,LIST
@@ -2244,6 +2267,7 @@ HOST-SUFFIX,bbcpersian.com,LIST
 HOST-SUFFIX,bbcverticals.com,LIST
 HOST-SUFFIX,bbg.gov,LIST
 HOST-SUFFIX,bcvcdn.com,LIST
+HOST-SUFFIX,bddup.com,LIST
 HOST-SUFFIX,bdupload.asia,LIST
 HOST-SUFFIX,bdupload.in,LIST
 HOST-SUFFIX,bdzybf7.com,LIST
@@ -2260,6 +2284,7 @@ HOST-SUFFIX,bigcontent.io,LIST
 HOST-SUFFIX,bigfile.to,LIST
 HOST-SUFFIX,biggerupload.com,LIST
 HOST-SUFFIX,biggggg.com,LIST
+HOST-SUFFIX,bili.de,LIST
 HOST-SUFFIX,bili.rip,LIST
 HOST-SUFFIX,bilibili.tv,LIST
 HOST-SUFFIX,biliintl.com,LIST
@@ -2271,6 +2296,7 @@ HOST-SUFFIX,blip.tv,LIST
 HOST-SUFFIX,blobcdn.com,LIST
 HOST-SUFFIX,blogblog.com,LIST
 HOST-SUFFIX,blogcdn.com,LIST
+HOST-SUFFIX,blueseacdn.com,LIST
 HOST-SUFFIX,bmp.ovh,LIST
 HOST-SUFFIX,bnbstatic.com,LIST
 HOST-SUFFIX,bootstrapcdn.com,LIST
@@ -2299,8 +2325,11 @@ HOST-SUFFIX,c4assets.com,LIST
 HOST-SUFFIX,cabletv.com.hk,LIST
 HOST-SUFFIX,callhulu.com,LIST
 HOST-SUFFIX,camfrogcdn.com,LIST
+HOST-SUFFIX,carlos.trade,LIST
+HOST-SUFFIX,carryz.net,LIST
 HOST-SUFFIX,casoneexchange.com,LIST
 HOST-SUFFIX,catbox.moe,LIST
+HOST-SUFFIX,catlinks.co.uk,LIST
 HOST-SUFFIX,cbs.com,LIST
 HOST-SUFFIX,cbsaavideo.com,LIST
 HOST-SUFFIX,cbscorporation.com,LIST
@@ -2406,10 +2435,12 @@ HOST-SUFFIX,chasecdn.com,LIST
 HOST-SUFFIX,chcdn.xyz,LIST
 HOST-SUFFIX,chedrive.com,LIST
 HOST-SUFFIX,chedrive.net,LIST
+HOST-SUFFIX,cherrytv.one,LIST
 HOST-SUFFIX,chesscomfiles.com,LIST
 HOST-SUFFIX,chobit.cc,LIST
 HOST-SUFFIX,chocotv.com.tw,LIST
 HOST-SUFFIX,chomikuj.pl,LIST
+HOST-SUFFIX,cinema.facmata.net,LIST
 HOST-SUFFIX,cinemax.com,LIST
 HOST-SUFFIX,cjoint.net,LIST
 HOST-SUFFIX,classicalradio.com,LIST
@@ -2541,6 +2572,7 @@ HOST-SUFFIX,ddownload.com,LIST
 HOST-SUFFIX,deb.debian.org,LIST
 HOST-SUFFIX,debian.map.fastlydns.net,LIST
 HOST-SUFFIX,deezer.com,LIST
+HOST-SUFFIX,deja-vu.beauty,LIST
 HOST-SUFFIX,delegated-ipfs.dev,LIST
 HOST-SUFFIX,deliver.vkcdnservice.com,LIST
 HOST-SUFFIX,delivery.mp.microsoft.com,LIST
@@ -2557,6 +2589,7 @@ HOST-SUFFIX,devrum.uptime.com,LIST
 HOST-SUFFIX,dfichiers.com,LIST
 HOST-SUFFIX,dfiles.eu,LIST
 HOST-SUFFIX,di.fm,LIST
+HOST-SUFFIX,dicarerhome.com,LIST
 HOST-SUFFIX,digitalocean.com,LIST
 HOST-SUFFIX,digitaloceanspaces.com,LIST
 HOST-SUFFIX,dilcdn.com,LIST
@@ -2759,20 +2792,29 @@ HOST-SUFFIX,edgecastcdn.net,LIST
 HOST-SUFFIX,edgedatg.com,LIST
 HOST-SUFFIX,edgestorewebcdn.azureedge.net,LIST
 HOST-SUFFIX,edis.at,LIST
+HOST-SUFFIX,ednovas.org,LIST
 HOST-SUFFIX,edx-cdn.org,LIST
 HOST-SUFFIX,egdownload.fastly-edge.com,LIST
+HOST-SUFFIX,eggjs.org,LIST
 HOST-SUFFIX,ehgt.org,LIST
 HOST-SUFFIX,ehwiki.org,LIST
 HOST-SUFFIX,elitefile.net,LIST
 HOST-SUFFIX,els-cdn.com,LIST
 HOST-SUFFIX,eluniverso.com,LIST
+HOST-SUFFIX,em.ssky.me,LIST
 HOST-SUFFIX,embedgram.com,LIST
+HOST-SUFFIX,emby1.medi4.org,LIST
+HOST-SUFFIX,emby77.cf,LIST
+HOST-SUFFIX,emby77.org,LIST
 HOST-SUFFIX,embyclub.com,LIST
 HOST-SUFFIX,embyclub.vip,LIST
 HOST-SUFFIX,embylianmeng.com,LIST
+HOST-SUFFIX,embymv.me,LIST
+HOST-SUFFIX,embymv.tk,LIST
 HOST-SUFFIX,embyplus.club,LIST
 HOST-SUFFIX,embyplus.org,LIST
 HOST-SUFFIX,embyserver.ga,LIST
+HOST-SUFFIX,embytv.cf,LIST
 HOST-SUFFIX,emload.com,LIST
 HOST-SUFFIX,emotivecdn.io,LIST
 HOST-SUFFIX,encoretvb.com,LIST
@@ -3095,6 +3137,7 @@ HOST-SUFFIX,freedomplatform.tv,LIST
 HOST-SUFFIX,freehulu.com,LIST
 HOST-SUFFIX,freeleecher.ir,LIST
 HOST-SUFFIX,freepornhdonlinegay.com,LIST
+HOST-SUFFIX,freetz.top,LIST
 HOST-SUFFIX,friday.tw,LIST
 HOST-SUFFIX,fsdn.com,LIST
 HOST-SUFFIX,fse.tv,LIST
@@ -3133,6 +3176,7 @@ HOST-SUFFIX,gettyfile.ru,LIST
 HOST-SUFFIX,gfxfile.com,LIST
 HOST-SUFFIX,ggpht.cn,LIST
 HOST-SUFFIX,ggpht.com,LIST
+HOST-SUFFIX,ggtt.cf,LIST
 HOST-SUFFIX,ghcr.io,LIST
 HOST-SUFFIX,giga-down.com,LIST
 HOST-SUFFIX,gigapeta.com,LIST
@@ -3162,6 +3206,7 @@ HOST-SUFFIX,goloady.com,LIST
 HOST-SUFFIX,golos-ameriki.ru,LIST
 HOST-SUFFIX,golosameriki.com,LIST
 HOST-SUFFIX,gooddaychicago.com,LIST
+HOST-SUFFIX,goodisp.org,LIST
 HOST-SUFFIX,googleadservices.com,LIST
 HOST-SUFFIX,googledrive.com,LIST
 HOST-SUFFIX,googleusercontent.com,LIST
@@ -3172,6 +3217,8 @@ HOST-SUFFIX,gradle-dn.com,LIST
 HOST-SUFFIX,gradle.org,LIST
 HOST-SUFFIX,gravatar.com,LIST
 HOST-SUFFIX,gravity.jup.io,LIST
+HOST-SUFFIX,gtlx.org,LIST
+HOST-SUFFIX,gugumedia.link,LIST
 HOST-SUFFIX,gv.com,LIST
 HOST-SUFFIX,gvt0.com,LIST
 HOST-SUFFIX,gvt1.com,LIST
@@ -3187,6 +3234,7 @@ HOST-SUFFIX,h-cdn.co,LIST
 HOST-SUFFIX,h-cdn.com,LIST
 HOST-SUFFIX,hackerone-user-content.com,LIST
 HOST-SUFFIX,haiwaikan.com,LIST
+HOST-SUFFIX,happyav.eu.org,LIST
 HOST-SUFFIX,happyon.jp,LIST
 HOST-SUFFIX,hardbin.com,LIST
 HOST-SUFFIX,hath.network,LIST
@@ -3229,6 +3277,7 @@ HOST-SUFFIX,hooloo.tv,LIST
 HOST-SUFFIX,hoolu.com,LIST
 HOST-SUFFIX,hoolu.tv,LIST
 HOST-SUFFIX,hotlink.cc,LIST
+HOST-SUFFIX,hovervan.org,LIST
 HOST-SUFFIX,howtogeekimages.com,LIST
 HOST-SUFFIX,hs-scripts.com,LIST
 HOST-SUFFIX,hs-scripts.net,LIST
@@ -3301,6 +3350,7 @@ HOST-SUFFIX,hyper.is,LIST
 HOST-SUFFIX,i-cable.com,LIST
 HOST-SUFFIX,i-dont-care-about-cookies.eu,LIST
 HOST-SUFFIX,i.optimole.com,LIST
+HOST-SUFFIX,i109.com,LIST
 HOST-SUFFIX,ibm.com,LIST
 HOST-SUFFIX,ibytedtos.com,LIST
 HOST-SUFFIX,ibyteimg.com,LIST
@@ -3310,6 +3360,7 @@ HOST-SUFFIX,iflix.com,LIST
 HOST-SUFFIX,iframe.ly,LIST
 HOST-SUFFIX,iggcdn.com,LIST
 HOST-SUFFIX,ignimgs.com,LIST
+HOST-SUFFIX,ii00.cc,LIST
 HOST-SUFFIX,iii.hair,LIST
 HOST-SUFFIX,iili.io,LIST
 HOST-SUFFIX,ik.imagekit.io,LIST
@@ -3323,6 +3374,7 @@ HOST-SUFFIX,images-iherb.com,LIST
 HOST-SUFFIX,images.arcpublishing.com,LIST
 HOST-SUFFIX,images.gameru.net,LIST
 HOST-SUFFIX,imageshack.us,LIST
+HOST-SUFFIX,imetyou.top,LIST
 HOST-SUFFIX,img-dpreview.com,LIST
 HOST-SUFFIX,img.myflixer.pw,LIST
 HOST-SUFFIX,img1.acsta.net,LIST
@@ -3349,6 +3401,7 @@ HOST-SUFFIX,indazn.com,LIST
 HOST-SUFFIX,indaznlab.com,LIST
 HOST-SUFFIX,indishare.me,LIST
 HOST-SUFFIX,indishare.org,LIST
+HOST-SUFFIX,infinityfly.top,LIST
 HOST-SUFFIX,infura-ipfs.io,LIST
 HOST-SUFFIX,ingest.sentry.io,LIST
 HOST-SUFFIX,insidevoa.com,LIST
@@ -3460,6 +3513,7 @@ HOST-SUFFIX,jsdelivr.net,LIST
 HOST-SUFFIX,jspm.dev,LIST
 HOST-SUFFIX,jspm.io,LIST
 HOST-SUFFIX,jtvnw.net,LIST
+HOST-SUFFIX,ju.dog,LIST
 HOST-SUFFIX,jumploads.com,LIST
 HOST-SUFFIX,jw-cdn.org,LIST
 HOST-SUFFIX,jwpcdn.com,LIST
@@ -3551,9 +3605,12 @@ HOST-SUFFIX,lowescdn.com,LIST
 HOST-SUFFIX,lr-ingest.com,LIST
 HOST-SUFFIX,lsposed.org,LIST
 HOST-SUFFIX,ltwebstatic.com,LIST
+HOST-SUFFIX,lucasmedia.top,LIST
 HOST-SUFFIX,lzzyimg.com,LIST
 HOST-SUFFIX,lzzypic.com,LIST
 HOST-SUFFIX,macupload.net,LIST
+HOST-SUFFIX,magpie.cyou,LIST
+HOST-SUFFIX,magpiecdn.tech,LIST
 HOST-SUFFIX,maker.tv,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
 HOST-SUFFIX,mangadex.network,LIST
@@ -3572,6 +3629,7 @@ HOST-SUFFIX,maskedsingerfox.com,LIST
 HOST-SUFFIX,max.com,LIST
 HOST-SUFFIX,maxgo.com,LIST
 HOST-SUFFIX,mbamupdates.com,LIST
+HOST-SUFFIX,mcjoker.xyz,LIST
 HOST-SUFFIX,mcusercontent.com,LIST
 HOST-SUFFIX,media-amazon.com,LIST
 HOST-SUFFIX,media-imdb.com,LIST
@@ -3619,6 +3677,8 @@ HOST-SUFFIX,misakaf.xyz,LIST
 HOST-SUFFIX,misskeyusercontent.com,LIST
 HOST-SUFFIX,misskeyusercontent.jp,LIST
 HOST-SUFFIX,missuo.ru,LIST
+HOST-SUFFIX,misty.ltd,LIST
+HOST-SUFFIX,mius.uk,LIST
 HOST-SUFFIX,mixdrop.club,LIST
 HOST-SUFFIX,mixdrop.co,LIST
 HOST-SUFFIX,mixloads.com,LIST
@@ -3640,6 +3700,7 @@ HOST-SUFFIX,mshare.io,LIST
 HOST-SUFFIX,msnbc.com,LIST
 HOST-SUFFIX,mtvnservices.com,LIST
 HOST-SUFFIX,mudvod.tv,LIST
+HOST-SUFFIX,mulgore.net,LIST
 HOST-SUFFIX,multiup.org,LIST
 HOST-SUFFIX,muscache.com,LIST
 HOST-SUFFIX,muscdn.com,LIST
@@ -3697,6 +3758,7 @@ HOST-SUFFIX,mytvsuper.com,LIST
 HOST-SUFFIX,mytvsuperlimited.hb.omtrdc.net,LIST
 HOST-SUFFIX,mytvsuperlimited.sc.omtrdc.net,LIST
 HOST-SUFFIX,mzzcloud.life,LIST
+HOST-SUFFIX,nanflix.net,LIST
 HOST-SUFFIX,natgeomaps.com,LIST
 HOST-SUFFIX,nationalgeographic.com,LIST
 HOST-SUFFIX,nationalgeographicpartners.com,LIST
@@ -3736,6 +3798,7 @@ HOST-SUFFIX,netu.tv,LIST
 HOST-SUFFIX,newpppp.com,LIST
 HOST-SUFFIX,newscdn.com.au,LIST
 HOST-SUFFIX,newsnowfox.com,LIST
+HOST-SUFFIX,newwan.top,LIST
 HOST-SUFFIX,nextjs.org,LIST
 HOST-SUFFIX,nextui.org,LIST
 HOST-SUFFIX,nexus-cdn.com,LIST
@@ -3758,6 +3821,7 @@ HOST-SUFFIX,nicomanga.jp,LIST
 HOST-SUFFIX,niconico.com,LIST
 HOST-SUFFIX,nicoseiga.jp,LIST
 HOST-SUFFIX,nicovideo.jp,LIST
+HOST-SUFFIX,nijigem.by,LIST
 HOST-SUFFIX,nikkei.co.jp,LIST
 HOST-SUFFIX,nikkei.com,LIST
 HOST-SUFFIX,nikkei.jp,LIST
@@ -3789,6 +3853,8 @@ HOST-SUFFIX,nowvideo.club,LIST
 HOST-SUFFIX,npm.io,LIST
 HOST-SUFFIX,npmfs.com,LIST
 HOST-SUFFIX,nsstatic.net,LIST
+HOST-SUFFIX,ntrrr.am.sb,LIST
+HOST-SUFFIX,nvidia.rip,LIST
 HOST-SUFFIX,nxcli.io,LIST
 HOST-SUFFIX,nxedge.io,LIST
 HOST-SUFFIX,nypost.com,LIST
@@ -3815,6 +3881,7 @@ HOST-SUFFIX,oculuscdn.com,LIST
 HOST-SUFFIX,odycdn.com,LIST
 HOST-SUFFIX,ogads-pa.clients6.google.com,LIST
 HOST-SUFFIX,ogads-pa.googleapis.com,LIST
+HOST-SUFFIX,ohhhh.org,LIST
 HOST-SUFFIX,oktacdn.com,LIST
 HOST-SUFFIX,olehd.com,LIST
 HOST-SUFFIX,olelive.com,LIST
@@ -3852,6 +3919,7 @@ HOST-SUFFIX,oss-me-east-1.aliyuncs.com,LIST
 HOST-SUFFIX,oss-us-east-1.aliyuncs.com,LIST
 HOST-SUFFIX,oss-us-west-1.aliyuncs.com,LIST
 HOST-SUFFIX,otakudrive.life,LIST
+HOST-SUFFIX,ouonet.org,LIST
 HOST-SUFFIX,ouroath.com,LIST
 HOST-SUFFIX,ourupload.com,LIST
 HOST-SUFFIX,overcast.fm,LIST
@@ -3893,6 +3961,9 @@ HOST-SUFFIX,picsum.photos,LIST
 HOST-SUFFIX,piecejointe.net,LIST
 HOST-SUFFIX,pikpak.me,LIST
 HOST-SUFFIX,pikpakdrive.com,LIST
+HOST-SUFFIX,pilipili.club,LIST
+HOST-SUFFIX,pilipiliultra.com,LIST
+HOST-SUFFIX,pilipiliultra.top,LIST
 HOST-SUFFIX,pimg.tw,LIST
 HOST-SUFFIX,pinata.cloud,LIST
 HOST-SUFFIX,pinimg.com,LIST
@@ -3921,6 +3992,7 @@ HOST-SUFFIX,pluto.tv,LIST
 HOST-SUFFIX,plyr.io,LIST
 HOST-SUFFIX,pnpm.io,LIST
 HOST-SUFFIX,poecdn.net,LIST
+HOST-SUFFIX,pololine.ml,LIST
 HOST-SUFFIX,polyfill-fastly.io,LIST
 HOST-SUFFIX,polygon.com,LIST
 HOST-SUFFIX,porn5.asia,LIST
@@ -3928,6 +4000,7 @@ HOST-SUFFIX,porndudecdn.com,LIST
 HOST-SUFFIX,pornhub.com,LIST
 HOST-SUFFIX,pornhubpremium.com,LIST
 HOST-SUFFIX,pornimg.xyz,LIST
+HOST-SUFFIX,post.cn2gias.uk,LIST
 HOST-SUFFIX,postimg.cc,LIST
 HOST-SUFFIX,potplayer.tv,LIST
 HOST-SUFFIX,pplusstatic.com,LIST
@@ -4054,6 +4127,7 @@ HOST-SUFFIX,redbunker.net,LIST
 HOST-SUFFIX,redd.it,LIST
 HOST-SUFFIX,redditmedia.com,LIST
 HOST-SUFFIX,redditstatic.com,LIST
+HOST-SUFFIX,reddust.link,LIST
 HOST-SUFFIX,redtube.com,LIST
 HOST-SUFFIX,registerhulu.com,LIST
 HOST-SUFFIX,registry.gitplac.si,LIST
@@ -4145,6 +4219,7 @@ HOST-SUFFIX,shops-disney.com,LIST
 HOST-SUFFIX,shopspeedtv.com,LIST
 HOST-SUFFIX,shortpixel.ai,LIST
 HOST-SUFFIX,showtime.com,LIST
+HOST-SUFFIX,shuipo.lol,LIST
 HOST-SUFFIX,simfileshare.net,LIST
 HOST-SUFFIX,simg.jp,LIST
 HOST-SUFFIX,similarcdn.com,LIST
@@ -4192,6 +4267,7 @@ HOST-SUFFIX,speeddreamride.com,LIST
 HOST-SUFFIX,speedfantasybid.com,LIST
 HOST-SUFFIX,speedracegear.com,LIST
 HOST-SUFFIX,speedrun.com,LIST
+HOST-SUFFIX,speedx.one,LIST
 HOST-SUFFIX,speedxtra.com,LIST
 HOST-SUFFIX,spicyfile.com,LIST
 HOST-SUFFIX,splunkcloud.com,LIST
@@ -4212,6 +4288,7 @@ HOST-SUFFIX,stackpathcdn.com,LIST
 HOST-SUFFIX,stapecdn.com,LIST
 HOST-SUFFIX,star-brasil.com,LIST
 HOST-SUFFIX,star-latam.com,LIST
+HOST-SUFFIX,starcat.eu.org,LIST
 HOST-SUFFIX,starwars.com,LIST
 HOST-SUFFIX,starwarsgalacticstarcruiser.com,LIST
 HOST-SUFFIX,starwarskids.com,LIST
@@ -4250,7 +4327,9 @@ HOST-SUFFIX,storage.yandexcloud.net,LIST
 HOST-SUFFIX,storjipfs-gateway.com,LIST
 HOST-SUFFIX,storry.tv,LIST
 HOST-SUFFIX,streaks.jp,LIST
+HOST-SUFFIX,stream.ntrrr.top,LIST
 HOST-SUFFIX,stream.publicradio.org,LIST
+HOST-SUFFIX,stream.synn.cc,LIST
 HOST-SUFFIX,streamango.com,LIST
 HOST-SUFFIX,streamcherry.com,LIST
 HOST-SUFFIX,streamhentai.org,LIST
@@ -4263,6 +4342,8 @@ HOST-SUFFIX,stripeassets.com,LIST
 HOST-SUFFIX,stripecdn.com,LIST
 HOST-SUFFIX,stripst.com,LIST
 HOST-SUFFIX,strpst.com,LIST
+HOST-SUFFIX,studyfun.live,LIST
+HOST-SUFFIX,stylexjs.com,LIST
 HOST-SUFFIX,substackcdn.com,LIST
 HOST-SUFFIX,subyshare.com,LIST
 HOST-SUFFIX,sundryfiles.com,LIST
@@ -4278,6 +4359,7 @@ HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,syfy.com,LIST
 HOST-SUFFIX,syncs.online,LIST
 HOST-SUFFIX,takefile.link,LIST
+HOST-SUFFIX,tanhuatv.site,LIST
 HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,tdesktop.com,LIST
 HOST-SUFFIX,teamtailor-cdn.com,LIST
@@ -4293,6 +4375,7 @@ HOST-SUFFIX,temp.sh,LIST
 HOST-SUFFIX,tenvoi.com,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
 HOST-SUFFIX,testonfox.com,LIST
+HOST-SUFFIX,texon.fans,LIST
 HOST-SUFFIX,texon.io,LIST
 HOST-SUFFIX,tezfiles.com,LIST
 HOST-SUFFIX,theclasshroom.com,LIST
@@ -4462,6 +4545,7 @@ HOST-SUFFIX,userupload.in,LIST
 HOST-SUFFIX,userupload.net,LIST
 HOST-SUFFIX,ut-assets.com,LIST
 HOST-SUFFIX,uuu.glass,LIST
+HOST-SUFFIX,uuuoo.cc,LIST
 HOST-SUFFIX,uvcdn.com,LIST
 HOST-SUFFIX,v-cdn.net,LIST
 HOST-SUFFIX,v.smtcdns.com,LIST
@@ -4619,6 +4703,7 @@ HOST-SUFFIX,windows.net,LIST
 HOST-SUFFIX,winticket.jp,LIST
 HOST-SUFFIX,winudf.com,LIST
 HOST-SUFFIX,wipfiles.net,LIST
+HOST-SUFFIX,wiri.tk,LIST
 HOST-SUFFIX,wixmp.com,LIST
 HOST-SUFFIX,wixstatic.com,LIST
 HOST-SUFFIX,wixstudio.io,LIST
@@ -4647,8 +4732,10 @@ HOST-SUFFIX,xenupload.com,LIST
 HOST-SUFFIX,xeton.dev,LIST
 HOST-SUFFIX,xhcdn.com,LIST
 HOST-SUFFIX,xhpingcdn.com,LIST
+HOST-SUFFIX,xiaoyi.one,LIST
 HOST-SUFFIX,xingcdn.com,LIST
 HOST-SUFFIX,xlog.app,LIST
+HOST-SUFFIX,xmsl.org,LIST
 HOST-SUFFIX,xnxx-cdn.com,LIST
 HOST-SUFFIX,xo.com,LIST
 HOST-SUFFIX,xubster.com,LIST
@@ -4691,6 +4778,7 @@ HOST-SUFFIX,zeetv.com,LIST
 HOST-SUFFIX,zeeuk.com,LIST
 HOST-SUFFIX,zeriamerikes.com,LIST
 HOST-SUFFIX,zi-scripts.com,LIST
+HOST-SUFFIX,zi0.icu,LIST
 HOST-SUFFIX,ziddu.com,LIST
 HOST-SUFFIX,ziffstatic.com,LIST
 HOST-SUFFIX,ziglang.org,LIST
@@ -4701,6 +4789,7 @@ HOST-SUFFIX,zohostatic.com,LIST
 HOST-SUFFIX,zohostatic.eu,LIST
 HOST-SUFFIX,zohowebstatic.com,LIST
 HOST-SUFFIX,zorocdn.xyz,LIST
+HOST-SUFFIX,zox.show,LIST
 HOST-SUFFIX,zype.com,LIST
 HOST-KEYWORD,-files.gitbook.io,LIST
 HOST-KEYWORD,-res.cloudinary.com,LIST
@@ -4804,6 +4893,7 @@ IP-CIDR,149.255.128.1/32,LIST,no-resolve
 IP-CIDR,150.109.28.51/32,LIST,no-resolve
 IP-CIDR,151.5.17.19/32,LIST,no-resolve
 IP-CIDR,151.5.17.43/32,LIST,no-resolve
+IP-CIDR,152.53.67.239/32,LIST,no-resolve
 IP-CIDR,159.138.102.146/32,LIST,no-resolve
 IP-CIDR,161.0.157.195/32,LIST,no-resolve
 IP-CIDR,161.0.157.73/32,LIST,no-resolve
@@ -5012,6 +5102,7 @@ IP-CIDR,186.177.100.2/32,LIST,no-resolve
 IP-CIDR,186.177.66.50/32,LIST,no-resolve
 IP-CIDR,186.179.71.154/32,LIST,no-resolve
 IP-CIDR,186.96.222.38/32,LIST,no-resolve
+IP-CIDR,188.172.228.49/32,LIST,no-resolve
 IP-CIDR,188.47.194.235/32,LIST,no-resolve
 IP-CIDR,188.47.194.243/32,LIST,no-resolve
 IP-CIDR,188.47.194.244/31,LIST,no-resolve
@@ -5126,6 +5217,7 @@ IP-CIDR,201.174.249.34/32,LIST,no-resolve
 IP-CIDR,201.174.48.130/32,LIST,no-resolve
 IP-CIDR,202.188.117.43/32,LIST,no-resolve
 IP-CIDR,202.188.117.45/32,LIST,no-resolve
+IP-CIDR,202.61.255.248/32,LIST,no-resolve
 IP-CIDR,203.116.0.0/16,LIST,no-resolve
 IP-CIDR,203.177.54.2/32,LIST,no-resolve
 IP-CIDR,203.198.0.0/20,LIST,no-resolve
@@ -5209,6 +5301,7 @@ IP-CIDR,212.113.160.242/32,LIST,no-resolve
 IP-CIDR,212.230.122.34/32,LIST,no-resolve
 IP-CIDR,212.6.80.20/32,LIST,no-resolve
 IP-CIDR,212.6.80.4/32,LIST,no-resolve
+IP-CIDR,212.90.120.164/32,LIST,no-resolve
 IP-CIDR,213.140.51.111/32,LIST,no-resolve
 IP-CIDR,213.158.201.180/32,LIST,no-resolve
 IP-CIDR,216.183.33.177/32,LIST,no-resolve
