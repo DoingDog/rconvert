@@ -1,5 +1,5 @@
-# Quantumult total line 5775
-# Last updated Sat 12/07/2024 22:14:09.61
+# Quantumult total line 5794
+# Last updated Tue 12/10/2024 22:15:03.76
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -66,6 +66,7 @@ HOST,app.moegirl.tw,LIST
 HOST,app.roboflow.com,LIST
 HOST,app.viral-loops.com,LIST
 HOST,appassets.mvtdev.com,LIST
+HOST,apple-relay.apple.com,LIST
 HOST,apple-relay.cloudflare.com,LIST
 HOST,apple-relay.fastly-edge.com,LIST
 HOST,apple.comscoreresearch.com,LIST
@@ -87,6 +88,7 @@ HOST,assets-next.matters.news,LIST
 HOST,assets-next.mattersprotocol.io,LIST
 HOST,assets-production.packagecloud.io,LIST
 HOST,assets-s3-us-east-1.ceros.com,LIST
+HOST,assets-themes.chess.com,LIST
 HOST,assets-v2.super.so,LIST
 HOST,assets-www.xbox.com,LIST
 HOST,assets.apilayer.com,LIST
@@ -312,6 +314,7 @@ HOST,cdn-media-1.freecodecamp.org,LIST
 HOST,cdn-media-2.freecodecamp.org,LIST
 HOST,cdn-mobile.aptoide.com,LIST
 HOST,cdn-msp.18comic.vip,LIST
+HOST,cdn-msp.jmcomic-zzz.one,LIST
 HOST,cdn-msp.jmcomic.me,LIST
 HOST,cdn-node.diskpart.com,LIST
 HOST,cdn-patch.swtor.com,LIST
@@ -524,6 +527,7 @@ HOST,cdn.smooch.io,LIST
 HOST,cdn.softswiss.net,LIST
 HOST,cdn.split.io,LIST
 HOST,cdn.sprig.com,LIST
+HOST,cdn.st-note.com,LIST
 HOST,cdn.starapps.studio,LIST
 HOST,cdn.stash.com,LIST
 HOST,cdn.stellarhosted.com,LIST
@@ -717,6 +721,7 @@ HOST,desktop.parallels.com,LIST
 HOST,desktop.wifiman.com,LIST
 HOST,detectportal.firefox.com,LIST
 HOST,devimages-cdn.apple.com,LIST
+HOST,devnull.perfops.net,LIST
 HOST,devstreaming-cdn.apple.com,LIST
 HOST,dh-site.b-cdn.net,LIST
 HOST,dims.apnews.com,LIST
@@ -744,6 +749,7 @@ HOST,dl.pstmn.io,LIST
 HOST,dl.snipaste.com,LIST
 HOST,dl.tailscale.com,LIST
 HOST,dl.ui.com,LIST
+HOST,dl.wechat.com,LIST
 HOST,dl2.nwjs.io,LIST
 HOST,dl2.xmind.net,LIST
 HOST,dl3.xmind.net,LIST
@@ -796,6 +802,7 @@ HOST,downloads.coindesk.com,LIST
 HOST,downloads.openwrt.org,LIST
 HOST,downloads.raspberrypi.com,LIST
 HOST,downloads.wordpress.org,LIST
+HOST,downloads.xiph.org,LIST
 HOST,downloads.xrite.com,LIST
 HOST,drive.massgrave.dev,LIST
 HOST,drop.ndtv.com,LIST
@@ -1195,6 +1202,8 @@ HOST,keyframe-cdn.abcnews.com,LIST
 HOST,kh.google.com,LIST
 HOST,ktpx.amazon.com,LIST
 HOST,lain.bgm.tv,LIST
+HOST,latency-test.lab.skk.moe,LIST
+HOST,latency-test.skk.moe,LIST
 HOST,launcher.spot.im,LIST
 HOST,lcdn-locator.apple.com,LIST
 HOST,learn.optimizely.com,LIST
@@ -1523,6 +1532,7 @@ HOST,rules.ac,LIST
 HOST,rules1.clearurls.xyz,LIST
 HOST,rules2.clearurls.xyz,LIST
 HOST,rum-agent.na-01.cloud.solarwinds.com,LIST
+HOST,rum-cdn.perfops.net,LIST
 HOST,runkit-packages-static-executables.com,LIST
 HOST,runkit-packages-static.com,LIST
 HOST,rv-assets.softonic.com,LIST
@@ -1773,6 +1783,7 @@ HOST,static.mysph.sph.com.sg,LIST
 HOST,static.mytonwallet.io,LIST
 HOST,static.na1.visioncritical.com,LIST
 HOST,static.namebeta.com,LIST
+HOST,static.netify.ai,LIST
 HOST,static.news.bitcoin.com,LIST
 HOST,static.nicehash.com,LIST
 HOST,static.npmjs.com,LIST
@@ -1905,6 +1916,7 @@ HOST,tiles.windy.com,LIST
 HOST,time.cloudflare.com,LIST
 HOST,tn.vjav.com,LIST
 HOST,ton.local.twitter.com,LIST
+HOST,tools-static.wmflabs.org,LIST
 HOST,topbar-static.piano.io,LIST
 HOST,torrindex.net,LIST
 HOST,tracker.cdnbye.com,LIST
@@ -2110,6 +2122,7 @@ HOST-SUFFIX,agechecker-northern-apps.com,LIST
 HOST-SUFFIX,agechecker.northern-apps.com,LIST
 HOST-SUFFIX,agon.cf,LIST
 HOST-SUFFIX,ahcdn.com,LIST
+HOST-SUFFIX,airio3.live,LIST
 HOST-SUFFIX,aiv-cdn.net,LIST
 HOST-SUFFIX,aiv-delivery.net,LIST
 HOST-SUFFIX,akamai-cdn-content.com,LIST
@@ -2184,6 +2197,7 @@ HOST-SUFFIX,applemusic.com,LIST
 HOST-SUFFIX,applicationinsights.azure.cn,LIST
 HOST-SUFFIX,applicationinsights.azure.com,LIST
 HOST-SUFFIX,appmifile.com,LIST
+HOST-SUFFIX,appsflyersdk.com,LIST
 HOST-SUFFIX,apranet.eu.org,LIST
 HOST-SUFFIX,archive.debian.org,LIST
 HOST-SUFFIX,archive.org,LIST
@@ -2360,6 +2374,7 @@ HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn-one.com,LIST
 HOST-SUFFIX,cdn-spurit.com,LIST
+HOST-SUFFIX,cdn-telegram.org,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn-website.com,LIST
 HOST-SUFFIX,cdn-zlib.sk,LIST
@@ -3404,6 +3419,7 @@ HOST-SUFFIX,indishare.org,LIST
 HOST-SUFFIX,infinityfly.top,LIST
 HOST-SUFFIX,infura-ipfs.io,LIST
 HOST-SUFFIX,ingest.sentry.io,LIST
+HOST-SUFFIX,ingest.us.sentry.io,LIST
 HOST-SUFFIX,insidevoa.com,LIST
 HOST-SUFFIX,instant.page,LIST
 HOST-SUFFIX,inter.iqiyi.com,LIST
@@ -3559,6 +3575,7 @@ HOST-SUFFIX,kshared.com,LIST
 HOST-SUFFIX,ktvu.com,LIST
 HOST-SUFFIX,kwcdn.com,LIST
 HOST-SUFFIX,kym-cdn.com,LIST
+HOST-SUFFIX,larksuitecdn.com,LIST
 HOST-SUFFIX,launcher.mojang.com,LIST
 HOST-SUFFIX,launchercontent.mojang.com,LIST
 HOST-SUFFIX,launchermeta.mojang.com,LIST
@@ -3696,6 +3713,7 @@ HOST-SUFFIX,movshare.net,LIST
 HOST-SUFFIX,mox.moe,LIST
 HOST-SUFFIX,mp4upload.com,LIST
 HOST-SUFFIX,msftconnecttest.com,LIST
+HOST-SUFFIX,msftncsi.com,LIST
 HOST-SUFFIX,mshare.io,LIST
 HOST-SUFFIX,msnbc.com,LIST
 HOST-SUFFIX,mtvnservices.com,LIST
@@ -4405,6 +4423,7 @@ HOST-SUFFIX,tiktokv.com,LIST
 HOST-SUFFIX,tiktokv.us,LIST
 HOST-SUFFIX,tiktokw.com,LIST
 HOST-SUFFIX,tildacdn.com,LIST
+HOST-SUFFIX,tildacdn.net,LIST
 HOST-SUFFIX,tile.openstreetmap.de,LIST
 HOST-SUFFIX,tile.openstreetmap.org,LIST
 HOST-SUFFIX,tile.osm.org,LIST

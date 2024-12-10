@@ -1,5 +1,5 @@
-# Adblock total line 4835
-# Last updated Sat 12/07/2024 22:14:09.75
+# Adblock total line 4854
+# Last updated Tue 12/10/2024 22:15:03.90
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -66,6 +66,7 @@
 ||app.roboflow.com^
 ||app.viral-loops.com^
 ||appassets.mvtdev.com^
+||apple-relay.apple.com^
 ||apple-relay.cloudflare.com^
 ||apple-relay.fastly-edge.com^
 ||apple.comscoreresearch.com^
@@ -87,6 +88,7 @@
 ||assets-next.mattersprotocol.io^
 ||assets-production.packagecloud.io^
 ||assets-s3-us-east-1.ceros.com^
+||assets-themes.chess.com^
 ||assets-v2.super.so^
 ||assets-www.xbox.com^
 ||assets.apilayer.com^
@@ -312,6 +314,7 @@
 ||cdn-media-2.freecodecamp.org^
 ||cdn-mobile.aptoide.com^
 ||cdn-msp.18comic.vip^
+||cdn-msp.jmcomic-zzz.one^
 ||cdn-msp.jmcomic.me^
 ||cdn-node.diskpart.com^
 ||cdn-patch.swtor.com^
@@ -524,6 +527,7 @@
 ||cdn.softswiss.net^
 ||cdn.split.io^
 ||cdn.sprig.com^
+||cdn.st-note.com^
 ||cdn.starapps.studio^
 ||cdn.stash.com^
 ||cdn.stellarhosted.com^
@@ -717,6 +721,7 @@
 ||desktop.wifiman.com^
 ||detectportal.firefox.com^
 ||devimages-cdn.apple.com^
+||devnull.perfops.net^
 ||devstreaming-cdn.apple.com^
 ||dh-site.b-cdn.net^
 ||dims.apnews.com^
@@ -744,6 +749,7 @@
 ||dl.snipaste.com^
 ||dl.tailscale.com^
 ||dl.ui.com^
+||dl.wechat.com^
 ||dl2.nwjs.io^
 ||dl2.xmind.net^
 ||dl3.xmind.net^
@@ -796,6 +802,7 @@
 ||downloads.openwrt.org^
 ||downloads.raspberrypi.com^
 ||downloads.wordpress.org^
+||downloads.xiph.org^
 ||downloads.xrite.com^
 ||drive.massgrave.dev^
 ||drop.ndtv.com^
@@ -1195,6 +1202,8 @@
 ||kh.google.com^
 ||ktpx.amazon.com^
 ||lain.bgm.tv^
+||latency-test.lab.skk.moe^
+||latency-test.skk.moe^
 ||launcher.spot.im^
 ||lcdn-locator.apple.com^
 ||learn.optimizely.com^
@@ -1523,6 +1532,7 @@
 ||rules1.clearurls.xyz^
 ||rules2.clearurls.xyz^
 ||rum-agent.na-01.cloud.solarwinds.com^
+||rum-cdn.perfops.net^
 ||runkit-packages-static-executables.com^
 ||runkit-packages-static.com^
 ||rv-assets.softonic.com^
@@ -1773,6 +1783,7 @@
 ||static.mytonwallet.io^
 ||static.na1.visioncritical.com^
 ||static.namebeta.com^
+||static.netify.ai^
 ||static.news.bitcoin.com^
 ||static.nicehash.com^
 ||static.npmjs.com^
@@ -1905,6 +1916,7 @@
 ||time.cloudflare.com^
 ||tn.vjav.com^
 ||ton.local.twitter.com^
+||tools-static.wmflabs.org^
 ||topbar-static.piano.io^
 ||torrindex.net^
 ||tracker.cdnbye.com^
@@ -2110,6 +2122,7 @@
 ||agechecker.northern-apps.com^
 ||agon.cf^
 ||ahcdn.com^
+||airio3.live^
 ||aiv-cdn.net^
 ||aiv-delivery.net^
 ||akamai-cdn-content.com^
@@ -2184,6 +2197,7 @@
 ||applicationinsights.azure.cn^
 ||applicationinsights.azure.com^
 ||appmifile.com^
+||appsflyersdk.com^
 ||apranet.eu.org^
 ||archive.debian.org^
 ||archive.org^
@@ -2360,6 +2374,7 @@
 ||cdn-lfs.huggingface.co^
 ||cdn-one.com^
 ||cdn-spurit.com^
+||cdn-telegram.org^
 ||cdn-uploads.huggingface.co^
 ||cdn-website.com^
 ||cdn-zlib.sk^
@@ -3404,6 +3419,7 @@
 ||infinityfly.top^
 ||infura-ipfs.io^
 ||ingest.sentry.io^
+||ingest.us.sentry.io^
 ||insidevoa.com^
 ||instant.page^
 ||inter.iqiyi.com^
@@ -3559,6 +3575,7 @@
 ||ktvu.com^
 ||kwcdn.com^
 ||kym-cdn.com^
+||larksuitecdn.com^
 ||launcher.mojang.com^
 ||launchercontent.mojang.com^
 ||launchermeta.mojang.com^
@@ -3696,6 +3713,7 @@
 ||mox.moe^
 ||mp4upload.com^
 ||msftconnecttest.com^
+||msftncsi.com^
 ||mshare.io^
 ||msnbc.com^
 ||mtvnservices.com^
@@ -4405,6 +4423,7 @@
 ||tiktokv.us^
 ||tiktokw.com^
 ||tildacdn.com^
+||tildacdn.net^
 ||tile.openstreetmap.de^
 ||tile.openstreetmap.org^
 ||tile.osm.org^

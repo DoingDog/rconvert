@@ -1,5 +1,5 @@
-# Clash total line 5789
-# Last updated Sat 12/07/2024 22:14:09.64
+# Clash total line 5808
+# Last updated Tue 12/10/2024 22:15:03.79
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -67,6 +67,7 @@ payload:
   - DOMAIN,app.roboflow.com
   - DOMAIN,app.viral-loops.com
   - DOMAIN,appassets.mvtdev.com
+  - DOMAIN,apple-relay.apple.com
   - DOMAIN,apple-relay.cloudflare.com
   - DOMAIN,apple-relay.fastly-edge.com
   - DOMAIN,apple.comscoreresearch.com
@@ -88,6 +89,7 @@ payload:
   - DOMAIN,assets-next.mattersprotocol.io
   - DOMAIN,assets-production.packagecloud.io
   - DOMAIN,assets-s3-us-east-1.ceros.com
+  - DOMAIN,assets-themes.chess.com
   - DOMAIN,assets-v2.super.so
   - DOMAIN,assets-www.xbox.com
   - DOMAIN,assets.apilayer.com
@@ -313,6 +315,7 @@ payload:
   - DOMAIN,cdn-media-2.freecodecamp.org
   - DOMAIN,cdn-mobile.aptoide.com
   - DOMAIN,cdn-msp.18comic.vip
+  - DOMAIN,cdn-msp.jmcomic-zzz.one
   - DOMAIN,cdn-msp.jmcomic.me
   - DOMAIN,cdn-node.diskpart.com
   - DOMAIN,cdn-patch.swtor.com
@@ -525,6 +528,7 @@ payload:
   - DOMAIN,cdn.softswiss.net
   - DOMAIN,cdn.split.io
   - DOMAIN,cdn.sprig.com
+  - DOMAIN,cdn.st-note.com
   - DOMAIN,cdn.starapps.studio
   - DOMAIN,cdn.stash.com
   - DOMAIN,cdn.stellarhosted.com
@@ -718,6 +722,7 @@ payload:
   - DOMAIN,desktop.wifiman.com
   - DOMAIN,detectportal.firefox.com
   - DOMAIN,devimages-cdn.apple.com
+  - DOMAIN,devnull.perfops.net
   - DOMAIN,devstreaming-cdn.apple.com
   - DOMAIN,dh-site.b-cdn.net
   - DOMAIN,dims.apnews.com
@@ -745,6 +750,7 @@ payload:
   - DOMAIN,dl.snipaste.com
   - DOMAIN,dl.tailscale.com
   - DOMAIN,dl.ui.com
+  - DOMAIN,dl.wechat.com
   - DOMAIN,dl2.nwjs.io
   - DOMAIN,dl2.xmind.net
   - DOMAIN,dl3.xmind.net
@@ -797,6 +803,7 @@ payload:
   - DOMAIN,downloads.openwrt.org
   - DOMAIN,downloads.raspberrypi.com
   - DOMAIN,downloads.wordpress.org
+  - DOMAIN,downloads.xiph.org
   - DOMAIN,downloads.xrite.com
   - DOMAIN,drive.massgrave.dev
   - DOMAIN,drop.ndtv.com
@@ -1196,6 +1203,8 @@ payload:
   - DOMAIN,kh.google.com
   - DOMAIN,ktpx.amazon.com
   - DOMAIN,lain.bgm.tv
+  - DOMAIN,latency-test.lab.skk.moe
+  - DOMAIN,latency-test.skk.moe
   - DOMAIN,launcher.spot.im
   - DOMAIN,lcdn-locator.apple.com
   - DOMAIN,learn.optimizely.com
@@ -1524,6 +1533,7 @@ payload:
   - DOMAIN,rules1.clearurls.xyz
   - DOMAIN,rules2.clearurls.xyz
   - DOMAIN,rum-agent.na-01.cloud.solarwinds.com
+  - DOMAIN,rum-cdn.perfops.net
   - DOMAIN,runkit-packages-static-executables.com
   - DOMAIN,runkit-packages-static.com
   - DOMAIN,rv-assets.softonic.com
@@ -1774,6 +1784,7 @@ payload:
   - DOMAIN,static.mytonwallet.io
   - DOMAIN,static.na1.visioncritical.com
   - DOMAIN,static.namebeta.com
+  - DOMAIN,static.netify.ai
   - DOMAIN,static.news.bitcoin.com
   - DOMAIN,static.nicehash.com
   - DOMAIN,static.npmjs.com
@@ -1906,6 +1917,7 @@ payload:
   - DOMAIN,time.cloudflare.com
   - DOMAIN,tn.vjav.com
   - DOMAIN,ton.local.twitter.com
+  - DOMAIN,tools-static.wmflabs.org
   - DOMAIN,topbar-static.piano.io
   - DOMAIN,torrindex.net
   - DOMAIN,tracker.cdnbye.com
@@ -2111,6 +2123,7 @@ payload:
   - DOMAIN-SUFFIX,agechecker.northern-apps.com
   - DOMAIN-SUFFIX,agon.cf
   - DOMAIN-SUFFIX,ahcdn.com
+  - DOMAIN-SUFFIX,airio3.live
   - DOMAIN-SUFFIX,aiv-cdn.net
   - DOMAIN-SUFFIX,aiv-delivery.net
   - DOMAIN-SUFFIX,akamai-cdn-content.com
@@ -2185,6 +2198,7 @@ payload:
   - DOMAIN-SUFFIX,applicationinsights.azure.cn
   - DOMAIN-SUFFIX,applicationinsights.azure.com
   - DOMAIN-SUFFIX,appmifile.com
+  - DOMAIN-SUFFIX,appsflyersdk.com
   - DOMAIN-SUFFIX,apranet.eu.org
   - DOMAIN-SUFFIX,archive.debian.org
   - DOMAIN-SUFFIX,archive.org
@@ -2361,6 +2375,7 @@ payload:
   - DOMAIN-SUFFIX,cdn-lfs.huggingface.co
   - DOMAIN-SUFFIX,cdn-one.com
   - DOMAIN-SUFFIX,cdn-spurit.com
+  - DOMAIN-SUFFIX,cdn-telegram.org
   - DOMAIN-SUFFIX,cdn-uploads.huggingface.co
   - DOMAIN-SUFFIX,cdn-website.com
   - DOMAIN-SUFFIX,cdn-zlib.sk
@@ -3405,6 +3420,7 @@ payload:
   - DOMAIN-SUFFIX,infinityfly.top
   - DOMAIN-SUFFIX,infura-ipfs.io
   - DOMAIN-SUFFIX,ingest.sentry.io
+  - DOMAIN-SUFFIX,ingest.us.sentry.io
   - DOMAIN-SUFFIX,insidevoa.com
   - DOMAIN-SUFFIX,instant.page
   - DOMAIN-SUFFIX,inter.iqiyi.com
@@ -3560,6 +3576,7 @@ payload:
   - DOMAIN-SUFFIX,ktvu.com
   - DOMAIN-SUFFIX,kwcdn.com
   - DOMAIN-SUFFIX,kym-cdn.com
+  - DOMAIN-SUFFIX,larksuitecdn.com
   - DOMAIN-SUFFIX,launcher.mojang.com
   - DOMAIN-SUFFIX,launchercontent.mojang.com
   - DOMAIN-SUFFIX,launchermeta.mojang.com
@@ -3697,6 +3714,7 @@ payload:
   - DOMAIN-SUFFIX,mox.moe
   - DOMAIN-SUFFIX,mp4upload.com
   - DOMAIN-SUFFIX,msftconnecttest.com
+  - DOMAIN-SUFFIX,msftncsi.com
   - DOMAIN-SUFFIX,mshare.io
   - DOMAIN-SUFFIX,msnbc.com
   - DOMAIN-SUFFIX,mtvnservices.com
@@ -4406,6 +4424,7 @@ payload:
   - DOMAIN-SUFFIX,tiktokv.us
   - DOMAIN-SUFFIX,tiktokw.com
   - DOMAIN-SUFFIX,tildacdn.com
+  - DOMAIN-SUFFIX,tildacdn.net
   - DOMAIN-SUFFIX,tile.openstreetmap.de
   - DOMAIN-SUFFIX,tile.openstreetmap.org
   - DOMAIN-SUFFIX,tile.osm.org
