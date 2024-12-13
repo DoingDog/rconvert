@@ -1,5 +1,5 @@
-# Clash total line 2785
-# Last updated Tue 12/10/2024 22:14:53.28
+# Clash total line 2788
+# Last updated Fri 12/13/2024 22:14:18.72
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -286,7 +286,6 @@ payload:
   - DOMAIN,cdn-a.sonyentertainmentnetwork.com
   - DOMAIN,cdn-app.pathfactory.com
   - DOMAIN,cdn-assets.circleci.com
-  - DOMAIN,cdn-assets.porntube.com
   - DOMAIN,cdn-bundler.nice-team.net
   - DOMAIN,cdn-c.leavemealone.com
   - DOMAIN,cdn-client.medium.com
@@ -312,7 +311,6 @@ payload:
   - DOMAIN,cdn-share-sprites.flaticon.com
   - DOMAIN,cdn-static-1.medium.com
   - DOMAIN,cdn-static.talent.com
-  - DOMAIN,cdn-thumbs.porntube.com
   - DOMAIN,cdn-uicons.flaticon.com
   - DOMAIN,cdn-www.bluestacks.com
   - DOMAIN,cdn-yotpo-images-production.yotpo.com
@@ -337,6 +335,7 @@ payload:
   - DOMAIN,cdn.axieinfinity.com
   - DOMAIN,cdn.babylonjs.com
   - DOMAIN,cdn.bfe.dev
+  - DOMAIN,cdn.bigcloud.click
   - DOMAIN,cdn.birdie.so
   - DOMAIN,cdn.branch.io
   - DOMAIN,cdn.britannica.com
@@ -347,7 +346,6 @@ payload:
   - DOMAIN,cdn.calibermind.com
   - DOMAIN,cdn.cameo.com
   - DOMAIN,cdn.cbd.int
-  - DOMAIN,cdn.ceres9350.com
   - DOMAIN,cdn.channel.io
   - DOMAIN,cdn.chess24.com
   - DOMAIN,cdn.circle.so
@@ -385,6 +383,7 @@ payload:
   - DOMAIN,cdn.ecomm.ui.com
   - DOMAIN,cdn.embed.ly
   - DOMAIN,cdn.embedly.com
+  - DOMAIN,cdn.engagement.ai
   - DOMAIN,cdn.equalweb.com
   - DOMAIN,cdn.eu.contentful.com
   - DOMAIN,cdn.european-alternatives.eu
@@ -527,7 +526,6 @@ payload:
   - DOMAIN,cdn.svgator.com
   - DOMAIN,cdn.tailwindcss.com
   - DOMAIN,cdn.termius.com
-  - DOMAIN,cdn.thisav.com
   - DOMAIN,cdn.tinypass.com
   - DOMAIN,cdn.tolt.io
   - DOMAIN,cdn.tracxn.com
@@ -600,7 +598,6 @@ payload:
   - DOMAIN,cdn4.sysgears.com
   - DOMAIN,cdn5.hextom.com
   - DOMAIN,cdn6.aptoide.com
-  - DOMAIN,cdn7.pornmaster.fun
   - DOMAIN,cdn77.boyfriendtv.com
   - DOMAIN,cdna.artstation.com
   - DOMAIN,cdnapisec.kaltura.com
@@ -648,7 +645,6 @@ payload:
   - DOMAIN,components.clever-cloud.com
   - DOMAIN,components.justanswer.com
   - DOMAIN,config.extension.grammarly.com
-  - DOMAIN,confluence-v1.prod.atl-paas.net
   - DOMAIN,connect.facebook.net
   - DOMAIN,connectivitycheck.android.com
   - DOMAIN,connectivitycheck.gstatic.com
@@ -664,6 +660,7 @@ payload:
   - DOMAIN,content.arduino.cc
   - DOMAIN,content.invisioncic.com
   - DOMAIN,content.jwplatform.com
+  - DOMAIN,content.overwolf.com
   - DOMAIN,content.product.glitch.com
   - DOMAIN,content.wepik.com
   - DOMAIN,contents-thumbnail2.fc2.com
@@ -758,6 +755,7 @@ payload:
   - DOMAIN,error.rakuten.co.jp
   - DOMAIN,eslint.style
   - DOMAIN,eu-images.contentstack.com
+  - DOMAIN,eu.cdnbye.com
   - DOMAIN,eu.hamreus.com
   - DOMAIN,eu01ccistatic.zoom.us
   - DOMAIN,euc-widget.freshworks.com
@@ -847,6 +845,7 @@ payload:
   - DOMAIN,hub-assets.displaycal.net
   - DOMAIN,hv-monsterdb-data.skk.moe
   - DOMAIN,i.1password.com
+  - DOMAIN,i.bang.com
   - DOMAIN,i.creativecommons.org
   - DOMAIN,i.dailymail.co.uk
   - DOMAIN,i.gawby.com
@@ -991,6 +990,7 @@ payload:
   - DOMAIN,img.applealmond.com
   - DOMAIN,img.apponic.com
   - DOMAIN,img.atlasobscura.com
+  - DOMAIN,img.atom.com
   - DOMAIN,img.atwiki.jp
   - DOMAIN,img.badgesize.io
   - DOMAIN,img.biguz.net
@@ -1048,7 +1048,6 @@ payload:
   - DOMAIN,img2.tnaflix.com
   - DOMAIN,img2.xiangbinjun.com
   - DOMAIN,img3.airdroid.com
-  - DOMAIN,img3.lltaohuaxiang.com
   - DOMAIN,img4.airdroid.com
   - DOMAIN,img6.airdroid.com
   - DOMAIN,imgcdn.cna.com.tw
@@ -1193,7 +1192,6 @@ payload:
   - DOMAIN,media.webtoo.ls
   - DOMAIN,media.wired.com
   - DOMAIN,media.yukimochi.jp
-  - DOMAIN,media.zoom.us
   - DOMAIN,media0.giphy.com
   - DOMAIN,media1.giphy.com
   - DOMAIN,media1.tenor.com
@@ -1223,6 +1221,7 @@ payload:
   - DOMAIN,my-json-server.typicode.com
   - DOMAIN,mycommerce.akamaized.net
   - DOMAIN,na-library.klarnaservices.com
+  - DOMAIN,namedotcom-cdn.name.tools
   - DOMAIN,navismithapis-cdn.com
   - DOMAIN,nbcnewsdigital-static.nbcuni.com
   - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
@@ -1460,6 +1459,7 @@ payload:
   - DOMAIN,safebrowsing.google.com
   - DOMAIN,safebrowsing.googleapis.com
   - DOMAIN,sandpack-cdn-staging.blazingly.io
+  - DOMAIN,sandpack-cdn-v2.codesandbox.io
   - DOMAIN,sbl.onfastspring.com
   - DOMAIN,scdn.clerk.com
   - DOMAIN,scontent.whatsapp.net
@@ -1541,6 +1541,7 @@ payload:
   - DOMAIN,static-assets.mapbox.com
   - DOMAIN,static-assets.npr.org
   - DOMAIN,static-assets.vinted.com
+  - DOMAIN,static-beta.curseforge.com
   - DOMAIN,static-ca-cdn.eporner.com
   - DOMAIN,static-cache.fboom.me
   - DOMAIN,static-cache.k2s.cc
@@ -1647,7 +1648,6 @@ payload:
   - DOMAIN,static.institution.grammarly.com
   - DOMAIN,static.iris.informa.com
   - DOMAIN,static.itch.io
-  - DOMAIN,static.izanmei.net
   - DOMAIN,static.j51.net
   - DOMAIN,static.javcdn.info
   - DOMAIN,static.javhd.com
@@ -1818,7 +1818,6 @@ payload:
   - DOMAIN,tools-static.wmflabs.org
   - DOMAIN,topbar-static.piano.io
   - DOMAIN,torrindex.net
-  - DOMAIN,tracker.cdnbye.com
   - DOMAIN,truth.bahamut.com.tw
   - DOMAIN,tuf-repo-cdn.sigstore.dev
   - DOMAIN,tuf-repo.github.com
@@ -2007,6 +2006,7 @@ payload:
   - DOMAIN-SUFFIX,bfzypic.com
   - DOMAIN-SUFFIX,bigcontent.io
   - DOMAIN-SUFFIX,bitbucket.io
+  - DOMAIN-SUFFIX,bitgetimg.com
   - DOMAIN-SUFFIX,blackbaudcdn.net
   - DOMAIN-SUFFIX,bleepstatic.com
   - DOMAIN-SUFFIX,blob.core.windows.net
@@ -2201,6 +2201,7 @@ payload:
   - DOMAIN-SUFFIX,fonts.com
   - DOMAIN-SUFFIX,fonts.net
   - DOMAIN-SUFFIX,forbesimg.com
+  - DOMAIN-SUFFIX,forgecdn.net
   - DOMAIN-SUFFIX,framercdn.com
   - DOMAIN-SUFFIX,framerstatic.com
   - DOMAIN-SUFFIX,framerusercontent.com
@@ -2443,6 +2444,7 @@ payload:
   - DOMAIN-SUFFIX,myfilebase.com
   - DOMAIN-SUFFIX,mypinata.cloud
   - DOMAIN-SUFFIX,myshopapps.com
+  - DOMAIN-SUFFIX,nc-img.com
   - DOMAIN-SUFFIX,ndtvimg.com
   - DOMAIN-SUFFIX,nel.cloudflare.com
   - DOMAIN-SUFFIX,nel.goog
@@ -2723,6 +2725,7 @@ payload:
   - DOMAIN-SUFFIX,video.missav.com
   - DOMAIN-SUFFIX,videodelivery.net
   - DOMAIN-SUFFIX,vimeocdn.com
+  - DOMAIN-SUFFIX,vodvideo.cbsnews.com
   - DOMAIN-SUFFIX,vox-cdn.com
   - DOMAIN-SUFFIX,vsassets.io
   - DOMAIN-SUFFIX,vscode-cdn.net
