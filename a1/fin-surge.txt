@@ -1,5 +1,5 @@
-# Surge Rules total line 883
-# Last updated Fri 12/13/2024 22:14:15.42
+# Surge Rules total line 882
+# Last updated Mon 12/16/2024 22:14:11.90
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
@@ -783,7 +783,6 @@ IP-CIDR,23.89.50.180/32,no-resolve
 IP-CIDR,23.91.3.114/32,no-resolve
 IP-CIDR,27.221.89.128/28,no-resolve
 IP-CIDR,27.255.67.120/32,no-resolve
-IP-CIDR,3.228.226.42/32,no-resolve
 IP-CIDR,34.102.137.201/32,no-resolve
 IP-CIDR,34.215.155.61/32,no-resolve
 IP-CIDR,35.194.26.233/32,no-resolve
