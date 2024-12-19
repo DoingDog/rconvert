@@ -1,5 +1,5 @@
-# Clash total line 5841
-# Last updated Mon 12/16/2024 22:14:25.40
+# Clash total line 5867
+# Last updated Thu 12/19/2024 22:14:22.35
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -447,6 +447,7 @@ payload:
   - DOMAIN,cdn.kobo.com
   - DOMAIN,cdn.langshop.app
   - DOMAIN,cdn.leandata.com
+  - DOMAIN,cdn.lemonsqueezy.com
   - DOMAIN,cdn.libravatar.org
   - DOMAIN,cdn.lihkg.com
   - DOMAIN,cdn.linearicons.com
@@ -507,12 +508,14 @@ payload:
   - DOMAIN,cdn.readme.io
   - DOMAIN,cdn.ready-market.com.tw
   - DOMAIN,cdn.recovermycart.com
+  - DOMAIN,cdn.redhat.com
   - DOMAIN,cdn.redoc.ly
   - DOMAIN,cdn.reimu.net
   - DOMAIN,cdn.rex.contents.rakuten.co.jp
   - DOMAIN,cdn.rive.app
   - DOMAIN,cdn.robinpro.gallery
   - DOMAIN,cdn.roboflow.com
+  - DOMAIN,cdn.royaleapi.com
   - DOMAIN,cdn.safecharge.com
   - DOMAIN,cdn.sanity.io
   - DOMAIN,cdn.sc.gl
@@ -614,7 +617,6 @@ payload:
   - DOMAIN,cdn4.sysgears.com
   - DOMAIN,cdn5.hextom.com
   - DOMAIN,cdn6.aptoide.com
-  - DOMAIN,cdn6.edgedatg
   - DOMAIN,cdn77.boyfriendtv.com
   - DOMAIN,cdna.artstation.com
   - DOMAIN,cdnapisec.kaltura.com
@@ -665,6 +667,7 @@ payload:
   - DOMAIN,components.justanswer.com
   - DOMAIN,componentupdater.brave.com
   - DOMAIN,config.extension.grammarly.com
+  - DOMAIN,connect-js.stripe.com
   - DOMAIN,connect.facebook.net
   - DOMAIN,connectivitycheck.android.com
   - DOMAIN,connectivitycheck.gstatic.com
@@ -1219,6 +1222,7 @@ payload:
   - DOMAIN,latency-test.lab.skk.moe
   - DOMAIN,latency-test.skk.moe
   - DOMAIN,launcher.spot.im
+  - DOMAIN,lc.nssurge.com
   - DOMAIN,lcdn-locator.apple.com
   - DOMAIN,learn.optimizely.com
   - DOMAIN,lecontent.sololearn.com
@@ -1411,6 +1415,7 @@ payload:
   - DOMAIN,p.typekit.net
   - DOMAIN,p.udn.com.tw
   - DOMAIN,pacdn.500px.org
+  - DOMAIN,package-assets.oomol.com
   - DOMAIN,packagecloud.io
   - DOMAIN,packages-cf.termux.dev
   - DOMAIN,packages.argotunnel.com
@@ -1518,6 +1523,7 @@ payload:
   - DOMAIN,registry.fedoraproject.org
   - DOMAIN,registry.npmjs.com
   - DOMAIN,registry.npmjs.org
+  - DOMAIN,registry.oomol.com
   - DOMAIN,regmedia.co.uk
   - DOMAIN,release.runcloud.io
   - DOMAIN,releases.arc.net
@@ -1695,6 +1701,7 @@ payload:
   - DOMAIN,static-assets.vinted.com
   - DOMAIN,static-ca-cdn.eporner.com
   - DOMAIN,static-cdn.123rf.com
+  - DOMAIN,static-cdn.bytegiftia.top
   - DOMAIN,static-cdn.osdn.net
   - DOMAIN,static-cdn.spot.im
   - DOMAIN,static-cdn.usertesting.com
@@ -1920,7 +1927,6 @@ payload:
   - DOMAIN,t4.picb.cc
   - DOMAIN,tag.trovo-tag.com
   - DOMAIN,tag.unifyintent.com
-  - DOMAIN,tags.bkrtx.com
   - DOMAIN,tags.nationwide.com
   - DOMAIN,tags.nba.com
   - DOMAIN,tags.news.com.au
@@ -1928,6 +1934,8 @@ payload:
   - DOMAIN,talk.washingtonpost.com
   - DOMAIN,talon-website-prod.ecosec.on.epicgames.com
   - DOMAIN,telemetry.1passwordservices.com
+  - DOMAIN,telemetry.business.githubcopilot.com
+  - DOMAIN,telemetry.individual.githubcopilot.com
   - DOMAIN,telemetry.split.io
   - DOMAIN,telemetry.vercel.com
   - DOMAIN,th.bing.com
@@ -2423,6 +2431,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.imgeng.in
   - DOMAIN-SUFFIX,cdn.imghaste.com
   - DOMAIN-SUFFIX,cdn.ipinfo.io
+  - DOMAIN-SUFFIX,cdn.iz8qkg.com
   - DOMAIN-SUFFIX,cdn.manage.runcloud.io
   - DOMAIN-SUFFIX,cdn.medallia.com
   - DOMAIN-SUFFIX,cdn.mobileread.com
@@ -2466,6 +2475,7 @@ payload:
   - DOMAIN-SUFFIX,cdnst.net
   - DOMAIN-SUFFIX,cdntrex.com
   - DOMAIN-SUFFIX,centfile.com
+  - DOMAIN-SUFFIX,ceres9350.com
   - DOMAIN-SUFFIX,cf-images.ap-southeast-1.prod.boltdns.net
   - DOMAIN-SUFFIX,cf-ipfs.com
   - DOMAIN-SUFFIX,cfcdn.mux.com
@@ -2923,6 +2933,7 @@ payload:
   - DOMAIN-SUFFIX,ff-03.com
   - DOMAIN-SUFFIX,ff-04.com
   - DOMAIN-SUFFIX,ff-05.com
+  - DOMAIN-SUFFIX,ffzy888.com
   - DOMAIN-SUFFIX,file-up.org
   - DOMAIN-SUFFIX,file-upload.com
   - DOMAIN-SUFFIX,file-upload.net
@@ -3187,6 +3198,7 @@ payload:
   - DOMAIN-SUFFIX,fse.tv
   - DOMAIN-SUFFIX,fshare.vn
   - DOMAIN-SUFFIX,fssta.com
+  - DOMAIN-SUFFIX,fsvod1.com
   - DOMAIN-SUFFIX,ftcdn.net
   - DOMAIN-SUFFIX,ftp-master.debian.org
   - DOMAIN-SUFFIX,ftp.debian.org
@@ -3299,6 +3311,7 @@ payload:
   - DOMAIN-SUFFIX,hbomaxcdn.com
   - DOMAIN-SUFFIX,hbonow.com
   - DOMAIN-SUFFIX,hbounify-prod.evergent.com
+  - DOMAIN-SUFFIX,hdzyk-cdn.com
   - DOMAIN-SUFFIX,hembed.com
   - DOMAIN-SUFFIX,hentaiera.com
   - DOMAIN-SUFFIX,hentaiverse.org
@@ -3307,6 +3320,7 @@ payload:
   - DOMAIN-SUFFIX,hetzner.com
   - DOMAIN-SUFFIX,hetzner.de
   - DOMAIN-SUFFIX,hexupload.net
+  - DOMAIN-SUFFIX,hey10.cjkypo.com
   - DOMAIN-SUFFIX,hgagecdn.com
   - DOMAIN-SUFFIX,highwinds-cdn.com
   - DOMAIN-SUFFIX,himalaya.com
@@ -3409,6 +3423,7 @@ payload:
   - DOMAIN-SUFFIX,iili.io
   - DOMAIN-SUFFIX,ik.imagekit.io
   - DOMAIN-SUFFIX,ilovepdf.com
+  - DOMAIN-SUFFIX,image8899.net
   - DOMAIN-SUFFIX,imagebam.com
   - DOMAIN-SUFFIX,imageban.ru
   - DOMAIN-SUFFIX,imagedelivery.net
@@ -3661,6 +3676,7 @@ payload:
   - DOMAIN-SUFFIX,makeuseofimages.com
   - DOMAIN-SUFFIX,mangadex.network
   - DOMAIN-SUFFIX,manifest.prod.boltdns.net
+  - DOMAIN-SUFFIX,mapi.4kvm.net
   - DOMAIN-SUFFIX,marketing.aws.dev
   - DOMAIN-SUFFIX,marvel.com
   - DOMAIN-SUFFIX,marvel10thanniversary.com
@@ -3804,6 +3820,7 @@ payload:
   - DOMAIN-SUFFIX,mytvsuper.com
   - DOMAIN-SUFFIX,mytvsuperlimited.hb.omtrdc.net
   - DOMAIN-SUFFIX,mytvsuperlimited.sc.omtrdc.net
+  - DOMAIN-SUFFIX,myvideos.info
   - DOMAIN-SUFFIX,mzzcloud.life
   - DOMAIN-SUFFIX,nanflix.net
   - DOMAIN-SUFFIX,natgeomaps.com
@@ -4199,6 +4216,7 @@ payload:
   - DOMAIN-SUFFIX,rosefile.net
   - DOMAIN-SUFFIX,roseimgs.com
   - DOMAIN-SUFFIX,rprimelab.com
+  - DOMAIN-SUFFIX,rrcdnbf3.com
   - DOMAIN-SUFFIX,rsb.net
   - DOMAIN-SUFFIX,rspcdn.net
   - DOMAIN-SUFFIX,rss3.dev
@@ -4408,6 +4426,7 @@ payload:
   - DOMAIN-SUFFIX,sxccdn.com
   - DOMAIN-SUFFIX,syfy.com
   - DOMAIN-SUFFIX,syncs.online
+  - DOMAIN-SUFFIX,szjal.cn
   - DOMAIN-SUFFIX,takefile.link
   - DOMAIN-SUFFIX,tanhuatv.site
   - DOMAIN-SUFFIX,tapecontent.net
@@ -4473,6 +4492,7 @@ payload:
   - DOMAIN-SUFFIX,tmpfiles.org
   - DOMAIN-SUFFIX,tmsimg.com
   - DOMAIN-SUFFIX,tnastatic.com
+  - DOMAIN-SUFFIX,tokyvideo.com
   - DOMAIN-SUFFIX,top4top.net
   - DOMAIN-SUFFIX,torproject.org
   - DOMAIN-SUFFIX,tpdfiles.com
@@ -4603,6 +4623,7 @@ payload:
   - DOMAIN-SUFFIX,v.smtcdns.com
   - DOMAIN-SUFFIX,v.smtcdns.net
   - DOMAIN-SUFFIX,v2ex.co
+  - DOMAIN-SUFFIX,v82u1l.com
   - DOMAIN-SUFFIX,valvesoftware.com
   - DOMAIN-SUFFIX,vanillicon.com
   - DOMAIN-SUFFIX,vbstatic.co
@@ -4707,6 +4728,7 @@ payload:
   - DOMAIN-SUFFIX,voxmedia.com
   - DOMAIN-SUFFIX,voxops.net
   - DOMAIN-SUFFIX,voxzer.org
+  - DOMAIN-SUFFIX,vplay.life
   - DOMAIN-SUFFIX,vsassets.io
   - DOMAIN-SUFFIX,vscode-cdn.net
   - DOMAIN-SUFFIX,vscode-unpkg.net
@@ -4744,6 +4766,7 @@ payload:
   - DOMAIN-SUFFIX,wetvinfo.com
   - DOMAIN-SUFFIX,whatthefox.com
   - DOMAIN-SUFFIX,whosthehost.com
+  - DOMAIN-SUFFIX,whweitao.com
   - DOMAIN-SUFFIX,widget.cluster.groovehq.com
   - DOMAIN-SUFFIX,widget.clutch.co
   - DOMAIN-SUFFIX,wikia.nocookie.net
@@ -4762,6 +4785,8 @@ payload:
   - DOMAIN-SUFFIX,wofl.tv
   - DOMAIN-SUFFIX,woflthenewsstation.com
   - DOMAIN-SUFFIX,wogx.com
+  - DOMAIN-SUFFIX,wolongcdnm3u8.com
+  - DOMAIN-SUFFIX,wolongzywcdn3.com
   - DOMAIN-SUFFIX,workers.dev
   - DOMAIN-SUFFIX,workupload.com
   - DOMAIN-SUFFIX,world-files.com
@@ -4803,6 +4828,7 @@ payload:
   - DOMAIN-SUFFIX,yelpcdn.com
   - DOMAIN-SUFFIX,yimg.com
   - DOMAIN-SUFFIX,yimg.jp
+  - DOMAIN-SUFFIX,yle888.vip
   - DOMAIN-SUFFIX,ymq.cool
   - DOMAIN-SUFFIX,youboranqs01.com
   - DOMAIN-SUFFIX,youporn.com
