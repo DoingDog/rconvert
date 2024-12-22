@@ -1,5 +1,5 @@
-# Quantumult total line 2857
-# Last updated Thu 12/19/2024 22:14:11.56
+# Quantumult total line 2867
+# Last updated Sun 12/22/2024 22:13:36.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -340,7 +340,6 @@ HOST,cdn.bigcloud.click,LIST
 HOST,cdn.birdie.so,LIST
 HOST,cdn.branch.io,LIST
 HOST,cdn.britannica.com,LIST
-HOST,cdn.bsky.app,LIST
 HOST,cdn.bsky.social,LIST
 HOST,cdn.builder.io,LIST
 HOST,cdn.c1.amplience.net,LIST
@@ -744,6 +743,7 @@ HOST,edge.marker.io,LIST
 HOST,edge.personalizer.io,LIST
 HOST,edge1.certona.net,LIST
 HOST,edgeassetservice.azureedge.net,LIST
+HOST,edgecdn-embza6g8cacagcbn.z01.azurefd.net,LIST
 HOST,edgestatic.azureedge.net,LIST
 HOST,eep.io,LIST
 HOST,eightcha.com,LIST
@@ -1262,6 +1262,7 @@ HOST,nodei.co,LIST
 HOST,npm.antfu.dev,LIST
 HOST,npm.im,LIST
 HOST,npm.jsr.io,LIST
+HOST,ntp.msn.com,LIST
 HOST,null.jsbin.com,LIST
 HOST,o.n1mp.org,LIST
 HOST,object.innei.in,LIST
@@ -1630,6 +1631,7 @@ HOST,static.bitfinex.com,LIST
 HOST,static.buffer.com,LIST
 HOST,static.bytepan.com,LIST
 HOST,static.canva.com,LIST
+HOST,static.captcha-delivery.com,LIST
 HOST,static.chaika.moe,LIST
 HOST,static.change.org,LIST
 HOST,static.cloud.coveo.com,LIST
@@ -1811,6 +1813,7 @@ HOST,storageapi2.fleek.co,LIST
 HOST,store-images.microsoft.com,LIST
 HOST,store-images.s-microsoft.com,LIST
 HOST,stories.freepiklabs.com,LIST
+HOST,stream.mux.com,LIST
 HOST,streaming.split.io,LIST
 HOST,sts.online.visualstudio.com,LIST
 HOST,sts3.wsj.net,LIST
@@ -1854,6 +1857,7 @@ HOST,thumbsnap.com,LIST
 HOST,tiles.stadiamaps.com,LIST
 HOST,tiles.windy.com,LIST
 HOST,time.cloudflare.com,LIST
+HOST,time.windows.com,LIST
 HOST,tn.txxx.tube,LIST
 HOST,tn.vjav.com,LIST
 HOST,ton.local.twitter.com,LIST
@@ -1889,6 +1893,7 @@ HOST,uploads.linear.app,LIST
 HOST,uploads.sitepoint.com,LIST
 HOST,upos-sz-mirroralibstar1.bilivideo.com,LIST
 HOST,upos-sz-mirrorcosbstar1.bilivideo.com,LIST
+HOST,us-js.zonka.co,LIST
 HOST,us.hamreus.com,LIST
 HOST,us01ccistatic.zoom.us,LIST
 HOST,use.fortawesome.com,LIST
@@ -1915,6 +1920,7 @@ HOST,vice-prod.sdiapi.com,LIST
 HOST,vice-web-statics-cdn.vice.com,LIST
 HOST,video-images.vice.com,LIST
 HOST,video-meta.humix.com,LIST
+HOST,video.bsky.app,LIST
 HOST,video.cdnbye.com,LIST
 HOST,video1.7mmtv.sx,LIST
 HOST,video2.7mmtv.sx,LIST
@@ -2081,6 +2087,7 @@ HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn-website.com,LIST
 HOST-SUFFIX,cdn-zlib.sk,LIST
 HOST-SUFFIX,cdn.applicationinsights.io,LIST
+HOST-SUFFIX,cdn.bsky.app,LIST
 HOST-SUFFIX,cdn.cookielaw.org,LIST
 HOST-SUFFIX,cdn.cwinfo.net,LIST
 HOST-SUFFIX,cdn.discordapp.com,LIST
@@ -2490,6 +2497,7 @@ HOST-SUFFIX,mngbcn.com,LIST
 HOST-SUFFIX,motherlessmedia.com,LIST
 HOST-SUFFIX,msftconnecttest.com,LIST
 HOST-SUFFIX,msftncsi.com,LIST
+HOST-SUFFIX,msftstatic.com,LIST
 HOST-SUFFIX,muscache.com,LIST
 HOST-SUFFIX,mvnrepository.com,LIST
 HOST-SUFFIX,myanalytics.cdn.office.net,LIST
@@ -2503,6 +2511,7 @@ HOST-SUFFIX,nc-img.com,LIST
 HOST-SUFFIX,ndtvimg.com,LIST
 HOST-SUFFIX,nel.cloudflare.com,LIST
 HOST-SUFFIX,nel.goog,LIST
+HOST-SUFFIX,nel.measure.office.net,LIST
 HOST-SUFFIX,nelreports.net,LIST
 HOST-SUFFIX,nest.land,LIST
 HOST-SUFFIX,net.anydesk.com,LIST
@@ -2645,6 +2654,7 @@ HOST-SUFFIX,sbcdnvideo.com,LIST
 HOST-SUFFIX,sc-cdn.com,LIST
 HOST-SUFFIX,schemastore.org,LIST
 HOST-SUFFIX,sciencedirectassets.com,LIST
+HOST-SUFFIX,scorecardresearch.com,LIST
 HOST-SUFFIX,scribdassets.com,LIST
 HOST-SUFFIX,seadn.io,LIST
 HOST-SUFFIX,search.ipfsgate.com,LIST

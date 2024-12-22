@@ -1,5 +1,5 @@
-# Main total line 5867
-# Last updated Thu 12/19/2024 22:14:22.16
+# Main total line 5877
+# Last updated Sun 12/22/2024 22:13:46.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -354,7 +354,6 @@ DOMAIN,cdn.bigcloud.click
 DOMAIN,cdn.birdie.so
 DOMAIN,cdn.branch.io
 DOMAIN,cdn.britannica.com
-DOMAIN,cdn.bsky.app
 DOMAIN,cdn.bsky.social
 DOMAIN,cdn.builder.io
 DOMAIN,cdn.c1.amplience.net
@@ -830,6 +829,7 @@ DOMAIN,edge.personalizer.io
 DOMAIN,edge.steam-dns.top.comcast.net
 DOMAIN,edge1.certona.net
 DOMAIN,edgeassetservice.azureedge.net
+DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net
 DOMAIN,edgestatic.azureedge.net
 DOMAIN,eep.io
 DOMAIN,eightcha.com
@@ -1382,6 +1382,7 @@ DOMAIN,np-edge.itunes.apple.com
 DOMAIN,npm.antfu.dev
 DOMAIN,npm.im
 DOMAIN,npm.jsr.io
+DOMAIN,ntp.msn.com
 DOMAIN,null.jsbin.com
 DOMAIN,o.n1mp.org
 DOMAIN,object.innei.in
@@ -1740,6 +1741,7 @@ DOMAIN,static.bitfinex.com
 DOMAIN,static.buffer.com
 DOMAIN,static.bytepan.com
 DOMAIN,static.canva.com
+DOMAIN,static.captcha-delivery.com
 DOMAIN,static.chaika.moe
 DOMAIN,static.change.org
 DOMAIN,static.cloud.coveo.com
@@ -1908,6 +1910,7 @@ DOMAIN,store-images.microsoft.com
 DOMAIN,store-images.s-microsoft.com
 DOMAIN,store.setapp.com
 DOMAIN,stories.freepiklabs.com
+DOMAIN,stream.mux.com
 DOMAIN,streaming.split.io
 DOMAIN,streetviewpixels-pa.googleapis.com
 DOMAIN,sts.online.visualstudio.com
@@ -1948,6 +1951,7 @@ DOMAIN,thumbsnap.com
 DOMAIN,tiles.stadiamaps.com
 DOMAIN,tiles.windy.com
 DOMAIN,time.cloudflare.com
+DOMAIN,time.windows.com
 DOMAIN,tn.txxx.tube
 DOMAIN,tn.vjav.com
 DOMAIN,ton.local.twitter.com
@@ -1985,6 +1989,7 @@ DOMAIN,uploads.linear.app
 DOMAIN,uploads.sitepoint.com
 DOMAIN,upos-sz-mirroralibstar1.bilivideo.com
 DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
+DOMAIN,us-js.zonka.co
 DOMAIN,us.hamreus.com
 DOMAIN,us01ccistatic.zoom.us
 DOMAIN,use.fortawesome.com
@@ -2014,6 +2019,7 @@ DOMAIN,vice-prod.sdiapi.com
 DOMAIN,vice-web-statics-cdn.vice.com
 DOMAIN,video-images.vice.com
 DOMAIN,video-meta.humix.com
+DOMAIN,video.bsky.app
 DOMAIN,video.cdnbye.com
 DOMAIN,video1.7mmtv.sx
 DOMAIN,video2.7mmtv.sx
@@ -2417,6 +2423,7 @@ DOMAIN-SUFFIX,cdn-zlib.sk
 DOMAIN-SUFFIX,cdn.angruo.com
 DOMAIN-SUFFIX,cdn.applicationinsights.io
 DOMAIN-SUFFIX,cdn.blizzard.com
+DOMAIN-SUFFIX,cdn.bsky.app
 DOMAIN-SUFFIX,cdn.cloudflare.net
 DOMAIN-SUFFIX,cdn.cwinfo.net
 DOMAIN-SUFFIX,cdn.discordapp.com
@@ -3758,6 +3765,7 @@ DOMAIN-SUFFIX,mox.moe
 DOMAIN-SUFFIX,mp4upload.com
 DOMAIN-SUFFIX,msftconnecttest.com
 DOMAIN-SUFFIX,msftncsi.com
+DOMAIN-SUFFIX,msftstatic.com
 DOMAIN-SUFFIX,mshare.io
 DOMAIN-SUFFIX,msnbc.com
 DOMAIN-SUFFIX,mtvnservices.com
@@ -3842,6 +3850,7 @@ DOMAIN-SUFFIX,nebula-media.org
 DOMAIN-SUFFIX,nebula.app
 DOMAIN-SUFFIX,nel.cloudflare.com
 DOMAIN-SUFFIX,nel.goog
+DOMAIN-SUFFIX,nel.measure.office.net
 DOMAIN-SUFFIX,nelion.me
 DOMAIN-SUFFIX,nelreports.net
 DOMAIN-SUFFIX,nest.land
@@ -4246,6 +4255,7 @@ DOMAIN-SUFFIX,sc-cdn.com
 DOMAIN-SUFFIX,scdn.co
 DOMAIN-SUFFIX,schemastore.org
 DOMAIN-SUFFIX,sciencedirectassets.com
+DOMAIN-SUFFIX,scorecardresearch.com
 DOMAIN-SUFFIX,screens-lab.jp
 DOMAIN-SUFFIX,scribd.com
 DOMAIN-SUFFIX,scribdassets.com
