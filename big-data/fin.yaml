@@ -1,5 +1,5 @@
-# Clash total line 5877
-# Last updated Sun 12/22/2024 22:13:46.77
+# Clash total line 5878
+# Last updated Wed 12/25/2024 22:13:56.06
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -543,6 +543,7 @@ payload:
   - DOMAIN,cdn.svgator.com
   - DOMAIN,cdn.tailwindcss.com
   - DOMAIN,cdn.termius.com
+  - DOMAIN,cdn.thenewstack.io
   - DOMAIN,cdn.tolt.io
   - DOMAIN,cdn.tracxn.com
   - DOMAIN,cdn.transcend.io
