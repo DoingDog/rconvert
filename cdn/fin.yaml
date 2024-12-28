@@ -1,5 +1,5 @@
 # Clash total line 2869
-# Last updated Wed 12/25/2024 22:13:46.60
+# Last updated Sat 12/28/2024 22:13:28.27
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1669,7 +1669,6 @@ payload:
   - DOMAIN,static.foxbusiness.com
   - DOMAIN,static.foxnews.com
   - DOMAIN,static.freeimages.com
-  - DOMAIN,static.frostming.com
   - DOMAIN,static.getbutton.io
   - DOMAIN,static.gettyimages.com
   - DOMAIN,static.global.visioncritical.com
@@ -1956,6 +1955,7 @@ payload:
   - DOMAIN,web-toolbar.playstation.com
   - DOMAIN,webassets.linear.app
   - DOMAIN,webfonts.zoho.com
+  - DOMAIN,webp.frostming.com
   - DOMAIN,website-cdn.ipinfo.io
   - DOMAIN,widget.freshworks.com
   - DOMAIN,widget.intercom.io
