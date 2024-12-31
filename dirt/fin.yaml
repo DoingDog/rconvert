@@ -1,5 +1,5 @@
-# Clash total line 4363
-# Last updated Sat 12/28/2024 22:13:47.37
+# Clash total line 4365
+# Last updated Tue 12/31/2024 22:14:14.49
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -1372,6 +1372,7 @@ payload:
   - DOMAIN-SUFFIX,ecjobhome.com
   - DOMAIN-SUFFIX,ecloud-gdu.com
   - DOMAIN-SUFFIX,ecombdapi.com
+  - DOMAIN-SUFFIX,edge-byted.com
   - DOMAIN-SUFFIX,edu4399.com
   - DOMAIN-SUFFIX,eduei.com
   - DOMAIN-SUFFIX,eeyy.com
@@ -3526,6 +3527,7 @@ payload:
   - DOMAIN-SUFFIX,volccdn.com
   - DOMAIN-SUFFIX,volceapplog.com
   - DOMAIN-SUFFIX,volces.com
+  - DOMAIN-SUFFIX,volcvideo.com
   - DOMAIN-SUFFIX,volcvod.com
   - DOMAIN-SUFFIX,vpgame.com
   - DOMAIN-SUFFIX,vxo7tu.com

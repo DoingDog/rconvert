@@ -1,5 +1,5 @@
-# Clash total line 5878
-# Last updated Sat 12/28/2024 22:13:37.73
+# Clash total line 5894
+# Last updated Tue 12/31/2024 22:14:04.76
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -167,6 +167,7 @@ payload:
   - DOMAIN,assets.nationbuilder.com
   - DOMAIN,assets.newrepublic.com
   - DOMAIN,assets.nintendo.com
+  - DOMAIN,assets.nxtrace.org
   - DOMAIN,assets.onestore.ms
   - DOMAIN,assets.ontrack.com
   - DOMAIN,assets.openshift.com
@@ -302,6 +303,7 @@ payload:
   - DOMAIN,cdn-bundler.nice-team.net
   - DOMAIN,cdn-c.leavemealone.com
   - DOMAIN,cdn-client.medium.com
+  - DOMAIN,cdn-dynmedia-1.microsoft.com
   - DOMAIN,cdn-edge.karte.io
   - DOMAIN,cdn-eu.dynamicyield.com
   - DOMAIN,cdn-fck.tnaflix.com
@@ -353,6 +355,7 @@ payload:
   - DOMAIN,cdn.bfe.dev
   - DOMAIN,cdn.bigcloud.click
   - DOMAIN,cdn.birdie.so
+  - DOMAIN,cdn.botframework.com
   - DOMAIN,cdn.branch.io
   - DOMAIN,cdn.britannica.com
   - DOMAIN,cdn.bsky.social
@@ -567,6 +570,7 @@ payload:
   - DOMAIN,cdn.viglink.com
   - DOMAIN,cdn.wccftech.com
   - DOMAIN,cdn.weglot.com
+  - DOMAIN,cdn.wikiwiki.jp
   - DOMAIN,cdn.windowsreport.com
   - DOMAIN,cdn.winget.microsoft.com
   - DOMAIN,cdn.wishpond.net
@@ -1018,6 +1022,7 @@ payload:
   - DOMAIN,image.ship.vercel.com
   - DOMAIN,image.shutterstock.com
   - DOMAIN,image.status.io
+  - DOMAIN,image.telanganatoday.com
   - DOMAIN,image.theblockbeats.info
   - DOMAIN,image.thefly.com
   - DOMAIN,image.tmdb.org
@@ -1215,6 +1220,7 @@ payload:
   - DOMAIN,jslibs.blackmagicdesign.com
   - DOMAIN,jsonplaceholder.typicode.com
   - DOMAIN,jssdk.opin.media
+  - DOMAIN,k-cdn.depot.dev
   - DOMAIN,kdata1.com
   - DOMAIN,keyframe-cdn.abcnews.com
   - DOMAIN,kh.google.com
@@ -1301,6 +1307,7 @@ payload:
   - DOMAIN,media.shopimind.com
   - DOMAIN,media.smooch.io
   - DOMAIN,media.steampowered.com
+  - DOMAIN,media.telanganatoday.com
   - DOMAIN,media.tenor.com
   - DOMAIN,media.themoviedb.org
   - DOMAIN,media.theporndude.com
@@ -1412,6 +1419,7 @@ payload:
   - DOMAIN,oversea.alphatvapp.top
   - DOMAIN,ovo.wxw.moe
   - DOMAIN,p-smith.com
+  - DOMAIN,p.depot.dev
   - DOMAIN,p.inari.site
   - DOMAIN,p.sda1.dev
   - DOMAIN,p.typekit.net
@@ -1573,6 +1581,7 @@ payload:
   - DOMAIN,s.namemc.com
   - DOMAIN,s.plurk.com
   - DOMAIN,s.rfi.fr
+  - DOMAIN,s.slideme.org
   - DOMAIN,s.udn.com.tw
   - DOMAIN,s.w-x.co
   - DOMAIN,s.w.org
@@ -1722,6 +1731,7 @@ payload:
   - DOMAIN,static-production.npmjs.com
   - DOMAIN,static-r.kamihimeproject.net
   - DOMAIN,static-resource.np.community.playstation.net
+  - DOMAIN,static-secure-uploads.ui.com
   - DOMAIN,static-sg-cdn.eporner.com
   - DOMAIN,static-sv.fc2.com
   - DOMAIN,static-web-prod.skillshare.com
@@ -1827,6 +1837,7 @@ payload:
   - DOMAIN,static.oomol.com
   - DOMAIN,static.opensea.io
   - DOMAIN,static.osdn.net
+  - DOMAIN,static.pingcap.com
   - DOMAIN,static.playstation.com
   - DOMAIN,static.plus.net
   - DOMAIN,static.politico.com
@@ -2255,6 +2266,7 @@ payload:
   - DOMAIN-SUFFIX,assets.getpocket.com
   - DOMAIN-SUFFIX,assets.heroku.com
   - DOMAIN-SUFFIX,assets.pinterest.com
+  - DOMAIN-SUFFIX,assets.shortbread.aws.dev
   - DOMAIN-SUFFIX,assets.tumblr.com
   - DOMAIN-SUFFIX,assets.ubuntu.com
   - DOMAIN-SUFFIX,assets.xboxservices.com
@@ -2426,6 +2438,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.applicationinsights.io
   - DOMAIN-SUFFIX,cdn.blizzard.com
   - DOMAIN-SUFFIX,cdn.bsky.app
+  - DOMAIN-SUFFIX,cdn.chrome.marketplace.aws.dev
   - DOMAIN-SUFFIX,cdn.cloudflare.net
   - DOMAIN-SUFFIX,cdn.cwinfo.net
   - DOMAIN-SUFFIX,cdn.discordapp.com
@@ -3339,6 +3352,7 @@ payload:
   - DOMAIN-SUFFIX,hitfile.net
   - DOMAIN-SUFFIX,hits.b3log.org
   - DOMAIN-SUFFIX,hjholdings.jp
+  - DOMAIN-SUFFIX,hommec.com
   - DOMAIN-SUFFIX,hooloo.tv
   - DOMAIN-SUFFIX,hoolu.com
   - DOMAIN-SUFFIX,hoolu.tv
@@ -3663,6 +3677,7 @@ payload:
   - DOMAIN-SUFFIX,load.to
   - DOMAIN-SUFFIX,local.webcontainer.io
   - DOMAIN-SUFFIX,localizecdn.com
+  - DOMAIN-SUFFIX,location-plus.nhk.jp
   - DOMAIN-SUFFIX,loggly.com
   - DOMAIN-SUFFIX,logx.optimizely.com
   - DOMAIN-SUFFIX,logz.io
@@ -4780,6 +4795,7 @@ payload:
   - DOMAIN-SUFFIX,whweitao.com
   - DOMAIN-SUFFIX,widget.cluster.groovehq.com
   - DOMAIN-SUFFIX,widget.clutch.co
+  - DOMAIN-SUFFIX,widgets.marketplace.aws.dev
   - DOMAIN-SUFFIX,wikia.nocookie.net
   - DOMAIN-SUFFIX,wikifortio.com
   - DOMAIN-SUFFIX,wikiplus-app.com
