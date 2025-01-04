@@ -1,5 +1,5 @@
-# Clash total line 2884
-# Last updated Wed 01/01/2025 22:13:57.61
+# Clash total line 2918
+# Last updated Sat 01/04/2025 22:13:34.09
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -63,6 +63,7 @@ payload:
   - DOMAIN,apple-relay.apple.com
   - DOMAIN,apple-relay.cloudflare.com
   - DOMAIN,apple-relay.fastly-edge.com
+  - DOMAIN,apps.bazaarvoice.com
   - DOMAIN,apps.profitihub.com
   - DOMAIN,archive.mozilla.org
   - DOMAIN,artworks.thetvdb.com
@@ -279,6 +280,18 @@ payload:
   - DOMAIN,c.s-microsoft.com
   - DOMAIN,c.speedtestcustom.com
   - DOMAIN,c.start.me
+  - DOMAIN,c1.patreon.com
+  - DOMAIN,c10.patreon.com
+  - DOMAIN,c11.patreon.com
+  - DOMAIN,c13.patreon.com
+  - DOMAIN,c14.patreon.com
+  - DOMAIN,c16.patreon.com
+  - DOMAIN,c17.patreon.com
+  - DOMAIN,c4.patreon.com
+  - DOMAIN,c5.patreon.com
+  - DOMAIN,c6.patreon.com
+  - DOMAIN,c7.patreon.com
+  - DOMAIN,c8.patreon.com
   - DOMAIN,ca.nfs.pub
   - DOMAIN,cacerts.digicert.com
   - DOMAIN,cache-05.filehippo.net
@@ -345,6 +358,7 @@ payload:
   - DOMAIN,cdn.britannica.com
   - DOMAIN,cdn.bsky.social
   - DOMAIN,cdn.builder.io
+  - DOMAIN,cdn.buymeacoffee.com
   - DOMAIN,cdn.c1.amplience.net
   - DOMAIN,cdn.calibermind.com
   - DOMAIN,cdn.cameo.com
@@ -399,6 +413,8 @@ payload:
   - DOMAIN,cdn.freebiesupply.com
   - DOMAIN,cdn.freecodecamp.org
   - DOMAIN,cdn.freshdesk.com
+  - DOMAIN,cdn.gamemonkey.org
+  - DOMAIN,cdn.gdl.gg
   - DOMAIN,cdn.getkoala.com
   - DOMAIN,cdn.gettr.com
   - DOMAIN,cdn.ghostery.com
@@ -431,6 +447,7 @@ payload:
   - DOMAIN,cdn.jwplayer.com
   - DOMAIN,cdn.kinopio.club
   - DOMAIN,cdn.kinsta.com
+  - DOMAIN,cdn.ko-fi.com
   - DOMAIN,cdn.koala.live
   - DOMAIN,cdn.kobo.com
   - DOMAIN,cdn.langshop.app
@@ -659,6 +676,7 @@ payload:
   - DOMAIN,code.ionicframework.com
   - DOMAIN,code.jquery.com
   - DOMAIN,code.piano.io
+  - DOMAIN,code.upscope.io
   - DOMAIN,common-header.nimg.jp
   - DOMAIN,compass-ssl.xbox.com
   - DOMAIN,components.clever-cloud.com
@@ -961,6 +979,7 @@ payload:
   - DOMAIN,images.g2crowd.com
   - DOMAIN,images.idgesg.net
   - DOMAIN,images.macrumors.com
+  - DOMAIN,images.mattel.net
   - DOMAIN,images.microcms-assets.io
   - DOMAIN,images.moegoat.com
   - DOMAIN,images.moovitapp.com
@@ -1045,12 +1064,14 @@ payload:
   - DOMAIN,img.lvv2.com
   - DOMAIN,img.m.mw
   - DOMAIN,img.majors.im
+  - DOMAIN,img.ml0987.com
   - DOMAIN,img.moedog.org
   - DOMAIN,img.moegirl.tw
   - DOMAIN,img.mresou.com
   - DOMAIN,img.pawoo.net
   - DOMAIN,img.perfops.net
   - DOMAIN,img.picacomic.com
+  - DOMAIN,img.ra7.xyz
   - DOMAIN,img.reg.ru
   - DOMAIN,img.reimu.net
   - DOMAIN,img.represent.com
@@ -1122,9 +1143,11 @@ payload:
   - DOMAIN,js.stripe.com
   - DOMAIN,js.txxx.tube
   - DOMAIN,js.upload.io
+  - DOMAIN,js.upscope.io
   - DOMAIN,js.userflow.com
   - DOMAIN,js.verygoodvault.com
   - DOMAIN,js1.chargebee.com
+  - DOMAIN,jsdelivr.b-cdn.net
   - DOMAIN,jsdelivr.ioiox.net
   - DOMAIN,jslibs.blackmagicdesign.com
   - DOMAIN,jsonplaceholder.typicode.com
@@ -1135,6 +1158,7 @@ payload:
   - DOMAIN,lain.bgm.tv
   - DOMAIN,latency-test.lab.skk.moe
   - DOMAIN,latency-test.skk.moe
+  - DOMAIN,launcher-files.modrinth.com
   - DOMAIN,launcher.spot.im
   - DOMAIN,launchercontent.mojang.com
   - DOMAIN,lc.nssurge.com
@@ -1405,6 +1429,7 @@ payload:
   - DOMAIN,quriobot.com
   - DOMAIN,r.r10s.jp
   - DOMAIN,r2.leadsy.ai
+  - DOMAIN,rapid-cdn.yottaa.com
   - DOMAIN,raw.github.com
   - DOMAIN,rawmarkdown.cloudflareaccess.org
   - DOMAIN,rebound.postmarkapp.com
@@ -1816,6 +1841,7 @@ payload:
   - DOMAIN,storage-b.picacomic.com
   - DOMAIN,storage.crisp.chat
   - DOMAIN,storage.gra.cloud.ovh.net
+  - DOMAIN,storage.ko-fi.com
   - DOMAIN,storage.moegirl.tw
   - DOMAIN,storage.sciencecast.org
   - DOMAIN,storage.withfabric.xyz
@@ -1942,6 +1968,7 @@ payload:
   - DOMAIN,vir.wsj.net
   - DOMAIN,viu-static.akamaized.net
   - DOMAIN,vjs.zencdn.net
+  - DOMAIN,vod.jfly.xyz
   - DOMAIN,vscode-sync-insiders.trafficmanager.net
   - DOMAIN,vscode-sync.trafficmanager.net
   - DOMAIN,vuejs.org
@@ -2192,6 +2219,7 @@ payload:
   - DOMAIN-SUFFIX,data.debugbear.com
   - DOMAIN-SUFFIX,datocms-assets.com
   - DOMAIN-SUFFIX,daumcdn.net
+  - DOMAIN-SUFFIX,ddpic.info
   - DOMAIN-SUFFIX,delegated-ipfs.dev
   - DOMAIN-SUFFIX,delvenetworks.com
   - DOMAIN-SUFFIX,deno.land
@@ -2265,6 +2293,7 @@ payload:
   - DOMAIN-SUFFIX,fiverrcdn.com
   - DOMAIN-SUFFIX,fivetiu.com
   - DOMAIN-SUFFIX,flagcdn.com
+  - DOMAIN-SUFFIX,flaglog.com
   - DOMAIN-SUFFIX,flagpedia.net
   - DOMAIN-SUFFIX,flk-ipfs.xyz
   - DOMAIN-SUFFIX,fncstatic.com
@@ -2281,6 +2310,7 @@ payload:
   - DOMAIN-SUFFIX,ftcdn.net
   - DOMAIN-SUFFIX,futurecdn.net
   - DOMAIN-SUFFIX,gadgets360cdn.com
+  - DOMAIN-SUFFIX,gamesgamescdn.com
   - DOMAIN-SUFFIX,gateway.originprotocol.com
   - DOMAIN-SUFFIX,gateway.pinata.cloud
   - DOMAIN-SUFFIX,gateway.serph.network
@@ -2438,6 +2468,7 @@ payload:
   - DOMAIN-SUFFIX,jinyingimage.com
   - DOMAIN-SUFFIX,jisuimage.com
   - DOMAIN-SUFFIX,jitpack.io
+  - DOMAIN-SUFFIX,jpgjingpinx.com
   - DOMAIN-SUFFIX,js-eu1.hubspot.com
   - DOMAIN-SUFFIX,js.hubspot.com
   - DOMAIN-SUFFIX,js.hubspotfeedback.com
@@ -2461,6 +2492,8 @@ payload:
   - DOMAIN-SUFFIX,kwcdn.com
   - DOMAIN-SUFFIX,kym-cdn.com
   - DOMAIN-SUFFIX,larksuitecdn.com
+  - DOMAIN-SUFFIX,lbpicpic.com
+  - DOMAIN-SUFFIX,lbpictupian.com
   - DOMAIN-SUFFIX,lencr.org
   - DOMAIN-SUFFIX,liangzipic.com
   - DOMAIN-SUFFIX,licensebuttons.net
@@ -2574,6 +2607,7 @@ payload:
   - DOMAIN-SUFFIX,parastorage.com
   - DOMAIN-SUFFIX,pastebin.com
   - DOMAIN-SUFFIX,patientpop.com
+  - DOMAIN-SUFFIX,patreonusercontent.com
   - DOMAIN-SUFFIX,payloadcms.app
   - DOMAIN-SUFFIX,pcdn.co
   - DOMAIN-SUFFIX,permaweb.eu.org

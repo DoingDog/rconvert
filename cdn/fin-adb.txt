@@ -1,5 +1,5 @@
-# Adblock total line 2884
-# Last updated Wed 01/01/2025 22:13:57.69
+# Adblock total line 2918
+# Last updated Sat 01/04/2025 22:13:34.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -62,6 +62,7 @@
 ||apple-relay.apple.com^
 ||apple-relay.cloudflare.com^
 ||apple-relay.fastly-edge.com^
+||apps.bazaarvoice.com^
 ||apps.profitihub.com^
 ||archive.mozilla.org^
 ||artworks.thetvdb.com^
@@ -278,6 +279,18 @@
 ||c.s-microsoft.com^
 ||c.speedtestcustom.com^
 ||c.start.me^
+||c1.patreon.com^
+||c10.patreon.com^
+||c11.patreon.com^
+||c13.patreon.com^
+||c14.patreon.com^
+||c16.patreon.com^
+||c17.patreon.com^
+||c4.patreon.com^
+||c5.patreon.com^
+||c6.patreon.com^
+||c7.patreon.com^
+||c8.patreon.com^
 ||ca.nfs.pub^
 ||cacerts.digicert.com^
 ||cache-05.filehippo.net^
@@ -344,6 +357,7 @@
 ||cdn.britannica.com^
 ||cdn.bsky.social^
 ||cdn.builder.io^
+||cdn.buymeacoffee.com^
 ||cdn.c1.amplience.net^
 ||cdn.calibermind.com^
 ||cdn.cameo.com^
@@ -398,6 +412,8 @@
 ||cdn.freebiesupply.com^
 ||cdn.freecodecamp.org^
 ||cdn.freshdesk.com^
+||cdn.gamemonkey.org^
+||cdn.gdl.gg^
 ||cdn.getkoala.com^
 ||cdn.gettr.com^
 ||cdn.ghostery.com^
@@ -430,6 +446,7 @@
 ||cdn.jwplayer.com^
 ||cdn.kinopio.club^
 ||cdn.kinsta.com^
+||cdn.ko-fi.com^
 ||cdn.koala.live^
 ||cdn.kobo.com^
 ||cdn.langshop.app^
@@ -658,6 +675,7 @@
 ||code.ionicframework.com^
 ||code.jquery.com^
 ||code.piano.io^
+||code.upscope.io^
 ||common-header.nimg.jp^
 ||compass-ssl.xbox.com^
 ||components.clever-cloud.com^
@@ -960,6 +978,7 @@
 ||images.g2crowd.com^
 ||images.idgesg.net^
 ||images.macrumors.com^
+||images.mattel.net^
 ||images.microcms-assets.io^
 ||images.moegoat.com^
 ||images.moovitapp.com^
@@ -1044,12 +1063,14 @@
 ||img.lvv2.com^
 ||img.m.mw^
 ||img.majors.im^
+||img.ml0987.com^
 ||img.moedog.org^
 ||img.moegirl.tw^
 ||img.mresou.com^
 ||img.pawoo.net^
 ||img.perfops.net^
 ||img.picacomic.com^
+||img.ra7.xyz^
 ||img.reg.ru^
 ||img.reimu.net^
 ||img.represent.com^
@@ -1121,9 +1142,11 @@
 ||js.stripe.com^
 ||js.txxx.tube^
 ||js.upload.io^
+||js.upscope.io^
 ||js.userflow.com^
 ||js.verygoodvault.com^
 ||js1.chargebee.com^
+||jsdelivr.b-cdn.net^
 ||jsdelivr.ioiox.net^
 ||jslibs.blackmagicdesign.com^
 ||jsonplaceholder.typicode.com^
@@ -1134,6 +1157,7 @@
 ||lain.bgm.tv^
 ||latency-test.lab.skk.moe^
 ||latency-test.skk.moe^
+||launcher-files.modrinth.com^
 ||launcher.spot.im^
 ||launchercontent.mojang.com^
 ||lc.nssurge.com^
@@ -1404,6 +1428,7 @@
 ||quriobot.com^
 ||r.r10s.jp^
 ||r2.leadsy.ai^
+||rapid-cdn.yottaa.com^
 ||raw.github.com^
 ||rawmarkdown.cloudflareaccess.org^
 ||rebound.postmarkapp.com^
@@ -1815,6 +1840,7 @@
 ||storage-b.picacomic.com^
 ||storage.crisp.chat^
 ||storage.gra.cloud.ovh.net^
+||storage.ko-fi.com^
 ||storage.moegirl.tw^
 ||storage.sciencecast.org^
 ||storage.withfabric.xyz^
@@ -1941,6 +1967,7 @@
 ||vir.wsj.net^
 ||viu-static.akamaized.net^
 ||vjs.zencdn.net^
+||vod.jfly.xyz^
 ||vscode-sync-insiders.trafficmanager.net^
 ||vscode-sync.trafficmanager.net^
 ||vuejs.org^
@@ -2191,6 +2218,7 @@
 ||data.debugbear.com^
 ||datocms-assets.com^
 ||daumcdn.net^
+||ddpic.info^
 ||delegated-ipfs.dev^
 ||delvenetworks.com^
 ||deno.land^
@@ -2264,6 +2292,7 @@
 ||fiverrcdn.com^
 ||fivetiu.com^
 ||flagcdn.com^
+||flaglog.com^
 ||flagpedia.net^
 ||flk-ipfs.xyz^
 ||fncstatic.com^
@@ -2280,6 +2309,7 @@
 ||ftcdn.net^
 ||futurecdn.net^
 ||gadgets360cdn.com^
+||gamesgamescdn.com^
 ||gateway.originprotocol.com^
 ||gateway.pinata.cloud^
 ||gateway.serph.network^
@@ -2437,6 +2467,7 @@
 ||jinyingimage.com^
 ||jisuimage.com^
 ||jitpack.io^
+||jpgjingpinx.com^
 ||js-eu1.hubspot.com^
 ||js.hubspot.com^
 ||js.hubspotfeedback.com^
@@ -2460,6 +2491,8 @@
 ||kwcdn.com^
 ||kym-cdn.com^
 ||larksuitecdn.com^
+||lbpicpic.com^
+||lbpictupian.com^
 ||lencr.org^
 ||liangzipic.com^
 ||licensebuttons.net^
@@ -2573,6 +2606,7 @@
 ||parastorage.com^
 ||pastebin.com^
 ||patientpop.com^
+||patreonusercontent.com^
 ||payloadcms.app^
 ||pcdn.co^
 ||permaweb.eu.org^
