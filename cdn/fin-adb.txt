@@ -1,5 +1,5 @@
-# Adblock total line 2918
-# Last updated Sat 01/04/2025 22:13:34.18
+# Adblock total line 2919
+# Last updated Tue 01/07/2025 22:14:05.05
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -25,6 +25,7 @@
 ||akidoo.top^
 ||alt.idgesg.net^
 ||amp.azure.net^
+||analytics.twitter.com^
 ||analytics.welcomesoftware.com^
 ||anchor.digitalocean.com^
 ||android-safebrowsing.google.com^
@@ -121,6 +122,7 @@
 ||assets.documentcloud.org^
 ||assets.dwncdn.net^
 ||assets.ecomm.ui.com^
+||assets.embeddables.com^
 ||assets.euractiv.com^
 ||assets.exercism.org^
 ||assets.extension.grammarly.com^
@@ -261,6 +263,7 @@
 ||blade-public-static.blade-group.com^
 ||blob.sololearn.com^
 ||boards.greenhouse.io^
+||bookface-static.ycombinator.com^
 ||bot.ivy.ai^
 ||brick.a.ssl.fastly.net^
 ||brick.freetls.fastly.net^
@@ -331,7 +334,6 @@
 ||cdn-www.bluestacks.com^
 ||cdn-yotpo-images-production.yotpo.com^
 ||cdn.18jav.tv^
-||cdn.9to5terminal.com^
 ||cdn.accounts.nintendo.com^
 ||cdn.adguard.com^
 ||cdn.adguard.info^
@@ -441,7 +443,9 @@
 ||cdn.jetphotos.com^
 ||cdn.jitbit.com^
 ||cdn.joincommunity.xyz^
+||cdn.joinhoney.com^
 ||cdn.jolipage.co^
+||cdn.jotfor.ms^
 ||cdn.judge.me^
 ||cdn.jwplayer.com^
 ||cdn.kinopio.club^
@@ -667,7 +671,6 @@
 ||cms-assets.webediamovies.pro^
 ||cms-assets.xboxservices.com^
 ||cms-cdn.now.gg^
-||cms.payloadcms.com^
 ||cms.typenetwork.com^
 ||code.benco.io^
 ||code.highcharts.com^
@@ -935,6 +938,7 @@
 ||image.freepik.com^
 ||image.gyutto.com^
 ||image.gyutto.jp^
+||image.hkhl.hk^
 ||image.ibb.co^
 ||image.jnislniv.xyz^
 ||image.lichess1.org^
@@ -998,6 +1002,7 @@
 ||images.store.crowdstrike.com^
 ||images.svc.ui.com^
 ||images.tokopedia.net^
+||images.typeform.com^
 ||images.unsplash.com^
 ||images.web3.storage^
 ||images.weserv.nl^
@@ -1106,6 +1111,7 @@
 ||imgs3.hcaptcha.com^
 ||imgsrv.crunchyroll.com^
 ||imgssl.constantcontact.com^
+||import-cdn.default.com^
 ||ims.windy.com^
 ||info.cloudflare.com^
 ||info.knak.com^
@@ -1200,6 +1206,7 @@
 ||media-cdn.comfy.social^
 ||media-cdn.epicgames.com^
 ||media-cldnry.s-nbcnews.com^
+||media-cms.onesignal.com^
 ||media-s3-eu-west-1.ceros.com^
 ||media-s3-us-east-1.ceros.com^
 ||media-s3-us-west-1.ceros.com^
@@ -1226,6 +1233,7 @@
 ||media.hachyderm.io^
 ||media.infosec.exchange^
 ||media.istockphoto.com^
+||media.kit.com^
 ||media.licdn.com^
 ||media.loom-app.com^
 ||media.mas.to^
@@ -1282,6 +1290,7 @@
 ||navismithapis-cdn.com^
 ||nbcnewsdigital-static.nbcuni.com^
 ||net-fe-static-assets.network-controller.svc.ui.com^
+||netlify.apollo.io^
 ||newassets.hcaptcha.com^
 ||newsletter.postmarkapp.com^
 ||next-images.opencollective.com^
@@ -1444,6 +1453,7 @@
 ||renderer-assets.typeform.com^
 ||replicate.npmjs.com^
 ||repo.gradle.org^
+||repo.hex.pm^
 ||repo.maven.apache.org^
 ||repo.nextdns.io^
 ||repo1.maven.org^
@@ -1515,6 +1525,7 @@
 ||s3.m.0x.mk^
 ||s3.masto.ai^
 ||s3.picacomic.com^
+||s3.producthunt.com^
 ||s3.stackabuse.com^
 ||s3.toot.io^
 ||s3.us-west-000.backblazeb2.com^
@@ -1538,6 +1549,7 @@
 ||scripts.dailymail.co.uk^
 ||scripts.webeo.com^
 ||sdata.ndtv.com^
+||sdk.customfit.ai^
 ||sdk.listenlive.co^
 ||sdk.qikify.com^
 ||sdk.snapkit.com^
@@ -1644,6 +1656,7 @@
 ||static-resource.np.community.playstation.net^
 ||static-secure-uploads.ui.com^
 ||static-sg-cdn.eporner.com^
+||static-staging.scroll.com^
 ||static-sv.fc2.com^
 ||static-web-prod.skillshare.com^
 ||static-web.grammarly.com^
@@ -1993,6 +2006,7 @@
 ||webfonts.zoho.com^
 ||webp.frostming.com^
 ||website-cdn.ipinfo.io^
+||webstatic.chargebee.com^
 ||widget.freshworks.com^
 ||widget.intercom.io^
 ||widget.kapa.ai^
@@ -2036,12 +2050,10 @@
 ||7mmtv.tv^
 ||91pic.org^
 ||98avcdn.xyz^
-||99av.tv^
 ||9cache.com^
 ||a.storyblok.com^
 ||aacdn.nagich.com^
 ||aayinltcs.arduino.cc^
-||abc-cdn.net^
 ||abc-cdn.net.au^
 ||abcnewsfe.com^
 ||addons.business^
@@ -2050,7 +2062,6 @@
 ||agechecker-northern-apps.com^
 ||agechecker.northern-apps.com^
 ||airio3.live^
-||akamai-content-delivery.com^
 ||akamai-content-network.com^
 ||alexdav.id^
 ||alonestreaming.com^
@@ -2139,7 +2150,6 @@
 ||cdn.imgeng.in^
 ||cdn.imghaste.com^
 ||cdn.ipinfo.io^
-||cdn.iz8qkg.com^
 ||cdn.manage.runcloud.io^
 ||cdn.medallia.com^
 ||cdn.mozilla.net^
@@ -2173,7 +2183,6 @@
 ||cdnpure.com^
 ||cdnst.net^
 ||cdntrex.com^
-||ceres9350.com^
 ||cf-ipfs.com^
 ||cfcdn.mux.com^
 ||characterai.io^
@@ -2268,7 +2277,6 @@
 ||events.backtrace.io^
 ||exp-tas.com^
 ||ezocdn.com^
-||ezocdn.net^
 ||f-droid.org^
 ||f.hubspotfree.net^
 ||fakestoreapi.com^
@@ -2344,7 +2352,6 @@
 ||hbfile.net^
 ||hdzyk-cdn.com^
 ||hembed.com^
-||hey10.cjkypo.com^
 ||hgagecdn.com^
 ||highwinds-cdn.com^
 ||himg.nl^
@@ -2358,7 +2365,6 @@
 ||hsto.org^
 ||hubspotusercontent-eu1.net^
 ||hubspotusercontent-na1.net^
-||hubspotusercontent30.com^
 ||hubspotusercontent30.net^
 ||i-dont-care-about-cookies.eu^
 ||i.optimole.com^
@@ -2444,7 +2450,6 @@
 ||ipfs.sloppyta.co^
 ||ipfs.smartholdem.io^
 ||ipfs.soul-network.com^
-||ipfs.tayfundogdas.me^
 ||ipfs.telos.miami^
 ||ipfs.tribecap.co^
 ||ipfs.trusti.id^
@@ -2579,7 +2584,6 @@
 ||notion-static.com^
 ||notionusercontent.com^
 ||now.sh^
-||nowestatic.com^
 ||npm.io^
 ||npmfs.com^
 ||nxcli.io^
@@ -2592,7 +2596,6 @@
 ||ogads-pa.googleapis.com^
 ||oktacdn.com^
 ||olemovienews.com^
-||ominisrc.com^
 ||omnisnippet1.com^
 ||onekey-asset.com^
 ||onrender.com^
@@ -2648,6 +2651,7 @@
 ||proxy.ustclug.org^
 ||proxy1.startpage.com^
 ||proxy2.startpage.com^
+||proxy3.startpage.com^
 ||pstatic.net^
 ||pstorage.space^
 ||public.cdn.office.net^
@@ -2660,7 +2664,6 @@
 ||pypi.org^
 ||pythonhosted.org^
 ||pztv.ca^
-||pzvcdn.com^
 ||qooqlevideo.com^
 ||quay.io^
 ||quip-cdn.com^
@@ -2765,6 +2768,7 @@
 ||statuspage.io^
 ||steamstatic.com^
 ||steamusercontent.com^
+||sthlstatic.com^
 ||storage.googleapis.com^
 ||storage.infomaniak.com^
 ||storage.yandexcloud.net^
@@ -2838,7 +2842,6 @@
 ||uvcdn.com^
 ||v-cdn.net^
 ||v2ex.co^
-||v82u1l.com^
 ||vanillicon.com^
 ||vercel.app^
 ||vercel.dev^
@@ -2866,7 +2869,6 @@
 ||webp.se^
 ||webpkgcache.com^
 ||website-files.com^
-||whweitao.com^
 ||widget.cluster.groovehq.com^
 ||widget.clutch.co^
 ||widgets.marketplace.aws.dev^
@@ -2897,7 +2899,6 @@
 ||yastatic.net^
 ||yelpcdn.com^
 ||yimg.com^
-||yle888.vip^
 ||ymq.cool^
 ||yourimageshare.com^
 ||ytimg.com^
