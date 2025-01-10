@@ -1,5 +1,5 @@
-# Clash total line 5931
-# Last updated Tue 01/07/2025 22:14:14.07
+# Clash total line 5938
+# Last updated Fri 01/10/2025 22:13:42.36
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -233,7 +233,6 @@ payload:
   - DOMAIN,assets9.lottiefiles.com
   - DOMAIN,assetscdn-wchat.eu.freshchat.com
   - DOMAIN,assetscdn.jable.tv
-  - DOMAIN,at.adtech.redventures.io
   - DOMAIN,atn.hitomi.la
   - DOMAIN,attachments.office.net
   - DOMAIN,aus2-community.mozilla.org
@@ -375,6 +374,7 @@ payload:
   - DOMAIN,cdn.britannica.com
   - DOMAIN,cdn.bsky.social
   - DOMAIN,cdn.builder.io
+  - DOMAIN,cdn.bullwhip.cloud
   - DOMAIN,cdn.buymeacoffee.com
   - DOMAIN,cdn.c1.amplience.net
   - DOMAIN,cdn.calibermind.com
@@ -606,12 +606,14 @@ payload:
   - DOMAIN,cdn.zhujiwiki.com
   - DOMAIN,cdn.zoom.us
   - DOMAIN,cdn0.dan.com
+  - DOMAIN,cdn0.iconfinder.com
   - DOMAIN,cdn01.jotfor.ms
   - DOMAIN,cdn02.jotfor.ms
   - DOMAIN,cdn03.jotfor.ms
   - DOMAIN,cdn1.airdroid.com
   - DOMAIN,cdn1.dan.com
   - DOMAIN,cdn1.epicgames.com
+  - DOMAIN,cdn1.iconfinder.com
   - DOMAIN,cdn1.identitymind.com
   - DOMAIN,cdn1.plesk.com
   - DOMAIN,cdn1.stamped.io
@@ -627,6 +629,7 @@ payload:
   - DOMAIN,cdn2.epicgames.com
   - DOMAIN,cdn2.ettoday.net
   - DOMAIN,cdn2.hextom.com
+  - DOMAIN,cdn2.iconfinder.com
   - DOMAIN,cdn2.macpaw.com
   - DOMAIN,cdn2.onlyfans.com
   - DOMAIN,cdn2.stamped.io
@@ -635,12 +638,15 @@ payload:
   - DOMAIN,cdn2.unrealengine.com
   - DOMAIN,cdn3.dan.com
   - DOMAIN,cdn3.hextom.com
+  - DOMAIN,cdn3.iconfinder.com
   - DOMAIN,cdn3.onlyfans.com
   - DOMAIN,cdn3.stamped.io
   - DOMAIN,cdn3.sysgears.com
   - DOMAIN,cdn3.unrealengine.com
+  - DOMAIN,cdn4.iconfinder.com
   - DOMAIN,cdn4.sysgears.com
   - DOMAIN,cdn5.hextom.com
+  - DOMAIN,cdn5.iconfinder.com
   - DOMAIN,cdn6.aptoide.com
   - DOMAIN,cdn77.boyfriendtv.com
   - DOMAIN,cdna.artstation.com
@@ -1233,6 +1239,7 @@ payload:
   - DOMAIN,js.navattic.com
   - DOMAIN,js.partnerstack.com
   - DOMAIN,js.pusher.com
+  - DOMAIN,js.puter.com
   - DOMAIN,js.qualified.com
   - DOMAIN,js.recurly.com
   - DOMAIN,js.short.io
@@ -1485,7 +1492,6 @@ payload:
   - DOMAIN,pic.7mmtv.me
   - DOMAIN,pic.cangku.moe
   - DOMAIN,pic.imge.cc
-  - DOMAIN,pic.libilibi.top
   - DOMAIN,pic.macked.app
   - DOMAIN,pic.onlinewebfonts.com
   - DOMAIN,pic.skk.moe
@@ -1726,7 +1732,6 @@ payload:
   - DOMAIN,sp.nba.com
   - DOMAIN,sp.replit.com
   - DOMAIN,spcdn.incartupsell.com
-  - DOMAIN,spoppe-b.azureedge.net
   - DOMAIN,sprig.figma.com
   - DOMAIN,st-eu.dynamicyield.com
   - DOMAIN,st.agrd.eu
@@ -1844,6 +1849,7 @@ payload:
   - DOMAIN,static.iris.informa.com
   - DOMAIN,static.itch.io
   - DOMAIN,static.j51.net
+  - DOMAIN,static.javatpoint.com
   - DOMAIN,static.javhd.com
   - DOMAIN,static.jsbin.com
   - DOMAIN,static.killedbygoogle.com
@@ -1893,7 +1899,6 @@ payload:
   - DOMAIN,static.snapchat.com
   - DOMAIN,static.snaptube.in
   - DOMAIN,static.snyk.io
-  - DOMAIN,static.socratic.org
   - DOMAIN,static.solarwinds.com
   - DOMAIN,static.spankbang.com
   - DOMAIN,static.srcspot.com
@@ -2010,6 +2015,7 @@ payload:
   - DOMAIN,tools-static.wmflabs.org
   - DOMAIN,topbar-static.piano.io
   - DOMAIN,torrindex.net
+  - DOMAIN,tracking.inflection.io
   - DOMAIN,tuf-repo-cdn.sigstore.dev
   - DOMAIN,tuf-repo.github.com
   - DOMAIN,turbo.build
@@ -2055,7 +2061,6 @@ payload:
   - DOMAIN,userimg-bee.customeriomail.com
   - DOMAIN,userimg.customeriomail.com
   - DOMAIN,userpic.redgifs.com
-  - DOMAIN,useruploads.socratic.org
   - DOMAIN,useruploads.visualwebsiteoptimizer.com
   - DOMAIN,uts-api.itunes.apple.com
   - DOMAIN,utteranc.es
@@ -3813,6 +3818,7 @@ payload:
   - DOMAIN-SUFFIX,mngbcn.com
   - DOMAIN-SUFFIX,mobile-collector.newrelic.com
   - DOMAIN-SUFFIX,modsbase.com
+  - DOMAIN-SUFFIX,monitor.azure.com
   - DOMAIN-SUFFIX,moov.hk
   - DOMAIN-SUFFIX,motherlessmedia.com
   - DOMAIN-SUFFIX,moviesanywhere.com
@@ -4568,6 +4574,7 @@ payload:
   - DOMAIN-SUFFIX,ttcache.com
   - DOMAIN-SUFFIX,ttl.sh
   - DOMAIN-SUFFIX,ttwstatic.com
+  - DOMAIN-SUFFIX,tunnels.api.visualstudio.com
   - DOMAIN-SUFFIX,turb.cc
   - DOMAIN-SUFFIX,turb.to
   - DOMAIN-SUFFIX,turbo.to

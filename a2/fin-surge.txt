@@ -1,5 +1,5 @@
-# Surge Rules total line 578
-# Last updated Tue 01/07/2025 22:08:02.47
+# Surge Rules total line 579
+# Last updated Fri 01/10/2025 22:08:07.07
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
@@ -374,6 +374,7 @@ IP-CIDR,139.159.32.82/32,no-resolve
 IP-CIDR,139.196.239.52/32,no-resolve
 IP-CIDR,139.224.26.92/32,no-resolve
 IP-CIDR,139.224.74.148/32,no-resolve
+IP-CIDR,144.202.34.169/32,no-resolve
 IP-CIDR,146.148.85.61/32,no-resolve
 IP-CIDR,157.148.47.204/32,no-resolve
 IP-CIDR,162.212.181.32/32,no-resolve

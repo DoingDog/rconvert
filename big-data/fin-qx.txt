@@ -1,5 +1,5 @@
-# Quantumult total line 5917
-# Last updated Tue 01/07/2025 22:14:14.02
+# Quantumult total line 5924
+# Last updated Fri 01/10/2025 22:13:42.33
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -232,7 +232,6 @@ HOST,assets8.lottiefiles.com,LIST
 HOST,assets9.lottiefiles.com,LIST
 HOST,assetscdn-wchat.eu.freshchat.com,LIST
 HOST,assetscdn.jable.tv,LIST
-HOST,at.adtech.redventures.io,LIST
 HOST,atn.hitomi.la,LIST
 HOST,attachments.office.net,LIST
 HOST,aus2-community.mozilla.org,LIST
@@ -374,6 +373,7 @@ HOST,cdn.branch.io,LIST
 HOST,cdn.britannica.com,LIST
 HOST,cdn.bsky.social,LIST
 HOST,cdn.builder.io,LIST
+HOST,cdn.bullwhip.cloud,LIST
 HOST,cdn.buymeacoffee.com,LIST
 HOST,cdn.c1.amplience.net,LIST
 HOST,cdn.calibermind.com,LIST
@@ -605,12 +605,14 @@ HOST,cdn.zeabur.com,LIST
 HOST,cdn.zhujiwiki.com,LIST
 HOST,cdn.zoom.us,LIST
 HOST,cdn0.dan.com,LIST
+HOST,cdn0.iconfinder.com,LIST
 HOST,cdn01.jotfor.ms,LIST
 HOST,cdn02.jotfor.ms,LIST
 HOST,cdn03.jotfor.ms,LIST
 HOST,cdn1.airdroid.com,LIST
 HOST,cdn1.dan.com,LIST
 HOST,cdn1.epicgames.com,LIST
+HOST,cdn1.iconfinder.com,LIST
 HOST,cdn1.identitymind.com,LIST
 HOST,cdn1.plesk.com,LIST
 HOST,cdn1.stamped.io,LIST
@@ -626,6 +628,7 @@ HOST,cdn2.editmysite.com,LIST
 HOST,cdn2.epicgames.com,LIST
 HOST,cdn2.ettoday.net,LIST
 HOST,cdn2.hextom.com,LIST
+HOST,cdn2.iconfinder.com,LIST
 HOST,cdn2.macpaw.com,LIST
 HOST,cdn2.onlyfans.com,LIST
 HOST,cdn2.stamped.io,LIST
@@ -634,12 +637,15 @@ HOST,cdn2.ttloli.com,LIST
 HOST,cdn2.unrealengine.com,LIST
 HOST,cdn3.dan.com,LIST
 HOST,cdn3.hextom.com,LIST
+HOST,cdn3.iconfinder.com,LIST
 HOST,cdn3.onlyfans.com,LIST
 HOST,cdn3.stamped.io,LIST
 HOST,cdn3.sysgears.com,LIST
 HOST,cdn3.unrealengine.com,LIST
+HOST,cdn4.iconfinder.com,LIST
 HOST,cdn4.sysgears.com,LIST
 HOST,cdn5.hextom.com,LIST
+HOST,cdn5.iconfinder.com,LIST
 HOST,cdn6.aptoide.com,LIST
 HOST,cdn77.boyfriendtv.com,LIST
 HOST,cdna.artstation.com,LIST
@@ -1232,6 +1238,7 @@ HOST,js.memberful.com,LIST
 HOST,js.navattic.com,LIST
 HOST,js.partnerstack.com,LIST
 HOST,js.pusher.com,LIST
+HOST,js.puter.com,LIST
 HOST,js.qualified.com,LIST
 HOST,js.recurly.com,LIST
 HOST,js.short.io,LIST
@@ -1484,7 +1491,6 @@ HOST,photos5.appleinsider.com,LIST
 HOST,pic.7mmtv.me,LIST
 HOST,pic.cangku.moe,LIST
 HOST,pic.imge.cc,LIST
-HOST,pic.libilibi.top,LIST
 HOST,pic.macked.app,LIST
 HOST,pic.onlinewebfonts.com,LIST
 HOST,pic.skk.moe,LIST
@@ -1725,7 +1731,6 @@ HOST,sp-spiegel-de.spiegel.de,LIST
 HOST,sp.nba.com,LIST
 HOST,sp.replit.com,LIST
 HOST,spcdn.incartupsell.com,LIST
-HOST,spoppe-b.azureedge.net,LIST
 HOST,sprig.figma.com,LIST
 HOST,st-eu.dynamicyield.com,LIST
 HOST,st.agrd.eu,LIST
@@ -1843,6 +1848,7 @@ HOST,static.institution.grammarly.com,LIST
 HOST,static.iris.informa.com,LIST
 HOST,static.itch.io,LIST
 HOST,static.j51.net,LIST
+HOST,static.javatpoint.com,LIST
 HOST,static.javhd.com,LIST
 HOST,static.jsbin.com,LIST
 HOST,static.killedbygoogle.com,LIST
@@ -1892,7 +1898,6 @@ HOST,static.skyassets.com,LIST
 HOST,static.snapchat.com,LIST
 HOST,static.snaptube.in,LIST
 HOST,static.snyk.io,LIST
-HOST,static.socratic.org,LIST
 HOST,static.solarwinds.com,LIST
 HOST,static.spankbang.com,LIST
 HOST,static.srcspot.com,LIST
@@ -2009,6 +2014,7 @@ HOST,ton.local.twitter.com,LIST
 HOST,tools-static.wmflabs.org,LIST
 HOST,topbar-static.piano.io,LIST
 HOST,torrindex.net,LIST
+HOST,tracking.inflection.io,LIST
 HOST,tuf-repo-cdn.sigstore.dev,LIST
 HOST,tuf-repo.github.com,LIST
 HOST,turbo.build,LIST
@@ -2054,7 +2060,6 @@ HOST,userimg-assets.customeriomail.com,LIST
 HOST,userimg-bee.customeriomail.com,LIST
 HOST,userimg.customeriomail.com,LIST
 HOST,userpic.redgifs.com,LIST
-HOST,useruploads.socratic.org,LIST
 HOST,useruploads.visualwebsiteoptimizer.com,LIST
 HOST,uts-api.itunes.apple.com,LIST
 HOST,utteranc.es,LIST
@@ -3812,6 +3817,7 @@ HOST-SUFFIX,mmtcdn.com,LIST
 HOST-SUFFIX,mngbcn.com,LIST
 HOST-SUFFIX,mobile-collector.newrelic.com,LIST
 HOST-SUFFIX,modsbase.com,LIST
+HOST-SUFFIX,monitor.azure.com,LIST
 HOST-SUFFIX,moov.hk,LIST
 HOST-SUFFIX,motherlessmedia.com,LIST
 HOST-SUFFIX,moviesanywhere.com,LIST
@@ -4567,6 +4573,7 @@ HOST-SUFFIX,trustless-gateway.link,LIST
 HOST-SUFFIX,ttcache.com,LIST
 HOST-SUFFIX,ttl.sh,LIST
 HOST-SUFFIX,ttwstatic.com,LIST
+HOST-SUFFIX,tunnels.api.visualstudio.com,LIST
 HOST-SUFFIX,turb.cc,LIST
 HOST-SUFFIX,turb.to,LIST
 HOST-SUFFIX,turbo.to,LIST

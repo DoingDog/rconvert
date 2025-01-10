@@ -1,5 +1,5 @@
-# Clash total line 4363
-# Last updated Tue 01/07/2025 22:14:23.45
+# Clash total line 4361
+# Last updated Fri 01/10/2025 22:13:51.80
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -358,8 +358,6 @@ payload:
   - DOMAIN-SUFFIX,9xgame.com
   - DOMAIN-SUFFIX,9xiu.com
   - DOMAIN-SUFFIX,9xu.com
-  - DOMAIN-SUFFIX,_msdcs
-  - DOMAIN-SUFFIX,_tcp
   - DOMAIN-SUFFIX,a9vg.com
   - DOMAIN-SUFFIX,aaplimg.com
   - DOMAIN-SUFFIX,aardio.com
