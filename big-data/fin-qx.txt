@@ -1,5 +1,5 @@
-# Quantumult total line 5924
-# Last updated Fri 01/10/2025 22:13:42.33
+# Quantumult total line 5934
+# Last updated Mon 01/13/2025 22:13:33.41
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -122,6 +122,7 @@ HOST,assets.coingecko.com,LIST
 HOST,assets.context.ly,LIST
 HOST,assets.controld.com,LIST
 HOST,assets.convertkit.com,LIST
+HOST,assets.cyberghostvpn.com,LIST
 HOST,assets.dev.to,LIST
 HOST,assets.dify.ai,LIST
 HOST,assets.dnsfilter.com,LIST
@@ -185,6 +186,7 @@ HOST,assets.quillbot.com,LIST
 HOST,assets.raspberrypi.com,LIST
 HOST,assets.repair.org,LIST
 HOST,assets.safing.io,LIST
+HOST,assets.salesmartly.com,LIST
 HOST,assets.scaleflex.com,LIST
 HOST,assets.science.nasa.gov,LIST
 HOST,assets.scroll.com,LIST
@@ -406,6 +408,7 @@ HOST,cdn.db-ip.com,LIST
 HOST,cdn.decrypt.co,LIST
 HOST,cdn.deta.space,LIST
 HOST,cdn.dnsimple.com,LIST
+HOST,cdn.document360.io,LIST
 HOST,cdn.donmai.us,LIST
 HOST,cdn.dotaoutpost.com,LIST
 HOST,cdn.download.it,LIST
@@ -450,6 +453,7 @@ HOST,cdn.hypershort.com,LIST
 HOST,cdn.icomoon.io,LIST
 HOST,cdn.imageengine.io,LIST
 HOST,cdn.img.ly,LIST
+HOST,cdn.ionos.de,LIST
 HOST,cdn.ip2location.io,LIST
 HOST,cdn.ipregistry.co,LIST
 HOST,cdn.jetboost.io,LIST
@@ -658,6 +662,7 @@ HOST,cdnjs.cat.net,LIST
 HOST,cdnjs.cloudflare.com,LIST
 HOST,cdnl.tnaflix.com,LIST
 HOST,cdns.gigya.com,LIST
+HOST,certificates.godaddy.com,LIST
 HOST,certona.gap.com,LIST
 HOST,cf-assets.www.cloudflare.com,LIST
 HOST,cf-images.us-east-1.prod.boltdns.net,LIST
@@ -858,6 +863,7 @@ HOST,edge-mobile-static.azureedge.net,LIST
 HOST,edge.cwtv-vod-ext.top.comcast.net,LIST
 HOST,edge.marker.io,LIST
 HOST,edge.personalizer.io,LIST
+HOST,edge.sitecorecloud.io,LIST
 HOST,edge.steam-dns.top.comcast.net,LIST
 HOST,edge1.certona.net,LIST
 HOST,edgeassetservice.azureedge.net,LIST
@@ -1128,6 +1134,7 @@ HOST,img-api.mac4ever.com,LIST
 HOST,img-cos.mandaoo.com,LIST
 HOST,img-en.fs.com,LIST
 HOST,img.3movs.com,LIST
+HOST,img.adspower.net,LIST
 HOST,img.agrd.eu,LIST
 HOST,img.announcekit.app,LIST
 HOST,img.api.video,LIST
@@ -2084,6 +2091,7 @@ HOST,videos2.edclub.com,LIST
 HOST,vir.wsj.net,LIST
 HOST,vjs.zencdn.net,LIST
 HOST,vod.jfly.xyz,LIST
+HOST,vpncdn.protonweb.com,LIST
 HOST,vscode-sync-insiders.trafficmanager.net,LIST
 HOST,vscode-sync.trafficmanager.net,LIST
 HOST,vuejs.org,LIST
@@ -2108,6 +2116,7 @@ HOST,webfonts.zoho.com,LIST
 HOST,webp.frostming.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
 HOST,webstatic.chargebee.com,LIST
+HOST,widget.docsbot.ai,LIST
 HOST,widget.freshworks.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.kapa.ai,LIST
@@ -4614,6 +4623,7 @@ HOST-SUFFIX,uber-assets.com,LIST
 HOST-SUFFIX,ubiqfile.com,LIST
 HOST-SUFFIX,ucarecdn.com,LIST
 HOST-SUFFIX,udify.app,LIST
+HOST-SUFFIX,uicdn.net,LIST
 HOST-SUFFIX,ul.to,LIST
 HOST-SUFFIX,uloz.to,LIST
 HOST-SUFFIX,ulozto.net,LIST
