@@ -1,5 +1,5 @@
-# Clash total line 2937
-# Last updated Mon 01/13/2025 22:13:23.85
+# Clash total line 2947
+# Last updated Thu 01/16/2025 22:13:32.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -585,6 +585,7 @@ payload:
   - DOMAIN,cdn.vidible.tv
   - DOMAIN,cdn.vidyard.com
   - DOMAIN,cdn.viglink.com
+  - DOMAIN,cdn.vuukle.com
   - DOMAIN,cdn.wccftech.com
   - DOMAIN,cdn.weglot.com
   - DOMAIN,cdn.wikiwiki.jp
@@ -843,6 +844,7 @@ payload:
   - DOMAIN,files.mastodon.ktachibana.party
   - DOMAIN,files.mastodon.online
   - DOMAIN,files.mastodon.social
+  - DOMAIN,files.namecheap.com
   - DOMAIN,files.readme.io
   - DOMAIN,files.reg.ru
   - DOMAIN,files.slack.com
@@ -967,6 +969,7 @@ payload:
   - DOMAIN,image.theblockbeats.info
   - DOMAIN,image.thefly.com
   - DOMAIN,image.tmdb.org
+  - DOMAIN,image.vuukle.com
   - DOMAIN,image.westinyou.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
@@ -1249,6 +1252,7 @@ payload:
   - DOMAIN,media.infosec.exchange
   - DOMAIN,media.istockphoto.com
   - DOMAIN,media.kit.com
+  - DOMAIN,media.lantern.io
   - DOMAIN,media.licdn.com
   - DOMAIN,media.loom-app.com
   - DOMAIN,media.mas.to
@@ -1480,6 +1484,7 @@ payload:
   - DOMAIN,resize.blogsys.jp
   - DOMAIN,resize.yandex.net
   - DOMAIN,resizing.flixster.com
+  - DOMAIN,resource-accel.fs.com
   - DOMAIN,resource.akashic.coe.nicovideo.jp
   - DOMAIN,resource.fs.com
   - DOMAIN,resource.video.nimg.jp
@@ -1927,6 +1932,7 @@ payload:
   - DOMAIN,tools-static.wmflabs.org
   - DOMAIN,topbar-static.piano.io
   - DOMAIN,torrindex.net
+  - DOMAIN,touchgal-image.moyu.moe
   - DOMAIN,tracking.inflection.io
   - DOMAIN,truth.bahamut.com.tw
   - DOMAIN,tuf-repo-cdn.sigstore.dev
@@ -2381,7 +2387,11 @@ payload:
   - DOMAIN-SUFFIX,hsto.org
   - DOMAIN-SUFFIX,hubspotusercontent-eu1.net
   - DOMAIN-SUFFIX,hubspotusercontent-na1.net
+  - DOMAIN-SUFFIX,hubspotusercontent00.net
+  - DOMAIN-SUFFIX,hubspotusercontent10.net
+  - DOMAIN-SUFFIX,hubspotusercontent20.net
   - DOMAIN-SUFFIX,hubspotusercontent30.net
+  - DOMAIN-SUFFIX,hubspotusercontent40.net
   - DOMAIN-SUFFIX,i-dont-care-about-cookies.eu
   - DOMAIN-SUFFIX,i.optimole.com
   - DOMAIN-SUFFIX,ibytedtos.com

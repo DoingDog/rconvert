@@ -1,5 +1,5 @@
-# Quantumult total line 2937
-# Last updated Mon 01/13/2025 22:13:23.82
+# Quantumult total line 2947
+# Last updated Thu 01/16/2025 22:13:32.09
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -584,6 +584,7 @@ HOST,cdn.verifypass.com,LIST
 HOST,cdn.vidible.tv,LIST
 HOST,cdn.vidyard.com,LIST
 HOST,cdn.viglink.com,LIST
+HOST,cdn.vuukle.com,LIST
 HOST,cdn.wccftech.com,LIST
 HOST,cdn.weglot.com,LIST
 HOST,cdn.wikiwiki.jp,LIST
@@ -842,6 +843,7 @@ HOST,files.jotform.com,LIST
 HOST,files.mastodon.ktachibana.party,LIST
 HOST,files.mastodon.online,LIST
 HOST,files.mastodon.social,LIST
+HOST,files.namecheap.com,LIST
 HOST,files.readme.io,LIST
 HOST,files.reg.ru,LIST
 HOST,files.slack.com,LIST
@@ -966,6 +968,7 @@ HOST,image.telanganatoday.com,LIST
 HOST,image.theblockbeats.info,LIST
 HOST,image.thefly.com,LIST
 HOST,image.tmdb.org,LIST
+HOST,image.vuukle.com,LIST
 HOST,image.westinyou.com,LIST
 HOST,imagehost.player.fm,LIST
 HOST,imageio.forbes.com,LIST
@@ -1248,6 +1251,7 @@ HOST,media.hachyderm.io,LIST
 HOST,media.infosec.exchange,LIST
 HOST,media.istockphoto.com,LIST
 HOST,media.kit.com,LIST
+HOST,media.lantern.io,LIST
 HOST,media.licdn.com,LIST
 HOST,media.loom-app.com,LIST
 HOST,media.mas.to,LIST
@@ -1479,6 +1483,7 @@ HOST,res2.weblium.site,LIST
 HOST,resize.blogsys.jp,LIST
 HOST,resize.yandex.net,LIST
 HOST,resizing.flixster.com,LIST
+HOST,resource-accel.fs.com,LIST
 HOST,resource.akashic.coe.nicovideo.jp,LIST
 HOST,resource.fs.com,LIST
 HOST,resource.video.nimg.jp,LIST
@@ -1926,6 +1931,7 @@ HOST,ton.local.twitter.com,LIST
 HOST,tools-static.wmflabs.org,LIST
 HOST,topbar-static.piano.io,LIST
 HOST,torrindex.net,LIST
+HOST,touchgal-image.moyu.moe,LIST
 HOST,tracking.inflection.io,LIST
 HOST,truth.bahamut.com.tw,LIST
 HOST,tuf-repo-cdn.sigstore.dev,LIST
@@ -2380,7 +2386,11 @@ HOST-SUFFIX,hscollectedforms.net,LIST
 HOST-SUFFIX,hsto.org,LIST
 HOST-SUFFIX,hubspotusercontent-eu1.net,LIST
 HOST-SUFFIX,hubspotusercontent-na1.net,LIST
+HOST-SUFFIX,hubspotusercontent00.net,LIST
+HOST-SUFFIX,hubspotusercontent10.net,LIST
+HOST-SUFFIX,hubspotusercontent20.net,LIST
 HOST-SUFFIX,hubspotusercontent30.net,LIST
+HOST-SUFFIX,hubspotusercontent40.net,LIST
 HOST-SUFFIX,i-dont-care-about-cookies.eu,LIST
 HOST-SUFFIX,i.optimole.com,LIST
 HOST-SUFFIX,ibytedtos.com,LIST
