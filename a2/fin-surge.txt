@@ -1,5 +1,5 @@
-# Surge Rules total line 581
-# Last updated Sun 01/19/2025 22:07:55.31
+# Surge Rules total line 583
+# Last updated Wed 01/22/2025 22:08:09.84
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
@@ -22,6 +22,7 @@ DOMAIN-KEYWORD,a3.bytecdn.cn
 DOMAIN-KEYWORD,a3.pstatp.com
 DOMAIN-KEYWORD,ad.api.moji.com
 DOMAIN-KEYWORD,ad.ihuman.com
+DOMAIN-KEYWORD,ad.ixigua.com
 DOMAIN-KEYWORD,ad.toutiao.com
 DOMAIN-KEYWORD,adash.man.aliyuncs.com
 DOMAIN-KEYWORD,adform
@@ -379,6 +380,7 @@ IP-CIDR,146.148.85.61/32,no-resolve
 IP-CIDR,157.148.47.204/32,no-resolve
 IP-CIDR,162.212.181.32/32,no-resolve
 IP-CIDR,169.254.169.254/32,no-resolve
+IP-CIDR,172.232.58.59/32,no-resolve
 IP-CIDR,173.208.177.227/32,no-resolve
 IP-CIDR,175.6.223.15/32,no-resolve
 IP-CIDR,180.153.103.224/32,no-resolve

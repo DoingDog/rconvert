@@ -1,5 +1,5 @@
-# Clash total line 5963
-# Last updated Sun 01/19/2025 22:13:43.98
+# Clash total line 6055
+# Last updated Wed 01/22/2025 22:13:51.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -21,7 +21,6 @@ payload:
   - DOMAIN,ajax.googleapis.com
   - DOMAIN,ajax.microsoft.com
   - DOMAIN,ak.sail-horizon.com
-  - DOMAIN,akidoo.top
   - DOMAIN,akmcdnoversea-tw.inter.ptqy.gitv.tv
   - DOMAIN,alt.idgesg.net
   - DOMAIN,amp.azure.net
@@ -164,6 +163,7 @@ payload:
   - DOMAIN,assets.matters.news
   - DOMAIN,assets.mayoclinic.org
   - DOMAIN,assets.media-platform.com
+  - DOMAIN,assets.mediadelivery.net
   - DOMAIN,assets.monei.com
   - DOMAIN,assets.monica.im
   - DOMAIN,assets.mozilla.social
@@ -189,6 +189,7 @@ payload:
   - DOMAIN,assets.safing.io
   - DOMAIN,assets.salesmartly.com
   - DOMAIN,assets.scaleflex.com
+  - DOMAIN,assets.scaleway.com
   - DOMAIN,assets.science.nasa.gov
   - DOMAIN,assets.scroll.com
   - DOMAIN,assets.sendinblue.com
@@ -350,6 +351,7 @@ payload:
   - DOMAIN,cdn-www.bluestacks.com
   - DOMAIN,cdn-yotpo-images-production.yotpo.com
   - DOMAIN,cdn.18jav.tv
+  - DOMAIN,cdn.7tv.app
   - DOMAIN,cdn.accounts.nintendo.com
   - DOMAIN,cdn.adguard.com
   - DOMAIN,cdn.adguard.info
@@ -426,6 +428,7 @@ payload:
   - DOMAIN,cdn.faire.com
   - DOMAIN,cdn.filen.io
   - DOMAIN,cdn.firebase.com
+  - DOMAIN,cdn.fluidplayer.com
   - DOMAIN,cdn.forms.office.net
   - DOMAIN,cdn.fosstodon.org
   - DOMAIN,cdn.fourthwall.com
@@ -459,6 +462,7 @@ payload:
   - DOMAIN,cdn.ionos.de
   - DOMAIN,cdn.ip2location.io
   - DOMAIN,cdn.ipregistry.co
+  - DOMAIN,cdn.javsts.com
   - DOMAIN,cdn.jetboost.io
   - DOMAIN,cdn.jetphotos.com
   - DOMAIN,cdn.jitbit.com
@@ -533,6 +537,7 @@ payload:
   - DOMAIN,cdn.prod.www.spiegel.de
   - DOMAIN,cdn.prowritingaid.com
   - DOMAIN,cdn.quadpay.com
+  - DOMAIN,cdn.quickemailverification.com
   - DOMAIN,cdn.rauno.me
   - DOMAIN,cdn.readme.io
   - DOMAIN,cdn.ready-market.com.tw
@@ -567,6 +572,7 @@ payload:
   - DOMAIN,cdn.st-note.com
   - DOMAIN,cdn.starapps.studio
   - DOMAIN,cdn.stash.com
+  - DOMAIN,cdn.staticdelivr.com
   - DOMAIN,cdn.stellarhosted.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
@@ -602,6 +608,7 @@ payload:
   - DOMAIN,cdn.windowsreport.com
   - DOMAIN,cdn.winget.microsoft.com
   - DOMAIN,cdn.wishpond.net
+  - DOMAIN,cdn.workos.com
   - DOMAIN,cdn.worldvectorlogo.com
   - DOMAIN,cdn.writeas.net
   - DOMAIN,cdn.xeiaso.net
@@ -618,18 +625,23 @@ payload:
   - DOMAIN,cdn02.jotfor.ms
   - DOMAIN,cdn03.jotfor.ms
   - DOMAIN,cdn1.airdroid.com
+  - DOMAIN,cdn1.bigcommerce.com
   - DOMAIN,cdn1.dan.com
   - DOMAIN,cdn1.epicgames.com
+  - DOMAIN,cdn1.hentaicity.com
   - DOMAIN,cdn1.iconfinder.com
   - DOMAIN,cdn1.identitymind.com
   - DOMAIN,cdn1.plesk.com
   - DOMAIN,cdn1.stamped.io
   - DOMAIN,cdn1.sysgears.com
   - DOMAIN,cdn1.unrealengine.com
+  - DOMAIN,cdn10.bigcommerce.com
+  - DOMAIN,cdn11.bigcommerce.com
   - DOMAIN,cdn2-imgix.macpaw.com
   - DOMAIN,cdn2.abiresearch.com
   - DOMAIN,cdn2.airdroid.com
   - DOMAIN,cdn2.auth0.com
+  - DOMAIN,cdn2.bigcommerce.com
   - DOMAIN,cdn2.dan.com
   - DOMAIN,cdn2.downdetector.com
   - DOMAIN,cdn2.editmysite.com
@@ -642,7 +654,9 @@ payload:
   - DOMAIN,cdn2.stamped.io
   - DOMAIN,cdn2.sysgears.com
   - DOMAIN,cdn2.ttloli.com
+  - DOMAIN,cdn2.turboviplay.cc
   - DOMAIN,cdn2.unrealengine.com
+  - DOMAIN,cdn3.bigcommerce.com
   - DOMAIN,cdn3.dan.com
   - DOMAIN,cdn3.hextom.com
   - DOMAIN,cdn3.iconfinder.com
@@ -650,12 +664,18 @@ payload:
   - DOMAIN,cdn3.stamped.io
   - DOMAIN,cdn3.sysgears.com
   - DOMAIN,cdn3.unrealengine.com
+  - DOMAIN,cdn4.bigcommerce.com
   - DOMAIN,cdn4.iconfinder.com
   - DOMAIN,cdn4.sysgears.com
+  - DOMAIN,cdn5.bigcommerce.com
   - DOMAIN,cdn5.hextom.com
   - DOMAIN,cdn5.iconfinder.com
   - DOMAIN,cdn6.aptoide.com
+  - DOMAIN,cdn6.bigcommerce.com
+  - DOMAIN,cdn7.bigcommerce.com
   - DOMAIN,cdn77.boyfriendtv.com
+  - DOMAIN,cdn8.bigcommerce.com
+  - DOMAIN,cdn9.bigcommerce.com
   - DOMAIN,cdna.artstation.com
   - DOMAIN,cdnapisec.kaltura.com
   - DOMAIN,cdnb.artstation.com
@@ -677,6 +697,7 @@ payload:
   - DOMAIN,cf.shopee.tw
   - DOMAIN,cfvod.kaltura.com
   - DOMAIN,chart.googleapis.com
+  - DOMAIN,checkout-sdk.bigcommerce.com
   - DOMAIN,checkout.stripe.com
   - DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
   - DOMAIN,ci.testling.com
@@ -854,12 +875,13 @@ payload:
   - DOMAIN,drop.ndtv.com
   - DOMAIN,drscdn.500px.org
   - DOMAIN,dynamic-assets.coinbase.com
-  - DOMAIN,dynamic-assets.mobilius.top
   - DOMAIN,e.deviantart.net
   - DOMAIN,e.linear.app
   - DOMAIN,e3.365dm.com
   - DOMAIN,easylist-downloads.adblockplus.org
   - DOMAIN,ec-prod.scene7.com
+  - DOMAIN,ecommplugins-scripts.trustpilot.com
+  - DOMAIN,ecommplugins-trustboxsettings.trustpilot.com
   - DOMAIN,edata.ndtv.com
   - DOMAIN,edge-consumer-static.azureedge.net
   - DOMAIN,edge-mobile-static.azureedge.net
@@ -963,6 +985,7 @@ payload:
   - DOMAIN,formulae.brew.sh
   - DOMAIN,frames-commandbar-prod.commandbar.com
   - DOMAIN,front-resource.fs.com
+  - DOMAIN,frontend-apps.workos.com
   - DOMAIN,fs2.onlyhentaistuff.com
   - DOMAIN,fscdn.eppo.cloud
   - DOMAIN,ftp.gnu.org
@@ -994,7 +1017,10 @@ payload:
   - DOMAIN,hamifans.emome.net
   - DOMAIN,hawk.tomsguide.com
   - DOMAIN,headway-widget.net
+  - DOMAIN,hentaiworldtv.b-cdn.net
+  - DOMAIN,hhhhhhome86227170.wordpress.com
   - DOMAIN,hls-amt.itunes.apple.com
+  - DOMAIN,hls.hentaicity.com
   - DOMAIN,hls.itunes.apple.com
   - DOMAIN,home.integrate.com
   - DOMAIN,hub-assets.displaycal.net
@@ -1154,6 +1180,7 @@ payload:
   - DOMAIN,img.catwvod.xyz
   - DOMAIN,img.clerk.com
   - DOMAIN,img.community.ui.com
+  - DOMAIN,img.coomer.su
   - DOMAIN,img.decrypt.co
   - DOMAIN,img.dlsite.jp
   - DOMAIN,img.domaintools.com
@@ -1246,6 +1273,7 @@ payload:
   - DOMAIN,js.hsforms.net
   - DOMAIN,js.jotform.com
   - DOMAIN,js.klarn.com
+  - DOMAIN,js.klarna.com
   - DOMAIN,js.memberful.com
   - DOMAIN,js.navattic.com
   - DOMAIN,js.partnerstack.com
@@ -1343,6 +1371,7 @@ payload:
   - DOMAIN,media.graphassets.com
   - DOMAIN,media.hachyderm.io
   - DOMAIN,media.infosec.exchange
+  - DOMAIN,media.inhumanity.com
   - DOMAIN,media.istockphoto.com
   - DOMAIN,media.kit.com
   - DOMAIN,media.lantern.io
@@ -1370,11 +1399,19 @@ payload:
   - DOMAIN,media.yukimochi.jp
   - DOMAIN,media0.giphy.com
   - DOMAIN,media1.giphy.com
+  - DOMAIN,media1.kissjav.com
   - DOMAIN,media1.tenor.com
+  - DOMAIN,media10.kissjav.com
   - DOMAIN,media2.dev.to
   - DOMAIN,media2.giphy.com
+  - DOMAIN,media2.kissjav.com
   - DOMAIN,media3.giphy.com
+  - DOMAIN,media3.kissjav.com
   - DOMAIN,media4.giphy.com
+  - DOMAIN,media4.kissjav.com
+  - DOMAIN,media7.kissjav.com
+  - DOMAIN,media8.kissjav.com
+  - DOMAIN,media9.kissjav.com
   - DOMAIN,medias.meow.social
   - DOMAIN,megapx-assets.dcard.tw
   - DOMAIN,metrics.kapa.ai
@@ -1434,6 +1471,7 @@ payload:
   - DOMAIN,news-events.apple.com
   - DOMAIN,newsletter.postmarkapp.com
   - DOMAIN,next-images.opencollective.com
+  - DOMAIN,nextra.site
   - DOMAIN,ni-assets.azureedge.net
   - DOMAIN,nightly.link
   - DOMAIN,no-cache.hubspot.com
@@ -1470,7 +1508,6 @@ payload:
   - DOMAIN,osint.digitalside.it
   - DOMAIN,oss-binaries.phusionpassenger.com
   - DOMAIN,oss.moe.cat
-  - DOMAIN,oversea.alphatvapp.top
   - DOMAIN,ovo.wxw.moe
   - DOMAIN,p-smith.com
   - DOMAIN,p.depot.dev
@@ -1575,6 +1612,7 @@ payload:
   - DOMAIN,pytorch.org
   - DOMAIN,quriobot.com
   - DOMAIN,r.r10s.jp
+  - DOMAIN,r2.1hanime.com
   - DOMAIN,r2.leadsy.ai
   - DOMAIN,rapid-cdn.yottaa.com
   - DOMAIN,raw.github.com
@@ -1647,8 +1685,14 @@ payload:
   - DOMAIN,s1.coincarp.com
   - DOMAIN,s1.divhunt.com
   - DOMAIN,s1.feedly.com
+  - DOMAIN,s1.maxstream.org
   - DOMAIN,s1.qwant.com
+  - DOMAIN,s10.maxstream.org
+  - DOMAIN,s11.maxstream.org
+  - DOMAIN,s12.maxstream.org
+  - DOMAIN,s13.maxstream.org
   - DOMAIN,s2.coinmarketcap.com
+  - DOMAIN,s2.maxstream.org
   - DOMAIN,s2.qwant.com
   - DOMAIN,s3-alpha-sig.figma.com
   - DOMAIN,s3-alpha.figma.com
@@ -1677,7 +1721,13 @@ payload:
   - DOMAIN,s3.us-west-001.backblazeb2.com
   - DOMAIN,s3.us-west-004.backblazeb2.com
   - DOMAIN,s3media.squarespace.com
+  - DOMAIN,s4.maxstream.org
+  - DOMAIN,s5.maxstream.org
+  - DOMAIN,s6.maxstream.org
+  - DOMAIN,s7.maxstream.org
   - DOMAIN,s7d1.scene7.com
+  - DOMAIN,s8.maxstream.org
+  - DOMAIN,s9.maxstream.org
   - DOMAIN,safebrowsing.brave.com
   - DOMAIN,safebrowsing.google.com
   - DOMAIN,safebrowsing.googleapis.com
@@ -1767,7 +1817,6 @@ payload:
   - DOMAIN,static-assets.mapbox.com
   - DOMAIN,static-assets.npr.org
   - DOMAIN,static-assets.vinted.com
-  - DOMAIN,static-ca-cdn.eporner.com
   - DOMAIN,static-cdn.123rf.com
   - DOMAIN,static-cdn.bytegiftia.top
   - DOMAIN,static-cdn.osdn.net
@@ -1789,7 +1838,6 @@ payload:
   - DOMAIN,static-r.kamihimeproject.net
   - DOMAIN,static-resource.np.community.playstation.net
   - DOMAIN,static-secure-uploads.ui.com
-  - DOMAIN,static-sg-cdn.eporner.com
   - DOMAIN,static-staging.scroll.com
   - DOMAIN,static-sv.fc2.com
   - DOMAIN,static-web-prod.skillshare.com
@@ -1956,7 +2004,9 @@ payload:
   - DOMAIN,static8.lottiefiles.com
   - DOMAIN,static9.lottiefiles.com
   - DOMAIN,staticctf.ubisoft.com
+  - DOMAIN,statics.erothots.co
   - DOMAIN,statics.goorm.io
+  - DOMAIN,statics.simpshub.com
   - DOMAIN,staticw2.yotpo.com
   - DOMAIN,stats.codesandbox.io
   - DOMAIN,stats.setapp.com
@@ -2096,6 +2146,7 @@ payload:
   - DOMAIN,video1.7mmtv.sx
   - DOMAIN,video2.7mmtv.sx
   - DOMAIN,videos.elephas.app
+  - DOMAIN,videos.ohentai.org
   - DOMAIN,videos2.edclub.com
   - DOMAIN,vir.wsj.net
   - DOMAIN,vjs.zencdn.net
@@ -2104,6 +2155,7 @@ payload:
   - DOMAIN,vscode-sync-insiders.trafficmanager.net
   - DOMAIN,vscode-sync.trafficmanager.net
   - DOMAIN,vuejs.org
+  - DOMAIN,vz-2222604c-50b.b-cdn.net
   - DOMAIN,w.chatlio.com
   - DOMAIN,w2.influxdata.com
   - DOMAIN,wac-cdn-2.atlassian.com
@@ -2248,6 +2300,7 @@ payload:
   - DOMAIN-SUFFIX,akamaihd.net
   - DOMAIN-SUFFIX,akamaistream.net
   - DOMAIN-SUFFIX,akamaized.net
+  - DOMAIN-SUFFIX,akidoo.top
   - DOMAIN-SUFFIX,alexdav.id
   - DOMAIN-SUFFIX,alfafile.net
   - DOMAIN-SUFFIX,alldebrid.com
@@ -2256,6 +2309,8 @@ payload:
   - DOMAIN-SUFFIX,alldebrid.fr
   - DOMAIN-SUFFIX,alldebrid.it
   - DOMAIN-SUFFIX,alonestreaming.com
+  - DOMAIN-SUFFIX,alphafish.top
+  - DOMAIN-SUFFIX,alphatvapp.top
   - DOMAIN-SUFFIX,alterupload.com
   - DOMAIN-SUFFIX,amaicdn.com
   - DOMAIN-SUFFIX,amazon.jobs
@@ -2288,6 +2343,7 @@ payload:
   - DOMAIN-SUFFIX,anidom.com
   - DOMAIN-SUFFIX,anonfiles.com
   - DOMAIN-SUFFIX,anpoimages.com
+  - DOMAIN-SUFFIX,anpustream.com
   - DOMAIN-SUFFIX,ant.design
   - DOMAIN-SUFFIX,anzfile.net
   - DOMAIN-SUFFIX,aol.co.uk
@@ -2306,6 +2362,7 @@ payload:
   - DOMAIN-SUFFIX,app.gitbook.com
   - DOMAIN-SUFFIX,app.khoros.com
   - DOMAIN-SUFFIX,app.render.com
+  - DOMAIN-SUFFIX,apperoni.top
   - DOMAIN-SUFFIX,apple.news
   - DOMAIN-SUFFIX,applemusic.com
   - DOMAIN-SUFFIX,applicationinsights.azure.cn
@@ -2347,7 +2404,6 @@ payload:
   - DOMAIN-SUFFIX,ausfile.com
   - DOMAIN-SUFFIX,autoupdatesvc.delivery.autodesk.com
   - DOMAIN-SUFFIX,av01.tv
-  - DOMAIN-SUFFIX,avdocker.com
   - DOMAIN-SUFFIX,avdocker3.com
   - DOMAIN-SUFFIX,avximg.com
   - DOMAIN-SUFFIX,aws
@@ -2379,6 +2435,7 @@ payload:
   - DOMAIN-SUFFIX,badoocdn.com
   - DOMAIN-SUFFIX,bahamut.com.tw
   - DOMAIN-SUFFIX,baisi.pro
+  - DOMAIN-SUFFIX,balley.top
   - DOMAIN-SUFFIX,bam.nr-data.net
   - DOMAIN-SUFFIX,bam.nr-date.net
   - DOMAIN-SUFFIX,bamgrid.com
@@ -2431,6 +2488,7 @@ payload:
   - DOMAIN-SUFFIX,blueseacdn.com
   - DOMAIN-SUFFIX,bmp.ovh
   - DOMAIN-SUFFIX,bnbstatic.com
+  - DOMAIN-SUFFIX,boomio-cdn.com
   - DOMAIN-SUFFIX,bootstrapcdn.com
   - DOMAIN-SUFFIX,botsrv2.com
   - DOMAIN-SUFFIX,bowenpress.com
@@ -2487,6 +2545,7 @@ payload:
   - DOMAIN-SUFFIX,cbstelevisioncity.com
   - DOMAIN-SUFFIX,cd4o.com
   - DOMAIN-SUFFIX,cdkworkshop.com
+  - DOMAIN-SUFFIX,cdn-centaurus.com
   - DOMAIN-SUFFIX,cdn-cookieyes.com
   - DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co
   - DOMAIN-SUFFIX,cdn-lfs.huggingface.co
@@ -2530,6 +2589,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.runcloud.io
   - DOMAIN-SUFFIX,cdn.s7s.ai
   - DOMAIN-SUFFIX,cdn.segment.com
+  - DOMAIN-SUFFIX,cdn.serverable.com
   - DOMAIN-SUFFIX,cdn.signalfx.com
   - DOMAIN-SUFFIX,cdn.skk.moe
   - DOMAIN-SUFFIX,cdn.survey.medallia.com
@@ -2546,6 +2606,7 @@ payload:
   - DOMAIN-SUFFIX,cdn77-storage.com
   - DOMAIN-SUFFIX,cdnbf.net
   - DOMAIN-SUFFIX,cdnclouder.com
+  - DOMAIN-SUFFIX,cdndoe.xyz
   - DOMAIN-SUFFIX,cdnfonts.com
   - DOMAIN-SUFFIX,cdninstagram.com
   - DOMAIN-SUFFIX,cdnjhd.com
@@ -2595,6 +2656,7 @@ payload:
   - DOMAIN-SUFFIX,cloudatacdn.com
   - DOMAIN-SUFFIX,cloudconvert.com
   - DOMAIN-SUFFIX,cloudflare-ipfs.com
+  - DOMAIN-SUFFIX,cloudflare-terms-of-service-abuse.com
   - DOMAIN-SUFFIX,cloudflare.docker.com
   - DOMAIN-SUFFIX,cloudflare.ltd
   - DOMAIN-SUFFIX,cloudflaremirrors.com
@@ -2605,6 +2667,7 @@ payload:
   - DOMAIN-SUFFIX,cloudghost.net
   - DOMAIN-SUFFIX,cloudimg.io
   - DOMAIN-SUFFIX,cloudvideo.tv
+  - DOMAIN-SUFFIX,cmail19.com
   - DOMAIN-SUFFIX,cmail20.com
   - DOMAIN-SUFFIX,cms-cdn.linear.app
   - DOMAIN-SUFFIX,cms-twdigitalassets.com
@@ -2961,6 +3024,7 @@ payload:
   - DOMAIN-SUFFIX,eonline.com
   - DOMAIN-SUFFIX,epicgamescdn.com
   - DOMAIN-SUFFIX,epimg.net
+  - DOMAIN-SUFFIX,erocdn.co
   - DOMAIN-SUFFIX,eroimg.net
   - DOMAIN-SUFFIX,err.sh
   - DOMAIN-SUFFIX,esm.run
@@ -2983,6 +3047,7 @@ payload:
   - DOMAIN-SUFFIX,exload.com
   - DOMAIN-SUFFIX,exp-tas.com
   - DOMAIN-SUFFIX,ext-twitch.tv
+  - DOMAIN-SUFFIX,externulls.com
   - DOMAIN-SUFFIX,extmatrix.com
   - DOMAIN-SUFFIX,ezocdn.com
   - DOMAIN-SUFFIX,f-droid.org
@@ -2991,6 +3056,7 @@ payload:
   - DOMAIN-SUFFIX,f1manager.com
   - DOMAIN-SUFFIX,f1play.com
   - DOMAIN-SUFFIX,fabricmc.net
+  - DOMAIN-SUFFIX,fakeimg.pl
   - DOMAIN-SUFFIX,fakestoreapi.com
   - DOMAIN-SUFFIX,fast.com
   - DOMAIN-SUFFIX,fastbit.cc
@@ -3099,6 +3165,7 @@ payload:
   - DOMAIN-SUFFIX,forgecdn.net
   - DOMAIN-SUFFIX,formula1.com
   - DOMAIN-SUFFIX,forthethrone.com
+  - DOMAIN-SUFFIX,fourhoi.com
   - DOMAIN-SUFFIX,fox-corporation.com
   - DOMAIN-SUFFIX,fox-news.com
   - DOMAIN-SUFFIX,fox.com
@@ -3299,6 +3366,7 @@ payload:
   - DOMAIN-SUFFIX,gadgets360cdn.com
   - DOMAIN-SUFFIX,gamer.com.tw
   - DOMAIN-SUFFIX,gamesgamescdn.com
+  - DOMAIN-SUFFIX,gammacdn.com
   - DOMAIN-SUFFIX,gateway.originprotocol.com
   - DOMAIN-SUFFIX,gateway.serph.network
   - DOMAIN-SUFFIX,gcr.io
@@ -3397,6 +3465,9 @@ payload:
   - DOMAIN-SUFFIX,hbounify-prod.evergent.com
   - DOMAIN-SUFFIX,hdzyk-cdn.com
   - DOMAIN-SUFFIX,hembed.com
+  - DOMAIN-SUFFIX,hencover.xyz
+  - DOMAIN-SUFFIX,henread.xyz
+  - DOMAIN-SUFFIX,hentaicdn.com
   - DOMAIN-SUFFIX,hentaiera.com
   - DOMAIN-SUFFIX,hentaiverse.org
   - DOMAIN-SUFFIX,herokuapp.com
@@ -3405,6 +3476,9 @@ payload:
   - DOMAIN-SUFFIX,hetzner.de
   - DOMAIN-SUFFIX,hexupload.net
   - DOMAIN-SUFFIX,hgagecdn.com
+  - DOMAIN-SUFFIX,hgasm1.com
+  - DOMAIN-SUFFIX,hgasm2.com
+  - DOMAIN-SUFFIX,hgasm3.com
   - DOMAIN-SUFFIX,highwinds-cdn.com
   - DOMAIN-SUFFIX,himalaya.com
   - DOMAIN-SUFFIX,himg.nl
@@ -3427,6 +3501,7 @@ payload:
   - DOMAIN-SUFFIX,hscollectedforms.net
   - DOMAIN-SUFFIX,hsto.org
   - DOMAIN-SUFFIX,hu1u.com
+  - DOMAIN-SUFFIX,hubspotlinks.com
   - DOMAIN-SUFFIX,hubspotusercontent-eu1.net
   - DOMAIN-SUFFIX,hubspotusercontent-na1.net
   - DOMAIN-SUFFIX,hubspotusercontent00.net
@@ -3452,8 +3527,10 @@ payload:
   - DOMAIN-SUFFIX,huffpostarabi.com
   - DOMAIN-SUFFIX,huffpostbrasil.com
   - DOMAIN-SUFFIX,huffpostmaghreb.com
+  - DOMAIN-SUFFIX,hugebil.com
   - DOMAIN-SUFFIX,hugefiles.cc
   - DOMAIN-SUFFIX,hugefiles.net
+  - DOMAIN-SUFFIX,hugoal.com
   - DOMAIN-SUFFIX,hulkload.com
   - DOMAIN-SUFFIX,hulkshare.com
   - DOMAIN-SUFFIX,huloo.cc
@@ -3519,6 +3596,7 @@ payload:
   - DOMAIN-SUFFIX,images-iherb.com
   - DOMAIN-SUFFIX,images.arcpublishing.com
   - DOMAIN-SUFFIX,images.gameru.net
+  - DOMAIN-SUFFIX,images.hentaicity.com
   - DOMAIN-SUFFIX,imageshack.us
   - DOMAIN-SUFFIX,imetyou.top
   - DOMAIN-SUFFIX,img-dpreview.com
@@ -3540,6 +3618,7 @@ payload:
   - DOMAIN-SUFFIX,imgtbl.com
   - DOMAIN-SUFFIX,imgtp.com
   - DOMAIN-SUFFIX,imgyzzy.com
+  - DOMAIN-SUFFIX,imhentai.xxx
   - DOMAIN-SUFFIX,imkan.tv
   - DOMAIN-SUFFIX,imostatic.com
   - DOMAIN-SUFFIX,in.appcenter.ms
@@ -3549,6 +3628,7 @@ payload:
   - DOMAIN-SUFFIX,indishare.org
   - DOMAIN-SUFFIX,infinityfly.top
   - DOMAIN-SUFFIX,infura-ipfs.io
+  - DOMAIN-SUFFIX,ingest.de.sentry.io
   - DOMAIN-SUFFIX,ingest.sentry.io
   - DOMAIN-SUFFIX,ingest.us.sentry.io
   - DOMAIN-SUFFIX,insidevoa.com
@@ -3647,6 +3727,7 @@ payload:
   - DOMAIN-SUFFIX,joeswall.com
   - DOMAIN-SUFFIX,joinmaidez.com
   - DOMAIN-SUFFIX,joox.com
+  - DOMAIN-SUFFIX,jpg5.su
   - DOMAIN-SUFFIX,jpgjingpinx.com
   - DOMAIN-SUFFIX,js-agent.newrelic.com
   - DOMAIN-SUFFIX,js-eu1.hubspot.com
@@ -3757,6 +3838,7 @@ payload:
   - DOMAIN-SUFFIX,lsposed.org
   - DOMAIN-SUFFIX,ltwebstatic.com
   - DOMAIN-SUFFIX,lucasmedia.top
+  - DOMAIN-SUFFIX,lulucdn.com
   - DOMAIN-SUFFIX,lzzyimg.com
   - DOMAIN-SUFFIX,lzzypic.com
   - DOMAIN-SUFFIX,macupload.net
@@ -3840,6 +3922,7 @@ payload:
   - DOMAIN-SUFFIX,mmtcdn.com
   - DOMAIN-SUFFIX,mngbcn.com
   - DOMAIN-SUFFIX,mobile-collector.newrelic.com
+  - DOMAIN-SUFFIX,mobilius.top
   - DOMAIN-SUFFIX,modsbase.com
   - DOMAIN-SUFFIX,monitor.azure.com
   - DOMAIN-SUFFIX,moov.hk
@@ -4154,6 +4237,7 @@ payload:
   - DOMAIN-SUFFIX,pololine.ml
   - DOMAIN-SUFFIX,polyfill-fastly.io
   - DOMAIN-SUFFIX,polygon.com
+  - DOMAIN-SUFFIX,porn-d.xyz
   - DOMAIN-SUFFIX,porn5.asia
   - DOMAIN-SUFFIX,porndudecdn.com
   - DOMAIN-SUFFIX,pornhub.com
@@ -4297,6 +4381,7 @@ payload:
   - DOMAIN-SUFFIX,repo.anaconda.com
   - DOMAIN-SUFFIX,repo.jing.rocks
   - DOMAIN-SUFFIX,res.office365.com
+  - DOMAIN-SUFFIX,rescript-lang.org
   - DOMAIN-SUFFIX,revclouds.com
   - DOMAIN-SUFFIX,rg.to
   - DOMAIN-SUFFIX,rghost.ru
@@ -4318,6 +4403,7 @@ payload:
   - DOMAIN-SUFFIX,rthk.org.hk
   - DOMAIN-SUFFIX,ruleset.skk.moe
   - DOMAIN-SUFFIX,rum.cronitor.io
+  - DOMAIN-SUFFIX,runkit-packages.com
   - DOMAIN-SUFFIX,runkitcdn.com
   - DOMAIN-SUFFIX,s-nbcnews.com
   - DOMAIN-SUFFIX,s3-website.fr-par.scw.cloud
@@ -4588,11 +4674,13 @@ payload:
   - DOMAIN-SUFFIX,tmpfiles.org
   - DOMAIN-SUFFIX,tmsimg.com
   - DOMAIN-SUFFIX,tnastatic.com
+  - DOMAIN-SUFFIX,tnmr.org
   - DOMAIN-SUFFIX,tokyvideo.com
   - DOMAIN-SUFFIX,top4top.net
   - DOMAIN-SUFFIX,torproject.org
   - DOMAIN-SUFFIX,tpdfiles.com
   - DOMAIN-SUFFIX,trackerslist.com
+  - DOMAIN-SUFFIX,trafficdeposit.com
   - DOMAIN-SUFFIX,transcend-cdn.com
   - DOMAIN-SUFFIX,trustless-gateway.link
   - DOMAIN-SUFFIX,ttcache.com
@@ -4724,6 +4812,7 @@ payload:
   - DOMAIN-SUFFIX,valvesoftware.com
   - DOMAIN-SUFFIX,vanillicon.com
   - DOMAIN-SUFFIX,vbstatic.co
+  - DOMAIN-SUFFIX,vcmdiawe.com
   - DOMAIN-SUFFIX,vercel.app
   - DOMAIN-SUFFIX,vercel.dev
   - DOMAIN-SUFFIX,verizon.com
@@ -4932,6 +5021,7 @@ payload:
   - DOMAIN-SUFFIX,yourupload.com
   - DOMAIN-SUFFIX,youtu.be
   - DOMAIN-SUFFIX,ypncdn.com
+  - DOMAIN-SUFFIX,yps.link
   - DOMAIN-SUFFIX,yt.be
   - DOMAIN-SUFFIX,ytimg.com
   - DOMAIN-SUFFIX,z4a.net
@@ -4965,6 +5055,7 @@ payload:
   - DOMAIN-SUFFIX,zorocdn.xyz
   - DOMAIN-SUFFIX,zox.show
   - DOMAIN-SUFFIX,zype.com
+  - DOMAIN-KEYWORD,-cdn.eporner.com
   - DOMAIN-KEYWORD,-files.gitbook.io
   - DOMAIN-KEYWORD,-res.cloudinary.com
   - DOMAIN-KEYWORD,-spotify-com
@@ -4976,6 +5067,7 @@ payload:
   - DOMAIN-KEYWORD,apiproxy-device-prod-nlb-
   - DOMAIN-KEYWORD,avoddashs
   - DOMAIN-KEYWORD,bbcfmt
+  - DOMAIN-KEYWORD,cdn.adultempire.com
   - DOMAIN-KEYWORD,cdnstatic.
   - DOMAIN-KEYWORD,discovery.uplynk.com
   - DOMAIN-KEYWORD,dsn.algolia.net
