@@ -1,5 +1,5 @@
-# Clash total line 6055
-# Last updated Wed 01/22/2025 22:13:51.13
+# Clash total line 6082
+# Last updated Sat 01/25/2025 22:14:27.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -512,6 +512,7 @@ payload:
   - DOMAIN,cdn.onesignal.com
   - DOMAIN,cdn.onetime.dog
   - DOMAIN,cdn.onlyhentaistuff.com
+  - DOMAIN,cdn.openai.com
   - DOMAIN,cdn.osxdaily.com
   - DOMAIN,cdn.paddle.com
   - DOMAIN,cdn.pagefly.io
@@ -603,6 +604,7 @@ payload:
   - DOMAIN,cdn.viglink.com
   - DOMAIN,cdn.vuukle.com
   - DOMAIN,cdn.wccftech.com
+  - DOMAIN,cdn.webclicks24.com
   - DOMAIN,cdn.weglot.com
   - DOMAIN,cdn.wikiwiki.jp
   - DOMAIN,cdn.windowsreport.com
@@ -613,6 +615,7 @@ payload:
   - DOMAIN,cdn.writeas.net
   - DOMAIN,cdn.xeiaso.net
   - DOMAIN,cdn.xgroovy.com
+  - DOMAIN,cdn.xvidzz.com
   - DOMAIN,cdn.yinghuazy.xyz
   - DOMAIN,cdn.ywxi.net
   - DOMAIN,cdn.zapier.com
@@ -686,6 +689,9 @@ payload:
   - DOMAIN,cdnjs.cloudflare.com
   - DOMAIN,cdnl.tnaflix.com
   - DOMAIN,cdns.gigya.com
+  - DOMAIN,cdnstatic.porno-cum.com
+  - DOMAIN,cdnstatic.w1mp.com
+  - DOMAIN,cdnstatic.w4nkr.com
   - DOMAIN,certificates.godaddy.com
   - DOMAIN,certona.gap.com
   - DOMAIN,cf-assets.www.cloudflare.com
@@ -945,6 +951,8 @@ payload:
   - DOMAIN,favicon.yandex.net
   - DOMAIN,favicons.nextdns.io
   - DOMAIN,favicons.teams.cloudflare.com
+  - DOMAIN,fdn.gsmarena.com
+  - DOMAIN,fdn2.gsmarena.com
   - DOMAIN,fedorapeople.org
   - DOMAIN,fesdk.nexon.com
   - DOMAIN,fiddle.fastly.dev
@@ -1131,6 +1139,7 @@ payload:
   - DOMAIN,images.ptt.cc
   - DOMAIN,images.purevpn-tools.com
   - DOMAIN,images.scalero.io
+  - DOMAIN,images.scrolller.com
   - DOMAIN,images.spot.im
   - DOMAIN,images.spr.so
   - DOMAIN,images.store.crowdstrike.com
@@ -1329,6 +1338,7 @@ payload:
   - DOMAIN,loutre.blockchair.io
   - DOMAIN,ltn.hitomi.la
   - DOMAIN,m-cdn.phonearena.com
+  - DOMAIN,m.porn3dx.com
   - DOMAIN,m.wsj.net
   - DOMAIN,m3.gab.com
   - DOMAIN,m3u8.girigirilove.com
@@ -1462,6 +1472,7 @@ payload:
   - DOMAIN,my-json-server.typicode.com
   - DOMAIN,na-library.klarnaservices.com
   - DOMAIN,namedotcom-cdn.name.tools
+  - DOMAIN,nav.yumenosora.co.jp
   - DOMAIN,navismithapis-cdn.com
   - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
   - DOMAIN,netlify.apollo.io
@@ -1658,6 +1669,7 @@ payload:
   - DOMAIN,rpg.pic-imges.com
   - DOMAIN,rsi.grafana.com
   - DOMAIN,rsms.me
+  - DOMAIN,rtcg-access.bytevcloud.com
   - DOMAIN,rts-static-prod.freshworksapi.com
   - DOMAIN,rules.ac
   - DOMAIN,rules1.clearurls.xyz
@@ -1856,6 +1868,7 @@ payload:
   - DOMAIN,static.bit.cloud
   - DOMAIN,static.bit.dev
   - DOMAIN,static.bitfinex.com
+  - DOMAIN,static.bravoporn.com
   - DOMAIN,static.buffer.com
   - DOMAIN,static.bytepan.com
   - DOMAIN,static.canva.com
@@ -1885,6 +1898,7 @@ payload:
   - DOMAIN,static.ettoday.net
   - DOMAIN,static.euronews.com
   - DOMAIN,static.fasthosts.co.uk
+  - DOMAIN,static.fbot.me
   - DOMAIN,static.fc2.com
   - DOMAIN,static.fc2cn.com
   - DOMAIN,static.ffx.io
@@ -1981,6 +1995,7 @@ payload:
   - DOMAIN,static.v2ex.com
   - DOMAIN,static.vinted.com
   - DOMAIN,static.vocadb.net
+  - DOMAIN,static.webclicks24.com
   - DOMAIN,static.whatsapp.net
   - DOMAIN,static.workday.com
   - DOMAIN,static.xgroovy.com
@@ -1989,16 +2004,21 @@ payload:
   - DOMAIN,static.zaobao.com
   - DOMAIN,static.zaobao.com.sg
   - DOMAIN,static1.lottiefiles.com
+  - DOMAIN,static1.muchohentai.com
   - DOMAIN,static1.smartbear.co
   - DOMAIN,static1.squarespace.com
   - DOMAIN,static10.lottiefiles.com
   - DOMAIN,static2.avg.com
   - DOMAIN,static2.lottiefiles.com
+  - DOMAIN,static2.muchohentai.com
   - DOMAIN,static2.onlyfans.com
   - DOMAIN,static3.lottiefiles.com
+  - DOMAIN,static3.muchohentai.com
   - DOMAIN,static3.squarespace.com
   - DOMAIN,static4.lottiefiles.com
+  - DOMAIN,static4.muchohentai.com
   - DOMAIN,static5.lottiefiles.com
+  - DOMAIN,static5.muchohentai.com
   - DOMAIN,static6.lottiefiles.com
   - DOMAIN,static7.lottiefiles.com
   - DOMAIN,static8.lottiefiles.com
@@ -2156,6 +2176,7 @@ payload:
   - DOMAIN,vscode-sync.trafficmanager.net
   - DOMAIN,vuejs.org
   - DOMAIN,vz-2222604c-50b.b-cdn.net
+  - DOMAIN,vz-c0fe498e-5ab.b-cdn.net
   - DOMAIN,w.chatlio.com
   - DOMAIN,w2.influxdata.com
   - DOMAIN,wac-cdn-2.atlassian.com
@@ -2258,6 +2279,7 @@ payload:
   - DOMAIN-SUFFIX,9xupload.xyz
   - DOMAIN-SUFFIX,a.o333o.com
   - DOMAIN-SUFFIX,a.storyblok.com
+  - DOMAIN-SUFFIX,a1tb.com
   - DOMAIN-SUFFIX,a24films.com
   - DOMAIN-SUFFIX,aaa.ax
   - DOMAIN-SUFFIX,aacdn.nagich.com
@@ -2613,6 +2635,7 @@ payload:
   - DOMAIN-SUFFIX,cdnjs.network
   - DOMAIN-SUFFIX,cdnmania.org
   - DOMAIN-SUFFIX,cdnpk.net
+  - DOMAIN-SUFFIX,cdnpm.net
   - DOMAIN-SUFFIX,cdnppb.net
   - DOMAIN-SUFFIX,cdnpure.com
   - DOMAIN-SUFFIX,cdnst.net
@@ -2640,6 +2663,8 @@ payload:
   - DOMAIN-SUFFIX,cinemax.com
   - DOMAIN-SUFFIX,cjoint.net
   - DOMAIN-SUFFIX,classicalradio.com
+  - DOMAIN-SUFFIX,claudeusercontent.com
+  - DOMAIN-SUFFIX,cldup.com
   - DOMAIN-SUFFIX,clicknupload.cc
   - DOMAIN-SUFFIX,clicknupload.co
   - DOMAIN-SUFFIX,clicknupload.com
@@ -3372,6 +3397,7 @@ payload:
   - DOMAIN-SUFFIX,gcr.io
   - DOMAIN-SUFFIX,gcr.si
   - DOMAIN-SUFFIX,gcx920110.com
+  - DOMAIN-SUFFIX,gdvid.info
   - DOMAIN-SUFFIX,ge.tt
   - DOMAIN-SUFFIX,geekprank.com
   - DOMAIN-SUFFIX,gentcdn.com
@@ -3916,6 +3942,7 @@ payload:
   - DOMAIN-SUFFIX,mixdrop.club
   - DOMAIN-SUFFIX,mixdrop.co
   - DOMAIN-SUFFIX,mixloads.com
+  - DOMAIN-SUFFIX,mjedge.net
   - DOMAIN-SUFFIX,mktgcdn.com
   - DOMAIN-SUFFIX,mlcdn.com
   - DOMAIN-SUFFIX,mm.bing.net
@@ -4093,6 +4120,7 @@ payload:
   - DOMAIN-SUFFIX,nowestatic.com
   - DOMAIN-SUFFIX,nowvideo.club
   - DOMAIN-SUFFIX,npm.io
+  - DOMAIN-SUFFIX,npmcdn.com
   - DOMAIN-SUFFIX,npmfs.com
   - DOMAIN-SUFFIX,nsstatic.net
   - DOMAIN-SUFFIX,ntrrr.am.sb
@@ -5068,7 +5096,6 @@ payload:
   - DOMAIN-KEYWORD,avoddashs
   - DOMAIN-KEYWORD,bbcfmt
   - DOMAIN-KEYWORD,cdn.adultempire.com
-  - DOMAIN-KEYWORD,cdnstatic.
   - DOMAIN-KEYWORD,discovery.uplynk.com
   - DOMAIN-KEYWORD,dsn.algolia.net
   - DOMAIN-KEYWORD,dualstack.apiproxy-
