@@ -1,5 +1,5 @@
-# Main total line 6082
-# Last updated Sat 01/25/2025 22:14:26.94
+# Main total line 6084
+# Last updated Tue 01/28/2025 22:13:56.12
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -31,6 +31,7 @@ DOMAIN,amupdatedl5.microsoft.com
 DOMAIN,analytics.twitter.com
 DOMAIN,analytics.welcomesoftware.com
 DOMAIN,android-safebrowsing.google.com
+DOMAIN,answers-afd.microsoft.com
 DOMAIN,api-esp-ap.piano.io
 DOMAIN,api-eu.mixpanel.com
 DOMAIN,api-frameworks.vercel.sh
@@ -553,6 +554,7 @@ DOMAIN,cdn.royaleapi.com
 DOMAIN,cdn.safecharge.com
 DOMAIN,cdn.sanity.io
 DOMAIN,cdn.sc.gl
+DOMAIN,cdn.schemaapp.com
 DOMAIN,cdn.sciencecast.org
 DOMAIN,cdn.search.brave.com
 DOMAIN,cdn.sedo.com
@@ -969,6 +971,7 @@ DOMAIN,files.slack.com
 DOMAIN,files.smashing.media
 DOMAIN,files.writefreely.org
 DOMAIN,files.yande.re
+DOMAIN,filestore.community.support.microsoft.com
 DOMAIN,filestore.fortinet.com
 DOMAIN,firebase-settings.crashlytics.com
 DOMAIN,firebaselogging-pa.googleapis.com
@@ -1700,10 +1703,8 @@ DOMAIN,s1.maxstream.org
 DOMAIN,s1.qwant.com
 DOMAIN,s10.maxstream.org
 DOMAIN,s11.maxstream.org
-DOMAIN,s12.maxstream.org
 DOMAIN,s13.maxstream.org
 DOMAIN,s2.coinmarketcap.com
-DOMAIN,s2.maxstream.org
 DOMAIN,s2.qwant.com
 DOMAIN,s3-alpha-sig.figma.com
 DOMAIN,s3-alpha.figma.com
@@ -1977,6 +1978,7 @@ DOMAIN,static.snyk.io
 DOMAIN,static.solarwinds.com
 DOMAIN,static.spankbang.com
 DOMAIN,static.srcspot.com
+DOMAIN,static.staff-start.com
 DOMAIN,static.start.me
 DOMAIN,static.status.io
 DOMAIN,static.telegraph.co.uk
@@ -2178,6 +2180,7 @@ DOMAIN,vz-2222604c-50b.b-cdn.net
 DOMAIN,vz-c0fe498e-5ab.b-cdn.net
 DOMAIN,w.chatlio.com
 DOMAIN,w2.influxdata.com
+DOMAIN,wa.arounddeal.com
 DOMAIN,wac-cdn-2.atlassian.com
 DOMAIN,wac-cdn.atlassian.com
 DOMAIN,waitlisted.co
@@ -2232,7 +2235,6 @@ DOMAIN,wwwimages2.adobe.com
 DOMAIN,xpaywalletcdn.azureedge.net
 DOMAIN,xvcf1.xboxlive.com
 DOMAIN,xvcf2.xboxlive.com
-DOMAIN,yummlystatic.com
 DOMAIN-SUFFIX,10musume.com
 DOMAIN-SUFFIX,112263.com
 DOMAIN-SUFFIX,123456.al
@@ -2425,7 +2427,6 @@ DOMAIN-SUFFIX,atv-ps.amazon.com
 DOMAIN-SUFFIX,ausfile.com
 DOMAIN-SUFFIX,autoupdatesvc.delivery.autodesk.com
 DOMAIN-SUFFIX,av01.tv
-DOMAIN-SUFFIX,avdocker3.com
 DOMAIN-SUFFIX,avximg.com
 DOMAIN-SUFFIX,aws
 DOMAIN-SUFFIX,aws-iot-hackathon.com
@@ -2527,6 +2528,7 @@ DOMAIN-SUFFIX,bucketeer.jp
 DOMAIN-SUFFIX,bugly.qcloud.com
 DOMAIN-SUFFIX,bundle.run
 DOMAIN-SUFFIX,bundle.thimatic-apps.com
+DOMAIN-SUFFIX,bunnycdn.com
 DOMAIN-SUFFIX,buyvm.net
 DOMAIN-SUFFIX,bytebucket.org
 DOMAIN-SUFFIX,bytedapm.com
@@ -2632,9 +2634,7 @@ DOMAIN-SUFFIX,cdnfonts.com
 DOMAIN-SUFFIX,cdninstagram.com
 DOMAIN-SUFFIX,cdnjhd.com
 DOMAIN-SUFFIX,cdnjs.network
-DOMAIN-SUFFIX,cdnmania.org
 DOMAIN-SUFFIX,cdnpk.net
-DOMAIN-SUFFIX,cdnpm.net
 DOMAIN-SUFFIX,cdnppb.net
 DOMAIN-SUFFIX,cdnpure.com
 DOMAIN-SUFFIX,cdnst.net
@@ -3504,6 +3504,7 @@ DOMAIN-SUFFIX,hgagecdn.com
 DOMAIN-SUFFIX,hgasm1.com
 DOMAIN-SUFFIX,hgasm2.com
 DOMAIN-SUFFIX,hgasm3.com
+DOMAIN-SUFFIX,hgimg00.com
 DOMAIN-SUFFIX,highwinds-cdn.com
 DOMAIN-SUFFIX,himalaya.com
 DOMAIN-SUFFIX,himg.nl
@@ -4083,6 +4084,7 @@ DOMAIN-SUFFIX,ngfiles.com
 DOMAIN-SUFFIX,nginxconfig.io
 DOMAIN-SUFFIX,nhentai.net
 DOMAIN-SUFFIX,nhentai.xxx
+DOMAIN-SUFFIX,nhentaimg.com
 DOMAIN-SUFFIX,nhsm.tk
 DOMAIN-SUFFIX,nicodic.jp
 DOMAIN-SUFFIX,nicomanga.jp

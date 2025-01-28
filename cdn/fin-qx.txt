@@ -1,5 +1,5 @@
-# Quantumult total line 3074
-# Last updated Sat 01/25/2025 22:14:17.14
+# Quantumult total line 3076
+# Last updated Tue 01/28/2025 22:13:45.83
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -28,6 +28,7 @@ HOST,analytics.twitter.com,LIST
 HOST,analytics.welcomesoftware.com,LIST
 HOST,anchor.digitalocean.com,LIST
 HOST,android-safebrowsing.google.com,LIST
+HOST,answers-afd.microsoft.com,LIST
 HOST,api-esp-ap.piano.io,LIST
 HOST,api-eu.mixpanel.com,LIST
 HOST,api-frameworks.vercel.sh,LIST
@@ -542,6 +543,7 @@ HOST,cdn.royaleapi.com,LIST
 HOST,cdn.safecharge.com,LIST
 HOST,cdn.sanity.io,LIST
 HOST,cdn.sc.gl,LIST
+HOST,cdn.schemaapp.com,LIST
 HOST,cdn.sciencecast.org,LIST
 HOST,cdn.search.brave.com,LIST
 HOST,cdn.sedo.com,LIST
@@ -882,6 +884,7 @@ HOST,files.slack.com,LIST
 HOST,files.smashing.media,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
+HOST,filestore.community.support.microsoft.com,LIST
 HOST,filestore.fortinet.com,LIST
 HOST,firebase-settings.crashlytics.com,LIST
 HOST,firebaselogging-pa.googleapis.com,LIST
@@ -1578,10 +1581,8 @@ HOST,s1.maxstream.org,LIST
 HOST,s1.qwant.com,LIST
 HOST,s10.maxstream.org,LIST
 HOST,s11.maxstream.org,LIST
-HOST,s12.maxstream.org,LIST
 HOST,s13.maxstream.org,LIST
 HOST,s2.coinmarketcap.com,LIST
-HOST,s2.maxstream.org,LIST
 HOST,s2.qwant.com,LIST
 HOST,s3-alpha-sig.figma.com,LIST
 HOST,s3-alpha.figma.com,LIST
@@ -1878,6 +1879,7 @@ HOST,static.snyk.io,LIST
 HOST,static.solarwinds.com,LIST
 HOST,static.spankbang.com,LIST
 HOST,static.srcspot.com,LIST
+HOST,static.staff-start.com,LIST
 HOST,static.start.me,LIST
 HOST,static.status.io,LIST
 HOST,static.telegraph.co.uk,LIST
@@ -2083,6 +2085,7 @@ HOST,vz-c0fe498e-5ab.b-cdn.net,LIST
 HOST,w.chatlio.com,LIST
 HOST,w.soundcloud.com,LIST
 HOST,w2.influxdata.com,LIST
+HOST,wa.arounddeal.com,LIST
 HOST,wac-cdn-2.atlassian.com,LIST
 HOST,wac-cdn.atlassian.com,LIST
 HOST,waitlisted.co,LIST
@@ -2136,7 +2139,6 @@ HOST,www.typescriptlang.org,LIST
 HOST,wwwimages2.adobe.com,LIST
 HOST,xpaywalletcdn.azureedge.net,LIST
 HOST,yep.video.yahoo.com,LIST
-HOST,yummlystatic.com,LIST
 HOST,zephr-templates.cnbc.com,LIST
 HOST-SUFFIX,1passwordusercontent.ca,LIST
 HOST-SUFFIX,1passwordusercontent.com,LIST
@@ -2196,7 +2198,6 @@ HOST-SUFFIX,assets.shortbread.aws.dev,LIST
 HOST-SUFFIX,assets.tumblr.com,LIST
 HOST-SUFFIX,assets.ubuntu.com,LIST
 HOST-SUFFIX,assettype.com,LIST
-HOST-SUFFIX,avdocker3.com,LIST
 HOST-SUFFIX,avximg.com,LIST
 HOST-SUFFIX,awsstatic.com,LIST
 HOST-SUFFIX,ax1x.com,LIST
@@ -2230,6 +2231,7 @@ HOST-SUFFIX,bstatic.com,LIST
 HOST-SUFFIX,bugly.qcloud.com,LIST
 HOST-SUFFIX,bundle.run,LIST
 HOST-SUFFIX,bundle.thimatic-apps.com,LIST
+HOST-SUFFIX,bunnycdn.com,LIST
 HOST-SUFFIX,bytebucket.org,LIST
 HOST-SUFFIX,bytedapm.com,LIST
 HOST-SUFFIX,c-dn.net,LIST
@@ -2285,9 +2287,7 @@ HOST-SUFFIX,cdnfonts.com,LIST
 HOST-SUFFIX,cdninstagram.com,LIST
 HOST-SUFFIX,cdnjhd.com,LIST
 HOST-SUFFIX,cdnjs.network,LIST
-HOST-SUFFIX,cdnmania.org,LIST
 HOST-SUFFIX,cdnpk.net,LIST
-HOST-SUFFIX,cdnpm.net,LIST
 HOST-SUFFIX,cdnppb.net,LIST
 HOST-SUFFIX,cdnpure.com,LIST
 HOST-SUFFIX,cdnst.net,LIST
@@ -2479,6 +2479,7 @@ HOST-SUFFIX,hgagecdn.com,LIST
 HOST-SUFFIX,hgasm1.com,LIST
 HOST-SUFFIX,hgasm2.com,LIST
 HOST-SUFFIX,hgasm3.com,LIST
+HOST-SUFFIX,hgimg00.com,LIST
 HOST-SUFFIX,highwinds-cdn.com,LIST
 HOST-SUFFIX,himg.nl,LIST
 HOST-SUFFIX,hits.b3log.org,LIST
@@ -2716,6 +2717,7 @@ HOST-SUFFIX,newscdn.com.au,LIST
 HOST-SUFFIX,nextui.org,LIST
 HOST-SUFFIX,nftstorage.link,LIST
 HOST-SUFFIX,ngfiles.com,LIST
+HOST-SUFFIX,nhentaimg.com,LIST
 HOST-SUFFIX,nincontent.com,LIST
 HOST-SUFFIX,ninjastream.to,LIST
 HOST-SUFFIX,nitrocdn.com,LIST

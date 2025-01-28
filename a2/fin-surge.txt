@@ -1,5 +1,5 @@
-# Surge Rules total line 584
-# Last updated Sat 01/25/2025 22:08:43.00
+# Surge Rules total line 594
+# Last updated Tue 01/28/2025 22:07:57.26
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
@@ -256,6 +256,16 @@ DOMAIN-KEYWORD,xxshuyuan
 DOMAIN-KEYWORD,ynuf.alipay.com
 DOMAIN-KEYWORD,zjtoolbar
 DOMAIN-KEYWORD,zymerget
+IP-ASN,1012
+IP-ASN,18044
+IP-ASN,27523
+IP-ASN,401111
+IP-ASN,54625
+IP-ASN,62489
+IP-ASN,62853
+IP-ASN,7257
+IP-ASN,7719
+IP-ASN,945
 IP-CIDR,0.0.0.0/24,no-resolve
 IP-CIDR,1.3.0.10/32,no-resolve
 IP-CIDR,10.72.25.0/24,no-resolve

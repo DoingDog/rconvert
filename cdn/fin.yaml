@@ -1,5 +1,5 @@
-# Clash total line 3074
-# Last updated Sat 01/25/2025 22:14:17.17
+# Clash total line 3076
+# Last updated Tue 01/28/2025 22:13:45.86
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -29,6 +29,7 @@ payload:
   - DOMAIN,analytics.welcomesoftware.com
   - DOMAIN,anchor.digitalocean.com
   - DOMAIN,android-safebrowsing.google.com
+  - DOMAIN,answers-afd.microsoft.com
   - DOMAIN,api-esp-ap.piano.io
   - DOMAIN,api-eu.mixpanel.com
   - DOMAIN,api-frameworks.vercel.sh
@@ -543,6 +544,7 @@ payload:
   - DOMAIN,cdn.safecharge.com
   - DOMAIN,cdn.sanity.io
   - DOMAIN,cdn.sc.gl
+  - DOMAIN,cdn.schemaapp.com
   - DOMAIN,cdn.sciencecast.org
   - DOMAIN,cdn.search.brave.com
   - DOMAIN,cdn.sedo.com
@@ -883,6 +885,7 @@ payload:
   - DOMAIN,files.smashing.media
   - DOMAIN,files.writefreely.org
   - DOMAIN,files.yande.re
+  - DOMAIN,filestore.community.support.microsoft.com
   - DOMAIN,filestore.fortinet.com
   - DOMAIN,firebase-settings.crashlytics.com
   - DOMAIN,firebaselogging-pa.googleapis.com
@@ -1579,10 +1582,8 @@ payload:
   - DOMAIN,s1.qwant.com
   - DOMAIN,s10.maxstream.org
   - DOMAIN,s11.maxstream.org
-  - DOMAIN,s12.maxstream.org
   - DOMAIN,s13.maxstream.org
   - DOMAIN,s2.coinmarketcap.com
-  - DOMAIN,s2.maxstream.org
   - DOMAIN,s2.qwant.com
   - DOMAIN,s3-alpha-sig.figma.com
   - DOMAIN,s3-alpha.figma.com
@@ -1879,6 +1880,7 @@ payload:
   - DOMAIN,static.solarwinds.com
   - DOMAIN,static.spankbang.com
   - DOMAIN,static.srcspot.com
+  - DOMAIN,static.staff-start.com
   - DOMAIN,static.start.me
   - DOMAIN,static.status.io
   - DOMAIN,static.telegraph.co.uk
@@ -2084,6 +2086,7 @@ payload:
   - DOMAIN,w.chatlio.com
   - DOMAIN,w.soundcloud.com
   - DOMAIN,w2.influxdata.com
+  - DOMAIN,wa.arounddeal.com
   - DOMAIN,wac-cdn-2.atlassian.com
   - DOMAIN,wac-cdn.atlassian.com
   - DOMAIN,waitlisted.co
@@ -2137,7 +2140,6 @@ payload:
   - DOMAIN,wwwimages2.adobe.com
   - DOMAIN,xpaywalletcdn.azureedge.net
   - DOMAIN,yep.video.yahoo.com
-  - DOMAIN,yummlystatic.com
   - DOMAIN,zephr-templates.cnbc.com
   - DOMAIN-SUFFIX,1passwordusercontent.ca
   - DOMAIN-SUFFIX,1passwordusercontent.com
@@ -2197,7 +2199,6 @@ payload:
   - DOMAIN-SUFFIX,assets.tumblr.com
   - DOMAIN-SUFFIX,assets.ubuntu.com
   - DOMAIN-SUFFIX,assettype.com
-  - DOMAIN-SUFFIX,avdocker3.com
   - DOMAIN-SUFFIX,avximg.com
   - DOMAIN-SUFFIX,awsstatic.com
   - DOMAIN-SUFFIX,ax1x.com
@@ -2231,6 +2232,7 @@ payload:
   - DOMAIN-SUFFIX,bugly.qcloud.com
   - DOMAIN-SUFFIX,bundle.run
   - DOMAIN-SUFFIX,bundle.thimatic-apps.com
+  - DOMAIN-SUFFIX,bunnycdn.com
   - DOMAIN-SUFFIX,bytebucket.org
   - DOMAIN-SUFFIX,bytedapm.com
   - DOMAIN-SUFFIX,c-dn.net
@@ -2286,9 +2288,7 @@ payload:
   - DOMAIN-SUFFIX,cdninstagram.com
   - DOMAIN-SUFFIX,cdnjhd.com
   - DOMAIN-SUFFIX,cdnjs.network
-  - DOMAIN-SUFFIX,cdnmania.org
   - DOMAIN-SUFFIX,cdnpk.net
-  - DOMAIN-SUFFIX,cdnpm.net
   - DOMAIN-SUFFIX,cdnppb.net
   - DOMAIN-SUFFIX,cdnpure.com
   - DOMAIN-SUFFIX,cdnst.net
@@ -2480,6 +2480,7 @@ payload:
   - DOMAIN-SUFFIX,hgasm1.com
   - DOMAIN-SUFFIX,hgasm2.com
   - DOMAIN-SUFFIX,hgasm3.com
+  - DOMAIN-SUFFIX,hgimg00.com
   - DOMAIN-SUFFIX,highwinds-cdn.com
   - DOMAIN-SUFFIX,himg.nl
   - DOMAIN-SUFFIX,hits.b3log.org
@@ -2717,6 +2718,7 @@ payload:
   - DOMAIN-SUFFIX,nextui.org
   - DOMAIN-SUFFIX,nftstorage.link
   - DOMAIN-SUFFIX,ngfiles.com
+  - DOMAIN-SUFFIX,nhentaimg.com
   - DOMAIN-SUFFIX,nincontent.com
   - DOMAIN-SUFFIX,ninjastream.to
   - DOMAIN-SUFFIX,nitrocdn.com
