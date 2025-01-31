@@ -1,5 +1,5 @@
-# Surge Rules total line 906
-# Last updated Tue 01/28/2025 22:13:42.30
+# Surge Rules total line 920
+# Last updated Fri 01/31/2025 22:13:14.24
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
@@ -21,6 +21,8 @@ DOMAIN-KEYWORD,a.9game.cn
 DOMAIN-KEYWORD,a.wkanx.com
 DOMAIN-KEYWORD,a3.bytecdn.cn
 DOMAIN-KEYWORD,a3.pstatp.com
+DOMAIN-KEYWORD,a8clk.
+DOMAIN-KEYWORD,a8cv.
 DOMAIN-KEYWORD,ad.api.moji.com
 DOMAIN-KEYWORD,ad.ihuman.com
 DOMAIN-KEYWORD,ad.ixigua.com
@@ -247,6 +249,7 @@ DOMAIN-KEYWORD,pclog.
 DOMAIN-KEYWORD,pdds.ucweb.com
 DOMAIN-KEYWORD,pglstatp-toutiao
 DOMAIN-KEYWORD,pingfore
+DOMAIN-KEYWORD,plausible.
 DOMAIN-KEYWORD,policy.jd.com
 DOMAIN-KEYWORD,promote.biz.weibo.cn
 DOMAIN-KEYWORD,puds.ucweb.com
@@ -270,7 +273,7 @@ DOMAIN-KEYWORD,securepubads
 DOMAIN-KEYWORD,server.m.pp.cn
 DOMAIN-KEYWORD,sf1-ttcdn-tos.pstatp.com
 DOMAIN-KEYWORD,sf3-ttcdn-tos.pstatp.com
-DOMAIN-KEYWORD,smetrics.marketing.
+DOMAIN-KEYWORD,smetrics.
 DOMAIN-KEYWORD,socdm
 DOMAIN-KEYWORD,splashimgbssdl.yun.kugou.com
 DOMAIN-KEYWORD,stsdk.vivo.com.cn
@@ -320,13 +323,23 @@ DOMAIN-KEYWORD,ynuf.alipay.com
 DOMAIN-KEYWORD,zjtoolbar
 DOMAIN-KEYWORD,zymerget
 IP-ASN,1012
+IP-ASN,140915
+IP-ASN,14651
 IP-ASN,18044
 IP-ASN,27523
 IP-ASN,401111
+IP-ASN,40115
+IP-ASN,44324
+IP-ASN,5111
+IP-ASN,53808
 IP-ASN,54625
+IP-ASN,60539
+IP-ASN,60842
+IP-ASN,61302
 IP-ASN,62489
 IP-ASN,62853
 IP-ASN,7257
+IP-ASN,7480
 IP-ASN,7719
 IP-ASN,945
 IP-CIDR,0.0.0.0/24,no-resolve
@@ -847,6 +860,7 @@ IP-CIDR,49.235.102.145/32,no-resolve
 IP-CIDR,49.235.102.190/32,no-resolve
 IP-CIDR,49.235.102.235/32,no-resolve
 IP-CIDR,49.71.37.101/32,no-resolve
+IP-CIDR,5.253.59.162/32,no-resolve
 IP-CIDR,5.61.55.143/32,no-resolve
 IP-CIDR,51.77.227.96/29,no-resolve
 IP-CIDR,51.89.187.136/29,no-resolve

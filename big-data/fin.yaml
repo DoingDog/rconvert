@@ -1,5 +1,5 @@
-# Clash total line 6084
-# Last updated Tue 01/28/2025 22:13:56.31
+# Clash total line 6088
+# Last updated Fri 01/31/2025 22:13:28.68
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -7,6 +7,7 @@ payload:
   - DOMAIN,a.deviantart.net
   - DOMAIN,a.fireside.fm
   - DOMAIN,a.gawby.com
+  - DOMAIN,a.kickstarter.com
   - DOMAIN,a5.behance.net
   - DOMAIN,academy-public.coinmarketcap.com
   - DOMAIN,account-cdn.svc.ui.com
@@ -327,6 +328,7 @@ payload:
   - DOMAIN,cdn-eu.dynamicyield.com
   - DOMAIN,cdn-fck.tnaflix.com
   - DOMAIN,cdn-forum.networklessons.com
+  - DOMAIN,cdn-front.freepik.com
   - DOMAIN,cdn-images-1.medium.com
   - DOMAIN,cdn-images.mailchimp.com
   - DOMAIN,cdn-images.orbstack.dev
@@ -402,6 +404,7 @@ payload:
   - DOMAIN,cdn.configcat.com
   - DOMAIN,cdn.consentmanager.net
   - DOMAIN,cdn.contentful.com
+  - DOMAIN,cdn.conveythis.com
   - DOMAIN,cdn.credible.com
   - DOMAIN,cdn.css.net
   - DOMAIN,cdn.cxense.com
@@ -427,6 +430,7 @@ payload:
   - DOMAIN,cdn.eu.contentful.com
   - DOMAIN,cdn.european-alternatives.eu
   - DOMAIN,cdn.faire.com
+  - DOMAIN,cdn.fastcomments.com
   - DOMAIN,cdn.filen.io
   - DOMAIN,cdn.firebase.com
   - DOMAIN,cdn.fluidplayer.com
@@ -1038,6 +1042,7 @@ payload:
   - DOMAIN,hulu.com.c.footprint.net
   - DOMAIN,hulu.map.fastly.net
   - DOMAIN,hv-monsterdb-data.skk.moe
+  - DOMAIN,i-cdn.embed.ly
   - DOMAIN,i.1password.com
   - DOMAIN,i.bang.com
   - DOMAIN,i.creativecommons.org
@@ -1056,6 +1061,7 @@ payload:
   - DOMAIN,i.insider.com
   - DOMAIN,i.ioiox.com
   - DOMAIN,i.jpg.dog
+  - DOMAIN,i.kickstarter.com
   - DOMAIN,i.loli.best
   - DOMAIN,i.mt.lv
   - DOMAIN,i.mydramalist.com
@@ -1199,7 +1205,6 @@ payload:
   - DOMAIN,img.foresightnews.pro
   - DOMAIN,img.fortawesome.com
   - DOMAIN,img.freepik.com
-  - DOMAIN,img.hcloud.lat
   - DOMAIN,img.hellofresh.com
   - DOMAIN,img.hentaihaven.xxx
   - DOMAIN,img.icons8.com
@@ -2151,7 +2156,6 @@ payload:
   - DOMAIN,useruploads.visualwebsiteoptimizer.com
   - DOMAIN,uts-api.itunes.apple.com
   - DOMAIN,utteranc.es
-  - DOMAIN,v.hillwaver.com
   - DOMAIN,v.w-x.co
   - DOMAIN,v2.listenloop.com
   - DOMAIN,vanilla-extract.style
