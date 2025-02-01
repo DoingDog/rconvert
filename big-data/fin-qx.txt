@@ -1,5 +1,5 @@
-# Quantumult total line 6074
-# Last updated Fri 01/31/2025 22:13:28.64
+# Quantumult total line 6087
+# Last updated Sat 02/01/2025 22:12:55.15
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -42,6 +42,7 @@ HOST,api.bintray.com,LIST
 HOST,api.crashguard.me,LIST
 HOST,api.dicebear.com,LIST
 HOST,api.iconify.design,LIST
+HOST,api.instantly.ai,LIST
 HOST,api.mintlify.com,LIST
 HOST,api.mixpanel.com,LIST
 HOST,api.okzy.tv,LIST
@@ -279,6 +280,7 @@ HOST,bst.icons8.com,LIST
 HOST,btn.hitomi.la,LIST
 HOST,builds.paranoidandroid.co,LIST
 HOST,builds.parsec.app,LIST
+HOST,bundle.dyn-rev.app,LIST
 HOST,bundle.trysavvy.com,LIST
 HOST,bundlephobia.com,LIST
 HOST,bundler.nice-team.net,LIST
@@ -357,6 +359,7 @@ HOST,cdn.7tv.app,LIST
 HOST,cdn.accounts.nintendo.com,LIST
 HOST,cdn.adguard.com,LIST
 HOST,cdn.adguard.info,LIST
+HOST,cdn.aimerce.ai,LIST
 HOST,cdn.amcharts.com,LIST
 HOST,cdn.announcekit.app,LIST
 HOST,cdn.answeroverflow.com,LIST
@@ -445,6 +448,7 @@ HOST,cdn.geekzone.co.nz,LIST
 HOST,cdn.getkoala.com,LIST
 HOST,cdn.gettr.com,LIST
 HOST,cdn.ghostery.com,LIST
+HOST,cdn.giftcardpro.app,LIST
 HOST,cdn.glitch.com,LIST
 HOST,cdn.glitch.global,LIST
 HOST,cdn.glitch.me,LIST
@@ -832,6 +836,7 @@ HOST,dl2.nwjs.io,LIST
 HOST,dl2.xmind.net,LIST
 HOST,dl3.xmind.net,LIST
 HOST,dlcdnets.asus.com,LIST
+HOST,do.featurebase.app,LIST
 HOST,docker.cloudsmith.io,LIST
 HOST,docs.rs,LIST
 HOST,down.filen-1.net,LIST
@@ -1350,6 +1355,7 @@ HOST,m.wsj.net,LIST
 HOST,m3.gab.com,LIST
 HOST,m3u8.girigirilove.com,LIST
 HOST,mac-release-static.stash.ws,LIST
+HOST,makerworld.bblmw.com,LIST
 HOST,mangaz-books.j-comi.jp,LIST
 HOST,mangaz-static.j-comi.jp,LIST
 HOST,mantisloader.mantis-awx.com,LIST
@@ -1400,6 +1406,7 @@ HOST,media.nationwide.com,LIST
 HOST,media.npr.org,LIST
 HOST,media.orz.uno,LIST
 HOST,media.owcnow.com,LIST
+HOST,media.printables.com,LIST
 HOST,media.pullopen.xyz,LIST
 HOST,media.ra.kroll.com,LIST
 HOST,media.shopimind.com,LIST
@@ -1581,6 +1588,7 @@ HOST,platform.instagram.com,LIST
 HOST,platform.twitter.com,LIST
 HOST,platforms.makemytrip.com,LIST
 HOST,play-edge.itunes.apple.com,LIST
+HOST,play.gotolstoy.com,LIST
 HOST,play.izanmei.net,LIST
 HOST,play.publicradio.org,LIST
 HOST,play.vidyard.com,LIST
@@ -1673,6 +1681,7 @@ HOST,resources-cache.prod.sketch.com,LIST
 HOST,resources-live.sketch.cloud,LIST
 HOST,resources.esportsinsider.com,LIST
 HOST,resources.help.salesforce.com,LIST
+HOST,rest.happierleads.com,LIST
 HOST,rpg.pic-imges.com,LIST
 HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
@@ -2168,6 +2177,7 @@ HOST,video-images.vice.com,LIST
 HOST,video-meta.humix.com,LIST
 HOST,video.bsky.app,LIST
 HOST,video.cdnbye.com,LIST
+HOST,video.dailymail.co.uk,LIST
 HOST,video1.7mmtv.sx,LIST
 HOST,video2.7mmtv.sx,LIST
 HOST,videos.elephas.app,LIST
@@ -2206,6 +2216,7 @@ HOST,website-cdn.ipinfo.io,LIST
 HOST,webstatic.chargebee.com,LIST
 HOST,widget.docsbot.ai,LIST
 HOST,widget.freshworks.com,LIST
+HOST,widget.gotolstoy.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.kapa.ai,LIST
 HOST,widget.trustpilot.com,LIST
@@ -4630,6 +4641,7 @@ HOST-SUFFIX,stylexjs.com,LIST
 HOST-SUFFIX,substackcdn.com,LIST
 HOST-SUFFIX,subyshare.com,LIST
 HOST-SUFFIX,sundryfiles.com,LIST
+HOST-SUFFIX,superfiliate-cdn.com,LIST
 HOST-SUFFIX,surge.sh,LIST
 HOST-SUFFIX,surrit.com,LIST
 HOST-SUFFIX,susercontent.com,LIST
@@ -4695,6 +4707,7 @@ HOST-SUFFIX,tile.openstreetmap.org,LIST
 HOST-SUFFIX,tile.osm.org,LIST
 HOST-SUFFIX,timestalks.com,LIST
 HOST-SUFFIX,timg135.top,LIST
+HOST-SUFFIX,tindiemedia.com,LIST
 HOST-SUFFIX,tinypass.com,LIST
 HOST-SUFFIX,tinyupload.com,LIST
 HOST-SUFFIX,tiqcdn.com,LIST

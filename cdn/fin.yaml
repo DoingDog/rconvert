@@ -1,5 +1,5 @@
-# Clash total line 3080
-# Last updated Fri 01/31/2025 22:13:17.78
+# Clash total line 3093
+# Last updated Sat 02/01/2025 22:12:44.69
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -39,6 +39,7 @@ payload:
   - DOMAIN,api.crashguard.me
   - DOMAIN,api.dicebear.com
   - DOMAIN,api.iconify.design
+  - DOMAIN,api.instantly.ai
   - DOMAIN,api.mintlify.com
   - DOMAIN,api.mixpanel.com
   - DOMAIN,api.producthunt.com
@@ -274,6 +275,7 @@ payload:
   - DOMAIN,brick.freetls.fastly.net
   - DOMAIN,bst.icons8.com
   - DOMAIN,btn.hitomi.la
+  - DOMAIN,bundle.dyn-rev.app
   - DOMAIN,bundle.trysavvy.com
   - DOMAIN,bundlephobia.com
   - DOMAIN,bundler.nice-team.net
@@ -344,6 +346,7 @@ payload:
   - DOMAIN,cdn.accounts.nintendo.com
   - DOMAIN,cdn.adguard.com
   - DOMAIN,cdn.adguard.info
+  - DOMAIN,cdn.aimerce.ai
   - DOMAIN,cdn.amcharts.com
   - DOMAIN,cdn.announcekit.app
   - DOMAIN,cdn.answeroverflow.com
@@ -433,6 +436,7 @@ payload:
   - DOMAIN,cdn.getkoala.com
   - DOMAIN,cdn.gettr.com
   - DOMAIN,cdn.ghostery.com
+  - DOMAIN,cdn.giftcardpro.app
   - DOMAIN,cdn.glitch.com
   - DOMAIN,cdn.glitch.global
   - DOMAIN,cdn.glitch.me
@@ -794,6 +798,7 @@ payload:
   - DOMAIN,dl.airdroid.com
   - DOMAIN,dl.nwjs.io
   - DOMAIN,dl2.nwjs.io
+  - DOMAIN,do.featurebase.app
   - DOMAIN,docker.cloudsmith.io
   - DOMAIN,docs.rs
   - DOMAIN,doppler-config.cbsivideo.com
@@ -1260,6 +1265,7 @@ payload:
   - DOMAIN,m.wsj.net
   - DOMAIN,m3.gab.com
   - DOMAIN,m3u8.girigirilove.com
+  - DOMAIN,makerworld.bblmw.com
   - DOMAIN,mangaz-books.j-comi.jp
   - DOMAIN,mangaz-static.j-comi.jp
   - DOMAIN,mantisloader.mantis-awx.com
@@ -1312,6 +1318,7 @@ payload:
   - DOMAIN,media.npr.org
   - DOMAIN,media.orz.uno
   - DOMAIN,media.owcnow.com
+  - DOMAIN,media.printables.com
   - DOMAIN,media.pullopen.xyz
   - DOMAIN,media.ra.kroll.com
   - DOMAIN,media.shopimind.com
@@ -1460,6 +1467,7 @@ payload:
   - DOMAIN,platform.instagram.com
   - DOMAIN,platform.twitter.com
   - DOMAIN,platforms.makemytrip.com
+  - DOMAIN,play.gotolstoy.com
   - DOMAIN,play.izanmei.net
   - DOMAIN,play.publicradio.org
   - DOMAIN,play.vidyard.com
@@ -1553,6 +1561,7 @@ payload:
   - DOMAIN,resources-live.sketch.cloud
   - DOMAIN,resources.esportsinsider.com
   - DOMAIN,resources.help.salesforce.com
+  - DOMAIN,rest.happierleads.com
   - DOMAIN,rsi.grafana.com
   - DOMAIN,rsms.me
   - DOMAIN,rtcg-access.bytevcloud.com
@@ -2071,6 +2080,7 @@ payload:
   - DOMAIN,video-meta.humix.com
   - DOMAIN,video.bsky.app
   - DOMAIN,video.cdnbye.com
+  - DOMAIN,video.dailymail.co.uk
   - DOMAIN,video1.7mmtv.sx
   - DOMAIN,video2.7mmtv.sx
   - DOMAIN,videos.elephas.app
@@ -2113,6 +2123,7 @@ payload:
   - DOMAIN,webstatic.chargebee.com
   - DOMAIN,widget.docsbot.ai
   - DOMAIN,widget.freshworks.com
+  - DOMAIN,widget.gotolstoy.com
   - DOMAIN,widget.intercom.io
   - DOMAIN,widget.kapa.ai
   - DOMAIN,widget.trustpilot.com
@@ -2938,6 +2949,7 @@ payload:
   - DOMAIN-SUFFIX,strpst.com
   - DOMAIN-SUFFIX,stylexjs.com
   - DOMAIN-SUFFIX,substackcdn.com
+  - DOMAIN-SUFFIX,superfiliate-cdn.com
   - DOMAIN-SUFFIX,surge.sh
   - DOMAIN-SUFFIX,surrit.com
   - DOMAIN-SUFFIX,susercontent.com
@@ -2959,6 +2971,7 @@ payload:
   - DOMAIN-SUFFIX,tile.openstreetmap.org
   - DOMAIN-SUFFIX,tile.osm.org
   - DOMAIN-SUFFIX,timg135.top
+  - DOMAIN-SUFFIX,tindiemedia.com
   - DOMAIN-SUFFIX,tiqcdn.com
   - DOMAIN-SUFFIX,tkcdns.com
   - DOMAIN-SUFFIX,tmsimg.com
