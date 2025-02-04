@@ -1,5 +1,5 @@
-# Clash total line 3093
-# Last updated Sat 02/01/2025 22:12:44.69
+# Clash total line 3094
+# Last updated Tue 02/04/2025 22:13:50.25
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -908,6 +908,7 @@ payload:
   - DOMAIN,fonts.gishan.cc
   - DOMAIN,fonts.googleapis.com
   - DOMAIN,fonts.gstatic.com
+  - DOMAIN,fonts.mailerlite.com
   - DOMAIN,fonts.sony.net
   - DOMAIN,fonts.svc.ui.com
   - DOMAIN,fonts.twitter.com
