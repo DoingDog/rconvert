@@ -1,5 +1,5 @@
-# Clash total line 4361
-# Last updated Tue 02/04/2025 22:14:11.72
+# Clash total line 4362
+# Last updated Fri 02/07/2025 22:13:58.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -58,6 +58,7 @@ payload:
   - DOMAIN-SUFFIX,10010.com
   - DOMAIN-SUFFIX,100bt.com
   - DOMAIN-SUFFIX,100offer.com
+  - DOMAIN-SUFFIX,111.com
   - DOMAIN-SUFFIX,11467.com
   - DOMAIN-SUFFIX,114chn.com
   - DOMAIN-SUFFIX,114menhu.com

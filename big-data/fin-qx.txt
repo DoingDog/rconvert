@@ -1,5 +1,5 @@
-# Quantumult total line 6088
-# Last updated Tue 02/04/2025 22:14:01.07
+# Quantumult total line 6100
+# Last updated Fri 02/07/2025 22:13:48.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -712,6 +712,7 @@ HOST,cf.javfree.me,LIST
 HOST,cf.shopee.tw,LIST
 HOST,cfvod.kaltura.com,LIST
 HOST,chart.googleapis.com,LIST
+HOST,chat-content.beanfun.com,LIST
 HOST,checkout-sdk.bigcommerce.com,LIST
 HOST,checkout.stripe.com,LIST
 HOST,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv,LIST
@@ -744,6 +745,7 @@ HOST,componentupdater.brave.com,LIST
 HOST,config.extension.grammarly.com,LIST
 HOST,connect-js.stripe.com,LIST
 HOST,connect.facebook.net,LIST
+HOST,connect.nosto.com,LIST
 HOST,connectivitycheck.android.com,LIST
 HOST,connectivitycheck.gstatic.com,LIST
 HOST,consent-manager.ft.com,LIST
@@ -758,6 +760,7 @@ HOST,content.any.run,LIST
 HOST,content.api.news,LIST
 HOST,content.arduino.cc,LIST
 HOST,content.invisioncic.com,LIST
+HOST,content.kaspersky-labs.com,LIST
 HOST,content.overwolf.com,LIST
 HOST,content.product.glitch.com,LIST
 HOST,content.wepik.com,LIST
@@ -784,6 +787,7 @@ HOST,css.createsend1.com,LIST
 HOST,ctldl.windowsupdate.com,LIST
 HOST,cuinf.sfcat.link,LIST
 HOST,curl.se,LIST
+HOST,cw-image-resizer.cwg.tw,LIST
 HOST,d4.alternativeto.net,LIST
 HOST,dam.freshworks.com,LIST
 HOST,dashasiafox.akamaized.netflix,LIST
@@ -882,6 +886,7 @@ HOST,downloader.cursor.sh,LIST
 HOST,downloadr2.apkmirror.com,LIST
 HOST,downloads.1password.com,LIST
 HOST,downloads.coindesk.com,LIST
+HOST,downloads.lemonsqueezy.com,LIST
 HOST,downloads.openwrt.org,LIST
 HOST,downloads.raspberrypi.com,LIST
 HOST,downloads.wordpress.org,LIST
@@ -1404,6 +1409,7 @@ HOST,media.mas.to,LIST
 HOST,media.masto.nu,LIST
 HOST,media.mstdn.io,LIST
 HOST,media.nationwide.com,LIST
+HOST,media.nownews.com,LIST
 HOST,media.npr.org,LIST
 HOST,media.orz.uno,LIST
 HOST,media.owcnow.com,LIST
@@ -1518,6 +1524,7 @@ HOST,ocsp.digicert.com,LIST
 HOST,ocsp.godaddy.com,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,ocsp.usertrust.com,LIST
+HOST,oct8neproxy.azurewebsites.net,LIST
 HOST,ocvideo.apple.com,LIST
 HOST,officecdnmac.microsoft.com,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
@@ -1641,6 +1648,7 @@ HOST,quriobot.com,LIST
 HOST,r.r10s.jp,LIST
 HOST,r2.1hanime.com,LIST
 HOST,r2.leadsy.ai,LIST
+HOST,r2cdn.perplexity.ai,LIST
 HOST,rapid-cdn.yottaa.com,LIST
 HOST,raw.github.com,LIST
 HOST,rawmarkdown.cloudflareaccess.org,LIST
@@ -1744,6 +1752,7 @@ HOST,s3.picacomic.com,LIST
 HOST,s3.producthunt.com,LIST
 HOST,s3.stackabuse.com,LIST
 HOST,s3.toot.io,LIST
+HOST,s3.tradingview.com,LIST
 HOST,s3.us-west-000.backblazeb2.com,LIST
 HOST,s3.us-west-001.backblazeb2.com,LIST
 HOST,s3.us-west-004.backblazeb2.com,LIST
@@ -1918,6 +1927,7 @@ HOST,static.fc2.com,LIST
 HOST,static.fc2cn.com,LIST
 HOST,static.ffx.io,LIST
 HOST,static.figma.com,LIST
+HOST,static.filehorse.com,LIST
 HOST,static.filestackapi.com,LIST
 HOST,static.freeimages.com,LIST
 HOST,static.getbutton.io,LIST
@@ -3028,6 +3038,7 @@ HOST-SUFFIX,ebayimg.com,LIST
 HOST-SUFFIX,ebaystatic.com,LIST
 HOST-SUFFIX,edditstatic.com,LIST
 HOST-SUFFIX,edge.api.brightcove.com,LIST
+HOST-SUFFIX,edge.storage-yahoo.jp,LIST
 HOST-SUFFIX,edgecastcdn.net,LIST
 HOST-SUFFIX,edgedatg.com,LIST
 HOST-SUFFIX,edgestorewebcdn.azureedge.net,LIST
@@ -3091,6 +3102,7 @@ HOST-SUFFIX,externulls.com,LIST
 HOST-SUFFIX,extmatrix.com,LIST
 HOST-SUFFIX,ezocdn.com,LIST
 HOST-SUFFIX,f-droid.org,LIST
+HOST-SUFFIX,f.hubspotemail.net,LIST
 HOST-SUFFIX,f.hubspotfree.net,LIST
 HOST-SUFFIX,f1esports.com,LIST
 HOST-SUFFIX,f1manager.com,LIST
