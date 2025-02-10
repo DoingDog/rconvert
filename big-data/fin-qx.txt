@@ -1,5 +1,5 @@
-# Quantumult total line 6100
-# Last updated Fri 02/07/2025 22:13:48.07
+# Quantumult total line 6107
+# Last updated Mon 02/10/2025 22:14:24.32
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -376,6 +376,7 @@ HOST,cdn.autoketing.org,LIST
 HOST,cdn.axieinfinity.com,LIST
 HOST,cdn.babylonjs.com,LIST
 HOST,cdn.bfe.dev,LIST
+HOST,cdn.bfldr.com,LIST
 HOST,cdn.bigcloud.click,LIST
 HOST,cdn.birdie.so,LIST
 HOST,cdn.botframework.com,LIST
@@ -411,6 +412,7 @@ HOST,cdn.credible.com,LIST
 HOST,cdn.css.net,LIST
 HOST,cdn.cxense.com,LIST
 HOST,cdn.cypress.io,LIST
+HOST,cdn.daily.dev,LIST
 HOST,cdn.datacamp.com,LIST
 HOST,cdn.datatables.net,LIST
 HOST,cdn.datdota.com,LIST
@@ -566,7 +568,6 @@ HOST,cdn.schemaapp.com,LIST
 HOST,cdn.sciencecast.org,LIST
 HOST,cdn.search.brave.com,LIST
 HOST,cdn.sedo.com,LIST
-HOST,cdn.sellix.io,LIST
 HOST,cdn.seondf.com,LIST
 HOST,cdn.setapp.com,LIST
 HOST,cdn.sheetjs.com,LIST
@@ -1016,6 +1017,7 @@ HOST,fscdn.eppo.cloud,LIST
 HOST,ftp.gnu.org,LIST
 HOST,ftp.gwdg.de,LIST
 HOST,g-static.ap4r.com,LIST
+HOST,gearbox.imgix.com,LIST
 HOST,genesis-cdn.ff.com,LIST
 HOST,geoip-js.com,LIST
 HOST,get.pixelexperience.org,LIST
@@ -1092,7 +1094,6 @@ HOST,icons.ly,LIST
 HOST,icons.zeabur.com,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
-HOST,image.4fuk.org,LIST
 HOST,image.ap-mail.org,LIST
 HOST,image.civitai.com,LIST
 HOST,image.crisp.chat,LIST
@@ -1385,6 +1386,7 @@ HOST,media.cleanshot.cloud,LIST
 HOST,media.cmx.edu.kg,LIST
 HOST,media.contentapi.ea.com,LIST
 HOST,media.convertkit.com,LIST
+HOST,media.daily.dev,LIST
 HOST,media.datacenterdynamics.com,LIST
 HOST,media.dev.to,LIST
 HOST,media.discordapp.net,LIST
@@ -1401,6 +1403,7 @@ HOST,media.graphassets.com,LIST
 HOST,media.hachyderm.io,LIST
 HOST,media.infosec.exchange,LIST
 HOST,media.inhumanity.com,LIST
+HOST,media.invisioncic.com,LIST
 HOST,media.istockphoto.com,LIST
 HOST,media.kit.com,LIST
 HOST,media.lantern.io,LIST
@@ -1972,6 +1975,7 @@ HOST,static.mytonwallet.io,LIST
 HOST,static.na1.visioncritical.com,LIST
 HOST,static.namebeta.com,LIST
 HOST,static.netify.ai,LIST
+HOST,static.newmobilelife.com,LIST
 HOST,static.news.bitcoin.com,LIST
 HOST,static.nicehash.com,LIST
 HOST,static.npmjs.com,LIST
@@ -2150,7 +2154,6 @@ HOST,updates-cdn.bravesoftware.com,LIST
 HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
-HOST,upload.filebase.com,LIST
 HOST,upload.wikimedia.org,LIST
 HOST,uploads.codesandbox.io,LIST
 HOST,uploads.guim.co.uk,LIST
@@ -2308,6 +2311,7 @@ HOST-SUFFIX,a.o333o.com,LIST
 HOST-SUFFIX,a.storyblok.com,LIST
 HOST-SUFFIX,a1tb.com,LIST
 HOST-SUFFIX,a24films.com,LIST
+HOST-SUFFIX,a7s.imgix.com,LIST
 HOST-SUFFIX,aaa.ax,LIST
 HOST-SUFFIX,aacdn.nagich.com,LIST
 HOST-SUFFIX,aayinltcs.arduino.cc,LIST
@@ -4350,7 +4354,6 @@ HOST-SUFFIX,pximg.net,LIST
 HOST-SUFFIX,pxlecdn.com,LIST
 HOST-SUFFIX,pypi.org,LIST
 HOST-SUFFIX,pythonhosted.org,LIST
-HOST-SUFFIX,pztv.ca,LIST
 HOST-SUFFIX,q13.com,LIST
 HOST-SUFFIX,q13fox.com,LIST
 HOST-SUFFIX,qobuz.at,LIST
@@ -4530,6 +4533,7 @@ HOST-SUFFIX,simfileshare.net,LIST
 HOST-SUFFIX,simg.jp,LIST
 HOST-SUFFIX,similarcdn.com,LIST
 HOST-SUFFIX,simplecastcdn.com,LIST
+HOST-SUFFIX,simpleflyingimages.com,LIST
 HOST-SUFFIX,sirv.com,LIST
 HOST-SUFFIX,siteintercept.qualtrics.com,LIST
 HOST-SUFFIX,sitescdn.net,LIST
@@ -4548,6 +4552,7 @@ HOST-SUFFIX,smartmediarep.com,LIST
 HOST-SUFFIX,smartscreen.microsoft.com,LIST
 HOST-SUFFIX,smassets.net,LIST
 HOST-SUFFIX,smilecdn.co,LIST
+HOST-SUFFIX,smmallcdn.net,LIST
 HOST-SUFFIX,smushcdn.com,LIST
 HOST-SUFFIX,sndcdn.com,LIST
 HOST-SUFFIX,snowfiles.com,LIST
@@ -4581,6 +4586,7 @@ HOST-SUFFIX,spoti.fi,LIST
 HOST-SUFFIX,spotilocal.com,LIST
 HOST-SUFFIX,sqspcdn.com,LIST
 HOST-SUFFIX,squarespace-cdn.com,LIST
+HOST-SUFFIX,srcdn.com,LIST
 HOST-SUFFIX,ss-cdn.com,LIST
 HOST-SUFFIX,ssl-images-amazon.com,LIST
 HOST-SUFFIX,ssl0d.com,LIST
@@ -5057,6 +5063,7 @@ HOST-SUFFIX,xhpingcdn.com,LIST
 HOST-SUFFIX,xiaoyi.one,LIST
 HOST-SUFFIX,xingcdn.com,LIST
 HOST-SUFFIX,xlog.app,LIST
+HOST-SUFFIX,xm-apps-static.com,LIST
 HOST-SUFFIX,xmsl.org,LIST
 HOST-SUFFIX,xnxx-cdn.com,LIST
 HOST-SUFFIX,xo.com,LIST

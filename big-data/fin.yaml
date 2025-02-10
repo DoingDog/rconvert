@@ -1,5 +1,5 @@
-# Clash total line 6114
-# Last updated Fri 02/07/2025 22:13:48.12
+# Clash total line 6121
+# Last updated Mon 02/10/2025 22:14:24.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -377,6 +377,7 @@ payload:
   - DOMAIN,cdn.axieinfinity.com
   - DOMAIN,cdn.babylonjs.com
   - DOMAIN,cdn.bfe.dev
+  - DOMAIN,cdn.bfldr.com
   - DOMAIN,cdn.bigcloud.click
   - DOMAIN,cdn.birdie.so
   - DOMAIN,cdn.botframework.com
@@ -412,6 +413,7 @@ payload:
   - DOMAIN,cdn.css.net
   - DOMAIN,cdn.cxense.com
   - DOMAIN,cdn.cypress.io
+  - DOMAIN,cdn.daily.dev
   - DOMAIN,cdn.datacamp.com
   - DOMAIN,cdn.datatables.net
   - DOMAIN,cdn.datdota.com
@@ -567,7 +569,6 @@ payload:
   - DOMAIN,cdn.sciencecast.org
   - DOMAIN,cdn.search.brave.com
   - DOMAIN,cdn.sedo.com
-  - DOMAIN,cdn.sellix.io
   - DOMAIN,cdn.seondf.com
   - DOMAIN,cdn.setapp.com
   - DOMAIN,cdn.sheetjs.com
@@ -1017,6 +1018,7 @@ payload:
   - DOMAIN,ftp.gnu.org
   - DOMAIN,ftp.gwdg.de
   - DOMAIN,g-static.ap4r.com
+  - DOMAIN,gearbox.imgix.com
   - DOMAIN,genesis-cdn.ff.com
   - DOMAIN,geoip-js.com
   - DOMAIN,get.pixelexperience.org
@@ -1093,7 +1095,6 @@ payload:
   - DOMAIN,icons.zeabur.com
   - DOMAIN,imag.malavida.com
   - DOMAIN,image-forwarder.notaku.so
-  - DOMAIN,image.4fuk.org
   - DOMAIN,image.ap-mail.org
   - DOMAIN,image.civitai.com
   - DOMAIN,image.crisp.chat
@@ -1386,6 +1387,7 @@ payload:
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.contentapi.ea.com
   - DOMAIN,media.convertkit.com
+  - DOMAIN,media.daily.dev
   - DOMAIN,media.datacenterdynamics.com
   - DOMAIN,media.dev.to
   - DOMAIN,media.discordapp.net
@@ -1402,6 +1404,7 @@ payload:
   - DOMAIN,media.hachyderm.io
   - DOMAIN,media.infosec.exchange
   - DOMAIN,media.inhumanity.com
+  - DOMAIN,media.invisioncic.com
   - DOMAIN,media.istockphoto.com
   - DOMAIN,media.kit.com
   - DOMAIN,media.lantern.io
@@ -1973,6 +1976,7 @@ payload:
   - DOMAIN,static.na1.visioncritical.com
   - DOMAIN,static.namebeta.com
   - DOMAIN,static.netify.ai
+  - DOMAIN,static.newmobilelife.com
   - DOMAIN,static.news.bitcoin.com
   - DOMAIN,static.nicehash.com
   - DOMAIN,static.npmjs.com
@@ -2151,7 +2155,6 @@ payload:
   - DOMAIN,updates.istatmenus.app
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
-  - DOMAIN,upload.filebase.com
   - DOMAIN,upload.wikimedia.org
   - DOMAIN,uploads.codesandbox.io
   - DOMAIN,uploads.guim.co.uk
@@ -2309,6 +2312,7 @@ payload:
   - DOMAIN-SUFFIX,a.storyblok.com
   - DOMAIN-SUFFIX,a1tb.com
   - DOMAIN-SUFFIX,a24films.com
+  - DOMAIN-SUFFIX,a7s.imgix.com
   - DOMAIN-SUFFIX,aaa.ax
   - DOMAIN-SUFFIX,aacdn.nagich.com
   - DOMAIN-SUFFIX,aayinltcs.arduino.cc
@@ -4351,7 +4355,6 @@ payload:
   - DOMAIN-SUFFIX,pxlecdn.com
   - DOMAIN-SUFFIX,pypi.org
   - DOMAIN-SUFFIX,pythonhosted.org
-  - DOMAIN-SUFFIX,pztv.ca
   - DOMAIN-SUFFIX,q13.com
   - DOMAIN-SUFFIX,q13fox.com
   - DOMAIN-SUFFIX,qobuz.at
@@ -4531,6 +4534,7 @@ payload:
   - DOMAIN-SUFFIX,simg.jp
   - DOMAIN-SUFFIX,similarcdn.com
   - DOMAIN-SUFFIX,simplecastcdn.com
+  - DOMAIN-SUFFIX,simpleflyingimages.com
   - DOMAIN-SUFFIX,sirv.com
   - DOMAIN-SUFFIX,siteintercept.qualtrics.com
   - DOMAIN-SUFFIX,sitescdn.net
@@ -4549,6 +4553,7 @@ payload:
   - DOMAIN-SUFFIX,smartscreen.microsoft.com
   - DOMAIN-SUFFIX,smassets.net
   - DOMAIN-SUFFIX,smilecdn.co
+  - DOMAIN-SUFFIX,smmallcdn.net
   - DOMAIN-SUFFIX,smushcdn.com
   - DOMAIN-SUFFIX,sndcdn.com
   - DOMAIN-SUFFIX,snowfiles.com
@@ -4582,6 +4587,7 @@ payload:
   - DOMAIN-SUFFIX,spotilocal.com
   - DOMAIN-SUFFIX,sqspcdn.com
   - DOMAIN-SUFFIX,squarespace-cdn.com
+  - DOMAIN-SUFFIX,srcdn.com
   - DOMAIN-SUFFIX,ss-cdn.com
   - DOMAIN-SUFFIX,ssl-images-amazon.com
   - DOMAIN-SUFFIX,ssl0d.com
@@ -5058,6 +5064,7 @@ payload:
   - DOMAIN-SUFFIX,xiaoyi.one
   - DOMAIN-SUFFIX,xingcdn.com
   - DOMAIN-SUFFIX,xlog.app
+  - DOMAIN-SUFFIX,xm-apps-static.com
   - DOMAIN-SUFFIX,xmsl.org
   - DOMAIN-SUFFIX,xnxx-cdn.com
   - DOMAIN-SUFFIX,xo.com
