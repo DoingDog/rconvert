@@ -1,5 +1,5 @@
-# Quantumult total line 6107
-# Last updated Mon 02/10/2025 22:14:24.32
+# Quantumult total line 6112
+# Last updated Thu 02/13/2025 22:14:24.00
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1995,6 +1995,7 @@ HOST,static.probit.com,LIST
 HOST,static.queue-it.net,LIST
 HOST,static.rakuten.com,LIST
 HOST,static.redhat.com,LIST
+HOST,static.redox-os.org,LIST
 HOST,static.reo.dev,LIST
 HOST,static.replay.io,LIST
 HOST,static.rust-lang.org,LIST
@@ -2125,6 +2126,7 @@ HOST,time.cloudflare.com,LIST
 HOST,time.windows.com,LIST
 HOST,tn.txxx.tube,LIST
 HOST,tn.vjav.com,LIST
+HOST,todoist.b-cdn.net,LIST
 HOST,ton.local.twitter.com,LIST
 HOST,tools-static.wmflabs.org,LIST
 HOST,topbar-static.piano.io,LIST
@@ -3064,6 +3066,7 @@ HOST-SUFFIX,emby77.org,LIST
 HOST-SUFFIX,embyclub.com,LIST
 HOST-SUFFIX,embyclub.vip,LIST
 HOST-SUFFIX,embylianmeng.com,LIST
+HOST-SUFFIX,embymv.link,LIST
 HOST-SUFFIX,embymv.me,LIST
 HOST-SUFFIX,embymv.tk,LIST
 HOST-SUFFIX,embyplus.club,LIST
@@ -3990,6 +3993,7 @@ HOST-SUFFIX,moviesanywhere.com,LIST
 HOST-SUFFIX,movshare.net,LIST
 HOST-SUFFIX,mox.moe,LIST
 HOST-SUFFIX,mp4upload.com,LIST
+HOST-SUFFIX,msftauthimages.net,LIST
 HOST-SUFFIX,msftconnecttest.com,LIST
 HOST-SUFFIX,msftncsi.com,LIST
 HOST-SUFFIX,msftstatic.com,LIST
@@ -4531,6 +4535,7 @@ HOST-SUFFIX,showtime.com,LIST
 HOST-SUFFIX,shuipo.lol,LIST
 HOST-SUFFIX,simfileshare.net,LIST
 HOST-SUFFIX,simg.jp,LIST
+HOST-SUFFIX,simgbb.com,LIST
 HOST-SUFFIX,similarcdn.com,LIST
 HOST-SUFFIX,simplecastcdn.com,LIST
 HOST-SUFFIX,simpleflyingimages.com,LIST

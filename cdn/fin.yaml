@@ -1,5 +1,5 @@
-# Clash total line 3115
-# Last updated Mon 02/10/2025 22:14:14.89
+# Clash total line 3118
+# Last updated Thu 02/13/2025 22:14:11.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -2033,6 +2033,7 @@ payload:
   - DOMAIN,time.windows.com
   - DOMAIN,tn.txxx.tube
   - DOMAIN,tn.vjav.com
+  - DOMAIN,todoist.b-cdn.net
   - DOMAIN,ton.local.twitter.com
   - DOMAIN,tools-static.wmflabs.org
   - DOMAIN,topbar-static.piano.io
@@ -2725,6 +2726,7 @@ payload:
   - DOMAIN-SUFFIX,mobilius.top
   - DOMAIN-SUFFIX,monitor.azure.com
   - DOMAIN-SUFFIX,motherlessmedia.com
+  - DOMAIN-SUFFIX,msftauthimages.net
   - DOMAIN-SUFFIX,msftconnecttest.com
   - DOMAIN-SUFFIX,msftncsi.com
   - DOMAIN-SUFFIX,msftstatic.com
@@ -2903,6 +2905,7 @@ payload:
   - DOMAIN-SUFFIX,shields.io
   - DOMAIN-SUFFIX,shopifycdn.com
   - DOMAIN-SUFFIX,shortpixel.ai
+  - DOMAIN-SUFFIX,simgbb.com
   - DOMAIN-SUFFIX,similarcdn.com
   - DOMAIN-SUFFIX,simplecastcdn.com
   - DOMAIN-SUFFIX,simpleflyingimages.com
