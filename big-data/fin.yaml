@@ -1,5 +1,5 @@
-# Clash total line 6161
-# Last updated Sun 02/16/2025 22:13:18.33
+# Clash total line 6189
+# Last updated Wed 02/19/2025 22:14:07.12
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -359,6 +359,7 @@ payload:
   - DOMAIN,cdn-uicons.flaticon.com
   - DOMAIN,cdn-updates.orbstack.dev
   - DOMAIN,cdn-web.fydeos.io
+  - DOMAIN,cdn-web.orbstack.dev
   - DOMAIN,cdn-www.bluestacks.com
   - DOMAIN,cdn-yotpo-images-production.yotpo.com
   - DOMAIN,cdn.17app.co
@@ -443,6 +444,7 @@ payload:
   - DOMAIN,cdn.equalweb.com
   - DOMAIN,cdn.eu.contentful.com
   - DOMAIN,cdn.european-alternatives.eu
+  - DOMAIN,cdn.evbstatic.com
   - DOMAIN,cdn.faire.com
   - DOMAIN,cdn.fastcomments.com
   - DOMAIN,cdn.filen.io
@@ -454,6 +456,7 @@ payload:
   - DOMAIN,cdn.freebiesupply.com
   - DOMAIN,cdn.freecodecamp.org
   - DOMAIN,cdn.freshdesk.com
+  - DOMAIN,cdn.fwupd.org
   - DOMAIN,cdn.gamemonkey.org
   - DOMAIN,cdn.gdl.gg
   - DOMAIN,cdn.geekzone.co.nz
@@ -479,6 +482,7 @@ payload:
   - DOMAIN,cdn.icomoon.io
   - DOMAIN,cdn.imageengine.io
   - DOMAIN,cdn.img.ly
+  - DOMAIN,cdn.infoq.com
   - DOMAIN,cdn.ionos.de
   - DOMAIN,cdn.ip2location.io
   - DOMAIN,cdn.ipregistry.co
@@ -540,6 +544,7 @@ payload:
   - DOMAIN,cdn.pagic.org
   - DOMAIN,cdn.parsely.com
   - DOMAIN,cdn.pathfactory.com
+  - DOMAIN,cdn.pendo.io
   - DOMAIN,cdn.perfops.net
   - DOMAIN,cdn.permutive.com
   - DOMAIN,cdn.piano.io
@@ -715,6 +720,7 @@ payload:
   - DOMAIN,cdnstatic.porno-cum.com
   - DOMAIN,cdnstatic.w1mp.com
   - DOMAIN,cdnstatic.w4nkr.com
+  - DOMAIN,cdntranscend.eventbrite.com
   - DOMAIN,certificates.godaddy.com
   - DOMAIN,certona.gap.com
   - DOMAIN,cf-assets.www.cloudflare.com
@@ -733,6 +739,7 @@ payload:
   - DOMAIN,ci.testling.com
   - DOMAIN,ciscobinary.openh264.org
   - DOMAIN,claritystatic.azureedge.net
+  - DOMAIN,clickup.marketlinc.com
   - DOMAIN,client.hikarifield.co.jp
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloud.typenetwork.com
@@ -805,6 +812,7 @@ payload:
   - DOMAIN,d4.alternativeto.net
   - DOMAIN,dam.freshworks.com
   - DOMAIN,dashasiafox.akamaized.netflix
+  - DOMAIN,data.web.clickup.com
   - DOMAIN,david-dm.org
   - DOMAIN,daznfeeds.com.edgekey.net
   - DOMAIN,db.onlinewebfonts.com
@@ -975,6 +983,7 @@ payload:
   - DOMAIN,f003.backblazeb2.com
   - DOMAIN,f004.backblazeb2.com
   - DOMAIN,fast.wistia.com
+  - DOMAIN,fast.wistia.net
   - DOMAIN,fastly-cloud.typenetwork.com
   - DOMAIN,fastly-download.epicgames.com
   - DOMAIN,fastporndelivery.hqporner.com
@@ -1036,6 +1045,8 @@ payload:
   - DOMAIN,geoip-js.com
   - DOMAIN,get.pixelexperience.org
   - DOMAIN,gfx-data.news-engineering.aws.wapo.pub
+  - DOMAIN,ghfast.top
+  - DOMAIN,ghgo.xyz
   - DOMAIN,ghp.ci
   - DOMAIN,gitpkg-fork.vercel.sh
   - DOMAIN,global.divhunt.com
@@ -1064,6 +1075,7 @@ payload:
   - DOMAIN,hls.hentaicity.com
   - DOMAIN,hls.itunes.apple.com
   - DOMAIN,home.integrate.com
+  - DOMAIN,http.kali.org
   - DOMAIN,hub-assets.displaycal.net
   - DOMAIN,hulu.com.c.footprint.net
   - DOMAIN,hulu.map.fastly.net
@@ -1182,6 +1194,7 @@ payload:
   - DOMAIN,images.tokopedia.net
   - DOMAIN,images.typeform.com
   - DOMAIN,images.unsplash.com
+  - DOMAIN,images.videolan.org
   - DOMAIN,images.web3.storage
   - DOMAIN,images.weserv.nl
   - DOMAIN,images.wikia.com
@@ -1281,6 +1294,7 @@ payload:
   - DOMAIN,img6.airdroid.com
   - DOMAIN,imgcdn.cna.com.tw
   - DOMAIN,imgix.setapp.com
+  - DOMAIN,imgopt.infoq.com
   - DOMAIN,imgproxy.fourthwall.com
   - DOMAIN,imgrs.apkcombo.com
   - DOMAIN,imgs.plurk.com
@@ -1359,6 +1373,7 @@ payload:
   - DOMAIN,lib.arvancloud.ir
   - DOMAIN,libraries.hund.io
   - DOMAIN,libs.quillbot.com
+  - DOMAIN,lift-ai-js.marketlinc.com
   - DOMAIN,link.storjshare.io
   - DOMAIN,linkstorage.linkfire.com
   - DOMAIN,linuxiac.b-cdn.net
@@ -1631,6 +1646,7 @@ payload:
   - DOMAIN,playwright.azureedge.net
   - DOMAIN,plugins.dprint.dev
   - DOMAIN,plus.unsplash.com
+  - DOMAIN,polyfill-fe.toss.im
   - DOMAIN,polyfill.bbhub.io
   - DOMAIN,pomf2.lain.la
   - DOMAIN,pool.jortage.com
@@ -1820,6 +1836,7 @@ payload:
   - DOMAIN,secure.telegraph.co.uk
   - DOMAIN,security.debian.org
   - DOMAIN,security.ubuntu.com
+  - DOMAIN,segapi.clerk.com
   - DOMAIN,sentry.ainopara.com
   - DOMAIN,service-icons.zeabur.com
   - DOMAIN,services.linkfire.com
@@ -1928,6 +1945,7 @@ payload:
   - DOMAIN,static.cloudcachetci.com
   - DOMAIN,static.cnbeta.com.tw
   - DOMAIN,static.codepen.io
+  - DOMAIN,static.cohere.so
   - DOMAIN,static.coinall.ltd
   - DOMAIN,static.coingecko.com
   - DOMAIN,static.community.workday.com
@@ -1958,6 +1976,7 @@ payload:
   - DOMAIN,static.freeimages.com
   - DOMAIN,static.getbutton.io
   - DOMAIN,static.gettyimages.com
+  - DOMAIN,static.gitbook.com
   - DOMAIN,static.global.visioncritical.com
   - DOMAIN,static.gnome.org
   - DOMAIN,static.gopro.com
@@ -2011,6 +2030,7 @@ payload:
   - DOMAIN,static.oomol.com
   - DOMAIN,static.opensea.io
   - DOMAIN,static.osdn.net
+  - DOMAIN,static.parallels.com
   - DOMAIN,static.peatio.com
   - DOMAIN,static.pingcap.com
   - DOMAIN,static.playstation.com
@@ -2041,6 +2061,7 @@ payload:
   - DOMAIN,static.test-beta.com
   - DOMAIN,static.theguardian.com
   - DOMAIN,static.tokenview.io
+  - DOMAIN,static.toss.im
   - DOMAIN,static.tp-link.com
   - DOMAIN,static.tradingview.com
   - DOMAIN,static.tronscan.org
@@ -2175,6 +2196,7 @@ payload:
   - DOMAIN,update.googleapis.com
   - DOMAIN,update.greasyfork.org
   - DOMAIN,update.kiwibrowser.com
+  - DOMAIN,update.parallels.com
   - DOMAIN,update.sleazyfork.org
   - DOMAIN,updater.snipaste.com
   - DOMAIN,updates-cdn.bravesoftware.com
@@ -2250,6 +2272,7 @@ payload:
   - DOMAIN,web-cdn.bitrise.io
   - DOMAIN,web-static.pages.iheart.com
   - DOMAIN,web-toolbar.playstation.com
+  - DOMAIN,webappassets.smartsheet.com
   - DOMAIN,webassets.linear.app
   - DOMAIN,webcdn.17app.co
   - DOMAIN,webfonts.zoho.com
@@ -2626,6 +2649,7 @@ payload:
   - DOMAIN-SUFFIX,cbssvideo.com
   - DOMAIN-SUFFIX,cbstelevisioncity.com
   - DOMAIN-SUFFIX,cd4o.com
+  - DOMAIN-SUFFIX,cdimage.debian.org
   - DOMAIN-SUFFIX,cdkworkshop.com
   - DOMAIN-SUFFIX,cdn-centaurus.com
   - DOMAIN-SUFFIX,cdn-cookieyes.com
@@ -3917,6 +3941,7 @@ payload:
   - DOMAIN-SUFFIX,local.webcontainer.io
   - DOMAIN-SUFFIX,localizecdn.com
   - DOMAIN-SUFFIX,location-plus.nhk.jp
+  - DOMAIN-SUFFIX,lodash.com
   - DOMAIN-SUFFIX,loggly.com
   - DOMAIN-SUFFIX,logx.optimizely.com
   - DOMAIN-SUFFIX,logz.io
@@ -4306,6 +4331,7 @@ payload:
   - DOMAIN-SUFFIX,pimg.tw
   - DOMAIN-SUFFIX,pinata.cloud
   - DOMAIN-SUFFIX,pinimg.com
+  - DOMAIN-SUFFIX,pipedriveassets.com
   - DOMAIN-SUFFIX,piston-data.mojang.com
   - DOMAIN-SUFFIX,pixelcdn.net
   - DOMAIN-SUFFIX,pixeldrain.com
@@ -4340,6 +4366,7 @@ payload:
   - DOMAIN-SUFFIX,pornhub.com
   - DOMAIN-SUFFIX,pornhubpremium.com
   - DOMAIN-SUFFIX,pornimg.xyz
+  - DOMAIN-SUFFIX,ports.ubuntu.com
   - DOMAIN-SUFFIX,post.cn2gias.uk
   - DOMAIN-SUFFIX,postimg.cc
   - DOMAIN-SUFFIX,potplayer.tv
@@ -4676,6 +4703,7 @@ payload:
   - DOMAIN-SUFFIX,storage.yandexcloud.net
   - DOMAIN-SUFFIX,storjipfs-gateway.com
   - DOMAIN-SUFFIX,storry.tv
+  - DOMAIN-SUFFIX,strapi.logto.io
   - DOMAIN-SUFFIX,streaks.jp
   - DOMAIN-SUFFIX,stream.ntrrr.top
   - DOMAIN-SUFFIX,stream.publicradio.org
