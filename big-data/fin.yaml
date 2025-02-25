@@ -1,5 +1,5 @@
-# Clash total line 6201
-# Last updated Sat 02/22/2025 22:13:08.83
+# Clash total line 6217
+# Last updated Tue 02/25/2025 22:14:30.87
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -433,6 +433,7 @@ payload:
   - DOMAIN,cdn.decrypt.co
   - DOMAIN,cdn.delight-vr.com
   - DOMAIN,cdn.deta.space
+  - DOMAIN,cdn.devolutions.net
   - DOMAIN,cdn.dnsimple.com
   - DOMAIN,cdn.document360.io
   - DOMAIN,cdn.donmai.us
@@ -514,6 +515,7 @@ payload:
   - DOMAIN,cdn.linearicons.com
   - DOMAIN,cdn.livechatinc.com
   - DOMAIN,cdn.loom.com
+  - DOMAIN,cdn.macstories.net
   - DOMAIN,cdn.manageengine.com
   - DOMAIN,cdn.maptiler.com
   - DOMAIN,cdn.masto.host
@@ -521,7 +523,6 @@ payload:
   - DOMAIN,cdn.matterhorn.app
   - DOMAIN,cdn.mcauto-images-production.sendgrid.net
   - DOMAIN,cdn.mcr.ea.com
-  - DOMAIN,cdn.media.amplience.net
   - DOMAIN,cdn.mewe.com
   - DOMAIN,cdn.micro.blog
   - DOMAIN,cdn.minecraft-server-list.com
@@ -717,6 +718,7 @@ payload:
   - DOMAIN,cdnapisec.kaltura.com
   - DOMAIN,cdnb.artstation.com
   - DOMAIN,cdne-pics.youjizz.com
+  - DOMAIN,cdnfonts.devolutions.net
   - DOMAIN,cdnjs.betterstack.com
   - DOMAIN,cdnjs.buymeacoffee.com
   - DOMAIN,cdnjs.cat.net
@@ -727,6 +729,7 @@ payload:
   - DOMAIN,cdnstatic.w1mp.com
   - DOMAIN,cdnstatic.w4nkr.com
   - DOMAIN,cdntranscend.eventbrite.com
+  - DOMAIN,cdnweb.devolutions.net
   - DOMAIN,certificates.godaddy.com
   - DOMAIN,certona.gap.com
   - DOMAIN,cf-assets.www.cloudflare.com
@@ -889,6 +892,7 @@ payload:
   - DOMAIN,download.cypress.io
   - DOMAIN,download.dlsite.com
   - DOMAIN,download.docker.com
+  - DOMAIN,download.edovia.com
   - DOMAIN,download.fydeos.io
   - DOMAIN,download.gigabyte.com
   - DOMAIN,download.gimp.org
@@ -1287,6 +1291,7 @@ payload:
   - DOMAIN,img.sparemin.com
   - DOMAIN,img.sparknotes.com
   - DOMAIN,img.supjav.com
+  - DOMAIN,img.telemetr.io
   - DOMAIN,img.timero.xyz
   - DOMAIN,img.urlnode.com
   - DOMAIN,img.utdstc.com
@@ -1544,6 +1549,7 @@ payload:
   - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
   - DOMAIN,netlify.apollo.io
   - DOMAIN,newassets.hcaptcha.com
+  - DOMAIN,news-assets.apple.com
   - DOMAIN,news-client.apple.com
   - DOMAIN,news-edge.apple.com
   - DOMAIN,news-events.apple.com
@@ -1782,6 +1788,7 @@ payload:
   - DOMAIN,s3-alpha.figma.com
   - DOMAIN,s3-figma-plugin-images-production-sig.figma.com
   - DOMAIN,s3-symbol-logo.tradingview.com
+  - DOMAIN,s3.2233778.xyz
   - DOMAIN,s3.aaaaa.io
   - DOMAIN,s3.acg.mn
   - DOMAIN,s3.arkjp.net
@@ -1876,6 +1883,7 @@ payload:
   - DOMAIN,social-cdn.vivaldi.net
   - DOMAIN,softwareupdate.pilotmoon.com
   - DOMAIN,softwareupdate.vmware.com
+  - DOMAIN,solve-widget.forethought.ai
   - DOMAIN,source.domaintools.com
   - DOMAIN,sourcepoint.theguardian.com
   - DOMAIN,sp-spiegel-de.spiegel.de
@@ -1916,7 +1924,7 @@ payload:
   - DOMAIN,static-forms.klaviyo.com
   - DOMAIN,static-gcp.freepikcompany.com
   - DOMAIN,static-id.fc2.com
-  - DOMAIN,static-landing.probit.com
+  - DOMAIN,static-landing.probiplacehold.cot.com
   - DOMAIN,static-lccn.leetcode.com
   - DOMAIN,static-main.moovit.com
   - DOMAIN,static-overlay.ubisoft.com
@@ -2054,6 +2062,7 @@ payload:
   - DOMAIN,static.rust-lang.org
   - DOMAIN,static.scarf.sh
   - DOMAIN,static.scroll.com
+  - DOMAIN,static.seel.com
   - DOMAIN,static.skyassets.com
   - DOMAIN,static.snapchat.com
   - DOMAIN,static.snaptube.in
@@ -2166,6 +2175,7 @@ payload:
   - DOMAIN,telemetry.individual.githubcopilot.com
   - DOMAIN,telemetry.split.io
   - DOMAIN,telemetry.vercel.com
+  - DOMAIN,telemetry2.devolutions.net
   - DOMAIN,th.bing.com
   - DOMAIN,themes.fourthwall.com
   - DOMAIN,thingproxy.freeboard.io
@@ -2208,6 +2218,8 @@ payload:
   - DOMAIN,update.sleazyfork.org
   - DOMAIN,updater.snipaste.com
   - DOMAIN,updates-cdn.bravesoftware.com
+  - DOMAIN,updates.bravesoftware.com
+  - DOMAIN,updates.edovia.com
   - DOMAIN,updates.istatmenus.app
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
@@ -3022,6 +3034,7 @@ payload:
   - DOMAIN-SUFFIX,dl.steam.clngaa.com
   - DOMAIN-SUFFIX,dl.steam.ksyna.com
   - DOMAIN-SUFFIX,dl.wireshark.org
+  - DOMAIN-SUFFIX,dl2.discordapp.net
   - DOMAIN-SUFFIX,dl4free.com
   - DOMAIN-SUFFIX,dlunar.net
   - DOMAIN-SUFFIX,dm-event.net
@@ -3994,6 +4007,7 @@ payload:
   - DOMAIN-SUFFIX,mcusercontent.com
   - DOMAIN-SUFFIX,media-amazon.com
   - DOMAIN-SUFFIX,media-imdb.com
+  - DOMAIN-SUFFIX,media.amplience.net
   - DOMAIN-SUFFIX,media.beeper.com
   - DOMAIN-SUFFIX,media.ci-en.jp
   - DOMAIN-SUFFIX,media.strapiapp.com
@@ -4333,6 +4347,7 @@ payload:
   - DOMAIN-SUFFIX,photobucket.com
   - DOMAIN-SUFFIX,photos.live.com
   - DOMAIN-SUFFIX,phprcdn.com
+  - DOMAIN-SUFFIX,pichost.top
   - DOMAIN-SUFFIX,picsum.photos
   - DOMAIN-SUFFIX,piecejointe.net
   - DOMAIN-SUFFIX,pikpak.me
@@ -4660,6 +4675,7 @@ payload:
   - DOMAIN-SUFFIX,splunkcloud.com
   - DOMAIN-SUFFIX,spoti.fi
   - DOMAIN-SUFFIX,spotilocal.com
+  - DOMAIN-SUFFIX,spreadshirtmedia.com
   - DOMAIN-SUFFIX,sqspcdn.com
   - DOMAIN-SUFFIX,squarespace-cdn.com
   - DOMAIN-SUFFIX,srcdn.com

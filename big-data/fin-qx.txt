@@ -1,5 +1,5 @@
-# Quantumult total line 6187
-# Last updated Sat 02/22/2025 22:13:08.80
+# Quantumult total line 6203
+# Last updated Tue 02/25/2025 22:14:30.84
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -432,6 +432,7 @@ HOST,cdn.db-ip.com,LIST
 HOST,cdn.decrypt.co,LIST
 HOST,cdn.delight-vr.com,LIST
 HOST,cdn.deta.space,LIST
+HOST,cdn.devolutions.net,LIST
 HOST,cdn.dnsimple.com,LIST
 HOST,cdn.document360.io,LIST
 HOST,cdn.donmai.us,LIST
@@ -513,6 +514,7 @@ HOST,cdn.lihkg.com,LIST
 HOST,cdn.linearicons.com,LIST
 HOST,cdn.livechatinc.com,LIST
 HOST,cdn.loom.com,LIST
+HOST,cdn.macstories.net,LIST
 HOST,cdn.manageengine.com,LIST
 HOST,cdn.maptiler.com,LIST
 HOST,cdn.masto.host,LIST
@@ -520,7 +522,6 @@ HOST,cdn.mathjax.org,LIST
 HOST,cdn.matterhorn.app,LIST
 HOST,cdn.mcauto-images-production.sendgrid.net,LIST
 HOST,cdn.mcr.ea.com,LIST
-HOST,cdn.media.amplience.net,LIST
 HOST,cdn.mewe.com,LIST
 HOST,cdn.micro.blog,LIST
 HOST,cdn.minecraft-server-list.com,LIST
@@ -716,6 +717,7 @@ HOST,cdna.artstation.com,LIST
 HOST,cdnapisec.kaltura.com,LIST
 HOST,cdnb.artstation.com,LIST
 HOST,cdne-pics.youjizz.com,LIST
+HOST,cdnfonts.devolutions.net,LIST
 HOST,cdnjs.betterstack.com,LIST
 HOST,cdnjs.buymeacoffee.com,LIST
 HOST,cdnjs.cat.net,LIST
@@ -726,6 +728,7 @@ HOST,cdnstatic.porno-cum.com,LIST
 HOST,cdnstatic.w1mp.com,LIST
 HOST,cdnstatic.w4nkr.com,LIST
 HOST,cdntranscend.eventbrite.com,LIST
+HOST,cdnweb.devolutions.net,LIST
 HOST,certificates.godaddy.com,LIST
 HOST,certona.gap.com,LIST
 HOST,cf-assets.www.cloudflare.com,LIST
@@ -888,6 +891,7 @@ HOST,download.cpuid.com,LIST
 HOST,download.cypress.io,LIST
 HOST,download.dlsite.com,LIST
 HOST,download.docker.com,LIST
+HOST,download.edovia.com,LIST
 HOST,download.fydeos.io,LIST
 HOST,download.gigabyte.com,LIST
 HOST,download.gimp.org,LIST
@@ -1286,6 +1290,7 @@ HOST,img.skk.moe,LIST
 HOST,img.sparemin.com,LIST
 HOST,img.sparknotes.com,LIST
 HOST,img.supjav.com,LIST
+HOST,img.telemetr.io,LIST
 HOST,img.timero.xyz,LIST
 HOST,img.urlnode.com,LIST
 HOST,img.utdstc.com,LIST
@@ -1543,6 +1548,7 @@ HOST,navismithapis-cdn.com,LIST
 HOST,net-fe-static-assets.network-controller.svc.ui.com,LIST
 HOST,netlify.apollo.io,LIST
 HOST,newassets.hcaptcha.com,LIST
+HOST,news-assets.apple.com,LIST
 HOST,news-client.apple.com,LIST
 HOST,news-edge.apple.com,LIST
 HOST,news-events.apple.com,LIST
@@ -1781,6 +1787,7 @@ HOST,s3-alpha-sig.figma.com,LIST
 HOST,s3-alpha.figma.com,LIST
 HOST,s3-figma-plugin-images-production-sig.figma.com,LIST
 HOST,s3-symbol-logo.tradingview.com,LIST
+HOST,s3.2233778.xyz,LIST
 HOST,s3.aaaaa.io,LIST
 HOST,s3.acg.mn,LIST
 HOST,s3.arkjp.net,LIST
@@ -1875,6 +1882,7 @@ HOST,snippets.freshchat.com,LIST
 HOST,social-cdn.vivaldi.net,LIST
 HOST,softwareupdate.pilotmoon.com,LIST
 HOST,softwareupdate.vmware.com,LIST
+HOST,solve-widget.forethought.ai,LIST
 HOST,source.domaintools.com,LIST
 HOST,sourcepoint.theguardian.com,LIST
 HOST,sp-spiegel-de.spiegel.de,LIST
@@ -1915,7 +1923,7 @@ HOST,static-effect.reg.ru,LIST
 HOST,static-forms.klaviyo.com,LIST
 HOST,static-gcp.freepikcompany.com,LIST
 HOST,static-id.fc2.com,LIST
-HOST,static-landing.probit.com,LIST
+HOST,static-landing.probiplacehold.cot.com,LIST
 HOST,static-lccn.leetcode.com,LIST
 HOST,static-main.moovit.com,LIST
 HOST,static-overlay.ubisoft.com,LIST
@@ -2053,6 +2061,7 @@ HOST,static.replay.io,LIST
 HOST,static.rust-lang.org,LIST
 HOST,static.scarf.sh,LIST
 HOST,static.scroll.com,LIST
+HOST,static.seel.com,LIST
 HOST,static.skyassets.com,LIST
 HOST,static.snapchat.com,LIST
 HOST,static.snaptube.in,LIST
@@ -2165,6 +2174,7 @@ HOST,telemetry.business.githubcopilot.com,LIST
 HOST,telemetry.individual.githubcopilot.com,LIST
 HOST,telemetry.split.io,LIST
 HOST,telemetry.vercel.com,LIST
+HOST,telemetry2.devolutions.net,LIST
 HOST,th.bing.com,LIST
 HOST,themes.fourthwall.com,LIST
 HOST,thingproxy.freeboard.io,LIST
@@ -2207,6 +2217,8 @@ HOST,update.parallels.com,LIST
 HOST,update.sleazyfork.org,LIST
 HOST,updater.snipaste.com,LIST
 HOST,updates-cdn.bravesoftware.com,LIST
+HOST,updates.bravesoftware.com,LIST
+HOST,updates.edovia.com,LIST
 HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
@@ -3021,6 +3033,7 @@ HOST-SUFFIX,dl.playstation.net,LIST
 HOST-SUFFIX,dl.steam.clngaa.com,LIST
 HOST-SUFFIX,dl.steam.ksyna.com,LIST
 HOST-SUFFIX,dl.wireshark.org,LIST
+HOST-SUFFIX,dl2.discordapp.net,LIST
 HOST-SUFFIX,dl4free.com,LIST
 HOST-SUFFIX,dlunar.net,LIST
 HOST-SUFFIX,dm-event.net,LIST
@@ -3993,6 +4006,7 @@ HOST-SUFFIX,mcjoker.xyz,LIST
 HOST-SUFFIX,mcusercontent.com,LIST
 HOST-SUFFIX,media-amazon.com,LIST
 HOST-SUFFIX,media-imdb.com,LIST
+HOST-SUFFIX,media.amplience.net,LIST
 HOST-SUFFIX,media.beeper.com,LIST
 HOST-SUFFIX,media.ci-en.jp,LIST
 HOST-SUFFIX,media.strapiapp.com,LIST
@@ -4332,6 +4346,7 @@ HOST-SUFFIX,phncdn.com,LIST
 HOST-SUFFIX,photobucket.com,LIST
 HOST-SUFFIX,photos.live.com,LIST
 HOST-SUFFIX,phprcdn.com,LIST
+HOST-SUFFIX,pichost.top,LIST
 HOST-SUFFIX,picsum.photos,LIST
 HOST-SUFFIX,piecejointe.net,LIST
 HOST-SUFFIX,pikpak.me,LIST
@@ -4659,6 +4674,7 @@ HOST-SUFFIX,spicyfile.com,LIST
 HOST-SUFFIX,splunkcloud.com,LIST
 HOST-SUFFIX,spoti.fi,LIST
 HOST-SUFFIX,spotilocal.com,LIST
+HOST-SUFFIX,spreadshirtmedia.com,LIST
 HOST-SUFFIX,sqspcdn.com,LIST
 HOST-SUFFIX,squarespace-cdn.com,LIST
 HOST-SUFFIX,srcdn.com,LIST
