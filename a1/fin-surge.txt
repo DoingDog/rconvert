@@ -1,5 +1,5 @@
-# Surge Rules total line 916
-# Last updated Tue 02/25/2025 22:14:18.61
+# Surge Rules total line 918
+# Last updated Fri 02/28/2025 22:13:54.73
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
@@ -446,7 +446,7 @@ IP-CIDR,117.92.229.188/32,no-resolve
 IP-CIDR,118.107.47.88/32,no-resolve
 IP-CIDR,118.144.88.126/32,no-resolve
 IP-CIDR,118.144.88.208/28,no-resolve
-IP-CIDR,118.89.204.0/23,no-resolve
+IP-CIDR,118.89.204.198/32,no-resolve
 IP-CIDR,119.18.193.135/32,no-resolve
 IP-CIDR,119.188.13.0/24,no-resolve
 IP-CIDR,119.188.172.192/28,no-resolve
@@ -636,6 +636,8 @@ IP-CIDR,202.105.165.202/32,no-resolve
 IP-CIDR,202.106.199.34/31,no-resolve
 IP-CIDR,202.106.199.36/31,no-resolve
 IP-CIDR,202.106.199.38/32,no-resolve
+IP-CIDR,202.90.108.13/32,no-resolve
+IP-CIDR,202.90.110.46/32,no-resolve
 IP-CIDR,202.98.24.121/32,no-resolve
 IP-CIDR,202.98.24.122/31,no-resolve
 IP-CIDR,202.98.24.124/31,no-resolve

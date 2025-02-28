@@ -1,5 +1,5 @@
-# Clash total line 6217
-# Last updated Tue 02/25/2025 22:14:30.87
+# Clash total line 6234
+# Last updated Fri 02/28/2025 22:14:06.72
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -432,6 +432,7 @@ payload:
   - DOMAIN,cdn.db-ip.com
   - DOMAIN,cdn.decrypt.co
   - DOMAIN,cdn.delight-vr.com
+  - DOMAIN,cdn.designsystem.arm.com
   - DOMAIN,cdn.deta.space
   - DOMAIN,cdn.devolutions.net
   - DOMAIN,cdn.dnsimple.com
@@ -657,8 +658,10 @@ payload:
   - DOMAIN,cdn.zeabur.com
   - DOMAIN,cdn.zhujiwiki.com
   - DOMAIN,cdn.zoom.us
+  - DOMAIN,cdn0-i.techbang.com
   - DOMAIN,cdn0.dan.com
   - DOMAIN,cdn0.iconfinder.com
+  - DOMAIN,cdn0.techbang.com
   - DOMAIN,cdn01.jotfor.ms
   - DOMAIN,cdn02.jotfor.ms
   - DOMAIN,cdn03.jotfor.ms
@@ -672,6 +675,7 @@ payload:
   - DOMAIN,cdn1.plesk.com
   - DOMAIN,cdn1.stamped.io
   - DOMAIN,cdn1.sysgears.com
+  - DOMAIN,cdn1.techbang.com
   - DOMAIN,cdn1.unrealengine.com
   - DOMAIN,cdn10.bigcommerce.com
   - DOMAIN,cdn11.bigcommerce.com
@@ -691,6 +695,7 @@ payload:
   - DOMAIN,cdn2.onlyfans.com
   - DOMAIN,cdn2.stamped.io
   - DOMAIN,cdn2.sysgears.com
+  - DOMAIN,cdn2.techbang.com
   - DOMAIN,cdn2.ttloli.com
   - DOMAIN,cdn2.turboviplay.cc
   - DOMAIN,cdn2.unrealengine.com
@@ -750,6 +755,8 @@ payload:
   - DOMAIN,claritystatic.azureedge.net
   - DOMAIN,clickup.marketlinc.com
   - DOMAIN,client.hikarifield.co.jp
+  - DOMAIN,clientsdk.launchdarkly.com
+  - DOMAIN,clientstream.launchdarkly.com
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloud.typenetwork.com
   - DOMAIN,cloudflare.tv
@@ -983,6 +990,8 @@ payload:
   - DOMAIN,event.ithome.com.tw
   - DOMAIN,events-delivery.apple.com
   - DOMAIN,events-live.apple.com
+  - DOMAIN,events.launchdarkly.com
+  - DOMAIN,events.ld.catamorphic.com
   - DOMAIN,events.split.io
   - DOMAIN,events.tableplus.com
   - DOMAIN,experience-ap.piano.io
@@ -1011,6 +1020,7 @@ payload:
   - DOMAIN,fiddle.jshell.net
   - DOMAIN,file.izanmei.net
   - DOMAIN,files.armorgames.com
+  - DOMAIN,files.buildwithfern.com
   - DOMAIN,files.jotform.com
   - DOMAIN,files.mastodon.ktachibana.party
   - DOMAIN,files.mastodon.online
@@ -1127,6 +1137,7 @@ payload:
   - DOMAIN,ias.r10s.jp
   - DOMAIN,icons.buffer.com
   - DOMAIN,icons.duckduckgo.com
+  - DOMAIN,icons.ferndocs.com
   - DOMAIN,icons.leavemealone.com
   - DOMAIN,icons.llamao.fi
   - DOMAIN,icons.ly
@@ -1166,6 +1177,7 @@ payload:
   - DOMAIN,images-ext-1.discordapp.net
   - DOMAIN,images-ext-2.discordapp.net
   - DOMAIN,images.991.com
+  - DOMAIN,images.anandtech.com
   - DOMAIN,images.arigatotravel.com
   - DOMAIN,images.axios.com
   - DOMAIN,images.bfmtv.com
@@ -1330,6 +1342,7 @@ payload:
   - DOMAIN,invent.kde.org
   - DOMAIN,ipfs.d.tube
   - DOMAIN,irp-cdn.multiscreensite.com
+  - DOMAIN,isitmaintained.com
   - DOMAIN,iterm2.com
   - DOMAIN,j.udn.com.tw
   - DOMAIN,jac.yahoosandbox.com
@@ -1786,6 +1799,7 @@ payload:
   - DOMAIN,s2.qwant.com
   - DOMAIN,s3-alpha-sig.figma.com
   - DOMAIN,s3-alpha.figma.com
+  - DOMAIN,s3-figma-force-client-reloads-production.figma.com
   - DOMAIN,s3-figma-plugin-images-production-sig.figma.com
   - DOMAIN,s3-symbol-logo.tradingview.com
   - DOMAIN,s3.2233778.xyz
@@ -1806,6 +1820,7 @@ payload:
   - DOMAIN,s3.masto.ai
   - DOMAIN,s3.picacomic.com
   - DOMAIN,s3.producthunt.com
+  - DOMAIN,s3.sitepoint.com
   - DOMAIN,s3.stackabuse.com
   - DOMAIN,s3.toot.io
   - DOMAIN,s3.tradingview.com
@@ -2203,6 +2218,7 @@ payload:
   - DOMAIN,typescript-eslint.io
   - DOMAIN,typescript.azureedge.net
   - DOMAIN,typescript.visualstudio.com
+  - DOMAIN,u.keka.io
   - DOMAIN,ubistatic-a.ubisoft.com
   - DOMAIN,ubistatic2-a.ubisoft.com
   - DOMAIN,udata.namespace.so
@@ -2272,6 +2288,7 @@ payload:
   - DOMAIN,vpncdn.protonweb.com
   - DOMAIN,vscode-sync-insiders.trafficmanager.net
   - DOMAIN,vscode-sync.trafficmanager.net
+  - DOMAIN,vsmarketplacebadge.apphb.com
   - DOMAIN,vuejs.org
   - DOMAIN,vz-2222604c-50b.b-cdn.net
   - DOMAIN,vz-c0fe498e-5ab.b-cdn.net
