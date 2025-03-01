@@ -1,5 +1,5 @@
-# Clash total line 6234
-# Last updated Fri 02/28/2025 22:14:06.72
+# Clash total line 6238
+# Last updated Sat 03/01/2025 22:13:15.20
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1094,6 +1094,7 @@ payload:
   - DOMAIN,headway-widget.net
   - DOMAIN,hentaiworldtv.b-cdn.net
   - DOMAIN,hhhhhhome86227170.wordpress.com
+  - DOMAIN,hips.hearstapps.com
   - DOMAIN,hls-amt.itunes.apple.com
   - DOMAIN,hls.hentaicity.com
   - DOMAIN,hls.itunes.apple.com
@@ -1472,6 +1473,7 @@ payload:
   - DOMAIN,media.masto.nu
   - DOMAIN,media.mstdn.io
   - DOMAIN,media.nationwide.com
+  - DOMAIN,media.newyorker.com
   - DOMAIN,media.nownews.com
   - DOMAIN,media.npr.org
   - DOMAIN,media.orz.uno
@@ -2594,6 +2596,7 @@ payload:
   - DOMAIN-SUFFIX,bbcpersian.com
   - DOMAIN-SUFFIX,bbcverticals.com
   - DOMAIN-SUFFIX,bbg.gov
+  - DOMAIN-SUFFIX,bblcdn.com
   - DOMAIN-SUFFIX,bcvcdn.com
   - DOMAIN-SUFFIX,bddup.com
   - DOMAIN-SUFFIX,bdupload.asia
@@ -4400,6 +4403,7 @@ payload:
   - DOMAIN-SUFFIX,pluto.tv
   - DOMAIN-SUFFIX,plyr.io
   - DOMAIN-SUFFIX,pnpm.io
+  - DOMAIN-SUFFIX,pocket-image-cache.com
   - DOMAIN-SUFFIX,poecdn.net
   - DOMAIN-SUFFIX,pololine.ml
   - DOMAIN-SUFFIX,polyfill-fastly.io

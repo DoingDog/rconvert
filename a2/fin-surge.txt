@@ -1,5 +1,5 @@
-# Surge Rules total line 604
-# Last updated Fri 02/28/2025 22:08:18.87
+# Surge Rules total line 605
+# Last updated Sat 03/01/2025 22:07:26.31
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
@@ -103,6 +103,7 @@ DOMAIN-KEYWORD,cp-home-pl-
 DOMAIN-KEYWORD,cpu.baidu.com
 DOMAIN-KEYWORD,crashlytics
 DOMAIN-KEYWORD,dat8
+DOMAIN-KEYWORD,dc.pimentaafricana
 DOMAIN-KEYWORD,dfkj8
 DOMAIN-KEYWORD,dlads
 DOMAIN-KEYWORD,dm.bytedance.com
@@ -231,6 +232,7 @@ DOMAIN-KEYWORD,telemetry.officeapps.live.com
 DOMAIN-KEYWORD,toateeli
 DOMAIN-KEYWORD,tosv.boe.byted.org
 DOMAIN-KEYWORD,tosv.byted.org
+DOMAIN-KEYWORD,track.msadcenter
 DOMAIN-KEYWORD,track.opentable.
 DOMAIN-KEYWORD,track.tiara
 DOMAIN-KEYWORD,track.uc.cn
@@ -556,7 +558,6 @@ IP-CIDR,47.93.103.196/32,no-resolve
 IP-CIDR,47.94.89.32/32,no-resolve
 IP-CIDR,47.96.162.122/32,no-resolve
 IP-CIDR,49.71.37.101/32,no-resolve
-IP-CIDR,5.253.59.162/32,no-resolve
 IP-CIDR,58.215.179.159/32,no-resolve
 IP-CIDR,58.221.28.166/32,no-resolve
 IP-CIDR,59.111.239.61/32,no-resolve
