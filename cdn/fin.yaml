@@ -1,5 +1,5 @@
-# Clash total line 3211
-# Last updated Sat 03/01/2025 22:13:05.24
+# Clash total line 3224
+# Last updated Tue 03/04/2025 22:14:21.71
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -98,6 +98,7 @@ payload:
   - DOMAIN,assets.atlasobscura.com
   - DOMAIN,assets.auth.magic.link
   - DOMAIN,assets.awwwards.com
+  - DOMAIN,assets.basehub.com
   - DOMAIN,assets.bbhub.io
   - DOMAIN,assets.bitstamp.net
   - DOMAIN,assets.bnidx.com
@@ -361,6 +362,7 @@ payload:
   - DOMAIN,cdn.announcekit.app
   - DOMAIN,cdn.answeroverflow.com
   - DOMAIN,cdn.apkmonk.com
+  - DOMAIN,cdn.app.neononepay.com
   - DOMAIN,cdn.apponic.com
   - DOMAIN,cdn.arcade.software
   - DOMAIN,cdn.arduino.cc
@@ -409,6 +411,7 @@ payload:
   - DOMAIN,cdn.conveythis.com
   - DOMAIN,cdn.credible.com
   - DOMAIN,cdn.css.net
+  - DOMAIN,cdn.cuty.io
   - DOMAIN,cdn.cxense.com
   - DOMAIN,cdn.daily.dev
   - DOMAIN,cdn.dap.dmm.co.jp
@@ -555,6 +558,7 @@ payload:
   - DOMAIN,cdn.privacy.paramount.com
   - DOMAIN,cdn.prod.ext.web.purview.azure.com
   - DOMAIN,cdn.prod.www.spiegel.de
+  - DOMAIN,cdn.promotekit.com
   - DOMAIN,cdn.prowritingaid.com
   - DOMAIN,cdn.quadpay.com
   - DOMAIN,cdn.quickemailverification.com
@@ -592,6 +596,7 @@ payload:
   - DOMAIN,cdn.softswiss.net
   - DOMAIN,cdn.split.io
   - DOMAIN,cdn.sprig.com
+  - DOMAIN,cdn.sso.mozilla.com
   - DOMAIN,cdn.st-note.com
   - DOMAIN,cdn.starapps.studio
   - DOMAIN,cdn.stash.com
@@ -741,6 +746,7 @@ payload:
   - DOMAIN,cfvod.kaltura.com
   - DOMAIN,chart.googleapis.com
   - DOMAIN,chat-content.beanfun.com
+  - DOMAIN,chatwidgetmetrics-proxy.usepylon.com
   - DOMAIN,checkout-sdk.bigcommerce.com
   - DOMAIN,checkout.stripe.com
   - DOMAIN,ci.testling.com
@@ -1830,6 +1836,7 @@ payload:
   - DOMAIN,static-sv.fc2.com
   - DOMAIN,static-web-prod.skillshare.com
   - DOMAIN,static-web.grammarly.com
+  - DOMAIN,static-www.onlyoffice.com
   - DOMAIN,static.4shared.com
   - DOMAIN,static.ada.support
   - DOMAIN,static.addtoany.com
@@ -2123,6 +2130,7 @@ payload:
   - DOMAIN,ubistatic2-a.akamaihd.net
   - DOMAIN,ubistatic2-a.ubisoft.com
   - DOMAIN,udata.namespace.so
+  - DOMAIN,uhf.microsoft.com
   - DOMAIN,ui-cdn.digitalocean.com
   - DOMAIN,ui.contentstack.com
   - DOMAIN,ui.trailhead.com
@@ -2207,6 +2215,7 @@ payload:
   - DOMAIN,webfonts.zoho.com
   - DOMAIN,webp.frostming.com
   - DOMAIN,website-cdn.ipinfo.io
+  - DOMAIN,website-prod.cache.wpscdn.com
   - DOMAIN,webstatic.chargebee.com
   - DOMAIN,widget.docsbot.ai
   - DOMAIN,widget.freshworks.com
@@ -2446,6 +2455,7 @@ payload:
   - DOMAIN-SUFFIX,cthd.icu
   - DOMAIN-SUFFIX,cwwcdn.com
   - DOMAIN-SUFFIX,data.debugbear.com
+  - DOMAIN-SUFFIX,dataplane.rudderstack.com
   - DOMAIN-SUFFIX,datocms-assets.com
   - DOMAIN-SUFFIX,daumcdn.net
   - DOMAIN-SUFFIX,dditscdn.com
@@ -2478,6 +2488,7 @@ payload:
   - DOMAIN-SUFFIX,dwcdn.net
   - DOMAIN-SUFFIX,dweb.eu.org
   - DOMAIN-SUFFIX,dweb.link
+  - DOMAIN-SUFFIX,dynamic-static-assets.com
   - DOMAIN-SUFFIX,e.crashlytics.com
   - DOMAIN-SUFFIX,easylist.to
   - DOMAIN-SUFFIX,ebayimg.com
@@ -2883,6 +2894,7 @@ payload:
   - DOMAIN-SUFFIX,photobucket.com
   - DOMAIN-SUFFIX,phprcdn.com
   - DOMAIN-SUFFIX,pichost.top
+  - DOMAIN-SUFFIX,picjs.xyz
   - DOMAIN-SUFFIX,picsum.photos
   - DOMAIN-SUFFIX,pimg.tw
   - DOMAIN-SUFFIX,pinimg.com
@@ -2950,6 +2962,7 @@ payload:
   - DOMAIN-SUFFIX,reactjs.org
   - DOMAIN-SUFFIX,readthedocs.io
   - DOMAIN-SUFFIX,reasoningtheory.net
+  - DOMAIN-SUFFIX,recharts.org
   - DOMAIN-SUFFIX,redd.it
   - DOMAIN-SUFFIX,redditmedia.com
   - DOMAIN-SUFFIX,redditstatic.com
