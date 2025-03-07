@@ -1,5 +1,5 @@
-# Clash total line 6252
-# Last updated Tue 03/04/2025 22:14:32.67
+# Clash total line 6271
+# Last updated Fri 03/07/2025 22:12:43.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -12,6 +12,7 @@ payload:
   - DOMAIN,academy-public.coinmarketcap.com
   - DOMAIN,account-cdn.svc.ui.com
   - DOMAIN,accounts-cdn.9gag.com
+  - DOMAIN,addins.deepl.com
   - DOMAIN,adkit.9pub.io
   - DOMAIN,aff.equalweb.com
   - DOMAIN,agi.armorgames.com
@@ -825,6 +826,7 @@ payload:
   - DOMAIN,crl.verisign.com
   - DOMAIN,crt.comodoca.com
   - DOMAIN,crt.usertrust.com
+  - DOMAIN,csp.microsoft.com
   - DOMAIN,css-1-cdn.airdroid.com
   - DOMAIN,css.blackmagicdesign.com
   - DOMAIN,css.createsend1.com
@@ -1319,12 +1321,22 @@ payload:
   - DOMAIN,img.windy.com
   - DOMAIN,img.xhacgn.com
   - DOMAIN,img.xjh.me
+  - DOMAIN,img0.yna.co.kr
   - DOMAIN,img1.ak.crunchyroll.com
+  - DOMAIN,img1.yna.co.kr
   - DOMAIN,img2.tnaflix.com
   - DOMAIN,img2.xiangbinjun.com
+  - DOMAIN,img2.yna.co.kr
   - DOMAIN,img3.airdroid.com
+  - DOMAIN,img3.yna.co.kr
   - DOMAIN,img4.airdroid.com
+  - DOMAIN,img4.yna.co.kr
+  - DOMAIN,img5.yna.co.kr
   - DOMAIN,img6.airdroid.com
+  - DOMAIN,img6.yna.co.kr
+  - DOMAIN,img7.yna.co.kr
+  - DOMAIN,img8.yna.co.kr
+  - DOMAIN,img9.yna.co.kr
   - DOMAIN,imgcdn.cna.com.tw
   - DOMAIN,imgix.setapp.com
   - DOMAIN,imgopt.infoq.com
@@ -1679,6 +1691,7 @@ payload:
   - DOMAIN,player.cnevids.com
   - DOMAIN,player.louisvuitton.com
   - DOMAIN,playgroundcdn.typescriptlang.org
+  - DOMAIN,playwright-akamai.azureedge.net
   - DOMAIN,playwright.azureedge.net
   - DOMAIN,plugins.dprint.dev
   - DOMAIN,plus.unsplash.com
@@ -1866,6 +1879,7 @@ payload:
   - DOMAIN,sdk.split.io
   - DOMAIN,seal-newyork.bbb.org
   - DOMAIN,searchanise-ef84.kxcdn.com
+  - DOMAIN,searchg2-assets.crownpeak.net
   - DOMAIN,searchserverapi.com
   - DOMAIN,seccdn.libravatar.org
   - DOMAIN,secure-res.craft.do
@@ -2073,6 +2087,7 @@ payload:
   - DOMAIN,static.osdn.net
   - DOMAIN,static.parallels.com
   - DOMAIN,static.peatio.com
+  - DOMAIN,static.pfrt.yna.co.kr
   - DOMAIN,static.pingcap.com
   - DOMAIN,static.playstation.com
   - DOMAIN,static.plus.net
@@ -2360,6 +2375,7 @@ payload:
   - DOMAIN,www.bbthat.com
   - DOMAIN,www.googleapis.com
   - DOMAIN,www.pngmart.com
+  - DOMAIN,www.tbstat.com
   - DOMAIN,www.typescriptlang.org
   - DOMAIN,wwwimages2.adobe.com
   - DOMAIN,xpaywalletcdn.azureedge.net
@@ -2618,6 +2634,7 @@ payload:
   - DOMAIN-SUFFIX,bezsms.org
   - DOMAIN-SUFFIX,bftuvip.com
   - DOMAIN-SUFFIX,bfzypic.com
+  - DOMAIN-SUFFIX,bgstatic.com
   - DOMAIN-SUFFIX,biccam.com
   - DOMAIN-SUFFIX,bidi.net.uk
   - DOMAIN-SUFFIX,bigbigchannel.com.hk
@@ -2673,6 +2690,7 @@ payload:
   - DOMAIN-SUFFIX,camfrogcdn.com
   - DOMAIN-SUFFIX,carlos.trade
   - DOMAIN-SUFFIX,carryz.net
+  - DOMAIN-SUFFIX,cartocdn.com
   - DOMAIN-SUFFIX,casoneexchange.com
   - DOMAIN-SUFFIX,catbox.moe
   - DOMAIN-SUFFIX,catlinks.co.uk
@@ -4377,6 +4395,7 @@ payload:
   - DOMAIN-SUFFIX,pgl.yoyo.org
   - DOMAIN-SUFFIX,phncdn.com
   - DOMAIN-SUFFIX,photobucket.com
+  - DOMAIN-SUFFIX,photocdn.stream
   - DOMAIN-SUFFIX,photos.live.com
   - DOMAIN-SUFFIX,phprcdn.com
   - DOMAIN-SUFFIX,pichost.top

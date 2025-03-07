@@ -1,5 +1,5 @@
-# Clash total line 3224
-# Last updated Tue 03/04/2025 22:14:21.71
+# Clash total line 3241
+# Last updated Fri 03/07/2025 22:12:34.45
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -814,6 +814,7 @@ payload:
   - DOMAIN,crl.verisign.com
   - DOMAIN,crt.comodoca.com
   - DOMAIN,crt.usertrust.com
+  - DOMAIN,csp.microsoft.com
   - DOMAIN,css-1-cdn.airdroid.com
   - DOMAIN,css.blackmagicdesign.com
   - DOMAIN,css.createsend1.com
@@ -1220,12 +1221,22 @@ payload:
   - DOMAIN,img.xhacgn.com
   - DOMAIN,img.xjh.me
   - DOMAIN,img.youtube.com
+  - DOMAIN,img0.yna.co.kr
   - DOMAIN,img1.ak.crunchyroll.com
+  - DOMAIN,img1.yna.co.kr
   - DOMAIN,img2.tnaflix.com
   - DOMAIN,img2.xiangbinjun.com
+  - DOMAIN,img2.yna.co.kr
   - DOMAIN,img3.airdroid.com
+  - DOMAIN,img3.yna.co.kr
   - DOMAIN,img4.airdroid.com
+  - DOMAIN,img4.yna.co.kr
+  - DOMAIN,img5.yna.co.kr
   - DOMAIN,img6.airdroid.com
+  - DOMAIN,img6.yna.co.kr
+  - DOMAIN,img7.yna.co.kr
+  - DOMAIN,img8.yna.co.kr
+  - DOMAIN,img9.yna.co.kr
   - DOMAIN,imgcdn.cna.com.tw
   - DOMAIN,imgix.setapp.com
   - DOMAIN,imgopt.infoq.com
@@ -1733,6 +1744,7 @@ payload:
   - DOMAIN,sdk.split.io
   - DOMAIN,seal-newyork.bbb.org
   - DOMAIN,searchanise-ef84.kxcdn.com
+  - DOMAIN,searchg2-assets.crownpeak.net
   - DOMAIN,searchserverapi.com
   - DOMAIN,seccdn.libravatar.org
   - DOMAIN,secure-res.craft.do
@@ -1962,6 +1974,7 @@ payload:
   - DOMAIN,static.osdn.net
   - DOMAIN,static.parallels.com
   - DOMAIN,static.peatio.com
+  - DOMAIN,static.pfrt.yna.co.kr
   - DOMAIN,static.pingcap.com
   - DOMAIN,static.playstation.com
   - DOMAIN,static.plus.net
@@ -2248,6 +2261,7 @@ payload:
   - DOMAIN,www.10086.win
   - DOMAIN,www.bbthat.com
   - DOMAIN,www.pngmart.com
+  - DOMAIN,www.tbstat.com
   - DOMAIN,www.typescriptlang.org
   - DOMAIN,wwwimages2.adobe.com
   - DOMAIN,xpaywalletcdn.azureedge.net
@@ -2325,6 +2339,7 @@ payload:
   - DOMAIN-SUFFIX,bestjavcdn.com
   - DOMAIN-SUFFIX,bftuvip.com
   - DOMAIN-SUFFIX,bfzypic.com
+  - DOMAIN-SUFFIX,bgstatic.com
   - DOMAIN-SUFFIX,biccam.com
   - DOMAIN-SUFFIX,bigcdn.cc
   - DOMAIN-SUFFIX,bigcontent.io
@@ -2350,6 +2365,7 @@ payload:
   - DOMAIN-SUFFIX,bytebucket.org
   - DOMAIN-SUFFIX,bytedapm.com
   - DOMAIN-SUFFIX,c-dn.net
+  - DOMAIN-SUFFIX,cartocdn.com
   - DOMAIN-SUFFIX,cbsnewsstatic.com
   - DOMAIN-SUFFIX,cdn-centaurus.com
   - DOMAIN-SUFFIX,cdn-cookieyes.com
@@ -2892,6 +2908,7 @@ payload:
   - DOMAIN-SUFFIX,pgl.yoyo.org
   - DOMAIN-SUFFIX,phncdn.com
   - DOMAIN-SUFFIX,photobucket.com
+  - DOMAIN-SUFFIX,photocdn.stream
   - DOMAIN-SUFFIX,phprcdn.com
   - DOMAIN-SUFFIX,pichost.top
   - DOMAIN-SUFFIX,picjs.xyz

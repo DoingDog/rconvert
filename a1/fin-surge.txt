@@ -1,11 +1,14 @@
-# Surge Rules total line 923
-# Last updated Tue 03/04/2025 22:14:17.98
+# Surge Rules total line 928
+# Last updated Fri 03/07/2025 22:12:31.30
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
+DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
+DOMAIN-KEYWORD,-pia.appsflyersdk.com
 DOMAIN-KEYWORD,-rtb.gravite.net
 DOMAIN-KEYWORD,-s2s.sensic.net
+DOMAIN-KEYWORD,-skadsdkless.appsflyersdk.com
 DOMAIN-KEYWORD,-spiky.clevertap-prod.com
 DOMAIN-KEYWORD,-tracker.biliapi.net
 DOMAIN-KEYWORD,-txtagstore
@@ -570,6 +573,8 @@ IP-CIDR,167.99.31.227/32,no-resolve
 IP-CIDR,169.254.169.254/32,no-resolve
 IP-CIDR,172.121.4.251/32,no-resolve
 IP-CIDR,172.121.4.252/32,no-resolve
+IP-CIDR,172.232.58.169/32,no-resolve
+IP-CIDR,172.232.58.237/32,no-resolve
 IP-CIDR,172.255.103.118/32,no-resolve
 IP-CIDR,172.255.6.135/32,no-resolve
 IP-CIDR,172.255.6.137/32,no-resolve

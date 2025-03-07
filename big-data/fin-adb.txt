@@ -1,5 +1,5 @@
-# Adblock total line 5298
-# Last updated Tue 03/04/2025 22:14:32.78
+# Adblock total line 5317
+# Last updated Fri 03/07/2025 22:12:43.68
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -11,6 +11,7 @@
 ||academy-public.coinmarketcap.com^
 ||account-cdn.svc.ui.com^
 ||accounts-cdn.9gag.com^
+||addins.deepl.com^
 ||adkit.9pub.io^
 ||aff.equalweb.com^
 ||agi.armorgames.com^
@@ -824,6 +825,7 @@
 ||crl.verisign.com^
 ||crt.comodoca.com^
 ||crt.usertrust.com^
+||csp.microsoft.com^
 ||css-1-cdn.airdroid.com^
 ||css.blackmagicdesign.com^
 ||css.createsend1.com^
@@ -1318,12 +1320,22 @@
 ||img.windy.com^
 ||img.xhacgn.com^
 ||img.xjh.me^
+||img0.yna.co.kr^
 ||img1.ak.crunchyroll.com^
+||img1.yna.co.kr^
 ||img2.tnaflix.com^
 ||img2.xiangbinjun.com^
+||img2.yna.co.kr^
 ||img3.airdroid.com^
+||img3.yna.co.kr^
 ||img4.airdroid.com^
+||img4.yna.co.kr^
+||img5.yna.co.kr^
 ||img6.airdroid.com^
+||img6.yna.co.kr^
+||img7.yna.co.kr^
+||img8.yna.co.kr^
+||img9.yna.co.kr^
 ||imgcdn.cna.com.tw^
 ||imgix.setapp.com^
 ||imgopt.infoq.com^
@@ -1678,6 +1690,7 @@
 ||player.cnevids.com^
 ||player.louisvuitton.com^
 ||playgroundcdn.typescriptlang.org^
+||playwright-akamai.azureedge.net^
 ||playwright.azureedge.net^
 ||plugins.dprint.dev^
 ||plus.unsplash.com^
@@ -1865,6 +1878,7 @@
 ||sdk.split.io^
 ||seal-newyork.bbb.org^
 ||searchanise-ef84.kxcdn.com^
+||searchg2-assets.crownpeak.net^
 ||searchserverapi.com^
 ||seccdn.libravatar.org^
 ||secure-res.craft.do^
@@ -2072,6 +2086,7 @@
 ||static.osdn.net^
 ||static.parallels.com^
 ||static.peatio.com^
+||static.pfrt.yna.co.kr^
 ||static.pingcap.com^
 ||static.playstation.com^
 ||static.plus.net^
@@ -2359,6 +2374,7 @@
 ||www.bbthat.com^
 ||www.googleapis.com^
 ||www.pngmart.com^
+||www.tbstat.com^
 ||www.typescriptlang.org^
 ||wwwimages2.adobe.com^
 ||xpaywalletcdn.azureedge.net^
@@ -2617,6 +2633,7 @@
 ||bezsms.org^
 ||bftuvip.com^
 ||bfzypic.com^
+||bgstatic.com^
 ||biccam.com^
 ||bidi.net.uk^
 ||bigbigchannel.com.hk^
@@ -2672,6 +2689,7 @@
 ||camfrogcdn.com^
 ||carlos.trade^
 ||carryz.net^
+||cartocdn.com^
 ||casoneexchange.com^
 ||catbox.moe^
 ||catlinks.co.uk^
@@ -4376,6 +4394,7 @@
 ||pgl.yoyo.org^
 ||phncdn.com^
 ||photobucket.com^
+||photocdn.stream^
 ||photos.live.com^
 ||phprcdn.com^
 ||pichost.top^

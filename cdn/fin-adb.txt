@@ -1,5 +1,5 @@
-# Adblock total line 3224
-# Last updated Tue 03/04/2025 22:14:21.81
+# Adblock total line 3241
+# Last updated Fri 03/07/2025 22:12:34.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -813,6 +813,7 @@
 ||crl.verisign.com^
 ||crt.comodoca.com^
 ||crt.usertrust.com^
+||csp.microsoft.com^
 ||css-1-cdn.airdroid.com^
 ||css.blackmagicdesign.com^
 ||css.createsend1.com^
@@ -1219,12 +1220,22 @@
 ||img.xhacgn.com^
 ||img.xjh.me^
 ||img.youtube.com^
+||img0.yna.co.kr^
 ||img1.ak.crunchyroll.com^
+||img1.yna.co.kr^
 ||img2.tnaflix.com^
 ||img2.xiangbinjun.com^
+||img2.yna.co.kr^
 ||img3.airdroid.com^
+||img3.yna.co.kr^
 ||img4.airdroid.com^
+||img4.yna.co.kr^
+||img5.yna.co.kr^
 ||img6.airdroid.com^
+||img6.yna.co.kr^
+||img7.yna.co.kr^
+||img8.yna.co.kr^
+||img9.yna.co.kr^
 ||imgcdn.cna.com.tw^
 ||imgix.setapp.com^
 ||imgopt.infoq.com^
@@ -1732,6 +1743,7 @@
 ||sdk.split.io^
 ||seal-newyork.bbb.org^
 ||searchanise-ef84.kxcdn.com^
+||searchg2-assets.crownpeak.net^
 ||searchserverapi.com^
 ||seccdn.libravatar.org^
 ||secure-res.craft.do^
@@ -1961,6 +1973,7 @@
 ||static.osdn.net^
 ||static.parallels.com^
 ||static.peatio.com^
+||static.pfrt.yna.co.kr^
 ||static.pingcap.com^
 ||static.playstation.com^
 ||static.plus.net^
@@ -2247,6 +2260,7 @@
 ||www.10086.win^
 ||www.bbthat.com^
 ||www.pngmart.com^
+||www.tbstat.com^
 ||www.typescriptlang.org^
 ||wwwimages2.adobe.com^
 ||xpaywalletcdn.azureedge.net^
@@ -2324,6 +2338,7 @@
 ||bestjavcdn.com^
 ||bftuvip.com^
 ||bfzypic.com^
+||bgstatic.com^
 ||biccam.com^
 ||bigcdn.cc^
 ||bigcontent.io^
@@ -2349,6 +2364,7 @@
 ||bytebucket.org^
 ||bytedapm.com^
 ||c-dn.net^
+||cartocdn.com^
 ||cbsnewsstatic.com^
 ||cdn-centaurus.com^
 ||cdn-cookieyes.com^
@@ -2891,6 +2907,7 @@
 ||pgl.yoyo.org^
 ||phncdn.com^
 ||photobucket.com^
+||photocdn.stream^
 ||phprcdn.com^
 ||pichost.top^
 ||picjs.xyz^

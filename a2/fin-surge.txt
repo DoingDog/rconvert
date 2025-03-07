@@ -1,10 +1,13 @@
-# Surge Rules total line 609
-# Last updated Tue 03/04/2025 22:08:29.94
+# Surge Rules total line 616
+# Last updated Fri 03/07/2025 22:06:47.10
+DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
+DOMAIN-KEYWORD,-pia.appsflyersdk.com
 DOMAIN-KEYWORD,-rtb.gravite.net
 DOMAIN-KEYWORD,-s2s.sensic.net
+DOMAIN-KEYWORD,-skadsdkless.appsflyersdk.com
 DOMAIN-KEYWORD,-spiky.clevertap-prod.com
 DOMAIN-KEYWORD,-tracker.biliapi.net
 DOMAIN-KEYWORD,-txtagstore
@@ -406,6 +409,8 @@ IP-CIDR,146.148.85.61/32,no-resolve
 IP-CIDR,157.148.47.204/32,no-resolve
 IP-CIDR,162.212.181.32/32,no-resolve
 IP-CIDR,169.254.169.254/32,no-resolve
+IP-CIDR,172.232.58.169/32,no-resolve
+IP-CIDR,172.232.58.237/32,no-resolve
 IP-CIDR,173.208.177.227/32,no-resolve
 IP-CIDR,175.6.223.15/32,no-resolve
 IP-CIDR,180.153.103.224/32,no-resolve
@@ -416,6 +421,7 @@ IP-CIDR,180.76.162.60/32,no-resolve
 IP-CIDR,180.76.171.28/32,no-resolve
 IP-CIDR,180.76.172.149/32,no-resolve
 IP-CIDR,180.76.181.213/32,no-resolve
+IP-CIDR,180.76.76.200/32,no-resolve
 IP-CIDR,180.96.2.114/32,no-resolve
 IP-CIDR,182.254.116.117/32,no-resolve
 IP-CIDR,182.254.118.119/32,no-resolve
@@ -428,7 +434,6 @@ IP-CIDR,183.221.250.11/32,no-resolve
 IP-CIDR,183.224.40.24/32,no-resolve
 IP-CIDR,183.59.53.237/32,no-resolve
 IP-CIDR,185.193.38.148/32,no-resolve
-IP-CIDR,186.76.76.200/32,no-resolve
 IP-CIDR,188.89.204.198/32,no-resolve
 IP-CIDR,193.238.227.136/32,no-resolve
 IP-CIDR,198.105.254.11/32,no-resolve
@@ -442,6 +447,8 @@ IP-CIDR,202.105.165.202/32,no-resolve
 IP-CIDR,202.106.199.34/31,no-resolve
 IP-CIDR,202.106.199.36/31,no-resolve
 IP-CIDR,202.106.199.38/32,no-resolve
+IP-CIDR,202.90.108.13/32,no-resolve
+IP-CIDR,202.90.110.46/32,no-resolve
 IP-CIDR,202.98.24.121/32,no-resolve
 IP-CIDR,202.98.24.122/31,no-resolve
 IP-CIDR,202.98.24.124/31,no-resolve
