@@ -1,5 +1,5 @@
-# Surge Rules total line 616
-# Last updated Fri 03/07/2025 22:06:47.10
+# Surge Rules total line 617
+# Last updated Mon 03/10/2025 22:08:32.03
 DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
@@ -270,7 +270,6 @@ IP-ASN,1012
 IP-ASN,140915
 IP-ASN,14651
 IP-ASN,18044
-IP-ASN,27523
 IP-ASN,401111
 IP-ASN,40115
 IP-ASN,44324
@@ -360,6 +359,7 @@ IP-CIDR,120.192.83.163/32,no-resolve
 IP-CIDR,120.197.89.239/32,no-resolve
 IP-CIDR,120.198.116.0/24,no-resolve
 IP-CIDR,120.209.138.64/32,no-resolve
+IP-CIDR,120.222.240.171/32,no-resolve
 IP-CIDR,120.240.95.37/32,no-resolve
 IP-CIDR,120.26.151.246/32,no-resolve
 IP-CIDR,120.27.34.156/32,no-resolve
@@ -524,6 +524,7 @@ IP-CIDR,222.187.226.96/32,no-resolve
 IP-CIDR,222.221.5.204/32,no-resolve
 IP-CIDR,222.221.5.252/31,no-resolve
 IP-CIDR,222.73.156.235/32,no-resolve
+IP-CIDR,223.111.27.248/32,no-resolve
 IP-CIDR,223.6.255.99/32,no-resolve
 IP-CIDR,223.82.248.117/32,no-resolve
 IP-CIDR,223.87.176.139/32,no-resolve

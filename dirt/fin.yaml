@@ -1,5 +1,5 @@
-# Clash total line 4360
-# Last updated Fri 03/07/2025 22:12:52.90
+# Clash total line 4361
+# Last updated Mon 03/10/2025 22:14:42.28
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -2201,6 +2201,7 @@ payload:
   - DOMAIN-SUFFIX,kiyuu.club
   - DOMAIN-SUFFIX,kkmh.com
   - DOMAIN-SUFFIX,kkzj.com
+  - DOMAIN-SUFFIX,klook.com
   - DOMAIN-SUFFIX,klpbbs.com
   - DOMAIN-SUFFIX,knewone.com
   - DOMAIN-SUFFIX,kongfz.com
