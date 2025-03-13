@@ -1,5 +1,5 @@
-# Clash total line 3242
-# Last updated Mon 03/10/2025 22:14:21.16
+# Clash total line 3243
+# Last updated Thu 03/13/2025 22:14:16.48
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -852,6 +852,7 @@ payload:
   - DOMAIN,drop.ndtv.com
   - DOMAIN,drscdn.500px.org
   - DOMAIN,dynamic-assets.coinbase.com
+  - DOMAIN,dz2cdn1.dzone.com
   - DOMAIN,e.deviantart.net
   - DOMAIN,e.linear.app
   - DOMAIN,e3.365dm.com

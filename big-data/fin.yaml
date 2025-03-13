@@ -1,5 +1,5 @@
-# Clash total line 6272
-# Last updated Mon 03/10/2025 22:14:31.42
+# Clash total line 6275
+# Last updated Thu 03/13/2025 22:14:27.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -77,6 +77,7 @@ payload:
   - DOMAIN,apple.comscoreresearch.com
   - DOMAIN,apps.bazaarvoice.com
   - DOMAIN,apps.profitihub.com
+  - DOMAIN,apt.xpipe.io
   - DOMAIN,archive.mozilla.org
   - DOMAIN,artifacts.electronjs.org
   - DOMAIN,artworks.thetvdb.com
@@ -947,6 +948,7 @@ payload:
   - DOMAIN,drop.ndtv.com
   - DOMAIN,drscdn.500px.org
   - DOMAIN,dynamic-assets.coinbase.com
+  - DOMAIN,dz2cdn1.dzone.com
   - DOMAIN,e.deviantart.net
   - DOMAIN,e.linear.app
   - DOMAIN,e3.365dm.com
@@ -1782,6 +1784,7 @@ payload:
   - DOMAIN,resources.help.salesforce.com
   - DOMAIN,rest.happierleads.com
   - DOMAIN,rpg.pic-imges.com
+  - DOMAIN,rpm.xpipe.io
   - DOMAIN,rsi.grafana.com
   - DOMAIN,rsms.me
   - DOMAIN,rtcg-access.bytevcloud.com
