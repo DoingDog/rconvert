@@ -1,7 +1,8 @@
-# Surge Rules total line 930
-# Last updated Sun 03/16/2025 22:13:41.85
+# Surge Rules total line 935
+# Last updated Wed 03/19/2025 22:14:31.37
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
+DOMAIN-KEYWORD,-analytics-events.apple.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
@@ -300,6 +301,10 @@ DOMAIN-KEYWORD,track.tiara
 DOMAIN-KEYWORD,track.uc.cn
 DOMAIN-KEYWORD,tracker.kugou.com
 DOMAIN-KEYWORD,trackercdnbj.kugou.com
+DOMAIN-KEYWORD,trkcmb.business.hsbc.
+DOMAIN-KEYWORD,trkgbm.business.hsbc.
+DOMAIN-KEYWORD,trkhinv.business.hsbc.
+DOMAIN-KEYWORD,trksvg.business.hsbc.
 DOMAIN-KEYWORD,trwl1
 DOMAIN-KEYWORD,tui.weibo.com
 DOMAIN-KEYWORD,tunion-api.m.taobao.com
