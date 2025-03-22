@@ -1,5 +1,5 @@
-# Quantumult total line 6313
-# Last updated Wed 03/19/2025 22:14:46.36
+# Quantumult total line 6324
+# Last updated Sat 03/22/2025 22:13:20.09
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -23,6 +23,7 @@ HOST,ajax.cloudflare.com,LIST
 HOST,ajax.googleapis.com,LIST
 HOST,ajax.microsoft.com,LIST
 HOST,ak.sail-horizon.com,LIST
+HOST,akamai-assets.squarespace.com,LIST
 HOST,akmcdnoversea-tw.inter.ptqy.gitv.tv,LIST
 HOST,alt.idgesg.net,LIST
 HOST,amp.azure.net,LIST
@@ -484,6 +485,7 @@ HOST,cdn.glitch.com,LIST
 HOST,cdn.glitch.global,LIST
 HOST,cdn.glitch.me,LIST
 HOST,cdn.gofundme.com,LIST
+HOST,cdn.googlesource.com,LIST
 HOST,cdn.graph.office.net,LIST
 HOST,cdn.growthbook.io,LIST
 HOST,cdn.hackernoon.com,LIST
@@ -659,6 +661,7 @@ HOST,cdn.vuukle.com,LIST
 HOST,cdn.wccftech.com,LIST
 HOST,cdn.webclicks24.com,LIST
 HOST,cdn.weglot.com,LIST
+HOST,cdn.wikimg.net,LIST
 HOST,cdn.wikiwand.com,LIST
 HOST,cdn.wikiwiki.jp,LIST
 HOST,cdn.windowsreport.com,LIST
@@ -789,6 +792,8 @@ HOST,cms-assets.nodecraft.com,LIST
 HOST,cms-assets.webediamovies.pro,LIST
 HOST,cms-assets.xboxservices.com,LIST
 HOST,cms-cdn.now.gg,LIST
+HOST,cms.recordedfuture.com,LIST
+HOST,cms.therecord.media,LIST
 HOST,cms.typenetwork.com,LIST
 HOST,code.benco.io,LIST
 HOST,code.highcharts.com,LIST
@@ -937,6 +942,7 @@ HOST,download.mersenne.ca,LIST
 HOST,download.mikrotik.com,LIST
 HOST,download.mlcc.google.com,LIST
 HOST,download.mozilla.org,LIST
+HOST,download.mxfast.com,LIST
 HOST,download.nektony.com,LIST
 HOST,download.opensuse.org,LIST
 HOST,download.parallels.com,LIST
@@ -1829,6 +1835,7 @@ HOST,s.abcnews.com,LIST
 HOST,s.gishan.cc,LIST
 HOST,s.imgflip.com,LIST
 HOST,s.imgur.com,LIST
+HOST,s.midishow.net,LIST
 HOST,s.namemc.com,LIST
 HOST,s.plurk.com,LIST
 HOST,s.rfi.fr,LIST
@@ -1956,6 +1963,7 @@ HOST,softwareupdate.pilotmoon.com,LIST
 HOST,softwareupdate.vmware.com,LIST
 HOST,solve-widget.forethought.ai,LIST
 HOST,source.domaintools.com,LIST
+HOST,sourcemaps.squarespace.net,LIST
 HOST,sourcepoint.theguardian.com,LIST
 HOST,sp-spiegel-de.spiegel.de,LIST
 HOST,sp.nba.com,LIST
@@ -2338,6 +2346,7 @@ HOST,versionbadg.es,LIST
 HOST,versioncheck-bg.addons.mozilla.org,LIST
 HOST,versioncheck.addons.mozilla.org,LIST
 HOST,vetted.ai,LIST
+HOST,vfat.classicreload.com,LIST
 HOST,vice-prod.sdiapi.com,LIST
 HOST,vice-web-statics-cdn.vice.com,LIST
 HOST,video-images.vice.com,LIST
@@ -2790,6 +2799,7 @@ HOST-SUFFIX,cdn.getfeedback.com,LIST
 HOST-SUFFIX,cdn.greenhouse.io,LIST
 HOST-SUFFIX,cdn.hinative.com,LIST
 HOST-SUFFIX,cdn.hkwesi22222.xyz,LIST
+HOST-SUFFIX,cdn.icann.org,LIST
 HOST-SUFFIX,cdn.ifixit.com,LIST
 HOST-SUFFIX,cdn.imgeng.in,LIST
 HOST-SUFFIX,cdn.imghaste.com,LIST
@@ -3267,6 +3277,7 @@ HOST-SUFFIX,espn.net,LIST
 HOST-SUFFIX,espncdn.com,LIST
 HOST-SUFFIX,espndotcom.tt.omtrdc.net,LIST
 HOST-SUFFIX,espnqa.com,LIST
+HOST-SUFFIX,etsystatic.com,LIST
 HOST-SUFFIX,eu-browse.startpage.com,LIST
 HOST-SUFFIX,eu-proxy.startpage.com,LIST
 HOST-SUFFIX,europeup.com,LIST

@@ -1,5 +1,5 @@
-# Clash total line 6327
-# Last updated Wed 03/19/2025 22:14:46.40
+# Clash total line 6338
+# Last updated Sat 03/22/2025 22:13:20.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -24,6 +24,7 @@ payload:
   - DOMAIN,ajax.googleapis.com
   - DOMAIN,ajax.microsoft.com
   - DOMAIN,ak.sail-horizon.com
+  - DOMAIN,akamai-assets.squarespace.com
   - DOMAIN,akmcdnoversea-tw.inter.ptqy.gitv.tv
   - DOMAIN,alt.idgesg.net
   - DOMAIN,amp.azure.net
@@ -485,6 +486,7 @@ payload:
   - DOMAIN,cdn.glitch.global
   - DOMAIN,cdn.glitch.me
   - DOMAIN,cdn.gofundme.com
+  - DOMAIN,cdn.googlesource.com
   - DOMAIN,cdn.graph.office.net
   - DOMAIN,cdn.growthbook.io
   - DOMAIN,cdn.hackernoon.com
@@ -660,6 +662,7 @@ payload:
   - DOMAIN,cdn.wccftech.com
   - DOMAIN,cdn.webclicks24.com
   - DOMAIN,cdn.weglot.com
+  - DOMAIN,cdn.wikimg.net
   - DOMAIN,cdn.wikiwand.com
   - DOMAIN,cdn.wikiwiki.jp
   - DOMAIN,cdn.windowsreport.com
@@ -790,6 +793,8 @@ payload:
   - DOMAIN,cms-assets.webediamovies.pro
   - DOMAIN,cms-assets.xboxservices.com
   - DOMAIN,cms-cdn.now.gg
+  - DOMAIN,cms.recordedfuture.com
+  - DOMAIN,cms.therecord.media
   - DOMAIN,cms.typenetwork.com
   - DOMAIN,code.benco.io
   - DOMAIN,code.highcharts.com
@@ -938,6 +943,7 @@ payload:
   - DOMAIN,download.mikrotik.com
   - DOMAIN,download.mlcc.google.com
   - DOMAIN,download.mozilla.org
+  - DOMAIN,download.mxfast.com
   - DOMAIN,download.nektony.com
   - DOMAIN,download.opensuse.org
   - DOMAIN,download.parallels.com
@@ -1830,6 +1836,7 @@ payload:
   - DOMAIN,s.gishan.cc
   - DOMAIN,s.imgflip.com
   - DOMAIN,s.imgur.com
+  - DOMAIN,s.midishow.net
   - DOMAIN,s.namemc.com
   - DOMAIN,s.plurk.com
   - DOMAIN,s.rfi.fr
@@ -1957,6 +1964,7 @@ payload:
   - DOMAIN,softwareupdate.vmware.com
   - DOMAIN,solve-widget.forethought.ai
   - DOMAIN,source.domaintools.com
+  - DOMAIN,sourcemaps.squarespace.net
   - DOMAIN,sourcepoint.theguardian.com
   - DOMAIN,sp-spiegel-de.spiegel.de
   - DOMAIN,sp.nba.com
@@ -2339,6 +2347,7 @@ payload:
   - DOMAIN,versioncheck-bg.addons.mozilla.org
   - DOMAIN,versioncheck.addons.mozilla.org
   - DOMAIN,vetted.ai
+  - DOMAIN,vfat.classicreload.com
   - DOMAIN,vice-prod.sdiapi.com
   - DOMAIN,vice-web-statics-cdn.vice.com
   - DOMAIN,video-images.vice.com
@@ -2791,6 +2800,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.greenhouse.io
   - DOMAIN-SUFFIX,cdn.hinative.com
   - DOMAIN-SUFFIX,cdn.hkwesi22222.xyz
+  - DOMAIN-SUFFIX,cdn.icann.org
   - DOMAIN-SUFFIX,cdn.ifixit.com
   - DOMAIN-SUFFIX,cdn.imgeng.in
   - DOMAIN-SUFFIX,cdn.imghaste.com
@@ -3268,6 +3278,7 @@ payload:
   - DOMAIN-SUFFIX,espncdn.com
   - DOMAIN-SUFFIX,espndotcom.tt.omtrdc.net
   - DOMAIN-SUFFIX,espnqa.com
+  - DOMAIN-SUFFIX,etsystatic.com
   - DOMAIN-SUFFIX,eu-browse.startpage.com
   - DOMAIN-SUFFIX,eu-proxy.startpage.com
   - DOMAIN-SUFFIX,europeup.com
