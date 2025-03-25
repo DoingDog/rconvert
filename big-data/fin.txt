@@ -1,5 +1,5 @@
-# Main total line 6338
-# Last updated Sat 03/22/2025 22:13:19.95
+# Main total line 6359
+# Last updated Tue 03/25/2025 22:14:23.86
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -126,6 +126,7 @@ DOMAIN,assets.chess24.com
 DOMAIN,assets.clever-cloud.com
 DOMAIN,assets.clickfunnels.com
 DOMAIN,assets.cloudpilot.ai
+DOMAIN,assets.cmcmarkets.com
 DOMAIN,assets.codepen.io
 DOMAIN,assets.coinbase.com
 DOMAIN,assets.coingecko.com
@@ -153,6 +154,7 @@ DOMAIN,assets.gcore.pro
 DOMAIN,assets.geeksforgeeks.org
 DOMAIN,assets.genius.com
 DOMAIN,assets.getkirby.com
+DOMAIN,assets.goat.com
 DOMAIN,assets.grammarly.com
 DOMAIN,assets.grooveapps.com
 DOMAIN,assets.guim.co.uk
@@ -248,7 +250,6 @@ DOMAIN,assets8.lottiefiles.com
 DOMAIN,assets9.lottiefiles.com
 DOMAIN,assetscdn-wchat.eu.freshchat.com
 DOMAIN,assetscdn.jable.tv
-DOMAIN,atn.hitomi.la
 DOMAIN,attachments.office.net
 DOMAIN,aus2-community.mozilla.org
 DOMAIN,aus5.mozilla.org
@@ -289,7 +290,6 @@ DOMAIN,bot.ivy.ai
 DOMAIN,brick.a.ssl.fastly.net
 DOMAIN,brick.freetls.fastly.net
 DOMAIN,bst.icons8.com
-DOMAIN,btn.hitomi.la
 DOMAIN,builds.paranoidandroid.co
 DOMAIN,builds.parsec.app
 DOMAIN,bundle.dyn-rev.app
@@ -335,6 +335,7 @@ DOMAIN,cdn-1.ggjav.com
 DOMAIN,cdn-a.sonyentertainmentnetwork.com
 DOMAIN,cdn-app.pathfactory.com
 DOMAIN,cdn-assets.circleci.com
+DOMAIN,cdn-avatars.huggingface.co
 DOMAIN,cdn-bundler.nice-team.net
 DOMAIN,cdn-c.leavemealone.com
 DOMAIN,cdn-client.medium.com
@@ -372,6 +373,7 @@ DOMAIN,cdn-web.orbstack.dev
 DOMAIN,cdn-widgetsrepository.yotpo.com
 DOMAIN,cdn-www.bluestacks.com
 DOMAIN,cdn-yotpo-images-production.yotpo.com
+DOMAIN,cdn.123av.me
 DOMAIN,cdn.17app.co
 DOMAIN,cdn.18jav.tv
 DOMAIN,cdn.7tv.app
@@ -419,6 +421,7 @@ DOMAIN,cdn.circle.so
 DOMAIN,cdn.clever-cloud.com
 DOMAIN,cdn.cliqz.com
 DOMAIN,cdn.cloudcraft.co
+DOMAIN,cdn.cmcmarkets.com
 DOMAIN,cdn.cnx-software.com
 DOMAIN,cdn.cocoapods.org
 DOMAIN,cdn.codeblackbelt.com
@@ -453,6 +456,7 @@ DOMAIN,cdn.download.it
 DOMAIN,cdn.drata.com
 DOMAIN,cdn.dribbble.com
 DOMAIN,cdn.dynamicyield.com
+DOMAIN,cdn.earthroulette.com
 DOMAIN,cdn.ecomm.ui.com
 DOMAIN,cdn.embed.ly
 DOMAIN,cdn.embedly.com
@@ -605,6 +609,7 @@ DOMAIN,cdn.royaleapi.com
 DOMAIN,cdn.safecharge.com
 DOMAIN,cdn.sanity.io
 DOMAIN,cdn.sc.gl
+DOMAIN,cdn.scaleflex.it
 DOMAIN,cdn.schemaapp.com
 DOMAIN,cdn.sciencecast.org
 DOMAIN,cdn.scripts.wtwhmedia.com
@@ -761,6 +766,7 @@ DOMAIN,cdp.sph.com.sg
 DOMAIN,certificates.godaddy.com
 DOMAIN,certona.gap.com
 DOMAIN,cf-assets.www.cloudflare.com
+DOMAIN,cf-cdn1.nebula-media.org
 DOMAIN,cf-images.us-east-1.prod.boltdns.net
 DOMAIN,cf.channel.io
 DOMAIN,cf.eip.telegraph.co.uk
@@ -791,6 +797,7 @@ DOMAIN,cminf.sfcat.link
 DOMAIN,cms-assets.nodecraft.com
 DOMAIN,cms-assets.webediamovies.pro
 DOMAIN,cms-assets.xboxservices.com
+DOMAIN,cms-cdn.goat.com
 DOMAIN,cms-cdn.now.gg
 DOMAIN,cms.recordedfuture.com
 DOMAIN,cms.therecord.media
@@ -1070,6 +1077,7 @@ DOMAIN,files.yande.re
 DOMAIN,filestore.community.support.microsoft.com
 DOMAIN,filestore.fortinet.com
 DOMAIN,firebase-settings.crashlytics.com
+DOMAIN,firebaseinstallations.googleapis.com
 DOMAIN,firebaselogging-pa.googleapis.com
 DOMAIN,firebaselogging.googleapis.com
 DOMAIN,firefox.settings.services.mozilla.com
@@ -1111,6 +1119,7 @@ DOMAIN,global.divhunt.com
 DOMAIN,glyph.medium.com
 DOMAIN,gmedia.playstation.com
 DOMAIN,go-updater.brave.com
+DOMAIN,go.imperva.com
 DOMAIN,go.vercel.com
 DOMAIN,godoc.org
 DOMAIN,gog-cdn-fastly-cp77.gog.com
@@ -1179,6 +1188,7 @@ DOMAIN,icons.leavemealone.com
 DOMAIN,icons.llamao.fi
 DOMAIN,icons.ly
 DOMAIN,icons.zeabur.com
+DOMAIN,ik.imagekit.net
 DOMAIN,imag.malavida.com
 DOMAIN,image-forwarder.notaku.so
 DOMAIN,image.ap-mail.org
@@ -1187,6 +1197,7 @@ DOMAIN,image.crisp.chat
 DOMAIN,image.dooo.ng
 DOMAIN,image.email.microsoftemail.com
 DOMAIN,image.freepik.com
+DOMAIN,image.goat.com
 DOMAIN,image.gyutto.com
 DOMAIN,image.gyutto.jp
 DOMAIN,image.hkhl.hk
@@ -1383,7 +1394,6 @@ DOMAIN,info.cloudflare.com
 DOMAIN,info.knak.com
 DOMAIN,install.virtfusion.net
 DOMAIN,int.mwbbiz.com
-DOMAIN,int.qiniuyun15.xyz
 DOMAIN,integrations.gitbook.com
 DOMAIN,interactive-examples.mdn.mozilla.net
 DOMAIN,interactive.guim.co.uk
@@ -1465,7 +1475,6 @@ DOMAIN,logo.clearbit.com
 DOMAIN,logos.kiwibrowser.com
 DOMAIN,logos.speedtestcustom.com
 DOMAIN,loutre.blockchair.io
-DOMAIN,ltn.hitomi.la
 DOMAIN,m-cdn.phonearena.com
 DOMAIN,m.porn3dx.com
 DOMAIN,m.wsj.net
@@ -1652,7 +1661,6 @@ DOMAIN,open-vsx.org
 DOMAIN,openapi.vercel.sh
 DOMAIN,openseauserdata.com
 DOMAIN,opensignal.cdnbye.com
-DOMAIN,opt.moovweb.net
 DOMAIN,optimizationguide-pa.googleapis.com
 DOMAIN,optimizely.com
 DOMAIN,organizer.bizzabo.com
@@ -1882,6 +1890,7 @@ DOMAIN,s3.picacomic.com
 DOMAIN,s3.producthunt.com
 DOMAIN,s3.sitepoint.com
 DOMAIN,s3.stackabuse.com
+DOMAIN,s3.teckids.org
 DOMAIN,s3.toot.io
 DOMAIN,s3.tradingview.com
 DOMAIN,s3.us-west-000.backblazeb2.com
@@ -1979,6 +1988,8 @@ DOMAIN,st1.zoom.us
 DOMAIN,st2.zoom.us
 DOMAIN,st3.zoom.us
 DOMAIN,staging-pubfeed.linkby.com
+DOMAIN,starharn-cf.nebula-media.org
+DOMAIN,starharn.nebula-media.org
 DOMAIN,start-page.buffer.com
 DOMAIN,static-00.iconduck.com
 DOMAIN,static-act.imoim.net
@@ -2094,7 +2105,6 @@ DOMAIN,static.institution.grammarly.com
 DOMAIN,static.iris.informa.com
 DOMAIN,static.itch.io
 DOMAIN,static.j51.net
-DOMAIN,static.javatpoint.com
 DOMAIN,static.javhd.com
 DOMAIN,static.jsbin.com
 DOMAIN,static.killedbygoogle.com
@@ -2136,6 +2146,7 @@ DOMAIN,static.pingcap.com
 DOMAIN,static.playstation.com
 DOMAIN,static.plus.net
 DOMAIN,static.politico.com
+DOMAIN,static.polldaddy.com
 DOMAIN,static.probit.com
 DOMAIN,static.queue-it.net
 DOMAIN,static.rakuten.com
@@ -2213,7 +2224,6 @@ DOMAIN,stats.setapp.macpaw.dev
 DOMAIN,stats.snipaste.com
 DOMAIN,status.ui.com
 DOMAIN,stbff.newfold.com
-DOMAIN,stbff.scene7.com
 DOMAIN,steam.apac.qtlglb.com
 DOMAIN,steam.eca.qtlglb.com
 DOMAIN,steam.naeu.qtlglb.com
@@ -2286,6 +2296,7 @@ DOMAIN,top1cdn.top1health.com
 DOMAIN,topbar-static.piano.io
 DOMAIN,torrindex.net
 DOMAIN,touchgal-image.moyu.moe
+DOMAIN,townsquare.media
 DOMAIN,tracking.inflection.io
 DOMAIN,tuf-repo-cdn.sigstore.dev
 DOMAIN,tuf-repo.github.com
@@ -2967,6 +2978,7 @@ DOMAIN-SUFFIX,cthd.icu
 DOMAIN-SUFFIX,curbed.com
 DOMAIN-SUFFIX,curiositystream.com
 DOMAIN-SUFFIX,curseforge.com
+DOMAIN-SUFFIX,customerioforms.com
 DOMAIN-SUFFIX,cwseed.com
 DOMAIN-SUFFIX,cwtv.com
 DOMAIN-SUFFIX,cwwcdn.com
@@ -3219,6 +3231,7 @@ DOMAIN-SUFFIX,dynamic-static-assets.com
 DOMAIN-SUFFIX,dzcdn.net
 DOMAIN-SUFFIX,e-hentai.org
 DOMAIN-SUFFIX,e.crashlytics.com
+DOMAIN-SUFFIX,e.degyax.one
 DOMAIN-SUFFIX,earth.google.com
 DOMAIN-SUFFIX,easybytez.com
 DOMAIN-SUFFIX,easylist.to
@@ -3243,6 +3256,7 @@ DOMAIN-SUFFIX,els-cdn.com
 DOMAIN-SUFFIX,eluniverso.com
 DOMAIN-SUFFIX,em.ssky.me
 DOMAIN-SUFFIX,embedgram.com
+DOMAIN-SUFFIX,emby-myg-de.vfing.de
 DOMAIN-SUFFIX,emby1.medi4.org
 DOMAIN-SUFFIX,emby77.cf
 DOMAIN-SUFFIX,emby77.org
@@ -3655,6 +3669,7 @@ DOMAIN-SUFFIX,go-disneyworldgo.com
 DOMAIN-SUFFIX,go.com
 DOMAIN-SUFFIX,gofile.io
 DOMAIN-SUFFIX,golang.org
+DOMAIN-SUFFIX,gold-usergeneratedcontent.net
 DOMAIN-SUFFIX,goloady.com
 DOMAIN-SUFFIX,golos-ameriki.ru
 DOMAIN-SUFFIX,golosameriki.com
@@ -4265,7 +4280,6 @@ DOMAIN-SUFFIX,nbys1.tv
 DOMAIN-SUFFIX,nbyy.tv
 DOMAIN-SUFFIX,nc-img.com
 DOMAIN-SUFFIX,ndtvimg.com
-DOMAIN-SUFFIX,nebula-media.org
 DOMAIN-SUFFIX,nebula.app
 DOMAIN-SUFFIX,nel.cloudflare.com
 DOMAIN-SUFFIX,nel.goog
@@ -4746,6 +4760,7 @@ DOMAIN-SUFFIX,siv2.com
 DOMAIN-SUFFIX,sixyik.com
 DOMAIN-SUFFIX,sky.com
 DOMAIN-SUFFIX,sky.fm
+DOMAIN-SUFFIX,skyearth8.xyz
 DOMAIN-SUFFIX,skygo.co.nz
 DOMAIN-SUFFIX,skyking.com.tw
 DOMAIN-SUFFIX,skypack.dev
@@ -4976,6 +4991,7 @@ DOMAIN-SUFFIX,turikhay.ru
 DOMAIN-SUFFIX,tusfiles.com
 DOMAIN-SUFFIX,tusfiles.net
 DOMAIN-SUFFIX,tv.apple.com
+DOMAIN-SUFFIX,tv.worldline.space
 DOMAIN-SUFFIX,tvb.com
 DOMAIN-SUFFIX,tvb.com.au
 DOMAIN-SUFFIX,tvbeventpower.com.hk
@@ -5456,6 +5472,7 @@ IP-CIDR,167.142.14.130/32,no-resolve
 IP-CIDR,167.142.14.134/32,no-resolve
 IP-CIDR,167.142.14.138/32,no-resolve
 IP-CIDR,167.142.208.146/32,no-resolve
+IP-CIDR,168.119.137.205/32,no-resolve
 IP-CIDR,170.238.0.198/32,no-resolve
 IP-CIDR,170.238.0.202/32,no-resolve
 IP-CIDR,170.238.0.206/32,no-resolve
@@ -5711,6 +5728,9 @@ IP-CIDR,195.121.126.197/32,no-resolve
 IP-CIDR,195.121.126.202/32,no-resolve
 IP-CIDR,195.121.126.228/32,no-resolve
 IP-CIDR,195.121.126.235/32,no-resolve
+IP-CIDR,195.128.100.146/32,no-resolve
+IP-CIDR,195.128.102.208/32,no-resolve
+IP-CIDR,195.201.86.86/32,no-resolve
 IP-CIDR,195.202.131.98/32,no-resolve
 IP-CIDR,195.8.12.194/32,no-resolve
 IP-CIDR,195.8.12.202/32,no-resolve
@@ -5766,6 +5786,7 @@ IP-CIDR,201.174.249.34/32,no-resolve
 IP-CIDR,201.174.48.130/32,no-resolve
 IP-CIDR,202.188.117.43/32,no-resolve
 IP-CIDR,202.188.117.45/32,no-resolve
+IP-CIDR,202.61.247.129/32,no-resolve
 IP-CIDR,202.61.255.248/32,no-resolve
 IP-CIDR,203.116.0.0/16,no-resolve
 IP-CIDR,203.177.54.2/32,no-resolve
