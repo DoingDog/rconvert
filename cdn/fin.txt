@@ -1,5 +1,5 @@
-# Main total line 3313
-# Last updated Tue 03/25/2025 22:14:14.01
+# Main total line 3325
+# Last updated Fri 03/28/2025 22:14:15.24
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -283,6 +283,7 @@ DOMAIN,bot.ivy.ai
 DOMAIN,brick.a.ssl.fastly.net
 DOMAIN,brick.freetls.fastly.net
 DOMAIN,bst.icons8.com
+DOMAIN,bucket1.notaku.so
 DOMAIN,bundle.dyn-rev.app
 DOMAIN,bundle.trysavvy.com
 DOMAIN,bundlephobia.com
@@ -492,6 +493,7 @@ DOMAIN,cdn.infoq.com
 DOMAIN,cdn.ionos.de
 DOMAIN,cdn.ip2location.io
 DOMAIN,cdn.ipregistry.co
+DOMAIN,cdn.javmg.com
 DOMAIN,cdn.javsts.com
 DOMAIN,cdn.jetboost.io
 DOMAIN,cdn.jetphotos.com
@@ -777,6 +779,7 @@ DOMAIN,clickup.marketlinc.com
 DOMAIN,clientsdk.launchdarkly.com
 DOMAIN,clientstream.launchdarkly.com
 DOMAIN,clips-media-assets2.twitch.tv
+DOMAIN,clips.kick.com
 DOMAIN,cloud.redhat.com
 DOMAIN,cloud.typenetwork.com
 DOMAIN,cloudflare.tv
@@ -963,6 +966,7 @@ DOMAIN,file.izanmei.net
 DOMAIN,files.armorgames.com
 DOMAIN,files.buildwithfern.com
 DOMAIN,files.jotform.com
+DOMAIN,files.kick.com
 DOMAIN,files.mastodon.ktachibana.party
 DOMAIN,files.mastodon.online
 DOMAIN,files.mastodon.social
@@ -1007,6 +1011,7 @@ DOMAIN,g1.nyt.com
 DOMAIN,gearbox.imgix.com
 DOMAIN,genesis-cdn.ff.com
 DOMAIN,geoip-js.com
+DOMAIN,geojson.io
 DOMAIN,gfx-data.news-engineering.aws.wapo.pub
 DOMAIN,gitpkg-fork.vercel.sh
 DOMAIN,global.divhunt.com
@@ -1016,10 +1021,12 @@ DOMAIN,gn-web-assets.api.bbc.com
 DOMAIN,go.imperva.com
 DOMAIN,go.vercel.com
 DOMAIN,godoc.org
+DOMAIN,gohugo.io
 DOMAIN,google-ohttp-relay-safebrowsing.fastly-edge.com
 DOMAIN,gopkg.in
 DOMAIN,graph.facebook.com
 DOMAIN,gravatar.cat.net
+DOMAIN,gstatic.com
 DOMAIN,gt1.onlyhentaistuff.com
 DOMAIN,gtranslate.io
 DOMAIN,hawk.tomsguide.com
@@ -1077,7 +1084,7 @@ DOMAIN,icons.llamao.fi
 DOMAIN,icons.ly
 DOMAIN,icons.zeabur.com
 DOMAIN,iframe.nbcnews.com
-DOMAIN,ik.imagekit.net
+DOMAIN,ik.imgkit.net
 DOMAIN,imag.malavida.com
 DOMAIN,image-forwarder.notaku.so
 DOMAIN,image.ap-mail.org
@@ -1137,6 +1144,7 @@ DOMAIN,images.flightradar24.com
 DOMAIN,images.freeimages.com
 DOMAIN,images.g2crowd.com
 DOMAIN,images.idgesg.net
+DOMAIN,images.kick.com
 DOMAIN,images.macrumors.com
 DOMAIN,images.mattel.net
 DOMAIN,images.microcms-assets.io
@@ -1425,6 +1433,7 @@ DOMAIN,media.licdn.com
 DOMAIN,media.loom-app.com
 DOMAIN,media.mas.to
 DOMAIN,media.masto.nu
+DOMAIN,media.minecraftforum.net
 DOMAIN,media.mstdn.io
 DOMAIN,media.nationwide.com
 DOMAIN,media.newyorker.com
@@ -2061,6 +2070,7 @@ DOMAIN,static.ui.com
 DOMAIN,static.underhentai.net
 DOMAIN,static.uptimia.com
 DOMAIN,static.v2ex.com
+DOMAIN,static.vanta.com
 DOMAIN,static.vinted.com
 DOMAIN,static.vocadb.net
 DOMAIN,static.webclicks24.com
@@ -2748,6 +2758,7 @@ DOMAIN-SUFFIX,ingest.us.sentry.io
 DOMAIN-SUFFIX,instant.page
 DOMAIN-SUFFIX,intercomassets.com
 DOMAIN-SUFFIX,intercomcdn.com
+DOMAIN-SUFFIX,intercomcdn.io
 DOMAIN-SUFFIX,intuitcdn.net
 DOMAIN-SUFFIX,invisionapp-cdn.com
 DOMAIN-SUFFIX,ipfs-gateway.cloud
@@ -2865,6 +2876,7 @@ DOMAIN-SUFFIX,lzzyimg.com
 DOMAIN-SUFFIX,lzzypic.com
 DOMAIN-SUFFIX,makeuseofimages.com
 DOMAIN-SUFFIX,mangadex.network
+DOMAIN-SUFFIX,mangguo-youku.com
 DOMAIN-SUFFIX,mapi.4kvm.net
 DOMAIN-SUFFIX,marketing.aws.dev
 DOMAIN-SUFFIX,mcusercontent.com

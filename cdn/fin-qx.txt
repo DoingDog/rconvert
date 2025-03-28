@@ -1,5 +1,5 @@
-# Quantumult total line 3313
-# Last updated Tue 03/25/2025 22:14:14.13
+# Quantumult total line 3325
+# Last updated Fri 03/28/2025 22:14:15.36
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -283,6 +283,7 @@ HOST,bot.ivy.ai,LIST
 HOST,brick.a.ssl.fastly.net,LIST
 HOST,brick.freetls.fastly.net,LIST
 HOST,bst.icons8.com,LIST
+HOST,bucket1.notaku.so,LIST
 HOST,bundle.dyn-rev.app,LIST
 HOST,bundle.trysavvy.com,LIST
 HOST,bundlephobia.com,LIST
@@ -492,6 +493,7 @@ HOST,cdn.infoq.com,LIST
 HOST,cdn.ionos.de,LIST
 HOST,cdn.ip2location.io,LIST
 HOST,cdn.ipregistry.co,LIST
+HOST,cdn.javmg.com,LIST
 HOST,cdn.javsts.com,LIST
 HOST,cdn.jetboost.io,LIST
 HOST,cdn.jetphotos.com,LIST
@@ -777,6 +779,7 @@ HOST,clickup.marketlinc.com,LIST
 HOST,clientsdk.launchdarkly.com,LIST
 HOST,clientstream.launchdarkly.com,LIST
 HOST,clips-media-assets2.twitch.tv,LIST
+HOST,clips.kick.com,LIST
 HOST,cloud.redhat.com,LIST
 HOST,cloud.typenetwork.com,LIST
 HOST,cloudflare.tv,LIST
@@ -963,6 +966,7 @@ HOST,file.izanmei.net,LIST
 HOST,files.armorgames.com,LIST
 HOST,files.buildwithfern.com,LIST
 HOST,files.jotform.com,LIST
+HOST,files.kick.com,LIST
 HOST,files.mastodon.ktachibana.party,LIST
 HOST,files.mastodon.online,LIST
 HOST,files.mastodon.social,LIST
@@ -1007,6 +1011,7 @@ HOST,g1.nyt.com,LIST
 HOST,gearbox.imgix.com,LIST
 HOST,genesis-cdn.ff.com,LIST
 HOST,geoip-js.com,LIST
+HOST,geojson.io,LIST
 HOST,gfx-data.news-engineering.aws.wapo.pub,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
 HOST,global.divhunt.com,LIST
@@ -1016,10 +1021,12 @@ HOST,gn-web-assets.api.bbc.com,LIST
 HOST,go.imperva.com,LIST
 HOST,go.vercel.com,LIST
 HOST,godoc.org,LIST
+HOST,gohugo.io,LIST
 HOST,google-ohttp-relay-safebrowsing.fastly-edge.com,LIST
 HOST,gopkg.in,LIST
 HOST,graph.facebook.com,LIST
 HOST,gravatar.cat.net,LIST
+HOST,gstatic.com,LIST
 HOST,gt1.onlyhentaistuff.com,LIST
 HOST,gtranslate.io,LIST
 HOST,hawk.tomsguide.com,LIST
@@ -1077,7 +1084,7 @@ HOST,icons.llamao.fi,LIST
 HOST,icons.ly,LIST
 HOST,icons.zeabur.com,LIST
 HOST,iframe.nbcnews.com,LIST
-HOST,ik.imagekit.net,LIST
+HOST,ik.imgkit.net,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
 HOST,image.ap-mail.org,LIST
@@ -1137,6 +1144,7 @@ HOST,images.flightradar24.com,LIST
 HOST,images.freeimages.com,LIST
 HOST,images.g2crowd.com,LIST
 HOST,images.idgesg.net,LIST
+HOST,images.kick.com,LIST
 HOST,images.macrumors.com,LIST
 HOST,images.mattel.net,LIST
 HOST,images.microcms-assets.io,LIST
@@ -1425,6 +1433,7 @@ HOST,media.licdn.com,LIST
 HOST,media.loom-app.com,LIST
 HOST,media.mas.to,LIST
 HOST,media.masto.nu,LIST
+HOST,media.minecraftforum.net,LIST
 HOST,media.mstdn.io,LIST
 HOST,media.nationwide.com,LIST
 HOST,media.newyorker.com,LIST
@@ -2061,6 +2070,7 @@ HOST,static.ui.com,LIST
 HOST,static.underhentai.net,LIST
 HOST,static.uptimia.com,LIST
 HOST,static.v2ex.com,LIST
+HOST,static.vanta.com,LIST
 HOST,static.vinted.com,LIST
 HOST,static.vocadb.net,LIST
 HOST,static.webclicks24.com,LIST
@@ -2748,6 +2758,7 @@ HOST-SUFFIX,ingest.us.sentry.io,LIST
 HOST-SUFFIX,instant.page,LIST
 HOST-SUFFIX,intercomassets.com,LIST
 HOST-SUFFIX,intercomcdn.com,LIST
+HOST-SUFFIX,intercomcdn.io,LIST
 HOST-SUFFIX,intuitcdn.net,LIST
 HOST-SUFFIX,invisionapp-cdn.com,LIST
 HOST-SUFFIX,ipfs-gateway.cloud,LIST
@@ -2865,6 +2876,7 @@ HOST-SUFFIX,lzzyimg.com,LIST
 HOST-SUFFIX,lzzypic.com,LIST
 HOST-SUFFIX,makeuseofimages.com,LIST
 HOST-SUFFIX,mangadex.network,LIST
+HOST-SUFFIX,mangguo-youku.com,LIST
 HOST-SUFFIX,mapi.4kvm.net,LIST
 HOST-SUFFIX,marketing.aws.dev,LIST
 HOST-SUFFIX,mcusercontent.com,LIST
