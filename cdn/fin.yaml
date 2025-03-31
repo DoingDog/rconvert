@@ -1,5 +1,5 @@
-# Clash total line 3325
-# Last updated Fri 03/28/2025 22:14:15.40
+# Clash total line 3333
+# Last updated Mon 03/31/2025 22:15:22.95
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -370,6 +370,7 @@ payload:
   - DOMAIN,cdn.announcekit.app
   - DOMAIN,cdn.answeroverflow.com
   - DOMAIN,cdn.apkmonk.com
+  - DOMAIN,cdn.app.fossa.com
   - DOMAIN,cdn.app.neononepay.com
   - DOMAIN,cdn.apponic.com
   - DOMAIN,cdn.arcade.software
@@ -435,6 +436,7 @@ payload:
   - DOMAIN,cdn.deta.space
   - DOMAIN,cdn.devolutions.net
   - DOMAIN,cdn.dnsimple.com
+  - DOMAIN,cdn.docsbot.com
   - DOMAIN,cdn.document360.io
   - DOMAIN,cdn.donmai.us
   - DOMAIN,cdn.dotaoutpost.com
@@ -951,6 +953,7 @@ payload:
   - DOMAIN,f002.backblazeb2.com
   - DOMAIN,f003.backblazeb2.com
   - DOMAIN,f004.backblazeb2.com
+  - DOMAIN,fast.appcues.com
   - DOMAIN,fast.wistia.com
   - DOMAIN,fast.wistia.net
   - DOMAIN,fastly-cloud.typenetwork.com
@@ -1083,6 +1086,7 @@ payload:
   - DOMAIN,icons.leavemealone.com
   - DOMAIN,icons.llamao.fi
   - DOMAIN,icons.ly
+  - DOMAIN,icons.veryicon.com
   - DOMAIN,icons.zeabur.com
   - DOMAIN,iframe.nbcnews.com
   - DOMAIN,ik.imgkit.net
@@ -1125,6 +1129,7 @@ payload:
   - DOMAIN,images-ext-2.discordapp.net
   - DOMAIN,images.991.com
   - DOMAIN,images.anandtech.com
+  - DOMAIN,images.applegamingwiki.com
   - DOMAIN,images.arigatotravel.com
   - DOMAIN,images.axios.com
   - DOMAIN,images.bfmtv.com
@@ -1475,6 +1480,7 @@ payload:
   - DOMAIN,media9.kissjav.com
   - DOMAIN,medias.meow.social
   - DOMAIN,megapx-assets.dcard.tw
+  - DOMAIN,meta.prismlauncher.org
   - DOMAIN,metrics.kapa.ai
   - DOMAIN,micro.rubiconproject.com
   - DOMAIN,minotar.net
@@ -2171,6 +2177,7 @@ payload:
   - DOMAIN,thingproxy.freeboard.io
   - DOMAIN,thumbnail.missav.com
   - DOMAIN,thumbnailer.mixcloud.com
+  - DOMAIN,thumbnails.applegamingwiki.com
   - DOMAIN,thumbnails.cbsig.net
   - DOMAIN,thumbor.forbes.com
   - DOMAIN,thumbs.onlyfans.com
@@ -2294,6 +2301,7 @@ payload:
   - DOMAIN,website-prod.cache.wpscdn.com
   - DOMAIN,webstatic.chargebee.com
   - DOMAIN,widget.automizely.com
+  - DOMAIN,widget.datablocks.se
   - DOMAIN,widget.docsbot.ai
   - DOMAIN,widget.freshworks.com
   - DOMAIN,widget.gotolstoy.com
