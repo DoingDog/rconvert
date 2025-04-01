@@ -1,5 +1,5 @@
-# Clash total line 3333
-# Last updated Mon 03/31/2025 22:15:22.95
+# Clash total line 3339
+# Last updated Tue 04/01/2025 22:15:02.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -213,6 +213,7 @@ payload:
   - DOMAIN,assets.swoogo.com
   - DOMAIN,assets.the-independent.com
   - DOMAIN,assets.time.com
+  - DOMAIN,assets.toiimg.com
   - DOMAIN,assets.tokopedia.net
   - DOMAIN,assets.toot.cafe
   - DOMAIN,assets.twitch.tv
@@ -555,6 +556,7 @@ payload:
   - DOMAIN,cdn.pagefly.io
   - DOMAIN,cdn.pagic.org
   - DOMAIN,cdn.paidy.com
+  - DOMAIN,cdn.paritydeals.com
   - DOMAIN,cdn.parsely.com
   - DOMAIN,cdn.pathfactory.com
   - DOMAIN,cdn.pendo.io
@@ -1347,6 +1349,7 @@ payload:
   - DOMAIN,jslibs.blackmagicdesign.com
   - DOMAIN,jsonplaceholder.typicode.com
   - DOMAIN,jssdk.opin.media
+  - DOMAIN,jssocdn.indiatimes.com
   - DOMAIN,k-cdn.depot.dev
   - DOMAIN,kdata1.com
   - DOMAIN,keyframe-cdn.abcnews.com
@@ -1484,6 +1487,7 @@ payload:
   - DOMAIN,metrics.kapa.ai
   - DOMAIN,micro.rubiconproject.com
   - DOMAIN,minotar.net
+  - DOMAIN,mintlify.b-cdn.net
   - DOMAIN,mir-s3-cdn-cf.behance.net
   - DOMAIN,miro.medium.com
   - DOMAIN,mixin-images.zeromesh.net
@@ -1600,6 +1604,7 @@ payload:
   - DOMAIN,pl.ea.com
   - DOMAIN,platform-assets.typekit.net
   - DOMAIN,platform.instagram.com
+  - DOMAIN,platform.theverge.com
   - DOMAIN,platform.twitter.com
   - DOMAIN,platforms.makemytrip.com
   - DOMAIN,play.gotolstoy.com
@@ -2065,6 +2070,7 @@ payload:
   - DOMAIN,static.tenki.jp
   - DOMAIN,static.test-beta.com
   - DOMAIN,static.theguardian.com
+  - DOMAIN,static.toiimg.com
   - DOMAIN,static.tokenview.io
   - DOMAIN,static.toss.im
   - DOMAIN,static.tp-link.com
