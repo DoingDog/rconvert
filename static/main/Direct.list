@@ -2,11 +2,7 @@ DOMAIN,ad.10010.com
 DOMAIN,ad.12306.cn
 DOMAIN,ad.abchina.com
 DOMAIN,ad.ourgame.com
-DOMAIN,speedtester.wifi.com
-DOMAIN,is1-ssl.mzstatic.com
 DOMAIN,adcdn.pingan.com
-DOMAIN,xd.awsl.app
-DOMAIN,w.awsl.app
 DOMAIN,advert.kf5.com
 DOMAIN,analytics.95516.com
 DOMAIN,app-advertise.zhihuishu.com
@@ -27,6 +23,7 @@ DOMAIN,gsp1.baidu.com
 DOMAIN,gsp2.baidu.com
 DOMAIN,gsp3.baidu.com
 DOMAIN,imtt.dd.qq.com
+DOMAIN,is1-ssl.mzstatic.com
 DOMAIN,livew.l.qq.com
 DOMAIN,log.mmstat.com
 DOMAIN,mesu.apple.com
@@ -40,6 +37,7 @@ DOMAIN,picanalysis-auth.vivo.com.cn
 DOMAIN,picanalysis.vivo.com.cn
 DOMAIN,router.asus.com
 DOMAIN,s.click.taobao.com
+DOMAIN,speedtester.wifi.com
 DOMAIN,sycm.mmstat.com
 DOMAIN,t10.baidu.com
 DOMAIN,t11.baidu.com
@@ -55,10 +53,13 @@ DOMAIN,tracking.miui.com
 DOMAIN,uc9.ucweb.com
 DOMAIN,vd.l.qq.com
 DOMAIN,vi.l.qq.com
+DOMAIN,w.awsl.app
+DOMAIN,xd.awsl.app
 DOMAIN,xp.apple.com
 DOMAIN-KEYWORD,wb_ad
 DOMAIN-SUFFIX,alipayobjects.com
 DOMAIN-SUFFIX,api.dmzj.com
+DOMAIN-SUFFIX,as174.de
 DOMAIN-SUFFIX,baomitu.com
 DOMAIN-SUFFIX,bootcss.com
 DOMAIN-SUFFIX,bugreport.huorong.cn
@@ -83,13 +84,12 @@ DOMAIN-SUFFIX,hiwifi.com
 DOMAIN-SUFFIX,home.arpa
 DOMAIN-SUFFIX,img.t.sinajs.cn
 DOMAIN-SUFFIX,jiasule.com
-DOMAIN-SUFFIX,makima.online
-DOMAIN-SUFFIX,as174.de
 DOMAIN-SUFFIX,js.t.sinajs.cn
 DOMAIN-SUFFIX,js1.t.sinajs.cn
 DOMAIN-SUFFIX,js2.t.sinajs.cn
 DOMAIN-SUFFIX,localhost.ptlogin2.qq.com
 DOMAIN-SUFFIX,localhost.sec.qq.com
+DOMAIN-SUFFIX,makima.online
 DOMAIN-SUFFIX,mars.jd.com
 DOMAIN-SUFFIX,message.bilibili.com
 DOMAIN-SUFFIX,miwifi.com
