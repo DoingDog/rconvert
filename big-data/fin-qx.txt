@@ -1,5 +1,5 @@
-# Quantumult total line 6876
-# Last updated Tue 04/01/2025 22:15:12.28
+# Quantumult total line 6878
+# Last updated Fri 04/04/2025 22:14:25.73
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,1-mirrors.in.sahilister.net,LIST
@@ -245,6 +245,7 @@ HOST,assets.openshift.net,LIST
 HOST,assets.orz.uno,LIST
 HOST,assets.peatio.com,LIST
 HOST,assets.pixlee.com,LIST
+HOST,assets.play.xbox.com,LIST
 HOST,assets.plurk.com,LIST
 HOST,assets.poool.fr,LIST
 HOST,assets.positional-bucket.com,LIST
@@ -383,7 +384,6 @@ HOST,cache.hackedfreegames.com,LIST
 HOST,cache.pack.google.com,LIST
 HOST,cache.video.iqiyi.com,LIST
 HOST,cassette.sphdigital.com.sg,LIST
-HOST,cavps.eu.org,LIST
 HOST,cc.boyfriendtv.com,LIST
 HOST,cc.coemn.com,LIST
 HOST,cc.uoc.gr,LIST
@@ -538,6 +538,7 @@ HOST,cdn.freecodecamp.org,LIST
 HOST,cdn.freshdesk.com,LIST
 HOST,cdn.fwupd.org,LIST
 HOST,cdn.gamemonkey.org,LIST
+HOST,cdn.gatherings.franchise.minecraft-services.net,LIST
 HOST,cdn.gdl.gg,LIST
 HOST,cdn.geekzone.co.nz,LIST
 HOST,cdn.getkoala.com,LIST
@@ -635,6 +636,7 @@ HOST,cdn.pathfactory.com,LIST
 HOST,cdn.pendo.io,LIST
 HOST,cdn.perfops.net,LIST
 HOST,cdn.permutive.com,LIST
+HOST,cdn.pgvt.io,LIST
 HOST,cdn.piano.io,LIST
 HOST,cdn.pickystory.com,LIST
 HOST,cdn.picrew.me,LIST
@@ -982,6 +984,7 @@ HOST,ctldl.windowsupdate.com,LIST
 HOST,cuinf.sfcat.link,LIST
 HOST,curl.se,LIST
 HOST,cw-image-resizer.cwg.tw,LIST
+HOST,d2c.aws.amazon.com,LIST
 HOST,d4.alternativeto.net,LIST
 HOST,dam.freshworks.com,LIST
 HOST,dashasiafox.akamaized.netflix,LIST
@@ -1042,6 +1045,7 @@ HOST,dl.wechat.com,LIST
 HOST,dl2.nwjs.io,LIST
 HOST,dl2.xmind.net,LIST
 HOST,dl3.xmind.net,LIST
+HOST,dlassets-ssl.xboxlive.com,LIST
 HOST,dlcdnets.asus.com,LIST
 HOST,do.featurebase.app,LIST
 HOST,docker.cloudsmith.io,LIST
@@ -1117,6 +1121,7 @@ HOST,ec-prod.scene7.com,LIST
 HOST,ecommplugins-scripts.trustpilot.com,LIST
 HOST,ecommplugins-trustboxsettings.trustpilot.com,LIST
 HOST,edata.ndtv.com,LIST
+HOST,edge-cloud-resource-static.azureedge.net,LIST
 HOST,edge-consumer-static.azureedge.net,LIST
 HOST,edge-mobile-static.azureedge.net,LIST
 HOST,edge.cwtv-vod-ext.top.comcast.net,LIST
@@ -2057,6 +2062,7 @@ HOST,moodular.jotform.com,LIST
 HOST,mosaic-blender.fxtwitter.com,LIST
 HOST,mosaic.fxtwitter.com,LIST
 HOST,mparticle.weather.com,LIST
+HOST,msdl.microsoft.com,LIST
 HOST,mstdn-s3.o3o.studio,LIST
 HOST,mta.newfold.com,LIST
 HOST,mui.com,LIST
@@ -2493,6 +2499,7 @@ HOST,static.arxiv.org,LIST
 HOST,static.assetlab.io,LIST
 HOST,static.axios.com,LIST
 HOST,static.bangumi.moe,LIST
+HOST,static.beebom.com,LIST
 HOST,static.bit.cloud,LIST
 HOST,static.bit.dev,LIST
 HOST,static.bitfinex.com,LIST
@@ -2703,6 +2710,7 @@ HOST,streetviewpixels-pa.googleapis.com,LIST
 HOST,sts.online.visualstudio.com,LIST
 HOST,sts3.wsj.net,LIST
 HOST,stubdownloader.services.mozilla.com,LIST
+HOST,su.virtualbuddy.app,LIST
 HOST,sunsite.icm.edu.pl,LIST
 HOST,sunsite.informatik.rwth-aachen.de,LIST
 HOST,support.content.office.net,LIST
@@ -2804,9 +2812,6 @@ HOST,user-images.trustpilot.com,LIST
 HOST,user-uploads.perchance.org,LIST
 HOST,usercontent.flodesk.com,LIST
 HOST,userfiles.uptimerobot.com,LIST
-HOST,userimg-assets.customeriomail.com,LIST
-HOST,userimg-bee.customeriomail.com,LIST
-HOST,userimg.customeriomail.com,LIST
 HOST,userpic.redgifs.com,LIST
 HOST,useruploads.visualwebsiteoptimizer.com,LIST
 HOST,uts-api.itunes.apple.com,LIST
@@ -3452,6 +3457,7 @@ HOST-SUFFIX,curbed.com,LIST
 HOST-SUFFIX,curiositystream.com,LIST
 HOST-SUFFIX,curseforge.com,LIST
 HOST-SUFFIX,customerioforms.com,LIST
+HOST-SUFFIX,customeriomail.com,LIST
 HOST-SUFFIX,cwseed.com,LIST
 HOST-SUFFIX,cwtv.com,LIST
 HOST-SUFFIX,cwwcdn.com,LIST
@@ -5932,7 +5938,6 @@ IP-CIDR,1.201.0.0/24,LIST,no-resolve
 IP-CIDR,1.37.35.6/32,LIST,no-resolve
 IP-CIDR,101.100.179.242/32,LIST,no-resolve
 IP-CIDR,101.100.179.250/32,LIST,no-resolve
-IP-CIDR,103.197.185.84/32,LIST,no-resolve
 IP-CIDR,103.246.56.0/22,LIST,no-resolve
 IP-CIDR,103.27.148.0/22,LIST,no-resolve
 IP-CIDR,103.5.34.153/32,LIST,no-resolve
@@ -5980,7 +5985,6 @@ IP-CIDR,146.115.2.238/32,LIST,no-resolve
 IP-CIDR,146.115.2.50/32,LIST,no-resolve
 IP-CIDR,146.115.2.62/32,LIST,no-resolve
 IP-CIDR,147.75.112.66/31,LIST,no-resolve
-IP-CIDR,148.135.94.8/32,LIST,no-resolve
 IP-CIDR,149.165.180.133/32,LIST,no-resolve
 IP-CIDR,149.165.180.134/32,LIST,no-resolve
 IP-CIDR,149.255.128.1/32,LIST,no-resolve
@@ -5988,7 +5992,6 @@ IP-CIDR,150.109.28.51/32,LIST,no-resolve
 IP-CIDR,151.5.17.19/32,LIST,no-resolve
 IP-CIDR,151.5.17.43/32,LIST,no-resolve
 IP-CIDR,152.53.67.239/32,LIST,no-resolve
-IP-CIDR,154.40.33.88/32,LIST,no-resolve
 IP-CIDR,159.138.102.146/32,LIST,no-resolve
 IP-CIDR,161.0.157.195/32,LIST,no-resolve
 IP-CIDR,161.0.157.73/32,LIST,no-resolve
@@ -6469,7 +6472,6 @@ IP-CIDR,34.208.0.0/12,LIST,no-resolve
 IP-CIDR,34.248.0.0/13,LIST,no-resolve
 IP-CIDR,35.160.0.0/13,LIST,no-resolve
 IP-CIDR,35.186.224.47/32,LIST,no-resolve
-IP-CIDR,37.123.192.219/32,LIST,no-resolve
 IP-CIDR,37.143.80.10/32,LIST,no-resolve
 IP-CIDR,37.143.80.14/32,LIST,no-resolve
 IP-CIDR,37.143.80.6/32,LIST,no-resolve

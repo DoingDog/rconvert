@@ -1,5 +1,5 @@
-# Main total line 6890
-# Last updated Tue 04/01/2025 22:15:12.11
+# Main total line 6892
+# Last updated Fri 04/04/2025 22:14:25.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,1-mirrors.in.sahilister.net
@@ -245,6 +245,7 @@ DOMAIN,assets.openshift.net
 DOMAIN,assets.orz.uno
 DOMAIN,assets.peatio.com
 DOMAIN,assets.pixlee.com
+DOMAIN,assets.play.xbox.com
 DOMAIN,assets.plurk.com
 DOMAIN,assets.poool.fr
 DOMAIN,assets.positional-bucket.com
@@ -383,7 +384,6 @@ DOMAIN,cache.hackedfreegames.com
 DOMAIN,cache.pack.google.com
 DOMAIN,cache.video.iqiyi.com
 DOMAIN,cassette.sphdigital.com.sg
-DOMAIN,cavps.eu.org
 DOMAIN,cc.boyfriendtv.com
 DOMAIN,cc.coemn.com
 DOMAIN,cc.uoc.gr
@@ -538,6 +538,7 @@ DOMAIN,cdn.freecodecamp.org
 DOMAIN,cdn.freshdesk.com
 DOMAIN,cdn.fwupd.org
 DOMAIN,cdn.gamemonkey.org
+DOMAIN,cdn.gatherings.franchise.minecraft-services.net
 DOMAIN,cdn.gdl.gg
 DOMAIN,cdn.geekzone.co.nz
 DOMAIN,cdn.getkoala.com
@@ -635,6 +636,7 @@ DOMAIN,cdn.pathfactory.com
 DOMAIN,cdn.pendo.io
 DOMAIN,cdn.perfops.net
 DOMAIN,cdn.permutive.com
+DOMAIN,cdn.pgvt.io
 DOMAIN,cdn.piano.io
 DOMAIN,cdn.pickystory.com
 DOMAIN,cdn.picrew.me
@@ -982,6 +984,7 @@ DOMAIN,ctldl.windowsupdate.com
 DOMAIN,cuinf.sfcat.link
 DOMAIN,curl.se
 DOMAIN,cw-image-resizer.cwg.tw
+DOMAIN,d2c.aws.amazon.com
 DOMAIN,d4.alternativeto.net
 DOMAIN,dam.freshworks.com
 DOMAIN,dashasiafox.akamaized.netflix
@@ -1042,6 +1045,7 @@ DOMAIN,dl.wechat.com
 DOMAIN,dl2.nwjs.io
 DOMAIN,dl2.xmind.net
 DOMAIN,dl3.xmind.net
+DOMAIN,dlassets-ssl.xboxlive.com
 DOMAIN,dlcdnets.asus.com
 DOMAIN,do.featurebase.app
 DOMAIN,docker.cloudsmith.io
@@ -1117,6 +1121,7 @@ DOMAIN,ec-prod.scene7.com
 DOMAIN,ecommplugins-scripts.trustpilot.com
 DOMAIN,ecommplugins-trustboxsettings.trustpilot.com
 DOMAIN,edata.ndtv.com
+DOMAIN,edge-cloud-resource-static.azureedge.net
 DOMAIN,edge-consumer-static.azureedge.net
 DOMAIN,edge-mobile-static.azureedge.net
 DOMAIN,edge.cwtv-vod-ext.top.comcast.net
@@ -2057,6 +2062,7 @@ DOMAIN,moodular.jotform.com
 DOMAIN,mosaic-blender.fxtwitter.com
 DOMAIN,mosaic.fxtwitter.com
 DOMAIN,mparticle.weather.com
+DOMAIN,msdl.microsoft.com
 DOMAIN,mstdn-s3.o3o.studio
 DOMAIN,mta.newfold.com
 DOMAIN,mui.com
@@ -2493,6 +2499,7 @@ DOMAIN,static.arxiv.org
 DOMAIN,static.assetlab.io
 DOMAIN,static.axios.com
 DOMAIN,static.bangumi.moe
+DOMAIN,static.beebom.com
 DOMAIN,static.bit.cloud
 DOMAIN,static.bit.dev
 DOMAIN,static.bitfinex.com
@@ -2703,6 +2710,7 @@ DOMAIN,streetviewpixels-pa.googleapis.com
 DOMAIN,sts.online.visualstudio.com
 DOMAIN,sts3.wsj.net
 DOMAIN,stubdownloader.services.mozilla.com
+DOMAIN,su.virtualbuddy.app
 DOMAIN,sunsite.icm.edu.pl
 DOMAIN,sunsite.informatik.rwth-aachen.de
 DOMAIN,support.content.office.net
@@ -2804,9 +2812,6 @@ DOMAIN,user-images.trustpilot.com
 DOMAIN,user-uploads.perchance.org
 DOMAIN,usercontent.flodesk.com
 DOMAIN,userfiles.uptimerobot.com
-DOMAIN,userimg-assets.customeriomail.com
-DOMAIN,userimg-bee.customeriomail.com
-DOMAIN,userimg.customeriomail.com
 DOMAIN,userpic.redgifs.com
 DOMAIN,useruploads.visualwebsiteoptimizer.com
 DOMAIN,uts-api.itunes.apple.com
@@ -3452,6 +3457,7 @@ DOMAIN-SUFFIX,curbed.com
 DOMAIN-SUFFIX,curiositystream.com
 DOMAIN-SUFFIX,curseforge.com
 DOMAIN-SUFFIX,customerioforms.com
+DOMAIN-SUFFIX,customeriomail.com
 DOMAIN-SUFFIX,cwseed.com
 DOMAIN-SUFFIX,cwtv.com
 DOMAIN-SUFFIX,cwwcdn.com
@@ -5932,7 +5938,6 @@ IP-CIDR,1.201.0.0/24,no-resolve
 IP-CIDR,1.37.35.6/32,no-resolve
 IP-CIDR,101.100.179.242/32,no-resolve
 IP-CIDR,101.100.179.250/32,no-resolve
-IP-CIDR,103.197.185.84/32,no-resolve
 IP-CIDR,103.246.56.0/22,no-resolve
 IP-CIDR,103.27.148.0/22,no-resolve
 IP-CIDR,103.5.34.153/32,no-resolve
@@ -5980,7 +5985,6 @@ IP-CIDR,146.115.2.238/32,no-resolve
 IP-CIDR,146.115.2.50/32,no-resolve
 IP-CIDR,146.115.2.62/32,no-resolve
 IP-CIDR,147.75.112.66/31,no-resolve
-IP-CIDR,148.135.94.8/32,no-resolve
 IP-CIDR,149.165.180.133/32,no-resolve
 IP-CIDR,149.165.180.134/32,no-resolve
 IP-CIDR,149.255.128.1/32,no-resolve
@@ -5988,7 +5992,6 @@ IP-CIDR,150.109.28.51/32,no-resolve
 IP-CIDR,151.5.17.19/32,no-resolve
 IP-CIDR,151.5.17.43/32,no-resolve
 IP-CIDR,152.53.67.239/32,no-resolve
-IP-CIDR,154.40.33.88/32,no-resolve
 IP-CIDR,159.138.102.146/32,no-resolve
 IP-CIDR,161.0.157.195/32,no-resolve
 IP-CIDR,161.0.157.73/32,no-resolve
@@ -6469,7 +6472,6 @@ IP-CIDR,34.208.0.0/12,no-resolve
 IP-CIDR,34.248.0.0/13,no-resolve
 IP-CIDR,35.160.0.0/13,no-resolve
 IP-CIDR,35.186.224.47/32,no-resolve
-IP-CIDR,37.123.192.219/32,no-resolve
 IP-CIDR,37.143.80.10/32,no-resolve
 IP-CIDR,37.143.80.14/32,no-resolve
 IP-CIDR,37.143.80.6/32,no-resolve

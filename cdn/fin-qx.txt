@@ -1,5 +1,5 @@
-# Quantumult total line 3339
-# Last updated Tue 04/01/2025 22:15:02.47
+# Quantumult total line 3345
+# Last updated Fri 04/04/2025 22:14:16.24
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -188,6 +188,7 @@ HOST,assets.openshift.net,LIST
 HOST,assets.orz.uno,LIST
 HOST,assets.peatio.com,LIST
 HOST,assets.pixlee.com,LIST
+HOST,assets.play.xbox.com,LIST
 HOST,assets.plurk.com,LIST
 HOST,assets.poool.fr,LIST
 HOST,assets.positional-bucket.com,LIST
@@ -466,6 +467,7 @@ HOST,cdn.freebiesupply.com,LIST
 HOST,cdn.freecodecamp.org,LIST
 HOST,cdn.freshdesk.com,LIST
 HOST,cdn.gamemonkey.org,LIST
+HOST,cdn.gatherings.franchise.minecraft-services.net,LIST
 HOST,cdn.gdl.gg,LIST
 HOST,cdn.geekzone.co.nz,LIST
 HOST,cdn.getkoala.com,LIST
@@ -561,6 +563,7 @@ HOST,cdn.pathfactory.com,LIST
 HOST,cdn.pendo.io,LIST
 HOST,cdn.perfops.net,LIST
 HOST,cdn.permutive.com,LIST
+HOST,cdn.pgvt.io,LIST
 HOST,cdn.piano.io,LIST
 HOST,cdn.pickystory.com,LIST
 HOST,cdn.picrew.me,LIST
@@ -853,6 +856,7 @@ HOST,css.blackmagicdesign.com,LIST
 HOST,css.createsend1.com,LIST
 HOST,curl.se,LIST
 HOST,cw-image-resizer.cwg.tw,LIST
+HOST,d2c.aws.amazon.com,LIST
 HOST,d4.alternativeto.net,LIST
 HOST,dam.freshworks.com,LIST
 HOST,dassets.shimano.com,LIST
@@ -878,6 +882,7 @@ HOST,divhunt.b-cdn.net,LIST
 HOST,dl.airdroid.com,LIST
 HOST,dl.nwjs.io,LIST
 HOST,dl2.nwjs.io,LIST
+HOST,dlassets-ssl.xboxlive.com,LIST
 HOST,do.featurebase.app,LIST
 HOST,docker.cloudsmith.io,LIST
 HOST,docs.rs,LIST
@@ -897,6 +902,7 @@ HOST,ec-prod.scene7.com,LIST
 HOST,ecommplugins-scripts.trustpilot.com,LIST
 HOST,ecommplugins-trustboxsettings.trustpilot.com,LIST
 HOST,edata.ndtv.com,LIST
+HOST,edge-cloud-resource-static.azureedge.net,LIST
 HOST,edge-consumer-static.azureedge.net,LIST
 HOST,edge-mobile-static.azureedge.net,LIST
 HOST,edge.marker.io,LIST
@@ -1928,6 +1934,7 @@ HOST,static.axios.com,LIST
 HOST,static.bangumi.moe,LIST
 HOST,static.bbc.co.uk,LIST
 HOST,static.bbci.co.uk,LIST
+HOST,static.beebom.com,LIST
 HOST,static.bit.cloud,LIST
 HOST,static.bit.dev,LIST
 HOST,static.bitfinex.com,LIST
@@ -2243,9 +2250,6 @@ HOST,user-images.trustpilot.com,LIST
 HOST,user-uploads.perchance.org,LIST
 HOST,usercontent.flodesk.com,LIST
 HOST,userfiles.uptimerobot.com,LIST
-HOST,userimg-assets.customeriomail.com,LIST
-HOST,userimg-bee.customeriomail.com,LIST
-HOST,userimg.customeriomail.com,LIST
 HOST,userpic.redgifs.com,LIST
 HOST,useruploads.visualwebsiteoptimizer.com,LIST
 HOST,utteranc.es,LIST
@@ -2475,6 +2479,7 @@ HOST-SUFFIX,cdn.medallia.com,LIST
 HOST-SUFFIX,cdn.mozilla.net,LIST
 HOST-SUFFIX,cdn.nimg.jp,LIST
 HOST-SUFFIX,cdn.nintendo.net,LIST
+HOST-SUFFIX,cdn.optimizely.com,LIST
 HOST-SUFFIX,cdn.pbs.org,LIST
 HOST-SUFFIX,cdn.printfriendly.com,LIST
 HOST-SUFFIX,cdn.prismic.io,LIST
@@ -2550,6 +2555,7 @@ HOST-SUFFIX,csp.withgoogle.com,LIST
 HOST-SUFFIX,ctfassets.net,LIST
 HOST-SUFFIX,cthd.icu,LIST
 HOST-SUFFIX,customerioforms.com,LIST
+HOST-SUFFIX,customeriomail.com,LIST
 HOST-SUFFIX,cwwcdn.com,LIST
 HOST-SUFFIX,data.debugbear.com,LIST
 HOST-SUFFIX,dataplane.rudderstack.com,LIST

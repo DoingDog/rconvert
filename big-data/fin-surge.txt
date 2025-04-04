@@ -1,5 +1,5 @@
-# Surge Rules total line 1017
-# Last updated Tue 04/01/2025 22:15:12.57
+# Surge Rules total line 1013
+# Last updated Fri 04/04/2025 22:14:26.00
 DOMAIN-KEYWORD,-assets.worldsex.com
 DOMAIN-KEYWORD,-cdn.eporner.com
 DOMAIN-KEYWORD,-files.gitbook.io
@@ -58,7 +58,6 @@ IP-CIDR,1.201.0.0/24,no-resolve
 IP-CIDR,1.37.35.6/32,no-resolve
 IP-CIDR,101.100.179.242/32,no-resolve
 IP-CIDR,101.100.179.250/32,no-resolve
-IP-CIDR,103.197.185.84/32,no-resolve
 IP-CIDR,103.246.56.0/22,no-resolve
 IP-CIDR,103.27.148.0/22,no-resolve
 IP-CIDR,103.5.34.153/32,no-resolve
@@ -106,7 +105,6 @@ IP-CIDR,146.115.2.238/32,no-resolve
 IP-CIDR,146.115.2.50/32,no-resolve
 IP-CIDR,146.115.2.62/32,no-resolve
 IP-CIDR,147.75.112.66/31,no-resolve
-IP-CIDR,148.135.94.8/32,no-resolve
 IP-CIDR,149.165.180.133/32,no-resolve
 IP-CIDR,149.165.180.134/32,no-resolve
 IP-CIDR,149.255.128.1/32,no-resolve
@@ -114,7 +112,6 @@ IP-CIDR,150.109.28.51/32,no-resolve
 IP-CIDR,151.5.17.19/32,no-resolve
 IP-CIDR,151.5.17.43/32,no-resolve
 IP-CIDR,152.53.67.239/32,no-resolve
-IP-CIDR,154.40.33.88/32,no-resolve
 IP-CIDR,159.138.102.146/32,no-resolve
 IP-CIDR,161.0.157.195/32,no-resolve
 IP-CIDR,161.0.157.73/32,no-resolve
@@ -595,7 +592,6 @@ IP-CIDR,34.208.0.0/12,no-resolve
 IP-CIDR,34.248.0.0/13,no-resolve
 IP-CIDR,35.160.0.0/13,no-resolve
 IP-CIDR,35.186.224.47/32,no-resolve
-IP-CIDR,37.123.192.219/32,no-resolve
 IP-CIDR,37.143.80.10/32,no-resolve
 IP-CIDR,37.143.80.14/32,no-resolve
 IP-CIDR,37.143.80.6/32,no-resolve
