@@ -1,5 +1,5 @@
-# Main total line 6892
-# Last updated Fri 04/04/2025 22:14:25.57
+# Main total line 6909
+# Last updated Mon 04/07/2025 22:15:17.56
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,1-mirrors.in.sahilister.net
@@ -129,6 +129,7 @@ DOMAIN,apple-relay.fastly-edge.com
 DOMAIN,apple.comscoreresearch.com
 DOMAIN,apps.bazaarvoice.com
 DOMAIN,apps.profitihub.com
+DOMAIN,apps.sophi.io
 DOMAIN,apt.xpipe.io
 DOMAIN,archive.cs.uu.nl
 DOMAIN,archive.mozilla.org
@@ -221,6 +222,7 @@ DOMAIN,assets.ipstack.com
 DOMAIN,assets.jable.tv
 DOMAIN,assets.jolipage.co
 DOMAIN,assets.kagi.com
+DOMAIN,assets.keysquare.io
 DOMAIN,assets.kraken.com
 DOMAIN,assets.leetcode.com
 DOMAIN,assets.lemonsqueezy.com
@@ -247,6 +249,7 @@ DOMAIN,assets.peatio.com
 DOMAIN,assets.pixlee.com
 DOMAIN,assets.play.xbox.com
 DOMAIN,assets.plurk.com
+DOMAIN,assets.polarbyte.com
 DOMAIN,assets.poool.fr
 DOMAIN,assets.positional-bucket.com
 DOMAIN,assets.prowritingaid.com
@@ -821,6 +824,7 @@ DOMAIN,cdnjs.cloudflare.com
 DOMAIN,cdnl.tnaflix.com
 DOMAIN,cdns.gigya.com
 DOMAIN,cdnstatic.porno-cum.com
+DOMAIN,cdnstatic.tencentcs.com
 DOMAIN,cdnstatic.w1mp.com
 DOMAIN,cdnstatic.w4nkr.com
 DOMAIN,cdntranscend.eventbrite.com
@@ -948,6 +952,7 @@ DOMAIN,cpwebassets.codepen.io
 DOMAIN,craftassets.unraid.net
 DOMAIN,cravatar.eu
 DOMAIN,creativajs.altervista.org
+DOMAIN,creative.eizzih.com
 DOMAIN,creator-image.javhd.com
 DOMAIN,crl.usertrust.com
 DOMAIN,crl.verisign.com
@@ -1157,6 +1162,7 @@ DOMAIN,encrypted-vtbn3.gstatic.com
 DOMAIN,enterprise.proxmox.com
 DOMAIN,epic-social-social-modules-prod.ol.epicgames.com
 DOMAIN,error.rakuten.co.jp
+DOMAIN,eslint-react.xyz
 DOMAIN,eslint.org
 DOMAIN,eslint.style
 DOMAIN,espejito.fder.edu.uy
@@ -1387,6 +1393,7 @@ DOMAIN,hawk.tomsguide.com
 DOMAIN,headway-widget.net
 DOMAIN,heatmap-external-a.strava.com
 DOMAIN,hentaiworldtv.b-cdn.net
+DOMAIN,heroicons.com
 DOMAIN,hhhhhhome86227170.wordpress.com
 DOMAIN,hips.hearstapps.com
 DOMAIN,hls-amt.itunes.apple.com
@@ -1511,6 +1518,7 @@ DOMAIN,images.newrepublic.com
 DOMAIN,images.nvidia.com
 DOMAIN,images.opencollective.com
 DOMAIN,images.pexels.com
+DOMAIN,images.pling.com
 DOMAIN,images.plurk.com
 DOMAIN,images.prismic.io
 DOMAIN,images.ptt.cc
@@ -2277,7 +2285,9 @@ DOMAIN,resource-accel.fs.com
 DOMAIN,resource.fs.com
 DOMAIN,resources-cache.prod.sketch.com
 DOMAIN,resources-live.sketch.cloud
+DOMAIN,resources.chessbase.com
 DOMAIN,resources.help.salesforce.com
+DOMAIN,resources.whatwg.org
 DOMAIN,rest.happierleads.com
 DOMAIN,rpg.pic-imges.com
 DOMAIN,rpm.xpipe.io
@@ -2352,6 +2362,7 @@ DOMAIN,s3.us-west-000.backblazeb2.com
 DOMAIN,s3.us-west-001.backblazeb2.com
 DOMAIN,s3.us-west-004.backblazeb2.com
 DOMAIN,s3media.squarespace.com
+DOMAIN,s4.itho.me
 DOMAIN,s4.maxstream.org
 DOMAIN,s5.maxstream.org
 DOMAIN,s6.maxstream.org
@@ -2452,6 +2463,7 @@ DOMAIN,starharn.nebula-media.org
 DOMAIN,start-page.buffer.com
 DOMAIN,static-00.iconduck.com
 DOMAIN,static-act.imoim.net
+DOMAIN,static-assets-1.truthsocial.com
 DOMAIN,static-assets-prod.epicgames.com
 DOMAIN,static-assets-web.flixcart.com
 DOMAIN,static-assets.clubhouseapi.com
@@ -2511,6 +2523,7 @@ DOMAIN,static.canva.com
 DOMAIN,static.captcha-delivery.com
 DOMAIN,static.chaika.moe
 DOMAIN,static.change.org
+DOMAIN,static.chessarena.com
 DOMAIN,static.cloud.coveo.com
 DOMAIN,static.cloudcachetci.com
 DOMAIN,static.cnbeta.com.tw
@@ -2676,6 +2689,7 @@ DOMAIN,static7.lottiefiles.com
 DOMAIN,static8.lottiefiles.com
 DOMAIN,static9.lottiefiles.com
 DOMAIN,staticctf.ubisoft.com
+DOMAIN,staticintl.cloudcachetci.com
 DOMAIN,statics.erothots.co
 DOMAIN,statics.goorm.io
 DOMAIN,statics.simpshub.com
@@ -2855,6 +2869,7 @@ DOMAIN,wac-cdn.atlassian.com
 DOMAIN,waitlisted.co
 DOMAIN,wandi-6402.kxcdn.com
 DOMAIN,wcpstatic.microsoft.com
+DOMAIN,wctour-images.worldchess.com
 DOMAIN,weather.istatmenus.app
 DOMAIN,web-assets.esetstatic.com
 DOMAIN,web-assets.ifttt.com
@@ -3012,6 +3027,7 @@ DOMAIN-SUFFIX,akamaized.net
 DOMAIN-SUFFIX,akidoo.top
 DOMAIN-SUFFIX,alexdav.id
 DOMAIN-SUFFIX,alfafile.net
+DOMAIN-SUFFIX,algolianet.com
 DOMAIN-SUFFIX,alldebrid.com
 DOMAIN-SUFFIX,alldebrid.de
 DOMAIN-SUFFIX,alldebrid.es
@@ -3722,6 +3738,7 @@ DOMAIN-SUFFIX,edge.api.brightcove.com
 DOMAIN-SUFFIX,edge.storage-yahoo.jp
 DOMAIN-SUFFIX,edgecastcdn.net
 DOMAIN-SUFFIX,edgedatg.com
+DOMAIN-SUFFIX,edgeone.app
 DOMAIN-SUFFIX,edgestorewebcdn.azureedge.net
 DOMAIN-SUFFIX,edis.at
 DOMAIN-SUFFIX,ednovas.org

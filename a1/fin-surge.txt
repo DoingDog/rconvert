@@ -1,5 +1,5 @@
-# Surge Rules total line 934
-# Last updated Fri 04/04/2025 22:14:12.95
+# Surge Rules total line 935
+# Last updated Mon 04/07/2025 22:15:05.36
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
 DOMAIN-KEYWORD,-analytics-events.apple.com
@@ -581,7 +581,6 @@ IP-CIDR,169.254.169.254/32,no-resolve
 IP-CIDR,172.121.4.251/32,no-resolve
 IP-CIDR,172.121.4.252/32,no-resolve
 IP-CIDR,172.232.58.169/32,no-resolve
-IP-CIDR,172.232.58.237/32,no-resolve
 IP-CIDR,172.255.103.118/32,no-resolve
 IP-CIDR,172.255.6.135/32,no-resolve
 IP-CIDR,172.255.6.137/32,no-resolve
@@ -703,6 +702,7 @@ IP-CIDR,211.161.101.110/32,no-resolve
 IP-CIDR,211.167.105.131/32,no-resolve
 IP-CIDR,211.98.70.226/31,no-resolve
 IP-CIDR,211.98.71.192/29,no-resolve
+IP-CIDR,212.117.186.252/32,no-resolve
 IP-CIDR,212.129.220.100/32,no-resolve
 IP-CIDR,212.129.220.107/32,no-resolve
 IP-CIDR,212.129.220.114/32,no-resolve
@@ -830,6 +830,7 @@ IP-CIDR,23.235.156.167/32,no-resolve
 IP-CIDR,23.244.43.212/32,no-resolve
 IP-CIDR,23.42.186.24/32,no-resolve
 IP-CIDR,23.66.147.48/32,no-resolve
+IP-CIDR,23.83.67.164/32,no-resolve
 IP-CIDR,23.89.50.180/32,no-resolve
 IP-CIDR,23.91.3.114/32,no-resolve
 IP-CIDR,27.221.89.128/28,no-resolve

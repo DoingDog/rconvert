@@ -1,5 +1,5 @@
-# Quantumult total line 3345
-# Last updated Fri 04/04/2025 22:14:16.24
+# Quantumult total line 3362
+# Last updated Mon 04/07/2025 22:15:08.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -69,6 +69,7 @@ HOST,apple-relay.cloudflare.com,LIST
 HOST,apple-relay.fastly-edge.com,LIST
 HOST,apps.bazaarvoice.com,LIST
 HOST,apps.profitihub.com,LIST
+HOST,apps.sophi.io,LIST
 HOST,archive.mozilla.org,LIST
 HOST,artworks.thetvdb.com,LIST
 HOST,asset-cdn.uscardforum.com,LIST
@@ -163,6 +164,7 @@ HOST,assets.ipstack.com,LIST
 HOST,assets.jable.tv,LIST
 HOST,assets.jolipage.co,LIST
 HOST,assets.kagi.com,LIST
+HOST,assets.keysquare.io,LIST
 HOST,assets.kraken.com,LIST
 HOST,assets.leetcode.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
@@ -190,6 +192,7 @@ HOST,assets.peatio.com,LIST
 HOST,assets.pixlee.com,LIST
 HOST,assets.play.xbox.com,LIST
 HOST,assets.plurk.com,LIST
+HOST,assets.polarbyte.com,LIST
 HOST,assets.poool.fr,LIST
 HOST,assets.positional-bucket.com,LIST
 HOST,assets.prowritingaid.com,LIST
@@ -758,6 +761,7 @@ HOST,cdnjs.cloudflare.com,LIST
 HOST,cdnl.tnaflix.com,LIST
 HOST,cdns.gigya.com,LIST
 HOST,cdnstatic.porno-cum.com,LIST
+HOST,cdnstatic.tencentcs.com,LIST
 HOST,cdnstatic.w1mp.com,LIST
 HOST,cdnstatic.w4nkr.com,LIST
 HOST,cdntranscend.eventbrite.com,LIST
@@ -845,6 +849,7 @@ HOST,cpwebassets.codepen.io,LIST
 HOST,craftassets.unraid.net,LIST
 HOST,cravatar.eu,LIST
 HOST,creativajs.altervista.org,LIST
+HOST,creative.eizzih.com,LIST
 HOST,creator-image.javhd.com,LIST
 HOST,crl.usertrust.com,LIST
 HOST,crl.verisign.com,LIST
@@ -936,6 +941,7 @@ HOST,encrypted-vtbn2.gstatic.com,LIST
 HOST,encrypted-vtbn3.gstatic.com,LIST
 HOST,epic-social-social-modules-prod.ol.epicgames.com,LIST
 HOST,error.rakuten.co.jp,LIST
+HOST,eslint-react.xyz,LIST
 HOST,eslint.org,LIST
 HOST,eslint.style,LIST
 HOST,eu-images.contentstack.com,LIST
@@ -1044,6 +1050,7 @@ HOST,hawk.tomsguide.com,LIST
 HOST,headway-widget.net,LIST
 HOST,heatmap-external-a.strava.com,LIST
 HOST,hentaiworldtv.b-cdn.net,LIST
+HOST,heroicons.com,LIST
 HOST,hhhhhhome86227170.wordpress.com,LIST
 HOST,hips.hearstapps.com,LIST
 HOST,hls.hentaicity.com,LIST
@@ -1168,6 +1175,7 @@ HOST,images.now-tv.com,LIST
 HOST,images.nvidia.com,LIST
 HOST,images.opencollective.com,LIST
 HOST,images.pexels.com,LIST
+HOST,images.pling.com,LIST
 HOST,images.plurk.com,LIST
 HOST,images.pluto.tv,LIST
 HOST,images.prismic.io,LIST
@@ -1707,7 +1715,9 @@ HOST,resource.fs.com,LIST
 HOST,resource.video.nimg.jp,LIST
 HOST,resources-cache.prod.sketch.com,LIST
 HOST,resources-live.sketch.cloud,LIST
+HOST,resources.chessbase.com,LIST
 HOST,resources.help.salesforce.com,LIST
+HOST,resources.whatwg.org,LIST
 HOST,rest.happierleads.com,LIST
 HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
@@ -1781,6 +1791,7 @@ HOST,s3.us-west-001.backblazeb2.com,LIST
 HOST,s3.us-west-002.backblazeb2.com,LIST
 HOST,s3.us-west-004.backblazeb2.com,LIST
 HOST,s3media.squarespace.com,LIST
+HOST,s4.itho.me,LIST
 HOST,s4.maxstream.org,LIST
 HOST,s5.maxstream.org,LIST
 HOST,s6.maxstream.org,LIST
@@ -1874,6 +1885,7 @@ HOST,staging-pubfeed.linkby.com,LIST
 HOST,start-page.buffer.com,LIST
 HOST,static-00.iconduck.com,LIST
 HOST,static-act.imoim.net,LIST
+HOST,static-assets-1.truthsocial.com,LIST
 HOST,static-assets-prod.epicgames.com,LIST
 HOST,static-assets-web.flixcart.com,LIST
 HOST,static-assets.clubhouseapi.com,LIST
@@ -1946,6 +1958,7 @@ HOST,static.canva.com,LIST
 HOST,static.captcha-delivery.com,LIST
 HOST,static.chaika.moe,LIST
 HOST,static.change.org,LIST
+HOST,static.chessarena.com,LIST
 HOST,static.cloud.coveo.com,LIST
 HOST,static.cloudcachetci.com,LIST
 HOST,static.cnbeta.com.tw,LIST
@@ -2124,6 +2137,7 @@ HOST,static7.lottiefiles.com,LIST
 HOST,static8.lottiefiles.com,LIST
 HOST,static9.lottiefiles.com,LIST
 HOST,staticctf.ubisoft.com,LIST
+HOST,staticintl.cloudcachetci.com,LIST
 HOST,statics-marketingsites-eas-ms-com.akamaized.net,LIST
 HOST,statics.erothots.co,LIST
 HOST,statics.goorm.io,LIST
@@ -2291,6 +2305,7 @@ HOST,wac-cdn.atlassian.com,LIST
 HOST,waitlisted.co,LIST
 HOST,wandi-6402.kxcdn.com,LIST
 HOST,wcpstatic.microsoft.com,LIST
+HOST,wctour-images.worldchess.com,LIST
 HOST,weather.istatmenus.app,LIST
 HOST,web-assets.esetstatic.com,LIST
 HOST,web-assets.ifttt.com,LIST
@@ -2377,6 +2392,7 @@ HOST-SUFFIX,airio3.live,LIST
 HOST-SUFFIX,akamai-content-network.com,LIST
 HOST-SUFFIX,akidoo.top,LIST
 HOST-SUFFIX,alexdav.id,LIST
+HOST-SUFFIX,algolianet.com,LIST
 HOST-SUFFIX,alonestreaming.com,LIST
 HOST-SUFFIX,alphafish.top,LIST
 HOST-SUFFIX,amaicdn.com,LIST
@@ -2598,6 +2614,7 @@ HOST-SUFFIX,easylist.to,LIST
 HOST-SUFFIX,ebayimg.com,LIST
 HOST-SUFFIX,ebaystatic.com,LIST
 HOST-SUFFIX,edge.storage-yahoo.jp,LIST
+HOST-SUFFIX,edgeone.app,LIST
 HOST-SUFFIX,edgestorewebcdn.azureedge.net,LIST
 HOST-SUFFIX,eggjs.org,LIST
 HOST-SUFFIX,ehgt.org,LIST
