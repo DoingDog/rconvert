@@ -1,5 +1,5 @@
-# Clash total line 6932
-# Last updated Thu 04/10/2025 22:15:27.85
+# Clash total line 6935
+# Last updated Sun 04/13/2025 22:14:24.09
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1098,6 +1098,7 @@ payload:
   - DOMAIN,download.nextag.com
   - DOMAIN,download.nus.edu.sg
   - DOMAIN,download.nust.na
+  - DOMAIN,download.onlyoffice.com
   - DOMAIN,download.opensuse.org
   - DOMAIN,download.parallels.com
   - DOMAIN,download.pixelexperience.org
@@ -1869,7 +1870,6 @@ payload:
   - DOMAIN,meta.prismlauncher.org
   - DOMAIN,metrics.kapa.ai
   - DOMAIN,micro.rubiconproject.com
-  - DOMAIN,minotar.net
   - DOMAIN,mintlify.b-cdn.net
   - DOMAIN,mir-s3-cdn-cf.behance.net
   - DOMAIN,miro.medium.com
@@ -2853,6 +2853,7 @@ payload:
   - DOMAIN,utteranc.es
   - DOMAIN,v.w-x.co
   - DOMAIN,v2.listenloop.com
+  - DOMAIN,v2uploads.zopim.io
   - DOMAIN,vanilla-extract.style
   - DOMAIN,versionbadg.es
   - DOMAIN,versioncheck-bg.addons.mozilla.org
@@ -4600,6 +4601,7 @@ payload:
   - DOMAIN-SUFFIX,litix.io
   - DOMAIN-SUFFIX,litv.tv
   - DOMAIN-SUFFIX,litvp.com
+  - DOMAIN-SUFFIX,live-video.net
   - DOMAIN-SUFFIX,livefilestore.com
   - DOMAIN-SUFFIX,livestream.com
   - DOMAIN-SUFFIX,lldns.net
@@ -4691,6 +4693,7 @@ payload:
   - DOMAIN-SUFFIX,mightyupload.com
   - DOMAIN-SUFFIX,minecraft.net
   - DOMAIN-SUFFIX,minecraftforge.net
+  - DOMAIN-SUFFIX,minotar.net
   - DOMAIN-SUFFIX,mirror-media.xyz
   - DOMAIN-SUFFIX,mirror.ac.za
   - DOMAIN-SUFFIX,mirror.amaze.com.au

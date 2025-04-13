@@ -1,5 +1,5 @@
-# Quantumult total line 6918
-# Last updated Thu 04/10/2025 22:15:27.80
+# Quantumult total line 6921
+# Last updated Sun 04/13/2025 22:14:24.04
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,1-mirrors.in.sahilister.net,LIST
@@ -1097,6 +1097,7 @@ HOST,download.nektony.com,LIST
 HOST,download.nextag.com,LIST
 HOST,download.nus.edu.sg,LIST
 HOST,download.nust.na,LIST
+HOST,download.onlyoffice.com,LIST
 HOST,download.opensuse.org,LIST
 HOST,download.parallels.com,LIST
 HOST,download.pixelexperience.org,LIST
@@ -1868,7 +1869,6 @@ HOST,megapx-assets.dcard.tw,LIST
 HOST,meta.prismlauncher.org,LIST
 HOST,metrics.kapa.ai,LIST
 HOST,micro.rubiconproject.com,LIST
-HOST,minotar.net,LIST
 HOST,mintlify.b-cdn.net,LIST
 HOST,mir-s3-cdn-cf.behance.net,LIST
 HOST,miro.medium.com,LIST
@@ -2852,6 +2852,7 @@ HOST,uts-api.itunes.apple.com,LIST
 HOST,utteranc.es,LIST
 HOST,v.w-x.co,LIST
 HOST,v2.listenloop.com,LIST
+HOST,v2uploads.zopim.io,LIST
 HOST,vanilla-extract.style,LIST
 HOST,versionbadg.es,LIST
 HOST,versioncheck-bg.addons.mozilla.org,LIST
@@ -4599,6 +4600,7 @@ HOST-SUFFIX,linx.li,LIST
 HOST-SUFFIX,litix.io,LIST
 HOST-SUFFIX,litv.tv,LIST
 HOST-SUFFIX,litvp.com,LIST
+HOST-SUFFIX,live-video.net,LIST
 HOST-SUFFIX,livefilestore.com,LIST
 HOST-SUFFIX,livestream.com,LIST
 HOST-SUFFIX,lldns.net,LIST
@@ -4690,6 +4692,7 @@ HOST-SUFFIX,mickeycloud.com,LIST
 HOST-SUFFIX,mightyupload.com,LIST
 HOST-SUFFIX,minecraft.net,LIST
 HOST-SUFFIX,minecraftforge.net,LIST
+HOST-SUFFIX,minotar.net,LIST
 HOST-SUFFIX,mirror-media.xyz,LIST
 HOST-SUFFIX,mirror.ac.za,LIST
 HOST-SUFFIX,mirror.amaze.com.au,LIST
