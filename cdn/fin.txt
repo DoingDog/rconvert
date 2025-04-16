@@ -1,5 +1,5 @@
-# Main total line 3389
-# Last updated Sun 04/13/2025 22:14:13.71
+# Main total line 3409
+# Last updated Wed 04/16/2025 22:15:36.19
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -56,6 +56,7 @@ DOMAIN,app-api.vidjet.io
 DOMAIN,app-spm.com
 DOMAIN,app-static.eu.posthog.com
 DOMAIN,app-static.turtl.co
+DOMAIN,app.1password.com
 DOMAIN,app.backinstock.org
 DOMAIN,app.brightback.com
 DOMAIN,app.chatwoot.com
@@ -175,7 +176,6 @@ DOMAIN,assets.mastercard.com
 DOMAIN,assets.matters.news
 DOMAIN,assets.mayoclinic.org
 DOMAIN,assets.media-platform.com
-DOMAIN,assets.mediadelivery.net
 DOMAIN,assets.monei.com
 DOMAIN,assets.monica.im
 DOMAIN,assets.mozilla.social
@@ -298,6 +298,7 @@ DOMAIN,bundlephobia.com
 DOMAIN,bundler.nice-team.net
 DOMAIN,bundler.wix-code.com
 DOMAIN,bundles.npr.org
+DOMAIN,bunnycdn-video-assets.b-cdn.net
 DOMAIN,businessunitprofile-cdn.trustpilot.net
 DOMAIN,busuanzi.ibruce.info
 DOMAIN,c.1password.com
@@ -371,6 +372,7 @@ DOMAIN,cdn.123av.me
 DOMAIN,cdn.17app.co
 DOMAIN,cdn.18jav.tv
 DOMAIN,cdn.7tv.app
+DOMAIN,cdn.accounts.autodesk.com
 DOMAIN,cdn.accounts.nintendo.com
 DOMAIN,cdn.adguard.com
 DOMAIN,cdn.adguard.info
@@ -469,6 +471,7 @@ DOMAIN,cdn.fastcomments.com
 DOMAIN,cdn.filen.io
 DOMAIN,cdn.firebase.com
 DOMAIN,cdn.fluidplayer.com
+DOMAIN,cdn.fontshare.com
 DOMAIN,cdn.forms.office.net
 DOMAIN,cdn.fosstodon.org
 DOMAIN,cdn.fourthwall.com
@@ -643,6 +646,7 @@ DOMAIN,cdn.svgator.com
 DOMAIN,cdn.tailwindcss.com
 DOMAIN,cdn.termius.com
 DOMAIN,cdn.thenewstack.io
+DOMAIN,cdn.thingiverse.com
 DOMAIN,cdn.tinypass.com
 DOMAIN,cdn.tolt.io
 DOMAIN,cdn.tracxn.com
@@ -820,7 +824,6 @@ DOMAIN,code.jquery.com
 DOMAIN,code.piano.io
 DOMAIN,code.upscope.io
 DOMAIN,common-header.nimg.jp
-DOMAIN,compass-ssl.xbox.com
 DOMAIN,components.clever-cloud.com
 DOMAIN,components.justanswer.com
 DOMAIN,components.trynow.net
@@ -874,6 +877,7 @@ DOMAIN,cw-image-resizer.cwg.tw
 DOMAIN,d2c.aws.amazon.com
 DOMAIN,d4.alternativeto.net
 DOMAIN,dam.freshworks.com
+DOMAIN,damassets.autodesk.net
 DOMAIN,dassets.shimano.com
 DOMAIN,data.pendo.io
 DOMAIN,data.web.clickup.com
@@ -937,6 +941,7 @@ DOMAIN,embed.savvycal.com
 DOMAIN,embed.tawk.to
 DOMAIN,embed.ted.com
 DOMAIN,embed.typeform.com
+DOMAIN,embedr.flickr.com
 DOMAIN,embedwistia-a.akamaihd.net
 DOMAIN,emoji-css.afeld.me
 DOMAIN,emos.plurk.com
@@ -987,6 +992,7 @@ DOMAIN,favicons.nextdns.io
 DOMAIN,favicons.teams.cloudflare.com
 DOMAIN,fdn.gsmarena.com
 DOMAIN,fdn2.gsmarena.com
+DOMAIN,featureflags.netlify.com
 DOMAIN,fesdk.nexon.com
 DOMAIN,fiddle.fastly.dev
 DOMAIN,fiddle.jshell.net
@@ -1093,6 +1099,7 @@ DOMAIN,i.iwara.tv
 DOMAIN,i.jpg.dog
 DOMAIN,i.kickstarter.com
 DOMAIN,i.loli.best
+DOMAIN,i.mediatek.com
 DOMAIN,i.mt.lv
 DOMAIN,i.mydramalist.com
 DOMAIN,i.nhentai.net
@@ -1193,6 +1200,7 @@ DOMAIN,images.pling.com
 DOMAIN,images.plurk.com
 DOMAIN,images.pluto.tv
 DOMAIN,images.prismic.io
+DOMAIN,images.profile.autodesk.com
 DOMAIN,images.ptt.cc
 DOMAIN,images.purevpn-tools.com
 DOMAIN,images.scalero.io
@@ -1280,7 +1288,6 @@ DOMAIN,img.openshop.com.hk
 DOMAIN,img.pawoo.net
 DOMAIN,img.perfops.net
 DOMAIN,img.picacomic.com
-DOMAIN,img.ra7.xyz
 DOMAIN,img.reg.ru
 DOMAIN,img.reimu.net
 DOMAIN,img.represent.com
@@ -1292,6 +1299,7 @@ DOMAIN,img.sparemin.com
 DOMAIN,img.sparknotes.com
 DOMAIN,img.supjav.com
 DOMAIN,img.telemetr.io
+DOMAIN,img.thingiverse.com
 DOMAIN,img.timero.xyz
 DOMAIN,img.urlnode.com
 DOMAIN,img.utdstc.com
@@ -1427,6 +1435,7 @@ DOMAIN,mantisloader.mantis-awx.com
 DOMAIN,maps.geoapify.com
 DOMAIN,maps.gstatic.com
 DOMAIN,marketing.figma.com
+DOMAIN,marketing.thingiverse.com
 DOMAIN,marketplace-web-assets.vinted.com
 DOMAIN,mastodon-static.miao.dev
 DOMAIN,maven.google.com
@@ -1523,6 +1532,7 @@ DOMAIN,miro.medium.com
 DOMAIN,mixin-images.zeromesh.net
 DOMAIN,mkt-site-asset.crypto.com
 DOMAIN,mobilecenter.azureedge.net
+DOMAIN,moderate.cleantalk.org
 DOMAIN,momentjs.com
 DOMAIN,moodular.jotform.com
 DOMAIN,mosaic-blender.fxtwitter.com
@@ -1556,7 +1566,6 @@ DOMAIN,nodei.co
 DOMAIN,npm.antfu.dev
 DOMAIN,npm.im
 DOMAIN,npm.jsr.io
-DOMAIN,ntp.api.bz
 DOMAIN,ntp.msn.com
 DOMAIN,null.jsbin.com
 DOMAIN,o.n1mp.org
@@ -1593,7 +1602,6 @@ DOMAIN,p2.bahamut.com.tw
 DOMAIN,pacdn.500px.org
 DOMAIN,package-assets.oomol.com
 DOMAIN,packages-cf.termux.dev
-DOMAIN,packages.argotunnel.com
 DOMAIN,packages.httpie.io
 DOMAIN,packages.jetbrains.team
 DOMAIN,packages.termux.dev
@@ -1629,6 +1637,7 @@ DOMAIN,pics.vpdmm.cc
 DOMAIN,pics.x-n-x-x.pro
 DOMAIN,pkg-cdn.jetbrains.team
 DOMAIN,pkg-size.dev
+DOMAIN,pkg.cloudflare.com
 DOMAIN,pkg.cloudflareclient.com
 DOMAIN,pkg.csb.dev
 DOMAIN,pkgs.dev.azure.com
@@ -1883,6 +1892,7 @@ DOMAIN,snyk-widget.herokuapp.com
 DOMAIN,social-cdn.vivaldi.net
 DOMAIN,solve-widget.forethought.ai
 DOMAIN,source.domaintools.com
+DOMAIN,source.unsplash.com
 DOMAIN,sourcemaps.squarespace.net
 DOMAIN,sourcepoint.theguardian.com
 DOMAIN,sp-spiegel-de.spiegel.de
@@ -1955,7 +1965,6 @@ DOMAIN,static.ada.support
 DOMAIN,static.addtoany.com
 DOMAIN,static.adguardvpn.com
 DOMAIN,static.afterpay.com
-DOMAIN,static.agilebits.com
 DOMAIN,static.ahrefs.com
 DOMAIN,static.aizanmei.org
 DOMAIN,static.apkpure.com
@@ -2014,6 +2023,7 @@ DOMAIN,static.filehorse.com
 DOMAIN,static.filestackapi.com
 DOMAIN,static.foxbusiness.com
 DOMAIN,static.foxnews.com
+DOMAIN,static.freedownloadmanager.org
 DOMAIN,static.freeimages.com
 DOMAIN,static.getbutton.io
 DOMAIN,static.gettyimages.com
@@ -2068,6 +2078,7 @@ DOMAIN,static.nhentai.net
 DOMAIN,static.nicehash.com
 DOMAIN,static.npmjs.com
 DOMAIN,static.nrk.no
+DOMAIN,static.observablehq.com
 DOMAIN,static.oklink.com
 DOMAIN,static.okx.com
 DOMAIN,static.olelive.com
@@ -2359,6 +2370,7 @@ DOMAIN,widget.user.com
 DOMAIN,widget.usersnap.com
 DOMAIN,widget.uservoice.com
 DOMAIN,widgets-red.media.weather.com
+DOMAIN,widgets.flickr.com
 DOMAIN,widgets.listenlive.co
 DOMAIN,widgets.media.weather.com
 DOMAIN,widgets.outbrain.com
@@ -2614,6 +2626,7 @@ DOMAIN-SUFFIX,divio-media.net
 DOMAIN-SUFFIX,dlunar.net
 DOMAIN-SUFFIX,dmcdn.net
 DOMAIN-SUFFIX,docker.io
+DOMAIN-SUFFIX,dockerstatic.com
 DOMAIN-SUFFIX,dogehls.xyz
 DOMAIN-SUFFIX,doodcdn.co
 DOMAIN-SUFFIX,doppiocdn.com
@@ -2950,6 +2963,7 @@ DOMAIN-SUFFIX,media.ci-en.jp
 DOMAIN-SUFFIX,media.strapiapp.com
 DOMAIN-SUFFIX,media.tumblr.com
 DOMAIN-SUFFIX,media.zestyio.com
+DOMAIN-SUFFIX,mediadelivery.net
 DOMAIN-SUFFIX,meetupstatic.com
 DOMAIN-SUFFIX,mercdn.net
 DOMAIN-SUFFIX,metric.gstatic.com
@@ -3016,6 +3030,7 @@ DOMAIN-SUFFIX,nxcli.io
 DOMAIN-SUFFIX,nxedge.io
 DOMAIN-SUFFIX,oaistatic.com
 DOMAIN-SUFFIX,oaiusercontent.com
+DOMAIN-SUFFIX,observableusercontent.com
 DOMAIN-SUFFIX,oculuscdn.com
 DOMAIN-SUFFIX,odycdn.com
 DOMAIN-SUFFIX,ogads-pa.clients6.google.com
@@ -3035,6 +3050,7 @@ DOMAIN-SUFFIX,packd.liuxingbaoyu.xyz
 DOMAIN-SUFFIX,pagecdn.io
 DOMAIN-SUFFIX,pages.dev
 DOMAIN-SUFFIX,parastorage.com
+DOMAIN-SUFFIX,parceljs.org
 DOMAIN-SUFFIX,pastebin.com
 DOMAIN-SUFFIX,patientpop.com
 DOMAIN-SUFFIX,patreonusercontent.com
@@ -3198,6 +3214,7 @@ DOMAIN-SUFFIX,stack.imgur.com
 DOMAIN-SUFFIX,stackblitz.io
 DOMAIN-SUFFIX,stapecdn.com
 DOMAIN-SUFFIX,static-prod-web.miniclip.com
+DOMAIN-SUFFIX,static.amplience.net
 DOMAIN-SUFFIX,static.chaosgroup.com
 DOMAIN-SUFFIX,static.domains
 DOMAIN-SUFFIX,static.flickr.com
@@ -3237,6 +3254,7 @@ DOMAIN-SUFFIX,superfiliate-cdn.com
 DOMAIN-SUFFIX,surge.sh
 DOMAIN-SUFFIX,surrit.com
 DOMAIN-SUFFIX,susercontent.com
+DOMAIN-SUFFIX,svbtleusercontent.com
 DOMAIN-SUFFIX,sway-cdn.com
 DOMAIN-SUFFIX,swiftypecdn.com
 DOMAIN-SUFFIX,sxccdn.com
@@ -3388,5 +3406,7 @@ DOMAIN-KEYWORD,-thumbs.worldsex.com
 DOMAIN-KEYWORD,99avcdn
 DOMAIN-KEYWORD,cdn.adultempire.com
 DOMAIN-KEYWORD,dsn.algolia.net
+DOMAIN-KEYWORD,fonts.hanime1
+DOMAIN-KEYWORD,vdownload.hanime1
 DOMAIN-KEYWORD,vod-adaptive.akamaized.net
 DOMAIN-KEYWORD,web-assets.zendesk

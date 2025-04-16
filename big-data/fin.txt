@@ -1,9 +1,7 @@
-# Main total line 6935
-# Last updated Sun 04/13/2025 22:14:23.88
+# Main total line 6895
+# Last updated Wed 04/16/2025 22:15:46.34
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
-DOMAIN,1-mirrors.in.sahilister.net
-DOMAIN,2-mirrors.in.sahilister.net
 DOMAIN,3dna.nationbuilder.com
 DOMAIN,a.deviantart.net
 DOMAIN,a.fireside.fm
@@ -42,42 +40,32 @@ DOMAIN,android-safebrowsing.google.com
 DOMAIN,anorien.csc.warwick.ac.uk
 DOMAIN,answers-afd.microsoft.com
 DOMAIN,apache-mirror.rbc.ru
-DOMAIN,apache.01link.hk
 DOMAIN,apache.40b.nl
-DOMAIN,apache.belnet.be
 DOMAIN,apache.cbox.biz
 DOMAIN,apache.claz.org
 DOMAIN,apache.communilink.net
-DOMAIN,apache.cp.if.ua
 DOMAIN,apache.crihan.fr
 DOMAIN,apache.cs.utah.edu
 DOMAIN,apache.cs.utah.edu.org
 DOMAIN,apache.cs.uu.nl
 DOMAIN,apache.cu.be
-DOMAIN,apache.dattatec.com
-DOMAIN,apache.forsale.plus
 DOMAIN,apache.forthnet.gr
 DOMAIN,apache.hippo.nl
 DOMAIN,apache.ip-connect.vn.ua
 DOMAIN,apache.is.co.za
-DOMAIN,apache.javapipe.com
 DOMAIN,apache.lauf-forum.at
-DOMAIN,apache.mediamirrors.org
 DOMAIN,apache.melbourneitmirror.net
 DOMAIN,apache.mesi.com.ar
 DOMAIN,apache.miloslavbrada.cz
 DOMAIN,apache.mindstudios.com
 DOMAIN,apache.mivzakim.net
-DOMAIN,apache.oshte.net
 DOMAIN,apache.osuosl.org
 DOMAIN,apache.otenet.gr
-DOMAIN,apache.panu.it
 DOMAIN,apache.proserve.nl
 DOMAIN,apache.rediris.es
 DOMAIN,apache.redkiwi.nl
 DOMAIN,apache.saix.net
 DOMAIN,apache.spd.co.il
-DOMAIN,apache.spinellicreations.com
 DOMAIN,apache.stu.edu.tw
 DOMAIN,apache.tt.co.kr
 DOMAIN,apache.uib.no
@@ -115,6 +103,7 @@ DOMAIN,app-spm.com
 DOMAIN,app-static.eu.posthog.com
 DOMAIN,app-static.turtl.co
 DOMAIN,app-updates.agilebits.com
+DOMAIN,app.1password.com
 DOMAIN,app.backinstock.org
 DOMAIN,app.brightback.com
 DOMAIN,app.chatwoot.com
@@ -135,7 +124,6 @@ DOMAIN,apps.sophi.io
 DOMAIN,apt.xpipe.io
 DOMAIN,archive.cs.uu.nl
 DOMAIN,archive.mozilla.org
-DOMAIN,artfiles.org.org
 DOMAIN,artifacts.electronjs.org
 DOMAIN,artworks.thetvdb.com
 DOMAIN,asset-cdn.uscardforum.com
@@ -233,7 +221,6 @@ DOMAIN,assets.mastercard.com
 DOMAIN,assets.matters.news
 DOMAIN,assets.mayoclinic.org
 DOMAIN,assets.media-platform.com
-DOMAIN,assets.mediadelivery.net
 DOMAIN,assets.monei.com
 DOMAIN,assets.monica.im
 DOMAIN,assets.mozilla.social
@@ -360,6 +347,7 @@ DOMAIN,bundlephobia.com
 DOMAIN,bundler.nice-team.net
 DOMAIN,bundler.wix-code.com
 DOMAIN,bundles.npr.org
+DOMAIN,bunnycdn-video-assets.b-cdn.net
 DOMAIN,businessunitprofile-cdn.trustpilot.net
 DOMAIN,busuanzi.ibruce.info
 DOMAIN,c.1password.com
@@ -394,7 +382,6 @@ DOMAIN,cassette.sphdigital.com.sg
 DOMAIN,cc-embed.adobe.com
 DOMAIN,cc.boyfriendtv.com
 DOMAIN,cc.coemn.com
-DOMAIN,cc.uoc.gr
 DOMAIN,cdimage.kali.org
 DOMAIN,cdn-1.ggjav.com
 DOMAIN,cdn-a.sonyentertainmentnetwork.com
@@ -442,6 +429,7 @@ DOMAIN,cdn.123av.me
 DOMAIN,cdn.17app.co
 DOMAIN,cdn.18jav.tv
 DOMAIN,cdn.7tv.app
+DOMAIN,cdn.accounts.autodesk.com
 DOMAIN,cdn.accounts.nintendo.com
 DOMAIN,cdn.adguard.com
 DOMAIN,cdn.adguard.info
@@ -539,6 +527,7 @@ DOMAIN,cdn.fastcomments.com
 DOMAIN,cdn.filen.io
 DOMAIN,cdn.firebase.com
 DOMAIN,cdn.fluidplayer.com
+DOMAIN,cdn.fontshare.com
 DOMAIN,cdn.forms.office.net
 DOMAIN,cdn.fosstodon.org
 DOMAIN,cdn.fourthwall.com
@@ -712,6 +701,7 @@ DOMAIN,cdn.svgator.com
 DOMAIN,cdn.tailwindcss.com
 DOMAIN,cdn.termius.com
 DOMAIN,cdn.thenewstack.io
+DOMAIN,cdn.thingiverse.com
 DOMAIN,cdn.tolt.io
 DOMAIN,cdn.tracxn.com
 DOMAIN,cdn.transcend.io
@@ -888,7 +878,6 @@ DOMAIN,code.jquery.com
 DOMAIN,code.piano.io
 DOMAIN,code.upscope.io
 DOMAIN,codeload.github.com
-DOMAIN,compass-ssl.xbox.com
 DOMAIN,components.clever-cloud.com
 DOMAIN,components.justanswer.com
 DOMAIN,components.trynow.net
@@ -929,24 +918,19 @@ DOMAIN,cpan-mirror.rbc.ru
 DOMAIN,cpan.catalyst.net.nz
 DOMAIN,cpan.cpantesters.org
 DOMAIN,cpan.cs.utah.edu
-DOMAIN,cpan.cs.uu.nl
 DOMAIN,cpan.dcc.uchile.cl
 DOMAIN,cpan.develooper.com
-DOMAIN,cpan.etla.org
 DOMAIN,cpan.excellmedia.net
 DOMAIN,cpan.inode.at
 DOMAIN,cpan.inspire.net.nz
 DOMAIN,cpan.ip-connect.vn.ua
 DOMAIN,cpan.lagoon.nc
-DOMAIN,cpan.llarian.net
 DOMAIN,cpan.lnx.sk
 DOMAIN,cpan.metacpan.org
 DOMAIN,cpan.mines-albi.fr
 DOMAIN,cpan.mmgdesigns.com.ar
-DOMAIN,cpan.nctu.edu.tw
 DOMAIN,cpan.noris.de
 DOMAIN,cpan.pair.com
-DOMAIN,cpan.panu.it
 DOMAIN,cpan.perl.pt
 DOMAIN,cpan.pesat.net.id
 DOMAIN,cpan.rinet.ru
@@ -975,14 +959,10 @@ DOMAIN,css.blackmagicdesign.com
 DOMAIN,css.createsend1.com
 DOMAIN,ctan.altspu.ru
 DOMAIN,ctan.crest.fr
-DOMAIN,ctan.cs.uu.nl
 DOMAIN,ctan.dcc.uchile.cl
 DOMAIN,ctan.ebinger.cc
-DOMAIN,ctan.epst-tlemcen.dz
 DOMAIN,ctan.gutenberg.eu.org
-DOMAIN,ctan.ijs.si
 DOMAIN,ctan.imsc.res.in
-DOMAIN,ctan.kako-dev.de
 DOMAIN,ctan.math.ca
 DOMAIN,ctan.math.illinois.edu
 DOMAIN,ctan.math.utah.edu
@@ -999,9 +979,11 @@ DOMAIN,ctldl.windowsupdate.com
 DOMAIN,cuinf.sfcat.link
 DOMAIN,curl.se
 DOMAIN,cw-image-resizer.cwg.tw
+DOMAIN,d.myani.org
 DOMAIN,d2c.aws.amazon.com
 DOMAIN,d4.alternativeto.net
 DOMAIN,dam.freshworks.com
+DOMAIN,damassets.autodesk.net
 DOMAIN,dashasiafox.akamaized.netflix
 DOMAIN,dassets.shimano.com
 DOMAIN,data.pendo.io
@@ -1094,7 +1076,6 @@ DOMAIN,download.mlcc.google.com
 DOMAIN,download.mozilla.org
 DOMAIN,download.mxfast.com
 DOMAIN,download.nektony.com
-DOMAIN,download.nextag.com
 DOMAIN,download.nus.edu.sg
 DOMAIN,download.nust.na
 DOMAIN,download.onlyoffice.com
@@ -1110,14 +1091,13 @@ DOMAIN,download.todesktop.com
 DOMAIN,download.typora.io
 DOMAIN,download.visualstudio.microsoft.com
 DOMAIN,download.xbox.com
-DOMAIN,download.xs4all.nl
 DOMAIN,download2.epicgames.com
 DOMAIN,download3.epicgames.com
 DOMAIN,download4.epicgames.com
-DOMAIN,downloader.cursor.sh
 DOMAIN,downloadr2.apkmirror.com
 DOMAIN,downloads.1password.com
 DOMAIN,downloads.coindesk.com
+DOMAIN,downloads.cursor.com
 DOMAIN,downloads.lemonsqueezy.com
 DOMAIN,downloads.openwrt.org
 DOMAIN,downloads.raspberrypi.com
@@ -1211,6 +1191,7 @@ DOMAIN,favicons.nextdns.io
 DOMAIN,favicons.teams.cloudflare.com
 DOMAIN,fdn.gsmarena.com
 DOMAIN,fdn2.gsmarena.com
+DOMAIN,featureflags.netlify.com
 DOMAIN,fedorapeople.org
 DOMAIN,fesdk.nexon.com
 DOMAIN,fiddle.fastly.dev
@@ -1278,12 +1259,10 @@ DOMAIN,ftp.belnet.be
 DOMAIN,ftp.byfly.by
 DOMAIN,ftp.byfly.by.org
 DOMAIN,ftp.carnet.hr
-DOMAIN,ftp.cc.uoc.gr
 DOMAIN,ftp.cixug.es
 DOMAIN,ftp.cpan.org
 DOMAIN,ftp.cs.uu.nl
 DOMAIN,ftp.cse.buffalo.edu
-DOMAIN,ftp.cuhk.edu.hk
 DOMAIN,ftp.cvut.cz
 DOMAIN,ftp.download-by.net
 DOMAIN,ftp.eq.uc.pt
@@ -1301,12 +1280,9 @@ DOMAIN,ftp.gwdg.de
 DOMAIN,ftp.halifax.rwth-aachen.de
 DOMAIN,ftp.harukasan.org
 DOMAIN,ftp.heanet.ie
-DOMAIN,ftp.heikorichter.name
 DOMAIN,ftp.hosteurope.de
 DOMAIN,ftp.icm.edu.pl
-DOMAIN,ftp.igh.cnrs.fr
 DOMAIN,ftp.is.co.za
-DOMAIN,ftp.itu.edu.tr
 DOMAIN,ftp.jaist.ac.jp
 DOMAIN,ftp.kaist.ac.kr
 DOMAIN,ftp.kddilabs.jp
@@ -1323,12 +1299,10 @@ DOMAIN,ftp.mpi-inf.mpg.de
 DOMAIN,ftp.mpi-sb.mpg.de
 DOMAIN,ftp.muug.ca
 DOMAIN,ftp.nara.wide.ad.jp
-DOMAIN,ftp.neowiz.com
 DOMAIN,ftp.nluug.nl
 DOMAIN,ftp.ntua.gr
 DOMAIN,ftp.osuosl.org
 DOMAIN,ftp.panu.it
-DOMAIN,ftp.pbone.net
 DOMAIN,ftp.piotrkosoft.net
 DOMAIN,ftp.ps.pl
 DOMAIN,ftp.rediris.es
@@ -1382,7 +1356,6 @@ DOMAIN,gmedia.playstation.com
 DOMAIN,gnu.askapache.com
 DOMAIN,gnu.c3sl.ufpr.br
 DOMAIN,gnu.freemirror.org
-DOMAIN,gnu.spinellicreations.com
 DOMAIN,gnuftp.uib.no
 DOMAIN,go-updater.brave.com
 DOMAIN,go.imperva.com
@@ -1443,6 +1416,7 @@ DOMAIN,i.ioiox.com
 DOMAIN,i.jpg.dog
 DOMAIN,i.kickstarter.com
 DOMAIN,i.loli.best
+DOMAIN,i.mediatek.com
 DOMAIN,i.mt.lv
 DOMAIN,i.mydramalist.com
 DOMAIN,i.niupic.com
@@ -1536,6 +1510,7 @@ DOMAIN,images.pexels.com
 DOMAIN,images.pling.com
 DOMAIN,images.plurk.com
 DOMAIN,images.prismic.io
+DOMAIN,images.profile.autodesk.com
 DOMAIN,images.ptt.cc
 DOMAIN,images.purevpn-tools.com
 DOMAIN,images.scalero.io
@@ -1620,7 +1595,6 @@ DOMAIN,img.openshop.com.hk
 DOMAIN,img.pawoo.net
 DOMAIN,img.perfops.net
 DOMAIN,img.picacomic.com
-DOMAIN,img.ra7.xyz
 DOMAIN,img.reg.ru
 DOMAIN,img.reimu.net
 DOMAIN,img.represent.com
@@ -1633,6 +1607,7 @@ DOMAIN,img.sparemin.com
 DOMAIN,img.sparknotes.com
 DOMAIN,img.supjav.com
 DOMAIN,img.telemetr.io
+DOMAIN,img.thingiverse.com
 DOMAIN,img.timero.xyz
 DOMAIN,img.urlnode.com
 DOMAIN,img.utdstc.com
@@ -1780,6 +1755,7 @@ DOMAIN,mantisloader.mantis-awx.com
 DOMAIN,maps.geoapify.com
 DOMAIN,maps.gstatic.com
 DOMAIN,marketing.figma.com
+DOMAIN,marketing.thingiverse.com
 DOMAIN,marketplace-web-assets.vinted.com
 DOMAIN,marwan.ma
 DOMAIN,mastodon-static.miao.dev
@@ -1883,7 +1859,6 @@ DOMAIN,mirror.apache-kr.org
 DOMAIN,mirror.apad.pro
 DOMAIN,mirror.as43289.net
 DOMAIN,mirror.aut.ac.nz
-DOMAIN,mirror.bhoovd.com
 DOMAIN,mirror.bibleonline.ru
 DOMAIN,mirror.biznetgio.com
 DOMAIN,mirror.bom.albony.in
@@ -1901,7 +1876,6 @@ DOMAIN,mirror.datacenter.by
 DOMAIN,mirror.datapipe.net
 DOMAIN,mirror.de.leaseweb.net
 DOMAIN,mirror.del.albony.in
-DOMAIN,mirror.dkd.de
 DOMAIN,mirror.dkm.cz
 DOMAIN,mirror.dogado.de
 DOMAIN,mirror.downloadvn.com
@@ -1924,10 +1898,8 @@ DOMAIN,mirror.internode.on.net
 DOMAIN,mirror.is.co.za
 DOMAIN,mirror.its.dal.ca
 DOMAIN,mirror.jax.hugeserver.com
-DOMAIN,mirror.jre655.com
 DOMAIN,mirror.karneval.cz
 DOMAIN,mirror.keystealth.org
-DOMAIN,mirror.kiu.ac.ug
 DOMAIN,mirror.klaus-uwe.me
 DOMAIN,mirror.koddos.net
 DOMAIN,mirror.kumi.systems
@@ -1941,7 +1913,6 @@ DOMAIN,mirror.lyrahosting.com
 DOMAIN,mirror.lzu.edu.cn
 DOMAIN,mirror.macomnet.net
 DOMAIN,mirror.marwan.ma
-DOMAIN,mirror.met.hu
 DOMAIN,mirror.metanet.ch
 DOMAIN,mirror.metrocast.net
 DOMAIN,mirror.navercorp.com
@@ -1960,26 +1931,20 @@ DOMAIN,mirror.physik-pool.tu-berlin.de
 DOMAIN,mirror.pop-sc.rnp.br
 DOMAIN,mirror.pregi.net
 DOMAIN,mirror.ps.kz
-DOMAIN,mirror.rackdc.com
-DOMAIN,mirror.rasanegar.com
 DOMAIN,mirror.reverse.net
 DOMAIN,mirror.rise.ph
 DOMAIN,mirror.rit.edu
 DOMAIN,mirror.rol.ru
 DOMAIN,mirror.sbb.rs
-DOMAIN,mirror.sergal.org
-DOMAIN,mirror.serverbeheren.nl
 DOMAIN,mirror.serverion.com
 DOMAIN,mirror.softaculous.com
 DOMAIN,mirror.sov.uk.goscomb.net
 DOMAIN,mirror.squ.edu.om
 DOMAIN,mirror.stjschools.org
 DOMAIN,mirror.switch.ch
-DOMAIN,mirror.synyx.de
 DOMAIN,mirror.szerverem.hu
 DOMAIN,mirror.team-cymru.com
 DOMAIN,mirror.team-cymru.org
-DOMAIN,mirror.teklinks.com
 DOMAIN,mirror.tochlab.net
 DOMAIN,mirror.transip.net
 DOMAIN,mirror.truenetwork.ru
@@ -1992,7 +1957,6 @@ DOMAIN,mirror.unpad.ac.id
 DOMAIN,mirror.uoregon.edu
 DOMAIN,mirror.us-midwest-1.nexcess.net
 DOMAIN,mirror.ventraip.net.au
-DOMAIN,mirror.veriportal.com
 DOMAIN,mirror.vorboss.net
 DOMAIN,mirror.webtastix.net
 DOMAIN,mirror.xmission.com
@@ -2009,7 +1973,6 @@ DOMAIN,mirror.xtom.us
 DOMAIN,mirror.yandex.ru
 DOMAIN,mirror.yannic-bonenberger.com
 DOMAIN,mirror.yer.az
-DOMAIN,mirror.yongbok.net
 DOMAIN,mirror.za.web4africa.net
 DOMAIN,mirror2.evolution-host.com
 DOMAIN,mirrors.163.com
@@ -2017,7 +1980,6 @@ DOMAIN,mirrors.advancedhosters.com
 DOMAIN,mirrors.ae-online.de
 DOMAIN,mirrors.aliyun.com
 DOMAIN,mirrors.cat.net
-DOMAIN,mirrors.chevalier.io
 DOMAIN,mirrors.concertpass.com
 DOMAIN,mirrors.coreix.net
 DOMAIN,mirrors.de.sahilister.net
@@ -2026,16 +1988,13 @@ DOMAIN,mirrors.evowise.com
 DOMAIN,mirrors.fedoraproject.org
 DOMAIN,mirrors.gethosted.online
 DOMAIN,mirrors.gigenet.com
-DOMAIN,mirrors.hostingromania.ro
 DOMAIN,mirrors.hostingromania.ro.org
 DOMAIN,mirrors.ibiblio.org
 DOMAIN,mirrors.ircam.fr
 DOMAIN,mirrors.iu13.net
 DOMAIN,mirrors.kernel.org
-DOMAIN,mirrors.koehn.com
 DOMAIN,mirrors.linux-bulgaria.org
 DOMAIN,mirrors.m247.ro
-DOMAIN,mirrors.mi.ras.ru
 DOMAIN,mirrors.mit.edu
 DOMAIN,mirrors.mivocloud.com
 DOMAIN,mirrors.myaegean.gr
@@ -2055,17 +2014,12 @@ DOMAIN,mirrors.sarata.com
 DOMAIN,mirrors.saswata.cc
 DOMAIN,mirrors.sjtug.sjtu.edu.cn
 DOMAIN,mirrors.sonic.net
-DOMAIN,mirrors.sorengard.com
 DOMAIN,mirrors.standaloneinstaller.com
-DOMAIN,mirrors.supportex.net
-DOMAIN,mirrors.syringanetworks.net
-DOMAIN,mirrors.tripadvisor.com
 DOMAIN,mirrors.tuna.tsinghua.edu.cn
 DOMAIN,mirrors.ucr.ac.cr
 DOMAIN,mirrors.ukfast.co.uk
 DOMAIN,mirrors.up.pt
 DOMAIN,mirrors.ustc.edu.cn
-DOMAIN,mirrors.viethosting.com
 DOMAIN,mirrors.whoishostingthis.com
 DOMAIN,mirrors.xmissions.com
 DOMAIN,mirrors.xservers.ro
@@ -2082,6 +2036,7 @@ DOMAIN,mirrors.xtom.us
 DOMAIN,mixin-images.zeromesh.net
 DOMAIN,mkt-site-asset.crypto.com
 DOMAIN,mobilecenter.azureedge.net
+DOMAIN,moderate.cleantalk.org
 DOMAIN,momentjs.com
 DOMAIN,moodular.jotform.com
 DOMAIN,mosaic-blender.fxtwitter.com
@@ -2119,7 +2074,6 @@ DOMAIN,np-edge.itunes.apple.com
 DOMAIN,npm.antfu.dev
 DOMAIN,npm.im
 DOMAIN,npm.jsr.io
-DOMAIN,ntp.api.bz
 DOMAIN,ntp.msn.com
 DOMAIN,null.jsbin.com
 DOMAIN,o.n1mp.org
@@ -2159,7 +2113,6 @@ DOMAIN,pacdn.500px.org
 DOMAIN,package-assets.oomol.com
 DOMAIN,packagecloud.io
 DOMAIN,packages-cf.termux.dev
-DOMAIN,packages.argotunnel.com
 DOMAIN,packages.httpie.io
 DOMAIN,packages.linuxmint.com
 DOMAIN,packages.microsoft.com
@@ -2196,6 +2149,7 @@ DOMAIN,pics.x-n-x-x.pro
 DOMAIN,piotrkosoft.net
 DOMAIN,piston-meta.mojang.com
 DOMAIN,pkg-size.dev
+DOMAIN,pkg.cloudflare.com
 DOMAIN,pkg.cloudflareclient.com
 DOMAIN,pkg.csb.dev
 DOMAIN,pkgs.dev.azure.com
@@ -2266,7 +2220,6 @@ DOMAIN,raw.github.com
 DOMAIN,rawmarkdown.cloudflareaccess.org
 DOMAIN,rebound.postmarkapp.com
 DOMAIN,redircdn.com
-DOMAIN,redrockdigimark.commirror
 DOMAIN,redstone-launcher.mojang.com
 DOMAIN,registry-cdn.wapm.io
 DOMAIN,registry.bower.io
@@ -2457,10 +2410,10 @@ DOMAIN,snippets.freshchat.com
 DOMAIN,snt.utwente.nl
 DOMAIN,social-cdn.vivaldi.net
 DOMAIN,softwareupdate.pilotmoon.com
-DOMAIN,softwareupdate.vmware.com
 DOMAIN,solve-widget.forethought.ai
 DOMAIN,sotirov-bg.net
 DOMAIN,source.domaintools.com
+DOMAIN,source.unsplash.com
 DOMAIN,sourcemaps.squarespace.net
 DOMAIN,sourcepoint.theguardian.com
 DOMAIN,sp-spiegel-de.spiegel.de
@@ -2523,7 +2476,6 @@ DOMAIN,static.addtoany.com
 DOMAIN,static.adguard.com
 DOMAIN,static.adguardvpn.com
 DOMAIN,static.afterpay.com
-DOMAIN,static.agilebits.com
 DOMAIN,static.ahrefs.com
 DOMAIN,static.aizanmei.org
 DOMAIN,static.arxiv.org
@@ -2575,6 +2527,7 @@ DOMAIN,static.ffx.io
 DOMAIN,static.figma.com
 DOMAIN,static.filehorse.com
 DOMAIN,static.filestackapi.com
+DOMAIN,static.freedownloadmanager.org
 DOMAIN,static.freeimages.com
 DOMAIN,static.getbutton.io
 DOMAIN,static.gettyimages.com
@@ -2624,6 +2577,7 @@ DOMAIN,static.news.bitcoin.com
 DOMAIN,static.nicehash.com
 DOMAIN,static.npmjs.com
 DOMAIN,static.nrk.no
+DOMAIN,static.observablehq.com
 DOMAIN,static.oklink.com
 DOMAIN,static.okx.com
 DOMAIN,static.onlinewebfonts.com
@@ -2948,7 +2902,6 @@ DOMAIN,www.gstatic.com
 DOMAIN,www.pngmart.com
 DOMAIN,www.tbstat.com
 DOMAIN,www.typescriptlang.org
-DOMAIN,wwwftp.ciril.fr
 DOMAIN,wwwimages2.adobe.com
 DOMAIN,xenia.sote.hu
 DOMAIN,xpaywalletcdn.azureedge.net
@@ -3680,6 +3633,7 @@ DOMAIN-SUFFIX,dmxleo.com
 DOMAIN-SUFFIX,dnitv.com
 DOMAIN-SUFFIX,do.co
 DOMAIN-SUFFIX,docker.io
+DOMAIN-SUFFIX,dockerstatic.com
 DOMAIN-SUFFIX,docs.google.com
 DOMAIN-SUFFIX,dog1.verystream.com
 DOMAIN-SUFFIX,dogatch.jp
@@ -4663,6 +4617,7 @@ DOMAIN-SUFFIX,media.ci-en.jp
 DOMAIN-SUFFIX,media.strapiapp.com
 DOMAIN-SUFFIX,media.tumblr.com
 DOMAIN-SUFFIX,media.zestyio.com
+DOMAIN-SUFFIX,mediadelivery.net
 DOMAIN-SUFFIX,mediafire.com
 DOMAIN-SUFFIX,mediafree.co
 DOMAIN-SUFFIX,meetupstatic.com
@@ -4722,7 +4677,6 @@ DOMAIN-SUFFIX,mirror.serversaustralia.com.au
 DOMAIN-SUFFIX,mirror.triple-it.nl
 DOMAIN-SUFFIX,mirror.vexxhost.com
 DOMAIN-SUFFIX,mirror.vu.lt
-DOMAIN-SUFFIX,mirror1.spango.com
 DOMAIN-SUFFIX,mirrorcreator.com
 DOMAIN-SUFFIX,mirrors.dotsrc.org
 DOMAIN-SUFFIX,mirrors.hoobly.com
@@ -4958,6 +4912,7 @@ DOMAIN-SUFFIX,oaiusercontent.com
 DOMAIN-SUFFIX,oath.cloud
 DOMAIN-SUFFIX,oath.com
 DOMAIN-SUFFIX,oboom.com
+DOMAIN-SUFFIX,observableusercontent.com
 DOMAIN-SUFFIX,obsproject.com
 DOMAIN-SUFFIX,ocnttv.com
 DOMAIN-SUFFIX,oculuscdn.com
@@ -5020,6 +4975,7 @@ DOMAIN-SUFFIX,paradisehotelquizfox.com
 DOMAIN-SUFFIX,paramount.com
 DOMAIN-SUFFIX,paramountplus.com
 DOMAIN-SUFFIX,parastorage.com
+DOMAIN-SUFFIX,parceljs.org
 DOMAIN-SUFFIX,pashtovoa.com
 DOMAIN-SUFFIX,pastebin.com
 DOMAIN-SUFFIX,patientpop.com
@@ -5403,6 +5359,7 @@ DOMAIN-SUFFIX,starwarskids.com
 DOMAIN-SUFFIX,static-prod-web.miniclip.com
 DOMAIN-SUFFIX,static-qobuz.com
 DOMAIN-SUFFIX,static-verizon.com
+DOMAIN-SUFFIX,static.amplience.net
 DOMAIN-SUFFIX,static.chaosgroup.com
 DOMAIN-SUFFIX,static.ctinets.com
 DOMAIN-SUFFIX,static.domains
@@ -5461,6 +5418,7 @@ DOMAIN-SUFFIX,superfiliate-cdn.com
 DOMAIN-SUFFIX,surge.sh
 DOMAIN-SUFFIX,surrit.com
 DOMAIN-SUFFIX,susercontent.com
+DOMAIN-SUFFIX,svbtleusercontent.com
 DOMAIN-SUFFIX,sway-cdn.com
 DOMAIN-SUFFIX,swiftupload.com
 DOMAIN-SUFFIX,swiftypecdn.com
@@ -5951,6 +5909,7 @@ DOMAIN-KEYWORD,ekwxsntt
 DOMAIN-KEYWORD,emby.
 DOMAIN-KEYWORD,emby2.
 DOMAIN-KEYWORD,embyssl.
+DOMAIN-KEYWORD,fonts.hanime1
 DOMAIN-KEYWORD,hamivideo.cdn.hinet.net
 DOMAIN-KEYWORD,hbogoasia
 DOMAIN-KEYWORD,japonx
@@ -5973,6 +5932,7 @@ DOMAIN-KEYWORD,tiktokcdn
 DOMAIN-KEYWORD,ttvnw
 DOMAIN-KEYWORD,tvbanywhere
 DOMAIN-KEYWORD,uk-live
+DOMAIN-KEYWORD,vdownload.hanime1
 DOMAIN-KEYWORD,vod-adaptive.akamaized.net
 DOMAIN-KEYWORD,voddazn
 DOMAIN-KEYWORD,web-assets.zendesk

@@ -1,9 +1,7 @@
-# Adblock total line 5976
-# Last updated Sun 04/13/2025 22:14:24.19
+# Adblock total line 5936
+# Last updated Wed 04/16/2025 22:15:46.64
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
-||1-mirrors.in.sahilister.net^
-||2-mirrors.in.sahilister.net^
 ||3dna.nationbuilder.com^
 ||a.deviantart.net^
 ||a.fireside.fm^
@@ -42,42 +40,32 @@
 ||anorien.csc.warwick.ac.uk^
 ||answers-afd.microsoft.com^
 ||apache-mirror.rbc.ru^
-||apache.01link.hk^
 ||apache.40b.nl^
-||apache.belnet.be^
 ||apache.cbox.biz^
 ||apache.claz.org^
 ||apache.communilink.net^
-||apache.cp.if.ua^
 ||apache.crihan.fr^
 ||apache.cs.utah.edu^
 ||apache.cs.utah.edu.org^
 ||apache.cs.uu.nl^
 ||apache.cu.be^
-||apache.dattatec.com^
-||apache.forsale.plus^
 ||apache.forthnet.gr^
 ||apache.hippo.nl^
 ||apache.ip-connect.vn.ua^
 ||apache.is.co.za^
-||apache.javapipe.com^
 ||apache.lauf-forum.at^
-||apache.mediamirrors.org^
 ||apache.melbourneitmirror.net^
 ||apache.mesi.com.ar^
 ||apache.miloslavbrada.cz^
 ||apache.mindstudios.com^
 ||apache.mivzakim.net^
-||apache.oshte.net^
 ||apache.osuosl.org^
 ||apache.otenet.gr^
-||apache.panu.it^
 ||apache.proserve.nl^
 ||apache.rediris.es^
 ||apache.redkiwi.nl^
 ||apache.saix.net^
 ||apache.spd.co.il^
-||apache.spinellicreations.com^
 ||apache.stu.edu.tw^
 ||apache.tt.co.kr^
 ||apache.uib.no^
@@ -115,6 +103,7 @@
 ||app-static.eu.posthog.com^
 ||app-static.turtl.co^
 ||app-updates.agilebits.com^
+||app.1password.com^
 ||app.backinstock.org^
 ||app.brightback.com^
 ||app.chatwoot.com^
@@ -135,7 +124,6 @@
 ||apt.xpipe.io^
 ||archive.cs.uu.nl^
 ||archive.mozilla.org^
-||artfiles.org.org^
 ||artifacts.electronjs.org^
 ||artworks.thetvdb.com^
 ||asset-cdn.uscardforum.com^
@@ -233,7 +221,6 @@
 ||assets.matters.news^
 ||assets.mayoclinic.org^
 ||assets.media-platform.com^
-||assets.mediadelivery.net^
 ||assets.monei.com^
 ||assets.monica.im^
 ||assets.mozilla.social^
@@ -360,6 +347,7 @@
 ||bundler.nice-team.net^
 ||bundler.wix-code.com^
 ||bundles.npr.org^
+||bunnycdn-video-assets.b-cdn.net^
 ||businessunitprofile-cdn.trustpilot.net^
 ||busuanzi.ibruce.info^
 ||c.1password.com^
@@ -394,7 +382,6 @@
 ||cc-embed.adobe.com^
 ||cc.boyfriendtv.com^
 ||cc.coemn.com^
-||cc.uoc.gr^
 ||cdimage.kali.org^
 ||cdn-1.ggjav.com^
 ||cdn-a.sonyentertainmentnetwork.com^
@@ -442,6 +429,7 @@
 ||cdn.17app.co^
 ||cdn.18jav.tv^
 ||cdn.7tv.app^
+||cdn.accounts.autodesk.com^
 ||cdn.accounts.nintendo.com^
 ||cdn.adguard.com^
 ||cdn.adguard.info^
@@ -539,6 +527,7 @@
 ||cdn.filen.io^
 ||cdn.firebase.com^
 ||cdn.fluidplayer.com^
+||cdn.fontshare.com^
 ||cdn.forms.office.net^
 ||cdn.fosstodon.org^
 ||cdn.fourthwall.com^
@@ -712,6 +701,7 @@
 ||cdn.tailwindcss.com^
 ||cdn.termius.com^
 ||cdn.thenewstack.io^
+||cdn.thingiverse.com^
 ||cdn.tolt.io^
 ||cdn.tracxn.com^
 ||cdn.transcend.io^
@@ -888,7 +878,6 @@
 ||code.piano.io^
 ||code.upscope.io^
 ||codeload.github.com^
-||compass-ssl.xbox.com^
 ||components.clever-cloud.com^
 ||components.justanswer.com^
 ||components.trynow.net^
@@ -929,24 +918,19 @@
 ||cpan.catalyst.net.nz^
 ||cpan.cpantesters.org^
 ||cpan.cs.utah.edu^
-||cpan.cs.uu.nl^
 ||cpan.dcc.uchile.cl^
 ||cpan.develooper.com^
-||cpan.etla.org^
 ||cpan.excellmedia.net^
 ||cpan.inode.at^
 ||cpan.inspire.net.nz^
 ||cpan.ip-connect.vn.ua^
 ||cpan.lagoon.nc^
-||cpan.llarian.net^
 ||cpan.lnx.sk^
 ||cpan.metacpan.org^
 ||cpan.mines-albi.fr^
 ||cpan.mmgdesigns.com.ar^
-||cpan.nctu.edu.tw^
 ||cpan.noris.de^
 ||cpan.pair.com^
-||cpan.panu.it^
 ||cpan.perl.pt^
 ||cpan.pesat.net.id^
 ||cpan.rinet.ru^
@@ -975,14 +959,10 @@
 ||css.createsend1.com^
 ||ctan.altspu.ru^
 ||ctan.crest.fr^
-||ctan.cs.uu.nl^
 ||ctan.dcc.uchile.cl^
 ||ctan.ebinger.cc^
-||ctan.epst-tlemcen.dz^
 ||ctan.gutenberg.eu.org^
-||ctan.ijs.si^
 ||ctan.imsc.res.in^
-||ctan.kako-dev.de^
 ||ctan.math.ca^
 ||ctan.math.illinois.edu^
 ||ctan.math.utah.edu^
@@ -999,9 +979,11 @@
 ||cuinf.sfcat.link^
 ||curl.se^
 ||cw-image-resizer.cwg.tw^
+||d.myani.org^
 ||d2c.aws.amazon.com^
 ||d4.alternativeto.net^
 ||dam.freshworks.com^
+||damassets.autodesk.net^
 ||dashasiafox.akamaized.netflix^
 ||dassets.shimano.com^
 ||data.pendo.io^
@@ -1094,7 +1076,6 @@
 ||download.mozilla.org^
 ||download.mxfast.com^
 ||download.nektony.com^
-||download.nextag.com^
 ||download.nus.edu.sg^
 ||download.nust.na^
 ||download.onlyoffice.com^
@@ -1110,14 +1091,13 @@
 ||download.typora.io^
 ||download.visualstudio.microsoft.com^
 ||download.xbox.com^
-||download.xs4all.nl^
 ||download2.epicgames.com^
 ||download3.epicgames.com^
 ||download4.epicgames.com^
-||downloader.cursor.sh^
 ||downloadr2.apkmirror.com^
 ||downloads.1password.com^
 ||downloads.coindesk.com^
+||downloads.cursor.com^
 ||downloads.lemonsqueezy.com^
 ||downloads.openwrt.org^
 ||downloads.raspberrypi.com^
@@ -1211,6 +1191,7 @@
 ||favicons.teams.cloudflare.com^
 ||fdn.gsmarena.com^
 ||fdn2.gsmarena.com^
+||featureflags.netlify.com^
 ||fedorapeople.org^
 ||fesdk.nexon.com^
 ||fiddle.fastly.dev^
@@ -1278,12 +1259,10 @@
 ||ftp.byfly.by^
 ||ftp.byfly.by.org^
 ||ftp.carnet.hr^
-||ftp.cc.uoc.gr^
 ||ftp.cixug.es^
 ||ftp.cpan.org^
 ||ftp.cs.uu.nl^
 ||ftp.cse.buffalo.edu^
-||ftp.cuhk.edu.hk^
 ||ftp.cvut.cz^
 ||ftp.download-by.net^
 ||ftp.eq.uc.pt^
@@ -1301,12 +1280,9 @@
 ||ftp.halifax.rwth-aachen.de^
 ||ftp.harukasan.org^
 ||ftp.heanet.ie^
-||ftp.heikorichter.name^
 ||ftp.hosteurope.de^
 ||ftp.icm.edu.pl^
-||ftp.igh.cnrs.fr^
 ||ftp.is.co.za^
-||ftp.itu.edu.tr^
 ||ftp.jaist.ac.jp^
 ||ftp.kaist.ac.kr^
 ||ftp.kddilabs.jp^
@@ -1323,12 +1299,10 @@
 ||ftp.mpi-sb.mpg.de^
 ||ftp.muug.ca^
 ||ftp.nara.wide.ad.jp^
-||ftp.neowiz.com^
 ||ftp.nluug.nl^
 ||ftp.ntua.gr^
 ||ftp.osuosl.org^
 ||ftp.panu.it^
-||ftp.pbone.net^
 ||ftp.piotrkosoft.net^
 ||ftp.ps.pl^
 ||ftp.rediris.es^
@@ -1382,7 +1356,6 @@
 ||gnu.askapache.com^
 ||gnu.c3sl.ufpr.br^
 ||gnu.freemirror.org^
-||gnu.spinellicreations.com^
 ||gnuftp.uib.no^
 ||go-updater.brave.com^
 ||go.imperva.com^
@@ -1443,6 +1416,7 @@
 ||i.jpg.dog^
 ||i.kickstarter.com^
 ||i.loli.best^
+||i.mediatek.com^
 ||i.mt.lv^
 ||i.mydramalist.com^
 ||i.niupic.com^
@@ -1536,6 +1510,7 @@
 ||images.pling.com^
 ||images.plurk.com^
 ||images.prismic.io^
+||images.profile.autodesk.com^
 ||images.ptt.cc^
 ||images.purevpn-tools.com^
 ||images.scalero.io^
@@ -1620,7 +1595,6 @@
 ||img.pawoo.net^
 ||img.perfops.net^
 ||img.picacomic.com^
-||img.ra7.xyz^
 ||img.reg.ru^
 ||img.reimu.net^
 ||img.represent.com^
@@ -1633,6 +1607,7 @@
 ||img.sparknotes.com^
 ||img.supjav.com^
 ||img.telemetr.io^
+||img.thingiverse.com^
 ||img.timero.xyz^
 ||img.urlnode.com^
 ||img.utdstc.com^
@@ -1780,6 +1755,7 @@
 ||maps.geoapify.com^
 ||maps.gstatic.com^
 ||marketing.figma.com^
+||marketing.thingiverse.com^
 ||marketplace-web-assets.vinted.com^
 ||marwan.ma^
 ||mastodon-static.miao.dev^
@@ -1883,7 +1859,6 @@
 ||mirror.apad.pro^
 ||mirror.as43289.net^
 ||mirror.aut.ac.nz^
-||mirror.bhoovd.com^
 ||mirror.bibleonline.ru^
 ||mirror.biznetgio.com^
 ||mirror.bom.albony.in^
@@ -1901,7 +1876,6 @@
 ||mirror.datapipe.net^
 ||mirror.de.leaseweb.net^
 ||mirror.del.albony.in^
-||mirror.dkd.de^
 ||mirror.dkm.cz^
 ||mirror.dogado.de^
 ||mirror.downloadvn.com^
@@ -1924,10 +1898,8 @@
 ||mirror.is.co.za^
 ||mirror.its.dal.ca^
 ||mirror.jax.hugeserver.com^
-||mirror.jre655.com^
 ||mirror.karneval.cz^
 ||mirror.keystealth.org^
-||mirror.kiu.ac.ug^
 ||mirror.klaus-uwe.me^
 ||mirror.koddos.net^
 ||mirror.kumi.systems^
@@ -1941,7 +1913,6 @@
 ||mirror.lzu.edu.cn^
 ||mirror.macomnet.net^
 ||mirror.marwan.ma^
-||mirror.met.hu^
 ||mirror.metanet.ch^
 ||mirror.metrocast.net^
 ||mirror.navercorp.com^
@@ -1960,26 +1931,20 @@
 ||mirror.pop-sc.rnp.br^
 ||mirror.pregi.net^
 ||mirror.ps.kz^
-||mirror.rackdc.com^
-||mirror.rasanegar.com^
 ||mirror.reverse.net^
 ||mirror.rise.ph^
 ||mirror.rit.edu^
 ||mirror.rol.ru^
 ||mirror.sbb.rs^
-||mirror.sergal.org^
-||mirror.serverbeheren.nl^
 ||mirror.serverion.com^
 ||mirror.softaculous.com^
 ||mirror.sov.uk.goscomb.net^
 ||mirror.squ.edu.om^
 ||mirror.stjschools.org^
 ||mirror.switch.ch^
-||mirror.synyx.de^
 ||mirror.szerverem.hu^
 ||mirror.team-cymru.com^
 ||mirror.team-cymru.org^
-||mirror.teklinks.com^
 ||mirror.tochlab.net^
 ||mirror.transip.net^
 ||mirror.truenetwork.ru^
@@ -1992,7 +1957,6 @@
 ||mirror.uoregon.edu^
 ||mirror.us-midwest-1.nexcess.net^
 ||mirror.ventraip.net.au^
-||mirror.veriportal.com^
 ||mirror.vorboss.net^
 ||mirror.webtastix.net^
 ||mirror.xmission.com^
@@ -2009,7 +1973,6 @@
 ||mirror.yandex.ru^
 ||mirror.yannic-bonenberger.com^
 ||mirror.yer.az^
-||mirror.yongbok.net^
 ||mirror.za.web4africa.net^
 ||mirror2.evolution-host.com^
 ||mirrors.163.com^
@@ -2017,7 +1980,6 @@
 ||mirrors.ae-online.de^
 ||mirrors.aliyun.com^
 ||mirrors.cat.net^
-||mirrors.chevalier.io^
 ||mirrors.concertpass.com^
 ||mirrors.coreix.net^
 ||mirrors.de.sahilister.net^
@@ -2026,16 +1988,13 @@
 ||mirrors.fedoraproject.org^
 ||mirrors.gethosted.online^
 ||mirrors.gigenet.com^
-||mirrors.hostingromania.ro^
 ||mirrors.hostingromania.ro.org^
 ||mirrors.ibiblio.org^
 ||mirrors.ircam.fr^
 ||mirrors.iu13.net^
 ||mirrors.kernel.org^
-||mirrors.koehn.com^
 ||mirrors.linux-bulgaria.org^
 ||mirrors.m247.ro^
-||mirrors.mi.ras.ru^
 ||mirrors.mit.edu^
 ||mirrors.mivocloud.com^
 ||mirrors.myaegean.gr^
@@ -2055,17 +2014,12 @@
 ||mirrors.saswata.cc^
 ||mirrors.sjtug.sjtu.edu.cn^
 ||mirrors.sonic.net^
-||mirrors.sorengard.com^
 ||mirrors.standaloneinstaller.com^
-||mirrors.supportex.net^
-||mirrors.syringanetworks.net^
-||mirrors.tripadvisor.com^
 ||mirrors.tuna.tsinghua.edu.cn^
 ||mirrors.ucr.ac.cr^
 ||mirrors.ukfast.co.uk^
 ||mirrors.up.pt^
 ||mirrors.ustc.edu.cn^
-||mirrors.viethosting.com^
 ||mirrors.whoishostingthis.com^
 ||mirrors.xmissions.com^
 ||mirrors.xservers.ro^
@@ -2082,6 +2036,7 @@
 ||mixin-images.zeromesh.net^
 ||mkt-site-asset.crypto.com^
 ||mobilecenter.azureedge.net^
+||moderate.cleantalk.org^
 ||momentjs.com^
 ||moodular.jotform.com^
 ||mosaic-blender.fxtwitter.com^
@@ -2119,7 +2074,6 @@
 ||npm.antfu.dev^
 ||npm.im^
 ||npm.jsr.io^
-||ntp.api.bz^
 ||ntp.msn.com^
 ||null.jsbin.com^
 ||o.n1mp.org^
@@ -2159,7 +2113,6 @@
 ||package-assets.oomol.com^
 ||packagecloud.io^
 ||packages-cf.termux.dev^
-||packages.argotunnel.com^
 ||packages.httpie.io^
 ||packages.linuxmint.com^
 ||packages.microsoft.com^
@@ -2196,6 +2149,7 @@
 ||piotrkosoft.net^
 ||piston-meta.mojang.com^
 ||pkg-size.dev^
+||pkg.cloudflare.com^
 ||pkg.cloudflareclient.com^
 ||pkg.csb.dev^
 ||pkgs.dev.azure.com^
@@ -2266,7 +2220,6 @@
 ||rawmarkdown.cloudflareaccess.org^
 ||rebound.postmarkapp.com^
 ||redircdn.com^
-||redrockdigimark.commirror^
 ||redstone-launcher.mojang.com^
 ||registry-cdn.wapm.io^
 ||registry.bower.io^
@@ -2457,10 +2410,10 @@
 ||snt.utwente.nl^
 ||social-cdn.vivaldi.net^
 ||softwareupdate.pilotmoon.com^
-||softwareupdate.vmware.com^
 ||solve-widget.forethought.ai^
 ||sotirov-bg.net^
 ||source.domaintools.com^
+||source.unsplash.com^
 ||sourcemaps.squarespace.net^
 ||sourcepoint.theguardian.com^
 ||sp-spiegel-de.spiegel.de^
@@ -2523,7 +2476,6 @@
 ||static.adguard.com^
 ||static.adguardvpn.com^
 ||static.afterpay.com^
-||static.agilebits.com^
 ||static.ahrefs.com^
 ||static.aizanmei.org^
 ||static.arxiv.org^
@@ -2575,6 +2527,7 @@
 ||static.figma.com^
 ||static.filehorse.com^
 ||static.filestackapi.com^
+||static.freedownloadmanager.org^
 ||static.freeimages.com^
 ||static.getbutton.io^
 ||static.gettyimages.com^
@@ -2624,6 +2577,7 @@
 ||static.nicehash.com^
 ||static.npmjs.com^
 ||static.nrk.no^
+||static.observablehq.com^
 ||static.oklink.com^
 ||static.okx.com^
 ||static.onlinewebfonts.com^
@@ -2948,7 +2902,6 @@
 ||www.pngmart.com^
 ||www.tbstat.com^
 ||www.typescriptlang.org^
-||wwwftp.ciril.fr^
 ||wwwimages2.adobe.com^
 ||xenia.sote.hu^
 ||xpaywalletcdn.azureedge.net^
@@ -3680,6 +3633,7 @@
 ||dnitv.com^
 ||do.co^
 ||docker.io^
+||dockerstatic.com^
 ||docs.google.com^
 ||dog1.verystream.com^
 ||dogatch.jp^
@@ -4663,6 +4617,7 @@
 ||media.strapiapp.com^
 ||media.tumblr.com^
 ||media.zestyio.com^
+||mediadelivery.net^
 ||mediafire.com^
 ||mediafree.co^
 ||meetupstatic.com^
@@ -4722,7 +4677,6 @@
 ||mirror.triple-it.nl^
 ||mirror.vexxhost.com^
 ||mirror.vu.lt^
-||mirror1.spango.com^
 ||mirrorcreator.com^
 ||mirrors.dotsrc.org^
 ||mirrors.hoobly.com^
@@ -4958,6 +4912,7 @@
 ||oath.cloud^
 ||oath.com^
 ||oboom.com^
+||observableusercontent.com^
 ||obsproject.com^
 ||ocnttv.com^
 ||oculuscdn.com^
@@ -5020,6 +4975,7 @@
 ||paramount.com^
 ||paramountplus.com^
 ||parastorage.com^
+||parceljs.org^
 ||pashtovoa.com^
 ||pastebin.com^
 ||patientpop.com^
@@ -5403,6 +5359,7 @@
 ||static-prod-web.miniclip.com^
 ||static-qobuz.com^
 ||static-verizon.com^
+||static.amplience.net^
 ||static.chaosgroup.com^
 ||static.ctinets.com^
 ||static.domains^
@@ -5461,6 +5418,7 @@
 ||surge.sh^
 ||surrit.com^
 ||susercontent.com^
+||svbtleusercontent.com^
 ||sway-cdn.com^
 ||swiftupload.com^
 ||swiftypecdn.com^
@@ -5951,6 +5909,7 @@
 /emby./
 /emby2./
 /embyssl./
+/fonts.hanime1/
 /hamivideo.cdn.hinet.net/
 /hbogoasia/
 /japonx/
@@ -5973,6 +5932,7 @@
 /ttvnw/
 /tvbanywhere/
 /uk-live/
+/vdownload.hanime1/
 /vod-adaptive.akamaized.net/
 /voddazn/
 /web-assets.zendesk/
