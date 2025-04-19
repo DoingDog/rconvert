@@ -1,5 +1,5 @@
-# Main total line 6895
-# Last updated Wed 04/16/2025 22:15:46.34
+# Main total line 6897
+# Last updated Sat 04/19/2025 22:12:03.52
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -34,6 +34,7 @@ DOMAIN,amupdatedl2.microsoft.com
 DOMAIN,amupdatedl3.microsoft.com
 DOMAIN,amupdatedl4.microsoft.com
 DOMAIN,amupdatedl5.microsoft.com
+DOMAIN,analytics.canarymail.io
 DOMAIN,analytics.twitter.com
 DOMAIN,analytics.welcomesoftware.com
 DOMAIN,android-safebrowsing.google.com
@@ -378,6 +379,7 @@ DOMAIN,cache.armorgames.com
 DOMAIN,cache.hackedfreegames.com
 DOMAIN,cache.pack.google.com
 DOMAIN,cache.video.iqiyi.com
+DOMAIN,canny-assets.io
 DOMAIN,cassette.sphdigital.com.sg
 DOMAIN,cc-embed.adobe.com
 DOMAIN,cc.boyfriendtv.com
@@ -987,6 +989,7 @@ DOMAIN,damassets.autodesk.net
 DOMAIN,dashasiafox.akamaized.netflix
 DOMAIN,dassets.shimano.com
 DOMAIN,data.pendo.io
+DOMAIN,data.schemaapp.com
 DOMAIN,data.web.clickup.com
 DOMAIN,david-dm.org
 DOMAIN,daznfeeds.com.edgekey.net
@@ -1058,6 +1061,7 @@ DOMAIN,download-core.sys.truenas.net
 DOMAIN,download.anydesk.com
 DOMAIN,download.bazzite.gg
 DOMAIN,download.beeper.com
+DOMAIN,download.clashverge.dev
 DOMAIN,download.cpuid.com
 DOMAIN,download.cypress.io
 DOMAIN,download.dlsite.com
@@ -1102,6 +1106,7 @@ DOMAIN,downloads.lemonsqueezy.com
 DOMAIN,downloads.openwrt.org
 DOMAIN,downloads.raspberrypi.com
 DOMAIN,downloads.wordpress.org
+DOMAIN,downloads.x-wrt.com
 DOMAIN,downloads.xiph.org
 DOMAIN,downloads.xrite.com
 DOMAIN,drive.massgrave.dev
@@ -1218,6 +1223,7 @@ DOMAIN,firebase-settings.crashlytics.com
 DOMAIN,firebaseinstallations.googleapis.com
 DOMAIN,firebaselogging-pa.googleapis.com
 DOMAIN,firebaselogging.googleapis.com
+DOMAIN,firebaseremoteconfig.googleapis.com
 DOMAIN,firefox.settings.services.mozilla.com
 DOMAIN,flo.uri.sh
 DOMAIN,flows.trysavvy.com
@@ -1242,6 +1248,7 @@ DOMAIN,frames-commandbar-prod.commandbar.com
 DOMAIN,freedif.org
 DOMAIN,front-resource.fs.com
 DOMAIN,frontend-apps.workos.com
+DOMAIN,frontend.floatplane.com
 DOMAIN,fs2.onlyhentaistuff.com
 DOMAIN,fscdn.eppo.cloud
 DOMAIN,ftp-chi.osuosl.org
@@ -1609,7 +1616,6 @@ DOMAIN,img.supjav.com
 DOMAIN,img.telemetr.io
 DOMAIN,img.thingiverse.com
 DOMAIN,img.timero.xyz
-DOMAIN,img.urlnode.com
 DOMAIN,img.utdstc.com
 DOMAIN,img.vim-cn.com
 DOMAIN,img.washingtonpost.com
@@ -1697,7 +1703,6 @@ DOMAIN,jslibs.blackmagicdesign.com
 DOMAIN,jsonplaceholder.typicode.com
 DOMAIN,jssdk.opin.media
 DOMAIN,jssocdn.indiatimes.com
-DOMAIN,k-cdn.depot.dev
 DOMAIN,kartolo.sby.datautama.net.id
 DOMAIN,kdata1.com
 DOMAIN,kde.c3sl.ufpr.br
@@ -1910,7 +1915,6 @@ DOMAIN,mirror.linux-ia64.org
 DOMAIN,mirror.liquidtelecom.com
 DOMAIN,mirror.low-orbit.net
 DOMAIN,mirror.lyrahosting.com
-DOMAIN,mirror.lzu.edu.cn
 DOMAIN,mirror.macomnet.net
 DOMAIN,mirror.marwan.ma
 DOMAIN,mirror.metanet.ch
@@ -1975,7 +1979,6 @@ DOMAIN,mirror.yannic-bonenberger.com
 DOMAIN,mirror.yer.az
 DOMAIN,mirror.za.web4africa.net
 DOMAIN,mirror2.evolution-host.com
-DOMAIN,mirrors.163.com
 DOMAIN,mirrors.advancedhosters.com
 DOMAIN,mirrors.ae-online.de
 DOMAIN,mirrors.aliyun.com
@@ -2002,9 +2005,7 @@ DOMAIN,mirrors.namecheap.com
 DOMAIN,mirrors.nav.ro
 DOMAIN,mirrors.neterra.net
 DOMAIN,mirrors.netix.net
-DOMAIN,mirrors.neusoft.edu.cn
 DOMAIN,mirrors.nic.cz
-DOMAIN,mirrors.nju.edu.cn
 DOMAIN,mirrors.nxthost.com
 DOMAIN,mirrors.ocf.berkeley.edu
 DOMAIN,mirrors.rackhosting.com
@@ -2012,14 +2013,11 @@ DOMAIN,mirrors.rit.edu
 DOMAIN,mirrors.rpmfusion.org
 DOMAIN,mirrors.sarata.com
 DOMAIN,mirrors.saswata.cc
-DOMAIN,mirrors.sjtug.sjtu.edu.cn
 DOMAIN,mirrors.sonic.net
 DOMAIN,mirrors.standaloneinstaller.com
-DOMAIN,mirrors.tuna.tsinghua.edu.cn
 DOMAIN,mirrors.ucr.ac.cr
 DOMAIN,mirrors.ukfast.co.uk
 DOMAIN,mirrors.up.pt
-DOMAIN,mirrors.ustc.edu.cn
 DOMAIN,mirrors.whoishostingthis.com
 DOMAIN,mirrors.xmissions.com
 DOMAIN,mirrors.xservers.ro
@@ -2088,11 +2086,13 @@ DOMAIN,oct8neproxy.azurewebsites.net
 DOMAIN,ocvideo.apple.com
 DOMAIN,officecdnmac.microsoft.com
 DOMAIN,ohttp-relay1.fastly-edge.com
+DOMAIN,onepluscommunityserver.com
 DOMAIN,ooo.0o0.ooo
 DOMAIN,open-vsx.org
 DOMAIN,openapi.vercel.sh
 DOMAIN,openseauserdata.com
 DOMAIN,opensignal.cdnbye.com
+DOMAIN,opfiles.b-cdn.net
 DOMAIN,optimizationguide-pa.googleapis.com
 DOMAIN,optimizely.com
 DOMAIN,organizer.bizzabo.com
@@ -2126,6 +2126,7 @@ DOMAIN,parts.blog.livedoor.jp
 DOMAIN,patterns.hiive.cloud
 DOMAIN,pba.apple.com
 DOMAIN,pbc.wsj.com
+DOMAIN,pbs.floatplane.com
 DOMAIN,pcz.javidol.org
 DOMAIN,pengtu.cc
 DOMAIN,pf-cdn-content-prod.azureedge.net
@@ -2146,6 +2147,7 @@ DOMAIN,pics.mf8.biz
 DOMAIN,pics.paypal.com
 DOMAIN,pics.vpdmm.cc
 DOMAIN,pics.x-n-x-x.pro
+DOMAIN,pim-media.intel.com
 DOMAIN,piotrkosoft.net
 DOMAIN,piston-meta.mojang.com
 DOMAIN,pkg-size.dev
@@ -2189,7 +2191,6 @@ DOMAIN,pro2-ui-assets-s3-fy.myportfolio.com
 DOMAIN,prod-cdn.webtune.ai
 DOMAIN,prod-packager-packages.codesandbox.io
 DOMAIN,prod.addictinggames.com
-DOMAIN,prod.msocdn.com
 DOMAIN,product-downloads.atlassian.com
 DOMAIN,profile-images.xing.com
 DOMAIN,promotions.betfair.com
@@ -2641,6 +2642,7 @@ DOMAIN,static.xns.one
 DOMAIN,static.xxxshake.com
 DOMAIN,static.zaobao.com
 DOMAIN,static.zaobao.com.sg
+DOMAIN,static.zuora.com
 DOMAIN,static1.lottiefiles.com
 DOMAIN,static1.muchohentai.com
 DOMAIN,static1.smartbear.co
@@ -2671,6 +2673,7 @@ DOMAIN,stats.codesandbox.io
 DOMAIN,stats.setapp.com
 DOMAIN,stats.setapp.macpaw.dev
 DOMAIN,stats.snipaste.com
+DOMAIN,status.canarymail.io
 DOMAIN,status.ui.com
 DOMAIN,stbff.newfold.com
 DOMAIN,steam.apac.qtlglb.com
@@ -2740,11 +2743,11 @@ DOMAIN,thumbsnap.com
 DOMAIN,tiles.stadiamaps.com
 DOMAIN,tiles.windy.com
 DOMAIN,time.cloudflare.com
+DOMAIN,time.google.com
 DOMAIN,time.windows.com
 DOMAIN,tn.txxx.tube
 DOMAIN,tn.vjav.com
 DOMAIN,todoist.b-cdn.net
-DOMAIN,ton.local.twitter.com
 DOMAIN,tools-static.wmflabs.org
 DOMAIN,tools.refokus.com
 DOMAIN,top1cdn.top1health.com
@@ -3780,6 +3783,7 @@ DOMAIN-SUFFIX,ezocdn.com
 DOMAIN-SUFFIX,f-droid.org
 DOMAIN-SUFFIX,f.hubspotemail.net
 DOMAIN-SUFFIX,f.hubspotfree.net
+DOMAIN-SUFFIX,f.hubspotstarter.net
 DOMAIN-SUFFIX,f1esports.com
 DOMAIN-SUFFIX,f1manager.com
 DOMAIN-SUFFIX,f1play.com
@@ -4538,7 +4542,6 @@ DOMAIN-SUFFIX,letsupload.co
 DOMAIN-SUFFIX,letsupload.io
 DOMAIN-SUFFIX,lf16-geckocdn.bytegecko-i18n.com
 DOMAIN-SUFFIX,lf16-pkgcdn.pitaya-clientai.com
-DOMAIN-SUFFIX,li-cdn.com
 DOMAIN-SUFFIX,liangzipic.com
 DOMAIN-SUFFIX,libsyn.com
 DOMAIN-SUFFIX,licdn.com
@@ -5238,7 +5241,6 @@ DOMAIN-SUFFIX,screens-lab.jp
 DOMAIN-SUFFIX,scribd.com
 DOMAIN-SUFFIX,scribdassets.com
 DOMAIN-SUFFIX,seadn.io
-DOMAIN-SUFFIX,search.ipfsgate.com
 DOMAIN-SUFFIX,seattlespheres.com
 DOMAIN-SUFFIX,secureservercdn.net
 DOMAIN-SUFFIX,secureupload.eu

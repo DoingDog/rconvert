@@ -1,5 +1,5 @@
-# Clash total line 3409
-# Last updated Wed 04/16/2025 22:15:36.34
+# Clash total line 3416
+# Last updated Sat 04/19/2025 22:11:53.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -29,6 +29,7 @@ payload:
   - DOMAIN,alt.idgesg.net
   - DOMAIN,amazon-omni-cdn.com
   - DOMAIN,amp.azure.net
+  - DOMAIN,analytics.canarymail.io
   - DOMAIN,analytics.twitter.com
   - DOMAIN,analytics.welcomesoftware.com
   - DOMAIN,anchor.digitalocean.com
@@ -327,6 +328,7 @@ payload:
   - DOMAIN,cache-05.filehippo.net
   - DOMAIN,cache.armorgames.com
   - DOMAIN,cache.hackedfreegames.com
+  - DOMAIN,canny-assets.io
   - DOMAIN,cassette.sphdigital.com.sg
   - DOMAIN,cc-embed.adobe.com
   - DOMAIN,cc.boyfriendtv.com
@@ -881,6 +883,7 @@ payload:
   - DOMAIN,damassets.autodesk.net
   - DOMAIN,dassets.shimano.com
   - DOMAIN,data.pendo.io
+  - DOMAIN,data.schemaapp.com
   - DOMAIN,data.web.clickup.com
   - DOMAIN,david-dm.org
   - DOMAIN,db.onlinewebfonts.com
@@ -1019,6 +1022,7 @@ payload:
   - DOMAIN,firebaseinstallations.googleapis.com
   - DOMAIN,firebaselogging-pa.googleapis.com
   - DOMAIN,firebaselogging.googleapis.com
+  - DOMAIN,firebaseremoteconfig.googleapis.com
   - DOMAIN,firefox.settings.services.mozilla.com
   - DOMAIN,flo.uri.sh
   - DOMAIN,flows.trysavvy.com
@@ -1041,6 +1045,7 @@ payload:
   - DOMAIN,freeshippingbar.herokuapp.com
   - DOMAIN,front-resource.fs.com
   - DOMAIN,frontend-apps.workos.com
+  - DOMAIN,frontend.floatplane.com
   - DOMAIN,fs2.onlyhentaistuff.com
   - DOMAIN,fscdn.eppo.cloud
   - DOMAIN,g-static.ap4r.com
@@ -1302,7 +1307,6 @@ payload:
   - DOMAIN,img.telemetr.io
   - DOMAIN,img.thingiverse.com
   - DOMAIN,img.timero.xyz
-  - DOMAIN,img.urlnode.com
   - DOMAIN,img.utdstc.com
   - DOMAIN,img.vim-cn.com
   - DOMAIN,img.washingtonpost.com
@@ -1387,7 +1391,6 @@ payload:
   - DOMAIN,jsonplaceholder.typicode.com
   - DOMAIN,jssdk.opin.media
   - DOMAIN,jssocdn.indiatimes.com
-  - DOMAIN,k-cdn.depot.dev
   - DOMAIN,kdata1.com
   - DOMAIN,keyframe-cdn.abcnews.com
   - DOMAIN,lain.bgm.tv
@@ -1593,6 +1596,7 @@ payload:
   - DOMAIN,oss.moe.cat
   - DOMAIN,ovo.wxw.moe
   - DOMAIN,ovp.itv.com
+  - DOMAIN,p-cdnstatic.svc.litv.tv
   - DOMAIN,p-smith.com
   - DOMAIN,p.depot.dev
   - DOMAIN,p.inari.site
@@ -1613,6 +1617,7 @@ payload:
   - DOMAIN,pba.apple.com
   - DOMAIN,pbc.nypost.com
   - DOMAIN,pbc.wsj.com
+  - DOMAIN,pbs.floatplane.com
   - DOMAIN,pcdn-my.pcloud.com
   - DOMAIN,pcdn-www.pcloud.com
   - DOMAIN,pcz.javidol.org
@@ -1636,6 +1641,7 @@ payload:
   - DOMAIN,pics.paypal.com
   - DOMAIN,pics.vpdmm.cc
   - DOMAIN,pics.x-n-x-x.pro
+  - DOMAIN,pim-media.intel.com
   - DOMAIN,pkg-cdn.jetbrains.team
   - DOMAIN,pkg-size.dev
   - DOMAIN,pkg.cloudflare.com
@@ -1680,7 +1686,6 @@ payload:
   - DOMAIN,prod-streaming-video-msn-com.akamaized.net
   - DOMAIN,prod-video-cms-amp-microsoft-com.akamaized.net
   - DOMAIN,prod.addictinggames.com
-  - DOMAIN,prod.msocdn.com
   - DOMAIN,prodamdnewsencoding.akamaized.net
   - DOMAIN,production-cmp.isgprivacy.cbsi.com
   - DOMAIN,profile-images.xing.com
@@ -1761,6 +1766,7 @@ payload:
   - DOMAIN,rv-assets.softonic.com
   - DOMAIN,s-cdn.anthropic.com
   - DOMAIN,s-cdn.phonearena.com
+  - DOMAIN,s-cdnstatic.svc.litv.tv
   - DOMAIN,s.abcnews.com
   - DOMAIN,s.gishan.cc
   - DOMAIN,s.imgflip.com
@@ -2145,6 +2151,7 @@ payload:
   - DOMAIN,static.xxxshake.com
   - DOMAIN,static.zaobao.com
   - DOMAIN,static.zaobao.com.sg
+  - DOMAIN,static.zuora.com
   - DOMAIN,static01.nyt.com
   - DOMAIN,static02.nyt.com
   - DOMAIN,static1.lottiefiles.com
@@ -2178,6 +2185,7 @@ payload:
   - DOMAIN,stats.codesandbox.io
   - DOMAIN,stats.setapp.com
   - DOMAIN,stats.setapp.macpaw.dev
+  - DOMAIN,status.canarymail.io
   - DOMAIN,status.ui.com
   - DOMAIN,stbff.newfold.com
   - DOMAIN,steamcdn-a.akamaihd.net
@@ -2245,11 +2253,11 @@ payload:
   - DOMAIN,tiles.stadiamaps.com
   - DOMAIN,tiles.windy.com
   - DOMAIN,time.cloudflare.com
+  - DOMAIN,time.google.com
   - DOMAIN,time.windows.com
   - DOMAIN,tn.txxx.tube
   - DOMAIN,tn.vjav.com
   - DOMAIN,todoist.b-cdn.net
-  - DOMAIN,ton.local.twitter.com
   - DOMAIN,tools-static.wmflabs.org
   - DOMAIN,tools.refokus.com
   - DOMAIN,top1cdn.top1health.com
@@ -2676,6 +2684,7 @@ payload:
   - DOMAIN-SUFFIX,f-droid.org
   - DOMAIN-SUFFIX,f.hubspotemail.net
   - DOMAIN-SUFFIX,f.hubspotfree.net
+  - DOMAIN-SUFFIX,f.hubspotstarter.net
   - DOMAIN-SUFFIX,faceit-cdn.net
   - DOMAIN-SUFFIX,fakeimg.pl
   - DOMAIN-SUFFIX,fakestoreapi.com
@@ -2922,7 +2931,6 @@ payload:
   - DOMAIN-SUFFIX,lbpicpic.com
   - DOMAIN-SUFFIX,lbpictupian.com
   - DOMAIN-SUFFIX,lencr.org
-  - DOMAIN-SUFFIX,li-cdn.com
   - DOMAIN-SUFFIX,liangzipic.com
   - DOMAIN-SUFFIX,licensebuttons.net
   - DOMAIN-SUFFIX,lichess1.org
@@ -3165,7 +3173,6 @@ payload:
   - DOMAIN-SUFFIX,scorecardresearch.com
   - DOMAIN-SUFFIX,scribdassets.com
   - DOMAIN-SUFFIX,seadn.io
-  - DOMAIN-SUFFIX,search.ipfsgate.com
   - DOMAIN-SUFFIX,sendspace.com
   - DOMAIN-SUFFIX,senja.io
   - DOMAIN-SUFFIX,sentry-cdn.com

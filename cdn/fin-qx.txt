@@ -1,5 +1,5 @@
-# Quantumult total line 3409
-# Last updated Wed 04/16/2025 22:15:36.31
+# Quantumult total line 3416
+# Last updated Sat 04/19/2025 22:11:53.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -28,6 +28,7 @@ HOST,akamai-assets.squarespace.com,LIST
 HOST,alt.idgesg.net,LIST
 HOST,amazon-omni-cdn.com,LIST
 HOST,amp.azure.net,LIST
+HOST,analytics.canarymail.io,LIST
 HOST,analytics.twitter.com,LIST
 HOST,analytics.welcomesoftware.com,LIST
 HOST,anchor.digitalocean.com,LIST
@@ -326,6 +327,7 @@ HOST,cacerts.digicert.com,LIST
 HOST,cache-05.filehippo.net,LIST
 HOST,cache.armorgames.com,LIST
 HOST,cache.hackedfreegames.com,LIST
+HOST,canny-assets.io,LIST
 HOST,cassette.sphdigital.com.sg,LIST
 HOST,cc-embed.adobe.com,LIST
 HOST,cc.boyfriendtv.com,LIST
@@ -880,6 +882,7 @@ HOST,dam.freshworks.com,LIST
 HOST,damassets.autodesk.net,LIST
 HOST,dassets.shimano.com,LIST
 HOST,data.pendo.io,LIST
+HOST,data.schemaapp.com,LIST
 HOST,data.web.clickup.com,LIST
 HOST,david-dm.org,LIST
 HOST,db.onlinewebfonts.com,LIST
@@ -1018,6 +1021,7 @@ HOST,firebase-settings.crashlytics.com,LIST
 HOST,firebaseinstallations.googleapis.com,LIST
 HOST,firebaselogging-pa.googleapis.com,LIST
 HOST,firebaselogging.googleapis.com,LIST
+HOST,firebaseremoteconfig.googleapis.com,LIST
 HOST,firefox.settings.services.mozilla.com,LIST
 HOST,flo.uri.sh,LIST
 HOST,flows.trysavvy.com,LIST
@@ -1040,6 +1044,7 @@ HOST,frames-commandbar-prod.commandbar.com,LIST
 HOST,freeshippingbar.herokuapp.com,LIST
 HOST,front-resource.fs.com,LIST
 HOST,frontend-apps.workos.com,LIST
+HOST,frontend.floatplane.com,LIST
 HOST,fs2.onlyhentaistuff.com,LIST
 HOST,fscdn.eppo.cloud,LIST
 HOST,g-static.ap4r.com,LIST
@@ -1301,7 +1306,6 @@ HOST,img.supjav.com,LIST
 HOST,img.telemetr.io,LIST
 HOST,img.thingiverse.com,LIST
 HOST,img.timero.xyz,LIST
-HOST,img.urlnode.com,LIST
 HOST,img.utdstc.com,LIST
 HOST,img.vim-cn.com,LIST
 HOST,img.washingtonpost.com,LIST
@@ -1386,7 +1390,6 @@ HOST,jslibs.blackmagicdesign.com,LIST
 HOST,jsonplaceholder.typicode.com,LIST
 HOST,jssdk.opin.media,LIST
 HOST,jssocdn.indiatimes.com,LIST
-HOST,k-cdn.depot.dev,LIST
 HOST,kdata1.com,LIST
 HOST,keyframe-cdn.abcnews.com,LIST
 HOST,lain.bgm.tv,LIST
@@ -1592,6 +1595,7 @@ HOST,oss.1p3a.com,LIST
 HOST,oss.moe.cat,LIST
 HOST,ovo.wxw.moe,LIST
 HOST,ovp.itv.com,LIST
+HOST,p-cdnstatic.svc.litv.tv,LIST
 HOST,p-smith.com,LIST
 HOST,p.depot.dev,LIST
 HOST,p.inari.site,LIST
@@ -1612,6 +1616,7 @@ HOST,patterns.hiive.cloud,LIST
 HOST,pba.apple.com,LIST
 HOST,pbc.nypost.com,LIST
 HOST,pbc.wsj.com,LIST
+HOST,pbs.floatplane.com,LIST
 HOST,pcdn-my.pcloud.com,LIST
 HOST,pcdn-www.pcloud.com,LIST
 HOST,pcz.javidol.org,LIST
@@ -1635,6 +1640,7 @@ HOST,pics.mf8.biz,LIST
 HOST,pics.paypal.com,LIST
 HOST,pics.vpdmm.cc,LIST
 HOST,pics.x-n-x-x.pro,LIST
+HOST,pim-media.intel.com,LIST
 HOST,pkg-cdn.jetbrains.team,LIST
 HOST,pkg-size.dev,LIST
 HOST,pkg.cloudflare.com,LIST
@@ -1679,7 +1685,6 @@ HOST,prod-packager-packages.codesandbox.io,LIST
 HOST,prod-streaming-video-msn-com.akamaized.net,LIST
 HOST,prod-video-cms-amp-microsoft-com.akamaized.net,LIST
 HOST,prod.addictinggames.com,LIST
-HOST,prod.msocdn.com,LIST
 HOST,prodamdnewsencoding.akamaized.net,LIST
 HOST,production-cmp.isgprivacy.cbsi.com,LIST
 HOST,profile-images.xing.com,LIST
@@ -1760,6 +1765,7 @@ HOST,runkit-packages-static.com,LIST
 HOST,rv-assets.softonic.com,LIST
 HOST,s-cdn.anthropic.com,LIST
 HOST,s-cdn.phonearena.com,LIST
+HOST,s-cdnstatic.svc.litv.tv,LIST
 HOST,s.abcnews.com,LIST
 HOST,s.gishan.cc,LIST
 HOST,s.imgflip.com,LIST
@@ -2144,6 +2150,7 @@ HOST,static.xns.one,LIST
 HOST,static.xxxshake.com,LIST
 HOST,static.zaobao.com,LIST
 HOST,static.zaobao.com.sg,LIST
+HOST,static.zuora.com,LIST
 HOST,static01.nyt.com,LIST
 HOST,static02.nyt.com,LIST
 HOST,static1.lottiefiles.com,LIST
@@ -2177,6 +2184,7 @@ HOST,staticw2.yotpo.com,LIST
 HOST,stats.codesandbox.io,LIST
 HOST,stats.setapp.com,LIST
 HOST,stats.setapp.macpaw.dev,LIST
+HOST,status.canarymail.io,LIST
 HOST,status.ui.com,LIST
 HOST,stbff.newfold.com,LIST
 HOST,steamcdn-a.akamaihd.net,LIST
@@ -2244,11 +2252,11 @@ HOST,thumbsnap.com,LIST
 HOST,tiles.stadiamaps.com,LIST
 HOST,tiles.windy.com,LIST
 HOST,time.cloudflare.com,LIST
+HOST,time.google.com,LIST
 HOST,time.windows.com,LIST
 HOST,tn.txxx.tube,LIST
 HOST,tn.vjav.com,LIST
 HOST,todoist.b-cdn.net,LIST
-HOST,ton.local.twitter.com,LIST
 HOST,tools-static.wmflabs.org,LIST
 HOST,tools.refokus.com,LIST
 HOST,top1cdn.top1health.com,LIST
@@ -2675,6 +2683,7 @@ HOST-SUFFIX,ezocdn.com,LIST
 HOST-SUFFIX,f-droid.org,LIST
 HOST-SUFFIX,f.hubspotemail.net,LIST
 HOST-SUFFIX,f.hubspotfree.net,LIST
+HOST-SUFFIX,f.hubspotstarter.net,LIST
 HOST-SUFFIX,faceit-cdn.net,LIST
 HOST-SUFFIX,fakeimg.pl,LIST
 HOST-SUFFIX,fakestoreapi.com,LIST
@@ -2921,7 +2930,6 @@ HOST-SUFFIX,larksuitecdn.com,LIST
 HOST-SUFFIX,lbpicpic.com,LIST
 HOST-SUFFIX,lbpictupian.com,LIST
 HOST-SUFFIX,lencr.org,LIST
-HOST-SUFFIX,li-cdn.com,LIST
 HOST-SUFFIX,liangzipic.com,LIST
 HOST-SUFFIX,licensebuttons.net,LIST
 HOST-SUFFIX,lichess1.org,LIST
@@ -3164,7 +3172,6 @@ HOST-SUFFIX,sciencedirectassets.com,LIST
 HOST-SUFFIX,scorecardresearch.com,LIST
 HOST-SUFFIX,scribdassets.com,LIST
 HOST-SUFFIX,seadn.io,LIST
-HOST-SUFFIX,search.ipfsgate.com,LIST
 HOST-SUFFIX,sendspace.com,LIST
 HOST-SUFFIX,senja.io,LIST
 HOST-SUFFIX,sentry-cdn.com,LIST

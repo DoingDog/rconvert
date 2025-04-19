@@ -1,5 +1,5 @@
-# Adblock total line 3409
-# Last updated Wed 04/16/2025 22:15:36.42
+# Adblock total line 3416
+# Last updated Sat 04/19/2025 22:11:53.66
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -28,6 +28,7 @@
 ||alt.idgesg.net^
 ||amazon-omni-cdn.com^
 ||amp.azure.net^
+||analytics.canarymail.io^
 ||analytics.twitter.com^
 ||analytics.welcomesoftware.com^
 ||anchor.digitalocean.com^
@@ -326,6 +327,7 @@
 ||cache-05.filehippo.net^
 ||cache.armorgames.com^
 ||cache.hackedfreegames.com^
+||canny-assets.io^
 ||cassette.sphdigital.com.sg^
 ||cc-embed.adobe.com^
 ||cc.boyfriendtv.com^
@@ -880,6 +882,7 @@
 ||damassets.autodesk.net^
 ||dassets.shimano.com^
 ||data.pendo.io^
+||data.schemaapp.com^
 ||data.web.clickup.com^
 ||david-dm.org^
 ||db.onlinewebfonts.com^
@@ -1018,6 +1021,7 @@
 ||firebaseinstallations.googleapis.com^
 ||firebaselogging-pa.googleapis.com^
 ||firebaselogging.googleapis.com^
+||firebaseremoteconfig.googleapis.com^
 ||firefox.settings.services.mozilla.com^
 ||flo.uri.sh^
 ||flows.trysavvy.com^
@@ -1040,6 +1044,7 @@
 ||freeshippingbar.herokuapp.com^
 ||front-resource.fs.com^
 ||frontend-apps.workos.com^
+||frontend.floatplane.com^
 ||fs2.onlyhentaistuff.com^
 ||fscdn.eppo.cloud^
 ||g-static.ap4r.com^
@@ -1301,7 +1306,6 @@
 ||img.telemetr.io^
 ||img.thingiverse.com^
 ||img.timero.xyz^
-||img.urlnode.com^
 ||img.utdstc.com^
 ||img.vim-cn.com^
 ||img.washingtonpost.com^
@@ -1386,7 +1390,6 @@
 ||jsonplaceholder.typicode.com^
 ||jssdk.opin.media^
 ||jssocdn.indiatimes.com^
-||k-cdn.depot.dev^
 ||kdata1.com^
 ||keyframe-cdn.abcnews.com^
 ||lain.bgm.tv^
@@ -1592,6 +1595,7 @@
 ||oss.moe.cat^
 ||ovo.wxw.moe^
 ||ovp.itv.com^
+||p-cdnstatic.svc.litv.tv^
 ||p-smith.com^
 ||p.depot.dev^
 ||p.inari.site^
@@ -1612,6 +1616,7 @@
 ||pba.apple.com^
 ||pbc.nypost.com^
 ||pbc.wsj.com^
+||pbs.floatplane.com^
 ||pcdn-my.pcloud.com^
 ||pcdn-www.pcloud.com^
 ||pcz.javidol.org^
@@ -1635,6 +1640,7 @@
 ||pics.paypal.com^
 ||pics.vpdmm.cc^
 ||pics.x-n-x-x.pro^
+||pim-media.intel.com^
 ||pkg-cdn.jetbrains.team^
 ||pkg-size.dev^
 ||pkg.cloudflare.com^
@@ -1679,7 +1685,6 @@
 ||prod-streaming-video-msn-com.akamaized.net^
 ||prod-video-cms-amp-microsoft-com.akamaized.net^
 ||prod.addictinggames.com^
-||prod.msocdn.com^
 ||prodamdnewsencoding.akamaized.net^
 ||production-cmp.isgprivacy.cbsi.com^
 ||profile-images.xing.com^
@@ -1760,6 +1765,7 @@
 ||rv-assets.softonic.com^
 ||s-cdn.anthropic.com^
 ||s-cdn.phonearena.com^
+||s-cdnstatic.svc.litv.tv^
 ||s.abcnews.com^
 ||s.gishan.cc^
 ||s.imgflip.com^
@@ -2144,6 +2150,7 @@
 ||static.xxxshake.com^
 ||static.zaobao.com^
 ||static.zaobao.com.sg^
+||static.zuora.com^
 ||static01.nyt.com^
 ||static02.nyt.com^
 ||static1.lottiefiles.com^
@@ -2177,6 +2184,7 @@
 ||stats.codesandbox.io^
 ||stats.setapp.com^
 ||stats.setapp.macpaw.dev^
+||status.canarymail.io^
 ||status.ui.com^
 ||stbff.newfold.com^
 ||steamcdn-a.akamaihd.net^
@@ -2244,11 +2252,11 @@
 ||tiles.stadiamaps.com^
 ||tiles.windy.com^
 ||time.cloudflare.com^
+||time.google.com^
 ||time.windows.com^
 ||tn.txxx.tube^
 ||tn.vjav.com^
 ||todoist.b-cdn.net^
-||ton.local.twitter.com^
 ||tools-static.wmflabs.org^
 ||tools.refokus.com^
 ||top1cdn.top1health.com^
@@ -2675,6 +2683,7 @@
 ||f-droid.org^
 ||f.hubspotemail.net^
 ||f.hubspotfree.net^
+||f.hubspotstarter.net^
 ||faceit-cdn.net^
 ||fakeimg.pl^
 ||fakestoreapi.com^
@@ -2921,7 +2930,6 @@
 ||lbpicpic.com^
 ||lbpictupian.com^
 ||lencr.org^
-||li-cdn.com^
 ||liangzipic.com^
 ||licensebuttons.net^
 ||lichess1.org^
@@ -3164,7 +3172,6 @@
 ||scorecardresearch.com^
 ||scribdassets.com^
 ||seadn.io^
-||search.ipfsgate.com^
 ||sendspace.com^
 ||senja.io^
 ||sentry-cdn.com^
