@@ -1,5 +1,5 @@
-# Adblock total line 4024
-# Last updated Sat 04/19/2025 22:12:13.87
+# Adblock total line 4032
+# Last updated Tue 04/22/2025 22:13:08.72
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||a.iqmtp.live^
 ||analytics.strava.com^
@@ -29,8 +29,6 @@
 ||ocsp2.globalsign.com^
 ||origin-a.akamaihd.ne^
 ||origin-a.akamaihd.net^
-||p-bstarstatic.akamaized.net^
-||p.bstarstatic.com^
 ||pi.hole^
 ||raw.iqiq.io^
 ||repeater.asus.com^
@@ -41,8 +39,6 @@
 ||steamcommunity-a.akamaihd.net^
 ||this_ruleset_is_made_by_sukkaw.ruleset.skk.moe^
 ||unifi^
-||upos-bstar-mirrorakam.akamaized.net^
-||upos-bstar1-mirrorakam.akamaized.net^
 ||www.layuicdn.com^
 ||www.libvideo.com^
 ||www.yxssp.com^
@@ -1282,6 +1278,14 @@
 ||dogedoge.com^
 ||doh.pub^
 ||doi.org^
+||domesticmedia.cc^
+||domesticmedia.co^
+||domesticmedia.com^
+||domesticmedia.net^
+||domesticmedia.tv^
+||domesticmediagame.co^
+||domesticmediagame.net^
+||domesticmediapay.com^
 ||donews.com^
 ||dongao.com^
 ||dongchedi.com^
@@ -2728,6 +2732,8 @@
 ||oxfordartonline.com^
 ||oxfordbibliographies.com^
 ||oxfordmusiconline.com^
+||p-bstarstatic.akamaized.net^
+||p.bstarstatic.com^
 ||p2cdn.com^
 ||p2peye.com^
 ||p4pfile.com^
@@ -3476,6 +3482,8 @@
 ||upaiyun.com^
 ||upcdn.net^
 ||upe.net^
+||upos-bstar-mirrorakam.akamaized.net^
+||upos-bstar1-mirrorakam.akamaized.net^
 ||upos-hz-mirrorakam.akamaized.net^
 ||upyun.com^
 ||urselect.com^

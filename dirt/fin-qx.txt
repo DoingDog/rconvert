@@ -1,5 +1,5 @@
-# Quantumult total line 4312
-# Last updated Sat 04/19/2025 22:12:13.75
+# Quantumult total line 4324
+# Last updated Tue 04/22/2025 22:13:08.58
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -29,8 +29,6 @@ HOST,ocsp.globalsign.com,LIST
 HOST,ocsp2.globalsign.com,LIST
 HOST,origin-a.akamaihd.ne,LIST
 HOST,origin-a.akamaihd.net,LIST
-HOST,p-bstarstatic.akamaized.net,LIST
-HOST,p.bstarstatic.com,LIST
 HOST,pi.hole,LIST
 HOST,raw.iqiq.io,LIST
 HOST,repeater.asus.com,LIST
@@ -41,8 +39,6 @@ HOST,speedtest.macpaw.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
 HOST,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe,LIST
 HOST,unifi,LIST
-HOST,upos-bstar-mirrorakam.akamaized.net,LIST
-HOST,upos-bstar1-mirrorakam.akamaized.net,LIST
 HOST,www.layuicdn.com,LIST
 HOST,www.libvideo.com,LIST
 HOST,www.yxssp.com,LIST
@@ -1282,6 +1278,14 @@ HOST-SUFFIX,doctoryou.ai,LIST
 HOST-SUFFIX,dogedoge.com,LIST
 HOST-SUFFIX,doh.pub,LIST
 HOST-SUFFIX,doi.org,LIST
+HOST-SUFFIX,domesticmedia.cc,LIST
+HOST-SUFFIX,domesticmedia.co,LIST
+HOST-SUFFIX,domesticmedia.com,LIST
+HOST-SUFFIX,domesticmedia.net,LIST
+HOST-SUFFIX,domesticmedia.tv,LIST
+HOST-SUFFIX,domesticmediagame.co,LIST
+HOST-SUFFIX,domesticmediagame.net,LIST
+HOST-SUFFIX,domesticmediapay.com,LIST
 HOST-SUFFIX,donews.com,LIST
 HOST-SUFFIX,dongao.com,LIST
 HOST-SUFFIX,dongchedi.com,LIST
@@ -2728,6 +2732,8 @@ HOST-SUFFIX,owsgo.com,LIST
 HOST-SUFFIX,oxfordartonline.com,LIST
 HOST-SUFFIX,oxfordbibliographies.com,LIST
 HOST-SUFFIX,oxfordmusiconline.com,LIST
+HOST-SUFFIX,p-bstarstatic.akamaized.net,LIST
+HOST-SUFFIX,p.bstarstatic.com,LIST
 HOST-SUFFIX,p2cdn.com,LIST
 HOST-SUFFIX,p2peye.com,LIST
 HOST-SUFFIX,p4pfile.com,LIST
@@ -3476,6 +3482,8 @@ HOST-SUFFIX,upai.com,LIST
 HOST-SUFFIX,upaiyun.com,LIST
 HOST-SUFFIX,upcdn.net,LIST
 HOST-SUFFIX,upe.net,LIST
+HOST-SUFFIX,upos-bstar-mirrorakam.akamaized.net,LIST
+HOST-SUFFIX,upos-bstar1-mirrorakam.akamaized.net,LIST
 HOST-SUFFIX,upos-hz-mirrorakam.akamaized.net,LIST
 HOST-SUFFIX,upyun.com,LIST
 HOST-SUFFIX,urselect.com,LIST
@@ -4133,6 +4141,7 @@ IP-CIDR,121.37.0.0/17,LIST,no-resolve
 IP-CIDR,121.51.0.0/16,LIST,no-resolve
 IP-CIDR,122.112.128.0/17,LIST,no-resolve
 IP-CIDR,123.58.160.0/19,LIST,no-resolve
+IP-CIDR,128.1.62.200/31,LIST,no-resolve
 IP-CIDR,129.204.0.0/16,LIST,no-resolve
 IP-CIDR,129.211.0.0/16,LIST,no-resolve
 IP-CIDR,129.226.0.0/16,LIST,no-resolve
@@ -4163,6 +4172,7 @@ IP-CIDR,149.129.64.0/18,LIST,no-resolve
 IP-CIDR,150.109.32.0/19,LIST,no-resolve
 IP-CIDR,150.109.64.0/20,LIST,no-resolve
 IP-CIDR,150.109.96.0/19,LIST,no-resolve
+IP-CIDR,150.116.92.250/32,LIST,no-resolve
 IP-CIDR,152.136.0.0/16,LIST,no-resolve
 IP-CIDR,159.138.0.0/18,LIST,no-resolve
 IP-CIDR,159.138.112.0/21,LIST,no-resolve
@@ -4175,6 +4185,7 @@ IP-CIDR,159.138.96.0/20,LIST,no-resolve
 IP-CIDR,162.14.0.0/16,LIST,no-resolve
 IP-CIDR,163.181.32.0/22,LIST,no-resolve
 IP-CIDR,163.181.40.0/24,LIST,no-resolve
+IP-CIDR,164.52.76.18/32,LIST,no-resolve
 IP-CIDR,170.33.0.0/22,LIST,no-resolve
 IP-CIDR,180.76.0.0/16,LIST,no-resolve
 IP-CIDR,182.254.0.0/16,LIST,no-resolve
@@ -4232,6 +4243,7 @@ IP-CIDR,45.253.132.0/22,LIST,no-resolve
 IP-CIDR,45.253.240.0/22,LIST,no-resolve
 IP-CIDR,45.254.48.0/23,LIST,no-resolve
 IP-CIDR,45.40.192.0/19,LIST,no-resolve
+IP-CIDR,45.43.32.234/32,LIST,no-resolve
 IP-CIDR,47.100.127.239/32,LIST,no-resolve
 IP-CIDR,47.240.0.0/16,LIST,no-resolve
 IP-CIDR,47.242.0.0/15,LIST,no-resolve

@@ -1,5 +1,5 @@
-# Adblock total line 5938
-# Last updated Sat 04/19/2025 22:12:03.84
+# Adblock total line 5943
+# Last updated Tue 04/22/2025 22:12:59.09
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -298,6 +298,8 @@
 ||assets9.lottiefiles.com^
 ||assetscdn-wchat.eu.freshchat.com^
 ||assetscdn.jable.tv^
+||attach.mobile01.com^
+||attach2.mobile01.com^
 ||attachments.office.net^
 ||aus2-community.mozilla.org^
 ||aus5.mozilla.org^
@@ -1066,6 +1068,7 @@
 ||download.cypress.io^
 ||download.dlsite.com^
 ||download.docker.com^
+||download.eassos.com^
 ||download.edovia.com^
 ||download.fydeos.io^
 ||download.gigabyte.com^
@@ -1118,7 +1121,6 @@
 ||e.linear.app^
 ||e3.365dm.com^
 ||easylist-downloads.adblockplus.org^
-||ec-prod.scene7.com^
 ||ecommplugins-scripts.trustpilot.com^
 ||ecommplugins-trustboxsettings.trustpilot.com^
 ||edata.ndtv.com^
@@ -1502,6 +1504,7 @@
 ||images.flightradar24.com^
 ||images.freeimages.com^
 ||images.g2crowd.com^
+||images.github.media^
 ||images.idgesg.net^
 ||images.kick.com^
 ||images.loox.io^
@@ -2054,7 +2057,6 @@
 ||net-fe-static-assets.network-controller.svc.ui.com^
 ||netlify.apollo.io^
 ||newassets.hcaptcha.com^
-||newfold.scene7.com^
 ||news-assets.apple.com^
 ||news-client.apple.com^
 ||news-edge.apple.com^
@@ -2340,7 +2342,6 @@
 ||s5.maxstream.org^
 ||s6.maxstream.org^
 ||s7.maxstream.org^
-||s7d1.scene7.com^
 ||s8.maxstream.org^
 ||s9.maxstream.org^
 ||safebrowsing.brave.com^
@@ -2541,6 +2542,7 @@
 ||static.heavy-r.com^
 ||static.helpjuice.com^
 ||static.hotjar.com^
+||static.hugedomains.com^
 ||static.ietf.org^
 ||static.ifunny.co^
 ||static.incapsula.com^
@@ -2829,6 +2831,7 @@
 ||videos.elephas.app^
 ||videos.ohentai.org^
 ||videos2.edclub.com^
+||vip.dytt-img.com^
 ||vir.wsj.net^
 ||vjs.zencdn.net^
 ||vod.jfly.xyz^
@@ -3369,7 +3372,6 @@
 ||cloudatacdn.com^
 ||cloudconvert.com^
 ||cloudflare-ipfs.com^
-||cloudflare-terms-of-service-abuse.com^
 ||cloudflare.docker.com^
 ||cloudflare.ltd^
 ||cloudflaremirrors.com^
@@ -5234,12 +5236,14 @@
 ||sbnation.com^
 ||sc-cdn.com^
 ||scdn.co^
+||scene7.com^
 ||schemastore.org^
 ||sciencedirectassets.com^
 ||scorecardresearch.com^
 ||screens-lab.jp^
 ||scribd.com^
 ||scribdassets.com^
+||scripts.gatorapi.com^
 ||seadn.io^
 ||seattlespheres.com^
 ||secureservercdn.net^
@@ -5358,6 +5362,7 @@
 ||starwars.com^
 ||starwarsgalacticstarcruiser.com^
 ||starwarskids.com^
+||static-assets.photoshop.adobe.com^
 ||static-prod-web.miniclip.com^
 ||static-qobuz.com^
 ||static-verizon.com^

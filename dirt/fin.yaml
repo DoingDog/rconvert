@@ -1,5 +1,5 @@
-# Clash total line 4356
-# Last updated Sat 04/19/2025 22:12:13.80
+# Clash total line 4368
+# Last updated Tue 04/22/2025 22:13:08.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -30,8 +30,6 @@ payload:
   - DOMAIN,ocsp2.globalsign.com
   - DOMAIN,origin-a.akamaihd.ne
   - DOMAIN,origin-a.akamaihd.net
-  - DOMAIN,p-bstarstatic.akamaized.net
-  - DOMAIN,p.bstarstatic.com
   - DOMAIN,pi.hole
   - DOMAIN,raw.iqiq.io
   - DOMAIN,repeater.asus.com
@@ -42,8 +40,6 @@ payload:
   - DOMAIN,steamcommunity-a.akamaihd.net
   - DOMAIN,this_ruleset_is_made_by_sukkaw.ruleset.skk.moe
   - DOMAIN,unifi
-  - DOMAIN,upos-bstar-mirrorakam.akamaized.net
-  - DOMAIN,upos-bstar1-mirrorakam.akamaized.net
   - DOMAIN,www.layuicdn.com
   - DOMAIN,www.libvideo.com
   - DOMAIN,www.yxssp.com
@@ -1283,6 +1279,14 @@ payload:
   - DOMAIN-SUFFIX,dogedoge.com
   - DOMAIN-SUFFIX,doh.pub
   - DOMAIN-SUFFIX,doi.org
+  - DOMAIN-SUFFIX,domesticmedia.cc
+  - DOMAIN-SUFFIX,domesticmedia.co
+  - DOMAIN-SUFFIX,domesticmedia.com
+  - DOMAIN-SUFFIX,domesticmedia.net
+  - DOMAIN-SUFFIX,domesticmedia.tv
+  - DOMAIN-SUFFIX,domesticmediagame.co
+  - DOMAIN-SUFFIX,domesticmediagame.net
+  - DOMAIN-SUFFIX,domesticmediapay.com
   - DOMAIN-SUFFIX,donews.com
   - DOMAIN-SUFFIX,dongao.com
   - DOMAIN-SUFFIX,dongchedi.com
@@ -2729,6 +2733,8 @@ payload:
   - DOMAIN-SUFFIX,oxfordartonline.com
   - DOMAIN-SUFFIX,oxfordbibliographies.com
   - DOMAIN-SUFFIX,oxfordmusiconline.com
+  - DOMAIN-SUFFIX,p-bstarstatic.akamaized.net
+  - DOMAIN-SUFFIX,p.bstarstatic.com
   - DOMAIN-SUFFIX,p2cdn.com
   - DOMAIN-SUFFIX,p2peye.com
   - DOMAIN-SUFFIX,p4pfile.com
@@ -3477,6 +3483,8 @@ payload:
   - DOMAIN-SUFFIX,upaiyun.com
   - DOMAIN-SUFFIX,upcdn.net
   - DOMAIN-SUFFIX,upe.net
+  - DOMAIN-SUFFIX,upos-bstar-mirrorakam.akamaized.net
+  - DOMAIN-SUFFIX,upos-bstar1-mirrorakam.akamaized.net
   - DOMAIN-SUFFIX,upos-hz-mirrorakam.akamaized.net
   - DOMAIN-SUFFIX,upyun.com
   - DOMAIN-SUFFIX,urselect.com
@@ -4134,6 +4142,7 @@ payload:
   - IP-CIDR,121.51.0.0/16,no-resolve
   - IP-CIDR,122.112.128.0/17,no-resolve
   - IP-CIDR,123.58.160.0/19,no-resolve
+  - IP-CIDR,128.1.62.200/31,no-resolve
   - IP-CIDR,129.204.0.0/16,no-resolve
   - IP-CIDR,129.211.0.0/16,no-resolve
   - IP-CIDR,129.226.0.0/16,no-resolve
@@ -4164,6 +4173,7 @@ payload:
   - IP-CIDR,150.109.32.0/19,no-resolve
   - IP-CIDR,150.109.64.0/20,no-resolve
   - IP-CIDR,150.109.96.0/19,no-resolve
+  - IP-CIDR,150.116.92.250/32,no-resolve
   - IP-CIDR,152.136.0.0/16,no-resolve
   - IP-CIDR,159.138.0.0/18,no-resolve
   - IP-CIDR,159.138.112.0/21,no-resolve
@@ -4176,6 +4186,7 @@ payload:
   - IP-CIDR,162.14.0.0/16,no-resolve
   - IP-CIDR,163.181.32.0/22,no-resolve
   - IP-CIDR,163.181.40.0/24,no-resolve
+  - IP-CIDR,164.52.76.18/32,no-resolve
   - IP-CIDR,170.33.0.0/22,no-resolve
   - IP-CIDR,180.76.0.0/16,no-resolve
   - IP-CIDR,182.254.0.0/16,no-resolve
@@ -4233,6 +4244,7 @@ payload:
   - IP-CIDR,45.253.240.0/22,no-resolve
   - IP-CIDR,45.254.48.0/23,no-resolve
   - IP-CIDR,45.40.192.0/19,no-resolve
+  - IP-CIDR,45.43.32.234/32,no-resolve
   - IP-CIDR,47.100.127.239/32,no-resolve
   - IP-CIDR,47.240.0.0/16,no-resolve
   - IP-CIDR,47.242.0.0/15,no-resolve
