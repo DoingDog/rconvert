@@ -1,5 +1,5 @@
-# Clash total line 4368
-# Last updated Tue 04/22/2025 22:13:08.62
+# Clash total line 4370
+# Last updated Fri 04/25/2025 22:13:11.11
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -2550,6 +2550,7 @@ payload:
   - DOMAIN-SUFFIX,mogucdn.com
   - DOMAIN-SUFFIX,mogujie.com
   - DOMAIN-SUFFIX,moji.com
+  - DOMAIN-SUFFIX,mojicdn.com
   - DOMAIN-SUFFIX,mojichina.com
   - DOMAIN-SUFFIX,mojidict.com
   - DOMAIN-SUFFIX,mokahr.com
@@ -2561,6 +2562,7 @@ payload:
   - DOMAIN-SUFFIX,morganstanleyhuaxin.com
   - DOMAIN-SUFFIX,moulem.com
   - DOMAIN-SUFFIX,mpg.de
+  - DOMAIN-SUFFIX,mrw.so
   - DOMAIN-SUFFIX,msanjia.com
   - DOMAIN-SUFFIX,msauth.net
   - DOMAIN-SUFFIX,mscbsc.com
