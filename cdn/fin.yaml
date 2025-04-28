@@ -1,5 +1,5 @@
-# Clash total line 3493
-# Last updated Fri 04/25/2025 22:12:50.94
+# Clash total line 3495
+# Last updated Mon 04/28/2025 22:13:12.36
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -2737,6 +2737,7 @@ payload:
   - DOMAIN-SUFFIX,esm.run
   - DOMAIN-SUFFIX,esm.sh
   - DOMAIN-SUFFIX,espncdn.com
+  - DOMAIN-SUFFIX,eth.sucks
   - DOMAIN-SUFFIX,etsystatic.com
   - DOMAIN-SUFFIX,eu-browse.startpage.com
   - DOMAIN-SUFFIX,eu-proxy.startpage.com
@@ -3448,6 +3449,7 @@ payload:
   - DOMAIN-SUFFIX,wsimg.com
   - DOMAIN-SUFFIX,wsrv.nl
   - DOMAIN-SUFFIX,www.s81c.com
+  - DOMAIN-SUFFIX,xascdn.li
   - DOMAIN-SUFFIX,xcdnpro.com
   - DOMAIN-SUFFIX,xda-cdn.com
   - DOMAIN-SUFFIX,xdaimages.com

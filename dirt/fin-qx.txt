@@ -1,5 +1,5 @@
-# Quantumult total line 4326
-# Last updated Fri 04/25/2025 22:13:11.08
+# Quantumult total line 4327
+# Last updated Mon 04/28/2025 22:13:31.09
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -2384,6 +2384,7 @@ HOST-SUFFIX,llsapp.com,LIST
 HOST-SUFFIX,llscdn.com,LIST
 HOST-SUFFIX,llsserver.com,LIST
 HOST-SUFFIX,lnlib.net,LIST
+HOST-SUFFIX,local,LIST
 HOST-SUFFIX,localdomain,LIST
 HOST-SUFFIX,localizecdn.com,LIST
 HOST-SUFFIX,lofter.com,LIST

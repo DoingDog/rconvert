@@ -1,5 +1,5 @@
-# Clash total line 4370
-# Last updated Fri 04/25/2025 22:13:11.11
+# Clash total line 4371
+# Last updated Mon 04/28/2025 22:13:31.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -2385,6 +2385,7 @@ payload:
   - DOMAIN-SUFFIX,llscdn.com
   - DOMAIN-SUFFIX,llsserver.com
   - DOMAIN-SUFFIX,lnlib.net
+  - DOMAIN-SUFFIX,local
   - DOMAIN-SUFFIX,localdomain
   - DOMAIN-SUFFIX,localizecdn.com
   - DOMAIN-SUFFIX,lofter.com
