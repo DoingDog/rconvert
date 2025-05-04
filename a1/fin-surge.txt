@@ -1,5 +1,5 @@
-# Surge Rules total line 935
-# Last updated Thu 05/01/2025 22:12:54.16
+# Surge Rules total line 929
+# Last updated Sun 05/04/2025 22:12:09.33
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
 DOMAIN-KEYWORD,-analytics-events.apple.com
@@ -99,7 +99,6 @@ DOMAIN-KEYWORD,assets.51downapp.cn
 DOMAIN-KEYWORD,audid-api.taobao.com
 DOMAIN-KEYWORD,av1.xdrig.com
 DOMAIN-KEYWORD,backstory.ebay.
-DOMAIN-KEYWORD,bahoom
 DOMAIN-KEYWORD,bds.snssdk.com
 DOMAIN-KEYWORD,bdsp.x.jd.com
 DOMAIN-KEYWORD,biz.weibo.com
@@ -927,11 +926,6 @@ IP-CIDR6,2402:4e00:1200:ed00:0:9089:6dac:96b6/128,no-resolve
 IP-CIDR6,2402:4e00:1900:1700:0:9554:1ad9:c3a/128,no-resolve
 IP-CIDR6,2402:db40:5100:1011::5/128,no-resolve
 IP-CIDR6,240e:928:1400:10::25/128,no-resolve
-PROCESS-NAME,LemonAgent
-PROCESS-NAME,LemonDaemon
-PROCESS-NAME,LemonMonitor
-PROCESS-NAME,LemonService
 PROCESS-NAME,SogouInput
 PROCESS-NAME,SogouServices
 PROCESS-NAME,SogouTaskManager
-PROCESS-NAME,TencentLemon
