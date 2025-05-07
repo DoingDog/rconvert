@@ -1,5 +1,5 @@
-# Quantumult total line 7067
-# Last updated Sun 05/04/2025 22:12:21.55
+# Quantumult total line 7073
+# Last updated Wed 05/07/2025 22:13:29.97
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -61,7 +61,6 @@ HOST,apache.mesi.com.ar,LIST
 HOST,apache.miloslavbrada.cz,LIST
 HOST,apache.mindstudios.com,LIST
 HOST,apache.mivzakim.net,LIST
-HOST,apache.osuosl.org,LIST
 HOST,apache.otenet.gr,LIST
 HOST,apache.proserve.nl,LIST
 HOST,apache.rediris.es,LIST
@@ -250,6 +249,7 @@ HOST,assets.prowritingaid.com,LIST
 HOST,assets.queue-it.net,LIST
 HOST,assets.quillbot.com,LIST
 HOST,assets.raspberrypi.com,LIST
+HOST,assets.redbullshop.com,LIST
 HOST,assets.repair.org,LIST
 HOST,assets.safing.io,LIST
 HOST,assets.salesmartly.com,LIST
@@ -611,6 +611,7 @@ HOST,cdn.lemonsqueezy.com,LIST
 HOST,cdn.libravatar.org,LIST
 HOST,cdn.lihkg.com,LIST
 HOST,cdn.linearicons.com,LIST
+HOST,cdn.linux.do,LIST
 HOST,cdn.livechatinc.com,LIST
 HOST,cdn.loom.com,LIST
 HOST,cdn.macstories.net,LIST
@@ -735,7 +736,6 @@ HOST,cdn.travis-ci.com,LIST
 HOST,cdn.travis-ci.org,LIST
 HOST,cdn.trustedsite.com,LIST
 HOST,cdn.trustpilot.net,LIST
-HOST,cdn.tryadapp.com,LIST
 HOST,cdn.ttgtmedia.com,LIST
 HOST,cdn.ttloli.com,LIST
 HOST,cdn.tuk.dev,LIST
@@ -1490,7 +1490,6 @@ HOST,i.vgy.me,LIST
 HOST,i.xgroovy.com,LIST
 HOST,i.xozilla.xxx,LIST
 HOST,i.xxxshake.com,LIST
-HOST,i1.anysex.com,LIST
 HOST,i2.anysex.com,LIST
 HOST,i2.hentaifox.com,LIST
 HOST,i3.anysex.com,LIST
@@ -1505,6 +1504,10 @@ HOST,icons.llamao.fi,LIST
 HOST,icons.ly,LIST
 HOST,icons.veryicon.com,LIST
 HOST,icons.zeabur.com,LIST
+HOST,ih0.redbubble.net,LIST
+HOST,ih1.redbubble.net,LIST
+HOST,ih2.redbubble.net,LIST
+HOST,ih3.redbubble.net,LIST
 HOST,ik.imgkit.net,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-forwarder.notaku.so,LIST
@@ -1670,6 +1673,7 @@ HOST,img.openshop.com.hk,LIST
 HOST,img.pawoo.net,LIST
 HOST,img.perfops.net,LIST
 HOST,img.picacomic.com,LIST
+HOST,img.redbull.com,LIST
 HOST,img.reg.ru,LIST
 HOST,img.reimu.net,LIST
 HOST,img.represent.com,LIST
@@ -2171,7 +2175,6 @@ HOST,objects.g0v.social,LIST
 HOST,objects.hit.moe,LIST
 HOST,ocsp.digicert.com,LIST
 HOST,ocsp.godaddy.com,LIST
-HOST,ocsp.int-x3.letsencrypt.org,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,ocsp.usertrust.com,LIST
 HOST,oct8neproxy.azurewebsites.net,LIST
@@ -2319,6 +2322,7 @@ HOST,r2.leadsy.ai,LIST
 HOST,rapid-cdn.yottaa.com,LIST
 HOST,raw.github.com,LIST
 HOST,rawmarkdown.cloudflareaccess.org,LIST
+HOST,rbds-static.redbull.com,LIST
 HOST,rebound.postmarkapp.com,LIST
 HOST,redircdn.com,LIST
 HOST,redstone-launcher.mojang.com,LIST
@@ -2415,6 +2419,7 @@ HOST,s3-zen.mds.yandex.net,LIST
 HOST,s3.2233778.xyz,LIST
 HOST,s3.aaaaa.io,LIST
 HOST,s3.acg.mn,LIST
+HOST,s3.anilist.co,LIST
 HOST,s3.arkjp.net,LIST
 HOST,s3.c.im,LIST
 HOST,s3.coinmarketcap.com,LIST
@@ -2440,6 +2445,7 @@ HOST,s3.us-west-000.backblazeb2.com,LIST
 HOST,s3.us-west-001.backblazeb2.com,LIST
 HOST,s3.us-west-004.backblazeb2.com,LIST
 HOST,s3media.squarespace.com,LIST
+HOST,s4.anilist.co,LIST
 HOST,s4.itho.me,LIST
 HOST,s4.maxstream.org,LIST
 HOST,s5.maxstream.org,LIST
@@ -2487,7 +2493,6 @@ HOST,segapi.clerk.com,LIST
 HOST,sentry.ainopara.com,LIST
 HOST,service-icons.zeabur.com,LIST
 HOST,services.linkfire.com,LIST
-HOST,settings.kiwibrowser.com,LIST
 HOST,sf-coze-web-cdn.coze.com,LIST
 HOST,sf-flow-web-cdn.ciciai.com,LIST
 HOST,sfiles.cnyes.cool,LIST
@@ -2632,7 +2637,6 @@ HOST,static.doujins.com,LIST
 HOST,static.drtuber.com,LIST
 HOST,static.dw.com,LIST
 HOST,static.dzeninfra.ru,LIST
-HOST,static.e621.net,LIST
 HOST,static.edge.microsoftapp.net,LIST
 HOST,static.eroterest.net,LIST
 HOST,static.esimplus.net,LIST
@@ -2652,6 +2656,7 @@ HOST,static.freeimages.com,LIST
 HOST,static.getbutton.io,LIST
 HOST,static.gettyimages.com,LIST
 HOST,static.gitbook.com,LIST
+HOST,static.gl-inet.com,LIST
 HOST,static.global.visioncritical.com,LIST
 HOST,static.gnome.org,LIST
 HOST,static.gopro.com,LIST
@@ -2770,6 +2775,7 @@ HOST,static.xxxshake.com,LIST
 HOST,static.zaobao.com,LIST
 HOST,static.zaobao.com.sg,LIST
 HOST,static.zuora.com,LIST
+HOST,static1.e621.net,LIST
 HOST,static1.lottiefiles.com,LIST
 HOST,static1.muchohentai.com,LIST
 HOST,static1.smartbear.co,LIST
@@ -2829,6 +2835,7 @@ HOST,streetviewpixels-pa.googleapis.com,LIST
 HOST,sts.online.visualstudio.com,LIST
 HOST,sts3.wsj.net,LIST
 HOST,stubdownloader.services.mozilla.com,LIST
+HOST,styleguide-assets.shannons.com.au,LIST
 HOST,su.virtualbuddy.app,LIST
 HOST,sunsite.icm.edu.pl,LIST
 HOST,sunsite.informatik.rwth-aachen.de,LIST
@@ -2901,13 +2908,13 @@ HOST,udata.namespace.so,LIST
 HOST,uhf.microsoft.com,LIST
 HOST,ui-statics-cf.streamable.com,LIST
 HOST,ui.contentstack.com,LIST
+HOST,ui.powerreviews.com,LIST
 HOST,ui.trailhead.com,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,unsubscribe-imgs.leavemealone.com,LIST
 HOST,update.code.visualstudio.com,LIST
 HOST,update.googleapis.com,LIST
 HOST,update.greasyfork.org,LIST
-HOST,update.kiwibrowser.com,LIST
 HOST,update.parallels.com,LIST
 HOST,update.sleazyfork.org,LIST
 HOST,updater.snipaste.com,LIST
@@ -2934,7 +2941,6 @@ HOST,use.typekit.net,LIST
 HOST,user-images.trustpilot.com,LIST
 HOST,user-uploads.perchance.org,LIST
 HOST,usercontent.flodesk.com,LIST
-HOST,userfiles.uptimerobot.com,LIST
 HOST,userpic.redgifs.com,LIST
 HOST,useruploads.visualwebsiteoptimizer.com,LIST
 HOST,uts-api.itunes.apple.com,LIST
@@ -3641,6 +3647,7 @@ HOST-SUFFIX,deja-vu.beauty,LIST
 HOST-SUFFIX,delegated-ipfs.dev,LIST
 HOST-SUFFIX,deliver.vkcdnservice.com,LIST
 HOST-SUFFIX,delivery.mp.microsoft.com,LIST
+HOST-SUFFIX,dellcdn.com,LIST
 HOST-SUFFIX,delvenetworks.com,LIST
 HOST-SUFFIX,dengeamerika.com,LIST
 HOST-SUFFIX,dengiamerika.com,LIST
@@ -4257,7 +4264,6 @@ HOST-SUFFIX,gamccdn.com,LIST
 HOST-SUFFIX,gamer.com.tw,LIST
 HOST-SUFFIX,gamesgamescdn.com,LIST
 HOST-SUFFIX,gammacdn.com,LIST
-HOST-SUFFIX,gannetcdn.com,LIST
 HOST-SUFFIX,gateway.originprotocol.com,LIST
 HOST-SUFFIX,gateway.serph.network,LIST
 HOST-SUFFIX,gcr.io,LIST
@@ -4695,6 +4701,7 @@ HOST-SUFFIX,launchermeta.mojang.com,LIST
 HOST-SUFFIX,launchpadlibrarian.net,LIST
 HOST-SUFFIX,lbpicpic.com,LIST
 HOST-SUFFIX,lbpictupian.com,LIST
+HOST-SUFFIX,ldstatic.com,LIST
 HOST-SUFFIX,leechall.com,LIST
 HOST-SUFFIX,lencr.org,LIST
 HOST-SUFFIX,letitbit.net,LIST
@@ -5728,7 +5735,6 @@ HOST-SUFFIX,ubembed.com,LIST
 HOST-SUFFIX,uber-assets.com,LIST
 HOST-SUFFIX,ubiqfile.com,LIST
 HOST-SUFFIX,ucarecdn.com,LIST
-HOST-SUFFIX,ucloud133.com,LIST
 HOST-SUFFIX,udify.app,LIST
 HOST-SUFFIX,uicdn.net,LIST
 HOST-SUFFIX,ul.to,LIST

@@ -1,5 +1,5 @@
-# Clash total line 3557
-# Last updated Sun 05/04/2025 22:12:12.27
+# Clash total line 3565
+# Last updated Wed 05/07/2025 22:13:19.30
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -210,6 +210,7 @@ payload:
   - DOMAIN,assets.queue-it.net
   - DOMAIN,assets.quillbot.com
   - DOMAIN,assets.raspberrypi.com
+  - DOMAIN,assets.redbullshop.com
   - DOMAIN,assets.repair.org
   - DOMAIN,assets.safing.io
   - DOMAIN,assets.salesmartly.com
@@ -555,6 +556,7 @@ payload:
   - DOMAIN,cdn.libravatar.org
   - DOMAIN,cdn.lihkg.com
   - DOMAIN,cdn.linearicons.com
+  - DOMAIN,cdn.linux.do
   - DOMAIN,cdn.livechatinc.com
   - DOMAIN,cdn.loom.com
   - DOMAIN,cdn.macstories.net
@@ -684,7 +686,6 @@ payload:
   - DOMAIN,cdn.travis-ci.org
   - DOMAIN,cdn.trustedsite.com
   - DOMAIN,cdn.trustpilot.net
-  - DOMAIN,cdn.tryadapp.com
   - DOMAIN,cdn.ttgtmedia.com
   - DOMAIN,cdn.ttloli.com
   - DOMAIN,cdn.tuk.dev
@@ -1166,7 +1167,6 @@ payload:
   - DOMAIN,i.xgroovy.com
   - DOMAIN,i.xozilla.xxx
   - DOMAIN,i.xxxshake.com
-  - DOMAIN,i1.anysex.com
   - DOMAIN,i2.anysex.com
   - DOMAIN,i2.bahamut.com.tw
   - DOMAIN,i2.hentaifox.com
@@ -1183,6 +1183,10 @@ payload:
   - DOMAIN,icons.veryicon.com
   - DOMAIN,icons.zeabur.com
   - DOMAIN,iframe.nbcnews.com
+  - DOMAIN,ih0.redbubble.net
+  - DOMAIN,ih1.redbubble.net
+  - DOMAIN,ih2.redbubble.net
+  - DOMAIN,ih3.redbubble.net
   - DOMAIN,ik.imgkit.net
   - DOMAIN,imag.malavida.com
   - DOMAIN,image-forwarder.notaku.so
@@ -1358,6 +1362,7 @@ payload:
   - DOMAIN,img.pawoo.net
   - DOMAIN,img.perfops.net
   - DOMAIN,img.picacomic.com
+  - DOMAIN,img.redbull.com
   - DOMAIN,img.reg.ru
   - DOMAIN,img.reimu.net
   - DOMAIN,img.represent.com
@@ -1661,7 +1666,6 @@ payload:
   - DOMAIN,objects.hit.moe
   - DOMAIN,ocsp.digicert.com
   - DOMAIN,ocsp.godaddy.com
-  - DOMAIN,ocsp.int-x3.letsencrypt.org
   - DOMAIN,ocsp.sectigo.com
   - DOMAIN,ocsp.usertrust.com
   - DOMAIN,oct8neproxy.azurewebsites.net
@@ -1800,6 +1804,7 @@ payload:
   - DOMAIN,rapid-cdn.yottaa.com
   - DOMAIN,raw.github.com
   - DOMAIN,rawmarkdown.cloudflareaccess.org
+  - DOMAIN,rbds-static.redbull.com
   - DOMAIN,rebound.postmarkapp.com
   - DOMAIN,redircdn.com
   - DOMAIN,registry.api.cnn.io
@@ -1878,6 +1883,7 @@ payload:
   - DOMAIN,s3.2233778.xyz
   - DOMAIN,s3.aaaaa.io
   - DOMAIN,s3.acg.mn
+  - DOMAIN,s3.anilist.co
   - DOMAIN,s3.arkjp.net
   - DOMAIN,s3.c.im
   - DOMAIN,s3.coinmarketcap.com
@@ -1903,6 +1909,7 @@ payload:
   - DOMAIN,s3.us-west-002.backblazeb2.com
   - DOMAIN,s3.us-west-004.backblazeb2.com
   - DOMAIN,s3media.squarespace.com
+  - DOMAIN,s4.anilist.co
   - DOMAIN,s4.itho.me
   - DOMAIN,s4.maxstream.org
   - DOMAIN,s5.maxstream.org
@@ -1951,7 +1958,6 @@ payload:
   - DOMAIN,sentry.ainopara.com
   - DOMAIN,service-icons.zeabur.com
   - DOMAIN,services.linkfire.com
-  - DOMAIN,settings.kiwibrowser.com
   - DOMAIN,sf-coze-web-cdn.coze.com
   - DOMAIN,sf-flow-web-cdn.ciciai.com
   - DOMAIN,sfiles.cnyes.cool
@@ -2105,7 +2111,6 @@ payload:
   - DOMAIN,static.drtuber.com
   - DOMAIN,static.dw.com
   - DOMAIN,static.dzeninfra.ru
-  - DOMAIN,static.e621.net
   - DOMAIN,static.edge.microsoftapp.net
   - DOMAIN,static.eroterest.net
   - DOMAIN,static.esimplus.net
@@ -2128,6 +2133,7 @@ payload:
   - DOMAIN,static.getbutton.io
   - DOMAIN,static.gettyimages.com
   - DOMAIN,static.gitbook.com
+  - DOMAIN,static.gl-inet.com
   - DOMAIN,static.global.visioncritical.com
   - DOMAIN,static.gnome.org
   - DOMAIN,static.gopro.com
@@ -2253,6 +2259,7 @@ payload:
   - DOMAIN,static.zuora.com
   - DOMAIN,static01.nyt.com
   - DOMAIN,static02.nyt.com
+  - DOMAIN,static1.e621.net
   - DOMAIN,static1.lottiefiles.com
   - DOMAIN,static1.muchohentai.com
   - DOMAIN,static1.smartbear.co
@@ -2311,6 +2318,7 @@ payload:
   - DOMAIN,sts.online.visualstudio.com
   - DOMAIN,sts3.wsj.net
   - DOMAIN,stubdownloader.services.mozilla.com
+  - DOMAIN,styleguide-assets.shannons.com.au
   - DOMAIN,support.content.office.net
   - DOMAIN,sw.cool3c.com
   - DOMAIN,sync.getpublica.com
@@ -2386,6 +2394,7 @@ payload:
   - DOMAIN,ui-cdn.digitalocean.com
   - DOMAIN,ui-statics-cf.streamable.com
   - DOMAIN,ui.contentstack.com
+  - DOMAIN,ui.powerreviews.com
   - DOMAIN,ui.trailhead.com
   - DOMAIN,unlimited-cdn.waifu2x.net
   - DOMAIN,unsubscribe-imgs.leavemealone.com
@@ -2408,7 +2417,6 @@ payload:
   - DOMAIN,user-images.trustpilot.com
   - DOMAIN,user-uploads.perchance.org
   - DOMAIN,usercontent.flodesk.com
-  - DOMAIN,userfiles.uptimerobot.com
   - DOMAIN,userpic.redgifs.com
   - DOMAIN,useruploads.visualwebsiteoptimizer.com
   - DOMAIN,utteranc.es
@@ -2741,6 +2749,7 @@ payload:
   - DOMAIN-SUFFIX,dditscdn.com
   - DOMAIN-SUFFIX,ddpic.info
   - DOMAIN-SUFFIX,delegated-ipfs.dev
+  - DOMAIN-SUFFIX,dellcdn.com
   - DOMAIN-SUFFIX,delvenetworks.com
   - DOMAIN-SUFFIX,deno.land
   - DOMAIN-SUFFIX,denopkg.com
@@ -2852,7 +2861,6 @@ payload:
   - DOMAIN-SUFFIX,gamccdn.com
   - DOMAIN-SUFFIX,gamesgamescdn.com
   - DOMAIN-SUFFIX,gammacdn.com
-  - DOMAIN-SUFFIX,gannetcdn.com
   - DOMAIN-SUFFIX,gateway.originprotocol.com
   - DOMAIN-SUFFIX,gateway.pinata.cloud
   - DOMAIN-SUFFIX,gateway.serph.network
@@ -3055,6 +3063,7 @@ payload:
   - DOMAIN-SUFFIX,larksuitecdn.com
   - DOMAIN-SUFFIX,lbpicpic.com
   - DOMAIN-SUFFIX,lbpictupian.com
+  - DOMAIN-SUFFIX,ldstatic.com
   - DOMAIN-SUFFIX,lencr.org
   - DOMAIN-SUFFIX,liangzipic.com
   - DOMAIN-SUFFIX,licensebuttons.net
@@ -3444,7 +3453,6 @@ payload:
   - DOMAIN-SUFFIX,ubembed.com
   - DOMAIN-SUFFIX,uber-assets.com
   - DOMAIN-SUFFIX,ucarecdn.com
-  - DOMAIN-SUFFIX,ucloud133.com
   - DOMAIN-SUFFIX,udify.app
   - DOMAIN-SUFFIX,uicdn.net
   - DOMAIN-SUFFIX,ungh.cc

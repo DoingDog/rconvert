@@ -1,5 +1,5 @@
-# Quantumult total line 4328
-# Last updated Sun 05/04/2025 22:12:31.23
+# Quantumult total line 4331
+# Last updated Wed 05/07/2025 22:13:40.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
@@ -16,6 +16,7 @@ HOST,download.jetbrains.com,LIST
 HOST,gstore.val.manlaxy.com,LIST
 HOST,homerouter.cpe,LIST
 HOST,hotspot.cslwifi.com,LIST
+HOST,i.dell.com,LIST
 HOST,images-cn.ssl-images-amazon.com,LIST
 HOST,injections.adguard.org,LIST
 HOST,instant.arubanetworks.com,LIST
@@ -694,6 +695,7 @@ HOST-SUFFIX,bx1k.com,LIST
 HOST-SUFFIX,byodonline.com,LIST
 HOST-SUFFIX,bystack.com,LIST
 HOST-SUFFIX,byteacctimg.com,LIST
+HOST-SUFFIX,bytecdntp.com,LIST
 HOST-SUFFIX,byted-static.com,LIST
 HOST-SUFFIX,byted.org,LIST
 HOST-SUFFIX,bytedance.com,LIST
@@ -2343,6 +2345,7 @@ HOST-SUFFIX,letvcdn.com,LIST
 HOST-SUFFIX,letvcloud.com,LIST
 HOST-SUFFIX,letvimg.com,LIST
 HOST-SUFFIX,lf-rc1.yhgfb-cn-static.com,LIST
+HOST-SUFFIX,lf127.net,LIST
 HOST-SUFFIX,lhzq.com,LIST
 HOST-SUFFIX,liangxinyao.com,LIST
 HOST-SUFFIX,lianjia.com,LIST
