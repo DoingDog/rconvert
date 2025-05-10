@@ -1,5 +1,5 @@
-# Clash total line 7087
-# Last updated Wed 05/07/2025 22:13:30.02
+# Clash total line 7093
+# Last updated Sat 05/10/2025 22:11:57.32
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -197,6 +197,7 @@ payload:
   - DOMAIN,assets.fireside.fm
   - DOMAIN,assets.flodesk.com
   - DOMAIN,assets.fonts.adobe.com
+  - DOMAIN,assets.freespeechcoalition.com
   - DOMAIN,assets.frontegg.com
   - DOMAIN,assets.garr.it
   - DOMAIN,assets.gcore.pro
@@ -261,6 +262,7 @@ payload:
   - DOMAIN,assets.shazam.com
   - DOMAIN,assets.sololearn.com
   - DOMAIN,assets.squarespace.com
+  - DOMAIN,assets.squarewebsites.org
   - DOMAIN,assets.st-note.com
   - DOMAIN,assets.stash.com
   - DOMAIN,assets.static-upwork.com
@@ -673,6 +675,7 @@ payload:
   - DOMAIN,cdn.plu.mx
   - DOMAIN,cdn.pricespider.com
   - DOMAIN,cdn.privacy-mgmt.com
+  - DOMAIN,cdn.privacy.com
   - DOMAIN,cdn.prod.ext.web.purview.azure.com
   - DOMAIN,cdn.prod.www.spiegel.de
   - DOMAIN,cdn.promotekit.com
@@ -716,6 +719,7 @@ payload:
   - DOMAIN,cdn.sprig.com
   - DOMAIN,cdn.sso.mozilla.com
   - DOMAIN,cdn.st-note.com
+  - DOMAIN,cdn.stackoverflow.co
   - DOMAIN,cdn.starapps.studio
   - DOMAIN,cdn.stash.com
   - DOMAIN,cdn.staticdelivr.com
@@ -1942,6 +1946,7 @@ payload:
   - DOMAIN,medium-media.vgm.io
   - DOMAIN,megapx-assets.dcard.tw
   - DOMAIN,meta.prismlauncher.org
+  - DOMAIN,meteorclient.com
   - DOMAIN,metrics.kapa.ai
   - DOMAIN,micro.rubiconproject.com
   - DOMAIN,mintlify.b-cdn.net
@@ -2666,6 +2671,7 @@ payload:
   - DOMAIN,static.heavy-r.com
   - DOMAIN,static.helpjuice.com
   - DOMAIN,static.hotjar.com
+  - DOMAIN,static.hubspot.com
   - DOMAIN,static.hugedomains.com
   - DOMAIN,static.ietf.org
   - DOMAIN,static.ifunny.co
