@@ -1,5 +1,5 @@
-# Clash total line 7093
-# Last updated Sat 05/10/2025 22:11:57.32
+# Clash total line 7106
+# Last updated Tue 05/13/2025 22:13:50.22
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -219,6 +219,7 @@ payload:
   - DOMAIN,assets.jolipage.co
   - DOMAIN,assets.kagi.com
   - DOMAIN,assets.keysquare.io
+  - DOMAIN,assets.khoros.com
   - DOMAIN,assets.kraken.com
   - DOMAIN,assets.leetcode.com
   - DOMAIN,assets.lemonsqueezy.com
@@ -308,6 +309,7 @@ payload:
   - DOMAIN,attach.mobile01.com
   - DOMAIN,attach2.mobile01.com
   - DOMAIN,attachments.office.net
+  - DOMAIN,aurora-customization-usw2.lithium.com
   - DOMAIN,aus2-community.mozilla.org
   - DOMAIN,aus5.mozilla.org
   - DOMAIN,auth.split.io
@@ -555,6 +557,7 @@ payload:
   - DOMAIN,cdn.fourthwall.com
   - DOMAIN,cdn.freebiesupply.com
   - DOMAIN,cdn.freecodecamp.org
+  - DOMAIN,cdn.freesound.org
   - DOMAIN,cdn.freshdesk.com
   - DOMAIN,cdn.fwupd.org
   - DOMAIN,cdn.gamemonkey.org
@@ -1091,6 +1094,7 @@ payload:
   - DOMAIN,dl.pstmn.io
   - DOMAIN,dl.snipaste.com
   - DOMAIN,dl.tailscale.com
+  - DOMAIN,dl.thorium.rocks
   - DOMAIN,dl.ui.com
   - DOMAIN,dl.wechat.com
   - DOMAIN,dl2.nwjs.io
@@ -2305,6 +2309,7 @@ payload:
   - DOMAIN,proxy.cors.sh
   - DOMAIN,proxy.csidetm.com
   - DOMAIN,proxy.joinmastodon.org
+  - DOMAIN,proxy.spigotmc.org
   - DOMAIN,ps.w.org
   - DOMAIN,psp-logos.uptimerobot.com
   - DOMAIN,public-assets.typeform.com
@@ -2749,6 +2754,7 @@ payload:
   - DOMAIN,static.socialshopwave.com
   - DOMAIN,static.solarwinds.com
   - DOMAIN,static.spankbang.com
+  - DOMAIN,static.spigotmc.org
   - DOMAIN,static.srcspot.com
   - DOMAIN,static.staff-start.com
   - DOMAIN,static.start.me
@@ -2761,6 +2767,7 @@ payload:
   - DOMAIN,static.toiimg.com
   - DOMAIN,static.tokenview.io
   - DOMAIN,static.toss.im
+  - DOMAIN,static.touhoudb.com
   - DOMAIN,static.tp-link.com
   - DOMAIN,static.tradingview.com
   - DOMAIN,static.tronscan.org
@@ -2875,6 +2882,7 @@ payload:
   - DOMAIN,telemetry.vercel.com
   - DOMAIN,telemetry2.devolutions.net
   - DOMAIN,th.bing.com
+  - DOMAIN,th1s_rule5et_1s_m4d3_by_5ukk4w_ruleset.skk.moe
   - DOMAIN,themes.fourthwall.com
   - DOMAIN,thingproxy.freeboard.io
   - DOMAIN,thumbnail.missav.com
@@ -3383,6 +3391,7 @@ payload:
   - DOMAIN-SUFFIX,carlos.trade
   - DOMAIN-SUFFIX,carryz.net
   - DOMAIN-SUFFIX,cartocdn.com
+  - DOMAIN-SUFFIX,cas-bridge.xethub.hf.co
   - DOMAIN-SUFFIX,casoneexchange.com
   - DOMAIN-SUFFIX,catbox.moe
   - DOMAIN-SUFFIX,catlinks.co.uk
@@ -3414,7 +3423,10 @@ payload:
   - DOMAIN-SUFFIX,cdkworkshop.com
   - DOMAIN-SUFFIX,cdn-centaurus.com
   - DOMAIN-SUFFIX,cdn-cookieyes.com
+  - DOMAIN-SUFFIX,cdn-lfs-eu-1.hf.co
+  - DOMAIN-SUFFIX,cdn-lfs-us-1.hf.co
   - DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co
+  - DOMAIN-SUFFIX,cdn-lfs.hf.co
   - DOMAIN-SUFFIX,cdn-lfs.huggingface.co
   - DOMAIN-SUFFIX,cdn-one.com
   - DOMAIN-SUFFIX,cdn-spurit.com
@@ -5649,6 +5661,7 @@ payload:
   - DOMAIN-SUFFIX,thehulubraintrust.com
   - DOMAIN-SUFFIX,themarvelexperiencetour.com
   - DOMAIN-SUFFIX,theplatform.com
+  - DOMAIN-SUFFIX,thesourcemediaassets.com
   - DOMAIN-SUFFIX,thestationbymaker.com
   - DOMAIN-SUFFIX,theverge.com
   - DOMAIN-SUFFIX,thevideo.io

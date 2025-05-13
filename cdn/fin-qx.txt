@@ -1,5 +1,5 @@
-# Quantumult total line 3571
-# Last updated Sat 05/10/2025 22:11:46.68
+# Quantumult total line 3583
+# Last updated Tue 05/13/2025 22:13:40.99
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -177,6 +177,7 @@ HOST,assets.jable.tv,LIST
 HOST,assets.jolipage.co,LIST
 HOST,assets.kagi.com,LIST
 HOST,assets.keysquare.io,LIST
+HOST,assets.khoros.com,LIST
 HOST,assets.kraken.com,LIST
 HOST,assets.leetcode.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
@@ -269,6 +270,7 @@ HOST,at.cbsi.com,LIST
 HOST,attach.mobile01.com,LIST
 HOST,attach2.mobile01.com,LIST
 HOST,attachments.office.net,LIST
+HOST,aurora-customization-usw2.lithium.com,LIST
 HOST,auth.split.io,LIST
 HOST,avatar.freepik.com,LIST
 HOST,avatar.stefanjudis.com,LIST
@@ -500,6 +502,7 @@ HOST,cdn.fosstodon.org,LIST
 HOST,cdn.fourthwall.com,LIST
 HOST,cdn.freebiesupply.com,LIST
 HOST,cdn.freecodecamp.org,LIST
+HOST,cdn.freesound.org,LIST
 HOST,cdn.freshdesk.com,LIST
 HOST,cdn.gamemonkey.org,LIST
 HOST,cdn.gatherings.franchise.minecraft-services.net,LIST
@@ -1785,6 +1788,7 @@ HOST,proxy.beyondwords.io,LIST
 HOST,proxy.cors.sh,LIST
 HOST,proxy.csidetm.com,LIST
 HOST,proxy.joinmastodon.org,LIST
+HOST,proxy.spigotmc.org,LIST
 HOST,ps.w.org,LIST
 HOST,psp-logos.uptimerobot.com,LIST
 HOST,public-assets.typeform.com,LIST
@@ -2228,6 +2232,7 @@ HOST,static.snyk.io,LIST
 HOST,static.socialshopwave.com,LIST
 HOST,static.solarwinds.com,LIST
 HOST,static.spankbang.com,LIST
+HOST,static.spigotmc.org,LIST
 HOST,static.srcspot.com,LIST
 HOST,static.staff-start.com,LIST
 HOST,static.start.me,LIST
@@ -2240,6 +2245,7 @@ HOST,static.threatlocker.com,LIST
 HOST,static.toiimg.com,LIST
 HOST,static.tokenview.io,LIST
 HOST,static.toss.im,LIST
+HOST,static.touhoudb.com,LIST
 HOST,static.tp-link.com,LIST
 HOST,static.tradingview.com,LIST
 HOST,static.tronscan.org,LIST
@@ -2354,6 +2360,7 @@ HOST,telemetry.stepsecurity.io,LIST
 HOST,telemetry.vercel.com,LIST
 HOST,telemetry2.devolutions.net,LIST
 HOST,th.bing.com,LIST
+HOST,th1s_rule5et_1s_m4d3_by_5ukk4w_ruleset.skk.moe,LIST
 HOST,themes.fourthwall.com,LIST
 HOST,thingproxy.freeboard.io,LIST
 HOST,thumbnail.missav.com,LIST
@@ -2637,10 +2644,14 @@ HOST-SUFFIX,bytebucket.org,LIST
 HOST-SUFFIX,bytedapm.com,LIST
 HOST-SUFFIX,c-dn.net,LIST
 HOST-SUFFIX,cartocdn.com,LIST
+HOST-SUFFIX,cas-bridge.xethub.hf.co,LIST
 HOST-SUFFIX,cbsnewsstatic.com,LIST
 HOST-SUFFIX,cdn-centaurus.com,LIST
 HOST-SUFFIX,cdn-cookieyes.com,LIST
+HOST-SUFFIX,cdn-lfs-eu-1.hf.co,LIST
+HOST-SUFFIX,cdn-lfs-us-1.hf.co,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
+HOST-SUFFIX,cdn-lfs.hf.co,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn-one.com,LIST
 HOST-SUFFIX,cdn-spurit.com,LIST
@@ -3422,6 +3433,7 @@ HOST-SUFFIX,teamtailor-cdn.com,LIST
 HOST-SUFFIX,tedcdn.com,LIST
 HOST-SUFFIX,telemetry.services.yofi.ai,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
+HOST-SUFFIX,thesourcemediaassets.com,LIST
 HOST-SUFFIX,thirdwebcdn.com,LIST
 HOST-SUFFIX,thisiscdn.com,LIST
 HOST-SUFFIX,tiktokcdn-us.com,LIST
