@@ -1,5 +1,5 @@
-# Quantumult total line 3583
-# Last updated Tue 05/13/2025 22:13:40.99
+# Quantumult total line 3584
+# Last updated Fri 05/16/2025 22:12:55.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -342,6 +342,7 @@ HOST,cacerts.digicert.com,LIST
 HOST,cache-05.filehippo.net,LIST
 HOST,cache.armorgames.com,LIST
 HOST,cache.hackedfreegames.com,LIST
+HOST,cache.omnicalculator.com,LIST
 HOST,canny-assets.io,LIST
 HOST,cassette.sphdigital.com.sg,LIST
 HOST,cc-embed.adobe.com,LIST
@@ -560,7 +561,6 @@ HOST,cdn.lemonsqueezy.com,LIST
 HOST,cdn.libravatar.org,LIST
 HOST,cdn.lihkg.com,LIST
 HOST,cdn.linearicons.com,LIST
-HOST,cdn.linux.do,LIST
 HOST,cdn.livechatinc.com,LIST
 HOST,cdn.loom.com,LIST
 HOST,cdn.macstories.net,LIST
@@ -590,6 +590,7 @@ HOST,cdn.neverbounce.com,LIST
 HOST,cdn.nolt.io,LIST
 HOST,cdn.now.gg,LIST
 HOST,cdn.nperf.com,LIST
+HOST,cdn.omnicalculator.com,LIST
 HOST,cdn.one.store,LIST
 HOST,cdn.onesignal.com,LIST
 HOST,cdn.onetime.dog,LIST
@@ -2413,6 +2414,7 @@ HOST,unsubscribe-imgs.leavemealone.com,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
 HOST,upload.wikimedia.org,LIST
+HOST,uploads-cdn.omnicalculator.com,LIST
 HOST,uploads.codesandbox.io,LIST
 HOST,uploads.guim.co.uk,LIST
 HOST,uploads.linear.app,LIST
@@ -2562,7 +2564,6 @@ HOST-SUFFIX,agechecker-northern-apps.com,LIST
 HOST-SUFFIX,agechecker.northern-apps.com,LIST
 HOST-SUFFIX,ahcdn.com,LIST
 HOST-SUFFIX,airio3.live,LIST
-HOST-SUFFIX,akamai-content-network.com,LIST
 HOST-SUFFIX,akidoo.top,LIST
 HOST-SUFFIX,alexdav.id,LIST
 HOST-SUFFIX,algolianet.com,LIST

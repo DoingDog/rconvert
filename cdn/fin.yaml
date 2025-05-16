@@ -1,5 +1,5 @@
-# Clash total line 3583
-# Last updated Tue 05/13/2025 22:13:41.02
+# Clash total line 3584
+# Last updated Fri 05/16/2025 22:12:55.41
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -343,6 +343,7 @@ payload:
   - DOMAIN,cache-05.filehippo.net
   - DOMAIN,cache.armorgames.com
   - DOMAIN,cache.hackedfreegames.com
+  - DOMAIN,cache.omnicalculator.com
   - DOMAIN,canny-assets.io
   - DOMAIN,cassette.sphdigital.com.sg
   - DOMAIN,cc-embed.adobe.com
@@ -561,7 +562,6 @@ payload:
   - DOMAIN,cdn.libravatar.org
   - DOMAIN,cdn.lihkg.com
   - DOMAIN,cdn.linearicons.com
-  - DOMAIN,cdn.linux.do
   - DOMAIN,cdn.livechatinc.com
   - DOMAIN,cdn.loom.com
   - DOMAIN,cdn.macstories.net
@@ -591,6 +591,7 @@ payload:
   - DOMAIN,cdn.nolt.io
   - DOMAIN,cdn.now.gg
   - DOMAIN,cdn.nperf.com
+  - DOMAIN,cdn.omnicalculator.com
   - DOMAIN,cdn.one.store
   - DOMAIN,cdn.onesignal.com
   - DOMAIN,cdn.onetime.dog
@@ -2414,6 +2415,7 @@ payload:
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
   - DOMAIN,upload.wikimedia.org
+  - DOMAIN,uploads-cdn.omnicalculator.com
   - DOMAIN,uploads.codesandbox.io
   - DOMAIN,uploads.guim.co.uk
   - DOMAIN,uploads.linear.app
@@ -2563,7 +2565,6 @@ payload:
   - DOMAIN-SUFFIX,agechecker.northern-apps.com
   - DOMAIN-SUFFIX,ahcdn.com
   - DOMAIN-SUFFIX,airio3.live
-  - DOMAIN-SUFFIX,akamai-content-network.com
   - DOMAIN-SUFFIX,akidoo.top
   - DOMAIN-SUFFIX,alexdav.id
   - DOMAIN-SUFFIX,algolianet.com

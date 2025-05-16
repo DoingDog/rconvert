@@ -1,5 +1,5 @@
 # Quantumult total line 7092
-# Last updated Tue 05/13/2025 22:13:50.17
+# Last updated Fri 05/16/2025 22:13:06.05
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -389,6 +389,7 @@ HOST,cache-05.filehippo.net,LIST
 HOST,cache.agilebits.com,LIST
 HOST,cache.armorgames.com,LIST
 HOST,cache.hackedfreegames.com,LIST
+HOST,cache.omnicalculator.com,LIST
 HOST,cache.pack.google.com,LIST
 HOST,cache.video.iqiyi.com,LIST
 HOST,canny-assets.io,LIST
@@ -616,7 +617,6 @@ HOST,cdn.lemonsqueezy.com,LIST
 HOST,cdn.libravatar.org,LIST
 HOST,cdn.lihkg.com,LIST
 HOST,cdn.linearicons.com,LIST
-HOST,cdn.linux.do,LIST
 HOST,cdn.livechatinc.com,LIST
 HOST,cdn.loom.com,LIST
 HOST,cdn.macstories.net,LIST
@@ -646,6 +646,7 @@ HOST,cdn.neverbounce.com,LIST
 HOST,cdn.nolt.io,LIST
 HOST,cdn.now.gg,LIST
 HOST,cdn.nperf.com,LIST
+HOST,cdn.omnicalculator.com,LIST
 HOST,cdn.one.store,LIST
 HOST,cdn.onesignal.com,LIST
 HOST,cdn.onetime.dog,LIST
@@ -1388,7 +1389,6 @@ HOST,ftp.task.gda.pl,LIST
 HOST,ftp.tc.edu.tw,LIST
 HOST,ftp.tsukuba.wide.ad.jp,LIST
 HOST,ftp.tu-chemnitz.de,LIST
-HOST,ftp.tudelft.nl,LIST
 HOST,ftp.twaren.net,LIST
 HOST,ftp.u-aizu.ac.jp,LIST
 HOST,ftp.ubuntu-tw.org,LIST
@@ -2939,6 +2939,7 @@ HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
 HOST,upload.wikimedia.org,LIST
+HOST,uploads-cdn.omnicalculator.com,LIST
 HOST,uploads.codesandbox.io,LIST
 HOST,uploads.guim.co.uk,LIST
 HOST,uploads.linear.app,LIST
@@ -3152,7 +3153,6 @@ HOST-SUFFIX,airio3.live,LIST
 HOST-SUFFIX,aiv-cdn.net,LIST
 HOST-SUFFIX,aiv-delivery.net,LIST
 HOST-SUFFIX,akamai-cdn-content.com,LIST
-HOST-SUFFIX,akamai-content-network.com,LIST
 HOST-SUFFIX,akamai.com,LIST
 HOST-SUFFIX,akamai.net,LIST
 HOST-SUFFIX,akamaiedge.net,LIST
