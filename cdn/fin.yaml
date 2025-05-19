@@ -1,5 +1,5 @@
-# Clash total line 3584
-# Last updated Fri 05/16/2025 22:12:55.41
+# Clash total line 3586
+# Last updated Mon 05/19/2025 22:13:30.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -707,6 +707,7 @@ payload:
   - DOMAIN,cdn.v2ex.com
   - DOMAIN,cdn.vector.co
   - DOMAIN,cdn.verifypass.com
+  - DOMAIN,cdn.viafoura.net
   - DOMAIN,cdn.vidible.tv
   - DOMAIN,cdn.vidyard.com
   - DOMAIN,cdn.viglink.com
@@ -2539,6 +2540,7 @@ payload:
   - DOMAIN,xpaywalletcdn.azureedge.net
   - DOMAIN,yep.video.yahoo.com
   - DOMAIN,zephr-templates.cnbc.com
+  - DOMAIN-SUFFIX,1a-1791.com
   - DOMAIN-SUFFIX,1passwordusercontent.ca
   - DOMAIN-SUFFIX,1passwordusercontent.com
   - DOMAIN-SUFFIX,1passwordusercontent.eu

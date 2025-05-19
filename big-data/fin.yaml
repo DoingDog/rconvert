@@ -1,5 +1,5 @@
-# Clash total line 7106
-# Last updated Fri 05/16/2025 22:13:06.09
+# Clash total line 7108
+# Last updated Mon 05/19/2025 22:13:42.58
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -758,6 +758,7 @@ payload:
   - DOMAIN,cdn.v2ex.com
   - DOMAIN,cdn.vector.co
   - DOMAIN,cdn.verifypass.com
+  - DOMAIN,cdn.viafoura.net
   - DOMAIN,cdn.vidyard.com
   - DOMAIN,cdn.viglink.com
   - DOMAIN,cdn.vuukle.com
@@ -3073,6 +3074,7 @@ payload:
   - DOMAIN-SUFFIX,112263.com
   - DOMAIN-SUFFIX,123456.al
   - DOMAIN-SUFFIX,16bit.cfd
+  - DOMAIN-SUFFIX,1a-1791.com
   - DOMAIN-SUFFIX,1fhjlv1.oloadcdn.net
   - DOMAIN-SUFFIX,1fichier.com
   - DOMAIN-SUFFIX,1fichier.info
