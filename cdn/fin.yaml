@@ -1,5 +1,5 @@
-# Clash total line 3586
-# Last updated Mon 05/19/2025 22:13:30.62
+# Clash total line 3596
+# Last updated Thu 05/22/2025 22:13:09.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -228,6 +228,7 @@ payload:
   - DOMAIN,assets.stash.com
   - DOMAIN,assets.static-upwork.com
   - DOMAIN,assets.stickpng.com
+  - DOMAIN,assets.stigg.io
   - DOMAIN,assets.swoogo.com
   - DOMAIN,assets.the-independent.com
   - DOMAIN,assets.time.com
@@ -319,6 +320,7 @@ payload:
   - DOMAIN,businessunitprofile-cdn.trustpilot.net
   - DOMAIN,busuanzi.ibruce.info
   - DOMAIN,c.1password.com
+  - DOMAIN,c.animaapp.com
   - DOMAIN,c.fantia.jp
   - DOMAIN,c.marsflag.com
   - DOMAIN,c.navattic.com
@@ -353,6 +355,7 @@ payload:
   - DOMAIN,cdn-app.pathfactory.com
   - DOMAIN,cdn-assets.circleci.com
   - DOMAIN,cdn-avatars.huggingface.co
+  - DOMAIN,cdn-b.saashub.com
   - DOMAIN,cdn-bundler.nice-team.net
   - DOMAIN,cdn-c.leavemealone.com
   - DOMAIN,cdn-cf-east.streamable.com
@@ -1657,6 +1660,7 @@ payload:
   - DOMAIN,netlify.apollo.io
   - DOMAIN,newassets.hcaptcha.com
   - DOMAIN,news-assets.apple.com
+  - DOMAIN,news-data.pts.org.tw
   - DOMAIN,newsletter.postmarkapp.com
   - DOMAIN,next-images.123rf.com
   - DOMAIN,next-images.opencollective.com
@@ -2078,6 +2082,7 @@ payload:
   - DOMAIN,static.afterpay.com
   - DOMAIN,static.ahrefs.com
   - DOMAIN,static.aizanmei.org
+  - DOMAIN,static.animaapp.com
   - DOMAIN,static.anyporn.com
   - DOMAIN,static.anysex.com
   - DOMAIN,static.apkpure.com
@@ -2139,6 +2144,7 @@ payload:
   - DOMAIN,static.filestackapi.com
   - DOMAIN,static.foxbusiness.com
   - DOMAIN,static.foxnews.com
+  - DOMAIN,static.frame.work
   - DOMAIN,static.freedownloadmanager.org
   - DOMAIN,static.freeimages.com
   - DOMAIN,static.getbutton.io
@@ -2362,6 +2368,7 @@ payload:
   - DOMAIN,telemetry.stepsecurity.io
   - DOMAIN,telemetry.vercel.com
   - DOMAIN,telemetry2.devolutions.net
+  - DOMAIN,texture.laby.net
   - DOMAIN,th.bing.com
   - DOMAIN,th1s_rule5et_1s_m4d3_by_5ukk4w_ruleset.skk.moe
   - DOMAIN,themes.fourthwall.com
@@ -2538,8 +2545,10 @@ payload:
   - DOMAIN,www.typescriptlang.org
   - DOMAIN,wwwimages2.adobe.com
   - DOMAIN,xpaywalletcdn.azureedge.net
+  - DOMAIN,y.yarn.co
   - DOMAIN,yep.video.yahoo.com
   - DOMAIN,zephr-templates.cnbc.com
+  - DOMAIN,zod.dev
   - DOMAIN-SUFFIX,1a-1791.com
   - DOMAIN-SUFFIX,1passwordusercontent.ca
   - DOMAIN-SUFFIX,1passwordusercontent.com
@@ -2722,6 +2731,7 @@ payload:
   - DOMAIN-SUFFIX,chasecdn.com
   - DOMAIN-SUFFIX,chcdn.xyz
   - DOMAIN-SUFFIX,chesscomfiles.com
+  - DOMAIN-SUFFIX,cktu01.sbs
   - DOMAIN-SUFFIX,claudeusercontent.com
   - DOMAIN-SUFFIX,cldup.com
   - DOMAIN-SUFFIX,clientmetrics-pa.googleapis.com

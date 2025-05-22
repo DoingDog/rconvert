@@ -1,5 +1,5 @@
-# Clash total line 4375
-# Last updated Mon 05/19/2025 22:13:54.47
+# Clash total line 4376
+# Last updated Thu 05/22/2025 22:13:28.77
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,a.iqmtp.live
@@ -1946,6 +1946,7 @@ payload:
   - DOMAIN-SUFFIX,inftab.com
   - DOMAIN-SUFFIX,infzm.com
   - DOMAIN-SUFFIX,interact.sh
+  - DOMAIN-SUFFIX,internal
   - DOMAIN-SUFFIX,intltencentcos.com
   - DOMAIN-SUFFIX,iop.org
   - DOMAIN-SUFFIX,ip-cdn.com

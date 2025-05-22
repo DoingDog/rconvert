@@ -1,9 +1,11 @@
-# Surge Rules total line 923
-# Last updated Mon 05/19/2025 22:13:26.91
+# Surge Rules total line 945
+# Last updated Thu 05/22/2025 22:13:06.44
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
+DOMAIN-KEYWORD,-adnow.com
 DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
 DOMAIN-KEYWORD,-analytics-events.apple.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
+DOMAIN-KEYWORD,-go.experian.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
 DOMAIN-KEYWORD,-logsdk.kwai-pro.com^
@@ -21,8 +23,11 @@ DOMAIN-KEYWORD,-ulogl2.kwaipros.com
 DOMAIN-KEYWORD,.engage.3m.
 DOMAIN-KEYWORD,.estream.
 DOMAIN-KEYWORD,.freecontent.
+DOMAIN-KEYWORD,.fstsrv
 DOMAIN-KEYWORD,.net.daraz.
 DOMAIN-KEYWORD,.nimiq.
+DOMAIN-KEYWORD,.sagewwl
+DOMAIN-KEYWORD,.srvqck
 DOMAIN-KEYWORD,.zooplus.
 DOMAIN-KEYWORD,112wan
 DOMAIN-KEYWORD,789htbet
@@ -82,6 +87,7 @@ DOMAIN-KEYWORD,alitui.weibo.com
 DOMAIN-KEYWORD,allyes
 DOMAIN-KEYWORD,analysys
 DOMAIN-KEYWORD,analytics-cdn.
+DOMAIN-KEYWORD,analytics.
 DOMAIN-KEYWORD,android.bugly.qq.com
 DOMAIN-KEYWORD,anybest.
 DOMAIN-KEYWORD,ap.51y5.net
@@ -90,8 +96,10 @@ DOMAIN-KEYWORD,api.freed.so
 DOMAIN-KEYWORD,api.sobot.com
 DOMAIN-KEYWORD,apiinit.amap.com
 DOMAIN-KEYWORD,apimg.qunliao.info
+DOMAIN-KEYWORD,app-analytics
+DOMAIN-KEYWORD,app-log.
 DOMAIN-KEYWORD,app.51y5.net
-DOMAIN-KEYWORD,applog.uc.cn
+DOMAIN-KEYWORD,applog.
 DOMAIN-KEYWORD,applogapi.autohome.com
 DOMAIN-KEYWORD,applovin
 DOMAIN-KEYWORD,appsflyer
@@ -135,6 +143,7 @@ DOMAIN-KEYWORD,crashlytics
 DOMAIN-KEYWORD,dat8
 DOMAIN-KEYWORD,dc.pimentaafricana
 DOMAIN-KEYWORD,dfkj8
+DOMAIN-KEYWORD,dkswshap-
 DOMAIN-KEYWORD,dlads
 DOMAIN-KEYWORD,dm.bytedance.com
 DOMAIN-KEYWORD,dm.pstatp.com
@@ -163,6 +172,7 @@ DOMAIN-KEYWORD,fc-video.cdn.bcebos.com
 DOMAIN-KEYWORD,fds.api.moji.com
 DOMAIN-KEYWORD,fenxi
 DOMAIN-KEYWORD,flightsy
+DOMAIN-KEYWORD,fzlm
 DOMAIN-KEYWORD,game.weibo.cn
 DOMAIN-KEYWORD,game.weibo.com
 DOMAIN-KEYWORD,gettate
@@ -185,6 +195,8 @@ DOMAIN-KEYWORD,in-page-push
 DOMAIN-KEYWORD,inmobi
 DOMAIN-KEYWORD,insights-collector.
 DOMAIN-KEYWORD,insurance.lianwifi.com
+DOMAIN-KEYWORD,ios-log.
+DOMAIN-KEYWORD,ioslog.
 DOMAIN-KEYWORD,jads
 DOMAIN-KEYWORD,jomodns
 DOMAIN-KEYWORD,js.union-wifi.com
@@ -248,7 +260,9 @@ DOMAIN-KEYWORD,pangolin-sdk-toutiao
 DOMAIN-KEYWORD,pangolin.snssdk.com
 DOMAIN-KEYWORD,paradisestatic.vivo.com.cn
 DOMAIN-KEYWORD,partnerad
+DOMAIN-KEYWORD,pc-log.
 DOMAIN-KEYWORD,pc.suishenyun.net
+DOMAIN-KEYWORD,pclog.
 DOMAIN-KEYWORD,pdds.ucweb.com
 DOMAIN-KEYWORD,pglstatp-toutiao
 DOMAIN-KEYWORD,pingfore
@@ -317,6 +331,7 @@ DOMAIN-KEYWORD,v1.log.moji.com
 DOMAIN-KEYWORD,v2.reachmax.cn
 DOMAIN-KEYWORD,val.atm.youku.com
 DOMAIN-KEYWORD,vidoza
+DOMAIN-KEYWORD,volc
 DOMAIN-KEYWORD,vs10.bj2ct.u3.ucweb.com
 DOMAIN-KEYWORD,wax.weibo.com
 DOMAIN-KEYWORD,wbapp.uve.weibo.com
@@ -396,6 +411,7 @@ IP-CIDR,107.183.137.18/32,no-resolve
 IP-CIDR,107.187.122.172/32,no-resolve
 IP-CIDR,107.21.113.76/32,no-resolve
 IP-CIDR,108.171.248.234/32,no-resolve
+IP-CIDR,109.123.233.251/32,no-resolve
 IP-CIDR,111.11.208.2/32,no-resolve
 IP-CIDR,111.175.220.160/29,no-resolve
 IP-CIDR,111.175.221.58/32,no-resolve
@@ -471,12 +487,14 @@ IP-CIDR,120.209.138.64/32,no-resolve
 IP-CIDR,120.222.240.171/32,no-resolve
 IP-CIDR,120.240.95.37/32,no-resolve
 IP-CIDR,120.26.151.246/32,no-resolve
+IP-CIDR,120.27.235.201/32,no-resolve
 IP-CIDR,120.27.34.156/32,no-resolve
 IP-CIDR,120.46.169.234/32,no-resolve
 IP-CIDR,120.55.199.139/32,no-resolve
 IP-CIDR,120.76.189.132/32,no-resolve
 IP-CIDR,120.80.57.123/32,no-resolve
 IP-CIDR,121.15.207.243/32,no-resolve
+IP-CIDR,121.196.197.147/32,no-resolve
 IP-CIDR,121.199.73.185/32,no-resolve
 IP-CIDR,121.201.108.2/32,no-resolve
 IP-CIDR,121.201.11.95/32,no-resolve
@@ -558,6 +576,7 @@ IP-CIDR,154.22.214.2/32,no-resolve
 IP-CIDR,154.7.80.158/32,no-resolve
 IP-CIDR,156.232.37.2/32,no-resolve
 IP-CIDR,156.246.162.2/32,no-resolve
+IP-CIDR,157.148.47.204/32,no-resolve
 IP-CIDR,157.90.183.248/32,no-resolve
 IP-CIDR,158.247.208.115/32,no-resolve
 IP-CIDR,162.212.181.32/32,no-resolve
@@ -710,6 +729,7 @@ IP-CIDR,218.68.250.118/31,no-resolve
 IP-CIDR,218.68.250.120/31,no-resolve
 IP-CIDR,218.93.127.37/32,no-resolve
 IP-CIDR,218.94.207.205/32,no-resolve
+IP-CIDR,219.143.187.136/32,no-resolve
 IP-CIDR,219.146.13.36/32,no-resolve
 IP-CIDR,219.234.83.60/32,no-resolve
 IP-CIDR,220.115.251.25/32,no-resolve
@@ -859,6 +879,8 @@ IP-CIDR,47.90.50.177/32,no-resolve
 IP-CIDR,47.93.103.196/32,no-resolve
 IP-CIDR,47.94.89.32/32,no-resolve
 IP-CIDR,47.96.162.122/32,no-resolve
+IP-CIDR,47.97.215.55/32,no-resolve
+IP-CIDR,47.99.42.29/32,no-resolve
 IP-CIDR,49.234.252.81/32,no-resolve
 IP-CIDR,49.235.102.100/32,no-resolve
 IP-CIDR,49.235.102.145/32,no-resolve
