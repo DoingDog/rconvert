@@ -1,5 +1,5 @@
-# Clash total line 3596
-# Last updated Thu 05/22/2025 22:13:09.43
+# Clash total line 3601
+# Last updated Sun 05/25/2025 22:12:54.21
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -477,6 +477,7 @@ payload:
   - DOMAIN,cdn.designsystem.arm.com
   - DOMAIN,cdn.deta.space
   - DOMAIN,cdn.devolutions.net
+  - DOMAIN,cdn.dexscreener.com
   - DOMAIN,cdn.dnsimple.com
   - DOMAIN,cdn.docsbot.com
   - DOMAIN,cdn.document360.io
@@ -946,6 +947,7 @@ payload:
   - DOMAIN,david-dm.org
   - DOMAIN,db.onlinewebfonts.com
   - DOMAIN,dc-cdn.cdw.com
+  - DOMAIN,dd.dexscreener.com
   - DOMAIN,ddcdn.comtucdncom.com
   - DOMAIN,decart-oasis.azureedge.net
   - DOMAIN,demo.unified-streaming.com
@@ -1388,6 +1390,7 @@ payload:
   - DOMAIN,img.telemetr.io
   - DOMAIN,img.thingiverse.com
   - DOMAIN,img.timero.xyz
+  - DOMAIN,img.toto.im
   - DOMAIN,img.utdstc.com
   - DOMAIN,img.vim-cn.com
   - DOMAIN,img.washingtonpost.com
@@ -2190,6 +2193,7 @@ payload:
   - DOMAIN,static.mocortech.com
   - DOMAIN,static.moegoat.com
   - DOMAIN,static.monei.net
+  - DOMAIN,static.moomoo.com
   - DOMAIN,static.moonpay.com
   - DOMAIN,static.music.com
   - DOMAIN,static.mysph.sph.com.sg
@@ -2536,6 +2540,7 @@ payload:
   - DOMAIN,ws2-cache.aptoide.com
   - DOMAIN,ww2-secure.justanswer.com
   - DOMAIN,ww2.justanswer.com
+  - DOMAIN,www-res.cablelabs.com
   - DOMAIN,www-static.ripe.net
   - DOMAIN,www.10086.win
   - DOMAIN,www.bbthat.com

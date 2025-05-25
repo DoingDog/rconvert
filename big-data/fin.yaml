@@ -1,5 +1,5 @@
-# Clash total line 7121
-# Last updated Thu 05/22/2025 22:13:18.81
+# Clash total line 7130
+# Last updated Sun 05/25/2025 22:13:03.27
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -533,6 +533,7 @@ payload:
   - DOMAIN,cdn.designsystem.arm.com
   - DOMAIN,cdn.deta.space
   - DOMAIN,cdn.devolutions.net
+  - DOMAIN,cdn.dexscreener.com
   - DOMAIN,cdn.dnsimple.com
   - DOMAIN,cdn.docsbot.com
   - DOMAIN,cdn.document360.io
@@ -1056,6 +1057,7 @@ payload:
   - DOMAIN,db.onlinewebfonts.com
   - DOMAIN,dc-cdn.cdw.com
   - DOMAIN,dca-lm-livedazn.secure.footprint.net
+  - DOMAIN,dd.dexscreener.com
   - DOMAIN,ddcdn.comtucdncom.com
   - DOMAIN,de.freedif.org
   - DOMAIN,deb.nodesource.com
@@ -1704,6 +1706,7 @@ payload:
   - DOMAIN,img.telemetr.io
   - DOMAIN,img.thingiverse.com
   - DOMAIN,img.timero.xyz
+  - DOMAIN,img.toto.im
   - DOMAIN,img.utdstc.com
   - DOMAIN,img.vim-cn.com
   - DOMAIN,img.washingtonpost.com
@@ -2713,6 +2716,7 @@ payload:
   - DOMAIN,static.mocortech.com
   - DOMAIN,static.moegoat.com
   - DOMAIN,static.monei.net
+  - DOMAIN,static.moomoo.com
   - DOMAIN,static.moonpay.com
   - DOMAIN,static.music.com
   - DOMAIN,static.mysph.sph.com.sg
@@ -3067,6 +3071,7 @@ payload:
   - DOMAIN,ww2-secure.justanswer.com
   - DOMAIN,ww2.justanswer.com
   - DOMAIN,www-ftp.lip6.fr
+  - DOMAIN,www-res.cablelabs.com
   - DOMAIN,www-static.ripe.net
   - DOMAIN,www.10086.win
   - DOMAIN,www.bbthat.com
@@ -3117,6 +3122,7 @@ payload:
   - DOMAIN-SUFFIX,5playdisk.ru
   - DOMAIN-SUFFIX,666565.xyz
   - DOMAIN-SUFFIX,7777777.buzz
+  - DOMAIN-SUFFIX,785858.xyz
   - DOMAIN-SUFFIX,7mmtv.tv
   - DOMAIN-SUFFIX,9191001.xyz
   - DOMAIN-SUFFIX,91ai.de
@@ -3999,6 +4005,7 @@ payload:
   - DOMAIN-SUFFIX,featureassets.org
   - DOMAIN-SUFFIX,feedercdn.com
   - DOMAIN-SUFFIX,feetcdn.com
+  - DOMAIN-SUFFIX,feiniu.lol
   - DOMAIN-SUFFIX,femefun.com
   - DOMAIN-SUFFIX,fetnet.net
   - DOMAIN-SUFFIX,feurl.com
@@ -5573,6 +5580,7 @@ payload:
   - DOMAIN-SUFFIX,starwars.com
   - DOMAIN-SUFFIX,starwarsgalacticstarcruiser.com
   - DOMAIN-SUFFIX,starwarskids.com
+  - DOMAIN-SUFFIX,staryuki.com
   - DOMAIN-SUFFIX,static-assets.photoshop.adobe.com
   - DOMAIN-SUFFIX,static-prod-web.miniclip.com
   - DOMAIN-SUFFIX,static-qobuz.com
@@ -6080,6 +6088,7 @@ payload:
   - DOMAIN-SUFFIX,z4a.net
   - DOMAIN-SUFFIX,z5.app
   - DOMAIN-SUFFIX,z5.com
+  - DOMAIN-SUFFIX,zabc.net
   - DOMAIN-SUFFIX,zachowajto.pl
   - DOMAIN-SUFFIX,zalivalka.ru
   - DOMAIN-SUFFIX,zczc.cz
