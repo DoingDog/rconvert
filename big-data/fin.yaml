@@ -1,5 +1,5 @@
-# Clash total line 7131
-# Last updated Wed 05/28/2025 22:13:38.10
+# Clash total line 7137
+# Last updated Sat 05/31/2025 22:12:47.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1206,6 +1206,7 @@ payload:
   - DOMAIN,edgestatic.azureedge.net
   - DOMAIN,eep.io
   - DOMAIN,eightcha.com
+  - DOMAIN,embed-cloudfront.wistia.com
   - DOMAIN,embed-ssl.wistia.com
   - DOMAIN,embed-v2.testimonial.to
   - DOMAIN,embed.culturalspot.org
@@ -1509,6 +1510,7 @@ payload:
   - DOMAIN,i.xgroovy.com
   - DOMAIN,i.xozilla.xxx
   - DOMAIN,i.xxxshake.com
+  - DOMAIN,i18n.prismlauncher.org
   - DOMAIN,i2.anysex.com
   - DOMAIN,i2.hentaifox.com
   - DOMAIN,i3.anysex.com
@@ -1530,6 +1532,8 @@ payload:
   - DOMAIN,ik.imgkit.net
   - DOMAIN,imag.malavida.com
   - DOMAIN,image-forwarder.notaku.so
+  - DOMAIN,image-stgus.samsung.com
+  - DOMAIN,image-us.samsung.com
   - DOMAIN,image.ap-mail.org
   - DOMAIN,image.civitai.com
   - DOMAIN,image.crisp.chat
@@ -1607,6 +1611,7 @@ payload:
   - DOMAIN,images.profile.autodesk.com
   - DOMAIN,images.ptt.cc
   - DOMAIN,images.purevpn-tools.com
+  - DOMAIN,images.samsung.com
   - DOMAIN,images.scalero.io
   - DOMAIN,images.scrolller.com
   - DOMAIN,images.spot.im
@@ -3063,6 +3068,7 @@ payload:
   - DOMAIN,widgets.zohosalesiq.com
   - DOMAIN,wikiwandv2-19431.kxcdn.com
   - DOMAIN,wimg.rule34.xxx
+  - DOMAIN,wire.shodan.io
   - DOMAIN,wl-apps.yourwebsite.life
   - DOMAIN,wp.salesforce.com
   - DOMAIN,wpmedia.tealium.com
