@@ -1,5 +1,5 @@
-# Clash total line 7137
-# Last updated Sat 05/31/2025 22:12:47.37
+# Clash total line 7142
+# Last updated Sun 06/01/2025 22:13:12.98
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -539,6 +539,7 @@ payload:
   - DOMAIN,cdn.document360.io
   - DOMAIN,cdn.donmai.us
   - DOMAIN,cdn.dotaoutpost.com
+  - DOMAIN,cdn.downdetector.com
   - DOMAIN,cdn.download.it
   - DOMAIN,cdn.drata.com
   - DOMAIN,cdn.dribbble.com
@@ -939,6 +940,7 @@ payload:
   - DOMAIN,code.piano.io
   - DOMAIN,code.upscope.io
   - DOMAIN,codeload.github.com
+  - DOMAIN,comm.res.easebar.com
   - DOMAIN,components.clever-cloud.com
   - DOMAIN,components.justanswer.com
   - DOMAIN,components.trynow.net
@@ -2982,6 +2984,9 @@ payload:
   - DOMAIN,useruploads.visualwebsiteoptimizer.com
   - DOMAIN,uts-api.itunes.apple.com
   - DOMAIN,utteranc.es
+  - DOMAIN,v-tiles1.downdetector.com
+  - DOMAIN,v-tiles2.downdetector.com
+  - DOMAIN,v-tiles3.downdetector.com
   - DOMAIN,v.w-x.co
   - DOMAIN,v2-images.crackle.com
   - DOMAIN,v2.listenloop.com
