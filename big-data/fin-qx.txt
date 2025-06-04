@@ -1,5 +1,5 @@
-# Quantumult total line 7128
-# Last updated Sun 06/01/2025 22:13:12.95
+# Quantumult total line 7134
+# Last updated Wed 06/04/2025 22:12:13.32
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -120,6 +120,7 @@ HOST,apple-relay.apple.com,LIST
 HOST,apple-relay.cloudflare.com,LIST
 HOST,apple-relay.fastly-edge.com,LIST
 HOST,apple.comscoreresearch.com,LIST
+HOST,apps-static.route4me.com,LIST
 HOST,apps.bazaarvoice.com,LIST
 HOST,apps.profitihub.com,LIST
 HOST,apps.sophi.io,LIST
@@ -373,6 +374,7 @@ HOST,c.navattic.com,LIST
 HOST,c.s-microsoft.com,LIST
 HOST,c.speedtestcustom.com,LIST
 HOST,c.start.me,LIST
+HOST,c.tadst.com,LIST
 HOST,c1.newegg.com,LIST
 HOST,c1.patreon.com,LIST
 HOST,c10.patreon.com,LIST
@@ -1291,6 +1293,7 @@ HOST,files.smashing.media,LIST
 HOST,files.svc.ui.com,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
+HOST,files2.freedownloadmanager.org,LIST
 HOST,filestore.community.support.microsoft.com,LIST
 HOST,filestore.fortinet.com,LIST
 HOST,firebase-settings.crashlytics.com,LIST
@@ -2330,6 +2333,7 @@ HOST,proxy.joinmastodon.org,LIST
 HOST,proxy.spigotmc.org,LIST
 HOST,ps.w.org,LIST
 HOST,psp-logos.uptimerobot.com,LIST
+HOST,pub.creaders.net,LIST
 HOST,public-assets.typeform.com,LIST
 HOST,public-cdn.bblmw.com,LIST
 HOST,public-files.gumroad.com,LIST
@@ -2949,6 +2953,7 @@ HOST,ui.powerreviews.com,LIST
 HOST,ui.trailhead.com,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,unsubscribe-imgs.leavemealone.com,LIST
+HOST,uos-support-files.svc.ui.com,LIST
 HOST,update.code.visualstudio.com,LIST
 HOST,update.googleapis.com,LIST
 HOST,update.greasyfork.org,LIST
@@ -3195,6 +3200,7 @@ HOST-SUFFIX,akidoo.top,LIST
 HOST-SUFFIX,alexdav.id,LIST
 HOST-SUFFIX,alfafile.net,LIST
 HOST-SUFFIX,algolianet.com,LIST
+HOST-SUFFIX,allawnofs.com,LIST
 HOST-SUFFIX,alldebrid.com,LIST
 HOST-SUFFIX,alldebrid.de,LIST
 HOST-SUFFIX,alldebrid.es,LIST

@@ -1,14 +1,19 @@
-# Surge Rules total line 945
-# Last updated Sun 06/01/2025 22:13:00.83
+# Surge Rules total line 947
+# Last updated Wed 06/04/2025 22:11:59.86
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
+DOMAIN-KEYWORD,-ad.sm.cn
+DOMAIN-KEYWORD,-ad.video.yximgs.com
+DOMAIN-KEYWORD,-ad.wtzw.com
 DOMAIN-KEYWORD,-adnow.com
 DOMAIN-KEYWORD,-adrevenue.appsflyersdk.com
 DOMAIN-KEYWORD,-analytics-events.apple.com
 DOMAIN-KEYWORD,-attr.appsflyersdk.com
+DOMAIN-KEYWORD,-be-pack-sign.pglstatp-toutiao.com
 DOMAIN-KEYWORD,-go.experian.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
 DOMAIN-KEYWORD,-logsdk.kwai-pro.com^
+DOMAIN-KEYWORD,-normal.zijieapi.com
 DOMAIN-KEYWORD,-pia.appsflyersdk.com
 DOMAIN-KEYWORD,-rtb.gravite.net
 DOMAIN-KEYWORD,-s2s.sensic.net
@@ -248,12 +253,9 @@ DOMAIN-KEYWORD,onenews
 DOMAIN-KEYWORD,openx
 DOMAIN-KEYWORD,ossgw.alicdn.com
 DOMAIN-KEYWORD,ossp.voicecloud.cn
-DOMAIN-KEYWORD,p26-be-pack-sign.pglstatp-toutiao.com
-DOMAIN-KEYWORD,p3-be-pack-sign.pglstatp-toutiao.com
 DOMAIN-KEYWORD,p3-pack.byteimg.com
 DOMAIN-KEYWORD,p3.pstatp.com
 DOMAIN-KEYWORD,p6-pack.byteimg.com
-DOMAIN-KEYWORD,p9-be-pack-sign.pglstatp-toutiao.com
 DOMAIN-KEYWORD,pagespeed-mod
 DOMAIN-KEYWORD,pancakeswap
 DOMAIN-KEYWORD,pangolin-sdk-toutiao
