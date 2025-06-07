@@ -1,5 +1,5 @@
-# Surge Rules total line 635
-# Last updated Wed 06/04/2025 22:08:10.27
+# Surge Rules total line 636
+# Last updated Sat 06/07/2025 22:08:28.50
 DOMAIN-KEYWORD,-ad.sm.cn
 DOMAIN-KEYWORD,-ad.video.yximgs.com
 DOMAIN-KEYWORD,-ad.wtzw.com
@@ -11,7 +11,7 @@ DOMAIN-KEYWORD,-be-pack-sign.pglstatp-toutiao.com
 DOMAIN-KEYWORD,-go.experian.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
-DOMAIN-KEYWORD,-logsdk.kwai-pro.com^
+DOMAIN-KEYWORD,-logsdk.kwai-pro.com
 DOMAIN-KEYWORD,-normal.zijieapi.com
 DOMAIN-KEYWORD,-pia.appsflyersdk.com
 DOMAIN-KEYWORD,-rtb.gravite.net
@@ -22,6 +22,7 @@ DOMAIN-KEYWORD,-tracker.biliapi.net
 DOMAIN-KEYWORD,-txtagstore
 DOMAIN-KEYWORD,-ulog.ksapisrv.com
 DOMAIN-KEYWORD,-ulog.kwai-pro.com
+DOMAIN-KEYWORD,-ulog.region.kwai-pro.com
 DOMAIN-KEYWORD,-ulogl2.kwai-pro.com
 DOMAIN-KEYWORD,-ulogl2.kwaipros.com
 DOMAIN-KEYWORD,.engage.3m.

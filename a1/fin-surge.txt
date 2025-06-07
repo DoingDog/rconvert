@@ -1,5 +1,5 @@
 # Surge Rules total line 947
-# Last updated Wed 06/04/2025 22:11:59.86
+# Last updated Sat 06/07/2025 22:12:09.20
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-ad.sm.cn
 DOMAIN-KEYWORD,-ad.video.yximgs.com
@@ -12,7 +12,7 @@ DOMAIN-KEYWORD,-be-pack-sign.pglstatp-toutiao.com
 DOMAIN-KEYWORD,-go.experian.com
 DOMAIN-KEYWORD,-launches.appsflyersdk.com
 DOMAIN-KEYWORD,-logging.nextmedia.com
-DOMAIN-KEYWORD,-logsdk.kwai-pro.com^
+DOMAIN-KEYWORD,-logsdk.kwai-pro.com
 DOMAIN-KEYWORD,-normal.zijieapi.com
 DOMAIN-KEYWORD,-pia.appsflyersdk.com
 DOMAIN-KEYWORD,-rtb.gravite.net
@@ -23,6 +23,7 @@ DOMAIN-KEYWORD,-tracker.biliapi.net
 DOMAIN-KEYWORD,-txtagstore
 DOMAIN-KEYWORD,-ulog.ksapisrv.com
 DOMAIN-KEYWORD,-ulog.kwai-pro.com
+DOMAIN-KEYWORD,-ulog.region.kwai-pro.com
 DOMAIN-KEYWORD,-ulogl2.kwai-pro.com
 DOMAIN-KEYWORD,-ulogl2.kwaipros.com
 DOMAIN-KEYWORD,.engage.3m.
@@ -641,7 +642,6 @@ IP-CIDR,183.6.188.224/29,no-resolve
 IP-CIDR,185.149.120.173/32,no-resolve
 IP-CIDR,185.165.169.108/32,no-resolve
 IP-CIDR,185.193.38.148/32,no-resolve
-IP-CIDR,186.76.76.200/32,no-resolve
 IP-CIDR,188.42.84.110/32,no-resolve
 IP-CIDR,188.42.84.137/32,no-resolve
 IP-CIDR,188.42.84.159/32,no-resolve

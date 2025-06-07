@@ -1,5 +1,5 @@
-# Clash total line 7148
-# Last updated Wed 06/04/2025 22:12:13.36
+# Clash total line 7154
+# Last updated Sat 06/07/2025 22:12:23.17
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -441,6 +441,7 @@ payload:
   - DOMAIN,cdn-public.sociabble.com
   - DOMAIN,cdn-raw.modrinth.com
   - DOMAIN,cdn-rdstaticassets.readdle.com
+  - DOMAIN,cdn-seo.airdroid.com
   - DOMAIN,cdn-service.jp.sumologic.com
   - DOMAIN,cdn-share-sprites.flaticon.com
   - DOMAIN,cdn-static-1.medium.com
@@ -663,6 +664,7 @@ payload:
   - DOMAIN,cdn.onlyhentaistuff.com
   - DOMAIN,cdn.openai.com
   - DOMAIN,cdn.opensuse.org
+  - DOMAIN,cdn.organicmaps.app
   - DOMAIN,cdn.osxdaily.com
   - DOMAIN,cdn.paddle.com
   - DOMAIN,cdn.pagefly.io
@@ -1575,6 +1577,7 @@ payload:
   - DOMAIN,images-ext-2.discordapp.net
   - DOMAIN,images-static.trustpilot.com
   - DOMAIN,images.991.com
+  - DOMAIN,images.airdroid.com
   - DOMAIN,images.anandtech.com
   - DOMAIN,images.applegamingwiki.com
   - DOMAIN,images.arigatotravel.com
@@ -1970,6 +1973,7 @@ payload:
   - DOMAIN,medias.meow.social
   - DOMAIN,medium-media.vgm.io
   - DOMAIN,megapx-assets.dcard.tw
+  - DOMAIN,meta.omaps.app
   - DOMAIN,meta.prismlauncher.org
   - DOMAIN,meteorclient.com
   - DOMAIN,metrics.kapa.ai
@@ -2405,6 +2409,7 @@ payload:
   - DOMAIN,rest.happierleads.com
   - DOMAIN,rpg.pic-imges.com
   - DOMAIN,rpm.xpipe.io
+  - DOMAIN,rs-cdn.splashtop.com
   - DOMAIN,rsi.grafana.com
   - DOMAIN,rsms.me
   - DOMAIN,rtcg-access.bytevcloud.com
@@ -2525,6 +2530,7 @@ payload:
   - DOMAIN,security.ubuntu.com
   - DOMAIN,segapi.clerk.com
   - DOMAIN,sentry.ainopara.com
+  - DOMAIN,seo-wp.airdroid.com
   - DOMAIN,service-icons.zeabur.com
   - DOMAIN,services.linkfire.com
   - DOMAIN,sf-coze-web-cdn.coze.com
@@ -4389,6 +4395,7 @@ payload:
   - DOMAIN-SUFFIX,grazie.ai
   - DOMAIN-SUFFIX,grazie.aws.intellij.net
   - DOMAIN-SUFFIX,gtlx.org
+  - DOMAIN-SUFFIX,gtranslate.net
   - DOMAIN-SUFFIX,gugumedia.link
   - DOMAIN-SUFFIX,gv.com
   - DOMAIN-SUFFIX,gvt0.com
@@ -5677,6 +5684,7 @@ payload:
   - DOMAIN-SUFFIX,tanhuatv.site
   - DOMAIN-SUFFIX,tapecontent.net
   - DOMAIN-SUFFIX,targetimg1.com
+  - DOMAIN-SUFFIX,tauri.app
   - DOMAIN-SUFFIX,tdesktop.com
   - DOMAIN-SUFFIX,teamtailor-cdn.com
   - DOMAIN-SUFFIX,teardownmods.com
@@ -5727,7 +5735,6 @@ payload:
   - DOMAIN-SUFFIX,tile.openstreetmap.org
   - DOMAIN-SUFFIX,tile.osm.org
   - DOMAIN-SUFFIX,timestalks.com
-  - DOMAIN-SUFFIX,timg135.top
   - DOMAIN-SUFFIX,tindiemedia.com
   - DOMAIN-SUFFIX,tinypass.com
   - DOMAIN-SUFFIX,tinyupload.com
@@ -5984,7 +5991,6 @@ payload:
   - DOMAIN-SUFFIX,voxmedia.com
   - DOMAIN-SUFFIX,voxops.net
   - DOMAIN-SUFFIX,voxzer.org
-  - DOMAIN-SUFFIX,vplay.life
   - DOMAIN-SUFFIX,vsassets.io
   - DOMAIN-SUFFIX,vscode-cdn.net
   - DOMAIN-SUFFIX,vscode-unpkg.net
