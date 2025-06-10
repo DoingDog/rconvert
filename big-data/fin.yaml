@@ -1,5 +1,5 @@
-# Clash total line 7154
-# Last updated Sat 06/07/2025 22:12:23.17
+# Clash total line 7158
+# Last updated Tue 06/10/2025 22:13:15.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -16,6 +16,7 @@ payload:
   - DOMAIN,addins.deepl.com
   - DOMAIN,adkit.9pub.io
   - DOMAIN,aff.equalweb.com
+  - DOMAIN,affportal.bhphoto.com
   - DOMAIN,agi.armorgames.com
   - DOMAIN,ai.google.dev
   - DOMAIN,aimg.fc2.com
@@ -83,6 +84,7 @@ payload:
   - DOMAIN,api.bintray.com
   - DOMAIN,api.crashguard.me
   - DOMAIN,api.dicebear.com
+  - DOMAIN,api.fontshare.com
   - DOMAIN,api.githubcopilot.com
   - DOMAIN,api.groq.com
   - DOMAIN,api.iconify.design
@@ -972,6 +974,7 @@ payload:
   - DOMAIN,content.invisioncic.com
   - DOMAIN,content.kaspersky-labs.com
   - DOMAIN,content.overwolf.com
+  - DOMAIN,content.powerapps.com
   - DOMAIN,content.product.glitch.com
   - DOMAIN,content.wepik.com
   - DOMAIN,contents-thumbnail2.fc2.com
@@ -2748,6 +2751,7 @@ payload:
   - DOMAIN,static.nicehash.com
   - DOMAIN,static.npmjs.com
   - DOMAIN,static.nrk.no
+  - DOMAIN,static.nyse.com
   - DOMAIN,static.observablehq.com
   - DOMAIN,static.oklink.com
   - DOMAIN,static.okx.com
