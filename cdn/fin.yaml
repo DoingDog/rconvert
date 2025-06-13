@@ -1,5 +1,5 @@
-# Clash total line 3622
-# Last updated Tue 06/10/2025 22:13:06.30
+# Clash total line 3624
+# Last updated Fri 06/13/2025 22:13:43.01
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -949,6 +949,7 @@ payload:
   - DOMAIN,dam.freshworks.com
   - DOMAIN,damassets.autodesk.net
   - DOMAIN,dassets.shimano.com
+  - DOMAIN,data.osmand.net
   - DOMAIN,data.pendo.io
   - DOMAIN,data.schemaapp.com
   - DOMAIN,data.web.clickup.com
@@ -1547,6 +1548,7 @@ payload:
   - DOMAIN,mantisloader.mantis-awx.com
   - DOMAIN,maps.geoapify.com
   - DOMAIN,maps.gstatic.com
+  - DOMAIN,maptile.osmand.net
   - DOMAIN,marber-cdn.economist.com
   - DOMAIN,marfeelexperimentsexperienceengine.mrf.io
   - DOMAIN,marketing.figma.com

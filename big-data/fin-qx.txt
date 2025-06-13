@@ -1,5 +1,5 @@
-# Quantumult total line 7144
-# Last updated Tue 06/10/2025 22:13:15.57
+# Quantumult total line 7154
+# Last updated Fri 06/13/2025 22:13:52.41
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1058,6 +1058,7 @@ HOST,damassets.autodesk.net,LIST
 HOST,dashasiafox.akamaized.netflix,LIST
 HOST,dassets.shimano.com,LIST
 HOST,data.gameflare.com,LIST
+HOST,data.osmand.net,LIST
 HOST,data.pendo.io,LIST
 HOST,data.schemaapp.com,LIST
 HOST,data.web.clickup.com,LIST
@@ -1117,8 +1118,13 @@ HOST,dl.thorium.rocks,LIST
 HOST,dl.ui.com,LIST
 HOST,dl.wechat.com,LIST
 HOST,dl2.nwjs.io,LIST
+HOST,dl2.osmand.net,LIST
 HOST,dl2.xmind.net,LIST
+HOST,dl3.osmand.net,LIST
 HOST,dl3.xmind.net,LIST
+HOST,dl4.osmand.net,LIST
+HOST,dl8.osmand.net,LIST
+HOST,dl9.osmand.net,LIST
 HOST,dlassets-ssl.xboxlive.com,LIST
 HOST,dlcdnets.asus.com,LIST
 HOST,do.featurebase.app,LIST
@@ -1160,6 +1166,7 @@ HOST,download.nus.edu.sg,LIST
 HOST,download.nust.na,LIST
 HOST,download.onlyoffice.com,LIST
 HOST,download.opensuse.org,LIST
+HOST,download.osmand.net,LIST
 HOST,download.parallels.com,LIST
 HOST,download.pixelexperience.org,LIST
 HOST,download.projectbluefin.io,LIST
@@ -1878,6 +1885,7 @@ HOST,mangaz-static.j-comi.jp,LIST
 HOST,mantisloader.mantis-awx.com,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
+HOST,maptile.osmand.net,LIST
 HOST,marber-cdn.economist.com,LIST
 HOST,marfeelexperimentsexperienceengine.mrf.io,LIST
 HOST,marketing.figma.com,LIST
@@ -2235,6 +2243,8 @@ HOST,osl.ugr.es,LIST
 HOST,oss-binaries.phusionpassenger.com,LIST
 HOST,oss.1p3a.com,LIST
 HOST,oss.moe.cat,LIST
+HOST,ota-cache1.googlezip.net,LIST
+HOST,ota.googlezip.net,LIST
 HOST,ovo.wxw.moe,LIST
 HOST,p-smith.com,LIST
 HOST,p.depot.dev,LIST
