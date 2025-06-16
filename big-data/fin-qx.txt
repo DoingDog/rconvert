@@ -1,5 +1,5 @@
-# Quantumult total line 7154
-# Last updated Fri 06/13/2025 22:13:52.41
+# Quantumult total line 7167
+# Last updated Mon 06/16/2025 22:14:20.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -626,6 +626,7 @@ HOST,cdn.kobo.com,LIST
 HOST,cdn.langshop.app,LIST
 HOST,cdn.leandata.com,LIST
 HOST,cdn.lemonsqueezy.com,LIST
+HOST,cdn.lgrckt-in.com,LIST
 HOST,cdn.libravatar.org,LIST
 HOST,cdn.lihkg.com,LIST
 HOST,cdn.linearicons.com,LIST
@@ -655,6 +656,7 @@ HOST,cdn.ndtv.com,LIST
 HOST,cdn.nerdschalk.com,LIST
 HOST,cdn.networklessons.com,LIST
 HOST,cdn.neverbounce.com,LIST
+HOST,cdn.nfcube.com,LIST
 HOST,cdn.nolt.io,LIST
 HOST,cdn.now.gg,LIST
 HOST,cdn.nperf.com,LIST
@@ -773,6 +775,8 @@ HOST,cdn.verifypass.com,LIST
 HOST,cdn.viafoura.net,LIST
 HOST,cdn.vidyard.com,LIST
 HOST,cdn.viglink.com,LIST
+HOST,cdn.violet.vin,LIST
+HOST,cdn.virtuoussoftware.com,LIST
 HOST,cdn.vuukle.com,LIST
 HOST,cdn.wccftech.com,LIST
 HOST,cdn.webclicks24.com,LIST
@@ -932,6 +936,7 @@ HOST,cms-assets.webediamovies.pro,LIST
 HOST,cms-assets.xboxservices.com,LIST
 HOST,cms-cdn.goat.com,LIST
 HOST,cms-cdn.now.gg,LIST
+HOST,cms.blavity.com,LIST
 HOST,cms.recordedfuture.com,LIST
 HOST,cms.therecord.media,LIST
 HOST,cms.typenetwork.com,LIST
@@ -1212,6 +1217,7 @@ HOST,edge-consumer-static.azureedge.net,LIST
 HOST,edge-mobile-static.azureedge.net,LIST
 HOST,edge.cwtv-vod-ext.top.comcast.net,LIST
 HOST,edge.marker.io,LIST
+HOST,edge.nodeseek.com,LIST
 HOST,edge.personalizer.io,LIST
 HOST,edge.sitecorecloud.io,LIST
 HOST,edge.steam-dns.top.comcast.net,LIST
@@ -1494,6 +1500,7 @@ HOST,hulu.com.c.footprint.net,LIST
 HOST,hulu.map.fastly.net,LIST
 HOST,hv-monsterdb-data.skk.moe,LIST
 HOST,i-cdn.embed.ly,LIST
+HOST,i.111666.best,LIST
 HOST,i.1password.com,LIST
 HOST,i.anysex.com,LIST
 HOST,i.bang.com,LIST
@@ -1699,6 +1706,7 @@ HOST,img.imgdd.com,LIST
 HOST,img.informer.com,LIST
 HOST,img.itch.zone,LIST
 HOST,img.javstore.net,LIST
+HOST,img.jjbb.me,LIST
 HOST,img.kbhgames.com,LIST
 HOST,img.kemono.su,LIST
 HOST,img.ltyears.com,LIST
@@ -2691,6 +2699,7 @@ HOST,static.drtuber.com,LIST
 HOST,static.dw.com,LIST
 HOST,static.dzeninfra.ru,LIST
 HOST,static.edge.microsoftapp.net,LIST
+HOST,static.elfsight.com,LIST
 HOST,static.eroterest.net,LIST
 HOST,static.esimplus.net,LIST
 HOST,static.ettoday.net,LIST
@@ -3627,6 +3636,7 @@ HOST-SUFFIX,cobuz.fr,LIST
 HOST-SUFFIX,cobuzz.fr,LIST
 HOST-SUFFIX,codeberg.page,LIST
 HOST-SUFFIX,codepenassets.com,LIST
+HOST-SUFFIX,colliderimages.com,LIST
 HOST-SUFFIX,combinatronics.io,LIST
 HOST-SUFFIX,comicporn.xxx,LIST
 HOST-SUFFIX,connatix.com,LIST
@@ -4317,6 +4327,7 @@ HOST-SUFFIX,freeleecher.ir,LIST
 HOST-SUFFIX,freepornhdonlinegay.com,LIST
 HOST-SUFFIX,freetz.top,LIST
 HOST-SUFFIX,friday.tw,LIST
+HOST-SUFFIX,frontapp.com,LIST
 HOST-SUFFIX,fsdn.com,LIST
 HOST-SUFFIX,fse.tv,LIST
 HOST-SUFFIX,fshare.vn,LIST
@@ -5315,6 +5326,7 @@ HOST-SUFFIX,prcdn.co,LIST
 HOST-SUFFIX,prefiles.com,LIST
 HOST-SUFFIX,pressablecdn.com,LIST
 HOST-SUFFIX,pressidiumcdn.com,LIST
+HOST-SUFFIX,prhcdn.com,LIST
 HOST-SUFFIX,prime-video.com,LIST
 HOST-SUFFIX,primeday.cn,LIST
 HOST-SUFFIX,primeday.com.cn,LIST
@@ -5899,6 +5911,7 @@ HOST-SUFFIX,v-cdn.net,LIST
 HOST-SUFFIX,v.smtcdns.com,LIST
 HOST-SUFFIX,v.smtcdns.net,LIST
 HOST-SUFFIX,v2ex.co,LIST
+HOST-SUFFIX,valnetcdn.com,LIST
 HOST-SUFFIX,valvesoftware.com,LIST
 HOST-SUFFIX,vanillicon.com,LIST
 HOST-SUFFIX,vbstatic.co,LIST

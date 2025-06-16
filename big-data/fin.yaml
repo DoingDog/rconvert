@@ -1,5 +1,5 @@
-# Clash total line 7168
-# Last updated Fri 06/13/2025 22:13:52.46
+# Clash total line 7181
+# Last updated Mon 06/16/2025 22:14:20.63
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -627,6 +627,7 @@ payload:
   - DOMAIN,cdn.langshop.app
   - DOMAIN,cdn.leandata.com
   - DOMAIN,cdn.lemonsqueezy.com
+  - DOMAIN,cdn.lgrckt-in.com
   - DOMAIN,cdn.libravatar.org
   - DOMAIN,cdn.lihkg.com
   - DOMAIN,cdn.linearicons.com
@@ -656,6 +657,7 @@ payload:
   - DOMAIN,cdn.nerdschalk.com
   - DOMAIN,cdn.networklessons.com
   - DOMAIN,cdn.neverbounce.com
+  - DOMAIN,cdn.nfcube.com
   - DOMAIN,cdn.nolt.io
   - DOMAIN,cdn.now.gg
   - DOMAIN,cdn.nperf.com
@@ -774,6 +776,8 @@ payload:
   - DOMAIN,cdn.viafoura.net
   - DOMAIN,cdn.vidyard.com
   - DOMAIN,cdn.viglink.com
+  - DOMAIN,cdn.violet.vin
+  - DOMAIN,cdn.virtuoussoftware.com
   - DOMAIN,cdn.vuukle.com
   - DOMAIN,cdn.wccftech.com
   - DOMAIN,cdn.webclicks24.com
@@ -933,6 +937,7 @@ payload:
   - DOMAIN,cms-assets.xboxservices.com
   - DOMAIN,cms-cdn.goat.com
   - DOMAIN,cms-cdn.now.gg
+  - DOMAIN,cms.blavity.com
   - DOMAIN,cms.recordedfuture.com
   - DOMAIN,cms.therecord.media
   - DOMAIN,cms.typenetwork.com
@@ -1213,6 +1218,7 @@ payload:
   - DOMAIN,edge-mobile-static.azureedge.net
   - DOMAIN,edge.cwtv-vod-ext.top.comcast.net
   - DOMAIN,edge.marker.io
+  - DOMAIN,edge.nodeseek.com
   - DOMAIN,edge.personalizer.io
   - DOMAIN,edge.sitecorecloud.io
   - DOMAIN,edge.steam-dns.top.comcast.net
@@ -1495,6 +1501,7 @@ payload:
   - DOMAIN,hulu.map.fastly.net
   - DOMAIN,hv-monsterdb-data.skk.moe
   - DOMAIN,i-cdn.embed.ly
+  - DOMAIN,i.111666.best
   - DOMAIN,i.1password.com
   - DOMAIN,i.anysex.com
   - DOMAIN,i.bang.com
@@ -1700,6 +1707,7 @@ payload:
   - DOMAIN,img.informer.com
   - DOMAIN,img.itch.zone
   - DOMAIN,img.javstore.net
+  - DOMAIN,img.jjbb.me
   - DOMAIN,img.kbhgames.com
   - DOMAIN,img.kemono.su
   - DOMAIN,img.ltyears.com
@@ -2692,6 +2700,7 @@ payload:
   - DOMAIN,static.dw.com
   - DOMAIN,static.dzeninfra.ru
   - DOMAIN,static.edge.microsoftapp.net
+  - DOMAIN,static.elfsight.com
   - DOMAIN,static.eroterest.net
   - DOMAIN,static.esimplus.net
   - DOMAIN,static.ettoday.net
@@ -3628,6 +3637,7 @@ payload:
   - DOMAIN-SUFFIX,cobuzz.fr
   - DOMAIN-SUFFIX,codeberg.page
   - DOMAIN-SUFFIX,codepenassets.com
+  - DOMAIN-SUFFIX,colliderimages.com
   - DOMAIN-SUFFIX,combinatronics.io
   - DOMAIN-SUFFIX,comicporn.xxx
   - DOMAIN-SUFFIX,connatix.com
@@ -4318,6 +4328,7 @@ payload:
   - DOMAIN-SUFFIX,freepornhdonlinegay.com
   - DOMAIN-SUFFIX,freetz.top
   - DOMAIN-SUFFIX,friday.tw
+  - DOMAIN-SUFFIX,frontapp.com
   - DOMAIN-SUFFIX,fsdn.com
   - DOMAIN-SUFFIX,fse.tv
   - DOMAIN-SUFFIX,fshare.vn
@@ -5316,6 +5327,7 @@ payload:
   - DOMAIN-SUFFIX,prefiles.com
   - DOMAIN-SUFFIX,pressablecdn.com
   - DOMAIN-SUFFIX,pressidiumcdn.com
+  - DOMAIN-SUFFIX,prhcdn.com
   - DOMAIN-SUFFIX,prime-video.com
   - DOMAIN-SUFFIX,primeday.cn
   - DOMAIN-SUFFIX,primeday.com.cn
@@ -5900,6 +5912,7 @@ payload:
   - DOMAIN-SUFFIX,v.smtcdns.com
   - DOMAIN-SUFFIX,v.smtcdns.net
   - DOMAIN-SUFFIX,v2ex.co
+  - DOMAIN-SUFFIX,valnetcdn.com
   - DOMAIN-SUFFIX,valvesoftware.com
   - DOMAIN-SUFFIX,vanillicon.com
   - DOMAIN-SUFFIX,vbstatic.co

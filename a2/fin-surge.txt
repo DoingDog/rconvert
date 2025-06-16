@@ -1,5 +1,5 @@
-# Surge Rules total line 636
-# Last updated Fri 06/13/2025 22:09:20.43
+# Surge Rules total line 635
+# Last updated Mon 06/16/2025 22:09:42.94
 DOMAIN-KEYWORD,-ad.sm.cn
 DOMAIN-KEYWORD,-ad.video.yximgs.com
 DOMAIN-KEYWORD,-ad.wtzw.com
@@ -431,7 +431,6 @@ IP-CIDR,139.224.74.148/32,no-resolve
 IP-CIDR,146.148.85.61/32,no-resolve
 IP-CIDR,157.148.47.204/32,no-resolve
 IP-CIDR,162.212.181.32/32,no-resolve
-IP-CIDR,162.243.103.246/32,no-resolve
 IP-CIDR,169.254.169.254/32,no-resolve
 IP-CIDR,173.208.177.227/32,no-resolve
 IP-CIDR,175.6.223.15/32,no-resolve
