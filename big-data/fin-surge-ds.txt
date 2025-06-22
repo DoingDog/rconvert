@@ -1,5 +1,5 @@
-# Surge Domain total line 6173
-# Last updated Thu 06/19/2025 22:14:09.71
+# Surge Domain total line 6196
+# Last updated Sun 06/22/2025 22:13:41.50
 0x0.st
 3dna.nationbuilder.com
 a.deviantart.net
@@ -77,6 +77,7 @@ apache.website-solution.net
 api-esp-ap.piano.io
 api-eu.mixpanel.com
 api-frameworks.vercel.sh
+api-lytics.macpaw.com
 api-updates.orbstack.dev
 api.allorigins.win
 api.bintray.com
@@ -339,6 +340,7 @@ badges.crowdin.net
 badges.frapsoft.com
 badges.gitter.im
 badges.greenkeeper.io
+bbc.mp-pxcdn.com
 bcdn.starapps.studio
 bcmedia.bitchute.com
 before.good-apps.co
@@ -429,6 +431,7 @@ cdn-img3.iporntv.net
 cdn-live.foreignaffairs.com
 cdn-longterm.mee6.xyz
 cdn-main.plus500.com
+cdn-media-0.freecodecamp.org
 cdn-media-1.freecodecamp.org
 cdn-media-2.freecodecamp.org
 cdn-mobile.aptoide.com
@@ -438,6 +441,7 @@ cdn-msp.jmcomic-zzz.one
 cdn-msp.jmcomic.me
 cdn-node.diskpart.com
 cdn-patch.swtor.com
+cdn-public-apis.moonlock.com
 cdn-public.sociabble.com
 cdn-raw.modrinth.com
 cdn-rdstaticassets.readdle.com
@@ -723,11 +727,13 @@ cdn.search.brave.com
 cdn.sedo.com
 cdn.seondf.com
 cdn.seonintelligence.com
+cdn.servicebell.com
 cdn.setapp.com
 cdn.sheetjs.com
 cdn.shopify.com
 cdn.shoppinggives.com
 cdn.simpleicons.org
+cdn.sitesearch360.com
 cdn.sketch.com
 cdn.skymavis.com
 cdn.smooch.io
@@ -751,12 +757,14 @@ cdn.termius.com
 cdn.theatlantic.com
 cdn.thenewstack.io
 cdn.thingiverse.com
+cdn.tiny.cloud
 cdn.tolt.io
 cdn.tracxn.com
 cdn.transcend.io
 cdn.transifex.com
 cdn.travis-ci.com
 cdn.travis-ci.org
+cdn.tronscan.org
 cdn.trustedsite.com
 cdn.trustpilot.net
 cdn.ttgtmedia.com
@@ -928,7 +936,9 @@ cloud.redhat.com
 cloud.typenetwork.com
 cloudflare.tv
 cloudfront.barilliance.com
+cloudfront.codeproject.com
 cloudfront.debian.net
+cmd-cdn.cleanmymac.com
 cminf.sfcat.link
 cmp-cdn.p.aws.economist.com
 cms-assets.nodecraft.com
@@ -968,6 +978,7 @@ consentdeliveryfd.azurefd.net
 console.groq.com
 consumersite-assets.trustpilot.net
 consumersiteimages.trustpilot.net
+content-a.strava.com
 content-cdn.y2mate.com
 content-management-files.canva.com
 content-origin.steampowered.com
@@ -1081,6 +1092,7 @@ decart-oasis.azureedge.net
 demo.unified-streaming.com
 demotiles.maplibre.org
 denali-static.grammarly.com
+design-assets.hubspot.com
 design-system.yext.com
 design.mayoclinic.org
 designsystem.brevo.com
@@ -1143,6 +1155,7 @@ down.filen-5.net
 down.filen.io
 down.filen.net
 download-core.sys.truenas.net
+download.ameliorated.io
 download.anydesk.com
 download.bazzite.gg
 download.beeper.com
@@ -2279,9 +2292,12 @@ patterns.hiive.cloud
 pba.apple.com
 pbc.wsj.com
 pbcdn1.podbean.com
+pbs-prod.linustechtips.com
 pbs.floatplane.com
 pcz.javidol.org
 pengtu.cc
+perf-na1.hsforms.com
+perf.hsforms.com
 pf-cdn-content-prod.azureedge.net
 pg2dhpc3p5ec22g3.jkforum.net
 pgw.udn.com.tw
@@ -2750,6 +2766,7 @@ static.kobo.com
 static.launchdarkly.com
 static.linear.app
 static.lingq.com
+static.macupdate.com
 static.maxmind.com
 static.meiguo.com
 static.mendeley.com
@@ -2869,6 +2886,7 @@ static8.lottiefiles.com
 static9.lottiefiles.com
 staticctf.ubisoft.com
 staticintl.cloudcachetci.com
+staticm.fastcomments.com
 statics.erothots.co
 statics.goorm.io
 statics.simpshub.com
@@ -3129,6 +3147,7 @@ www.gstatic.com
 www.pngmart.com
 www.tbstat.com
 www.typescriptlang.org
+www2.aomeisoftware.com
 wwwimages2.adobe.com
 xenia.sote.hu
 xpaywalletcdn.azureedge.net
@@ -3440,6 +3459,7 @@ zod.dev
 .br2share.net
 .bravotv.com
 .braze.com
+.brightspotcdn.com
 .brupload.net
 .bstarstatic.com
 .bstatic.com
@@ -3702,6 +3722,7 @@ zod.dev
 .dai.ly
 .dailymotion.com
 .dailyuploads.net
+.dam-cdn.atl.orangelogic.com
 .dandalinvoa.com
 .daofile.com
 .darivoa.com
@@ -3942,6 +3963,7 @@ zod.dev
 .dtci.co
 .dtci.technology
 .dtvce.com
+.dubcdn.com
 .dubox.com
 .duboxcdn.com
 .dummyimage.com
@@ -4664,7 +4686,6 @@ zod.dev
 .ipfs.genenetwork.org
 .ipfs.greyh.at
 .ipfs.infura.io
-.ipfs.ink
 .ipfs.io
 .ipfs.jbb.one
 .ipfs.kaleido.art
@@ -4732,6 +4753,7 @@ zod.dev
 .jpgjingpinx.com
 .js-agent.newrelic.com
 .js-eu1.hubspot.com
+.js.hs-banner.com
 .js.hubspot.com
 .js.hubspotfeedback.com
 .js.org
@@ -6041,6 +6063,7 @@ zod.dev
 .wat.tv
 .watchdisneyfe.com
 .watchespn.com
+.watchlycdn.com
 .watchnebula.com
 .wdcdn.net
 .wdfiles.com

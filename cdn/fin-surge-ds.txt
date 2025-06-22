@@ -1,5 +1,5 @@
-# Surge Domain total line 3630
-# Last updated Thu 06/19/2025 22:14:00.35
+# Surge Domain total line 3650
+# Last updated Sun 06/22/2025 22:13:31.89
 0x0.st
 3dna.nationbuilder.com
 4gtvimg2.4gtv.tv
@@ -39,6 +39,7 @@ answers-afd.microsoft.com
 api-esp-ap.piano.io
 api-eu.mixpanel.com
 api-frameworks.vercel.sh
+api-lytics.macpaw.com
 api.allorigins.win
 api.bintray.com
 api.crashguard.me
@@ -376,6 +377,7 @@ cdn-img3.iporntv.net
 cdn-live.foreignaffairs.com
 cdn-longterm.mee6.xyz
 cdn-main.plus500.com
+cdn-media-0.freecodecamp.org
 cdn-media-1.freecodecamp.org
 cdn-media-2.freecodecamp.org
 cdn-mobile.aptoide.com
@@ -384,6 +386,7 @@ cdn-msp.18comic.vip
 cdn-msp.jmcomic-zzz.one
 cdn-msp.jmcomic.me
 cdn-node.diskpart.com
+cdn-public-apis.moonlock.com
 cdn-public.sociabble.com
 cdn-raw.modrinth.com
 cdn-rdstaticassets.readdle.com
@@ -668,11 +671,13 @@ cdn.sedo.com
 cdn.segment.com
 cdn.seondf.com
 cdn.seonintelligence.com
+cdn.servicebell.com
 cdn.setapp.com
 cdn.sheetjs.com
 cdn.shopify.com
 cdn.shoppinggives.com
 cdn.simpleicons.org
+cdn.sitesearch360.com
 cdn.sketch.com
 cdn.skymavis.com
 cdn.smooch.io
@@ -696,6 +701,7 @@ cdn.termius.com
 cdn.theatlantic.com
 cdn.thenewstack.io
 cdn.thingiverse.com
+cdn.tiny.cloud
 cdn.tinypass.com
 cdn.tolt.io
 cdn.tracxn.com
@@ -703,6 +709,7 @@ cdn.transcend.io
 cdn.transifex.com
 cdn.travis-ci.com
 cdn.travis-ci.org
+cdn.tronscan.org
 cdn.trustedsite.com
 cdn.trustpilot.net
 cdn.ttgtmedia.com
@@ -874,6 +881,8 @@ cloud.redhat.com
 cloud.typenetwork.com
 cloudflare.tv
 cloudfront.barilliance.com
+cloudfront.codeproject.com
+cmd-cdn.cleanmymac.com
 cmp-cdn.p.aws.economist.com
 cms-assets.nodecraft.com
 cms-assets.webediamovies.pro
@@ -910,6 +919,7 @@ consent.dw.com
 consentdeliveryfd.azurefd.net
 consumersite-assets.trustpilot.net
 consumersiteimages.trustpilot.net
+content-a.strava.com
 content-cdn.y2mate.com
 content-management-files.canva.com
 content-prod-live.cert.starbucks.com
@@ -966,6 +976,7 @@ decart-oasis.azureedge.net
 demo.unified-streaming.com
 demotiles.maplibre.org
 denali-static.grammarly.com
+design-assets.hubspot.com
 design-system.yext.com
 design.mayoclinic.org
 designsystem.brevo.com
@@ -1741,11 +1752,14 @@ pba.apple.com
 pbc.nypost.com
 pbc.wsj.com
 pbcdn1.podbean.com
+pbs-prod.linustechtips.com
 pbs.floatplane.com
 pcdn-my.pcloud.com
 pcdn-www.pcloud.com
 pcz.javidol.org
 pengtu.cc
+perf-na1.hsforms.com
+perf.hsforms.com
 pg2dhpc3p5ec22g3.jkforum.net
 pgw.udn.com.tw
 phishing.army
@@ -2212,6 +2226,7 @@ static.launchdarkly.com
 static.licdn.com
 static.linear.app
 static.lingq.com
+static.macupdate.com
 static.maxmind.com
 static.mediafire.com
 static.meiguo.com
@@ -2336,6 +2351,7 @@ static8.lottiefiles.com
 static9.lottiefiles.com
 staticctf.ubisoft.com
 staticintl.cloudcachetci.com
+staticm.fastcomments.com
 statics-marketingsites-eas-ms-com.akamaized.net
 statics.erothots.co
 statics.goorm.io
@@ -2687,6 +2703,7 @@ zod.dev
 .botsrv2.com
 .boxcdn.net
 .bp.blogspot.com
+.brightspotcdn.com
 .bstarstatic.com
 .bstatic.com
 .bugly.qcloud.com
@@ -2812,6 +2829,7 @@ zod.dev
 .customerioforms.com
 .customeriomail.com
 .cwwcdn.com
+.dam-cdn.atl.orangelogic.com
 .data.debugbear.com
 .dataplane.rudderstack.com
 .datocms-assets.com
@@ -2848,6 +2866,7 @@ zod.dev
 .drtst.com
 .dsc.cloud
 .dtci-pe-vp-image-resizer.platform.edgedatg.com
+.dubcdn.com
 .dummyimage.com
 .dummyjson.com
 .dwcdn.net
@@ -3070,7 +3089,6 @@ zod.dev
 .ipfs.genenetwork.org
 .ipfs.greyh.at
 .ipfs.infura.io
-.ipfs.ink
 .ipfs.io
 .ipfs.jbb.one
 .ipfs.kaleido.art
@@ -3112,6 +3130,7 @@ zod.dev
 .jpg5.su
 .jpgjingpinx.com
 .js-eu1.hubspot.com
+.js.hs-banner.com
 .js.hubspot.com
 .js.hubspotfeedback.com
 .js.org
@@ -3571,6 +3590,7 @@ zod.dev
 .w3s.link
 .walmartimages.com
 .warnermediacdn.com
+.watchlycdn.com
 .wdfiles.com
 .web.app
 .webp.se
