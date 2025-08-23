@@ -1,6 +1,7 @@
-# Quantumult total line 4333
-# Last updated Sat 06/28/2025 22:13:29.20
+# Quantumult total line 4349
+# Last updated Sat 08/23/2025  6:29:53.06
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
+HOST,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe,LIST
 HOST,a.iqmtp.live,LIST
 HOST,analytics.strava.com,LIST
 HOST,aterm.me,LIST
@@ -22,6 +23,7 @@ HOST,injections.adguard.org,LIST
 HOST,instant.arubanetworks.com,LIST
 HOST,ip.istatmenus.app,LIST
 HOST,kc.kexinshe.com,LIST
+HOST,kms.03k.org,LIST
 HOST,local.adguard.org,LIST
 HOST,media.cdn.queniuqe.com,LIST
 HOST,mirrorbits.lineageos.org,LIST
@@ -39,7 +41,6 @@ HOST,setmeup.arubanetworks.com,LIST
 HOST,sms.imagetasks.com,LIST
 HOST,speedtest.macpaw.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
-HOST,th1s_rule5et_1s_m4d3_by_5ukk4w_ruleset.skk.moe,LIST
 HOST,unifi,LIST
 HOST,www.layuicdn.com,LIST
 HOST,www.libvideo.com,LIST
@@ -55,6 +56,7 @@ HOST-SUFFIX,10.in-addr.arpa,LIST
 HOST-SUFFIX,10010.com,LIST
 HOST-SUFFIX,100bt.com,LIST
 HOST-SUFFIX,100offer.com,LIST
+HOST-SUFFIX,110.com,LIST
 HOST-SUFFIX,111.com,LIST
 HOST-SUFFIX,11467.com,LIST
 HOST-SUFFIX,114chn.com,LIST
@@ -76,6 +78,8 @@ HOST-SUFFIX,123u.com,LIST
 HOST-SUFFIX,126.com,LIST
 HOST-SUFFIX,126.link,LIST
 HOST-SUFFIX,126.net,LIST
+HOST-SUFFIX,127.0.0.1.sslip.io,LIST
+HOST-SUFFIX,127.atlas.skk.moe,LIST
 HOST-SUFFIX,127.com,LIST
 HOST-SUFFIX,127.net,LIST
 HOST-SUFFIX,139.com,LIST
@@ -216,6 +220,7 @@ HOST-SUFFIX,3elife.net,LIST
 HOST-SUFFIX,3h3.com,LIST
 HOST-SUFFIX,3songshu.com,LIST
 HOST-SUFFIX,3yx.com,LIST
+HOST-SUFFIX,4008823823.com,LIST
 HOST-SUFFIX,40407.com,LIST
 HOST-SUFFIX,4399.com,LIST
 HOST-SUFFIX,4399.net,LIST
@@ -441,6 +446,7 @@ HOST-SUFFIX,alibabagroup.com,LIST
 HOST-SUFFIX,alibabaplanet.com,LIST
 HOST-SUFFIX,alibabaued.com,LIST
 HOST-SUFFIX,alibabausercontent.com,LIST
+HOST-SUFFIX,alibtrip.com,LIST
 HOST-SUFFIX,alicloud.com,LIST
 HOST-SUFFIX,alicloudapi.com,LIST
 HOST-SUFFIX,alicloudccp.com,LIST
@@ -706,6 +712,7 @@ HOST-SUFFIX,bytedapm.com,LIST
 HOST-SUFFIX,bytedns.net,LIST
 HOST-SUFFIX,bytedns1.com,LIST
 HOST-SUFFIX,bytednsdoc.com,LIST
+HOST-SUFFIX,byteeffecttos.com,LIST
 HOST-SUFFIX,bytefcdn.com,LIST
 HOST-SUFFIX,bytegecko.com,LIST
 HOST-SUFFIX,bytegoofy.com,LIST
@@ -1301,6 +1308,7 @@ HOST-SUFFIX,doticloud.com,LIST
 HOST-SUFFIX,douban.com,LIST
 HOST-SUFFIX,douban.fm,LIST
 HOST-SUFFIX,doubanio.com,LIST
+HOST-SUFFIX,doubao.com,LIST
 HOST-SUFFIX,douxie.com,LIST
 HOST-SUFFIX,douyin.com,LIST
 HOST-SUFFIX,douyincdn.com,LIST
@@ -1487,6 +1495,7 @@ HOST-SUFFIX,frdic.com,LIST
 HOST-SUFFIX,freebuf.com,LIST
 HOST-SUFFIX,fresh-ideas.cc,LIST
 HOST-SUFFIX,freshhema.com,LIST
+HOST-SUFFIX,freshippo.com,LIST
 HOST-SUFFIX,frontjs.com,LIST
 HOST-SUFFIX,frontwize.com,LIST
 HOST-SUFFIX,fsfund.com,LIST
@@ -1821,6 +1830,7 @@ HOST-SUFFIX,hwht.com,LIST
 HOST-SUFFIX,hwocloud.com,LIST
 HOST-SUFFIX,hwshu.com,LIST
 HOST-SUFFIX,hwtrip.com,LIST
+HOST-SUFFIX,hwwt8.com,LIST
 HOST-SUFFIX,hxcdn.net,LIST
 HOST-SUFFIX,hxfy888.com,LIST
 HOST-SUFFIX,hxsd.com,LIST
@@ -2683,6 +2693,7 @@ HOST-SUFFIX,officese.com,LIST
 HOST-SUFFIX,oi-wiki.com,LIST
 HOST-SUFFIX,oicq88.com,LIST
 HOST-SUFFIX,okooo.com,LIST
+HOST-SUFFIX,okr.com,LIST
 HOST-SUFFIX,ol-cdn.com,LIST
 HOST-SUFFIX,ol-img.com,LIST
 HOST-SUFFIX,oldboyedu.com,LIST
@@ -2808,6 +2819,9 @@ HOST-SUFFIX,ppstream.net,LIST
 HOST-SUFFIX,ppsurl.com,LIST
 HOST-SUFFIX,pptbest.com,LIST
 HOST-SUFFIX,pptv.com,LIST
+HOST-SUFFIX,ppximg.com,LIST
+HOST-SUFFIX,ppxstatic.com,LIST
+HOST-SUFFIX,ppxvod.com,LIST
 HOST-SUFFIX,prestodb-china.com,LIST
 HOST-SUFFIX,privatehd.to,LIST
 HOST-SUFFIX,proquest.com,LIST
@@ -3541,6 +3555,7 @@ HOST-SUFFIX,vobao.com,LIST
 HOST-SUFFIX,vodtcbk.com,LIST
 HOST-SUFFIX,volccdn.com,LIST
 HOST-SUFFIX,volceapplog.com,LIST
+HOST-SUFFIX,volcengine.com,LIST
 HOST-SUFFIX,volces.com,LIST
 HOST-SUFFIX,volcvideo.com,LIST
 HOST-SUFFIX,volcvod.com,LIST
@@ -3713,6 +3728,7 @@ HOST-SUFFIX,xiaomingtaiji.com,LIST
 HOST-SUFFIX,xiaomixiaoai.com,LIST
 HOST-SUFFIX,xiaomiyoupin.com,LIST
 HOST-SUFFIX,xiaote.net,LIST
+HOST-SUFFIX,xiaoxiaapi.com,LIST
 HOST-SUFFIX,xiaoxiongxitong.com,LIST
 HOST-SUFFIX,xiaoyuankousuan.com,LIST
 HOST-SUFFIX,xiaoyuxitong.com,LIST
