@@ -1,5 +1,5 @@
-# Clash total line 7393
-# Last updated Sat 08/23/2025  6:29:36.71
+# Clash total line 7401
+# Last updated Mon 08/25/2025 22:15:27.31
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -134,6 +134,7 @@ payload:
   - DOMAIN,apps.sophi.io
   - DOMAIN,apt.xpipe.io
   - DOMAIN,archive.cs.uu.nl
+  - DOMAIN,archive.kali.org
   - DOMAIN,archive.mozilla.org
   - DOMAIN,artifacts.electronjs.org
   - DOMAIN,artworks.thetvdb.com
@@ -289,6 +290,7 @@ payload:
   - DOMAIN,assets.toiimg.com
   - DOMAIN,assets.tokopedia.net
   - DOMAIN,assets.toot.cafe
+  - DOMAIN,assets.tvtropes.org
   - DOMAIN,assets.unifi-ai.com
   - DOMAIN,assets.upload.io
   - DOMAIN,assets.vantage.sh
@@ -357,6 +359,7 @@ payload:
   - DOMAIN,bcdn.starapps.studio
   - DOMAIN,bcmedia.bitchute.com
   - DOMAIN,before.good-apps.co
+  - DOMAIN,beta.eslint-react.xyz
   - DOMAIN,bhl.scpwikicn.com
   - DOMAIN,binaries.prisma.sh
   - DOMAIN,blacklist.tampermonkey.net
@@ -2003,6 +2006,7 @@ payload:
   - DOMAIN,m.porn3dx.com
   - DOMAIN,m.wsj.net
   - DOMAIN,m3.gab.com
+  - DOMAIN,m3u8-0.c-spanvideo.org
   - DOMAIN,m3u8.girigirilove.com
   - DOMAIN,mac-release-static.stash.ws
   - DOMAIN,makerworld.bblmw.com
@@ -2816,6 +2820,7 @@ payload:
   - DOMAIN,static.buffer.com
   - DOMAIN,static.buydomains.com
   - DOMAIN,static.bytepan.com
+  - DOMAIN,static.c-spanvideo.org
   - DOMAIN,static.canva.com
   - DOMAIN,static.captcha-delivery.com
   - DOMAIN,static.carfax.com
@@ -2975,6 +2980,7 @@ payload:
   - DOMAIN,static.tradingview.com
   - DOMAIN,static.tronscan.org
   - DOMAIN,static.tumblr.com
+  - DOMAIN,static.tvtropes.org
   - DOMAIN,static.typingclub.com
   - DOMAIN,static.ui.com
   - DOMAIN,static.underhentai.net
@@ -3293,6 +3299,7 @@ payload:
   - DOMAIN,www2.aomeisoftware.com
   - DOMAIN,wwwimages2.adobe.com
   - DOMAIN,xenia.sote.hu
+  - DOMAIN,ximage.c-spanvideo.org
   - DOMAIN,xpaywalletcdn.azureedge.net
   - DOMAIN,xvcf1.xboxlive.com
   - DOMAIN,xvcf2.xboxlive.com
@@ -6047,6 +6054,7 @@ payload:
   - DOMAIN-SUFFIX,up-4ever.com
   - DOMAIN-SUFFIX,up-4ever.org
   - DOMAIN-SUFFIX,up-load.io
+  - DOMAIN-SUFFIX,update.microsoft.com
   - DOMAIN-SUFFIX,upera.co
   - DOMAIN-SUFFIX,upfile.mobi
   - DOMAIN-SUFFIX,upfiles.com
