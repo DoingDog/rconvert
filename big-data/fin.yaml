@@ -1,5 +1,5 @@
-# Clash total line 7369
-# Last updated Thu 08/28/2025 22:14:27.46
+# Clash total line 7372
+# Last updated Sun 08/31/2025 22:14:15.63
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -560,6 +560,7 @@ payload:
   - DOMAIN,cdn.cxense.com
   - DOMAIN,cdn.cypress.io
   - DOMAIN,cdn.daily.dev
+  - DOMAIN,cdn.daradara.me
   - DOMAIN,cdn.datacamp.com
   - DOMAIN,cdn.datatables.net
   - DOMAIN,cdn.datdota.com
@@ -1623,6 +1624,7 @@ payload:
   - DOMAIN,i3.anysex.com
   - DOMAIN,i4.anysex.com
   - DOMAIN,ias.r10s.jp
+  - DOMAIN,icdn.javxx.com
   - DOMAIN,icm.edu.pl
   - DOMAIN,icons.buffer.com
   - DOMAIN,icons.duckduckgo.com
@@ -6335,6 +6337,7 @@ payload:
   - DOMAIN-SUFFIX,zeetv.co.uk
   - DOMAIN-SUFFIX,zeetv.com
   - DOMAIN-SUFFIX,zeeuk.com
+  - DOMAIN-SUFFIX,zenwave56.site
   - DOMAIN-SUFFIX,zeriamerikes.com
   - DOMAIN-SUFFIX,zi-scripts.com
   - DOMAIN-SUFFIX,zi0.icu
