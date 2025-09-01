@@ -1,5 +1,5 @@
-# Clash total line 7372
-# Last updated Sun 08/31/2025 22:14:15.63
+# Clash total line 7373
+# Last updated Mon 09/01/2025 22:14:03.35
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -3249,6 +3249,7 @@ payload:
   - DOMAIN,ws2-cache.aptoide.com
   - DOMAIN,ww2-secure.justanswer.com
   - DOMAIN,ww2.justanswer.com
+  - DOMAIN,www-cdn.uscardforum.com
   - DOMAIN,www-ftp.lip6.fr
   - DOMAIN,www-res.cablelabs.com
   - DOMAIN,www-static.ripe.net
