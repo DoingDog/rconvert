@@ -1,5 +1,5 @@
-# Quantumult total line 7375
-# Last updated Thu 09/04/2025 22:14:07.52
+# Quantumult total line 7382
+# Last updated Sun 09/07/2025 22:13:45.77
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -861,6 +861,8 @@ HOST,cdn.writeas.net,LIST
 HOST,cdn.xeiaso.net,LIST
 HOST,cdn.xgroovy.com,LIST
 HOST,cdn.xvidzz.com,LIST
+HOST,cdn.yamibuy.com,LIST
+HOST,cdn.yamibuy.net,LIST
 HOST,cdn.yinghuazy.xyz,LIST
 HOST,cdn.you.com,LIST
 HOST,cdn.ywxi.net,LIST
@@ -1400,6 +1402,7 @@ HOST,files.scamadviser.com,LIST
 HOST,files.slack.com,LIST
 HOST,files.smashing.media,LIST
 HOST,files.svc.ui.com,LIST
+HOST,files.webfe.shopee.io,LIST
 HOST,files.writefreely.org,LIST
 HOST,files.yande.re,LIST
 HOST,files2.freedownloadmanager.org,LIST
@@ -1782,6 +1785,7 @@ HOST,img.adspower.net,LIST
 HOST,img.agrd.eu,LIST
 HOST,img.announcekit.app,LIST
 HOST,img.api.video,LIST
+HOST,img.apk.cafe,LIST
 HOST,img.applealmond.com,LIST
 HOST,img.apponic.com,LIST
 HOST,img.atlasobscura.com,LIST
@@ -2563,6 +2567,7 @@ HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rules.ac,LIST
 HOST,rules1.clearurls.xyz,LIST
 HOST,rules2.clearurls.xyz,LIST
+HOST,ruleset.skk.moe,LIST
 HOST,rum-agent.na-01.cloud.solarwinds.com,LIST
 HOST,rum-cdn.perfops.net,LIST
 HOST,runkit-packages-static-executables.com,LIST
@@ -2715,6 +2720,7 @@ HOST,solve-widget.forethought.ai,LIST
 HOST,sotirov-bg.net,LIST
 HOST,source.domaintools.com,LIST
 HOST,source.unsplash.com,LIST
+HOST,sourcemap.webfe.shopeemobile.com,LIST
 HOST,sourcemaps.squarespace.net,LIST
 HOST,sourcepoint.theguardian.com,LIST
 HOST,sp-spiegel-de.spiegel.de,LIST
@@ -3006,6 +3012,7 @@ HOST,statics.erothots.co,LIST
 HOST,statics.goorm.io,LIST
 HOST,statics.simpshub.com,LIST
 HOST,statics.streamable.com,LIST
+HOST,staticsource1.redotpay.com,LIST
 HOST,staticw2.yotpo.com,LIST
 HOST,stats.codesandbox.io,LIST
 HOST,stats.setapp.com,LIST
@@ -3088,6 +3095,7 @@ HOST,tiles.stadiamaps.com,LIST
 HOST,tiles.versatiles.org,LIST
 HOST,tiles.windy.com,LIST
 HOST,time-a.nist.gov,LIST
+HOST,time.apple.com,LIST
 HOST,time.cloudflare.com,LIST
 HOST,time.google.com,LIST
 HOST,time.windows.com,LIST
@@ -5665,7 +5673,6 @@ HOST-SUFFIX,rspcdn.net,LIST
 HOST-SUFFIX,rss3.dev,LIST
 HOST-SUFFIX,rthk.hk,LIST
 HOST-SUFFIX,rthk.org.hk,LIST
-HOST-SUFFIX,ruleset.skk.moe,LIST
 HOST-SUFFIX,rum.cronitor.io,LIST
 HOST-SUFFIX,runkit-packages.com,LIST
 HOST-SUFFIX,runkitcdn.com,LIST
