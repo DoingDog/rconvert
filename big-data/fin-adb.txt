@@ -1,5 +1,5 @@
-# Adblock total line 6466
-# Last updated Wed 09/10/2025 22:13:46.15
+# Adblock total line 6486
+# Last updated Sat 09/13/2025 22:13:03.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -19,6 +19,7 @@
 ||aff.equalweb.com^
 ||affportal.bhphoto.com^
 ||agi.armorgames.com^
+||ah-cdn.merge.dev^
 ||ai.google.dev^
 ||aimg.fc2.com^
 ||aistudio.google.com^
@@ -542,6 +543,7 @@
 ||cdn.calibermind.com^
 ||cdn.cameo.com^
 ||cdn.camweara.com^
+||cdn.candy.ai^
 ||cdn.cbd.int^
 ||cdn.cfr.org^
 ||cdn.changelog.com^
@@ -663,7 +665,7 @@
 ||cdn.ipregistry.co^
 ||cdn.jamieoliver.com^
 ||cdn.javmg.com^
-||cdn.javsts.com^
+||cdn.javmiku.com^
 ||cdn.jetboost.io^
 ||cdn.jetphotos.com^
 ||cdn.jitbit.com^
@@ -717,6 +719,7 @@
 ||cdn.neverbounce.com^
 ||cdn.nfcube.com^
 ||cdn.nolt.io^
+||cdn.northropgrumman.com^
 ||cdn.now.gg^
 ||cdn.nperf.com^
 ||cdn.omnicalculator.com^
@@ -1016,10 +1019,12 @@
 ||cloudfront.barilliance.com^
 ||cloudfront.codeproject.com^
 ||cloudfront.debian.net^
+||cm1.aminoapps.com^
 ||cmd-cdn.cleanmymac.com^
 ||cminf.sfcat.link^
 ||cmp-cdn.p.aws.economist.com^
 ||cms-assets.nodecraft.com^
+||cms-assets.unrealengine.com^
 ||cms-assets.webediamovies.pro^
 ||cms-assets.xboxservices.com^
 ||cms-cdn.goat.com^
@@ -1043,6 +1048,7 @@
 ||components.clever-cloud.com^
 ||components.justanswer.com^
 ||components.trynow.net^
+||components.unrealengine.com^
 ||componentupdater.brave.com^
 ||config.extension.grammarly.com^
 ||connect-js.stripe.com^
@@ -1079,7 +1085,6 @@
 ||cp2.cloudflare.com^
 ||cp4.cloudflare.com^
 ||cpan-mirror.rbc.ru^
-||cpan.catalyst.net.nz^
 ||cpan.cpantesters.org^
 ||cpan.cs.utah.edu^
 ||cpan.dcc.uchile.cl^
@@ -1413,7 +1418,6 @@
 ||files.slack.com^
 ||files.smashing.media^
 ||files.svc.ui.com^
-||files.webfe.shopee.io^
 ||files.writefreely.org^
 ||files.yande.re^
 ||files2.freedownloadmanager.org^
@@ -1877,6 +1881,7 @@
 ||img1.ak.crunchyroll.com^
 ||img1.socialshopwave.com^
 ||img1.yna.co.kr^
+||img2.gelbooru.com^
 ||img2.javdove.com^
 ||img2.javmost.com^
 ||img2.socialshopwave.com^
@@ -1887,9 +1892,11 @@
 ||img3.socialshopwave.com^
 ||img3.yna.co.kr^
 ||img4.airdroid.com^
+||img4.gelbooru.com^
 ||img4.javmost.com^
 ||img4.socialshopwave.com^
 ||img4.yna.co.kr^
+||img5.gelbooru.com^
 ||img5.socialshopwave.com^
 ||img5.yna.co.kr^
 ||img6.airdroid.com^
@@ -1945,6 +1952,7 @@
 ||js-cdn.music.apple.com^
 ||js-eu1.hsforms.net^
 ||js-s3.quickcep.com^
+||js.assemblyexchange.com^
 ||js.braintreegateway.com^
 ||js.chargebee.com^
 ||js.chargify.com^
@@ -2401,6 +2409,7 @@
 ||p.sda1.dev^
 ||p.typekit.net^
 ||p.udn.com.tw^
+||pa1.aninoapps.com^
 ||pacdn.500px.org^
 ||package-assets.oomol.com^
 ||packagecloud.io^
@@ -2474,6 +2483,7 @@
 ||playwright.azureedge.net^
 ||plugins.dprint.dev^
 ||plus.unsplash.com^
+||pm1.aninoapps.com^
 ||pmecdn.protonweb.com^
 ||png.pngtree.com^
 ||polyfill-fe.toss.im^
@@ -2616,6 +2626,7 @@
 ||s1.feedly.com^
 ||s1.maxstream.org^
 ||s1.qwant.com^
+||s1.zerochan.net^
 ||s10.maxstream.org^
 ||s11.maxstream.org^
 ||s13.maxstream.org^
@@ -2742,7 +2753,6 @@
 ||sotirov-bg.net^
 ||source.domaintools.com^
 ||source.unsplash.com^
-||sourcemap.webfe.shopeemobile.com^
 ||sourcemaps.squarespace.net^
 ||sourcepoint.theguardian.com^
 ||sp-spiegel-de.spiegel.de^
@@ -2776,6 +2786,7 @@
 ||static-act.imoim.net^
 ||static-assets-1.truthsocial.com^
 ||static-assets-prod.epicgames.com^
+||static-assets-prod.unrealengine.com^
 ||static-assets-web.flixcart.com^
 ||static-assets.clubhouseapi.com^
 ||static-assets.codecademy.com^
@@ -2819,6 +2830,7 @@
 ||static.airtable.com^
 ||static.aizanmei.org^
 ||static.animaapp.com^
+||static.aninoapps.com^
 ||static.anyporn.com^
 ||static.anysex.com^
 ||static.arxiv.org^
@@ -2841,6 +2853,7 @@
 ||static.chaika.moe^
 ||static.change.org^
 ||static.chessarena.com^
+||static.chrome-stats.com^
 ||static.clips4sale.com^
 ||static.cloud.coveo.com^
 ||static.cloudcachetci.com^
@@ -3013,6 +3026,7 @@
 ||static.yfsp.tv^
 ||static.zaobao.com^
 ||static.zaobao.com.sg^
+||static.zerochan.net^
 ||static.zuora.com^
 ||static1.e621.net^
 ||static1.lottiefiles.com^
@@ -3235,6 +3249,7 @@
 ||w.chatlio.com^
 ||w2.influxdata.com^
 ||wa.arounddeal.com^
+||wa1.aninoapps.com^
 ||wac-cdn.atlassian.com^
 ||waitlisted.co^
 ||wandi-6402.kxcdn.com^
@@ -3300,9 +3315,11 @@
 ||www-res.cablelabs.com^
 ||www-static.ripe.net^
 ||www.10086.win^
+||www.acgpix.de^
 ||www.bbthat.com^
 ||www.googleapis.com^
 ||www.gstatic.com^
+||www.paypalobjects.com^
 ||www.pngmart.com^
 ||www.tbstat.com^
 ||www.typescriptlang.org^
@@ -5906,6 +5923,7 @@
 ||streamingdisney.net^
 ||streamsb.com^
 ||streamtape.com^
+||striiiipst.com^
 ||stripcdn.com^
 ||stripeassets.com^
 ||stripecdn.com^
@@ -6146,6 +6164,7 @@
 ||v2ex.co^
 ||valnetcdn.com^
 ||valvesoftware.com^
+||vancdn.com^
 ||vanillicon.com^
 ||vbstatic.co^
 ||vcmdiawe.com^
@@ -6276,6 +6295,7 @@
 ||wdupload.com^
 ||web.app^
 ||webchinupload.com^
+||webfe.shopee.io^
 ||webinfcdn.net^
 ||webp.se^
 ||webpkgcache.com^
