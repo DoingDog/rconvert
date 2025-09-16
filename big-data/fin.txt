@@ -1,5 +1,5 @@
-# Main total line 7445
-# Last updated Sat 09/13/2025 22:13:02.77
+# Main total line 7461
+# Last updated Tue 09/16/2025 22:13:27.35
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -108,6 +108,7 @@ DOMAIN,apichatwidget.usepylon.com
 DOMAIN,apim.m3pd.com
 DOMAIN,apm-misaka.biliapi.net
 DOMAIN,app-api.vidjet.io
+DOMAIN,app-cdn.logo.com
 DOMAIN,app-spm.com
 DOMAIN,app-static.eu.posthog.com
 DOMAIN,app-static.turtl.co
@@ -421,6 +422,7 @@ DOMAIN,c7.patreon.com
 DOMAIN,c8.patreon.com
 DOMAIN,ca.nfs.pub
 DOMAIN,cacerts.digicert.com
+DOMAIN,cacerts.rapidssl.com
 DOMAIN,cache-05.filehippo.net
 DOMAIN,cache.agilebits.com
 DOMAIN,cache.armorgames.com
@@ -655,6 +657,7 @@ DOMAIN,cdn.hongkongcard.com
 DOMAIN,cdn.hyperbeam.com
 DOMAIN,cdn.hypershort.com
 DOMAIN,cdn.icomoon.io
+DOMAIN,cdn.icon-icons.com
 DOMAIN,cdn.iconfinder.com
 DOMAIN,cdn.imageengine.io
 DOMAIN,cdn.img.ly
@@ -821,6 +824,7 @@ DOMAIN,cdn.streamlabs.com
 DOMAIN,cdn.substack.com
 DOMAIN,cdn.sunofbeaches.com
 DOMAIN,cdn.svgator.com
+DOMAIN,cdn.syftdata.com
 DOMAIN,cdn.tailwindcss.com
 DOMAIN,cdn.techcommunity.microsoft.com
 DOMAIN,cdn.termius.com
@@ -904,6 +908,7 @@ DOMAIN,cdn1.suno.ai
 DOMAIN,cdn1.sysgears.com
 DOMAIN,cdn1.techbang.com
 DOMAIN,cdn1.telegram.space
+DOMAIN,cdn1.telesco.pe
 DOMAIN,cdn1.unrealengine.com
 DOMAIN,cdn10.bigcommerce.com
 DOMAIN,cdn11.bigcommerce.com
@@ -940,10 +945,12 @@ DOMAIN,cdn4.bigcommerce.com
 DOMAIN,cdn4.iconfinder.com
 DOMAIN,cdn4.sysgears.com
 DOMAIN,cdn4.telegram.space
+DOMAIN,cdn4.telesco.pe
 DOMAIN,cdn5.bigcommerce.com
 DOMAIN,cdn5.hextom.com
 DOMAIN,cdn5.iconfinder.com
 DOMAIN,cdn5.telegram.space
+DOMAIN,cdn5.telesco.pe
 DOMAIN,cdn6.aptoide.com
 DOMAIN,cdn6.bigcommerce.com
 DOMAIN,cdn7.bigcommerce.com
@@ -956,6 +963,7 @@ DOMAIN,cdn8.bigcommerce.com
 DOMAIN,cdn9.bigcommerce.com
 DOMAIN,cdna.artstation.com
 DOMAIN,cdnapi.kaltura.com
+DOMAIN,cdnassets.roboflow.com
 DOMAIN,cdnb.artstation.com
 DOMAIN,cdnc.imagefap.com
 DOMAIN,cdne-pics.youjizz.com
@@ -1306,6 +1314,7 @@ DOMAIN,downloads2.broadcom.com
 DOMAIN,drive.massgrave.dev
 DOMAIN,drop.ndtv.com
 DOMAIN,drscdn.500px.org
+DOMAIN,dw.uptodown.net
 DOMAIN,dynamic-assets.coinbase.com
 DOMAIN,dz2cdn1.dzone.com
 DOMAIN,e.calibermind.com
@@ -1738,6 +1747,7 @@ DOMAIN,images.freeimages.com
 DOMAIN,images.g2crowd.com
 DOMAIN,images.github.media
 DOMAIN,images.hothardware.com
+DOMAIN,images.icon-icons.com
 DOMAIN,images.idgesg.net
 DOMAIN,images.indianexpress.com
 DOMAIN,images.kick.com
@@ -2477,6 +2487,7 @@ DOMAIN,play.vidyard.com
 DOMAIN,play.xfvod.pro
 DOMAIN,player-frontend.cnevids.com
 DOMAIN,player.cnevids.com
+DOMAIN,player.interactivity.brightcove.com
 DOMAIN,player.louisvuitton.com
 DOMAIN,playgroundcdn.typescriptlang.org
 DOMAIN,playwright-akamai.azureedge.net
@@ -2692,6 +2703,7 @@ DOMAIN,scripts.scriptwrapper.com
 DOMAIN,scripts.webeo.com
 DOMAIN,sdata.ndtv.com
 DOMAIN,sdk.customfit.ai
+DOMAIN,sdk.gleap.io
 DOMAIN,sdk.listenlive.co
 DOMAIN,sdk.loyaltylion.net
 DOMAIN,sdk.privacy-center.org
@@ -2894,6 +2906,7 @@ DOMAIN,static.freeimages.com
 DOMAIN,static.getbutton.io
 DOMAIN,static.gettyimages.com
 DOMAIN,static.giant-bicycles.com
+DOMAIN,static.gigabyte.com
 DOMAIN,static.gitbook.com
 DOMAIN,static.gl-inet.com
 DOMAIN,static.global.visioncritical.com
@@ -2975,6 +2988,7 @@ DOMAIN,static.redox-os.org
 DOMAIN,static.registration.bluehost.com
 DOMAIN,static.reo.dev
 DOMAIN,static.replay.io
+DOMAIN,static.roboflow.com
 DOMAIN,static.rust-lang.org
 DOMAIN,static.salidzini.lv
 DOMAIN,static.scarf.sh
@@ -3060,6 +3074,7 @@ DOMAIN,stats.snipaste.com
 DOMAIN,status.canarymail.io
 DOMAIN,status.ui.com
 DOMAIN,stbff.newfold.com
+DOMAIN,stc.utdstc.com
 DOMAIN,steam.apac.qtlglb.com
 DOMAIN,steam.eca.qtlglb.com
 DOMAIN,steam.naeu.qtlglb.com
@@ -3643,6 +3658,7 @@ DOMAIN-SUFFIX,bp.blogspot.com
 DOMAIN-SUFFIX,br2share.net
 DOMAIN-SUFFIX,bravotv.com
 DOMAIN-SUFFIX,braze.com
+DOMAIN-SUFFIX,brightcovecdn.com
 DOMAIN-SUFFIX,brightspotcdn.com
 DOMAIN-SUFFIX,brupload.net
 DOMAIN-SUFFIX,bstarstatic.com

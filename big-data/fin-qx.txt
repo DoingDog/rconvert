@@ -1,5 +1,5 @@
-# Quantumult total line 7431
-# Last updated Sat 09/13/2025 22:13:02.96
+# Quantumult total line 7447
+# Last updated Tue 09/16/2025 22:13:27.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -108,6 +108,7 @@ HOST,apichatwidget.usepylon.com,LIST
 HOST,apim.m3pd.com,LIST
 HOST,apm-misaka.biliapi.net,LIST
 HOST,app-api.vidjet.io,LIST
+HOST,app-cdn.logo.com,LIST
 HOST,app-spm.com,LIST
 HOST,app-static.eu.posthog.com,LIST
 HOST,app-static.turtl.co,LIST
@@ -421,6 +422,7 @@ HOST,c7.patreon.com,LIST
 HOST,c8.patreon.com,LIST
 HOST,ca.nfs.pub,LIST
 HOST,cacerts.digicert.com,LIST
+HOST,cacerts.rapidssl.com,LIST
 HOST,cache-05.filehippo.net,LIST
 HOST,cache.agilebits.com,LIST
 HOST,cache.armorgames.com,LIST
@@ -655,6 +657,7 @@ HOST,cdn.hongkongcard.com,LIST
 HOST,cdn.hyperbeam.com,LIST
 HOST,cdn.hypershort.com,LIST
 HOST,cdn.icomoon.io,LIST
+HOST,cdn.icon-icons.com,LIST
 HOST,cdn.iconfinder.com,LIST
 HOST,cdn.imageengine.io,LIST
 HOST,cdn.img.ly,LIST
@@ -821,6 +824,7 @@ HOST,cdn.streamlabs.com,LIST
 HOST,cdn.substack.com,LIST
 HOST,cdn.sunofbeaches.com,LIST
 HOST,cdn.svgator.com,LIST
+HOST,cdn.syftdata.com,LIST
 HOST,cdn.tailwindcss.com,LIST
 HOST,cdn.techcommunity.microsoft.com,LIST
 HOST,cdn.termius.com,LIST
@@ -904,6 +908,7 @@ HOST,cdn1.suno.ai,LIST
 HOST,cdn1.sysgears.com,LIST
 HOST,cdn1.techbang.com,LIST
 HOST,cdn1.telegram.space,LIST
+HOST,cdn1.telesco.pe,LIST
 HOST,cdn1.unrealengine.com,LIST
 HOST,cdn10.bigcommerce.com,LIST
 HOST,cdn11.bigcommerce.com,LIST
@@ -940,10 +945,12 @@ HOST,cdn4.bigcommerce.com,LIST
 HOST,cdn4.iconfinder.com,LIST
 HOST,cdn4.sysgears.com,LIST
 HOST,cdn4.telegram.space,LIST
+HOST,cdn4.telesco.pe,LIST
 HOST,cdn5.bigcommerce.com,LIST
 HOST,cdn5.hextom.com,LIST
 HOST,cdn5.iconfinder.com,LIST
 HOST,cdn5.telegram.space,LIST
+HOST,cdn5.telesco.pe,LIST
 HOST,cdn6.aptoide.com,LIST
 HOST,cdn6.bigcommerce.com,LIST
 HOST,cdn7.bigcommerce.com,LIST
@@ -956,6 +963,7 @@ HOST,cdn8.bigcommerce.com,LIST
 HOST,cdn9.bigcommerce.com,LIST
 HOST,cdna.artstation.com,LIST
 HOST,cdnapi.kaltura.com,LIST
+HOST,cdnassets.roboflow.com,LIST
 HOST,cdnb.artstation.com,LIST
 HOST,cdnc.imagefap.com,LIST
 HOST,cdne-pics.youjizz.com,LIST
@@ -1306,6 +1314,7 @@ HOST,downloads2.broadcom.com,LIST
 HOST,drive.massgrave.dev,LIST
 HOST,drop.ndtv.com,LIST
 HOST,drscdn.500px.org,LIST
+HOST,dw.uptodown.net,LIST
 HOST,dynamic-assets.coinbase.com,LIST
 HOST,dz2cdn1.dzone.com,LIST
 HOST,e.calibermind.com,LIST
@@ -1738,6 +1747,7 @@ HOST,images.freeimages.com,LIST
 HOST,images.g2crowd.com,LIST
 HOST,images.github.media,LIST
 HOST,images.hothardware.com,LIST
+HOST,images.icon-icons.com,LIST
 HOST,images.idgesg.net,LIST
 HOST,images.indianexpress.com,LIST
 HOST,images.kick.com,LIST
@@ -2477,6 +2487,7 @@ HOST,play.vidyard.com,LIST
 HOST,play.xfvod.pro,LIST
 HOST,player-frontend.cnevids.com,LIST
 HOST,player.cnevids.com,LIST
+HOST,player.interactivity.brightcove.com,LIST
 HOST,player.louisvuitton.com,LIST
 HOST,playgroundcdn.typescriptlang.org,LIST
 HOST,playwright-akamai.azureedge.net,LIST
@@ -2692,6 +2703,7 @@ HOST,scripts.scriptwrapper.com,LIST
 HOST,scripts.webeo.com,LIST
 HOST,sdata.ndtv.com,LIST
 HOST,sdk.customfit.ai,LIST
+HOST,sdk.gleap.io,LIST
 HOST,sdk.listenlive.co,LIST
 HOST,sdk.loyaltylion.net,LIST
 HOST,sdk.privacy-center.org,LIST
@@ -2894,6 +2906,7 @@ HOST,static.freeimages.com,LIST
 HOST,static.getbutton.io,LIST
 HOST,static.gettyimages.com,LIST
 HOST,static.giant-bicycles.com,LIST
+HOST,static.gigabyte.com,LIST
 HOST,static.gitbook.com,LIST
 HOST,static.gl-inet.com,LIST
 HOST,static.global.visioncritical.com,LIST
@@ -2975,6 +2988,7 @@ HOST,static.redox-os.org,LIST
 HOST,static.registration.bluehost.com,LIST
 HOST,static.reo.dev,LIST
 HOST,static.replay.io,LIST
+HOST,static.roboflow.com,LIST
 HOST,static.rust-lang.org,LIST
 HOST,static.salidzini.lv,LIST
 HOST,static.scarf.sh,LIST
@@ -3060,6 +3074,7 @@ HOST,stats.snipaste.com,LIST
 HOST,status.canarymail.io,LIST
 HOST,status.ui.com,LIST
 HOST,stbff.newfold.com,LIST
+HOST,stc.utdstc.com,LIST
 HOST,steam.apac.qtlglb.com,LIST
 HOST,steam.eca.qtlglb.com,LIST
 HOST,steam.naeu.qtlglb.com,LIST
@@ -3643,6 +3658,7 @@ HOST-SUFFIX,bp.blogspot.com,LIST
 HOST-SUFFIX,br2share.net,LIST
 HOST-SUFFIX,bravotv.com,LIST
 HOST-SUFFIX,braze.com,LIST
+HOST-SUFFIX,brightcovecdn.com,LIST
 HOST-SUFFIX,brightspotcdn.com,LIST
 HOST-SUFFIX,brupload.net,LIST
 HOST-SUFFIX,bstarstatic.com,LIST
