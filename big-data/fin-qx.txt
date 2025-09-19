@@ -1,5 +1,5 @@
-# Quantumult total line 7447
-# Last updated Tue 09/16/2025 22:13:27.50
+# Quantumult total line 7466
+# Last updated Fri 09/19/2025 22:14:34.97
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -116,6 +116,7 @@ HOST,app-updates.agilebits.com,LIST
 HOST,app.1password.com,LIST
 HOST,app.backinstock.org,LIST
 HOST,app.brightback.com,LIST
+HOST,app.cart-bot.net,LIST
 HOST,app.chatwoot.com,LIST
 HOST,app.cookieyes.com,LIST
 HOST,app.groove.cm,LIST
@@ -350,6 +351,7 @@ HOST,b.peatio.com,LIST
 HOST,b.sf-syn.com,LIST
 HOST,b2.mcarchive.net,LIST
 HOST,b5x-sentry.1passwordservices.com,LIST
+HOST,backinstock.useamp.com,LIST
 HOST,badbits.dwebops.pub,LIST
 HOST,badge.buildkite.com,LIST
 HOST,badge.fury.io,LIST
@@ -388,6 +390,7 @@ HOST,bucket1.notaku.so,LIST
 HOST,builds.paranoidandroid.co,LIST
 HOST,builds.parsec.app,LIST
 HOST,bundle.5gtb.com,LIST
+HOST,bundle.9gtb.com,LIST
 HOST,bundle.dyn-rev.app,LIST
 HOST,bundle.trysavvy.com,LIST
 HOST,bundlephobia.com,LIST
@@ -427,6 +430,7 @@ HOST,cache-05.filehippo.net,LIST
 HOST,cache.agilebits.com,LIST
 HOST,cache.armorgames.com,LIST
 HOST,cache.hackedfreegames.com,LIST
+HOST,cache.industry.siemens.com,LIST
 HOST,cache.omnicalculator.com,LIST
 HOST,cache.pack.google.com,LIST
 HOST,cache.video.iqiyi.com,LIST
@@ -440,6 +444,7 @@ HOST,cdimage.kali.org,LIST
 HOST,cdn-1.ggjav.com,LIST
 HOST,cdn-1.strava.com,LIST
 HOST,cdn-a.sonyentertainmentnetwork.com,LIST
+HOST,cdn-app.cart-bot.net,LIST
 HOST,cdn-app.pathfactory.com,LIST
 HOST,cdn-assets.circleci.com,LIST
 HOST,cdn-avatars.huggingface.co,LIST
@@ -1166,6 +1171,7 @@ HOST,dam.freshworks.com,LIST
 HOST,damassets.autodesk.net,LIST
 HOST,dashasiafox.akamaized.netflix,LIST
 HOST,dassets.shimano.com,LIST
+HOST,data.cdn.siemens.com,LIST
 HOST,data.gameflare.com,LIST
 HOST,data.osmand.net,LIST
 HOST,data.pendo.io,LIST
@@ -1351,6 +1357,7 @@ HOST,embed.savvycal.com,LIST
 HOST,embed.tawk.to,LIST
 HOST,embed.ted.com,LIST
 HOST,embed.typeform.com,LIST
+HOST,embed.zenn.studio,LIST
 HOST,emby-cdn1.nebula-media.org,LIST
 HOST,emoji-css.afeld.me,LIST
 HOST,emos.plurk.com,LIST
@@ -1740,6 +1747,7 @@ HOST,images.emojiterra.com,LIST
 HOST,images.en.aptoide.com,LIST
 HOST,images.everyplate.com,LIST
 HOST,images.fandango.com,LIST
+HOST,images.filepuma.com,LIST
 HOST,images.financemagnates.com,LIST
 HOST,images.findagrave.com,LIST
 HOST,images.flightradar24.com,LIST
@@ -1939,6 +1947,7 @@ HOST,import-cdn.default.com,LIST
 HOST,ims.windy.com,LIST
 HOST,info.cloudflare.com,LIST
 HOST,info.knak.com,LIST
+HOST,instafeed.nfcube.com,LIST
 HOST,install.virtfusion.net,LIST
 HOST,int.mwbbiz.com,LIST
 HOST,integrations.gitbook.com,LIST
@@ -2013,6 +2022,7 @@ HOST,launcher-files.modrinth.com,LIST
 HOST,launcher.spot.im,LIST
 HOST,lc.nssurge.com,LIST
 HOST,lcdn-locator.apple.com,LIST
+HOST,learn-attachment.microsoft.com,LIST
 HOST,learn.optimizely.com,LIST
 HOST,lecontent.sololearn.com,LIST
 HOST,ledger-wp-website-s3-prd.ledger.com,LIST
@@ -2022,6 +2032,7 @@ HOST,lib.ugent.be,LIST
 HOST,libraries.hund.io,LIST
 HOST,libs.quillbot.com,LIST
 HOST,lift-ai-js.marketlinc.com,LIST
+HOST,light.spicegems.org,LIST
 HOST,limitless.cmax.ai,LIST
 HOST,link.storjshare.io,LIST
 HOST,linkstorage.linkfire.com,LIST
@@ -2065,7 +2076,9 @@ HOST,marketing.thingiverse.com,LIST
 HOST,marketplace-web-assets.vinted.com,LIST
 HOST,marwan.ma,LIST
 HOST,maven.google.com,LIST
+HOST,maven.is-quite.gay,LIST
 HOST,maven.kr328.app,LIST
+HOST,maven.neoforged.net,LIST
 HOST,mcdn.vrporn.com,LIST
 HOST,mcdnds.vrporn.com,LIST
 HOST,mcdns.vrporn.com,LIST
@@ -2576,6 +2589,7 @@ HOST,repo.debiancn.org,LIST
 HOST,repo.hex.pm,LIST
 HOST,repo.nextdns.io,LIST
 HOST,repo.powerdns.com,LIST
+HOST,repo.sleeping.town,LIST
 HOST,repo1.maven.org,LIST
 HOST,repository.jboss.org,LIST
 HOST,repository.su,LIST
@@ -2988,6 +3002,7 @@ HOST,static.redox-os.org,LIST
 HOST,static.registration.bluehost.com,LIST
 HOST,static.reo.dev,LIST
 HOST,static.replay.io,LIST
+HOST,static.returngo.ai,LIST
 HOST,static.roboflow.com,LIST
 HOST,static.rust-lang.org,LIST
 HOST,static.salidzini.lv,LIST
@@ -3040,6 +3055,7 @@ HOST,static.xxxshake.com,LIST
 HOST,static.yfsp.tv,LIST
 HOST,static.zaobao.com,LIST
 HOST,static.zaobao.com.sg,LIST
+HOST,static.zenn.studio,LIST
 HOST,static.zerochan.net,LIST
 HOST,static.zuora.com,LIST
 HOST,static1.e621.net,LIST
@@ -3295,6 +3311,7 @@ HOST,webstatic.chargebee.com,LIST
 HOST,widget.automizely.com,LIST
 HOST,widget.datablocks.se,LIST
 HOST,widget.docsbot.ai,LIST
+HOST,widget.finlogix.com,LIST
 HOST,widget.freshworks.com,LIST
 HOST,widget.gotolstoy.com,LIST
 HOST,widget.intercom.io,LIST
@@ -4236,6 +4253,7 @@ HOST-SUFFIX,epimg.net,LIST
 HOST-SUFFIX,erocdn.co,LIST
 HOST-SUFFIX,eroimg.net,LIST
 HOST-SUFFIX,err.sh,LIST
+HOST-SUFFIX,esc-apps-cdn.com,LIST
 HOST-SUFFIX,esm.run,LIST
 HOST-SUFFIX,esm.sh,LIST
 HOST-SUFFIX,espn.co.uk,LIST
@@ -5124,6 +5142,7 @@ HOST-SUFFIX,media.ci-en.jp,LIST
 HOST-SUFFIX,media.strapiapp.com,LIST
 HOST-SUFFIX,media.tumblr.com,LIST
 HOST-SUFFIX,media.zestyio.com,LIST
+HOST-SUFFIX,mediadecathlon.com,LIST
 HOST-SUFFIX,mediadelivery.net,LIST
 HOST-SUFFIX,mediafire.com,LIST
 HOST-SUFFIX,mediafree.co,LIST

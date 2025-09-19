@@ -1,5 +1,5 @@
-# Clash total line 7461
-# Last updated Tue 09/16/2025 22:13:27.55
+# Clash total line 7480
+# Last updated Fri 09/19/2025 22:14:35.02
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -117,6 +117,7 @@ payload:
   - DOMAIN,app.1password.com
   - DOMAIN,app.backinstock.org
   - DOMAIN,app.brightback.com
+  - DOMAIN,app.cart-bot.net
   - DOMAIN,app.chatwoot.com
   - DOMAIN,app.cookieyes.com
   - DOMAIN,app.groove.cm
@@ -351,6 +352,7 @@ payload:
   - DOMAIN,b.sf-syn.com
   - DOMAIN,b2.mcarchive.net
   - DOMAIN,b5x-sentry.1passwordservices.com
+  - DOMAIN,backinstock.useamp.com
   - DOMAIN,badbits.dwebops.pub
   - DOMAIN,badge.buildkite.com
   - DOMAIN,badge.fury.io
@@ -389,6 +391,7 @@ payload:
   - DOMAIN,builds.paranoidandroid.co
   - DOMAIN,builds.parsec.app
   - DOMAIN,bundle.5gtb.com
+  - DOMAIN,bundle.9gtb.com
   - DOMAIN,bundle.dyn-rev.app
   - DOMAIN,bundle.trysavvy.com
   - DOMAIN,bundlephobia.com
@@ -428,6 +431,7 @@ payload:
   - DOMAIN,cache.agilebits.com
   - DOMAIN,cache.armorgames.com
   - DOMAIN,cache.hackedfreegames.com
+  - DOMAIN,cache.industry.siemens.com
   - DOMAIN,cache.omnicalculator.com
   - DOMAIN,cache.pack.google.com
   - DOMAIN,cache.video.iqiyi.com
@@ -441,6 +445,7 @@ payload:
   - DOMAIN,cdn-1.ggjav.com
   - DOMAIN,cdn-1.strava.com
   - DOMAIN,cdn-a.sonyentertainmentnetwork.com
+  - DOMAIN,cdn-app.cart-bot.net
   - DOMAIN,cdn-app.pathfactory.com
   - DOMAIN,cdn-assets.circleci.com
   - DOMAIN,cdn-avatars.huggingface.co
@@ -1167,6 +1172,7 @@ payload:
   - DOMAIN,damassets.autodesk.net
   - DOMAIN,dashasiafox.akamaized.netflix
   - DOMAIN,dassets.shimano.com
+  - DOMAIN,data.cdn.siemens.com
   - DOMAIN,data.gameflare.com
   - DOMAIN,data.osmand.net
   - DOMAIN,data.pendo.io
@@ -1352,6 +1358,7 @@ payload:
   - DOMAIN,embed.tawk.to
   - DOMAIN,embed.ted.com
   - DOMAIN,embed.typeform.com
+  - DOMAIN,embed.zenn.studio
   - DOMAIN,emby-cdn1.nebula-media.org
   - DOMAIN,emoji-css.afeld.me
   - DOMAIN,emos.plurk.com
@@ -1741,6 +1748,7 @@ payload:
   - DOMAIN,images.en.aptoide.com
   - DOMAIN,images.everyplate.com
   - DOMAIN,images.fandango.com
+  - DOMAIN,images.filepuma.com
   - DOMAIN,images.financemagnates.com
   - DOMAIN,images.findagrave.com
   - DOMAIN,images.flightradar24.com
@@ -1940,6 +1948,7 @@ payload:
   - DOMAIN,ims.windy.com
   - DOMAIN,info.cloudflare.com
   - DOMAIN,info.knak.com
+  - DOMAIN,instafeed.nfcube.com
   - DOMAIN,install.virtfusion.net
   - DOMAIN,int.mwbbiz.com
   - DOMAIN,integrations.gitbook.com
@@ -2014,6 +2023,7 @@ payload:
   - DOMAIN,launcher.spot.im
   - DOMAIN,lc.nssurge.com
   - DOMAIN,lcdn-locator.apple.com
+  - DOMAIN,learn-attachment.microsoft.com
   - DOMAIN,learn.optimizely.com
   - DOMAIN,lecontent.sololearn.com
   - DOMAIN,ledger-wp-website-s3-prd.ledger.com
@@ -2023,6 +2033,7 @@ payload:
   - DOMAIN,libraries.hund.io
   - DOMAIN,libs.quillbot.com
   - DOMAIN,lift-ai-js.marketlinc.com
+  - DOMAIN,light.spicegems.org
   - DOMAIN,limitless.cmax.ai
   - DOMAIN,link.storjshare.io
   - DOMAIN,linkstorage.linkfire.com
@@ -2066,7 +2077,9 @@ payload:
   - DOMAIN,marketplace-web-assets.vinted.com
   - DOMAIN,marwan.ma
   - DOMAIN,maven.google.com
+  - DOMAIN,maven.is-quite.gay
   - DOMAIN,maven.kr328.app
+  - DOMAIN,maven.neoforged.net
   - DOMAIN,mcdn.vrporn.com
   - DOMAIN,mcdnds.vrporn.com
   - DOMAIN,mcdns.vrporn.com
@@ -2577,6 +2590,7 @@ payload:
   - DOMAIN,repo.hex.pm
   - DOMAIN,repo.nextdns.io
   - DOMAIN,repo.powerdns.com
+  - DOMAIN,repo.sleeping.town
   - DOMAIN,repo1.maven.org
   - DOMAIN,repository.jboss.org
   - DOMAIN,repository.su
@@ -2989,6 +3003,7 @@ payload:
   - DOMAIN,static.registration.bluehost.com
   - DOMAIN,static.reo.dev
   - DOMAIN,static.replay.io
+  - DOMAIN,static.returngo.ai
   - DOMAIN,static.roboflow.com
   - DOMAIN,static.rust-lang.org
   - DOMAIN,static.salidzini.lv
@@ -3041,6 +3056,7 @@ payload:
   - DOMAIN,static.yfsp.tv
   - DOMAIN,static.zaobao.com
   - DOMAIN,static.zaobao.com.sg
+  - DOMAIN,static.zenn.studio
   - DOMAIN,static.zerochan.net
   - DOMAIN,static.zuora.com
   - DOMAIN,static1.e621.net
@@ -3296,6 +3312,7 @@ payload:
   - DOMAIN,widget.automizely.com
   - DOMAIN,widget.datablocks.se
   - DOMAIN,widget.docsbot.ai
+  - DOMAIN,widget.finlogix.com
   - DOMAIN,widget.freshworks.com
   - DOMAIN,widget.gotolstoy.com
   - DOMAIN,widget.intercom.io
@@ -4237,6 +4254,7 @@ payload:
   - DOMAIN-SUFFIX,erocdn.co
   - DOMAIN-SUFFIX,eroimg.net
   - DOMAIN-SUFFIX,err.sh
+  - DOMAIN-SUFFIX,esc-apps-cdn.com
   - DOMAIN-SUFFIX,esm.run
   - DOMAIN-SUFFIX,esm.sh
   - DOMAIN-SUFFIX,espn.co.uk
@@ -5125,6 +5143,7 @@ payload:
   - DOMAIN-SUFFIX,media.strapiapp.com
   - DOMAIN-SUFFIX,media.tumblr.com
   - DOMAIN-SUFFIX,media.zestyio.com
+  - DOMAIN-SUFFIX,mediadecathlon.com
   - DOMAIN-SUFFIX,mediadelivery.net
   - DOMAIN-SUFFIX,mediafire.com
   - DOMAIN-SUFFIX,mediafree.co

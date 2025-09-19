@@ -1,5 +1,5 @@
-# Quantumult total line 4349
-# Last updated Tue 09/16/2025 22:13:37.13
+# Quantumult total line 4351
+# Last updated Fri 09/19/2025 22:14:47.85
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe,LIST
 HOST,a.iqmtp.live,LIST
@@ -13,6 +13,7 @@ HOST,cn.download.nvidia.com,LIST
 HOST,config.ubnt.com,LIST
 HOST,console.gl-inet.com,LIST
 HOST,dl.ubnt.com,LIST
+HOST,dot.pub,LIST
 HOST,download.jetbrains.com,LIST
 HOST,gstore.val.manlaxy.com,LIST
 HOST,homerouter.cpe,LIST
@@ -186,6 +187,7 @@ HOST-SUFFIX,360kuai.com,LIST
 HOST-SUFFIX,360os.com,LIST
 HOST-SUFFIX,360safe.com,LIST
 HOST-SUFFIX,360shouji.com,LIST
+HOST-SUFFIX,360simg.com,LIST
 HOST-SUFFIX,360taojin.com,LIST
 HOST-SUFFIX,360top.com,LIST
 HOST-SUFFIX,360totalsecurity.com,LIST
