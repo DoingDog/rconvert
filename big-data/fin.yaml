@@ -1,5 +1,5 @@
-# Clash total line 7480
-# Last updated Fri 09/19/2025 22:14:35.02
+# Clash total line 7482
+# Last updated Mon 09/22/2025 22:15:53.62
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -773,6 +773,7 @@ payload:
   - DOMAIN,cdn.quickemailverification.com
   - DOMAIN,cdn.rauno.me
   - DOMAIN,cdn.readme.io
+  - DOMAIN,cdn.readmoo.com
   - DOMAIN,cdn.ready-market.com.tw
   - DOMAIN,cdn.rebuyengine.com
   - DOMAIN,cdn.recovermycart.com
@@ -2566,6 +2567,7 @@ payload:
   - DOMAIN,raw.github.com
   - DOMAIN,rawmarkdown.cloudflareaccess.org
   - DOMAIN,rbds-static.redbull.com
+  - DOMAIN,reader.readmoo.com
   - DOMAIN,rebound.postmarkapp.com
   - DOMAIN,redircdn.com
   - DOMAIN,redstone-launcher.mojang.com
