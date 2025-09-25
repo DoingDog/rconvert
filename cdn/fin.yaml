@@ -1,5 +1,5 @@
-# Clash total line 3937
-# Last updated Mon 09/22/2025 22:15:35.66
+# Clash total line 3943
+# Last updated Thu 09/25/2025 22:14:31.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1002,6 +1002,7 @@ payload:
   - DOMAIN,comm.res.easebar.com
   - DOMAIN,common-header.nimg.jp
   - DOMAIN,components.clever-cloud.com
+  - DOMAIN,components.cyclingfactory.be
   - DOMAIN,components.justanswer.com
   - DOMAIN,components.trynow.net
   - DOMAIN,components.unrealengine.com
@@ -1409,6 +1410,7 @@ payload:
   - DOMAIN,images.contentful.com
   - DOMAIN,images.contentstack.io
   - DOMAIN,images.crunchbase.com
+  - DOMAIN,images.cyclingfactory.be
   - DOMAIN,images.design-editor.com
   - DOMAIN,images.dmca.com
   - DOMAIN,images.drata.com
@@ -1487,6 +1489,7 @@ payload:
   - DOMAIN,img-api.mac4ever.com
   - DOMAIN,img-cos.mandaoo.com
   - DOMAIN,img-en.fs.com
+  - DOMAIN,img-fnc.ebc.net.tw
   - DOMAIN,img-prod-cms-rt-microsoft-com.akamaized.net
   - DOMAIN,img-s-msn-com.akamaized.net
   - DOMAIN,img.177pica.com
@@ -1749,6 +1752,7 @@ payload:
   - DOMAIN,media-s3-us-east-1.ceros.com
   - DOMAIN,media.beehiiv.com
   - DOMAIN,media.breitbart.com
+  - DOMAIN,media.bundlehunt.com
   - DOMAIN,media.cleanshot.cloud
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.cnn.com
@@ -2027,6 +2031,7 @@ payload:
   - DOMAIN,r2.leadsy.ai
   - DOMAIN,r2cdn.myshopline.com
   - DOMAIN,r2cdn.perplexity.ai
+  - DOMAIN,r34xyz.b-cdn.net
   - DOMAIN,rapid-cdn.yottaa.com
   - DOMAIN,raw.github.com
   - DOMAIN,rawmarkdown.cloudflareaccess.org
@@ -2633,6 +2638,7 @@ payload:
   - DOMAIN,thumbs.onlyfans.com
   - DOMAIN,thumbs2.sendvid.com
   - DOMAIN,thumbsnap.com
+  - DOMAIN,tile2.intervals.icu
   - DOMAIN,tiles.openfreemap.org
   - DOMAIN,tiles.stadiamaps.com
   - DOMAIN,tiles.versatiles.org

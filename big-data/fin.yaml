@@ -1,5 +1,5 @@
-# Clash total line 7482
-# Last updated Mon 09/22/2025 22:15:53.62
+# Clash total line 7489
+# Last updated Thu 09/25/2025 22:14:49.15
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1061,6 +1061,7 @@ payload:
   - DOMAIN,codeload.github.com
   - DOMAIN,comm.res.easebar.com
   - DOMAIN,components.clever-cloud.com
+  - DOMAIN,components.cyclingfactory.be
   - DOMAIN,components.justanswer.com
   - DOMAIN,components.trynow.net
   - DOMAIN,components.unrealengine.com
@@ -1741,6 +1742,7 @@ payload:
   - DOMAIN,images.contentful.com
   - DOMAIN,images.contentstack.io
   - DOMAIN,images.crunchbase.com
+  - DOMAIN,images.cyclingfactory.be
   - DOMAIN,images.design-editor.com
   - DOMAIN,images.dmca.com
   - DOMAIN,images.drata.com
@@ -1817,6 +1819,7 @@ payload:
   - DOMAIN,img-api.mac4ever.com
   - DOMAIN,img-cos.mandaoo.com
   - DOMAIN,img-en.fs.com
+  - DOMAIN,img-fnc.ebc.net.tw
   - DOMAIN,img.177pica.com
   - DOMAIN,img.3movs.com
   - DOMAIN,img.4gamers.com.tw
@@ -2092,6 +2095,7 @@ payload:
   - DOMAIN,media-s3-us-east-1.ceros.com
   - DOMAIN,media.beehiiv.com
   - DOMAIN,media.breitbart.com
+  - DOMAIN,media.bundlehunt.com
   - DOMAIN,media.cleanshot.cloud
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.contentapi.ea.com
@@ -2563,6 +2567,7 @@ payload:
   - DOMAIN,r2.1hanime.com
   - DOMAIN,r2.leadsy.ai
   - DOMAIN,r2cdn.myshopline.com
+  - DOMAIN,r34xyz.b-cdn.net
   - DOMAIN,rapid-cdn.yottaa.com
   - DOMAIN,raw.github.com
   - DOMAIN,rawmarkdown.cloudflareaccess.org
@@ -2583,6 +2588,7 @@ payload:
   - DOMAIN,releases.arc.net
   - DOMAIN,releases.grapheneos.org
   - DOMAIN,releases.obsidian.md
+  - DOMAIN,releases.stash.ws
   - DOMAIN,releases.warp.dev
   - DOMAIN,releases.whatpulse.org
   - DOMAIN,renderer-assets.typeform.com
@@ -3163,6 +3169,7 @@ payload:
   - DOMAIN,thumbor.forbes.com
   - DOMAIN,thumbs.onlyfans.com
   - DOMAIN,thumbsnap.com
+  - DOMAIN,tile2.intervals.icu
   - DOMAIN,tiles.openfreemap.org
   - DOMAIN,tiles.stadiamaps.com
   - DOMAIN,tiles.versatiles.org
