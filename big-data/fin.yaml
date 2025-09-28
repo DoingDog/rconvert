@@ -1,5 +1,5 @@
-# Clash total line 7489
-# Last updated Thu 09/25/2025 22:14:49.15
+# Clash total line 7495
+# Last updated Sun 09/28/2025 22:16:53.77
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -202,6 +202,7 @@ payload:
   - DOMAIN,assets.dify.ai
   - DOMAIN,assets.dnsfilter.com
   - DOMAIN,assets.documentcloud.org
+  - DOMAIN,assets.dub.co
   - DOMAIN,assets.dwncdn.net
   - DOMAIN,assets.ecomm.ui.com
   - DOMAIN,assets.embeddables.com
@@ -866,6 +867,7 @@ payload:
   - DOMAIN,cdn.viglink.com
   - DOMAIN,cdn.violet.vin
   - DOMAIN,cdn.virtuoussoftware.com
+  - DOMAIN,cdn.vnoc.com
   - DOMAIN,cdn.vuukle.com
   - DOMAIN,cdn.wccftech.com
   - DOMAIN,cdn.webclicks24.com
@@ -1653,6 +1655,7 @@ payload:
   - DOMAIN,i.jpg.dog
   - DOMAIN,i.kickstarter.com
   - DOMAIN,i.loli.best
+  - DOMAIN,i.magecdn.com
   - DOMAIN,i.mediatek.com
   - DOMAIN,i.mij.rip
   - DOMAIN,i.mt.lv
@@ -2622,6 +2625,7 @@ payload:
   - DOMAIN,resources.help.salesforce.com
   - DOMAIN,resources.whatwg.org
   - DOMAIN,rest.happierleads.com
+  - DOMAIN,reviews-badge.capterra.com
   - DOMAIN,rpg.pic-imges.com
   - DOMAIN,rpm.xpipe.io
   - DOMAIN,rs-cdn.splashtop.com
@@ -3111,6 +3115,7 @@ payload:
   - DOMAIN,storage.ko-fi.com
   - DOMAIN,storage.moegirl.tw
   - DOMAIN,storage.sciencecast.org
+  - DOMAIN,storage.tally.so
   - DOMAIN,storage.windiscover.com
   - DOMAIN,storage.withfabric.xyz
   - DOMAIN,storageapi.fleek.co
@@ -3303,6 +3308,7 @@ payload:
   - DOMAIN,web-assets.strava.com
   - DOMAIN,web-assets.waze.com
   - DOMAIN,web-cdn.bitrise.io
+  - DOMAIN,web-cdn.bsky.app
   - DOMAIN,web-sdk-cdn.eyefitu.com
   - DOMAIN,web-sdk.eyefitu.com
   - DOMAIN,web-starharn.nebula-media.org
