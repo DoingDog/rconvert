@@ -1,5 +1,5 @@
-# Quantumult total line 4352
-# Last updated Wed 10/01/2025 22:15:53.46
+# Quantumult total line 4355
+# Last updated Sat 10/04/2025 22:14:20.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe,LIST
 HOST,a.iqmtp.live,LIST
@@ -8,6 +8,7 @@ HOST,aterm.me,LIST
 HOST,blzddist1-a.akamaihd.net,LIST
 HOST,captive.apple.com,LIST
 HOST,cdn.angruo.com,LIST
+HOST,cdn.lilyemby.com,LIST
 HOST,client.amplifi.com,LIST
 HOST,cn.download.nvidia.com,LIST
 HOST,config.ubnt.com,LIST
@@ -42,6 +43,7 @@ HOST,setmeup.arubanetworks.com,LIST
 HOST,sms.imagetasks.com,LIST
 HOST,speedtest.macpaw.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
+HOST,tx.lilyemby.com,LIST
 HOST,unifi,LIST
 HOST,www.layuicdn.com,LIST
 HOST,www.libvideo.com,LIST
@@ -2126,6 +2128,7 @@ HOST-SUFFIX,jiayuan.com,LIST
 HOST-SUFFIX,jiazhao.com,LIST
 HOST-SUFFIX,jibencaozuo.com,LIST
 HOST-SUFFIX,jidian.im,LIST
+HOST-SUFFIX,jiedaibao.gs,LIST
 HOST-SUFFIX,jiemeng8.com,LIST
 HOST-SUFFIX,jiemian.com,LIST
 HOST-SUFFIX,jikeiot.cloud,LIST

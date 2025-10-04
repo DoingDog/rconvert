@@ -1,5 +1,5 @@
-# Clash total line 7511
-# Last updated Wed 10/01/2025 22:15:36.86
+# Clash total line 7516
+# Last updated Sat 10/04/2025 22:14:07.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1993,6 +1993,7 @@ payload:
   - DOMAIN,js.klarn.com
   - DOMAIN,js.klarna.com
   - DOMAIN,js.memberful.com
+  - DOMAIN,js.nagich.co.il
   - DOMAIN,js.navattic.com
   - DOMAIN,js.partnerstack.com
   - DOMAIN,js.pngtree.com
@@ -2805,6 +2806,7 @@ payload:
   - DOMAIN,sp.replit.com
   - DOMAIN,sp.streamlabs.com
   - DOMAIN,spcdn.incartupsell.com
+  - DOMAIN,speedmedia2.jfrog.com
   - DOMAIN,spotlightimage.biggo.com
   - DOMAIN,sprig.figma.com
   - DOMAIN,ssl.gstatic.com
@@ -2846,6 +2848,7 @@ payload:
   - DOMAIN,static-cdn.bytegiftia.top
   - DOMAIN,static-cdn.spot.im
   - DOMAIN,static-cdn.usertesting.com
+  - DOMAIN,static-cf.foxdata.com
   - DOMAIN,static-clst.avgle.com
   - DOMAIN,static-community.tp-link.com
   - DOMAIN,static-dm.ubisoft.com
@@ -2889,6 +2892,7 @@ payload:
   - DOMAIN,static.bit.cloud
   - DOMAIN,static.bit.dev
   - DOMAIN,static.bitfinex.com
+  - DOMAIN,static.bodor.com
   - DOMAIN,static.bravoporn.com
   - DOMAIN,static.buffer.com
   - DOMAIN,static.buydomains.com
@@ -3006,6 +3010,7 @@ payload:
   - DOMAIN,static.onlinewebfonts.com
   - DOMAIN,static.onlyfans.com
   - DOMAIN,static.oomol.com
+  - DOMAIN,static.openreplay.com
   - DOMAIN,static.opensea.io
   - DOMAIN,static.parallels.com
   - DOMAIN,static.peatio.com
