@@ -1,5 +1,5 @@
-# Quantumult total line 7508
-# Last updated Tue 10/07/2025 22:14:54.45
+# Quantumult total line 7518
+# Last updated Fri 10/10/2025 22:14:44.06
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -149,6 +149,7 @@ HOST,assets-app.circleci.com,LIST
 HOST,assets-cdn.123rf.com,LIST
 HOST,assets-cdn.abcnews.com,LIST
 HOST,assets-cdn.abcotvs.net,LIST
+HOST,assets-cdn.anh.moe,LIST
 HOST,assets-cdn.jable.tv,LIST
 HOST,assets-cdn.porn.com,LIST
 HOST,assets-cms.kraken.com,LIST
@@ -521,6 +522,7 @@ HOST,cdn.adguard.info,LIST
 HOST,cdn.adsninja.ca,LIST
 HOST,cdn.aimerce.ai,LIST
 HOST,cdn.amcharts.com,LIST
+HOST,cdn.amh.moe,LIST
 HOST,cdn.announcekit.app,LIST
 HOST,cdn.answeroverflow.com,LIST
 HOST,cdn.app.fossa.com,LIST
@@ -1333,6 +1335,7 @@ HOST,drop.ndtv.com,LIST
 HOST,drscdn.500px.org,LIST
 HOST,dw.uptodown.net,LIST
 HOST,dynamic-assets.coinbase.com,LIST
+HOST,dynamic-cdn.cms.ayoba.me,LIST
 HOST,dz2cdn1.dzone.com,LIST
 HOST,e.calibermind.com,LIST
 HOST,e.deviantart.net,LIST
@@ -1608,6 +1611,7 @@ HOST,gopkg.in,LIST
 HOST,graph.facebook.com,LIST
 HOST,gravatar.cat.net,LIST
 HOST,gravatar.tapglb.com,LIST
+HOST,groundnews.b-cdn.net,LIST
 HOST,gspe1-ssl.ls.apple.com,LIST
 HOST,gstatic.com,LIST
 HOST,gstatic.olympics.com,LIST
@@ -2102,6 +2106,7 @@ HOST,media-cdn.atlassian.com,LIST
 HOST,media-cdn.comfy.social,LIST
 HOST,media-cdn.epicgames.com,LIST
 HOST,media-central.indianexpress.com,LIST
+HOST,media-cms.ayoba.me,LIST
 HOST,media-cms.onesignal.com,LIST
 HOST,media-s3-us-east-1.ceros.com,LIST
 HOST,media.beehiiv.com,LIST
@@ -2955,6 +2960,7 @@ HOST,static.gigabyte.com,LIST
 HOST,static.gitbook.com,LIST
 HOST,static.gl-inet.com,LIST
 HOST,static.global.visioncritical.com,LIST
+HOST,static.gmgard.com,LIST
 HOST,static.gnome.org,LIST
 HOST,static.gopro.com,LIST
 HOST,static.grammarly.com,LIST
@@ -3196,6 +3202,7 @@ HOST,thumbor.forbes.com,LIST
 HOST,thumbs.onlyfans.com,LIST
 HOST,thumbsnap.com,LIST
 HOST,tile2.intervals.icu,LIST
+HOST,tiles.meteoguard.dtn.com,LIST
 HOST,tiles.openfreemap.org,LIST
 HOST,tiles.stadiamaps.com,LIST
 HOST,tiles.versatiles.org,LIST
@@ -3325,6 +3332,7 @@ HOST,wandi-6402.kxcdn.com,LIST
 HOST,wcpstatic.microsoft.com,LIST
 HOST,wctour-images.worldchess.com,LIST
 HOST,weather.istatmenus.app,LIST
+HOST,web-api-cdn.ground.news,LIST
 HOST,web-assets.esetstatic.com,LIST
 HOST,web-assets.ifttt.com,LIST
 HOST,web-assets.otogi-frontier.com,LIST
@@ -3514,6 +3522,8 @@ HOST-SUFFIX,alonestreaming.com,LIST
 HOST-SUFFIX,alphafish.top,LIST
 HOST-SUFFIX,alphatvapp.top,LIST
 HOST-SUFFIX,alterupload.com,LIST
+HOST-SUFFIX,am-cdn.online,LIST
+HOST-SUFFIX,am-cdn.pics,LIST
 HOST-SUFFIX,amaicdn.com,LIST
 HOST-SUFFIX,amazon.jobs,LIST
 HOST-SUFFIX,amazonaws.co.uk,LIST
