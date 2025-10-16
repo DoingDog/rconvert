@@ -1,5 +1,5 @@
-# Quantumult total line 7518
-# Last updated Mon 10/13/2025 22:15:21.84
+# Quantumult total line 7533
+# Last updated Thu 10/16/2025 22:13:25.55
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1029,8 +1029,10 @@ HOST,chatwidgetmetrics-proxy.usepylon.com,LIST
 HOST,checkout-sdk.bigcommerce.com,LIST
 HOST,checkout.stripe.com,LIST
 HOST,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv,LIST
+HOST,chunk-composing.canva.com,LIST
 HOST,ci.testling.com,LIST
 HOST,cimg.cnyes.cool,LIST
+HOST,cisco.yuntu.com.tw,LIST
 HOST,ciscobinary.openh264.org,LIST
 HOST,claritystatic.azureedge.net,LIST
 HOST,clarkson.edu,LIST
@@ -1424,6 +1426,7 @@ HOST,favicon.pirsch.io,LIST
 HOST,favicon.yandex.net,LIST
 HOST,favicons.nextdns.io,LIST
 HOST,favicons.teams.cloudflare.com,LIST
+HOST,fdisk.5play.app,LIST
 HOST,fdn.gsmarena.com,LIST
 HOST,fdn2.gsmarena.com,LIST
 HOST,featureflags.netlify.com,LIST
@@ -1460,6 +1463,7 @@ HOST,firebaseremoteconfig.googleapis.com,LIST
 HOST,firefox.settings.services.mozilla.com,LIST
 HOST,flo.uri.sh,LIST
 HOST,flows.trysavvy.com,LIST
+HOST,font-public.canva.com,LIST
 HOST,fonts.bunny.net,LIST
 HOST,fonts.cat.net,LIST
 HOST,fonts.codeberg.org,LIST
@@ -1735,6 +1739,7 @@ HOST,image.thefly.com,LIST
 HOST,image.tmdb.org,LIST
 HOST,image.vuukle.com,LIST
 HOST,image.westinyou.com,LIST
+HOST,image.yuntu.com.tw,LIST
 HOST,imagecdn.clips4sale.com,LIST
 HOST,imagehost.player.fm,LIST
 HOST,imageio.forbes.com,LIST
@@ -1797,6 +1802,7 @@ HOST,images.purevpn-tools.com,LIST
 HOST,images.samsung.com,LIST
 HOST,images.scalero.io,LIST
 HOST,images.scrolller.com,LIST
+HOST,images.softwaresuggest.com,LIST
 HOST,images.spot.im,LIST
 HOST,images.spr.so,LIST
 HOST,images.store.crowdstrike.com,LIST
@@ -2112,6 +2118,7 @@ HOST,media-s3-us-east-1.ceros.com,LIST
 HOST,media.beehiiv.com,LIST
 HOST,media.breitbart.com,LIST
 HOST,media.bundlehunt.com,LIST
+HOST,media.canva.com,LIST
 HOST,media.cleanshot.cloud,LIST
 HOST,media.cmx.edu.kg,LIST
 HOST,media.contentapi.ea.com,LIST
@@ -2165,6 +2172,7 @@ HOST,media.shopimind.com,LIST
 HOST,media.smooch.io,LIST
 HOST,media.steampowered.com,LIST
 HOST,media.tailfin.cc,LIST
+HOST,media.technologycounter.com,LIST
 HOST,media.telanganatoday.com,LIST
 HOST,media.tenor.com,LIST
 HOST,media.themoviedb.org,LIST
@@ -2370,6 +2378,7 @@ HOST,mirrors.xtom.jp,LIST
 HOST,mirrors.xtom.nl,LIST
 HOST,mirrors.xtom.sg,LIST
 HOST,mirrors.xtom.us,LIST
+HOST,mirrors.yuntu.com.tw,LIST
 HOST,mixin-images.zeromesh.net,LIST
 HOST,mkt-site-asset.crypto.com,LIST
 HOST,mobilecenter.azureedge.net,LIST
@@ -2421,6 +2430,7 @@ HOST,oaos-resources.allstate.com,LIST
 HOST,object.innei.in,LIST
 HOST,objects.g0v.social,LIST
 HOST,objects.hit.moe,LIST
+HOST,ocsp.comodoca.com,LIST
 HOST,ocsp.digicert.com,LIST
 HOST,ocsp.godaddy.com,LIST
 HOST,ocsp.sectigo.com,LIST
@@ -2429,6 +2439,7 @@ HOST,oct8neproxy.azurewebsites.net,LIST
 HOST,ocvideo.apple.com,LIST
 HOST,officecdnmac.microsoft.com,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
+HOST,oneocsp.microsoft.com,LIST
 HOST,onepluscommunityserver.com,LIST
 HOST,ooo.0o0.ooo,LIST
 HOST,open-vsx.org,LIST
@@ -3175,6 +3186,7 @@ HOST,t3.gstatic.com,LIST
 HOST,t3.picb.cc,LIST
 HOST,t4.picb.cc,LIST
 HOST,tag.trovo-tag.com,LIST
+HOST,tag.tvads.ai,LIST
 HOST,tag.unifyintent.com,LIST
 HOST,tags.nationwide.com,LIST
 HOST,tags.nba.com,LIST
@@ -3251,6 +3263,7 @@ HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,unsubscribe-imgs.leavemealone.com,LIST
 HOST,uos-support-files.svc.ui.com,LIST
 HOST,update.code.visualstudio.com,LIST
+HOST,update.cyberduck.io,LIST
 HOST,update.googleapis.com,LIST
 HOST,update.greasyfork.org,LIST
 HOST,update.parallels.com,LIST
@@ -3481,6 +3494,7 @@ HOST-SUFFIX,aboutamazon.com,LIST
 HOST-SUFFIX,aconvert.com,LIST
 HOST-SUFFIX,addons.business,LIST
 HOST-SUFFIX,adguard.io,LIST
+HOST-SUFFIX,adguardcdn.com,LIST
 HOST-SUFFIX,adobeccstatic.com,LIST
 HOST-SUFFIX,adobedtm.com,LIST
 HOST-SUFFIX,adrive.com,LIST
@@ -5732,6 +5746,7 @@ HOST-SUFFIX,qy0.ru,LIST
 HOST-SUFFIX,r2.dev,LIST
 HOST-SUFFIX,racaty.com,LIST
 HOST-SUFFIX,racaty.net,LIST
+HOST-SUFFIX,rackcdn.com,LIST
 HOST-SUFFIX,racked.com,LIST
 HOST-SUFFIX,radiotunes.com,LIST
 HOST-SUFFIX,radix-ui.com,LIST

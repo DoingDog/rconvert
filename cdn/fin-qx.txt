@@ -1,5 +1,5 @@
-# Quantumult total line 3988
-# Last updated Mon 10/13/2025 22:15:09.93
+# Quantumult total line 3999
+# Last updated Thu 10/16/2025 22:13:11.56
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -976,6 +976,7 @@ HOST,chat.digitalgenius.com,LIST
 HOST,chatwidgetmetrics-proxy.usepylon.com,LIST
 HOST,checkout-sdk.bigcommerce.com,LIST
 HOST,checkout.stripe.com,LIST
+HOST,chunk-composing.canva.com,LIST
 HOST,ci.testling.com,LIST
 HOST,cimg.cnyes.cool,LIST
 HOST,claritystatic.azureedge.net,LIST
@@ -1237,6 +1238,7 @@ HOST,firebaseremoteconfig.googleapis.com,LIST
 HOST,firefox.settings.services.mozilla.com,LIST
 HOST,flo.uri.sh,LIST
 HOST,flows.trysavvy.com,LIST
+HOST,font-public.canva.com,LIST
 HOST,fonts.bunny.net,LIST
 HOST,fonts.cat.net,LIST
 HOST,fonts.codeberg.org,LIST
@@ -1403,6 +1405,7 @@ HOST,image.thefly.com,LIST
 HOST,image.tmdb.org,LIST
 HOST,image.vuukle.com,LIST
 HOST,image.westinyou.com,LIST
+HOST,image.yuntu.com.tw,LIST
 HOST,imagecdn.clips4sale.com,LIST
 HOST,imagehost.player.fm,LIST
 HOST,imageio.forbes.com,LIST
@@ -1469,6 +1472,7 @@ HOST,images.purevpn-tools.com,LIST
 HOST,images.samsung.com,LIST
 HOST,images.scalero.io,LIST
 HOST,images.scrolller.com,LIST
+HOST,images.softwaresuggest.com,LIST
 HOST,images.spot.im,LIST
 HOST,images.spr.so,LIST
 HOST,images.store.crowdstrike.com,LIST
@@ -1771,6 +1775,7 @@ HOST,media-s3-us-east-1.ceros.com,LIST
 HOST,media.beehiiv.com,LIST
 HOST,media.breitbart.com,LIST
 HOST,media.bundlehunt.com,LIST
+HOST,media.canva.com,LIST
 HOST,media.cleanshot.cloud,LIST
 HOST,media.cmx.edu.kg,LIST
 HOST,media.cnn.com,LIST
@@ -1826,6 +1831,7 @@ HOST,media.shopimind.com,LIST
 HOST,media.smooch.io,LIST
 HOST,media.steampowered.com,LIST
 HOST,media.tailfin.cc,LIST
+HOST,media.technologycounter.com,LIST
 HOST,media.telanganatoday.com,LIST
 HOST,media.tenor.com,LIST
 HOST,media.themoviedb.org,LIST
@@ -1898,12 +1904,14 @@ HOST,oaos-resources.allstate.com,LIST
 HOST,object.innei.in,LIST
 HOST,objects.g0v.social,LIST
 HOST,objects.hit.moe,LIST
+HOST,ocsp.comodoca.com,LIST
 HOST,ocsp.digicert.com,LIST
 HOST,ocsp.godaddy.com,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,ocsp.usertrust.com,LIST
 HOST,oct8neproxy.azurewebsites.net,LIST
 HOST,ohttp-relay1.fastly-edge.com,LIST
+HOST,oneocsp.microsoft.com,LIST
 HOST,ooo.0o0.ooo,LIST
 HOST,open-vsx.org,LIST
 HOST,openapi.vercel.sh,LIST
@@ -2643,6 +2651,7 @@ HOST,t3.gstatic.com,LIST
 HOST,t3.picb.cc,LIST
 HOST,t4.picb.cc,LIST
 HOST,tag.trovo-tag.com,LIST
+HOST,tag.tvads.ai,LIST
 HOST,tag.unifyintent.com,LIST
 HOST,tags.nationwide.com,LIST
 HOST,tags.nba.com,LIST
@@ -2893,6 +2902,7 @@ HOST-SUFFIX,abc-cdn.net.au,LIST
 HOST-SUFFIX,abcnewsfe.com,LIST
 HOST-SUFFIX,abebookscdn.com,LIST
 HOST-SUFFIX,addons.business,LIST
+HOST-SUFFIX,adguardcdn.com,LIST
 HOST-SUFFIX,adobeccstatic.com,LIST
 HOST-SUFFIX,adtidy.org,LIST
 HOST-SUFFIX,agechecker-northern-apps.com,LIST
@@ -3662,6 +3672,7 @@ HOST-SUFFIX,quip-cdn.com,LIST
 HOST-SUFFIX,quip-marketing.com,LIST
 HOST-SUFFIX,quoracdn.net,LIST
 HOST-SUFFIX,qy0.ru,LIST
+HOST-SUFFIX,rackcdn.com,LIST
 HOST-SUFFIX,radix-ui.com,LIST
 HOST-SUFFIX,randomuser.me,LIST
 HOST-SUFFIX,ravencoinipfs-gateway.com,LIST

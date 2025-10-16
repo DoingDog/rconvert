@@ -1,5 +1,5 @@
-# Clash total line 7532
-# Last updated Mon 10/13/2025 22:15:21.89
+# Clash total line 7547
+# Last updated Thu 10/16/2025 22:13:25.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1030,8 +1030,10 @@ payload:
   - DOMAIN,checkout-sdk.bigcommerce.com
   - DOMAIN,checkout.stripe.com
   - DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
+  - DOMAIN,chunk-composing.canva.com
   - DOMAIN,ci.testling.com
   - DOMAIN,cimg.cnyes.cool
+  - DOMAIN,cisco.yuntu.com.tw
   - DOMAIN,ciscobinary.openh264.org
   - DOMAIN,claritystatic.azureedge.net
   - DOMAIN,clarkson.edu
@@ -1425,6 +1427,7 @@ payload:
   - DOMAIN,favicon.yandex.net
   - DOMAIN,favicons.nextdns.io
   - DOMAIN,favicons.teams.cloudflare.com
+  - DOMAIN,fdisk.5play.app
   - DOMAIN,fdn.gsmarena.com
   - DOMAIN,fdn2.gsmarena.com
   - DOMAIN,featureflags.netlify.com
@@ -1461,6 +1464,7 @@ payload:
   - DOMAIN,firefox.settings.services.mozilla.com
   - DOMAIN,flo.uri.sh
   - DOMAIN,flows.trysavvy.com
+  - DOMAIN,font-public.canva.com
   - DOMAIN,fonts.bunny.net
   - DOMAIN,fonts.cat.net
   - DOMAIN,fonts.codeberg.org
@@ -1736,6 +1740,7 @@ payload:
   - DOMAIN,image.tmdb.org
   - DOMAIN,image.vuukle.com
   - DOMAIN,image.westinyou.com
+  - DOMAIN,image.yuntu.com.tw
   - DOMAIN,imagecdn.clips4sale.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
@@ -1798,6 +1803,7 @@ payload:
   - DOMAIN,images.samsung.com
   - DOMAIN,images.scalero.io
   - DOMAIN,images.scrolller.com
+  - DOMAIN,images.softwaresuggest.com
   - DOMAIN,images.spot.im
   - DOMAIN,images.spr.so
   - DOMAIN,images.store.crowdstrike.com
@@ -2113,6 +2119,7 @@ payload:
   - DOMAIN,media.beehiiv.com
   - DOMAIN,media.breitbart.com
   - DOMAIN,media.bundlehunt.com
+  - DOMAIN,media.canva.com
   - DOMAIN,media.cleanshot.cloud
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.contentapi.ea.com
@@ -2166,6 +2173,7 @@ payload:
   - DOMAIN,media.smooch.io
   - DOMAIN,media.steampowered.com
   - DOMAIN,media.tailfin.cc
+  - DOMAIN,media.technologycounter.com
   - DOMAIN,media.telanganatoday.com
   - DOMAIN,media.tenor.com
   - DOMAIN,media.themoviedb.org
@@ -2371,6 +2379,7 @@ payload:
   - DOMAIN,mirrors.xtom.nl
   - DOMAIN,mirrors.xtom.sg
   - DOMAIN,mirrors.xtom.us
+  - DOMAIN,mirrors.yuntu.com.tw
   - DOMAIN,mixin-images.zeromesh.net
   - DOMAIN,mkt-site-asset.crypto.com
   - DOMAIN,mobilecenter.azureedge.net
@@ -2422,6 +2431,7 @@ payload:
   - DOMAIN,object.innei.in
   - DOMAIN,objects.g0v.social
   - DOMAIN,objects.hit.moe
+  - DOMAIN,ocsp.comodoca.com
   - DOMAIN,ocsp.digicert.com
   - DOMAIN,ocsp.godaddy.com
   - DOMAIN,ocsp.sectigo.com
@@ -2430,6 +2440,7 @@ payload:
   - DOMAIN,ocvideo.apple.com
   - DOMAIN,officecdnmac.microsoft.com
   - DOMAIN,ohttp-relay1.fastly-edge.com
+  - DOMAIN,oneocsp.microsoft.com
   - DOMAIN,onepluscommunityserver.com
   - DOMAIN,ooo.0o0.ooo
   - DOMAIN,open-vsx.org
@@ -3176,6 +3187,7 @@ payload:
   - DOMAIN,t3.picb.cc
   - DOMAIN,t4.picb.cc
   - DOMAIN,tag.trovo-tag.com
+  - DOMAIN,tag.tvads.ai
   - DOMAIN,tag.unifyintent.com
   - DOMAIN,tags.nationwide.com
   - DOMAIN,tags.nba.com
@@ -3252,6 +3264,7 @@ payload:
   - DOMAIN,unsubscribe-imgs.leavemealone.com
   - DOMAIN,uos-support-files.svc.ui.com
   - DOMAIN,update.code.visualstudio.com
+  - DOMAIN,update.cyberduck.io
   - DOMAIN,update.googleapis.com
   - DOMAIN,update.greasyfork.org
   - DOMAIN,update.parallels.com
@@ -3482,6 +3495,7 @@ payload:
   - DOMAIN-SUFFIX,aconvert.com
   - DOMAIN-SUFFIX,addons.business
   - DOMAIN-SUFFIX,adguard.io
+  - DOMAIN-SUFFIX,adguardcdn.com
   - DOMAIN-SUFFIX,adobeccstatic.com
   - DOMAIN-SUFFIX,adobedtm.com
   - DOMAIN-SUFFIX,adrive.com
@@ -5733,6 +5747,7 @@ payload:
   - DOMAIN-SUFFIX,r2.dev
   - DOMAIN-SUFFIX,racaty.com
   - DOMAIN-SUFFIX,racaty.net
+  - DOMAIN-SUFFIX,rackcdn.com
   - DOMAIN-SUFFIX,racked.com
   - DOMAIN-SUFFIX,radiotunes.com
   - DOMAIN-SUFFIX,radix-ui.com

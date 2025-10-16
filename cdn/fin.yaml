@@ -1,5 +1,5 @@
-# Clash total line 3988
-# Last updated Mon 10/13/2025 22:15:09.97
+# Clash total line 3999
+# Last updated Thu 10/16/2025 22:13:11.61
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -977,6 +977,7 @@ payload:
   - DOMAIN,chatwidgetmetrics-proxy.usepylon.com
   - DOMAIN,checkout-sdk.bigcommerce.com
   - DOMAIN,checkout.stripe.com
+  - DOMAIN,chunk-composing.canva.com
   - DOMAIN,ci.testling.com
   - DOMAIN,cimg.cnyes.cool
   - DOMAIN,claritystatic.azureedge.net
@@ -1238,6 +1239,7 @@ payload:
   - DOMAIN,firefox.settings.services.mozilla.com
   - DOMAIN,flo.uri.sh
   - DOMAIN,flows.trysavvy.com
+  - DOMAIN,font-public.canva.com
   - DOMAIN,fonts.bunny.net
   - DOMAIN,fonts.cat.net
   - DOMAIN,fonts.codeberg.org
@@ -1404,6 +1406,7 @@ payload:
   - DOMAIN,image.tmdb.org
   - DOMAIN,image.vuukle.com
   - DOMAIN,image.westinyou.com
+  - DOMAIN,image.yuntu.com.tw
   - DOMAIN,imagecdn.clips4sale.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
@@ -1470,6 +1473,7 @@ payload:
   - DOMAIN,images.samsung.com
   - DOMAIN,images.scalero.io
   - DOMAIN,images.scrolller.com
+  - DOMAIN,images.softwaresuggest.com
   - DOMAIN,images.spot.im
   - DOMAIN,images.spr.so
   - DOMAIN,images.store.crowdstrike.com
@@ -1772,6 +1776,7 @@ payload:
   - DOMAIN,media.beehiiv.com
   - DOMAIN,media.breitbart.com
   - DOMAIN,media.bundlehunt.com
+  - DOMAIN,media.canva.com
   - DOMAIN,media.cleanshot.cloud
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.cnn.com
@@ -1827,6 +1832,7 @@ payload:
   - DOMAIN,media.smooch.io
   - DOMAIN,media.steampowered.com
   - DOMAIN,media.tailfin.cc
+  - DOMAIN,media.technologycounter.com
   - DOMAIN,media.telanganatoday.com
   - DOMAIN,media.tenor.com
   - DOMAIN,media.themoviedb.org
@@ -1899,12 +1905,14 @@ payload:
   - DOMAIN,object.innei.in
   - DOMAIN,objects.g0v.social
   - DOMAIN,objects.hit.moe
+  - DOMAIN,ocsp.comodoca.com
   - DOMAIN,ocsp.digicert.com
   - DOMAIN,ocsp.godaddy.com
   - DOMAIN,ocsp.sectigo.com
   - DOMAIN,ocsp.usertrust.com
   - DOMAIN,oct8neproxy.azurewebsites.net
   - DOMAIN,ohttp-relay1.fastly-edge.com
+  - DOMAIN,oneocsp.microsoft.com
   - DOMAIN,ooo.0o0.ooo
   - DOMAIN,open-vsx.org
   - DOMAIN,openapi.vercel.sh
@@ -2644,6 +2652,7 @@ payload:
   - DOMAIN,t3.picb.cc
   - DOMAIN,t4.picb.cc
   - DOMAIN,tag.trovo-tag.com
+  - DOMAIN,tag.tvads.ai
   - DOMAIN,tag.unifyintent.com
   - DOMAIN,tags.nationwide.com
   - DOMAIN,tags.nba.com
@@ -2894,6 +2903,7 @@ payload:
   - DOMAIN-SUFFIX,abcnewsfe.com
   - DOMAIN-SUFFIX,abebookscdn.com
   - DOMAIN-SUFFIX,addons.business
+  - DOMAIN-SUFFIX,adguardcdn.com
   - DOMAIN-SUFFIX,adobeccstatic.com
   - DOMAIN-SUFFIX,adtidy.org
   - DOMAIN-SUFFIX,agechecker-northern-apps.com
@@ -3663,6 +3673,7 @@ payload:
   - DOMAIN-SUFFIX,quip-marketing.com
   - DOMAIN-SUFFIX,quoracdn.net
   - DOMAIN-SUFFIX,qy0.ru
+  - DOMAIN-SUFFIX,rackcdn.com
   - DOMAIN-SUFFIX,radix-ui.com
   - DOMAIN-SUFFIX,randomuser.me
   - DOMAIN-SUFFIX,ravencoinipfs-gateway.com
