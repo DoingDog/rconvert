@@ -1,5 +1,5 @@
-# Clash total line 3999
-# Last updated Thu 10/16/2025 22:13:11.61
+# Clash total line 4001
+# Last updated Sun 10/19/2025 22:14:01.87
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -793,6 +793,7 @@ payload:
   - DOMAIN,cdn.termius.com
   - DOMAIN,cdn.theatlantic.com
   - DOMAIN,cdn.thenewstack.io
+  - DOMAIN,cdn.thewirecutter.com
   - DOMAIN,cdn.thingiverse.com
   - DOMAIN,cdn.tiny.cloud
   - DOMAIN,cdn.tinypass.com
@@ -1820,6 +1821,7 @@ payload:
   - DOMAIN,media.nbclosangeles.com
   - DOMAIN,media.nbcnewyork.com
   - DOMAIN,media.newyorker.com
+  - DOMAIN,media.nngroup.com
   - DOMAIN,media.nownews.com
   - DOMAIN,media.npr.org
   - DOMAIN,media.orz.uno
