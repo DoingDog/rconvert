@@ -1,5 +1,5 @@
-# Clash total line 7549
-# Last updated Sun 10/19/2025 22:14:14.34
+# Clash total line 7553
+# Last updated Wed 10/22/2025 22:14:38.97
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -677,6 +677,7 @@ payload:
   - DOMAIN,cdn.imageengine.io
   - DOMAIN,cdn.img.ly
   - DOMAIN,cdn.infoq.com
+  - DOMAIN,cdn.insightmediagroup.io
   - DOMAIN,cdn.ionos.de
   - DOMAIN,cdn.ip2location.io
   - DOMAIN,cdn.iporntv.net
@@ -1206,7 +1207,6 @@ payload:
   - DOMAIN,debian-archive.trafficmanager.net
   - DOMAIN,demo.unified-streaming.com
   - DOMAIN,demotiles.maplibre.org
-  - DOMAIN,denali-static.grammarly.com
   - DOMAIN,design-assets.hubspot.com
   - DOMAIN,design-system.yext.com
   - DOMAIN,design.codeberg.org
@@ -2524,6 +2524,7 @@ payload:
   - DOMAIN,pkg.cloudflareclient.com
   - DOMAIN,pkg.csb.dev
   - DOMAIN,pkgs.dev.azure.com
+  - DOMAIN,pkgs.netbird.io
   - DOMAIN,pkgs.tailscale.com
   - DOMAIN,pl.ea.com
   - DOMAIN,platform-assets.typekit.net
@@ -2977,7 +2978,6 @@ payload:
   - DOMAIN,static.gmgard.com
   - DOMAIN,static.gnome.org
   - DOMAIN,static.gopro.com
-  - DOMAIN,static.grammarly.com
   - DOMAIN,static.guim.co.uk
   - DOMAIN,static.heavy-r.com
   - DOMAIN,static.helpjuice.com
@@ -3129,6 +3129,7 @@ payload:
   - DOMAIN,static8.lottiefiles.com
   - DOMAIN,static9.lottiefiles.com
   - DOMAIN,staticctf.ubisoft.com
+  - DOMAIN,statici.icloud.com
   - DOMAIN,staticintl.cloudcachetci.com
   - DOMAIN,staticm.fastcomments.com
   - DOMAIN,statics.erothots.co
@@ -4455,6 +4456,7 @@ payload:
   - DOMAIN-SUFFIX,flk-ipfs.xyz
   - DOMAIN-SUFFIX,florenfile.com
   - DOMAIN-SUFFIX,fls-na.amazon.com
+  - DOMAIN-SUFFIX,flsrv.net
   - DOMAIN-SUFFIX,flxvpn.net
   - DOMAIN-SUFFIX,flyshare.me
   - DOMAIN-SUFFIX,flzbcdn.xyz
@@ -4676,6 +4678,7 @@ payload:
   - DOMAIN-SUFFIX,gammacdn.com
   - DOMAIN-SUFFIX,gateway.originprotocol.com
   - DOMAIN-SUFFIX,gateway.serph.network
+  - DOMAIN-SUFFIX,gauthstatic.com
   - DOMAIN-SUFFIX,gayzyimage.com
   - DOMAIN-SUFFIX,gcr.io
   - DOMAIN-SUFFIX,gcr.si
@@ -6580,6 +6583,7 @@ payload:
   - DOMAIN-KEYWORD,server30cdn1
   - DOMAIN-KEYWORD,skydrive
   - DOMAIN-KEYWORD,spotify
+  - DOMAIN-KEYWORD,static.grammarly.com
   - DOMAIN-KEYWORD,static.trustpilot.com
   - DOMAIN-KEYWORD,steamuserimages
   - DOMAIN-KEYWORD,strntt00

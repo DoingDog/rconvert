@@ -1,5 +1,5 @@
-# Quantumult total line 4001
-# Last updated Sun 10/19/2025 22:14:01.82
+# Quantumult total line 4004
+# Last updated Wed 10/22/2025 22:14:25.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -619,6 +619,7 @@ HOST,cdn.iconfinder.com,LIST
 HOST,cdn.imageengine.io,LIST
 HOST,cdn.img.ly,LIST
 HOST,cdn.infoq.com,LIST
+HOST,cdn.insightmediagroup.io,LIST
 HOST,cdn.ionos.de,LIST
 HOST,cdn.ip2location.io,LIST
 HOST,cdn.iporntv.net,LIST
@@ -1090,7 +1091,6 @@ HOST,dc-cdn.cdw.com,LIST
 HOST,dd.dexscreener.com,LIST
 HOST,demo.unified-streaming.com,LIST
 HOST,demotiles.maplibre.org,LIST
-HOST,denali-static.grammarly.com,LIST
 HOST,design-assets.hubspot.com,LIST
 HOST,design-system.yext.com,LIST
 HOST,design.codeberg.org,LIST
@@ -2434,7 +2434,6 @@ HOST,static.global.visioncritical.com,LIST
 HOST,static.gmgard.com,LIST
 HOST,static.gnome.org,LIST
 HOST,static.gopro.com,LIST
-HOST,static.grammarly.com,LIST
 HOST,static.guim.co.uk,LIST
 HOST,static.heavy-r.com,LIST
 HOST,static.helpjuice.com,LIST
@@ -2597,6 +2596,7 @@ HOST,static7.lottiefiles.com,LIST
 HOST,static8.lottiefiles.com,LIST
 HOST,static9.lottiefiles.com,LIST
 HOST,staticctf.ubisoft.com,LIST
+HOST,statici.icloud.com,LIST
 HOST,staticintl.cloudcachetci.com,LIST
 HOST,staticm.fastcomments.com,LIST
 HOST,statics-marketingsites-eas-ms-com.akamaized.net,LIST
@@ -3228,6 +3228,7 @@ HOST-SUFFIX,flagcdn.com,LIST
 HOST-SUFFIX,flaglog.com,LIST
 HOST-SUFFIX,flagpedia.net,LIST
 HOST-SUFFIX,flk-ipfs.xyz,LIST
+HOST-SUFFIX,flsrv.net,LIST
 HOST-SUFFIX,fmcdn.net,LIST
 HOST-SUFFIX,fncstatic.com,LIST
 HOST-SUFFIX,fontawesome.com,LIST
@@ -3252,6 +3253,7 @@ HOST-SUFFIX,gammacdn.com,LIST
 HOST-SUFFIX,gateway.originprotocol.com,LIST
 HOST-SUFFIX,gateway.pinata.cloud,LIST
 HOST-SUFFIX,gateway.serph.network,LIST
+HOST-SUFFIX,gauthstatic.com,LIST
 HOST-SUFFIX,gayzyimage.com,LIST
 HOST-SUFFIX,gcr.si,LIST
 HOST-SUFFIX,gdvid.info,LIST
@@ -3998,6 +4000,7 @@ HOST-KEYWORD,fonts.hanime1,LIST
 HOST-KEYWORD,images.trustpilot.com,LIST
 HOST-KEYWORD,images.trustpilot.net,LIST
 HOST-KEYWORD,scripts.trustpilot.com,LIST
+HOST-KEYWORD,static.grammarly.com,LIST
 HOST-KEYWORD,static.trustpilot.com,LIST
 HOST-KEYWORD,vdownload.hanime1,LIST
 HOST-KEYWORD,vod-adaptive.akamaized.net,LIST
