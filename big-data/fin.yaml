@@ -1,5 +1,5 @@
-# Clash total line 7553
-# Last updated Wed 10/22/2025 22:14:38.97
+# Clash total line 7555
+# Last updated Sat 10/25/2025 22:13:57.66
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -185,6 +185,7 @@ payload:
   - DOMAIN,assets.calendly.com
   - DOMAIN,assets.canny.io
   - DOMAIN,assets.capterra.com
+  - DOMAIN,assets.cello.so
   - DOMAIN,assets.change.org
   - DOMAIN,assets.chaos.social
   - DOMAIN,assets.chess24.com
@@ -1283,6 +1284,7 @@ payload:
   - DOMAIN,download.cnet.com
   - DOMAIN,download.cpuid.com
   - DOMAIN,download.cypress.io
+  - DOMAIN,download.delta.chat
   - DOMAIN,download.dlsite.com
   - DOMAIN,download.docker.com
   - DOMAIN,download.eassos.com
