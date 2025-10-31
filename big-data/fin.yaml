@@ -1,5 +1,5 @@
-# Clash total line 7556
-# Last updated Tue 10/28/2025 22:15:46.76
+# Clash total line 7559
+# Last updated Fri 10/31/2025 22:15:34.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1584,6 +1584,7 @@ payload:
   - DOMAIN,ftpmirror1.infania.net
   - DOMAIN,g-static.ap4r.com
   - DOMAIN,g.newsweek.com
+  - DOMAIN,gamemedia.armorgames.com
   - DOMAIN,gdb.rferl.org
   - DOMAIN,gearbox.imgix.com
   - DOMAIN,generativelanguage.googleapis.com
@@ -2599,6 +2600,7 @@ payload:
   - DOMAIN,pytorch.org
   - DOMAIN,qmod.quotemedia.com
   - DOMAIN,quantum-mirror.hu
+  - DOMAIN,quests.armorgames.com
   - DOMAIN,quriobot.com
   - DOMAIN,r.r10s.jp
   - DOMAIN,r2.1hanime.com
@@ -5023,6 +5025,7 @@ payload:
   - DOMAIN-SUFFIX,ipns.co
   - DOMAIN-SUFFIX,ipstatp.com
   - DOMAIN-SUFFIX,iq.com
+  - DOMAIN-SUFFIX,ismcdn.jp
   - DOMAIN-SUFFIX,iso.reactos.org
   - DOMAIN-SUFFIX,isra.cloud
   - DOMAIN-SUFFIX,israbox.ch

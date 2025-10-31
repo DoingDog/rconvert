@@ -1,5 +1,5 @@
-# Quantumult total line 4006
-# Last updated Tue 10/28/2025 22:15:33.67
+# Quantumult total line 4009
+# Last updated Fri 10/31/2025 22:15:22.20
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1268,6 +1268,7 @@ HOST,fscdn.eppo.cloud,LIST
 HOST,g-static.ap4r.com,LIST
 HOST,g.newsweek.com,LIST
 HOST,g1.nyt.com,LIST
+HOST,gamemedia.armorgames.com,LIST
 HOST,gdb.rferl.org,LIST
 HOST,gearbox.imgix.com,LIST
 HOST,genesis-cdn.ff.com,LIST
@@ -2058,6 +2059,7 @@ HOST,publicsuffix.org,LIST
 HOST,puku-dist.4gamers.com.tw,LIST
 HOST,pytorch.org,LIST
 HOST,qmod.quotemedia.com,LIST
+HOST,quests.armorgames.com,LIST
 HOST,quriobot.com,LIST
 HOST,r.r10s.jp,LIST
 HOST,r2.1hanime.com,LIST
@@ -3424,6 +3426,7 @@ HOST-SUFFIX,ipfs1.pixura.io,LIST
 HOST-SUFFIX,ipfscdn.io,LIST
 HOST-SUFFIX,ipfsgateway.makersplace.com,LIST
 HOST-SUFFIX,ipns.co,LIST
+HOST-SUFFIX,ismcdn.jp,LIST
 HOST-SUFFIX,itsre-sumo.mozilla.net,LIST
 HOST-SUFFIX,itvstatic.com,LIST
 HOST-SUFFIX,javcdn.li,LIST
