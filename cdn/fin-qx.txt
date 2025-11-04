@@ -1,5 +1,5 @@
 # Quantumult total line 4010
-# Last updated Sat 11/01/2025 22:14:17.10
+# Last updated Tue 11/04/2025 22:15:28.34
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -82,9 +82,6 @@ HOST,app.quotemedia.com,LIST
 HOST,app.roboflow.com,LIST
 HOST,app.viral-loops.com,LIST
 HOST,appassets.mvtdev.com,LIST
-HOST,apple-relay.apple.com,LIST
-HOST,apple-relay.cloudflare.com,LIST
-HOST,apple-relay.fastly-edge.com,LIST
 HOST,apps-static.route4me.com,LIST
 HOST,apps.bazaarvoice.com,LIST
 HOST,apps.profitihub.com,LIST
@@ -1054,8 +1051,6 @@ HOST,conversiongorilla.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
 HOST,corp-backend.brevo.com,LIST
 HOST,cors-proxy.htmldriven.com,LIST
-HOST,cp2.cloudflare.com,LIST
-HOST,cp4.cloudflare.com,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,craftassets.unraid.net,LIST
 HOST,cravatar.eu,LIST
@@ -1358,6 +1353,7 @@ HOST,i4.anysex.com,LIST
 HOST,ias.r10s.jp,LIST
 HOST,icdn.javxx.com,LIST
 HOST,ichef.bbci.co.uk,LIST
+HOST,icon.icepanel.io,LIST
 HOST,icons.buffer.com,LIST
 HOST,icons.duckduckgo.com,LIST
 HOST,icons.ferndocs.com,LIST
@@ -1561,6 +1557,7 @@ HOST,img.javstore.net,LIST
 HOST,img.jjbb.me,LIST
 HOST,img.kbhgames.com,LIST
 HOST,img.kemono.su,LIST
+HOST,img.logokit.com,LIST
 HOST,img.ltyears.com,LIST
 HOST,img.lvv2.com,LIST
 HOST,img.m.mw,LIST
@@ -1885,6 +1882,7 @@ HOST,namedotcom-cdn.name.tools,LIST
 HOST,nav.yumenosora.co.jp,LIST
 HOST,navismithapis-cdn.com,LIST
 HOST,nbcnewsdigital-static.nbcuni.com,LIST
+HOST,nel.teo-rum.com,LIST
 HOST,net-fe-static-assets.network-controller.svc.ui.com,LIST
 HOST,netlify.apollo.io,LIST
 HOST,newassets.hcaptcha.com,LIST
@@ -2383,6 +2381,7 @@ HOST,static.c-spanvideo.org,LIST
 HOST,static.canva.com,LIST
 HOST,static.captcha-delivery.com,LIST
 HOST,static.carfax.com,LIST
+HOST,static.cdnlogo.com,LIST
 HOST,static.chaika.moe,LIST
 HOST,static.change.org,LIST
 HOST,static.chessarena.com,LIST
@@ -3826,6 +3825,7 @@ HOST-SUFFIX,stylexjs.com,LIST
 HOST-SUFFIX,substackcdn.com,LIST
 HOST-SUFFIX,supabase.co,LIST
 HOST-SUFFIX,superfiliate-cdn.com,LIST
+HOST-SUFFIX,superhumanstatic.com,LIST
 HOST-SUFFIX,surge.sh,LIST
 HOST-SUFFIX,surrit.com,LIST
 HOST-SUFFIX,surrit.store,LIST
