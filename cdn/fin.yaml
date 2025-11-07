@@ -1,5 +1,5 @@
-# Clash total line 4010
-# Last updated Tue 11/04/2025 22:15:28.38
+# Clash total line 4013
+# Last updated Fri 11/07/2025 22:15:06.27
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -829,6 +829,7 @@ payload:
   - DOMAIN,cdn.wccftech.com
   - DOMAIN,cdn.webclicks24.com
   - DOMAIN,cdn.weglot.com
+  - DOMAIN,cdn.whoer.com
   - DOMAIN,cdn.wikimg.net
   - DOMAIN,cdn.wikiwand.com
   - DOMAIN,cdn.wikiwiki.jp
@@ -1223,6 +1224,7 @@ payload:
   - DOMAIN,files.scamadviser.com
   - DOMAIN,files.slack.com
   - DOMAIN,files.smashing.media
+  - DOMAIN,files.stripe.com
   - DOMAIN,files.svc.ui.com
   - DOMAIN,files.writefreely.org
   - DOMAIN,files.yande.re
@@ -1486,6 +1488,7 @@ payload:
   - DOMAIN,images.voguehk.com
   - DOMAIN,images.web3.storage
   - DOMAIN,images.weserv.nl
+  - DOMAIN,images.whoer.com
   - DOMAIN,images.wikia.com
   - DOMAIN,images.wsj.net
   - DOMAIN,images.wsjcommerce.net
