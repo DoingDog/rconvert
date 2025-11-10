@@ -1,5 +1,5 @@
-# Clash total line 7566
-# Last updated Fri 11/07/2025 22:15:18.07
+# Clash total line 8244
+# Last updated Mon 11/10/2025 22:16:26.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -10,6 +10,7 @@ payload:
   - DOMAIN,a.gawby.com
   - DOMAIN,a.kickstarter.com
   - DOMAIN,a.klaviyo.com
+  - DOMAIN,a.pomf.cat
   - DOMAIN,a5.behance.net
   - DOMAIN,academy-public.coinmarketcap.com
   - DOMAIN,account-cdn.svc.ui.com
@@ -33,6 +34,8 @@ payload:
   - DOMAIN,akamai-assets.squarespace.com
   - DOMAIN,akamai-origin.myanimelist.net
   - DOMAIN,akmcdnoversea-tw.inter.ptqy.gitv.tv
+  - DOMAIN,alpha-gnu-org.ip-connect.vn.ua
+  - DOMAIN,alpha.gnu.org
   - DOMAIN,alt.idgesg.net
   - DOMAIN,amazon-omni-cdn.com
   - DOMAIN,amp.azure.net
@@ -132,9 +135,12 @@ payload:
   - DOMAIN,apps.bazaarvoice.com
   - DOMAIN,apps.profitihub.com
   - DOMAIN,apps.sophi.io
+  - DOMAIN,apt.tetaneutral.net
   - DOMAIN,apt.xpipe.io
   - DOMAIN,archive.cs.uu.nl
+  - DOMAIN,archive.g4t1.pro
   - DOMAIN,archive.kali.org
+  - DOMAIN,archive.linux.duke.edu
   - DOMAIN,archive.mozilla.org
   - DOMAIN,artifacts.electronjs.org
   - DOMAIN,artworks.thetvdb.com
@@ -185,7 +191,6 @@ payload:
   - DOMAIN,assets.cello.so
   - DOMAIN,assets.change.org
   - DOMAIN,assets.chaos.social
-  - DOMAIN,assets.chess24.com
   - DOMAIN,assets.clever-cloud.com
   - DOMAIN,assets.clickfunnels.com
   - DOMAIN,assets.cloudpilot.ai
@@ -332,6 +337,7 @@ payload:
   - DOMAIN,assetscdn.jable.tv
   - DOMAIN,atl-global.atlassian.com
   - DOMAIN,attach.mobile01.com
+  - DOMAIN,attach.setn.com
   - DOMAIN,attach2.mobile01.com
   - DOMAIN,attachments.office.net
   - DOMAIN,audio.rfa.org
@@ -403,6 +409,7 @@ payload:
   - DOMAIN,bundles.npr.org
   - DOMAIN,bunnycdn-video-assets.b-cdn.net
   - DOMAIN,busuanzi.ibruce.info
+  - DOMAIN,bzip.org
   - DOMAIN,c-bin.b-cdn.net
   - DOMAIN,c.1password.com
   - DOMAIN,c.animaapp.com
@@ -427,6 +434,7 @@ payload:
   - DOMAIN,c6.patreon.com
   - DOMAIN,c7.patreon.com
   - DOMAIN,c8.patreon.com
+  - DOMAIN,ca.dyi.ng
   - DOMAIN,ca.nfs.pub
   - DOMAIN,cacerts.digicert.com
   - DOMAIN,cacerts.rapidssl.com
@@ -521,7 +529,6 @@ payload:
   - DOMAIN,cdn.adsninja.ca
   - DOMAIN,cdn.aimerce.ai
   - DOMAIN,cdn.amcharts.com
-  - DOMAIN,cdn.amh.moe
   - DOMAIN,cdn.announcekit.app
   - DOMAIN,cdn.answeroverflow.com
   - DOMAIN,cdn.app.fossa.com
@@ -561,7 +568,6 @@ payload:
   - DOMAIN,cdn.cfr.org
   - DOMAIN,cdn.changelog.com
   - DOMAIN,cdn.channel.io
-  - DOMAIN,cdn.chess24.com
   - DOMAIN,cdn.circle.so
   - DOMAIN,cdn.clever-cloud.com
   - DOMAIN,cdn.cliqz.com
@@ -606,6 +612,7 @@ payload:
   - DOMAIN,cdn.docsbot.com
   - DOMAIN,cdn.document360.io
   - DOMAIN,cdn.donmai.us
+  - DOMAIN,cdn.doofinder.com
   - DOMAIN,cdn.dotaoutpost.com
   - DOMAIN,cdn.downdetector.com
   - DOMAIN,cdn.download.it
@@ -742,6 +749,7 @@ payload:
   - DOMAIN,cdn.nperf.com
   - DOMAIN,cdn.omnicalculator.com
   - DOMAIN,cdn.one.store
+  - DOMAIN,cdn.oneget.org
   - DOMAIN,cdn.onesignal.com
   - DOMAIN,cdn.onetime.dog
   - DOMAIN,cdn.onlyhentaistuff.com
@@ -771,6 +779,7 @@ payload:
   - DOMAIN,cdn.playwire.com
   - DOMAIN,cdn.plot.ly
   - DOMAIN,cdn.plu.mx
+  - DOMAIN,cdn.powershellgallery.com
   - DOMAIN,cdn.pricespider.com
   - DOMAIN,cdn.privacy-mgmt.com
   - DOMAIN,cdn.privacy.com
@@ -790,6 +799,7 @@ payload:
   - DOMAIN,cdn.redoc.ly
   - DOMAIN,cdn.redwap.xyz
   - DOMAIN,cdn.reimu.net
+  - DOMAIN,cdn.repo.cloudeka.id
   - DOMAIN,cdn.report-uri.com
   - DOMAIN,cdn.rex.contents.rakuten.co.jp
   - DOMAIN,cdn.rive.app
@@ -862,6 +872,7 @@ payload:
   - DOMAIN,cdn.ttgtmedia.com
   - DOMAIN,cdn.ttloli.com
   - DOMAIN,cdn.tuk.dev
+  - DOMAIN,cdn.ubuntu.repo.cloudeka.id
   - DOMAIN,cdn.unrealengine.com
   - DOMAIN,cdn.unwire.hk
   - DOMAIN,cdn.up-timely.com
@@ -930,6 +941,7 @@ payload:
   - DOMAIN,cdn1.techbang.com
   - DOMAIN,cdn1.telegram.space
   - DOMAIN,cdn1.telesco.pe
+  - DOMAIN,cdn1.tubeteen18.com
   - DOMAIN,cdn1.unrealengine.com
   - DOMAIN,cdn10.bigcommerce.com
   - DOMAIN,cdn11.bigcommerce.com
@@ -952,6 +964,7 @@ payload:
   - DOMAIN,cdn2.sysgears.com
   - DOMAIN,cdn2.techbang.com
   - DOMAIN,cdn2.ttloli.com
+  - DOMAIN,cdn2.tubeteen18.com
   - DOMAIN,cdn2.turboviplay.cc
   - DOMAIN,cdn2.unrealengine.com
   - DOMAIN,cdn3.bigcommerce.com
@@ -961,17 +974,20 @@ payload:
   - DOMAIN,cdn3.onlyfans.com
   - DOMAIN,cdn3.stamped.io
   - DOMAIN,cdn3.sysgears.com
+  - DOMAIN,cdn3.tubeteen18.com
   - DOMAIN,cdn3.unrealengine.com
   - DOMAIN,cdn4.bigcommerce.com
   - DOMAIN,cdn4.iconfinder.com
   - DOMAIN,cdn4.sysgears.com
   - DOMAIN,cdn4.telegram.space
   - DOMAIN,cdn4.telesco.pe
+  - DOMAIN,cdn4.tubeteen18.com
   - DOMAIN,cdn5.bigcommerce.com
   - DOMAIN,cdn5.hextom.com
   - DOMAIN,cdn5.iconfinder.com
   - DOMAIN,cdn5.telegram.space
   - DOMAIN,cdn5.telesco.pe
+  - DOMAIN,cdn5.tubeteen18.com
   - DOMAIN,cdn6.aptoide.com
   - DOMAIN,cdn6.bigcommerce.com
   - DOMAIN,cdn7.bigcommerce.com
@@ -1011,8 +1027,14 @@ payload:
   - DOMAIN,cdnweb.devolutions.net
   - DOMAIN,cdp.sph.com.sg
   - DOMAIN,celebrities-small.porndig.com
+  - DOMAIN,centos-stream-distro.1gservers.com
+  - DOMAIN,centos-stream.ip-connect.info
+  - DOMAIN,centos-stream.koyanet.lv
+  - DOMAIN,centos.anexia.at
+  - DOMAIN,centos.is
   - DOMAIN,certificates.godaddy.com
   - DOMAIN,certona.gap.com
+  - DOMAIN,cesium.di.uminho.pt
   - DOMAIN,cf-assets.www.cloudflare.com
   - DOMAIN,cf-cdn1.nebula-media.org
   - DOMAIN,cf-images.ap-northeast-1.prod.boltdns.net
@@ -1037,7 +1059,6 @@ payload:
   - DOMAIN,cisco.yuntu.com.tw
   - DOMAIN,ciscobinary.openh264.org
   - DOMAIN,claritystatic.azureedge.net
-  - DOMAIN,clarkson.edu
   - DOMAIN,clickup.marketlinc.com
   - DOMAIN,client.hikarifield.co.jp
   - DOMAIN,clientsdk.launchdarkly.com
@@ -1095,7 +1116,6 @@ payload:
   - DOMAIN,consentdeliveryfd.azurefd.net
   - DOMAIN,console.groq.com
   - DOMAIN,content-a.strava.com
-  - DOMAIN,content-cdn.y2mate.com
   - DOMAIN,content-management-files.canva.com
   - DOMAIN,content-origin.steampowered.com
   - DOMAIN,content-prod-live.cert.starbucks.com
@@ -1183,6 +1203,7 @@ payload:
   - DOMAIN,d.newsweek.com
   - DOMAIN,d2c.aws.amazon.com
   - DOMAIN,d4.alternativeto.net
+  - DOMAIN,dafi.inf.um.es
   - DOMAIN,dam.freshworks.com
   - DOMAIN,damassets.autodesk.net
   - DOMAIN,dashasiafox.akamaized.netflix
@@ -1199,11 +1220,76 @@ payload:
   - DOMAIN,dc-cdn.cdw.com
   - DOMAIN,dca-lm-livedazn.secure.footprint.net
   - DOMAIN,dd.dexscreener.com
-  - DOMAIN,de.freedif.org
+  - DOMAIN,deb-mir1.naitways.net
+  - DOMAIN,deb.bbxnet.sk
+  - DOMAIN,deb.campolargo.pr.gov.br
+  - DOMAIN,deb.nextgen.ch
   - DOMAIN,deb.nodesource.com
   - DOMAIN,debian-archive.trafficmanager.net
+  - DOMAIN,debian-mirror.behostings.net
+  - DOMAIN,debian-mirror.puq.apoapsis.cl
+  - DOMAIN,debian-mirror.sakura.ne.jp
+  - DOMAIN,debian.a1.bg
+  - DOMAIN,debian.anexia.at
+  - DOMAIN,debian.apt-mirror.de
+  - DOMAIN,debian.balt.net
+  - DOMAIN,debian.c3sl.ufpr.br
+  - DOMAIN,debian.carnet.hr
+  - DOMAIN,debian.cc.lehigh.edu
+  - DOMAIN,debian.ccns.ncku.edu.tw
+  - DOMAIN,debian.charite.de
+  - DOMAIN,debian.connesi.it
+  - DOMAIN,debian.cs.binghamton.edu
+  - DOMAIN,debian.cs.nycu.edu.tw
+  - DOMAIN,debian.csail.mit.edu
+  - DOMAIN,debian.csie.ntu.edu.tw
+  - DOMAIN,debian.dynamica.it
+  - DOMAIN,debian.ethz.ch
+  - DOMAIN,debian.grena.ge
+  - DOMAIN,debian.grn.cat
+  - DOMAIN,debian.inf.tu-dresden.de
+  - DOMAIN,debian.intergenia.de
+  - DOMAIN,debian.interhost.co.il
+  - DOMAIN,debian.ipacct.com
+  - DOMAIN,debian.ipsys.bf
+  - DOMAIN,debian.iskon.hr
+  - DOMAIN,debian.koyanet.lv
+  - DOMAIN,debian.lagis.at
+  - DOMAIN,debian.linux.n0c.ca
+  - DOMAIN,debian.lth.se
+  - DOMAIN,debian.ludost.net
+  - DOMAIN,debian.mithril.re
+  - DOMAIN,debian.mnet.bg
+  - DOMAIN,debian.mur.at
+  - DOMAIN,debian.nautile.nc
+  - DOMAIN,debian.netcologne.de
+  - DOMAIN,debian.netforce.hosting
+  - DOMAIN,debian.nic.cz
+  - DOMAIN,debian.obspm.fr
+  - DOMAIN,debian.osuosl.org
+  - DOMAIN,debian.otenet.gr
+  - DOMAIN,debian.polytech-lille.fr
+  - DOMAIN,debian.pop-sc.rnp.br
+  - DOMAIN,debian.proxad.net
+  - DOMAIN,debian.redimadrid.es
+  - DOMAIN,debian.repo.cure.edu.uy
+  - DOMAIN,debian.sil.at
+  - DOMAIN,debian.snt.utwente.nl
+  - DOMAIN,debian.superhosting.cz
+  - DOMAIN,debian.telecoms.bg
+  - DOMAIN,debian.tu-bs.de
+  - DOMAIN,debian.uchicago.edu
+  - DOMAIN,debian.uevora.pt
+  - DOMAIN,debian.univ-tlse2.fr
+  - DOMAIN,debian.unnoba.edu.ar
+  - DOMAIN,debian.uvigo.es
+  - DOMAIN,debian.volia.net
+  - DOMAIN,debian.web.trex.fi
+  - DOMAIN,debian.xtdv.net
   - DOMAIN,demo.unified-streaming.com
   - DOMAIN,demotiles.maplibre.org
+  - DOMAIN,dennou-k.gfd-dennou.org
+  - DOMAIN,depot-debian.univ-reunion.fr
   - DOMAIN,design-assets.hubspot.com
   - DOMAIN,design-system.yext.com
   - DOMAIN,design.codeberg.org
@@ -1218,6 +1304,7 @@ payload:
   - DOMAIN,devstreaming-cdn.apple.com
   - DOMAIN,dh-site.b-cdn.net
   - DOMAIN,dims.apnews.com
+  - DOMAIN,directory.fsf.org
   - DOMAIN,disco-static.productessentials.app
   - DOMAIN,disco.headliner.link
   - DOMAIN,disks.webvm.io
@@ -1308,6 +1395,7 @@ payload:
   - DOMAIN,download.pixelexperience.org
   - DOMAIN,download.projectbluefin.io
   - DOMAIN,download.proxyman.com
+  - DOMAIN,download.savannah.gnu.org
   - DOMAIN,download.sketch.com
   - DOMAIN,download.snipaste.com
   - DOMAIN,download.tensorflow.google.com
@@ -1333,6 +1421,7 @@ payload:
   - DOMAIN,downloads.xrite.com
   - DOMAIN,downloads2.broadcom.com
   - DOMAIN,drive.massgrave.dev
+  - DOMAIN,drmirror.physi.uni-heidelberg.de
   - DOMAIN,drop.ndtv.com
   - DOMAIN,drscdn.500px.org
   - DOMAIN,dw.uptodown.net
@@ -1363,6 +1452,7 @@ payload:
   - DOMAIN,edgeupdates.microsoft.com
   - DOMAIN,eep.io
   - DOMAIN,eightcha.com
+  - DOMAIN,elmirror.cl
   - DOMAIN,embed-cloudfront.wistia.com
   - DOMAIN,embed-ssl.wistia.com
   - DOMAIN,embed-v2.testimonial.to
@@ -1482,9 +1572,11 @@ payload:
   - DOMAIN,forest-mt-s3.seekrtech.com
   - DOMAIN,form-assets.mailchimp.com
   - DOMAIN,formulae.brew.sh
+  - DOMAIN,fosszone.csd.auth.gr
   - DOMAIN,fr2.rpmfind.net
   - DOMAIN,frames-commandbar-prod.commandbar.com
-  - DOMAIN,freedif.org
+  - DOMAIN,free.hands.com
+  - DOMAIN,free.nchc.org.tw
   - DOMAIN,front-resource.fs.com
   - DOMAIN,frontend-apps.workos.com
   - DOMAIN,frontend-assets.supabase.com
@@ -1500,85 +1592,180 @@ payload:
   - DOMAIN,ftp.agdsn.de
   - DOMAIN,ftp.agh.edu.pl
   - DOMAIN,ftp.aha.ru
+  - DOMAIN,ftp.antik.sk
   - DOMAIN,ftp.arnes.si
+  - DOMAIN,ftp.at.debian.org
+  - DOMAIN,ftp.au.debian.org
   - DOMAIN,ftp.auckland.ac.nz
+  - DOMAIN,ftp.be.debian.org
   - DOMAIN,ftp.belnet.be
+  - DOMAIN,ftp.bg.debian.org
+  - DOMAIN,ftp.bme.hu
+  - DOMAIN,ftp.br.debian.org
   - DOMAIN,ftp.byfly.by
   - DOMAIN,ftp.byfly.by.org
+  - DOMAIN,ftp.ca.debian.org
+  - DOMAIN,ftp.caliu.cat
   - DOMAIN,ftp.carnet.hr
+  - DOMAIN,ftp.cc.uoc.gr
+  - DOMAIN,ftp.ch.debian.org
+  - DOMAIN,ftp.cica.es
   - DOMAIN,ftp.cixug.es
+  - DOMAIN,ftp.cl.debian.org
+  - DOMAIN,ftp.cn.debian.org
+  - DOMAIN,ftp.corbina.net
   - DOMAIN,ftp.cpan.org
   - DOMAIN,ftp.cs.uu.nl
   - DOMAIN,ftp.cse.buffalo.edu
+  - DOMAIN,ftp.csuc.cat
   - DOMAIN,ftp.cvut.cz
+  - DOMAIN,ftp.cz.debian.org
+  - DOMAIN,ftp.de.debian.org
+  - DOMAIN,ftp.debian.cz
+  - DOMAIN,ftp.debian.sk
+  - DOMAIN,ftp.debianclub.org
+  - DOMAIN,ftp.dei.uc.pt
+  - DOMAIN,ftp.dk.debian.org
+  - DOMAIN,ftp.ec-m.fr
+  - DOMAIN,ftp.energotel.sk
   - DOMAIN,ftp.eq.uc.pt
+  - DOMAIN,ftp.es.debian.org
   - DOMAIN,ftp.eutelia.it
   - DOMAIN,ftp.fau.de
+  - DOMAIN,ftp.fi.debian.org
   - DOMAIN,ftp.fi.muni.cz
   - DOMAIN,ftp.forthnet.gr
+  - DOMAIN,ftp.fr.debian.org
   - DOMAIN,ftp.fu-berlin.de
   - DOMAIN,ftp.funet.fi
   - DOMAIN,ftp.gnome.org
   - DOMAIN,ftp.gnu.org
   - DOMAIN,ftp.gnu.org.ua
+  - DOMAIN,ftp.gtlib.gatech.edu
   - DOMAIN,ftp.gust.org.pl
   - DOMAIN,ftp.gwdg.de
   - DOMAIN,ftp.halifax.rwth-aachen.de
   - DOMAIN,ftp.harukasan.org
   - DOMAIN,ftp.heanet.ie
+  - DOMAIN,ftp.hk.debian.org
   - DOMAIN,ftp.hosteurope.de
+  - DOMAIN,ftp.hr.debian.org
   - DOMAIN,ftp.icm.edu.pl
+  - DOMAIN,ftp.iij.ad.jp
+  - DOMAIN,ftp.iinet.net.au
+  - DOMAIN,ftp.iitm.ac.in
   - DOMAIN,ftp.is.co.za
+  - DOMAIN,ftp.is.debian.org
+  - DOMAIN,ftp.it.debian.org
   - DOMAIN,ftp.jaist.ac.jp
+  - DOMAIN,ftp.jp.debian.org
   - DOMAIN,ftp.kaist.ac.kr
   - DOMAIN,ftp.kddilabs.jp
   - DOMAIN,ftp.kddlabs.co.jp
+  - DOMAIN,ftp.klid.dk
   - DOMAIN,ftp.kr.freebsd.org
   - DOMAIN,ftp.ktug.org
+  - DOMAIN,ftp.lanet.kr
   - DOMAIN,ftp.leg.uct.ac.za
+  - DOMAIN,ftp.linux.cz
+  - DOMAIN,ftp.linux.edu.lv
+  - DOMAIN,ftp.linux.it
+  - DOMAIN,ftp.linux.org.tr
+  - DOMAIN,ftp.linux.ro
   - DOMAIN,ftp.lip6.fr
   - DOMAIN,ftp.litnet.lt
+  - DOMAIN,ftp.lt.debian.org
+  - DOMAIN,ftp.ludd.ltu.se
   - DOMAIN,ftp.lug.ro
+  - DOMAIN,ftp.lysator.liu.se
   - DOMAIN,ftp.man.poznan.pl
   - DOMAIN,ftp.meisei-u.ac.jp
+  - DOMAIN,ftp.mirror.tw
   - DOMAIN,ftp.mpi-inf.mpg.de
   - DOMAIN,ftp.mpi-sb.mpg.de
   - DOMAIN,ftp.muug.ca
   - DOMAIN,ftp.nara.wide.ad.jp
+  - DOMAIN,ftp.nc.debian.org
+  - DOMAIN,ftp.nl.debian.org
   - DOMAIN,ftp.nluug.nl
+  - DOMAIN,ftp.nsc.ru
   - DOMAIN,ftp.ntua.gr
+  - DOMAIN,ftp.nz.debian.org
   - DOMAIN,ftp.osuosl.org
+  - DOMAIN,ftp.otenet.gr
   - DOMAIN,ftp.piotrkosoft.net
+  - DOMAIN,ftp.pl.debian.org
   - DOMAIN,ftp.ps.pl
+  - DOMAIN,ftp.psn.ru
+  - DOMAIN,ftp.psnc.pl
+  - DOMAIN,ftp.pt.debian.org
   - DOMAIN,ftp.rediris.es
+  - DOMAIN,ftp.rezopole.net
   - DOMAIN,ftp.riken.jp
+  - DOMAIN,ftp.rnl.tecnico.ulisboa.pt
   - DOMAIN,ftp.rpmfind.net
   - DOMAIN,ftp.rrze.uni-erlangen.de
   - DOMAIN,ftp.rrzn.uni-hannover.de
+  - DOMAIN,ftp.ru.debian.org
+  - DOMAIN,ftp.rz.tu-bs.de
   - DOMAIN,ftp.rz.uni-wuerzburg.de
   - DOMAIN,ftp.saix.net
+  - DOMAIN,ftp.sakura.ad.jp
+  - DOMAIN,ftp.se.debian.org
+  - DOMAIN,ftp.sh.cvut.cz
+  - DOMAIN,ftp.si.debian.org
+  - DOMAIN,ftp.sk.debian.org
   - DOMAIN,ftp.snt.utwente.nl
   - DOMAIN,ftp.sotirov-bg.net
   - DOMAIN,ftp.stu.edu.tw
+  - DOMAIN,ftp.stw-bonn.de
   - DOMAIN,ftp.sun.ac.za
   - DOMAIN,ftp.surfnet.nl
   - DOMAIN,ftp.task.gda.pl
   - DOMAIN,ftp.tc.edu.tw
+  - DOMAIN,ftp.ticklers.org
+  - DOMAIN,ftp.tku.edu.tw
   - DOMAIN,ftp.tsukuba.wide.ad.jp
   - DOMAIN,ftp.tu-chemnitz.de
+  - DOMAIN,ftp.tu-graz.ac.at
+  - DOMAIN,ftp.tu-ilmenau.de
+  - DOMAIN,ftp.tudelft.nl
+  - DOMAIN,ftp.tw.debian.org
   - DOMAIN,ftp.twaren.net
   - DOMAIN,ftp.u-aizu.ac.jp
+  - DOMAIN,ftp.u-picardie.fr
+  - DOMAIN,ftp.u-strasbg.fr
+  - DOMAIN,ftp.ubuntu-tw.net
   - DOMAIN,ftp.ubuntu-tw.org
+  - DOMAIN,ftp.udc.es
+  - DOMAIN,ftp.udx.icscoe.jp
+  - DOMAIN,ftp.uk.debian.org
+  - DOMAIN,ftp.uni-bayreuth.de
+  - DOMAIN,ftp.uni-hannover.de
+  - DOMAIN,ftp.uni-kl.de
+  - DOMAIN,ftp.uni-mainz.de
+  - DOMAIN,ftp.uni-sofia.bg
+  - DOMAIN,ftp.uni-stuttgart.de
   - DOMAIN,ftp.unicamp.br
+  - DOMAIN,ftp.uninett.no
+  - DOMAIN,ftp.univ-pau.fr
+  - DOMAIN,ftp.upjs.sk
+  - DOMAIN,ftp.us.debian.org
+  - DOMAIN,ftp.usf.edu
   - DOMAIN,ftp.ussg.iu.edu
+  - DOMAIN,ftp.uvigo.es
   - DOMAIN,ftp.wayne.edu
   - DOMAIN,ftp.wrz.de
   - DOMAIN,ftp.yz.yamagata-u.ac.jp
+  - DOMAIN,ftp.zcu.cz
   - DOMAIN,ftp1.nluug.nl
   - DOMAIN,ftp2.nluug.nl
+  - DOMAIN,ftp5.gwdg.de
   - DOMAIN,ftpdownloads.broadcom.com
   - DOMAIN,ftpmirror.gnu.org
+  - DOMAIN,ftpmirror.your.org
   - DOMAIN,ftpmirror1.infania.net
+  - DOMAIN,ftpserv.tudelft.nl
   - DOMAIN,g-static.ap4r.com
   - DOMAIN,g.newsweek.com
   - DOMAIN,gamemedia.armorgames.com
@@ -1593,17 +1780,20 @@ payload:
   - DOMAIN,ghfast.top
   - DOMAIN,ghgo.xyz
   - DOMAIN,ghp.ci
+  - DOMAIN,giano.com.dist.unige.it
   - DOMAIN,gimp.astra.in.ua
   - DOMAIN,gimp.ca
   - DOMAIN,gimp.ip-connect.info
   - DOMAIN,gimp.ip-connect.vn.ua
   - DOMAIN,gitpkg-fork.vercel.sh
   - DOMAIN,global.divhunt.com
+  - DOMAIN,glua.ua.pt
   - DOMAIN,glyph.medium.com
   - DOMAIN,gmedia.playstation.com
   - DOMAIN,gnu.askapache.com
   - DOMAIN,gnu.c3sl.ufpr.br
   - DOMAIN,gnu.freemirror.org
+  - DOMAIN,gnualpha.uib.no
   - DOMAIN,gnuftp.uib.no
   - DOMAIN,go-updater.brave.com
   - DOMAIN,go.imperva.com
@@ -1614,6 +1804,7 @@ payload:
   - DOMAIN,gohugo.io
   - DOMAIN,google-ohttp-relay-safebrowsing.fastly-edge.com
   - DOMAIN,gopkg.in
+  - DOMAIN,gpl.savoirfairelinux.net
   - DOMAIN,graph.facebook.com
   - DOMAIN,gravatar.cat.net
   - DOMAIN,gravatar.tapglb.com
@@ -1623,7 +1814,6 @@ payload:
   - DOMAIN,gstatic.olympics.com
   - DOMAIN,gt1.onlyhentaistuff.com
   - DOMAIN,gtranslate.io
-  - DOMAIN,gwdg.de
   - DOMAIN,h-dazn.online-metrix.net
   - DOMAIN,h-netflix.online-metrix.net
   - DOMAIN,hamifans.emome.net
@@ -1640,6 +1830,7 @@ payload:
   - DOMAIN,hls.itunes.apple.com
   - DOMAIN,home.integrate.com
   - DOMAIN,http.kali.org
+  - DOMAIN,http.krfoss.org
   - DOMAIN,httpd-mirror.sergal.org
   - DOMAIN,hub-assets.displaycal.net
   - DOMAIN,hubspotonwebflow.com
@@ -1692,7 +1883,6 @@ payload:
   - DOMAIN,i4.anysex.com
   - DOMAIN,ias.r10s.jp
   - DOMAIN,icdn.javxx.com
-  - DOMAIN,icm.edu.pl
   - DOMAIN,icon.icepanel.io
   - DOMAIN,icons.buffer.com
   - DOMAIN,icons.duckduckgo.com
@@ -1815,7 +2005,6 @@ payload:
   - DOMAIN,images.typeform.com
   - DOMAIN,images.unsplash.com
   - DOMAIN,images.videolan.org
-  - DOMAIN,images.voguehk.com
   - DOMAIN,images.web3.storage
   - DOMAIN,images.weserv.nl
   - DOMAIN,images.whoer.com
@@ -1884,7 +2073,6 @@ payload:
   - DOMAIN,img.informer.com
   - DOMAIN,img.itch.zone
   - DOMAIN,img.javstore.net
-  - DOMAIN,img.jjbb.me
   - DOMAIN,img.kbhgames.com
   - DOMAIN,img.kemono.su
   - DOMAIN,img.logokit.com
@@ -1897,6 +2085,7 @@ payload:
   - DOMAIN,img.moegirl.tw
   - DOMAIN,img.moviefap.com
   - DOMAIN,img.mresou.com
+  - DOMAIN,img.news.ebc.net.tw
   - DOMAIN,img.noy.asia
   - DOMAIN,img.olympics.com
   - DOMAIN,img.openshop.com.hk
@@ -1922,6 +2111,7 @@ payload:
   - DOMAIN,img.toto.im
   - DOMAIN,img.utdstc.com
   - DOMAIN,img.vim-cn.com
+  - DOMAIN,img.voguehk.com
   - DOMAIN,img.washingtonpost.com
   - DOMAIN,img.windy.com
   - DOMAIN,img.xhacgn.com
@@ -1971,6 +2161,7 @@ payload:
   - DOMAIN,imgs.plurk.com
   - DOMAIN,imgs.search.brave.com
   - DOMAIN,imgs.xkcd.com
+  - DOMAIN,imgs02.aventertainments.com
   - DOMAIN,imgs3.hcaptcha.com
   - DOMAIN,imgsrv.crunchyroll.com
   - DOMAIN,imgssl.constantcontact.com
@@ -1989,9 +2180,9 @@ payload:
   - DOMAIN,interwiki.scpwikicn.com
   - DOMAIN,invent.kde.org
   - DOMAIN,ipfs.d.tube
+  - DOMAIN,ir.ubuntu.sindad.cloud
   - DOMAIN,irp-cdn.multiscreensite.com
   - DOMAIN,isitmaintained.com
-  - DOMAIN,it.apache.contactlab.it
   - DOMAIN,iterm2.com
   - DOMAIN,j.udn.com.tw
   - DOMAIN,jac.yahoosandbox.com
@@ -2038,15 +2229,18 @@ payload:
   - DOMAIN,jsonplaceholder.typicode.com
   - DOMAIN,jssdk.opin.media
   - DOMAIN,jssocdn.indiatimes.com
+  - DOMAIN,kambing.uu.sg
   - DOMAIN,kartolo.sby.datautama.net.id
   - DOMAIN,kdata1.com
   - DOMAIN,kde.c3sl.ufpr.br
   - DOMAIN,kde.cu.be
   - DOMAIN,kde.ip-connect.vn.ua
+  - DOMAIN,kebo.pens.ac.id
+  - DOMAIN,kebo.vlsm.org
   - DOMAIN,keyframe-cdn.abcnews.com
   - DOMAIN,kh.google.com
-  - DOMAIN,kr.freebsd.org
   - DOMAIN,ktpx.amazon.com
+  - DOMAIN,labs.eif.urjc.es
   - DOMAIN,lain.bgm.tv
   - DOMAIN,lastfm.freetls.fastly.net
   - DOMAIN,latency-test.lab.skk.moe
@@ -2059,19 +2253,25 @@ payload:
   - DOMAIN,learn.optimizely.com
   - DOMAIN,lecontent.sololearn.com
   - DOMAIN,ledger-wp-website-s3-prd.ledger.com
+  - DOMAIN,lethe.chinstrap.org
   - DOMAIN,level3.blizzard.com
   - DOMAIN,lib.arvancloud.ir
   - DOMAIN,lib.ugent.be
   - DOMAIN,libraries.hund.io
   - DOMAIN,libs.quillbot.com
+  - DOMAIN,lidsol.fi-b.unam.mx
   - DOMAIN,lift-ai-js.marketlinc.com
   - DOMAIN,light.spicegems.org
   - DOMAIN,limitless.cmax.ai
   - DOMAIN,link.storjshare.io
   - DOMAIN,linkstorage.linkfire.com
   - DOMAIN,linorg.usp.br
+  - DOMAIN,linux-mirrors.fnal.gov
+  - DOMAIN,linux.domainesia.com
+  - DOMAIN,linux.purple-cat.net
+  - DOMAIN,linux.yz.yamagata-u.ac.jp
   - DOMAIN,linuxiac.b-cdn.net
-  - DOMAIN,lip6.fr
+  - DOMAIN,linuxsoft.cern.ch
   - DOMAIN,live-storage.fc2.com
   - DOMAIN,live.fanmingming.com
   - DOMAIN,live.visually-io.com
@@ -2085,7 +2285,8 @@ payload:
   - DOMAIN,logos.kiwibrowser.com
   - DOMAIN,logos.speedtestcustom.com
   - DOMAIN,loutre.blockchair.io
-  - DOMAIN,lysator.liu.se
+  - DOMAIN,lug.mines.edu
+  - DOMAIN,lzip.nongnu.org
   - DOMAIN,m-cdn.phonearena.com
   - DOMAIN,m.porn3dx.com
   - DOMAIN,m.wsj.net
@@ -2107,7 +2308,6 @@ payload:
   - DOMAIN,marketing.figma.com
   - DOMAIN,marketing.thingiverse.com
   - DOMAIN,marketplace-web-assets.vinted.com
-  - DOMAIN,marwan.ma
   - DOMAIN,maven.google.com
   - DOMAIN,maven.is-quite.gay
   - DOMAIN,maven.kr328.app
@@ -2200,6 +2400,7 @@ payload:
   - DOMAIN,medias.meow.social
   - DOMAIN,medium-media.vgm.io
   - DOMAIN,megapx-assets.dcard.tw
+  - DOMAIN,merlin.fit.vutbr.cz
   - DOMAIN,meta.omaps.app
   - DOMAIN,meta.prismlauncher.org
   - DOMAIN,meteorclient.com
@@ -2207,117 +2408,373 @@ payload:
   - DOMAIN,micro.rubiconproject.com
   - DOMAIN,mintlify.b-cdn.net
   - DOMAIN,mir-s3-cdn-cf.behance.net
+  - DOMAIN,mir.linux.kg
   - DOMAIN,miro.medium.com
+  - DOMAIN,miroir.univ-lorraine.fr
   - DOMAIN,mirror-cdn.xtom.com
+  - DOMAIN,mirror-gw.elastis.id
   - DOMAIN,mirror-hk.koddos.net
+  - DOMAIN,mirror-mk.interspace.com
+  - DOMAIN,mirror.0-1.cloud
+  - DOMAIN,mirror.01link.hk
   - DOMAIN,mirror.0x.sg
+  - DOMAIN,mirror.0x626b.com
+  - DOMAIN,mirror.23m.com
   - DOMAIN,mirror.23media.de
+  - DOMAIN,mirror.2degrees.nz
+  - DOMAIN,mirror.5i.fi
+  - DOMAIN,mirror.a1.mk
   - DOMAIN,mirror.aarnet.edu.au
   - DOMAIN,mirror.accum.se
+  - DOMAIN,mirror.aktkn.sg
+  - DOMAIN,mirror.alastyr.com
+  - DOMAIN,mirror.alwyzon.net
   - DOMAIN,mirror.amberit.com.bd
+  - DOMAIN,mirror.aminidc.com
+  - DOMAIN,mirror.ams.macarne.com
+  - DOMAIN,mirror.amscloud.co.id
+  - DOMAIN,mirror.anigil.com
   - DOMAIN,mirror.apache-kr.org
   - DOMAIN,mirror.apad.pro
+  - DOMAIN,mirror.applebred.net
+  - DOMAIN,mirror.aptus.co.tz
+  - DOMAIN,mirror.arizona.edu
+  - DOMAIN,mirror.arvancloud.ir
+  - DOMAIN,mirror.as.kamatera.com
+  - DOMAIN,mirror.as24220.net
+  - DOMAIN,mirror.as29550.net
+  - DOMAIN,mirror.as35701.net
   - DOMAIN,mirror.as43289.net
+  - DOMAIN,mirror.ati.tn
   - DOMAIN,mirror.aut.ac.nz
+  - DOMAIN,mirror.azvps.vn
+  - DOMAIN,mirror.bacloud.com
+  - DOMAIN,mirror.bahnhof.net
+  - DOMAIN,mirror.battern.eu
+  - DOMAIN,mirror.bg.host.ag
+  - DOMAIN,mirror.bgp.rodeo
+  - DOMAIN,mirror.bharatdatacenter.com
   - DOMAIN,mirror.bibleonline.ru
+  - DOMAIN,mirror.bizflycloud.vn
   - DOMAIN,mirror.biznetgio.com
+  - DOMAIN,mirror.blue3.com.br
   - DOMAIN,mirror.bom.albony.in
   - DOMAIN,mirror.bom2.albony.in
+  - DOMAIN,mirror.braindrainlan.nu
+  - DOMAIN,mirror.brightridge.com
   - DOMAIN,mirror.bytemark.co.uk
+  - DOMAIN,mirror.ca-tr.kamatera.com
   - DOMAIN,mirror.cat.net
   - DOMAIN,mirror.cc.columbia.edu
+  - DOMAIN,mirror.cc.vt.edu
   - DOMAIN,mirror.cedia.org.ec
   - DOMAIN,mirror.checkdomain.de
+  - DOMAIN,mirror.chmuri.net
+  - DOMAIN,mirror.citrahost.com
+  - DOMAIN,mirror.clearsky.vn
   - DOMAIN,mirror.clientvps.com
+  - DOMAIN,mirror.cloudhosting.lv
   - DOMAIN,mirror.cogentco.com
+  - DOMAIN,mirror.corbina.net
+  - DOMAIN,mirror.cov.ukservers.com
+  - DOMAIN,mirror.cpsc.ucalgary.ca
+  - DOMAIN,mirror.creoline.net
+  - DOMAIN,mirror.cs.jmu.edu
+  - DOMAIN,mirror.cs.odu.edu
   - DOMAIN,mirror.csclub.uwaterloo.ca
+  - DOMAIN,mirror.cse.iitk.ac.in
+  - DOMAIN,mirror.cyberbits.asia
   - DOMAIN,mirror.cyberbits.eu
+  - DOMAIN,mirror.cyberchains.org
+  - DOMAIN,mirror.d.umn.edu
+  - DOMAIN,mirror.dal.nexril.net
+  - DOMAIN,mirror.daniel-jost.net
+  - DOMAIN,mirror.datacenter.az
   - DOMAIN,mirror.datacenter.by
+  - DOMAIN,mirror.datacenter.mn
+  - DOMAIN,mirror.datamossa.io
   - DOMAIN,mirror.datapipe.net
+  - DOMAIN,mirror.dc.uz
   - DOMAIN,mirror.de.leaseweb.net
+  - DOMAIN,mirror.debian.ikoula.com
   - DOMAIN,mirror.del.albony.in
+  - DOMAIN,mirror.dewabiz.com
+  - DOMAIN,mirror.digitaloceans.dev
+  - DOMAIN,mirror.djvg.sg
   - DOMAIN,mirror.dkm.cz
+  - DOMAIN,mirror.docker.ru
   - DOMAIN,mirror.dogado.de
+  - DOMAIN,mirror.domainhizmetleri.com
   - DOMAIN,mirror.downloadvn.com
   - DOMAIN,mirror.dsrg.utoronto.ca
+  - DOMAIN,mirror.dst.ca
+  - DOMAIN,mirror.duocast.net
   - DOMAIN,mirror.easyname.at
   - DOMAIN,mirror.easyname.ch
+  - DOMAIN,mirror.efect.ro
+  - DOMAIN,mirror.ekiphost.com
+  - DOMAIN,mirror.elice.io
+  - DOMAIN,mirror.eliv.digital
+  - DOMAIN,mirror.enzu.com
+  - DOMAIN,mirror.esecuredata.com
+  - DOMAIN,mirror.estone.ca
+  - DOMAIN,mirror.eu-fr.kamatera.com
+  - DOMAIN,mirror.eu-lo.kamatera.com
+  - DOMAIN,mirror.eu.4psacloud.com
+  - DOMAIN,mirror.eu.kamatera.com
+  - DOMAIN,mirror.eu.oneandone.net
   - DOMAIN,mirror.evowise.com
+  - DOMAIN,mirror.facebook.net
+  - DOMAIN,mirror.faraso.org
   - DOMAIN,mirror.fcix.net
+  - DOMAIN,mirror.fi.ossplanet.net
+  - DOMAIN,mirror.fjordos.com
+  - DOMAIN,mirror.flo.c-f.ro
   - DOMAIN,mirror.freedif.org
+  - DOMAIN,mirror.freethought-internet.co.uk
+  - DOMAIN,mirror.fsmg.org.nz
+  - DOMAIN,mirror.fst.kz
   - DOMAIN,mirror.funkfreundelandshut.de
   - DOMAIN,mirror.ghproxy.com
+  - DOMAIN,mirror.gi.co.id
+  - DOMAIN,mirror.gofoss.xyz
+  - DOMAIN,mirror.gotmyhost.com
+  - DOMAIN,mirror.greennet.gl
+  - DOMAIN,mirror.grid.uchicago.edu
+  - DOMAIN,mirror.group.one
+  - DOMAIN,mirror.gsl.icu
+  - DOMAIN,mirror.hashy0917.net
+  - DOMAIN,mirror.hep.gg
+  - DOMAIN,mirror.hnd.cl
+  - DOMAIN,mirror.hoobly.com
   - DOMAIN,mirror.host.ag
+  - DOMAIN,mirror.hostafrica.co.za
+  - DOMAIN,mirror.hoster.kz
+  - DOMAIN,mirror.hosthink.net
+  - DOMAIN,mirror.hostiko.network
   - DOMAIN,mirror.hosting90.cz
+  - DOMAIN,mirror.hostnet.nl
   - DOMAIN,mirror.hs-esslingen.de
+  - DOMAIN,mirror.hyperdedic.ru
+  - DOMAIN,mirror.i3d.net
   - DOMAIN,mirror.ibcp.fr
+  - DOMAIN,mirror.ietlucknow.ac.in
+  - DOMAIN,mirror.ihost.md
+  - DOMAIN,mirror.il-ha.kamatera.com
+  - DOMAIN,mirror.il-pt.kamatera.com
+  - DOMAIN,mirror.il-rh.kamatera.com
+  - DOMAIN,mirror.il-ta.kamatera.com
+  - DOMAIN,mirror.il.kamatera.com
+  - DOMAIN,mirror.improve.nordlo.cloud
+  - DOMAIN,mirror.imt-systems.com
+  - DOMAIN,mirror.in2p3.fr
+  - DOMAIN,mirror.infomaniak.ch
   - DOMAIN,mirror.informatik.hs-fulda.de
+  - DOMAIN,mirror.informatik.tu-freiberg.de
+  - DOMAIN,mirror.init7.net
   - DOMAIN,mirror.inode.at
+  - DOMAIN,mirror.insacom.cl
   - DOMAIN,mirror.intergrid.com.au
+  - DOMAIN,mirror.internet.asn.au
   - DOMAIN,mirror.internode.on.net
+  - DOMAIN,mirror.ipb.de
+  - DOMAIN,mirror.iranserver.com
   - DOMAIN,mirror.is.co.za
+  - DOMAIN,mirror.isoc.org.il
+  - DOMAIN,mirror.it.ubc.ca
+  - DOMAIN,mirror.it4i.cz
+  - DOMAIN,mirror.its-tps.fr
   - DOMAIN,mirror.its.dal.ca
+  - DOMAIN,mirror.its.umich.edu
+  - DOMAIN,mirror.iway.ch
+  - DOMAIN,mirror.ixirhost.com
   - DOMAIN,mirror.jax.hugeserver.com
+  - DOMAIN,mirror.jeonnam.school
+  - DOMAIN,mirror.johnnybegood.fr
+  - DOMAIN,mirror.kamp.de
+  - DOMAIN,mirror.kapteyan.com.tr
   - DOMAIN,mirror.karneval.cz
+  - DOMAIN,mirror.katapult.io
+  - DOMAIN,mirror.keiminem.com
+  - DOMAIN,mirror.kernel.ir
   - DOMAIN,mirror.keystealth.org
+  - DOMAIN,mirror.kkg.berlin
+  - DOMAIN,mirror.kku.ac.th
   - DOMAIN,mirror.klaus-uwe.me
   - DOMAIN,mirror.koddos.net
+  - DOMAIN,mirror.kpfu.ru
+  - DOMAIN,mirror.krfoss.org
   - DOMAIN,mirror.kumi.systems
   - DOMAIN,mirror.lagoon.nc
   - DOMAIN,mirror.las.iastate.edu
+  - DOMAIN,mirror.lc
+  - DOMAIN,mirror.lchost.net
   - DOMAIN,mirror.leitecastro.com
+  - DOMAIN,mirror.library.ucy.ac.cy
+  - DOMAIN,mirror.limda.net
+  - DOMAIN,mirror.linkdata.com
   - DOMAIN,mirror.linux-ia64.org
-  - DOMAIN,mirror.liquidtelecom.com
+  - DOMAIN,mirror.linux.ncsu.edu
+  - DOMAIN,mirror.linux.org.au
+  - DOMAIN,mirror.liquidrp.de
+  - DOMAIN,mirror.litnet.lt
+  - DOMAIN,mirror.logol.ru
   - DOMAIN,mirror.low-orbit.net
   - DOMAIN,mirror.lyrahosting.com
   - DOMAIN,mirror.macomnet.net
+  - DOMAIN,mirror.maeen.sa
+  - DOMAIN,mirror.mangohost.net
+  - DOMAIN,mirror.marcusn.net
   - DOMAIN,mirror.marwan.ma
+  - DOMAIN,mirror.math.princeton.edu
+  - DOMAIN,mirror.math.ucdavis.edu
+  - DOMAIN,mirror.mci-1.serverforge.org
+  - DOMAIN,mirror.mephi.ru
   - DOMAIN,mirror.metanet.ch
   - DOMAIN,mirror.metrocast.net
+  - DOMAIN,mirror.mia.velocihost.net
+  - DOMAIN,mirror.mirohost.net
+  - DOMAIN,mirror.mrjester.net
+  - DOMAIN,mirror.mvizn.com
+  - DOMAIN,mirror.mythic-beasts.com
   - DOMAIN,mirror.navercorp.com
   - DOMAIN,mirror.nbtelecom.com.br
+  - DOMAIN,mirror.neftm.ru
+  - DOMAIN,mirror.neolabs.kz
   - DOMAIN,mirror.netcologne.de
   - DOMAIN,mirror.netcologne.de.org
-  - DOMAIN,mirror.netinch.com
+  - DOMAIN,mirror.netone.nl
+  - DOMAIN,mirror.netsite.dk
+  - DOMAIN,mirror.netspace.net.au
+  - DOMAIN,mirror.netzwerge.de
+  - DOMAIN,mirror.nevacloud.com
+  - DOMAIN,mirror.nforce.com
+  - DOMAIN,mirror.niif.hu
+  - DOMAIN,mirror.nishi.network
+  - DOMAIN,mirror.nitc.ac.in
+  - DOMAIN,mirror.nl.altushost.com
+  - DOMAIN,mirror.nl.as215296.net
+  - DOMAIN,mirror.nl.cdn-perfprod.com
+  - DOMAIN,mirror.nl.datapacket.com
   - DOMAIN,mirror.nl.leaseweb.net
+  - DOMAIN,mirror.nodesdirect.com
   - DOMAIN,mirror.nohup.it
   - DOMAIN,mirror.novg.net
+  - DOMAIN,mirror.nus.edu.sg
   - DOMAIN,mirror.nyi.net
   - DOMAIN,mirror.olnevhost.net
+  - DOMAIN,mirror.one.com
   - DOMAIN,mirror.ossplanet.net
+  - DOMAIN,mirror.ourhost.az
+  - DOMAIN,mirror.overthewire.com.au
   - DOMAIN,mirror.ox.ac.uk
+  - DOMAIN,mirror.papua.go.id
   - DOMAIN,mirror.physik-pool.tu-berlin.de
+  - DOMAIN,mirror.pilotfiber.com
+  - DOMAIN,mirror.pit.teraswitch.com
+  - DOMAIN,mirror.plusline.net
+  - DOMAIN,mirror.plusserver.com
+  - DOMAIN,mirror.pmf.kg.ac.rs
   - DOMAIN,mirror.pop-sc.rnp.br
+  - DOMAIN,mirror.positive-internet.com
   - DOMAIN,mirror.pregi.net
+  - DOMAIN,mirror.previder.nl
   - DOMAIN,mirror.ps.kz
+  - DOMAIN,mirror.raiolanetworks.com
+  - DOMAIN,mirror.rcg.sfu.ca
+  - DOMAIN,mirror.realcompute.io
+  - DOMAIN,mirror.reenigne.net
+  - DOMAIN,mirror.renu.ac.ug
+  - DOMAIN,mirror.retentionrange.co.bw
   - DOMAIN,mirror.reverse.net
   - DOMAIN,mirror.rise.ph
   - DOMAIN,mirror.rit.edu
   - DOMAIN,mirror.rol.ru
+  - DOMAIN,mirror.rustytel.net
+  - DOMAIN,mirror.sabay.com.kh
   - DOMAIN,mirror.sbb.rs
+  - DOMAIN,mirror.scaleuptech.com
+  - DOMAIN,mirror.servaxnet.com
+  - DOMAIN,mirror.server.net
   - DOMAIN,mirror.serverion.com
+  - DOMAIN,mirror.serverloft.eu
+  - DOMAIN,mirror.sg.gs
+  - DOMAIN,mirror.sh.com.tr
+  - DOMAIN,mirror.siati.ch
+  - DOMAIN,mirror.siena.edu
+  - DOMAIN,mirror.sinavps.ch
+  - DOMAIN,mirror.sitsa.com.ar
+  - DOMAIN,mirror.siwoo.org
   - DOMAIN,mirror.softaculous.com
+  - DOMAIN,mirror.solnet.ch
+  - DOMAIN,mirror.solnode.io
+  - DOMAIN,mirror.soonkeat.sg
   - DOMAIN,mirror.sov.uk.goscomb.net
   - DOMAIN,mirror.squ.edu.om
   - DOMAIN,mirror.stjschools.org
   - DOMAIN,mirror.switch.ch
   - DOMAIN,mirror.szerverem.hu
+  - DOMAIN,mirror.t-home.mk
   - DOMAIN,mirror.team-cymru.com
   - DOMAIN,mirror.team-cymru.org
+  - DOMAIN,mirror.team-host.ru
+  - DOMAIN,mirror.techlabs.co.kr
+  - DOMAIN,mirror.telepoint.bg
+  - DOMAIN,mirror.thunderhosting.cloud
+  - DOMAIN,mirror.timeweb.ru
+  - DOMAIN,mirror.timkevin.us
+  - DOMAIN,mirror.tngnet.com
   - DOMAIN,mirror.tochlab.net
   - DOMAIN,mirror.transip.net
   - DOMAIN,mirror.truenetwork.ru
   - DOMAIN,mirror.twds.com.tw
+  - DOMAIN,mirror.ubuntu.ikoula.com
+  - DOMAIN,mirror.ubuntu.serverforge.org
+  - DOMAIN,mirror.uchile.cl
   - DOMAIN,mirror.ucu.ac.ug
+  - DOMAIN,mirror.uepg.br
+  - DOMAIN,mirror.ufam.edu.br
+  - DOMAIN,mirror.ufro.cl
   - DOMAIN,mirror.ufs.ac.za
+  - DOMAIN,mirror.ufscar.br
   - DOMAIN,mirror.uic.edu
+  - DOMAIN,mirror.ukrnames.com
   - DOMAIN,mirror.umd.edu
+  - DOMAIN,mirror.unair.ac.id
+  - DOMAIN,mirror.unesp.br
+  - DOMAIN,mirror.unet.by
+  - DOMAIN,mirror.unimagdalena.edu.co
+  - DOMAIN,mirror.united-gameserver.de
+  - DOMAIN,mirror.units.it
+  - DOMAIN,mirror.unix-solutions.be
   - DOMAIN,mirror.unpad.ac.id
   - DOMAIN,mirror.uoregon.edu
   - DOMAIN,mirror.us-midwest-1.nexcess.net
+  - DOMAIN,mirror.us-ny2.kamatera.com
+  - DOMAIN,mirror.us-sc.kamatera.com
+  - DOMAIN,mirror.us-tx.kamatera.com
+  - DOMAIN,mirror.us.leaseweb.net
+  - DOMAIN,mirror.us.mirhosting.net
+  - DOMAIN,mirror.us.oneandone.net
+  - DOMAIN,mirror.usi.edu
+  - DOMAIN,mirror.vcu.edu
+  - DOMAIN,mirror.veesp.com
   - DOMAIN,mirror.ventraip.net.au
+  - DOMAIN,mirror.verinomi.com
+  - DOMAIN,mirror.vietnix.vn
+  - DOMAIN,mirror.viettelcloud.vn
+  - DOMAIN,mirror.vinehost.net
+  - DOMAIN,mirror.virtury.com
+  - DOMAIN,mirror.visiontech.com.bd
+  - DOMAIN,mirror.vnet.sk
   - DOMAIN,mirror.vorboss.net
+  - DOMAIN,mirror.vpgrp.io
+  - DOMAIN,mirror.vpsnet.com
   - DOMAIN,mirror.webtastix.net
+  - DOMAIN,mirror.webworld.ie
+  - DOMAIN,mirror.wtnet.de
+  - DOMAIN,mirror.xenyth.net
+  - DOMAIN,mirror.xeonbd.com
   - DOMAIN,mirror.xmission.com
   - DOMAIN,mirror.xtom.au
   - DOMAIN,mirror.xtom.com
@@ -2332,48 +2789,116 @@ payload:
   - DOMAIN,mirror.yandex.ru
   - DOMAIN,mirror.yannic-bonenberger.com
   - DOMAIN,mirror.yer.az
+  - DOMAIN,mirror.yuki.net.uk
+  - DOMAIN,mirror.za.abantu.cloud
   - DOMAIN,mirror.za.web4africa.net
+  - DOMAIN,mirror1.hs-esslingen.de
+  - DOMAIN,mirror1.infomaniak.com
+  - DOMAIN,mirror1.ku.ac.th
+  - DOMAIN,mirror1.sox.rs
+  - DOMAIN,mirror1.totbb.net
   - DOMAIN,mirror2.evolution-host.com
+  - DOMAIN,mirror2.infomaniak.com
+  - DOMAIN,mirror2.tuxinator.org
   - DOMAIN,mirrorbits.lineageos.org
+  - DOMAIN,mirrors-ubuntu.behostings.com
+  - DOMAIN,mirrors.accretive-networks.net
   - DOMAIN,mirrors.advancedhosters.com
   - DOMAIN,mirrors.ae-online.de
   - DOMAIN,mirrors.aliyun.com
+  - DOMAIN,mirrors.arpnetworks.com
+  - DOMAIN,mirrors.asnet.am
+  - DOMAIN,mirrors.atlas.net.co
+  - DOMAIN,mirrors.bangmod.cloud
+  - DOMAIN,mirrors.binaryracks.com
+  - DOMAIN,mirrors.bkns.vn
+  - DOMAIN,mirrors.bloomu.edu
+  - DOMAIN,mirrors.bmcc.edu
+  - DOMAIN,mirrors.c0urier.net
   - DOMAIN,mirrors.cat.net
+  - DOMAIN,mirrors.cat.pdx.edu
+  - DOMAIN,mirrors.centos.behostings.net
+  - DOMAIN,mirrors.chroot.ro
+  - DOMAIN,mirrors.cloudforest.co.th
+  - DOMAIN,mirrors.cmich.edu
+  - DOMAIN,mirrors.codec-cluster.org
   - DOMAIN,mirrors.concertpass.com
   - DOMAIN,mirrors.coreix.net
+  - DOMAIN,mirrors.datapark.ro
+  - DOMAIN,mirrors.dc.clear.net.ar
   - DOMAIN,mirrors.de.sahilister.net
   - DOMAIN,mirrors.edge.kernel.org
+  - DOMAIN,mirrors.egr.msu.edu
+  - DOMAIN,mirrors.esto.network
+  - DOMAIN,mirrors.evoluso.com
   - DOMAIN,mirrors.evowise.com
   - DOMAIN,mirrors.fedoraproject.org
+  - DOMAIN,mirrors.fibianet.dk
+  - DOMAIN,mirrors.gbnetwork.com
   - DOMAIN,mirrors.gethosted.online
   - DOMAIN,mirrors.gigenet.com
+  - DOMAIN,mirrors.glesys.net
+  - DOMAIN,mirrors.gofiber.vn
+  - DOMAIN,mirrors.hopbox.net
+  - DOMAIN,mirrors.hosterion.ro
+  - DOMAIN,mirrors.hostico.ro
   - DOMAIN,mirrors.hostingromania.ro.org
+  - DOMAIN,mirrors.hostiserver.com
   - DOMAIN,mirrors.ibiblio.org
+  - DOMAIN,mirrors.ic.unicamp.br
+  - DOMAIN,mirrors.iitd.ac.in
+  - DOMAIN,mirrors.ipserverone.com
   - DOMAIN,mirrors.ircam.fr
   - DOMAIN,mirrors.iu13.net
   - DOMAIN,mirrors.kernel.org
+  - DOMAIN,mirrors.layeronline.com
   - DOMAIN,mirrors.linux-bulgaria.org
+  - DOMAIN,mirrors.liquidweb.com
+  - DOMAIN,mirrors.lug.mtu.edu
   - DOMAIN,mirrors.m247.ro
+  - DOMAIN,mirrors.maine.edu
+  - DOMAIN,mirrors.melbourne.co.uk
+  - DOMAIN,mirrors.middlendian.com
   - DOMAIN,mirrors.mit.edu
   - DOMAIN,mirrors.mivocloud.com
   - DOMAIN,mirrors.myaegean.gr
   - DOMAIN,mirrors.nav.ro
+  - DOMAIN,mirrors.nepalicloud.com
   - DOMAIN,mirrors.neterra.net
   - DOMAIN,mirrors.netix.net
+  - DOMAIN,mirrors.nhanhoa.com
   - DOMAIN,mirrors.nic.cz
+  - DOMAIN,mirrors.nxtgen.com
   - DOMAIN,mirrors.nxthost.com
   - DOMAIN,mirrors.ocf.berkeley.edu
+  - DOMAIN,mirrors.opensource.is
+  - DOMAIN,mirrors.pardisco.co
+  - DOMAIN,mirrors.pidginhost.com
+  - DOMAIN,mirrors.powernet.com.ru
+  - DOMAIN,mirrors.ptisp.pt
   - DOMAIN,mirrors.rackhosting.com
   - DOMAIN,mirrors.rit.edu
   - DOMAIN,mirrors.rpmfusion.org
+  - DOMAIN,mirrors.sarak.as
   - DOMAIN,mirrors.sarata.com
   - DOMAIN,mirrors.saswata.cc
   - DOMAIN,mirrors.sonic.net
   - DOMAIN,mirrors.standaloneinstaller.com
+  - DOMAIN,mirrors.storpool.com
+  - DOMAIN,mirrors.teamcloud.am
+  - DOMAIN,mirrors.tino.org
+  - DOMAIN,mirrors.ubuntu.dimit.cloud
   - DOMAIN,mirrors.ucr.ac.cr
   - DOMAIN,mirrors.ukfast.co.uk
   - DOMAIN,mirrors.up.pt
+  - DOMAIN,mirrors.upr.edu
+  - DOMAIN,mirrors.us.kernel.org
+  - DOMAIN,mirrors.usinternet.com
+  - DOMAIN,mirrors.vcea.wsu.edu
+  - DOMAIN,mirrors.webhs.pt
   - DOMAIN,mirrors.whoishostingthis.com
+  - DOMAIN,mirrors.wikimedia.org
+  - DOMAIN,mirrors.xmission.com
   - DOMAIN,mirrors.xmissions.com
   - DOMAIN,mirrors.xservers.ro
   - DOMAIN,mirrors.xtom.au
@@ -2396,6 +2921,7 @@ payload:
   - DOMAIN,mosaic-blender.fxtwitter.com
   - DOMAIN,mosaic.fxtwitter.com
   - DOMAIN,mparticle.weather.com
+  - DOMAIN,mr.heru.id
   - DOMAIN,msdl.microsoft.com
   - DOMAIN,mstdn-s3.o3o.studio
   - DOMAIN,mta.newfold.com
@@ -2455,6 +2981,8 @@ payload:
   - DOMAIN,openapi.vercel.sh
   - DOMAIN,openseauserdata.com
   - DOMAIN,opensignal.cdnbye.com
+  - DOMAIN,opensource.nchc.org.tw
+  - DOMAIN,opensource.xtdv.net
   - DOMAIN,opfiles.b-cdn.net
   - DOMAIN,optimizationguide-pa.googleapis.com
   - DOMAIN,optimizely.com
@@ -2466,6 +2994,7 @@ payload:
   - DOMAIN,oss.1p3a.com
   - DOMAIN,oss.moe.cat
   - DOMAIN,oss.ypt.com
+  - DOMAIN,ossmirror.mycloud.services
   - DOMAIN,ota-cache1.googlezip.net
   - DOMAIN,ota.googlezip.net
   - DOMAIN,ovo.wxw.moe
@@ -2480,6 +3009,7 @@ payload:
   - DOMAIN,package-assets.oomol.com
   - DOMAIN,packagecloud.io
   - DOMAIN,packages-cf.termux.dev
+  - DOMAIN,packages.hs-regensburg.de
   - DOMAIN,packages.httpie.io
   - DOMAIN,packages.linuxmint.com
   - DOMAIN,packages.microsoft.com
@@ -2522,10 +3052,11 @@ payload:
   - DOMAIN,pics2.serviporno.com
   - DOMAIN,pictures-cdn.porn.com
   - DOMAIN,pim-media.intel.com
-  - DOMAIN,piotrkosoft.net
   - DOMAIN,piston-meta.mojang.com
   - DOMAIN,pixoraa.cc
   - DOMAIN,pkg-size.dev
+  - DOMAIN,pkg.adfinis-on-exoscale.ch
+  - DOMAIN,pkg.adfinis.com
   - DOMAIN,pkg.cloudflare.com
   - DOMAIN,pkg.cloudflareclient.com
   - DOMAIN,pkg.csb.dev
@@ -2550,6 +3081,7 @@ payload:
   - DOMAIN,playgroundcdn.typescriptlang.org
   - DOMAIN,playwright-akamai.azureedge.net
   - DOMAIN,playwright.azureedge.net
+  - DOMAIN,plug-mirror.rcac.purdue.edu
   - DOMAIN,plugins.dprint.dev
   - DOMAIN,plus.unsplash.com
   - DOMAIN,pm1.aninoapps.com
@@ -2598,6 +3130,8 @@ payload:
   - DOMAIN,public.saasexch.com
   - DOMAIN,public.zoorix.com
   - DOMAIN,publicsuffix.org
+  - DOMAIN,pubmirror.plutex.de
+  - DOMAIN,pubmirrors.dal.corespace.com
   - DOMAIN,puku-dist.4gamers.com.tw
   - DOMAIN,pytorch.org
   - DOMAIN,qmod.quotemedia.com
@@ -2606,6 +3140,7 @@ payload:
   - DOMAIN,quriobot.com
   - DOMAIN,r.r10s.jp
   - DOMAIN,r2.1hanime.com
+  - DOMAIN,r2.gear4music.com
   - DOMAIN,r2.leadsy.ai
   - DOMAIN,r2cdn.myshopline.com
   - DOMAIN,r34xyz.b-cdn.net
@@ -2633,14 +3168,27 @@ payload:
   - DOMAIN,releases.warp.dev
   - DOMAIN,releases.whatpulse.org
   - DOMAIN,renderer-assets.typeform.com
+  - DOMAIN,rep-ubuntu-il.upress.io
   - DOMAIN,replicate.npmjs.com
   - DOMAIN,repo.carbon.sh
   - DOMAIN,repo.debiancn.org
+  - DOMAIN,repo.extreme-ix.org
   - DOMAIN,repo.hex.pm
+  - DOMAIN,repo.ialab.dsu.edu
+  - DOMAIN,repo.ifca.es
+  - DOMAIN,repo.iut.ac.ir
+  - DOMAIN,repo.jztkft.hu
+  - DOMAIN,repo.linuxmirrors.ir
+  - DOMAIN,repo.morgan.kr
   - DOMAIN,repo.nextdns.io
   - DOMAIN,repo.powerdns.com
   - DOMAIN,repo.sleeping.town
+  - DOMAIN,repo.ugm.ac.id
+  - DOMAIN,repo.usk.ac.id
   - DOMAIN,repo1.maven.org
+  - DOMAIN,repo2.shinjiru.com
+  - DOMAIN,repos.del.extreme-ix.org
+  - DOMAIN,repos.interior.edu.uy
   - DOMAIN,repository.jboss.org
   - DOMAIN,repository.su
   - DOMAIN,res-geo.cdn.office.net
@@ -2669,6 +3217,13 @@ payload:
   - DOMAIN,rs-cdn.splashtop.com
   - DOMAIN,rsi.grafana.com
   - DOMAIN,rsms.me
+  - DOMAIN,rsync-linuxsoft.cern.ch
+  - DOMAIN,rsync.fjordos.com
+  - DOMAIN,rsync.gtlib.gatech.edu
+  - DOMAIN,rsync.icm.edu.pl
+  - DOMAIN,rsync.udc.es
+  - DOMAIN,rsync.uni-bayreuth.de
+  - DOMAIN,rsync.yuki.net.uk
   - DOMAIN,rtcg-access.bytevcloud.com
   - DOMAIN,rts-static-prod.freshworksapi.com
   - DOMAIN,rubygems.org
@@ -2799,7 +3354,8 @@ payload:
   - DOMAIN,sf-coze-web-cdn.coze.com
   - DOMAIN,sf-flow-web-cdn.ciciai.com
   - DOMAIN,sfiles.cnyes.cool
-  - DOMAIN,sh.cvut.cz
+  - DOMAIN,sft.if.usp.br
+  - DOMAIN,sg-mirrors.vhost.vn
   - DOMAIN,share.chessbase.com
   - DOMAIN,share.riseup.net
   - DOMAIN,shell.cdn.office.net
@@ -2823,12 +3379,11 @@ payload:
   - DOMAIN,snippet.growsumo.com
   - DOMAIN,snippet.maze.co
   - DOMAIN,snippets.freshchat.com
-  - DOMAIN,snt.utwente.nl
   - DOMAIN,social-cdn.vivaldi.net
   - DOMAIN,social-reaction-api.hk01.com
+  - DOMAIN,softlibre.unizar.es
   - DOMAIN,softwareupdate.pilotmoon.com
   - DOMAIN,solve-widget.forethought.ai
-  - DOMAIN,sotirov-bg.net
   - DOMAIN,source.domaintools.com
   - DOMAIN,source.roboflow.com
   - DOMAIN,source.unsplash.com
@@ -2872,7 +3427,6 @@ payload:
   - DOMAIN,static-assets.clubhouseapi.com
   - DOMAIN,static-assets.codecademy.com
   - DOMAIN,static-assets.coinbase.com
-  - DOMAIN,static-assets.freeanimehentai.net
   - DOMAIN,static-assets.juksy.com
   - DOMAIN,static-assets.mapbox.com
   - DOMAIN,static-assets.npr.org
@@ -2897,6 +3451,7 @@ payload:
   - DOMAIN,static-overlay.ubisoft.com
   - DOMAIN,static-production.npmjs.com
   - DOMAIN,static-r.kamihimeproject.net
+  - DOMAIN,static-r2.gear4music.com
   - DOMAIN,static-resource.np.community.playstation.net
   - DOMAIN,static-secure-uploads.ui.com
   - DOMAIN,static-sv.fc2.com
@@ -2977,6 +3532,7 @@ payload:
   - DOMAIN,static.frame.work
   - DOMAIN,static.freedownloadmanager.org
   - DOMAIN,static.freeimages.com
+  - DOMAIN,static.generated.photos
   - DOMAIN,static.getbutton.io
   - DOMAIN,static.gettyimages.com
   - DOMAIN,static.giant-bicycles.com
@@ -3141,6 +3697,7 @@ payload:
   - DOMAIN,statici.icloud.com
   - DOMAIN,staticintl.cloudcachetci.com
   - DOMAIN,staticm.fastcomments.com
+  - DOMAIN,statics-prod.mirrordaily.news
   - DOMAIN,statics.erothots.co
   - DOMAIN,statics.goorm.io
   - DOMAIN,statics.simpshub.com
@@ -3187,6 +3744,8 @@ payload:
   - DOMAIN,sunsite.icm.edu.pl
   - DOMAIN,sunsite.informatik.rwth-aachen.de
   - DOMAIN,support.content.office.net
+  - DOMAIN,suro.ubaya.ac.id
+  - DOMAIN,suse.uni-leipzig.de
   - DOMAIN,sydney.bing.com
   - DOMAIN,sync.getpublica.com
   - DOMAIN,t.betterstack.com
@@ -3218,7 +3777,6 @@ payload:
   - DOMAIN,texture.laby.net
   - DOMAIN,th.bing.com
   - DOMAIN,themes.fourthwall.com
-  - DOMAIN,thingproxy.freeboard.io
   - DOMAIN,thumbnail.missav.com
   - DOMAIN,thumbnailer.mixcloud.com
   - DOMAIN,thumbnails.applegamingwiki.com
@@ -3248,6 +3806,7 @@ payload:
   - DOMAIN,topbar-static.piano.io
   - DOMAIN,torrindex.net
   - DOMAIN,touchgal-image.moyu.moe
+  - DOMAIN,tour-content-cdn.kellymadisonmedia.com
   - DOMAIN,tourpic-vector.maps.komoot.net
   - DOMAIN,townsquare.media
   - DOMAIN,tracking.inflection.io
@@ -3255,6 +3814,8 @@ payload:
   - DOMAIN,tuf-repo-cdn.sigstore.dev
   - DOMAIN,tuf-repo.github.com
   - DOMAIN,tug.ctan.org
+  - DOMAIN,tug.org
+  - DOMAIN,tukaani.org
   - DOMAIN,turbo.build
   - DOMAIN,tux.rainside.sk
   - DOMAIN,twenty-icons.com
@@ -3264,6 +3825,71 @@ payload:
   - DOMAIN,u.keka.io
   - DOMAIN,ubistatic-a.ubisoft.com
   - DOMAIN,ubistatic2-a.ubisoft.com
+  - DOMAIN,ubuntu-archive.interhost.co.il
+  - DOMAIN,ubuntu-archive.locaweb.com.br
+  - DOMAIN,ubuntu-mirror.ati.tn
+  - DOMAIN,ubuntu-mirror.bhtelecom.ba
+  - DOMAIN,ubuntu-mirror.kimiahost.com
+  - DOMAIN,ubuntu-mirror.puq.apoapsis.cl
+  - DOMAIN,ubuntu-mirror.snu.edu.in
+  - DOMAIN,ubuntu.anexia.at
+  - DOMAIN,ubuntu.avalicense.com
+  - DOMAIN,ubuntu.btit.nz
+  - DOMAIN,ubuntu.c3sl.ufpr.br
+  - DOMAIN,ubuntu.ccns.ncku.edu.tw
+  - DOMAIN,ubuntu.cica.es
+  - DOMAIN,ubuntu.cs.nctu.edu.tw
+  - DOMAIN,ubuntu.cs.utah.edu
+  - DOMAIN,ubuntu.dcc.fc.up.pt
+  - DOMAIN,ubuntu.dts.mg
+  - DOMAIN,ubuntu.ethz.ch
+  - DOMAIN,ubuntu.gjolly.dev
+  - DOMAIN,ubuntu.grad.hr
+  - DOMAIN,ubuntu.grena.ge
+  - DOMAIN,ubuntu.grn.cat
+  - DOMAIN,ubuntu.hi.no
+  - DOMAIN,ubuntu.hysing.is
+  - DOMAIN,ubuntu.ip-connect.vn.ua
+  - DOMAIN,ubuntu.ipacct.com
+  - DOMAIN,ubuntu.koyanet.lv
+  - DOMAIN,ubuntu.lafibre.info
+  - DOMAIN,ubuntu.lagis.at
+  - DOMAIN,ubuntu.lagoon.nc
+  - DOMAIN,ubuntu.letscloud.io
+  - DOMAIN,ubuntu.linux-bg.org
+  - DOMAIN,ubuntu.linux.n0c.ca
+  - DOMAIN,ubuntu.man.lodz.pl
+  - DOMAIN,ubuntu.mobinhost.com
+  - DOMAIN,ubuntu.mti.mt.gov.br
+  - DOMAIN,ubuntu.netforce.hosting
+  - DOMAIN,ubuntu.org.ua
+  - DOMAIN,ubuntu.osuosl.org
+  - DOMAIN,ubuntu.otenet.gr
+  - DOMAIN,ubuntu.pars.host
+  - DOMAIN,ubuntu.parsvds.com
+  - DOMAIN,ubuntu.phoenixnap.com
+  - DOMAIN,ubuntu.pishgaman.net
+  - DOMAIN,ubuntu.repo.cure.edu.uy
+  - DOMAIN,ubuntu.rootlicense.com
+  - DOMAIN,ubuntu.securedservers.com
+  - DOMAIN,ubuntu.servering.info
+  - DOMAIN,ubuntu.syxpi.fr
+  - DOMAIN,ubuntu.task.gda.pl
+  - DOMAIN,ubuntu.tuxuri.com
+  - DOMAIN,ubuntu.ucr.ac.cr
+  - DOMAIN,ubuntu.uib.no
+  - DOMAIN,ubuntu.unc.edu.ar
+  - DOMAIN,ubuntu.uni-klu.ac.at
+  - DOMAIN,ubuntu.univ-nantes.fr
+  - DOMAIN,ubuntu.univ-reims.fr
+  - DOMAIN,ubuntu.uvigo.es
+  - DOMAIN,ubuntu.volia.net
+  - DOMAIN,ubuntu.vpsttt.com
+  - DOMAIN,ubuntu.web.trex.fi
+  - DOMAIN,ubuntu.zero.com.ar
+  - DOMAIN,ubuntutym.u-toyama.ac.jp
+  - DOMAIN,ucho.ignum.cz
+  - DOMAIN,ucmirror.canterbury.ac.nz
   - DOMAIN,udata.namespace.so
   - DOMAIN,uhf.microsoft.com
   - DOMAIN,ui-cdn.digitalocean-ui.com
@@ -3272,6 +3898,7 @@ payload:
   - DOMAIN,ui.powerreviews.com
   - DOMAIN,ui.trailhead.com
   - DOMAIN,uim.9uu22.com
+  - DOMAIN,ulises.hostalia.com
   - DOMAIN,unlimited-cdn.waifu2x.net
   - DOMAIN,unsubscribe-imgs.leavemealone.com
   - DOMAIN,uos-support-files.svc.ui.com
@@ -3298,6 +3925,7 @@ payload:
   - DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
   - DOMAIN,us-js.zonka.co
   - DOMAIN,us.123rf.com
+  - DOMAIN,us.dyi.ng
   - DOMAIN,us.hamreus.com
   - DOMAIN,us01ccistatic.zoom.us
   - DOMAIN,use.fortawesome.com
@@ -3339,6 +3967,8 @@ payload:
   - DOMAIN,vip.dytt-img.com
   - DOMAIN,vir.wsj.net
   - DOMAIN,vjs.zencdn.net
+  - DOMAIN,vn-mirrors.techhost.vn
+  - DOMAIN,vn-mirrors.vhost.vn
   - DOMAIN,vod.jfly.xyz
   - DOMAIN,vpncdn.protonweb.com
   - DOMAIN,vscode-sync-insiders.trafficmanager.net
@@ -3422,8 +4052,13 @@ payload:
   - DOMAIN,www.10086.win
   - DOMAIN,www.acgpix.de
   - DOMAIN,www.bbthat.com
+  - DOMAIN,www.club.cc.cmu.edu
+  - DOMAIN,www.gnu.org
+  - DOMAIN,www.gnupg.org
   - DOMAIN,www.googleapis.com
   - DOMAIN,www.gstatic.com
+  - DOMAIN,www.gtlib.gatech.edu
+  - DOMAIN,www.gutscheinrausch.de
   - DOMAIN,www.paypalobjects.com
   - DOMAIN,www.pngmart.com
   - DOMAIN,www.tbstat.com
@@ -3437,6 +4072,7 @@ payload:
   - DOMAIN,xvcf2.xboxlive.com
   - DOMAIN,y.yarn.co
   - DOMAIN,zod.dev
+  - DOMAIN,zzz.wxw.moe
   - DOMAIN-SUFFIX,10musume.com
   - DOMAIN-SUFFIX,112263.com
   - DOMAIN-SUFFIX,114514.quest
@@ -3771,6 +4407,7 @@ payload:
   - DOMAIN-SUFFIX,cabletv.com.hk
   - DOMAIN-SUFFIX,callhulu.com
   - DOMAIN-SUFFIX,camfrogcdn.com
+  - DOMAIN-SUFFIX,capcutstatic.com
   - DOMAIN-SUFFIX,carlos.trade
   - DOMAIN-SUFFIX,carryz.net
   - DOMAIN-SUFFIX,cartocdn.com
@@ -4057,6 +4694,7 @@ payload:
   - DOMAIN-SUFFIX,ddpic.info
   - DOMAIN-SUFFIX,deb.debian.org
   - DOMAIN-SUFFIX,debian.map.fastlydns.net
+  - DOMAIN-SUFFIX,debian.petiak.ir
   - DOMAIN-SUFFIX,deezer.com
   - DOMAIN-SUFFIX,deja-vu.beauty
   - DOMAIN-SUFFIX,delegated-ipfs.dev
@@ -4929,6 +5567,7 @@ payload:
   - DOMAIN-SUFFIX,imagedelivery.net
   - DOMAIN-SUFFIX,imagehub.cc
   - DOMAIN-SUFFIX,images-amazon.com
+  - DOMAIN-SUFFIX,images-dnxlive.com
   - DOMAIN-SUFFIX,images-iherb.com
   - DOMAIN-SUFFIX,images.arcpublishing.com
   - DOMAIN-SUFFIX,images.gameru.net
@@ -5048,6 +5687,7 @@ payload:
   - DOMAIN-SUFFIX,javcdn.vip
   - DOMAIN-SUFFIX,javday.space
   - DOMAIN-SUFFIX,javgg.net
+  - DOMAIN-SUFFIX,javhucdn.com
   - DOMAIN-SUFFIX,javplayer.me
   - DOMAIN-SUFFIX,javtxt.com
   - DOMAIN-SUFFIX,jazzradio.com
@@ -5258,38 +5898,69 @@ payload:
   - DOMAIN-SUFFIX,minecraftforge.net
   - DOMAIN-SUFFIX,minotar.net
   - DOMAIN-SUFFIX,mirror-media.xyz
+  - DOMAIN-SUFFIX,mirror.ac.ke
   - DOMAIN-SUFFIX,mirror.ac.za
   - DOMAIN-SUFFIX,mirror.amaze.com.au
   - DOMAIN-SUFFIX,mirror.anlx.net
   - DOMAIN-SUFFIX,mirror.ba
+  - DOMAIN-SUFFIX,mirror.blendbyte.net
   - DOMAIN-SUFFIX,mirror.cdnetworks.com
   - DOMAIN-SUFFIX,mirror.choon.net
   - DOMAIN-SUFFIX,mirror.clarkson.edu
+  - DOMAIN-SUFFIX,mirror.coganng.com
   - DOMAIN-SUFFIX,mirror.colo-serv.net
   - DOMAIN-SUFFIX,mirror.constant.com
   - DOMAIN-SUFFIX,mirror.digionline.de
   - DOMAIN-SUFFIX,mirror.digitalpacific.com.au
   - DOMAIN-SUFFIX,mirror.edgeuno.com
+  - DOMAIN-SUFFIX,mirror.famaserver.com
+  - DOMAIN-SUFFIX,mirror.flokinet.net
+  - DOMAIN-SUFFIX,mirror.frontiernet.net
   - DOMAIN-SUFFIX,mirror.ftn.uns.ac.rs
   - DOMAIN-SUFFIX,mirror.garr.it
   - DOMAIN-SUFFIX,mirror.globo.tech
+  - DOMAIN-SUFFIX,mirror.gnc.am
   - DOMAIN-SUFFIX,mirror.gtcomm.net
+  - DOMAIN-SUFFIX,mirror.guzel.net.tr
+  - DOMAIN-SUFFIX,mirror.homacloud.ai
+  - DOMAIN-SUFFIX,mirror.intermax.nl
   - DOMAIN-SUFFIX,mirror.iphh.net
   - DOMAIN-SUFFIX,mirror.iweb.ca
   - DOMAIN-SUFFIX,mirror.iweb.com
+  - DOMAIN-SUFFIX,mirror.letscloud.io
+  - DOMAIN-SUFFIX,mirror.linux.ro
+  - DOMAIN-SUFFIX,mirror.liquidtelecom.com
+  - DOMAIN-SUFFIX,mirror.lrz.de
   - DOMAIN-SUFFIX,mirror.nl
   - DOMAIN-SUFFIX,mirror.noc.one
   - DOMAIN-SUFFIX,mirror.norbert-ruehl.de
+  - DOMAIN-SUFFIX,mirror.rackspace.com
   - DOMAIN-SUFFIX,mirror.rafal.ca
+  - DOMAIN-SUFFIX,mirror.rain.co.za
+  - DOMAIN-SUFFIX,mirror.root.lu
   - DOMAIN-SUFFIX,mirror.serveriai.lt
   - DOMAIN-SUFFIX,mirror.serversaustralia.com.au
+  - DOMAIN-SUFFIX,mirror.shastacoe.net
+  - DOMAIN-SUFFIX,mirror.tefexia.net
+  - DOMAIN-SUFFIX,mirror.thegigabit.com
   - DOMAIN-SUFFIX,mirror.triple-it.nl
+  - DOMAIN-SUFFIX,mirror.true.nl
+  - DOMAIN-SUFFIX,mirror.tudos.de
+  - DOMAIN-SUFFIX,mirror.uk.sargasso.net
   - DOMAIN-SUFFIX,mirror.vexxhost.com
+  - DOMAIN-SUFFIX,mirror.vhosting-it.com
   - DOMAIN-SUFFIX,mirror.vu.lt
+  - DOMAIN-SUFFIX,mirror.wearetriple.com
+  - DOMAIN-SUFFIX,mirror.web4u.cz
+  - DOMAIN-SUFFIX,mirror.zzunipark.com
   - DOMAIN-SUFFIX,mirrorcreator.com
+  - DOMAIN-SUFFIX,mirrors.blix.com
+  - DOMAIN-SUFFIX,mirrors.cicku.me
+  - DOMAIN-SUFFIX,mirrors.clouvider.net
   - DOMAIN-SUFFIX,mirrors.dotsrc.org
   - DOMAIN-SUFFIX,mirrors.hoobly.com
   - DOMAIN-SUFFIX,mirrors.ionfish.org
+  - DOMAIN-SUFFIX,mirrors.linux.ro
   - DOMAIN-SUFFIX,mirrors.lucidnetworks.net
   - DOMAIN-SUFFIX,mirrors.nublue.co.uk
   - DOMAIN-SUFFIX,mirrors.omnilance.com
@@ -5300,6 +5971,7 @@ payload:
   - DOMAIN-SUFFIX,mirrors.tds.net.org
   - DOMAIN-SUFFIX,mirrors.uk2.net
   - DOMAIN-SUFFIX,mirrors.utermux.dev
+  - DOMAIN-SUFFIX,mirrors.zagrio.net
   - DOMAIN-SUFFIX,mirrorservice.org
   - DOMAIN-SUFFIX,misakaf.org
   - DOMAIN-SUFFIX,misakaf.xyz
@@ -5835,6 +6507,7 @@ payload:
   - DOMAIN-SUFFIX,rsb.net
   - DOMAIN-SUFFIX,rspcdn.net
   - DOMAIN-SUFFIX,rss3.dev
+  - DOMAIN-SUFFIX,rsync.kr
   - DOMAIN-SUFFIX,rthk.hk
   - DOMAIN-SUFFIX,rthk.org.hk
   - DOMAIN-SUFFIX,rum.cronitor.io
@@ -6197,6 +6870,11 @@ payload:
   - DOMAIN-SUFFIX,ubembed.com
   - DOMAIN-SUFFIX,uber-assets.com
   - DOMAIN-SUFFIX,ubiqfile.com
+  - DOMAIN-SUFFIX,ubuntu.csg.uzh.ch
+  - DOMAIN-SUFFIX,ubuntu.moon127.net
+  - DOMAIN-SUFFIX,ubuntu.nautile.nc
+  - DOMAIN-SUFFIX,ubuntu.petiak.ir
+  - DOMAIN-SUFFIX,ubuntumirror.dei.uc.pt
   - DOMAIN-SUFFIX,ucarecdn.com
   - DOMAIN-SUFFIX,udify.app
   - DOMAIN-SUFFIX,uicdn.net
