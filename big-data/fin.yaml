@@ -1,5 +1,5 @@
-# Clash total line 8276
-# Last updated Thu 11/13/2025 22:16:23.97
+# Clash total line 8282
+# Last updated Sun 11/16/2025 22:15:10.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -693,6 +693,7 @@ payload:
   - DOMAIN,cdn.insightmediagroup.io
   - DOMAIN,cdn.ionos.de
   - DOMAIN,cdn.ip2location.io
+  - DOMAIN,cdn.iplocation.net
   - DOMAIN,cdn.iporntv.net
   - DOMAIN,cdn.ipregistry.co
   - DOMAIN,cdn.jamieoliver.com
@@ -746,6 +747,7 @@ payload:
   - DOMAIN,cdn.music.com
   - DOMAIN,cdn.myanimelist.net
   - DOMAIN,cdn.myfonts.net
+  - DOMAIN,cdn.myfutanari.com
   - DOMAIN,cdn.myportfolio.com
   - DOMAIN,cdn.nba.com
   - DOMAIN,cdn.ndtv.com
@@ -2052,6 +2054,7 @@ payload:
   - DOMAIN,img-en.fs.com
   - DOMAIN,img-fnc.ebc.net.tw
   - DOMAIN,img.177pica.com
+  - DOMAIN,img.321cdn.com
   - DOMAIN,img.3movs.com
   - DOMAIN,img.4gamers.com.tw
   - DOMAIN,img.4khd.com
@@ -3482,6 +3485,7 @@ payload:
   - DOMAIN,static-web-prod.skillshare.com
   - DOMAIN,static-web.grammarly.com
   - DOMAIN,static-www.onlyoffice.com
+  - DOMAIN,static.3dporndude.com
   - DOMAIN,static.ada.support
   - DOMAIN,static.addtoany.com
   - DOMAIN,static.adguard.com
@@ -3665,6 +3669,7 @@ payload:
   - DOMAIN,static.start.me
   - DOMAIN,static.status.io
   - DOMAIN,static.telegraph.co.uk
+  - DOMAIN,static.tella.tv
   - DOMAIN,static.tenki.jp
   - DOMAIN,static.test-beta.com
   - DOMAIN,static.theguardian.com
@@ -4882,6 +4887,7 @@ payload:
   - DOMAIN-SUFFIX,dogatch.jp
   - DOMAIN-SUFFIX,dogehls.xyz
   - DOMAIN-SUFFIX,dokusho-ojikan.jp
+  - DOMAIN-SUFFIX,dolphin-anty-cdn.com
   - DOMAIN-SUFFIX,doodcdn.co
   - DOMAIN-SUFFIX,doodrive.com
   - DOMAIN-SUFFIX,doodstream.com
