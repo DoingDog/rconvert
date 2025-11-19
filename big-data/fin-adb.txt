@@ -1,5 +1,5 @@
-# Adblock total line 7323
-# Last updated Sun 11/16/2025 22:15:10.70
+# Adblock total line 7355
+# Last updated Wed 11/19/2025 22:15:44.47
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -195,6 +195,7 @@
 ||assets.clickfunnels.com^
 ||assets.cloudpilot.ai^
 ||assets.cmcmarkets.com^
+||assets.codeguru.com^
 ||assets.codepen.io^
 ||assets.coinbase.com^
 ||assets.coingecko.com^
@@ -556,6 +557,7 @@
 ||cdn.bfldr.com^
 ||cdn.bigcloud.click^
 ||cdn.birdie.so^
+||cdn.blogarama.com^
 ||cdn.botframework.com^
 ||cdn.branch.io^
 ||cdn.brandfetch.io^
@@ -607,6 +609,7 @@
 ||cdn.db-ip.com^
 ||cdn.db.io^
 ||cdn.decrypt.co^
+||cdn.decrypt.day^
 ||cdn.delight-vr.com^
 ||cdn.designerapp.osi.office.net^
 ||cdn.designsystem.arm.com^
@@ -779,6 +782,7 @@
 ||cdn.perfops.net^
 ||cdn.permutive.com^
 ||cdn.pgvt.io^
+||cdn.pi.spectrum.net^
 ||cdn.piano.io^
 ||cdn.pickystory.com^
 ||cdn.picrew.me^
@@ -1055,6 +1059,7 @@
 ||cf.eip.telegraph.co.uk^
 ||cf.hamreus.com^
 ||cf.javfree.me^
+||cf.mhgui.com^
 ||cf.shopee.tw^
 ||cfvod.kaltura.com^
 ||chart.googleapis.com^
@@ -1094,6 +1099,7 @@
 ||cms-cdn.goat.com^
 ||cms-cdn.now.gg^
 ||cms.blavity.com^
+||cms.myfonts.com^
 ||cms.recordedfuture.com^
 ||cms.therecord.media^
 ||cms.typenetwork.com^
@@ -1146,6 +1152,7 @@
 ||cookie-cdn.cookiepro.com^
 ||corp-backend.brevo.com^
 ||cors-proxy.htmldriven.com^
+||covers.openlibrary.org^
 ||cpan-mirror.rbc.ru^
 ||cpan.cpantesters.org^
 ||cpan.cs.utah.edu^
@@ -1499,6 +1506,9 @@
 ||eu.cdnbye.com^
 ||eu.hamreus.com^
 ||eu01ccistatic.zoom.us^
+||eu1.hamreus.com^
+||eu2.hamreus.com^
+||eu3.hamreus.com^
 ||euc-widget.freshworks.com^
 ||event.ithome.com.tw^
 ||events-delivery.apple.com^
@@ -1861,6 +1871,7 @@
 ||i.gawby.com^
 ||i.geekflare.com^
 ||i.giphy.com^
+||i.git99.com^
 ||i.guim.co.uk^
 ||i.gzn.jp^
 ||i.hamreus.com^
@@ -2012,6 +2023,7 @@
 ||images.scalero.io^
 ||images.scrolller.com^
 ||images.softwaresuggest.com^
+||images.spectrumnews1.com^
 ||images.spot.im^
 ||images.spr.so^
 ||images.store.crowdstrike.com^
@@ -2135,6 +2147,7 @@
 ||img.voguehk.com^
 ||img.washingtonpost.com^
 ||img.windy.com^
+||img.xbooru.com^
 ||img.xhacgn.com^
 ||img.xjh.me^
 ||img0.socialshopwave.com^
@@ -2399,6 +2412,7 @@
 ||media.printables.com^
 ||media.pullopen.xyz^
 ||media.ra.kroll.com^
+||media.raven.news^
 ||media.remax-prod.eng.remax.tech^
 ||media.shopimind.com^
 ||media.smooch.io^
@@ -3115,6 +3129,7 @@
 ||polyfill.bbhub.io^
 ||pomf2.lain.la^
 ||pool.jortage.com^
+||pp-static.monotype.com^
 ||ppa.launchpad.net^
 ||pptstatic.iyf.tv^
 ||practicaldev-herokuapp-com.freetls.fastly.net^
@@ -3280,6 +3295,7 @@
 ||s1.coincarp.com^
 ||s1.divhunt.com^
 ||s1.feedly.com^
+||s1.freebeacon.com^
 ||s1.maxstream.org^
 ||s1.qwant.com^
 ||s1.zerochan.net^
@@ -3287,6 +3303,7 @@
 ||s11.maxstream.org^
 ||s13.maxstream.org^
 ||s2.coinmarketcap.com^
+||s2.freebeacon.com^
 ||s2.qwant.com^
 ||s3-alpha-sig.figma.com^
 ||s3-alpha.figma.com^
@@ -3310,6 +3327,7 @@
 ||s3.eu-central-003.backblazeb2.com^
 ||s3.eu-central-2.wasabisys.com^
 ||s3.filebase.com^
+||s3.freebeacon.com^
 ||s3.go2778.com^
 ||s3.m.0x.mk^
 ||s3.masto.ai^
@@ -3325,6 +3343,7 @@
 ||s3.us-west-004.backblazeb2.com^
 ||s3media.squarespace.com^
 ||s4.anilist.co^
+||s4.freebeacon.com^
 ||s4.itho.me^
 ||s8.maxstream.org^
 ||s9.maxstream.org^
@@ -3370,6 +3389,7 @@
 ||security.debian.org^
 ||security.ubuntu.com^
 ||segapi.clerk.com^
+||sellon.shiprocket.in^
 ||sentry.ainopara.com^
 ||seo-wp.airdroid.com^
 ||sequoia.cdn-apple.com^
@@ -3421,6 +3441,7 @@
 ||speedmedia2.jfrog.com^
 ||spotlightimage.biggo.com^
 ||sprig.figma.com^
+||sr-cdn-1.shiprocket.in^
 ||ssl.gstatic.com^
 ||st-eu.dynamicyield.com^
 ||st.agrd.eu^
@@ -3483,6 +3504,7 @@
 ||static-us.afterpay.com^
 ||static-web-prod.skillshare.com^
 ||static-web.grammarly.com^
+||static-webfonts.myfonts.com^
 ||static-www.onlyoffice.com^
 ||static.3dporndude.com^
 ||static.ada.support^
@@ -3628,6 +3650,7 @@
 ||static.oomol.com^
 ||static.openreplay.com^
 ||static.opensea.io^
+||static.opensuse.org^
 ||static.parallels.com^
 ||static.peatio.com^
 ||static.pfrt.yna.co.kr^
@@ -3773,6 +3796,7 @@
 ||support.content.office.net^
 ||suro.ubaya.ac.id^
 ||suse.uni-leipzig.de^
+||swan.prod.merch.vpsvc.com^
 ||sydney.bing.com^
 ||sync.getpublica.com^
 ||t.betterstack.com^
@@ -3958,6 +3982,9 @@
 ||us.dyi.ng^
 ||us.hamreus.com^
 ||us01ccistatic.zoom.us^
+||us1.hamreus.com^
+||us2.hamreus.com^
+||us3.hamreus.com^
 ||use.fortawesome.com^
 ||use.typekit.com^
 ||use.typekit.net^
@@ -4609,6 +4636,7 @@
 ||cloudfront.net.in^
 ||cloudghost.net^
 ||cloudimg.io^
+||cloudinary.vpsvc.com^
 ||cloudlin.vip^
 ||cloudvideo.tv^
 ||cmail19.com^
@@ -5585,6 +5613,7 @@
 ||ibytedtos.com^
 ||ibyteimg.com^
 ||icerbox.com^
+||icfcdn.com^
 ||icon.horse^
 ||iflix.com^
 ||iframe.ly^
@@ -6209,6 +6238,7 @@
 ||npmcdn.com^
 ||npmfs.com^
 ||npms.io^
+||nsimg.net^
 ||nsstatic.net^
 ||ntrrr.am.sb^
 ||nv7s.com^
@@ -6721,6 +6751,7 @@
 ||staticblitz.com^
 ||staticflickr.com^
 ||staticimgly.com^
+||staticstack.net^
 ||staticworld.net^
 ||statuspage.io^
 ||steam-api.com^
@@ -6757,6 +6788,7 @@
 ||stripeassets.com^
 ||stripecdn.com^
 ||stripst.com^
+||strpssts-ana.com^
 ||strpst.com^
 ||studyfun.live^
 ||stylexjs.com^
