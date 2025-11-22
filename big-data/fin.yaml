@@ -1,5 +1,5 @@
-# Clash total line 8314
-# Last updated Wed 11/19/2025 22:15:44.32
+# Clash total line 8320
+# Last updated Sat 11/22/2025 22:14:43.81
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -82,6 +82,7 @@ payload:
   - DOMAIN,apache.uniminuto.edu
   - DOMAIN,apache.uvigo.es
   - DOMAIN,apache.website-solution.net
+  - DOMAIN,api-cdn.shutterstock.com
   - DOMAIN,api-esp-ap.piano.io
   - DOMAIN,api-eu.mixpanel.com
   - DOMAIN,api-frameworks.vercel.sh
@@ -758,6 +759,7 @@ payload:
   - DOMAIN,cdn.networklessons.com
   - DOMAIN,cdn.neverbounce.com
   - DOMAIN,cdn.nfcube.com
+  - DOMAIN,cdn.nodeimage.com
   - DOMAIN,cdn.nolt.io
   - DOMAIN,cdn.northropgrumman.com
   - DOMAIN,cdn.now.gg
@@ -3394,6 +3396,7 @@ payload:
   - DOMAIN,sentry.ainopara.com
   - DOMAIN,seo-wp.airdroid.com
   - DOMAIN,sequoia.cdn-apple.com
+  - DOMAIN,server.arcgisonline.com
   - DOMAIN,service-icons.zeabur.com
   - DOMAIN,services.linkfire.com
   - DOMAIN,sf-coze-web-cdn.coze.com
@@ -4747,6 +4750,7 @@ payload:
   - DOMAIN-SUFFIX,daznfeeds.com
   - DOMAIN-SUFFIX,daznservices.com
   - DOMAIN-SUFFIX,db.tt
+  - DOMAIN-SUFFIX,dc-telemetry.net
   - DOMAIN-SUFFIX,dc1-lm-live2dazn.secure.footprint.net
   - DOMAIN-SUFFIX,dc2-vodhls-perform.secure.footprint.net
   - DOMAIN-SUFFIX,dditsadn.com
@@ -4779,6 +4783,7 @@ payload:
   - DOMAIN-SUFFIX,dfiles.eu
   - DOMAIN-SUFFIX,di.fm
   - DOMAIN-SUFFIX,dicarerhome.com
+  - DOMAIN-SUFFIX,digikeyassets.com
   - DOMAIN-SUFFIX,digitalocean.com
   - DOMAIN-SUFFIX,digitaloceanspaces.com
   - DOMAIN-SUFFIX,dilcdn.com
@@ -6765,6 +6770,7 @@ payload:
   - DOMAIN-SUFFIX,steamusercontent.com
   - DOMAIN-SUFFIX,steemitimages.com
   - DOMAIN-SUFFIX,sthlstatic.com
+  - DOMAIN-SUFFIX,storage.boilerplate.com
   - DOMAIN-SUFFIX,storage.googleapis.com
   - DOMAIN-SUFFIX,storage.infomaniak.com
   - DOMAIN-SUFFIX,storage.live.com

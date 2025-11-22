@@ -1,5 +1,5 @@
-# Clash total line 4094
-# Last updated Wed 11/19/2025 22:15:32.25
+# Clash total line 4100
+# Last updated Sat 11/22/2025 22:14:31.65
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -43,6 +43,7 @@ payload:
   - DOMAIN,analytics.welcomesoftware.com
   - DOMAIN,anchor.digitalocean.com
   - DOMAIN,android-safebrowsing.google.com
+  - DOMAIN,api-cdn.shutterstock.com
   - DOMAIN,api-esp-ap.piano.io
   - DOMAIN,api-eu.mixpanel.com
   - DOMAIN,api-frameworks.vercel.sh
@@ -692,6 +693,7 @@ payload:
   - DOMAIN,cdn.networklessons.com
   - DOMAIN,cdn.neverbounce.com
   - DOMAIN,cdn.nfcube.com
+  - DOMAIN,cdn.nodeimage.com
   - DOMAIN,cdn.nolt.io
   - DOMAIN,cdn.northropgrumman.com
   - DOMAIN,cdn.now.gg
@@ -2287,6 +2289,7 @@ payload:
   - DOMAIN,sentry.ainopara.com
   - DOMAIN,seo-wp.airdroid.com
   - DOMAIN,sequoia.cdn-apple.com
+  - DOMAIN,server.arcgisonline.com
   - DOMAIN,service-icons.zeabur.com
   - DOMAIN,services.linkfire.com
   - DOMAIN,sf-coze-web-cdn.coze.com
@@ -3205,6 +3208,7 @@ payload:
   - DOMAIN-SUFFIX,dataplane.rudderstack.com
   - DOMAIN-SUFFIX,datocms-assets.com
   - DOMAIN-SUFFIX,daumcdn.net
+  - DOMAIN-SUFFIX,dc-telemetry.net
   - DOMAIN-SUFFIX,dditsadn.com
   - DOMAIN-SUFFIX,dditscdn.com
   - DOMAIN-SUFFIX,ddpic.info
@@ -3216,6 +3220,7 @@ payload:
   - DOMAIN-SUFFIX,descopecdn.com
   - DOMAIN-SUFFIX,design-system.economist.com
   - DOMAIN-SUFFIX,devrum.uptime.com
+  - DOMAIN-SUFFIX,digikeyassets.com
   - DOMAIN-SUFFIX,dilcdn.com
   - DOMAIN-SUFFIX,directupload.net
   - DOMAIN-SUFFIX,disconnect.me
@@ -3888,6 +3893,7 @@ payload:
   - DOMAIN-SUFFIX,steamusercontent.com
   - DOMAIN-SUFFIX,steemitimages.com
   - DOMAIN-SUFFIX,sthlstatic.com
+  - DOMAIN-SUFFIX,storage.boilerplate.com
   - DOMAIN-SUFFIX,storage.cloudconvert.com
   - DOMAIN-SUFFIX,storage.googleapis.com
   - DOMAIN-SUFFIX,storage.infomaniak.com
