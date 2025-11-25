@@ -1,5 +1,5 @@
-# Clash total line 8320
-# Last updated Sat 11/22/2025 22:14:43.81
+# Clash total line 8323
+# Last updated Tue 11/25/2025 22:16:02.21
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -515,6 +515,7 @@ payload:
   - DOMAIN,cdn-static.paw.cloud
   - DOMAIN,cdn-static.talent.com
   - DOMAIN,cdn-swell-assets.yotpo.com
+  - DOMAIN,cdn-teams-slug.flaticon.com
   - DOMAIN,cdn-thumbs.imagevenue.com
   - DOMAIN,cdn-uicons.flaticon.com
   - DOMAIN,cdn-updates.orbstack.dev
@@ -5541,6 +5542,7 @@ payload:
   - DOMAIN-SUFFIX,hs-scripts.net
   - DOMAIN-SUFFIX,hsappstatic.net
   - DOMAIN-SUFFIX,hscollectedforms.net
+  - DOMAIN-SUFFIX,hsstatic.net
   - DOMAIN-SUFFIX,hsto.org
   - DOMAIN-SUFFIX,hu1u.com
   - DOMAIN-SUFFIX,hubspotlinks.com
@@ -5968,6 +5970,7 @@ payload:
   - DOMAIN-SUFFIX,minecraft.net
   - DOMAIN-SUFFIX,minecraftforge.net
   - DOMAIN-SUFFIX,minotar.net
+  - DOMAIN-SUFFIX,mintcdn.com
   - DOMAIN-SUFFIX,mirror-media.xyz
   - DOMAIN-SUFFIX,mirror.ac.ke
   - DOMAIN-SUFFIX,mirror.ac.za

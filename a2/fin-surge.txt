@@ -1,5 +1,5 @@
-# Surge Rules total line 1026
-# Last updated Sat 11/22/2025 22:09:06.14
+# Surge Rules total line 1030
+# Last updated Tue 11/25/2025 22:10:14.78
 DOMAIN-KEYWORD,-ad.a.yximgs.com
 DOMAIN-KEYWORD,-ad.ixigua.com
 DOMAIN-KEYWORD,-ad.sm.cn
@@ -185,6 +185,8 @@ DOMAIN-KEYWORD,haowanyou
 DOMAIN-KEYWORD,highwebmedia
 DOMAIN-KEYWORD,histats
 DOMAIN-KEYWORD,hostingcloud
+DOMAIN-KEYWORD,httpdns-v6.gslb.yy.com
+DOMAIN-KEYWORD,httpdns.gslb.yy.com
 DOMAIN-KEYWORD,huichuan-mc.sm.cn
 DOMAIN-KEYWORD,huichuan.sm.cn
 DOMAIN-KEYWORD,iflyad.bj.openstorage.cn
@@ -592,7 +594,9 @@ IP-CIDR,180.76.171.28/32,no-resolve
 IP-CIDR,180.76.172.149/32,no-resolve
 IP-CIDR,180.76.181.213/32,no-resolve
 IP-CIDR,180.76.2.18/32,no-resolve
+IP-CIDR,180.76.76.112/32,no-resolve
 IP-CIDR,180.76.76.200/32,no-resolve
+IP-CIDR,180.76.76.220/32,no-resolve
 IP-CIDR,180.96.2.114/32,no-resolve
 IP-CIDR,182.173.0.181/32,no-resolve
 IP-CIDR,182.254.116.117/32,no-resolve
