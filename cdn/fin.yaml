@@ -1,5 +1,5 @@
-# Clash total line 4103
-# Last updated Tue 11/25/2025 22:15:48.34
+# Clash total line 4113
+# Last updated Fri 11/28/2025 22:14:39.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1078,6 +1078,8 @@ payload:
   - DOMAIN,cookie-cdn.cookiepro.com
   - DOMAIN,corp-backend.brevo.com
   - DOMAIN,cors-proxy.htmldriven.com
+  - DOMAIN,cover.comicbz.com
+  - DOMAIN,cover.yymanhua.com
   - DOMAIN,covers.openlibrary.org
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,craftassets.unraid.net
@@ -1094,7 +1096,9 @@ payload:
   - DOMAIN,css-1-cdn.airdroid.com
   - DOMAIN,css.4jpg.top
   - DOMAIN,css.blackmagicdesign.com
+  - DOMAIN,css.comicbz.com
   - DOMAIN,css.createsend1.com
+  - DOMAIN,css.yymanhua.com
   - DOMAIN,curl.se
   - DOMAIN,cw-image-resizer.cwg.tw
   - DOMAIN,cwsimages.ingramcontent.com
@@ -1418,6 +1422,7 @@ payload:
   - DOMAIN,image.ap-mail.org
   - DOMAIN,image.civitai.com
   - DOMAIN,image.cnbcfm.com
+  - DOMAIN,image.comicbz.com
   - DOMAIN,image.crisp.chat
   - DOMAIN,image.dooo.ng
   - DOMAIN,image.email.microsoftemail.com
@@ -1444,7 +1449,9 @@ payload:
   - DOMAIN,image.tmdb.org
   - DOMAIN,image.vuukle.com
   - DOMAIN,image.westinyou.com
+  - DOMAIN,image.xmanhua.net
   - DOMAIN,image.yuntu.com.tw
+  - DOMAIN,image.yymanhua.com
   - DOMAIN,imagecdn.clips4sale.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
@@ -1530,6 +1537,7 @@ payload:
   - DOMAIN,images.wikia.com
   - DOMAIN,images.wsj.net
   - DOMAIN,images.wsjcommerce.net
+  - DOMAIN,images.wurstclient.net
   - DOMAIN,images.youracclaim.com
   - DOMAIN,images1.cmp.optimizely.com
   - DOMAIN,images1.vinted.net
@@ -2104,6 +2112,7 @@ payload:
   - DOMAIN,public-pages.cbinsights.com
   - DOMAIN,public.flourish.studio
   - DOMAIN,public.hare200.com
+  - DOMAIN,public.komiic.com
   - DOMAIN,public.linear.app
   - DOMAIN,public.mocortech.com
   - DOMAIN,public.saasexch.com
@@ -2460,6 +2469,7 @@ payload:
   - DOMAIN,static.cohere.so
   - DOMAIN,static.coinall.ltd
   - DOMAIN,static.coingecko.com
+  - DOMAIN,static.comicbz.com
   - DOMAIN,static.community.workday.com
   - DOMAIN,static.convertio.co
   - DOMAIN,static.corp.google.com

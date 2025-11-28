@@ -1,5 +1,5 @@
-# Quantumult total line 4103
-# Last updated Tue 11/25/2025 22:15:48.29
+# Quantumult total line 4113
+# Last updated Fri 11/28/2025 22:14:39.33
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1077,6 +1077,8 @@ HOST,conversiongorilla.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
 HOST,corp-backend.brevo.com,LIST
 HOST,cors-proxy.htmldriven.com,LIST
+HOST,cover.comicbz.com,LIST
+HOST,cover.yymanhua.com,LIST
 HOST,covers.openlibrary.org,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,craftassets.unraid.net,LIST
@@ -1093,7 +1095,9 @@ HOST,csp.microsoft.com,LIST
 HOST,css-1-cdn.airdroid.com,LIST
 HOST,css.4jpg.top,LIST
 HOST,css.blackmagicdesign.com,LIST
+HOST,css.comicbz.com,LIST
 HOST,css.createsend1.com,LIST
+HOST,css.yymanhua.com,LIST
 HOST,curl.se,LIST
 HOST,cw-image-resizer.cwg.tw,LIST
 HOST,cwsimages.ingramcontent.com,LIST
@@ -1417,6 +1421,7 @@ HOST,image.acg.lol,LIST
 HOST,image.ap-mail.org,LIST
 HOST,image.civitai.com,LIST
 HOST,image.cnbcfm.com,LIST
+HOST,image.comicbz.com,LIST
 HOST,image.crisp.chat,LIST
 HOST,image.dooo.ng,LIST
 HOST,image.email.microsoftemail.com,LIST
@@ -1443,7 +1448,9 @@ HOST,image.thefly.com,LIST
 HOST,image.tmdb.org,LIST
 HOST,image.vuukle.com,LIST
 HOST,image.westinyou.com,LIST
+HOST,image.xmanhua.net,LIST
 HOST,image.yuntu.com.tw,LIST
+HOST,image.yymanhua.com,LIST
 HOST,imagecdn.clips4sale.com,LIST
 HOST,imagehost.player.fm,LIST
 HOST,imageio.forbes.com,LIST
@@ -1529,6 +1536,7 @@ HOST,images.whoer.com,LIST
 HOST,images.wikia.com,LIST
 HOST,images.wsj.net,LIST
 HOST,images.wsjcommerce.net,LIST
+HOST,images.wurstclient.net,LIST
 HOST,images.youracclaim.com,LIST
 HOST,images1.cmp.optimizely.com,LIST
 HOST,images1.vinted.net,LIST
@@ -2103,6 +2111,7 @@ HOST,public-img.mewe.com,LIST
 HOST,public-pages.cbinsights.com,LIST
 HOST,public.flourish.studio,LIST
 HOST,public.hare200.com,LIST
+HOST,public.komiic.com,LIST
 HOST,public.linear.app,LIST
 HOST,public.mocortech.com,LIST
 HOST,public.saasexch.com,LIST
@@ -2459,6 +2468,7 @@ HOST,static.codepen.io,LIST
 HOST,static.cohere.so,LIST
 HOST,static.coinall.ltd,LIST
 HOST,static.coingecko.com,LIST
+HOST,static.comicbz.com,LIST
 HOST,static.community.workday.com,LIST
 HOST,static.convertio.co,LIST
 HOST,static.corp.google.com,LIST
