@@ -1,5 +1,5 @@
-# Clash total line 4113
-# Last updated Fri 11/28/2025 22:14:39.37
+# Clash total line 4117
+# Last updated Mon 12/01/2025 22:14:49.49
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1153,6 +1153,7 @@ payload:
   - DOMAIN,e3.365dm.com
   - DOMAIN,eaassets-a.akamaihd.net
   - DOMAIN,easylist-downloads.adblockplus.org
+  - DOMAIN,ecn.dev.virtualearth.net
   - DOMAIN,ecommplugins-trustboxsettings.trustpilot.com
   - DOMAIN,edata.ndtv.com
   - DOMAIN,edge-cloud-resource-static.azureedge.net
@@ -2123,6 +2124,7 @@ payload:
   - DOMAIN,qmod.quotemedia.com
   - DOMAIN,quests.armorgames.com
   - DOMAIN,quriobot.com
+  - DOMAIN,r.bing.com
   - DOMAIN,r.r10s.jp
   - DOMAIN,r2.1hanime.com
   - DOMAIN,r2.gear4music.com
@@ -2823,6 +2825,7 @@ payload:
   - DOMAIN,uos-support-files.svc.ui.com
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
+  - DOMAIN,upload.movim.eu
   - DOMAIN,upload.wikimedia.org
   - DOMAIN,uploads-cdn.omnicalculator.com
   - DOMAIN,uploads.codesandbox.io
@@ -3959,6 +3962,7 @@ payload:
   - DOMAIN-SUFFIX,tile.osm.org
   - DOMAIN-SUFFIX,tiles-api.maps.komoot.net
   - DOMAIN-SUFFIX,tiles.mapbox.com
+  - DOMAIN-SUFFIX,tiles.virtualearth.net
   - DOMAIN-SUFFIX,tindiemedia.com
   - DOMAIN-SUFFIX,tiqcdn.com
   - DOMAIN-SUFFIX,tkcdns.com

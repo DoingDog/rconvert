@@ -1,5 +1,5 @@
-# Quantumult total line 4113
-# Last updated Fri 11/28/2025 22:14:39.33
+# Quantumult total line 4117
+# Last updated Mon 12/01/2025 22:14:49.44
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1152,6 +1152,7 @@ HOST,e.linear.app,LIST
 HOST,e3.365dm.com,LIST
 HOST,eaassets-a.akamaihd.net,LIST
 HOST,easylist-downloads.adblockplus.org,LIST
+HOST,ecn.dev.virtualearth.net,LIST
 HOST,ecommplugins-trustboxsettings.trustpilot.com,LIST
 HOST,edata.ndtv.com,LIST
 HOST,edge-cloud-resource-static.azureedge.net,LIST
@@ -2122,6 +2123,7 @@ HOST,pytorch.org,LIST
 HOST,qmod.quotemedia.com,LIST
 HOST,quests.armorgames.com,LIST
 HOST,quriobot.com,LIST
+HOST,r.bing.com,LIST
 HOST,r.r10s.jp,LIST
 HOST,r2.1hanime.com,LIST
 HOST,r2.gear4music.com,LIST
@@ -2822,6 +2824,7 @@ HOST,unsubscribe-imgs.leavemealone.com,LIST
 HOST,uos-support-files.svc.ui.com,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
+HOST,upload.movim.eu,LIST
 HOST,upload.wikimedia.org,LIST
 HOST,uploads-cdn.omnicalculator.com,LIST
 HOST,uploads.codesandbox.io,LIST
@@ -3958,6 +3961,7 @@ HOST-SUFFIX,tile.openstreetmap.org,LIST
 HOST-SUFFIX,tile.osm.org,LIST
 HOST-SUFFIX,tiles-api.maps.komoot.net,LIST
 HOST-SUFFIX,tiles.mapbox.com,LIST
+HOST-SUFFIX,tiles.virtualearth.net,LIST
 HOST-SUFFIX,tindiemedia.com,LIST
 HOST-SUFFIX,tiqcdn.com,LIST
 HOST-SUFFIX,tkcdns.com,LIST
