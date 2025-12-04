@@ -1,5 +1,5 @@
-# Clash total line 8339
-# Last updated Mon 12/01/2025 22:15:03.85
+# Clash total line 8346
+# Last updated Thu 12/04/2025 22:14:40.36
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1832,12 +1832,14 @@ payload:
   - DOMAIN,go-updater.brave.com
   - DOMAIN,go.imperva.com
   - DOMAIN,go.vercel.com
+  - DOMAIN,go.yaml.in
   - DOMAIN,godoc.org
   - DOMAIN,gog-cdn-fastly-cp77.gog.com
   - DOMAIN,gog-cdn-fastly.gog.com
   - DOMAIN,gohugo.io
   - DOMAIN,google-ohttp-relay-safebrowsing.fastly-edge.com
   - DOMAIN,gopkg.in
+  - DOMAIN,gotest.tools
   - DOMAIN,gpl.savoirfairelinux.net
   - DOMAIN,graph.facebook.com
   - DOMAIN,gravatar.cat.net
@@ -1918,6 +1920,7 @@ payload:
   - DOMAIN,i4.anysex.com
   - DOMAIN,ias.r10s.jp
   - DOMAIN,icdn.javxx.com
+  - DOMAIN,icms-image.slatic.net
   - DOMAIN,icon.icepanel.io
   - DOMAIN,icons.buffer.com
   - DOMAIN,icons.duckduckgo.com
@@ -2334,6 +2337,7 @@ payload:
   - DOMAIN,logos.speedtestcustom.com
   - DOMAIN,loutre.blockchair.io
   - DOMAIN,lug.mines.edu
+  - DOMAIN,lzd-img-global.slatic.net
   - DOMAIN,lzip.nongnu.org
   - DOMAIN,m-cdn.phonearena.com
   - DOMAIN,m.porn3dx.com
@@ -3989,6 +3993,7 @@ payload:
   - DOMAIN,updates.signal.org
   - DOMAIN,updates2.signal.org
   - DOMAIN,upload.movim.eu
+  - DOMAIN,upload.teftera.com
   - DOMAIN,upload.wikimedia.org
   - DOMAIN,uploads-cdn.omnicalculator.com
   - DOMAIN,uploads.codesandbox.io
@@ -4087,6 +4092,7 @@ payload:
   - DOMAIN,webobjects2.cdw.com
   - DOMAIN,webp.frostming.com
   - DOMAIN,website-cdn.ipinfo.io
+  - DOMAIN,website-media.deel.com
   - DOMAIN,website-prod.cache.wpscdn.com
   - DOMAIN,webstatic.chargebee.com
   - DOMAIN,widget.automizely.com
@@ -5861,6 +5867,7 @@ payload:
   - DOMAIN-SUFFIX,launchercontent.mojang.com
   - DOMAIN-SUFFIX,launchermeta.mojang.com
   - DOMAIN-SUFFIX,launchpadlibrarian.net
+  - DOMAIN-SUFFIX,lazcdn.com
   - DOMAIN-SUFFIX,lbpicpic.com
   - DOMAIN-SUFFIX,lbpictupian.com
   - DOMAIN-SUFFIX,ldstatic.com

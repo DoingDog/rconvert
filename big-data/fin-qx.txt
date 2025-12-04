@@ -1,5 +1,5 @@
-# Quantumult total line 8325
-# Last updated Mon 12/01/2025 22:15:03.80
+# Quantumult total line 8332
+# Last updated Thu 12/04/2025 22:14:40.30
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1831,12 +1831,14 @@ HOST,gnuftp.uib.no,LIST
 HOST,go-updater.brave.com,LIST
 HOST,go.imperva.com,LIST
 HOST,go.vercel.com,LIST
+HOST,go.yaml.in,LIST
 HOST,godoc.org,LIST
 HOST,gog-cdn-fastly-cp77.gog.com,LIST
 HOST,gog-cdn-fastly.gog.com,LIST
 HOST,gohugo.io,LIST
 HOST,google-ohttp-relay-safebrowsing.fastly-edge.com,LIST
 HOST,gopkg.in,LIST
+HOST,gotest.tools,LIST
 HOST,gpl.savoirfairelinux.net,LIST
 HOST,graph.facebook.com,LIST
 HOST,gravatar.cat.net,LIST
@@ -1917,6 +1919,7 @@ HOST,i3.anysex.com,LIST
 HOST,i4.anysex.com,LIST
 HOST,ias.r10s.jp,LIST
 HOST,icdn.javxx.com,LIST
+HOST,icms-image.slatic.net,LIST
 HOST,icon.icepanel.io,LIST
 HOST,icons.buffer.com,LIST
 HOST,icons.duckduckgo.com,LIST
@@ -2333,6 +2336,7 @@ HOST,logos.kiwibrowser.com,LIST
 HOST,logos.speedtestcustom.com,LIST
 HOST,loutre.blockchair.io,LIST
 HOST,lug.mines.edu,LIST
+HOST,lzd-img-global.slatic.net,LIST
 HOST,lzip.nongnu.org,LIST
 HOST,m-cdn.phonearena.com,LIST
 HOST,m.porn3dx.com,LIST
@@ -3988,6 +3992,7 @@ HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
 HOST,updates2.signal.org,LIST
 HOST,upload.movim.eu,LIST
+HOST,upload.teftera.com,LIST
 HOST,upload.wikimedia.org,LIST
 HOST,uploads-cdn.omnicalculator.com,LIST
 HOST,uploads.codesandbox.io,LIST
@@ -4086,6 +4091,7 @@ HOST,webfonts.zoho.com,LIST
 HOST,webobjects2.cdw.com,LIST
 HOST,webp.frostming.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
+HOST,website-media.deel.com,LIST
 HOST,website-prod.cache.wpscdn.com,LIST
 HOST,webstatic.chargebee.com,LIST
 HOST,widget.automizely.com,LIST
@@ -5860,6 +5866,7 @@ HOST-SUFFIX,launcher.mojang.com,LIST
 HOST-SUFFIX,launchercontent.mojang.com,LIST
 HOST-SUFFIX,launchermeta.mojang.com,LIST
 HOST-SUFFIX,launchpadlibrarian.net,LIST
+HOST-SUFFIX,lazcdn.com,LIST
 HOST-SUFFIX,lbpicpic.com,LIST
 HOST-SUFFIX,lbpictupian.com,LIST
 HOST-SUFFIX,ldstatic.com,LIST
