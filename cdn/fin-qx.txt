@@ -1,5 +1,5 @@
 # Quantumult total line 4122
-# Last updated Thu 12/04/2025 22:14:27.46
+# Last updated Sun 12/07/2025 22:14:39.80
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -2478,7 +2478,6 @@ HOST,static.convertio.co,LIST
 HOST,static.corp.google.com,LIST
 HOST,static.crunchyroll.com,LIST
 HOST,static.crypto.com,LIST
-HOST,static.dash.cloudflare.com,LIST
 HOST,static.deepl.com,LIST
 HOST,static.doujins.com,LIST
 HOST,static.drtuber.com,LIST
@@ -3894,6 +3893,7 @@ HOST-SUFFIX,static-assets.photoshop.adobe.com,LIST
 HOST-SUFFIX,static-prod-web.miniclip.com,LIST
 HOST-SUFFIX,static.amplience.net,LIST
 HOST-SUFFIX,static.chaosgroup.com,LIST
+HOST-SUFFIX,static.dash.cloudflare.com,LIST
 HOST-SUFFIX,static.domains,LIST
 HOST-SUFFIX,static.flickr.com,LIST
 HOST-SUFFIX,static.gartner.com,LIST

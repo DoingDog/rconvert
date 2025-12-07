@@ -1,5 +1,5 @@
 # Clash total line 4122
-# Last updated Thu 12/04/2025 22:14:27.51
+# Last updated Sun 12/07/2025 22:14:39.84
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -2479,7 +2479,6 @@ payload:
   - DOMAIN,static.corp.google.com
   - DOMAIN,static.crunchyroll.com
   - DOMAIN,static.crypto.com
-  - DOMAIN,static.dash.cloudflare.com
   - DOMAIN,static.deepl.com
   - DOMAIN,static.doujins.com
   - DOMAIN,static.drtuber.com
@@ -3895,6 +3894,7 @@ payload:
   - DOMAIN-SUFFIX,static-prod-web.miniclip.com
   - DOMAIN-SUFFIX,static.amplience.net
   - DOMAIN-SUFFIX,static.chaosgroup.com
+  - DOMAIN-SUFFIX,static.dash.cloudflare.com
   - DOMAIN-SUFFIX,static.domains
   - DOMAIN-SUFFIX,static.flickr.com
   - DOMAIN-SUFFIX,static.gartner.com

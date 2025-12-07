@@ -1,5 +1,5 @@
-# Clash total line 8346
-# Last updated Thu 12/04/2025 22:14:40.36
+# Clash total line 8350
+# Last updated Sun 12/07/2025 22:14:52.27
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -3009,6 +3009,7 @@ payload:
   - DOMAIN,nobara-images.nobaraproject.org
   - DOMAIN,node.green
   - DOMAIN,nodei.co
+  - DOMAIN,notebooklm.google.com
   - DOMAIN,notnetflix.cos.cat
   - DOMAIN,np-edge.itunes.apple.com
   - DOMAIN,npm.antfu.dev
@@ -3577,7 +3578,6 @@ payload:
   - DOMAIN,static.corp.google.com
   - DOMAIN,static.crunchyroll.com
   - DOMAIN,static.crypto.com
-  - DOMAIN,static.dash.cloudflare.com
   - DOMAIN,static.deepl.com
   - DOMAIN,static.doujins.com
   - DOMAIN,static.drtuber.com
@@ -5787,6 +5787,7 @@ payload:
   - DOMAIN-SUFFIX,jbkcdn.com
   - DOMAIN-SUFFIX,jbkcdn.io
   - DOMAIN-SUFFIX,jdbstatic.com
+  - DOMAIN-SUFFIX,jetbrains.ai
   - DOMAIN-SUFFIX,jetbrains.com
   - DOMAIN-SUFFIX,jetbrains.team
   - DOMAIN-SUFFIX,jetload.net
@@ -5988,6 +5989,7 @@ payload:
   - DOMAIN-SUFFIX,mfcimg.com
   - DOMAIN-SUFFIX,mickey.tv
   - DOMAIN-SUFFIX,mickeycloud.com
+  - DOMAIN-SUFFIX,microsoftpersonalcontent.com
   - DOMAIN-SUFFIX,mightyupload.com
   - DOMAIN-SUFFIX,minecraft.net
   - DOMAIN-SUFFIX,minecraftforge.net
@@ -6770,6 +6772,7 @@ payload:
   - DOMAIN-SUFFIX,static.amplience.net
   - DOMAIN-SUFFIX,static.chaosgroup.com
   - DOMAIN-SUFFIX,static.ctinets.com
+  - DOMAIN-SUFFIX,static.dash.cloudflare.com
   - DOMAIN-SUFFIX,static.domains
   - DOMAIN-SUFFIX,static.fun
   - DOMAIN-SUFFIX,static.gartner.com
@@ -7250,6 +7253,7 @@ payload:
   - DOMAIN-SUFFIX,wushare.com
   - DOMAIN-SUFFIX,www.s81c.com
   - DOMAIN-SUFFIX,wwwhuluplus.com
+  - DOMAIN-SUFFIX,x.ai
   - DOMAIN-SUFFIX,xascdn.li
   - DOMAIN-SUFFIX,xcdnpro.com
   - DOMAIN-SUFFIX,xcream.net

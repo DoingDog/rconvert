@@ -1,5 +1,5 @@
-# Quantumult total line 8332
-# Last updated Thu 12/04/2025 22:14:40.30
+# Quantumult total line 8336
+# Last updated Sun 12/07/2025 22:14:52.22
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -3008,6 +3008,7 @@ HOST,no-cache.hubspot.com,LIST
 HOST,nobara-images.nobaraproject.org,LIST
 HOST,node.green,LIST
 HOST,nodei.co,LIST
+HOST,notebooklm.google.com,LIST
 HOST,notnetflix.cos.cat,LIST
 HOST,np-edge.itunes.apple.com,LIST
 HOST,npm.antfu.dev,LIST
@@ -3576,7 +3577,6 @@ HOST,static.community.workday.com,LIST
 HOST,static.corp.google.com,LIST
 HOST,static.crunchyroll.com,LIST
 HOST,static.crypto.com,LIST
-HOST,static.dash.cloudflare.com,LIST
 HOST,static.deepl.com,LIST
 HOST,static.doujins.com,LIST
 HOST,static.drtuber.com,LIST
@@ -5786,6 +5786,7 @@ HOST-SUFFIX,jazzradio.com,LIST
 HOST-SUFFIX,jbkcdn.com,LIST
 HOST-SUFFIX,jbkcdn.io,LIST
 HOST-SUFFIX,jdbstatic.com,LIST
+HOST-SUFFIX,jetbrains.ai,LIST
 HOST-SUFFIX,jetbrains.com,LIST
 HOST-SUFFIX,jetbrains.team,LIST
 HOST-SUFFIX,jetload.net,LIST
@@ -5987,6 +5988,7 @@ HOST-SUFFIX,mexashare.com,LIST
 HOST-SUFFIX,mfcimg.com,LIST
 HOST-SUFFIX,mickey.tv,LIST
 HOST-SUFFIX,mickeycloud.com,LIST
+HOST-SUFFIX,microsoftpersonalcontent.com,LIST
 HOST-SUFFIX,mightyupload.com,LIST
 HOST-SUFFIX,minecraft.net,LIST
 HOST-SUFFIX,minecraftforge.net,LIST
@@ -6769,6 +6771,7 @@ HOST-SUFFIX,static-verizon.com,LIST
 HOST-SUFFIX,static.amplience.net,LIST
 HOST-SUFFIX,static.chaosgroup.com,LIST
 HOST-SUFFIX,static.ctinets.com,LIST
+HOST-SUFFIX,static.dash.cloudflare.com,LIST
 HOST-SUFFIX,static.domains,LIST
 HOST-SUFFIX,static.fun,LIST
 HOST-SUFFIX,static.gartner.com,LIST
@@ -7249,6 +7252,7 @@ HOST-SUFFIX,wupfile.com,LIST
 HOST-SUFFIX,wushare.com,LIST
 HOST-SUFFIX,www.s81c.com,LIST
 HOST-SUFFIX,wwwhuluplus.com,LIST
+HOST-SUFFIX,x.ai,LIST
 HOST-SUFFIX,xascdn.li,LIST
 HOST-SUFFIX,xcdnpro.com,LIST
 HOST-SUFFIX,xcream.net,LIST
