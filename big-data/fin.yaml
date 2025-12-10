@@ -1,5 +1,5 @@
-# Clash total line 8350
-# Last updated Sun 12/07/2025 22:14:52.27
+# Clash total line 8351
+# Last updated Wed 12/10/2025 22:16:51.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -676,6 +676,7 @@ payload:
   - DOMAIN,cdn.googlesource.com
   - DOMAIN,cdn.graph.office.net
   - DOMAIN,cdn.growthbook.io
+  - DOMAIN,cdn.hackaday.io
   - DOMAIN,cdn.hackernoon.com
   - DOMAIN,cdn.hashnode.com
   - DOMAIN,cdn.headwayapp.co
@@ -697,10 +698,12 @@ payload:
   - DOMAIN,cdn.infoq.com
   - DOMAIN,cdn.insightmediagroup.io
   - DOMAIN,cdn.ionos.de
+  - DOMAIN,cdn.ip2location.com
   - DOMAIN,cdn.ip2location.io
   - DOMAIN,cdn.iplocation.net
   - DOMAIN,cdn.iporntv.net
   - DOMAIN,cdn.ipregistry.co
+  - DOMAIN,cdn.ipwhois.io
   - DOMAIN,cdn.jamieoliver.com
   - DOMAIN,cdn.javmg.com
   - DOMAIN,cdn.javmiku.com
@@ -1068,7 +1071,6 @@ payload:
   - DOMAIN,cfvod.kaltura.com
   - DOMAIN,chart.googleapis.com
   - DOMAIN,charts.verdaccio.org
-  - DOMAIN,chat-content.beanfun.com
   - DOMAIN,chat.digitalgenius.com
   - DOMAIN,chatwidgetmetrics-proxy.usepylon.com
   - DOMAIN,checkout-sdk.bigcommerce.com
@@ -1208,7 +1210,6 @@ payload:
   - DOMAIN,ctan.dcc.uchile.cl
   - DOMAIN,ctan.ebinger.cc
   - DOMAIN,ctan.gutenberg.eu.org
-  - DOMAIN,ctan.imsc.res.in
   - DOMAIN,ctan.math.ca
   - DOMAIN,ctan.math.illinois.edu
   - DOMAIN,ctan.math.utah.edu
@@ -1826,7 +1827,6 @@ payload:
   - DOMAIN,gmedia.playstation.com
   - DOMAIN,gnu.askapache.com
   - DOMAIN,gnu.c3sl.ufpr.br
-  - DOMAIN,gnu.freemirror.org
   - DOMAIN,gnualpha.uib.no
   - DOMAIN,gnuftp.uib.no
   - DOMAIN,go-updater.brave.com
@@ -1854,6 +1854,7 @@ payload:
   - DOMAIN,h-netflix.online-metrix.net
   - DOMAIN,hamifans.emome.net
   - DOMAIN,hawk.tomsguide.com
+  - DOMAIN,hawky.pcgamer.com
   - DOMAIN,headway-widget.net
   - DOMAIN,heatmap-external-a.strava.com
   - DOMAIN,hello.zonos.com
@@ -2048,6 +2049,7 @@ payload:
   - DOMAIN,images.tokopedia.net
   - DOMAIN,images.typeform.com
   - DOMAIN,images.unsplash.com
+  - DOMAIN,images.vexels.com
   - DOMAIN,images.videolan.org
   - DOMAIN,images.vudu.com
   - DOMAIN,images.web3.storage
@@ -2364,7 +2366,6 @@ payload:
   - DOMAIN,maven.is-quite.gay
   - DOMAIN,maven.kr328.app
   - DOMAIN,maven.neoforged.net
-  - DOMAIN,mcdn.tubi.tv
   - DOMAIN,mcdn.vrporn.com
   - DOMAIN,mcdnds.vrporn.com
   - DOMAIN,mcdns.vrporn.com
@@ -2990,6 +2991,7 @@ payload:
   - DOMAIN,namedotcom-cdn.name.tools
   - DOMAIN,nav.yumenosora.co.jp
   - DOMAIN,navismithapis-cdn.com
+  - DOMAIN,nel.heroku.com
   - DOMAIN,nel.teo-rum.com
   - DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
   - DOMAIN,netlify.apollo.io
@@ -3321,8 +3323,6 @@ payload:
   - DOMAIN,s1.maxstream.org
   - DOMAIN,s1.qwant.com
   - DOMAIN,s1.zerochan.net
-  - DOMAIN,s10.maxstream.org
-  - DOMAIN,s11.maxstream.org
   - DOMAIN,s13.maxstream.org
   - DOMAIN,s2.coinmarketcap.com
   - DOMAIN,s2.freebeacon.com
@@ -3368,7 +3368,6 @@ payload:
   - DOMAIN,s4.freebeacon.com
   - DOMAIN,s4.itho.me
   - DOMAIN,s8.maxstream.org
-  - DOMAIN,s9.maxstream.org
   - DOMAIN,safebrowsing.brave.com
   - DOMAIN,safebrowsing.google.com
   - DOMAIN,safebrowsing.googleapis.com
@@ -3771,7 +3770,6 @@ payload:
   - DOMAIN,staticintl.cloudcachetci.com
   - DOMAIN,staticm.fastcomments.com
   - DOMAIN,statics-prod.mirrordaily.news
-  - DOMAIN,statics.erothots.co
   - DOMAIN,statics.goorm.io
   - DOMAIN,statics.simpshub.com
   - DOMAIN,statics.streamable.com
@@ -4027,6 +4025,7 @@ payload:
   - DOMAIN,v2uploads.zopim.io
   - DOMAIN,vanilla-extract.style
   - DOMAIN,vcdn.anysex.com
+  - DOMAIN,vectorified.com
   - DOMAIN,versionbadg.es
   - DOMAIN,versioncheck-bg.addons.mozilla.org
   - DOMAIN,versioncheck.addons.mozilla.org
@@ -4353,6 +4352,7 @@ payload:
   - DOMAIN-SUFFIX,assets.brightspot.abebooks.a2z.com
   - DOMAIN-SUFFIX,assets.getpocket.com
   - DOMAIN-SUFFIX,assets.heroku.com
+  - DOMAIN-SUFFIX,assets.ipinfo.io
   - DOMAIN-SUFFIX,assets.pinterest.com
   - DOMAIN-SUFFIX,assets.shortbread.aws.dev
   - DOMAIN-SUFFIX,assets.tumblr.com
@@ -5386,6 +5386,7 @@ payload:
   - DOMAIN-SUFFIX,freedomplatform.tv
   - DOMAIN-SUFFIX,freehulu.com
   - DOMAIN-SUFFIX,freeleecher.ir
+  - DOMAIN-SUFFIX,freemirror.org
   - DOMAIN-SUFFIX,freepornhdonlinegay.com
   - DOMAIN-SUFFIX,freetz.top
   - DOMAIN-SUFFIX,friday.tw
