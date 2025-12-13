@@ -1,5 +1,5 @@
-# Clash total line 8351
-# Last updated Wed 12/10/2025 22:16:51.60
+# Clash total line 8374
+# Last updated Sat 12/13/2025 22:15:34.48
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -227,6 +227,7 @@ payload:
   - DOMAIN,assets.geeksforgeeks.org
   - DOMAIN,assets.genius.com
   - DOMAIN,assets.getkirby.com
+  - DOMAIN,assets.getpostman.com
   - DOMAIN,assets.goat.com
   - DOMAIN,assets.gorgias.help
   - DOMAIN,assets.grammarly.com
@@ -239,6 +240,7 @@ payload:
   - DOMAIN,assets.holopin.io
   - DOMAIN,assets.humix.com
   - DOMAIN,assets.ifttt.com
+  - DOMAIN,assets.ipapi.com
   - DOMAIN,assets.ipstack.com
   - DOMAIN,assets.jable.tv
   - DOMAIN,assets.jolipage.co
@@ -298,6 +300,7 @@ payload:
   - DOMAIN,assets.static-upwork.com
   - DOMAIN,assets.stickpng.com
   - DOMAIN,assets.stigg.io
+  - DOMAIN,assets.streamlinehq.com
   - DOMAIN,assets.swoogo.com
   - DOMAIN,assets.tatlerasia.com
   - DOMAIN,assets.the-independent.com
@@ -447,6 +450,7 @@ payload:
   - DOMAIN,cache.armorgames.com
   - DOMAIN,cache.hackedfreegames.com
   - DOMAIN,cache.industry.siemens.com
+  - DOMAIN,cache.ip-api.com
   - DOMAIN,cache.omnicalculator.com
   - DOMAIN,cache.pack.google.com
   - DOMAIN,cache.video.iqiyi.com
@@ -746,6 +750,7 @@ payload:
   - DOMAIN,cdn.metadata.io
   - DOMAIN,cdn.mewe.com
   - DOMAIN,cdn.micro.blog
+  - DOMAIN,cdn.mida.so
   - DOMAIN,cdn.mikrotik.com
   - DOMAIN,cdn.minecraft-server-list.com
   - DOMAIN,cdn.miohentai.com
@@ -822,7 +827,6 @@ payload:
   - DOMAIN,cdn.redwap.xyz
   - DOMAIN,cdn.reimu.net
   - DOMAIN,cdn.repo.cloudeka.id
-  - DOMAIN,cdn.report-uri.com
   - DOMAIN,cdn.rex.contents.rakuten.co.jp
   - DOMAIN,cdn.rive.app
   - DOMAIN,cdn.road.cc
@@ -1090,6 +1094,7 @@ payload:
   - DOMAIN,cloud.daporkchop.net
   - DOMAIN,cloud.redhat.com
   - DOMAIN,cloud.typenetwork.com
+  - DOMAIN,cloudflare.f-droid.org
   - DOMAIN,cloudflare.tv
   - DOMAIN,cloudfront.barilliance.com
   - DOMAIN,cloudfront.codeproject.com
@@ -1378,6 +1383,7 @@ payload:
   - DOMAIN,docker.cloudsmith.io
   - DOMAIN,docs.brew.sh
   - DOMAIN,docs.rs
+  - DOMAIN,documenter-assets.pstmn.io
   - DOMAIN,domain.expiring-soon.xyz
   - DOMAIN,down.filen-1.net
   - DOMAIN,down.filen-2.net
@@ -1531,6 +1537,7 @@ payload:
   - DOMAIN,experience-ap.piano.io
   - DOMAIN,explorer-api.walletconnect.com
   - DOMAIN,external-content.duckduckgo.com
+  - DOMAIN,f-droid.org
   - DOMAIN,f.convertkit.com
   - DOMAIN,f.start.me
   - DOMAIN,f000.backblazeb2.com
@@ -1559,6 +1566,7 @@ payload:
   - DOMAIN,fesdk.nexon.com
   - DOMAIN,fiddle.fastly.dev
   - DOMAIN,fiddle.jshell.net
+  - DOMAIN,file.ahu.moe
   - DOMAIN,file.izanmei.net
   - DOMAIN,file.zoom.us
   - DOMAIN,file1.hkepc.net
@@ -1921,6 +1929,7 @@ payload:
   - DOMAIN,i4.anysex.com
   - DOMAIN,ias.r10s.jp
   - DOMAIN,icdn.javxx.com
+  - DOMAIN,icdn.missav123.to
   - DOMAIN,icms-image.slatic.net
   - DOMAIN,icon.icepanel.io
   - DOMAIN,icons.buffer.com
@@ -1933,6 +1942,7 @@ payload:
   - DOMAIN,icons.simplesvg.com
   - DOMAIN,icons.veryicon.com
   - DOMAIN,icons.zeabur.com
+  - DOMAIN,identity-assets.getpostman.com
   - DOMAIN,idportal-cdn-prd.unity.com
   - DOMAIN,ih0.redbubble.net
   - DOMAIN,ih1.redbubble.net
@@ -2063,6 +2073,7 @@ payload:
   - DOMAIN,images1.cmp.optimizely.com
   - DOMAIN,images1.vinted.net
   - DOMAIN,images1.welcomesoftware.com
+  - DOMAIN,images10.newegg.com
   - DOMAIN,images2.cmp.optimizely.com
   - DOMAIN,images2.giant-bicycles.com
   - DOMAIN,images2.vudu.com
@@ -2580,6 +2591,7 @@ payload:
   - DOMAIN,mirror.eu.4psacloud.com
   - DOMAIN,mirror.eu.kamatera.com
   - DOMAIN,mirror.eu.oneandone.net
+  - DOMAIN,mirror.eu.ossplanet.net
   - DOMAIN,mirror.evowise.com
   - DOMAIN,mirror.facebook.net
   - DOMAIN,mirror.faraso.org
@@ -3535,6 +3547,7 @@ payload:
   - DOMAIN,static.adguardvpn.com
   - DOMAIN,static.afterpay.com
   - DOMAIN,static.ahrefs.com
+  - DOMAIN,static.ahu.moe
   - DOMAIN,static.airtable.com
   - DOMAIN,static.aizanmei.org
   - DOMAIN,static.animaapp.com
@@ -3604,6 +3617,7 @@ payload:
   - DOMAIN,static.freeimages.com
   - DOMAIN,static.generated.photos
   - DOMAIN,static.getbutton.io
+  - DOMAIN,static.getpostman.com
   - DOMAIN,static.gettyimages.com
   - DOMAIN,static.giant-bicycles.com
   - DOMAIN,static.gigabyte.com
@@ -3628,6 +3642,8 @@ payload:
   - DOMAIN,static.inflect.com
   - DOMAIN,static.infomaniak.ch
   - DOMAIN,static.institution.grammarly.com
+  - DOMAIN,static.ipgeolocation.io
+  - DOMAIN,static.iplocate.io
   - DOMAIN,static.iris.informa.com
   - DOMAIN,static.itch.io
   - DOMAIN,static.iyf.tv
@@ -4117,6 +4133,7 @@ payload:
   - DOMAIN,widgets.tree-nation.com
   - DOMAIN,widgets.turnto.com
   - DOMAIN,widgets.zohosalesiq.com
+  - DOMAIN,wiki.metacubex.one
   - DOMAIN,wikiwandv2-19431.kxcdn.com
   - DOMAIN,wimg.rule34.xxx
   - DOMAIN,wire.shodan.io
@@ -4174,6 +4191,9 @@ payload:
   - DOMAIN-SUFFIX,1passwordusercontent.com
   - DOMAIN-SUFFIX,1passwordusercontent.eu
   - DOMAIN-SUFFIX,20120714.xyz
+  - DOMAIN-SUFFIX,2024cdn.sx
+  - DOMAIN-SUFFIX,2025cdn.sx
+  - DOMAIN-SUFFIX,2026cdn.sx
   - DOMAIN-SUFFIX,20thcenturystudios.com.au
   - DOMAIN-SUFFIX,20thcenturystudios.com.br
   - DOMAIN-SUFFIX,20thcenturystudios.jp
@@ -5085,7 +5105,6 @@ payload:
   - DOMAIN-SUFFIX,externulls.com
   - DOMAIN-SUFFIX,extmatrix.com
   - DOMAIN-SUFFIX,ezocdn.com
-  - DOMAIN-SUFFIX,f-droid.org
   - DOMAIN-SUFFIX,f.hubspotemail.net
   - DOMAIN-SUFFIX,f.hubspotfree.net
   - DOMAIN-SUFFIX,f.hubspotstarter.net
@@ -5113,6 +5132,7 @@ payload:
   - DOMAIN-SUFFIX,feedercdn.com
   - DOMAIN-SUFFIX,feetcdn.com
   - DOMAIN-SUFFIX,feiniu.lol
+  - DOMAIN-SUFFIX,fembeqv2.xyz
   - DOMAIN-SUFFIX,femefun.com
   - DOMAIN-SUFFIX,fetnet.net
   - DOMAIN-SUFFIX,feurl.com
@@ -5455,6 +5475,7 @@ payload:
   - DOMAIN-SUFFIX,githubusercontent.com
   - DOMAIN-SUFFIX,gitlab-static.net
   - DOMAIN-SUFFIX,gitlab.io
+  - DOMAIN-SUFFIX,gitmirror.com
   - DOMAIN-SUFFIX,gitpage.si
   - DOMAIN-SUFFIX,glasamerike.net
   - DOMAIN-SUFFIX,glass.adidas.com
@@ -5560,6 +5581,7 @@ payload:
   - DOMAIN-SUFFIX,hotlink.cc
   - DOMAIN-SUFFIX,hovervan.org
   - DOMAIN-SUFFIX,howtogeekimages.com
+  - DOMAIN-SUFFIX,hrcdn.net
   - DOMAIN-SUFFIX,hs-scripts.com
   - DOMAIN-SUFFIX,hs-scripts.net
   - DOMAIN-SUFFIX,hsappstatic.net
@@ -6589,6 +6611,7 @@ payload:
   - DOMAIN-SUFFIX,replicate.delivery
   - DOMAIN-SUFFIX,repo.anaconda.com
   - DOMAIN-SUFFIX,repo.jing.rocks
+  - DOMAIN-SUFFIX,report-uri.com
   - DOMAIN-SUFFIX,res.office365.com
   - DOMAIN-SUFFIX,rescript-lang.org
   - DOMAIN-SUFFIX,revclouds.com
