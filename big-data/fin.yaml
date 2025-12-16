@@ -1,5 +1,5 @@
-# Clash total line 8374
-# Last updated Sat 12/13/2025 22:15:34.48
+# Clash total line 8384
+# Last updated Tue 12/16/2025 22:16:33.53
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -213,6 +213,7 @@ payload:
   - DOMAIN,assets.dub.co
   - DOMAIN,assets.ecomm.ui.com
   - DOMAIN,assets.embeddables.com
+  - DOMAIN,assets.endorsely.com
   - DOMAIN,assets.euractiv.com
   - DOMAIN,assets.exercism.org
   - DOMAIN,assets.extension.grammarly.com
@@ -266,6 +267,7 @@ payload:
   - DOMAIN,assets.nxtrace.org
   - DOMAIN,assets.onestore.ms
   - DOMAIN,assets.ontrack.com
+  - DOMAIN,assets.openalternative.co
   - DOMAIN,assets.openshift.com
   - DOMAIN,assets.openshift.net
   - DOMAIN,assets.orz.uno
@@ -322,6 +324,7 @@ payload:
   - DOMAIN,assets.wikiwand.com
   - DOMAIN,assets.xmind.net
   - DOMAIN,assets.yande.re
+  - DOMAIN,assets.zendesk.com
   - DOMAIN,assets.zerohedge.com
   - DOMAIN,assets.zilliz.com
   - DOMAIN,assets0.headwayapp.co
@@ -637,6 +640,7 @@ payload:
   - DOMAIN,cdn.dynamicyield.com
   - DOMAIN,cdn.earthroulette.com
   - DOMAIN,cdn.ecomm.ui.com
+  - DOMAIN,cdn.electronic.us
   - DOMAIN,cdn.embed.ly
   - DOMAIN,cdn.embedly.com
   - DOMAIN,cdn.engagement.ai
@@ -1358,6 +1362,7 @@ payload:
   - DOMAIN,dl.getaurora.dev
   - DOMAIN,dl.google.com
   - DOMAIN,dl.iina.io
+  - DOMAIN,dl.imobie.com
   - DOMAIN,dl.l.google.com
   - DOMAIN,dl.motrix.app
   - DOMAIN,dl.nssurge.com
@@ -2180,6 +2185,7 @@ payload:
   - DOMAIN,img.xbooru.com
   - DOMAIN,img.xhacgn.com
   - DOMAIN,img.xjh.me
+  - DOMAIN,img.yna.co.kr
   - DOMAIN,img0.socialshopwave.com
   - DOMAIN,img0.yna.co.kr
   - DOMAIN,img1.ak.crunchyroll.com
@@ -2422,6 +2428,7 @@ payload:
   - DOMAIN,media.istockphoto.com
   - DOMAIN,media.kit.com
   - DOMAIN,media.lantern.io
+  - DOMAIN,media.letsdeel.com
   - DOMAIN,media.loom-app.com
   - DOMAIN,media.maptiler.com
   - DOMAIN,media.mas.to
@@ -3051,6 +3058,7 @@ payload:
   - DOMAIN,ooo.0o0.ooo
   - DOMAIN,open-vsx.org
   - DOMAIN,openapi.vercel.sh
+  - DOMAIN,openreplay-new.deel.tools
   - DOMAIN,openseauserdata.com
   - DOMAIN,opensignal.cdnbye.com
   - DOMAIN,opensource.nchc.org.tw
@@ -3177,6 +3185,7 @@ payload:
   - DOMAIN,pro2-ui-assets-s3-fy.myportfolio.com
   - DOMAIN,prod-api.crackle.com
   - DOMAIN,prod-cdn.webtune.ai
+  - DOMAIN,prod-images.rippling.com
   - DOMAIN,prod-packager-packages.codesandbox.io
   - DOMAIN,prod.addictinggames.com
   - DOMAIN,product-downloads.atlassian.com
@@ -4107,7 +4116,7 @@ payload:
   - DOMAIN,webobjects2.cdw.com
   - DOMAIN,webp.frostming.com
   - DOMAIN,website-cdn.ipinfo.io
-  - DOMAIN,website-media.deel.com
+  - DOMAIN,website-media
   - DOMAIN,website-prod.cache.wpscdn.com
   - DOMAIN,webstatic.chargebee.com
   - DOMAIN,widget.automizely.com
@@ -6933,6 +6942,7 @@ payload:
   - DOMAIN-SUFFIX,tiles.virtualearth.net
   - DOMAIN-SUFFIX,timestalks.com
   - DOMAIN-SUFFIX,tindiemedia.com
+  - DOMAIN-SUFFIX,tinifycdn.com
   - DOMAIN-SUFFIX,tinypass.com
   - DOMAIN-SUFFIX,tinyupload.com
   - DOMAIN-SUFFIX,tiqcdn.com

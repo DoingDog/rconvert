@@ -1,5 +1,5 @@
 # Quantumult total line 4356
-# Last updated Sat 12/13/2025 22:15:47.08
+# Last updated Tue 12/16/2025 22:16:45.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe,LIST
 HOST,a.iqmtp.live,LIST
@@ -600,6 +600,7 @@ HOST-SUFFIX,bdcloudapi.com,LIST
 HOST-SUFFIX,bdimg.com,LIST
 HOST-SUFFIX,bdstatic.com,LIST
 HOST-SUFFIX,bdtjrcv.com,LIST
+HOST-SUFFIX,bdurl.net,LIST
 HOST-SUFFIX,bdxiguaimg.com,LIST
 HOST-SUFFIX,bdxiguastatic.com,LIST
 HOST-SUFFIX,bdydns.com,LIST
@@ -1251,7 +1252,6 @@ HOST-SUFFIX,didichuxing.com,LIST
 HOST-SUFFIX,didiglobal.com,LIST
 HOST-SUFFIX,didimobility.co.jp,LIST
 HOST-SUFFIX,didistatic.com,LIST
-HOST-SUFFIX,dig.bdurl.net,LIST
 HOST-SUFFIX,digicert.com,LIST
 HOST-SUFFIX,dilidili.wang,LIST
 HOST-SUFFIX,dingding.xin,LIST

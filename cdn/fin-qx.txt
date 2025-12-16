@@ -1,5 +1,5 @@
-# Quantumult total line 4144
-# Last updated Sat 12/13/2025 22:15:21.85
+# Quantumult total line 4153
+# Last updated Tue 12/16/2025 22:16:21.52
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -162,6 +162,7 @@ HOST,assets.documentcloud.org,LIST
 HOST,assets.dub.co,LIST
 HOST,assets.ecomm.ui.com,LIST
 HOST,assets.embeddables.com,LIST
+HOST,assets.endorsely.com,LIST
 HOST,assets.euractiv.com,LIST
 HOST,assets.exercism.org,LIST
 HOST,assets.extension.grammarly.com,LIST
@@ -220,6 +221,7 @@ HOST,assets.nintendo.com,LIST
 HOST,assets.nxtrace.org,LIST
 HOST,assets.onestore.ms,LIST
 HOST,assets.ontrack.com,LIST
+HOST,assets.openalternative.co,LIST
 HOST,assets.openshift.com,LIST
 HOST,assets.openshift.net,LIST
 HOST,assets.orz.uno,LIST
@@ -279,6 +281,7 @@ HOST,assets.wikiwand.com,LIST
 HOST,assets.xboxservices.com,LIST
 HOST,assets.xmind.net,LIST
 HOST,assets.yande.re,LIST
+HOST,assets.zendesk.com,LIST
 HOST,assets.zerohedge.com,LIST
 HOST,assets.zilliz.com,LIST
 HOST,assets0.headwayapp.co,LIST
@@ -1665,6 +1668,7 @@ HOST,img.windy.com,LIST
 HOST,img.xbooru.com,LIST
 HOST,img.xhacgn.com,LIST
 HOST,img.xjh.me,LIST
+HOST,img.yna.co.kr,LIST
 HOST,img.youtube.com,LIST
 HOST,img0.socialshopwave.com,LIST
 HOST,img0.yna.co.kr,LIST
@@ -1882,6 +1886,7 @@ HOST,media.invisioncic.com,LIST
 HOST,media.istockphoto.com,LIST
 HOST,media.kit.com,LIST
 HOST,media.lantern.io,LIST
+HOST,media.letsdeel.com,LIST
 HOST,media.licdn.com,LIST
 HOST,media.loom-app.com,LIST
 HOST,media.maptiler.com,LIST
@@ -1995,6 +2000,7 @@ HOST,oneocsp.microsoft.com,LIST
 HOST,ooo.0o0.ooo,LIST
 HOST,open-vsx.org,LIST
 HOST,openapi.vercel.sh,LIST
+HOST,openreplay-new.deel.tools,LIST
 HOST,openseauserdata.com,LIST
 HOST,opensignal.cdnbye.com,LIST
 HOST,optimizationguide-pa.googleapis.com,LIST
@@ -2103,6 +2109,7 @@ HOST,previews.fleek.co,LIST
 HOST,privacy.axios.com,LIST
 HOST,pro2-ui-assets-s3-fy.myportfolio.com,LIST
 HOST,prod-cdn.webtune.ai,LIST
+HOST,prod-images.rippling.com,LIST
 HOST,prod-packager-packages.codesandbox.io,LIST
 HOST,prod-streaming-video-msn-com.akamaized.net,LIST
 HOST,prod-video-cms-amp-microsoft-com.akamaized.net,LIST
@@ -2620,6 +2627,7 @@ HOST,static.returngo.ai,LIST
 HOST,static.roboflow.com,LIST
 HOST,static.salidzini.lv,LIST
 HOST,static.scarf.sh,LIST
+HOST,static.sdkassets.chime.aws,LIST
 HOST,static.seel.com,LIST
 HOST,static.serverhunter.com,LIST
 HOST,static.skyassets.com,LIST
@@ -2933,7 +2941,7 @@ HOST,webfonts.zoho.com,LIST
 HOST,webobjects2.cdw.com,LIST
 HOST,webp.frostming.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
-HOST,website-media.deel.com,LIST
+HOST,website-media,LIST
 HOST,website-prod.cache.wpscdn.com,LIST
 HOST,webstatic.chargebee.com,LIST
 HOST,widget.automizely.com,LIST
@@ -3990,6 +3998,7 @@ HOST-SUFFIX,tiles-api.maps.komoot.net,LIST
 HOST-SUFFIX,tiles.mapbox.com,LIST
 HOST-SUFFIX,tiles.virtualearth.net,LIST
 HOST-SUFFIX,tindiemedia.com,LIST
+HOST-SUFFIX,tinifycdn.com,LIST
 HOST-SUFFIX,tiqcdn.com,LIST
 HOST-SUFFIX,tkcdns.com,LIST
 HOST-SUFFIX,tmsimg.com,LIST

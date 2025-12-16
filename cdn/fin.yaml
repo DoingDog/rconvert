@@ -1,5 +1,5 @@
-# Clash total line 4144
-# Last updated Sat 12/13/2025 22:15:21.89
+# Clash total line 4153
+# Last updated Tue 12/16/2025 22:16:21.56
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -163,6 +163,7 @@ payload:
   - DOMAIN,assets.dub.co
   - DOMAIN,assets.ecomm.ui.com
   - DOMAIN,assets.embeddables.com
+  - DOMAIN,assets.endorsely.com
   - DOMAIN,assets.euractiv.com
   - DOMAIN,assets.exercism.org
   - DOMAIN,assets.extension.grammarly.com
@@ -221,6 +222,7 @@ payload:
   - DOMAIN,assets.nxtrace.org
   - DOMAIN,assets.onestore.ms
   - DOMAIN,assets.ontrack.com
+  - DOMAIN,assets.openalternative.co
   - DOMAIN,assets.openshift.com
   - DOMAIN,assets.openshift.net
   - DOMAIN,assets.orz.uno
@@ -280,6 +282,7 @@ payload:
   - DOMAIN,assets.xboxservices.com
   - DOMAIN,assets.xmind.net
   - DOMAIN,assets.yande.re
+  - DOMAIN,assets.zendesk.com
   - DOMAIN,assets.zerohedge.com
   - DOMAIN,assets.zilliz.com
   - DOMAIN,assets0.headwayapp.co
@@ -1666,6 +1669,7 @@ payload:
   - DOMAIN,img.xbooru.com
   - DOMAIN,img.xhacgn.com
   - DOMAIN,img.xjh.me
+  - DOMAIN,img.yna.co.kr
   - DOMAIN,img.youtube.com
   - DOMAIN,img0.socialshopwave.com
   - DOMAIN,img0.yna.co.kr
@@ -1883,6 +1887,7 @@ payload:
   - DOMAIN,media.istockphoto.com
   - DOMAIN,media.kit.com
   - DOMAIN,media.lantern.io
+  - DOMAIN,media.letsdeel.com
   - DOMAIN,media.licdn.com
   - DOMAIN,media.loom-app.com
   - DOMAIN,media.maptiler.com
@@ -1996,6 +2001,7 @@ payload:
   - DOMAIN,ooo.0o0.ooo
   - DOMAIN,open-vsx.org
   - DOMAIN,openapi.vercel.sh
+  - DOMAIN,openreplay-new.deel.tools
   - DOMAIN,openseauserdata.com
   - DOMAIN,opensignal.cdnbye.com
   - DOMAIN,optimizationguide-pa.googleapis.com
@@ -2104,6 +2110,7 @@ payload:
   - DOMAIN,privacy.axios.com
   - DOMAIN,pro2-ui-assets-s3-fy.myportfolio.com
   - DOMAIN,prod-cdn.webtune.ai
+  - DOMAIN,prod-images.rippling.com
   - DOMAIN,prod-packager-packages.codesandbox.io
   - DOMAIN,prod-streaming-video-msn-com.akamaized.net
   - DOMAIN,prod-video-cms-amp-microsoft-com.akamaized.net
@@ -2621,6 +2628,7 @@ payload:
   - DOMAIN,static.roboflow.com
   - DOMAIN,static.salidzini.lv
   - DOMAIN,static.scarf.sh
+  - DOMAIN,static.sdkassets.chime.aws
   - DOMAIN,static.seel.com
   - DOMAIN,static.serverhunter.com
   - DOMAIN,static.skyassets.com
@@ -2934,7 +2942,7 @@ payload:
   - DOMAIN,webobjects2.cdw.com
   - DOMAIN,webp.frostming.com
   - DOMAIN,website-cdn.ipinfo.io
-  - DOMAIN,website-media.deel.com
+  - DOMAIN,website-media
   - DOMAIN,website-prod.cache.wpscdn.com
   - DOMAIN,webstatic.chargebee.com
   - DOMAIN,widget.automizely.com
@@ -3991,6 +3999,7 @@ payload:
   - DOMAIN-SUFFIX,tiles.mapbox.com
   - DOMAIN-SUFFIX,tiles.virtualearth.net
   - DOMAIN-SUFFIX,tindiemedia.com
+  - DOMAIN-SUFFIX,tinifycdn.com
   - DOMAIN-SUFFIX,tiqcdn.com
   - DOMAIN-SUFFIX,tkcdns.com
   - DOMAIN-SUFFIX,tmsimg.com
