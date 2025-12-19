@@ -1,5 +1,5 @@
-# Quantumult total line 8370
-# Last updated Tue 12/16/2025 22:16:33.47
+# Quantumult total line 8385
+# Last updated Fri 12/19/2025 22:16:43.17
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -15,6 +15,7 @@ HOST,academy-public.coinmarketcap.com,LIST
 HOST,account-cdn.svc.ui.com,LIST
 HOST,account-widget-mfe.gcore.com,LIST
 HOST,accounts-cdn.9gag.com,LIST
+HOST,acdn.mercury.com,LIST
 HOST,addins.deepl.com,LIST
 HOST,adkit.9pub.io,LIST
 HOST,aff.equalweb.com,LIST
@@ -136,6 +137,7 @@ HOST,apps-static.route4me.com,LIST
 HOST,apps.bazaarvoice.com,LIST
 HOST,apps.profitihub.com,LIST
 HOST,apps.sophi.io,LIST
+HOST,appstatico.electronic.us,LIST
 HOST,apt.tetaneutral.net,LIST
 HOST,apt.xpipe.io,LIST
 HOST,archive.cs.uu.nl,LIST
@@ -255,6 +257,7 @@ HOST,assets.mailgun.com,LIST
 HOST,assets.mastercard.com,LIST
 HOST,assets.matters.news,LIST
 HOST,assets.mayoclinic.org,LIST
+HOST,assets.mcp.corespeed.io,LIST
 HOST,assets.media-platform.com,LIST
 HOST,assets.monei.com,LIST
 HOST,assets.monica.im,LIST
@@ -750,6 +753,7 @@ HOST,cdn.mathjax.org,LIST
 HOST,cdn.matterhorn.app,LIST
 HOST,cdn.mcauto-images-production.sendgrid.net,LIST
 HOST,cdn.mcr.ea.com,LIST
+HOST,cdn.mercury.com,LIST
 HOST,cdn.metadata.io,LIST
 HOST,cdn.mewe.com,LIST
 HOST,cdn.micro.blog,LIST
@@ -860,6 +864,7 @@ HOST,cdn.shoppinggives.com,LIST
 HOST,cdn.sift.com,LIST
 HOST,cdn.simpleicons.org,LIST
 HOST,cdn.simplelocalize.io,LIST
+HOST,cdn.simplesat.io,LIST
 HOST,cdn.sitesearch360.com,LIST
 HOST,cdn.sketch.com,LIST
 HOST,cdn.skymavis.com,LIST
@@ -1078,6 +1083,7 @@ HOST,cf.shopee.tw,LIST
 HOST,cfvod.kaltura.com,LIST
 HOST,chart.googleapis.com,LIST
 HOST,charts.verdaccio.org,LIST
+HOST,chat-assets.front.app,LIST
 HOST,chat.digitalgenius.com,LIST
 HOST,chatwidgetmetrics-proxy.usepylon.com,LIST
 HOST,checkout-sdk.bigcommerce.com,LIST
@@ -1086,6 +1092,7 @@ HOST,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv,LIST
 HOST,chunk-composing.canva.com,LIST
 HOST,ci.testling.com,LIST
 HOST,cimg.cnyes.cool,LIST
+HOST,circle-flags.zeljko.me,LIST
 HOST,cisco.yuntu.com.tw,LIST
 HOST,ciscobinary.openh264.org,LIST
 HOST,claritystatic.azureedge.net,LIST
@@ -1922,6 +1929,7 @@ HOST,i.pcmag.com,LIST
 HOST,i.rtings.com,LIST
 HOST,i.servimg.com,LIST
 HOST,i.snap.as,LIST
+HOST,i.typlog.com,LIST
 HOST,i.vgy.me,LIST
 HOST,i.xgroovy.com,LIST
 HOST,i.xozilla.xxx,LIST
@@ -2128,6 +2136,7 @@ HOST,img.fastcybers.com,LIST
 HOST,img.foresightnews.pro,LIST
 HOST,img.fortawesome.com,LIST
 HOST,img.freepik.com,LIST
+HOST,img.fzf404.art,LIST
 HOST,img.gs,LIST
 HOST,img.hellofresh.com,LIST
 HOST,img.hentaihaven.xxx,LIST
@@ -2351,6 +2360,7 @@ HOST,load.csell.co,LIST
 HOST,loader.mantis-intelligence.com,LIST
 HOST,log-collector.17app.co,LIST
 HOST,logo.clearbit.com,LIST
+HOST,logos.composio.dev,LIST
 HOST,logos.kiwibrowser.com,LIST
 HOST,logos.speedtestcustom.com,LIST
 HOST,loutre.blockchair.io,LIST
@@ -3143,6 +3153,7 @@ HOST,pkgs.dev.azure.com,LIST
 HOST,pkgs.netbird.io,LIST
 HOST,pkgs.tailscale.com,LIST
 HOST,pl.ea.com,LIST
+HOST,placeholder.pics,LIST
 HOST,platform-assets.typekit.net,LIST
 HOST,platform.instagram.com,LIST
 HOST,platform.twitter.com,LIST
@@ -3174,6 +3185,7 @@ HOST,pp-static.monotype.com,LIST
 HOST,ppa.launchpad.net,LIST
 HOST,pptstatic.iyf.tv,LIST
 HOST,practicaldev-herokuapp-com.freetls.fastly.net,LIST
+HOST,prd-www-cdn.ubnt.com,LIST
 HOST,prego-cache.prod.sketch.com,LIST
 HOST,prettier.io,LIST
 HOST,preview.anysex.com,LIST
@@ -3225,6 +3237,7 @@ HOST,r.r10s.jp,LIST
 HOST,r2.1hanime.com,LIST
 HOST,r2.gear4music.com,LIST
 HOST,r2.leadsy.ai,LIST
+HOST,r2cdn.corespeed.io,LIST
 HOST,r2cdn.myshopline.com,LIST
 HOST,r34xyz.b-cdn.net,LIST
 HOST,rapid-cdn.yottaa.com,LIST
@@ -4461,6 +4474,7 @@ HOST-SUFFIX,beautyandthebeastmusical.co.uk,LIST
 HOST-SUFFIX,bentobox.tv,LIST
 HOST-SUFFIX,bestfreecdn.com,LIST
 HOST-SUFFIX,bestjavcdn.com,LIST
+HOST-SUFFIX,betterstackcdn.com,LIST
 HOST-SUFFIX,bezsms.org,LIST
 HOST-SUFFIX,bftuvip.com,LIST
 HOST-SUFFIX,bfzypic.com,LIST
@@ -4563,6 +4577,7 @@ HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,cdn-lfs.hf.co,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn-one.com,LIST
+HOST-SUFFIX,cdn-plain.com,LIST
 HOST-SUFFIX,cdn-spurit.com,LIST
 HOST-SUFFIX,cdn-telegram.org,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
