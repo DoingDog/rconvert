@@ -1,5 +1,5 @@
-# Clash total line 4400
-# Last updated Fri 12/19/2025 22:16:55.83
+# Clash total line 4393
+# Last updated Mon 12/22/2025 22:16:31.29
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
@@ -43,7 +43,6 @@ payload:
   - DOMAIN,setmeup.arubanetworks.com
   - DOMAIN,smart.uhdnow.com
   - DOMAIN,sms.imagetasks.com
-  - DOMAIN,speedtest.macpaw.com
   - DOMAIN,steamcommunity-a.akamaihd.net
   - DOMAIN,tx.lilyemby.com
   - DOMAIN,unifi
@@ -1046,7 +1045,6 @@ payload:
   - DOMAIN-SUFFIX,cloudzhuhai.com
   - DOMAIN-SUFFIX,clsa.com
   - DOMAIN-SUFFIX,cm.fancyapi.com
-  - DOMAIN-SUFFIX,cm.steampowered.com
   - DOMAIN-SUFFIX,cmb-leasing.com
   - DOMAIN-SUFFIX,cmbchina.biz
   - DOMAIN-SUFFIX,cmbchina.com
@@ -2649,7 +2647,6 @@ payload:
   - DOMAIN-SUFFIX,netease-inc.com
   - DOMAIN-SUFFIX,netease.com
   - DOMAIN-SUFFIX,netease.im
-  - DOMAIN-SUFFIX,netspeedtestmaster.com
   - DOMAIN-SUFFIX,netstatic.net
   - DOMAIN-SUFFIX,newasp.net
   - DOMAIN-SUFFIX,newbandeng.com
@@ -2773,10 +2770,6 @@ payload:
   - DOMAIN-SUFFIX,paopaoche.net
   - DOMAIN-SUFFIX,papocket.com
   - DOMAIN-SUFFIX,passthepopcorn.me
-  - DOMAIN-SUFFIX,paypal-mktg.com
-  - DOMAIN-SUFFIX,paypal.com
-  - DOMAIN-SUFFIX,paypal.me
-  - DOMAIN-SUFFIX,paypalobjects.com
   - DOMAIN-SUFFIX,pc6.com
   - DOMAIN-SUFFIX,pcbeta.com
   - DOMAIN-SUFFIX,pchome.net

@@ -1,5 +1,5 @@
-# Clash total line 8399
-# Last updated Fri 12/19/2025 22:16:43.22
+# Clash total line 8402
+# Last updated Mon 12/22/2025 22:16:18.99
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -882,6 +882,7 @@ payload:
   - DOMAIN,cdn.staticdelivr.com
   - DOMAIN,cdn.staticswin.com
   - DOMAIN,cdn.stellarhosted.com
+  - DOMAIN,cdn.stonly.com
   - DOMAIN,cdn.streamlabs.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
@@ -3264,6 +3265,7 @@ payload:
   - DOMAIN,releases.stash.ws
   - DOMAIN,releases.warp.dev
   - DOMAIN,releases.whatpulse.org
+  - DOMAIN,reload.getsentry.net
   - DOMAIN,renderer-assets.typeform.com
   - DOMAIN,rep-ubuntu-il.upress.io
   - DOMAIN,replicate.npmjs.com
@@ -4539,6 +4541,7 @@ payload:
   - DOMAIN-SUFFIX,capcutstatic.com
   - DOMAIN-SUFFIX,carlos.trade
   - DOMAIN-SUFFIX,carryz.net
+  - DOMAIN-SUFFIX,cartastatic.com
   - DOMAIN-SUFFIX,cartocdn.com
   - DOMAIN-SUFFIX,cas-bridge.xethub.hf.co
   - DOMAIN-SUFFIX,casoneexchange.com
