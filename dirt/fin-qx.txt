@@ -1,5 +1,5 @@
-# Quantumult total line 4349
-# Last updated Mon 12/22/2025 22:16:31.25
+# Quantumult total line 4357
+# Last updated Thu 12/25/2025 22:15:57.82
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe,LIST
 HOST,a.iqmtp.live,LIST
@@ -42,6 +42,7 @@ HOST,router.asus.com,LIST
 HOST,setmeup.arubanetworks.com,LIST
 HOST,smart.uhdnow.com,LIST
 HOST,sms.imagetasks.com,LIST
+HOST,speedtest.macpaw.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
 HOST,tx.lilyemby.com,LIST
 HOST,unifi,LIST
@@ -1044,6 +1045,7 @@ HOST-SUFFIX,cloudzhongshan.com,LIST
 HOST-SUFFIX,cloudzhuhai.com,LIST
 HOST-SUFFIX,clsa.com,LIST
 HOST-SUFFIX,cm.fancyapi.com,LIST
+HOST-SUFFIX,cm.steampowered.com,LIST
 HOST-SUFFIX,cmb-leasing.com,LIST
 HOST-SUFFIX,cmbchina.biz,LIST
 HOST-SUFFIX,cmbchina.com,LIST
@@ -2646,6 +2648,7 @@ HOST-SUFFIX,netbian.com,LIST
 HOST-SUFFIX,netease-inc.com,LIST
 HOST-SUFFIX,netease.com,LIST
 HOST-SUFFIX,netease.im,LIST
+HOST-SUFFIX,netspeedtestmaster.com,LIST
 HOST-SUFFIX,netstatic.net,LIST
 HOST-SUFFIX,newasp.net,LIST
 HOST-SUFFIX,newbandeng.com,LIST
@@ -2769,6 +2772,10 @@ HOST-SUFFIX,pangolin-sdk-toutiao.com,LIST
 HOST-SUFFIX,paopaoche.net,LIST
 HOST-SUFFIX,papocket.com,LIST
 HOST-SUFFIX,passthepopcorn.me,LIST
+HOST-SUFFIX,paypal-mktg.com,LIST
+HOST-SUFFIX,paypal.com,LIST
+HOST-SUFFIX,paypal.me,LIST
+HOST-SUFFIX,paypalobjects.com,LIST
 HOST-SUFFIX,pc6.com,LIST
 HOST-SUFFIX,pcbeta.com,LIST
 HOST-SUFFIX,pchome.net,LIST
@@ -3588,6 +3595,7 @@ HOST-SUFFIX,webank.com,LIST
 HOST-SUFFIX,webankcdn.net,LIST
 HOST-SUFFIX,webgame163.com,LIST
 HOST-SUFFIX,webofknowledge.com,LIST
+HOST-SUFFIX,webofscience.com,LIST
 HOST-SUFFIX,webok.net,LIST
 HOST-SUFFIX,webqxs.com,LIST
 HOST-SUFFIX,webterren.com,LIST
