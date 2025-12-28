@@ -1,5 +1,5 @@
-# Quantumult total line 4176
-# Last updated Thu 12/25/2025 22:15:31.88
+# Quantumult total line 4180
+# Last updated Sun 12/28/2025 22:15:51.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -717,6 +717,7 @@ HOST,cdn.omnicalculator.com,LIST
 HOST,cdn.one.store,LIST
 HOST,cdn.onesignal.com,LIST
 HOST,cdn.onetime.dog,LIST
+HOST,cdn.onfastspring.com,LIST
 HOST,cdn.onlyhentaistuff.com,LIST
 HOST,cdn.openai.com,LIST
 HOST,cdn.osxdaily.com,LIST
@@ -1473,6 +1474,7 @@ HOST,image.thefly.com,LIST
 HOST,image.tmdb.org,LIST
 HOST,image.vuukle.com,LIST
 HOST,image.westinyou.com,LIST
+HOST,image.worthepenny.com,LIST
 HOST,image.xmanhua.net,LIST
 HOST,image.yuntu.com.tw,LIST
 HOST,image.yymanhua.com,LIST
@@ -1974,7 +1976,6 @@ HOST,nav.yumenosora.co.jp,LIST
 HOST,navismithapis-cdn.com,LIST
 HOST,nbcnewsdigital-static.nbcuni.com,LIST
 HOST,nel.heroku.com,LIST
-HOST,nel.teo-rum.com,LIST
 HOST,net-fe-static-assets.network-controller.svc.ui.com,LIST
 HOST,netlify.apollo.io,LIST
 HOST,newassets.hcaptcha.com,LIST
@@ -2224,6 +2225,7 @@ HOST,s.abcnews.com,LIST
 HOST,s.gishan.cc,LIST
 HOST,s.imgflip.com,LIST
 HOST,s.imgur.com,LIST
+HOST,s.linear.app,LIST
 HOST,s.midishow.net,LIST
 HOST,s.namemc.com,LIST
 HOST,s.pacn.ws,LIST
@@ -3007,7 +3009,6 @@ HOST,www.acgpix.de,LIST
 HOST,www.bbthat.com,LIST
 HOST,www.envoyproxy.io,LIST
 HOST,www.gstatic.com,LIST
-HOST,www.paypalobjects.com,LIST
 HOST,www.pngmart.com,LIST
 HOST,www.tbstat.com,LIST
 HOST,www.typescriptlang.org,LIST
@@ -3770,6 +3771,7 @@ HOST-SUFFIX,pastebin.com,LIST
 HOST-SUFFIX,patientpop.com,LIST
 HOST-SUFFIX,patreonusercontent.com,LIST
 HOST-SUFFIX,payloadcms.app,LIST
+HOST-SUFFIX,paypalobjects.com,LIST
 HOST-SUFFIX,pcdn.co,LIST
 HOST-SUFFIX,permaweb.eu.org,LIST
 HOST-SUFFIX,permaweb.io,LIST
@@ -3862,6 +3864,7 @@ HOST-SUFFIX,redditmedia.com,LIST
 HOST-SUFFIX,redditstatic.com,LIST
 HOST-SUFFIX,registry.gitplac.si,LIST
 HOST-SUFFIX,replicate.delivery,LIST
+HOST-SUFFIX,replicateassets.com,LIST
 HOST-SUFFIX,report-uri.com,LIST
 HOST-SUFFIX,res.office365.com,LIST
 HOST-SUFFIX,rescript-lang.org,LIST
@@ -4005,6 +4008,7 @@ HOST-SUFFIX,tauri.app,LIST
 HOST-SUFFIX,teamtailor-cdn.com,LIST
 HOST-SUFFIX,tedcdn.com,LIST
 HOST-SUFFIX,telemetry.services.yofi.ai,LIST
+HOST-SUFFIX,teo-rum.com,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
 HOST-SUFFIX,thesourcemediaassets.com,LIST
 HOST-SUFFIX,thirdwebcdn.com,LIST

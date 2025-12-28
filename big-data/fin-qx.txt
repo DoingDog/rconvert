@@ -1,5 +1,5 @@
-# Quantumult total line 8393
-# Last updated Thu 12/25/2025 22:15:44.80
+# Quantumult total line 8402
+# Last updated Sun 12/28/2025 22:16:04.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -785,6 +785,7 @@ HOST,cdn.one.store,LIST
 HOST,cdn.oneget.org,LIST
 HOST,cdn.onesignal.com,LIST
 HOST,cdn.onetime.dog,LIST
+HOST,cdn.onfastspring.com,LIST
 HOST,cdn.onlyhentaistuff.com,LIST
 HOST,cdn.openai.com,LIST
 HOST,cdn.opensuse.org,LIST
@@ -1405,6 +1406,7 @@ HOST,down.filen-5.net,LIST
 HOST,down.filen.io,LIST
 HOST,down.filen.net,LIST
 HOST,download-core.sys.truenas.net,LIST
+HOST,download.amelabs.net,LIST
 HOST,download.ameliorated.io,LIST
 HOST,download.anydesk.com,LIST
 HOST,download.bazzite.gg,LIST
@@ -1444,6 +1446,7 @@ HOST,download.proxyman.com,LIST
 HOST,download.savannah.gnu.org,LIST
 HOST,download.sketch.com,LIST
 HOST,download.snipaste.com,LIST
+HOST,download.sysinternals.com,LIST
 HOST,download.tensorflow.google.com,LIST
 HOST,download.todesktop.com,LIST
 HOST,download.typora.io,LIST
@@ -1842,6 +1845,7 @@ HOST,gimp.ip-connect.info,LIST
 HOST,gimp.ip-connect.vn.ua,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
 HOST,global.divhunt.com,LIST
+HOST,global.uhdnow.com,LIST
 HOST,glua.ua.pt,LIST
 HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
@@ -1996,6 +2000,7 @@ HOST,image.thefly.com,LIST
 HOST,image.tmdb.org,LIST
 HOST,image.vuukle.com,LIST
 HOST,image.westinyou.com,LIST
+HOST,image.worthepenny.com,LIST
 HOST,image.xmanhua.net,LIST
 HOST,image.yuntu.com.tw,LIST
 HOST,image.yymanhua.com,LIST
@@ -3021,7 +3026,6 @@ HOST,namedotcom-cdn.name.tools,LIST
 HOST,nav.yumenosora.co.jp,LIST
 HOST,navismithapis-cdn.com,LIST
 HOST,nel.heroku.com,LIST
-HOST,nel.teo-rum.com,LIST
 HOST,net-fe-static-assets.network-controller.svc.ui.com,LIST
 HOST,netlify.apollo.io,LIST
 HOST,newassets.hcaptcha.com,LIST
@@ -3340,6 +3344,7 @@ HOST,s.abcnews.com,LIST
 HOST,s.gishan.cc,LIST
 HOST,s.imgflip.com,LIST
 HOST,s.imgur.com,LIST
+HOST,s.linear.app,LIST
 HOST,s.midishow.net,LIST
 HOST,s.namemc.com,LIST
 HOST,s.pacn.ws,LIST
@@ -4028,6 +4033,7 @@ HOST,update.parallels.com,LIST
 HOST,update.sleazyfork.org,LIST
 HOST,updater.snipaste.com,LIST
 HOST,updates-cdn.bravesoftware.com,LIST
+HOST,updates.64gr.am,LIST
 HOST,updates.bravesoftware.com,LIST
 HOST,updates.edovia.com,LIST
 HOST,updates.istatmenus.app,LIST
@@ -4064,6 +4070,7 @@ HOST,v-tiles1.downdetector.com,LIST
 HOST,v-tiles2.downdetector.com,LIST
 HOST,v-tiles3.downdetector.com,LIST
 HOST,v.w-x.co,LIST
+HOST,v1.uhdnow.com,LIST
 HOST,v2.listenloop.com,LIST
 HOST,v2uploads.zopim.io,LIST
 HOST,vanilla-extract.style,LIST
@@ -4187,7 +4194,6 @@ HOST,www.googleapis.com,LIST
 HOST,www.gstatic.com,LIST
 HOST,www.gtlib.gatech.edu,LIST
 HOST,www.gutscheinrausch.de,LIST
-HOST,www.paypalobjects.com,LIST
 HOST,www.pngmart.com,LIST
 HOST,www.tbstat.com,LIST
 HOST,www.tubi.tv,LIST
@@ -6424,6 +6430,7 @@ HOST-SUFFIX,patientpop.com,LIST
 HOST-SUFFIX,patreonusercontent.com,LIST
 HOST-SUFFIX,payhulu.com,LIST
 HOST-SUFFIX,payloadcms.app,LIST
+HOST-SUFFIX,paypalobjects.com,LIST
 HOST-SUFFIX,pbs.org,LIST
 HOST-SUFFIX,pcdn.co,LIST
 HOST-SUFFIX,pcjs.org,LIST
@@ -6640,6 +6647,7 @@ HOST-SUFFIX,registerhulu.com,LIST
 HOST-SUFFIX,registry.gitplac.si,LIST
 HOST-SUFFIX,releases.hashicorp.com,LIST
 HOST-SUFFIX,replicate.delivery,LIST
+HOST-SUFFIX,replicateassets.com,LIST
 HOST-SUFFIX,repo.anaconda.com,LIST
 HOST-SUFFIX,repo.jing.rocks,LIST
 HOST-SUFFIX,report-uri.com,LIST
@@ -6921,6 +6929,7 @@ HOST-SUFFIX,telemetry.services.yofi.ai,LIST
 HOST-SUFFIX,telemundo.com,LIST
 HOST-SUFFIX,temp.sh,LIST
 HOST-SUFFIX,tenvoi.com,LIST
+HOST-SUFFIX,teo-rum.com,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
 HOST-SUFFIX,testonfox.com,LIST
 HOST-SUFFIX,texon.fans,LIST
