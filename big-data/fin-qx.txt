@@ -1,5 +1,5 @@
-# Quantumult total line 8402
-# Last updated Sun 12/28/2025 22:16:04.43
+# Quantumult total line 8419
+# Last updated Wed 12/31/2025 22:16:47.64
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -313,6 +313,7 @@ HOST,assets.toiimg.com,LIST
 HOST,assets.tokopedia.net,LIST
 HOST,assets.toot.cafe,LIST
 HOST,assets.tvtropes.org,LIST
+HOST,assets.unicorn.studio,LIST
 HOST,assets.unifi-ai.com,LIST
 HOST,assets.upload.io,LIST
 HOST,assets.vantage.sh,LIST
@@ -692,6 +693,7 @@ HOST,cdn.hashnode.com,LIST
 HOST,cdn.headwayapp.co,LIST
 HOST,cdn.heapanalytics.com,LIST
 HOST,cdn.hellofresh.com,LIST
+HOST,cdn.hero-sms.com,LIST
 HOST,cdn.hextom.com,LIST
 HOST,cdn.highporn.net,LIST
 HOST,cdn.hiive.space,LIST
@@ -1270,6 +1272,7 @@ HOST,deb.bbxnet.sk,LIST
 HOST,deb.campolargo.pr.gov.br,LIST
 HOST,deb.nextgen.ch,LIST
 HOST,deb.nodesource.com,LIST
+HOST,deb.sury.org,LIST
 HOST,debian-archive.trafficmanager.net,LIST
 HOST,debian-mirror.behostings.net,LIST
 HOST,debian-mirror.puq.apoapsis.cl,LIST
@@ -1482,6 +1485,7 @@ HOST,e.deviantart.net,LIST
 HOST,e.linear.app,LIST
 HOST,e3.365dm.com,LIST
 HOST,easylist-downloads.adblockplus.org,LIST
+HOST,eclats.crans.org,LIST
 HOST,ecn.dev.virtualearth.net,LIST
 HOST,ecommplugins-trustboxsettings.trustpilot.com,LIST
 HOST,edata.ndtv.com,LIST
@@ -1535,6 +1539,7 @@ HOST,eslint.style,LIST
 HOST,espejito.fder.edu.uy,LIST
 HOST,eu-images.contentstack.com,LIST
 HOST,eu.cdnbye.com,LIST
+HOST,eu.edge.kernel.org,LIST
 HOST,eu.hamreus.com,LIST
 HOST,eu01ccistatic.zoom.us,LIST
 HOST,eu1.hamreus.com,LIST
@@ -1666,6 +1671,7 @@ HOST,ftp.ca.debian.org,LIST
 HOST,ftp.caliu.cat,LIST
 HOST,ftp.carnet.hr,LIST
 HOST,ftp.cc.uoc.gr,LIST
+HOST,ftp.cc.uoc.grs,LIST
 HOST,ftp.ch.debian.org,LIST
 HOST,ftp.cica.es,LIST
 HOST,ftp.cixug.es,LIST
@@ -1673,6 +1679,7 @@ HOST,ftp.cl.debian.org,LIST
 HOST,ftp.cn.debian.org,LIST
 HOST,ftp.corbina.net,LIST
 HOST,ftp.cpan.org,LIST
+HOST,ftp.crihan.fr,LIST
 HOST,ftp.cs.uu.nl,LIST
 HOST,ftp.cse.buffalo.edu,LIST
 HOST,ftp.csuc.cat,LIST
@@ -2351,9 +2358,11 @@ HOST,link.storjshare.io,LIST
 HOST,linkstorage.linkfire.com,LIST
 HOST,linorg.usp.br,LIST
 HOST,linux-mirrors.fnal.gov,LIST
+HOST,linux.cs.nctu.edu.tw,LIST
 HOST,linux.domainesia.com,LIST
 HOST,linux.purple-cat.net,LIST
 HOST,linux.yz.yamagata-u.ac.jp,LIST
+HOST,linux2.yz.yamagata-u.ac.jp,LIST
 HOST,linuxiac.b-cdn.net,LIST
 HOST,linuxsoft.cern.ch,LIST
 HOST,live-storage.fc2.com,LIST
@@ -2583,6 +2592,7 @@ HOST,mirror.datacenter.az,LIST
 HOST,mirror.datacenter.by,LIST
 HOST,mirror.datacenter.mn,LIST
 HOST,mirror.datamossa.io,LIST
+HOST,mirror.datapacket.com,LIST
 HOST,mirror.datapipe.net,LIST
 HOST,mirror.dc.uz,LIST
 HOST,mirror.de.leaseweb.net,LIST
@@ -2590,6 +2600,7 @@ HOST,mirror.debian.ikoula.com,LIST
 HOST,mirror.del.albony.in,LIST
 HOST,mirror.dewabiz.com,LIST
 HOST,mirror.digitaloceans.dev,LIST
+HOST,mirror.dimensiondata.com,LIST
 HOST,mirror.djvg.sg,LIST
 HOST,mirror.dkm.cz,LIST
 HOST,mirror.docker.ru,LIST
@@ -2608,6 +2619,7 @@ HOST,mirror.eliv.digital,LIST
 HOST,mirror.enzu.com,LIST
 HOST,mirror.esecuredata.com,LIST
 HOST,mirror.estone.ca,LIST
+HOST,mirror.ethz.ch,LIST
 HOST,mirror.eu-fr.kamatera.com,LIST
 HOST,mirror.eu-lo.kamatera.com,LIST
 HOST,mirror.eu.4psacloud.com,LIST
@@ -2772,6 +2784,7 @@ HOST,mirror.positive-internet.com,LIST
 HOST,mirror.pregi.net,LIST
 HOST,mirror.previder.nl,LIST
 HOST,mirror.ps.kz,LIST
+HOST,mirror.quickhost.uk,LIST
 HOST,mirror.raiolanetworks.com,LIST
 HOST,mirror.rcg.sfu.ca,LIST
 HOST,mirror.realcompute.io,LIST
@@ -2803,6 +2816,7 @@ HOST,mirror.solnode.io,LIST
 HOST,mirror.soonkeat.sg,LIST
 HOST,mirror.sov.uk.goscomb.net,LIST
 HOST,mirror.squ.edu.om,LIST
+HOST,mirror.steadfast.net,LIST
 HOST,mirror.stjschools.org,LIST
 HOST,mirror.switch.ch,LIST
 HOST,mirror.szerverem.hu,LIST
@@ -2924,6 +2938,7 @@ HOST,mirrors.egr.msu.edu,LIST
 HOST,mirrors.esto.network,LIST
 HOST,mirrors.evoluso.com,LIST
 HOST,mirrors.evowise.com,LIST
+HOST,mirrors.eze.sysarmy.com,LIST
 HOST,mirrors.fedoraproject.org,LIST
 HOST,mirrors.fibianet.dk,LIST
 HOST,mirrors.gbnetwork.com,LIST
@@ -2977,6 +2992,7 @@ HOST,mirrors.saswata.cc,LIST
 HOST,mirrors.sonic.net,LIST
 HOST,mirrors.standaloneinstaller.com,LIST
 HOST,mirrors.storpool.com,LIST
+HOST,mirrors.switch.ca,LIST
 HOST,mirrors.teamcloud.am,LIST
 HOST,mirrors.tino.org,LIST
 HOST,mirrors.ubuntu.dimit.cloud,LIST
@@ -3108,6 +3124,7 @@ HOST,packages.httpie.io,LIST
 HOST,packages.linuxmint.com,LIST
 HOST,packages.microsoft.com,LIST
 HOST,packages.oth-regensburg.de,LIST
+HOST,packages.sury.org,LIST
 HOST,packages.termux.dev,LIST
 HOST,packages.virtfusion.net,LIST
 HOST,packagespc.xboxlive.com,LIST

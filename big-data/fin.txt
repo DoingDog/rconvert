@@ -1,5 +1,5 @@
-# Main total line 8416
-# Last updated Sun 12/28/2025 22:16:04.22
+# Main total line 8433
+# Last updated Wed 12/31/2025 22:16:47.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -313,6 +313,7 @@ DOMAIN,assets.toiimg.com
 DOMAIN,assets.tokopedia.net
 DOMAIN,assets.toot.cafe
 DOMAIN,assets.tvtropes.org
+DOMAIN,assets.unicorn.studio
 DOMAIN,assets.unifi-ai.com
 DOMAIN,assets.upload.io
 DOMAIN,assets.vantage.sh
@@ -692,6 +693,7 @@ DOMAIN,cdn.hashnode.com
 DOMAIN,cdn.headwayapp.co
 DOMAIN,cdn.heapanalytics.com
 DOMAIN,cdn.hellofresh.com
+DOMAIN,cdn.hero-sms.com
 DOMAIN,cdn.hextom.com
 DOMAIN,cdn.highporn.net
 DOMAIN,cdn.hiive.space
@@ -1270,6 +1272,7 @@ DOMAIN,deb.bbxnet.sk
 DOMAIN,deb.campolargo.pr.gov.br
 DOMAIN,deb.nextgen.ch
 DOMAIN,deb.nodesource.com
+DOMAIN,deb.sury.org
 DOMAIN,debian-archive.trafficmanager.net
 DOMAIN,debian-mirror.behostings.net
 DOMAIN,debian-mirror.puq.apoapsis.cl
@@ -1482,6 +1485,7 @@ DOMAIN,e.deviantart.net
 DOMAIN,e.linear.app
 DOMAIN,e3.365dm.com
 DOMAIN,easylist-downloads.adblockplus.org
+DOMAIN,eclats.crans.org
 DOMAIN,ecn.dev.virtualearth.net
 DOMAIN,ecommplugins-trustboxsettings.trustpilot.com
 DOMAIN,edata.ndtv.com
@@ -1535,6 +1539,7 @@ DOMAIN,eslint.style
 DOMAIN,espejito.fder.edu.uy
 DOMAIN,eu-images.contentstack.com
 DOMAIN,eu.cdnbye.com
+DOMAIN,eu.edge.kernel.org
 DOMAIN,eu.hamreus.com
 DOMAIN,eu01ccistatic.zoom.us
 DOMAIN,eu1.hamreus.com
@@ -1666,6 +1671,7 @@ DOMAIN,ftp.ca.debian.org
 DOMAIN,ftp.caliu.cat
 DOMAIN,ftp.carnet.hr
 DOMAIN,ftp.cc.uoc.gr
+DOMAIN,ftp.cc.uoc.grs
 DOMAIN,ftp.ch.debian.org
 DOMAIN,ftp.cica.es
 DOMAIN,ftp.cixug.es
@@ -1673,6 +1679,7 @@ DOMAIN,ftp.cl.debian.org
 DOMAIN,ftp.cn.debian.org
 DOMAIN,ftp.corbina.net
 DOMAIN,ftp.cpan.org
+DOMAIN,ftp.crihan.fr
 DOMAIN,ftp.cs.uu.nl
 DOMAIN,ftp.cse.buffalo.edu
 DOMAIN,ftp.csuc.cat
@@ -2351,9 +2358,11 @@ DOMAIN,link.storjshare.io
 DOMAIN,linkstorage.linkfire.com
 DOMAIN,linorg.usp.br
 DOMAIN,linux-mirrors.fnal.gov
+DOMAIN,linux.cs.nctu.edu.tw
 DOMAIN,linux.domainesia.com
 DOMAIN,linux.purple-cat.net
 DOMAIN,linux.yz.yamagata-u.ac.jp
+DOMAIN,linux2.yz.yamagata-u.ac.jp
 DOMAIN,linuxiac.b-cdn.net
 DOMAIN,linuxsoft.cern.ch
 DOMAIN,live-storage.fc2.com
@@ -2583,6 +2592,7 @@ DOMAIN,mirror.datacenter.az
 DOMAIN,mirror.datacenter.by
 DOMAIN,mirror.datacenter.mn
 DOMAIN,mirror.datamossa.io
+DOMAIN,mirror.datapacket.com
 DOMAIN,mirror.datapipe.net
 DOMAIN,mirror.dc.uz
 DOMAIN,mirror.de.leaseweb.net
@@ -2590,6 +2600,7 @@ DOMAIN,mirror.debian.ikoula.com
 DOMAIN,mirror.del.albony.in
 DOMAIN,mirror.dewabiz.com
 DOMAIN,mirror.digitaloceans.dev
+DOMAIN,mirror.dimensiondata.com
 DOMAIN,mirror.djvg.sg
 DOMAIN,mirror.dkm.cz
 DOMAIN,mirror.docker.ru
@@ -2608,6 +2619,7 @@ DOMAIN,mirror.eliv.digital
 DOMAIN,mirror.enzu.com
 DOMAIN,mirror.esecuredata.com
 DOMAIN,mirror.estone.ca
+DOMAIN,mirror.ethz.ch
 DOMAIN,mirror.eu-fr.kamatera.com
 DOMAIN,mirror.eu-lo.kamatera.com
 DOMAIN,mirror.eu.4psacloud.com
@@ -2772,6 +2784,7 @@ DOMAIN,mirror.positive-internet.com
 DOMAIN,mirror.pregi.net
 DOMAIN,mirror.previder.nl
 DOMAIN,mirror.ps.kz
+DOMAIN,mirror.quickhost.uk
 DOMAIN,mirror.raiolanetworks.com
 DOMAIN,mirror.rcg.sfu.ca
 DOMAIN,mirror.realcompute.io
@@ -2803,6 +2816,7 @@ DOMAIN,mirror.solnode.io
 DOMAIN,mirror.soonkeat.sg
 DOMAIN,mirror.sov.uk.goscomb.net
 DOMAIN,mirror.squ.edu.om
+DOMAIN,mirror.steadfast.net
 DOMAIN,mirror.stjschools.org
 DOMAIN,mirror.switch.ch
 DOMAIN,mirror.szerverem.hu
@@ -2924,6 +2938,7 @@ DOMAIN,mirrors.egr.msu.edu
 DOMAIN,mirrors.esto.network
 DOMAIN,mirrors.evoluso.com
 DOMAIN,mirrors.evowise.com
+DOMAIN,mirrors.eze.sysarmy.com
 DOMAIN,mirrors.fedoraproject.org
 DOMAIN,mirrors.fibianet.dk
 DOMAIN,mirrors.gbnetwork.com
@@ -2977,6 +2992,7 @@ DOMAIN,mirrors.saswata.cc
 DOMAIN,mirrors.sonic.net
 DOMAIN,mirrors.standaloneinstaller.com
 DOMAIN,mirrors.storpool.com
+DOMAIN,mirrors.switch.ca
 DOMAIN,mirrors.teamcloud.am
 DOMAIN,mirrors.tino.org
 DOMAIN,mirrors.ubuntu.dimit.cloud
@@ -3108,6 +3124,7 @@ DOMAIN,packages.httpie.io
 DOMAIN,packages.linuxmint.com
 DOMAIN,packages.microsoft.com
 DOMAIN,packages.oth-regensburg.de
+DOMAIN,packages.sury.org
 DOMAIN,packages.termux.dev
 DOMAIN,packages.virtfusion.net
 DOMAIN,packagespc.xboxlive.com

@@ -1,5 +1,5 @@
-# Clash total line 4180
-# Last updated Sun 12/28/2025 22:15:51.64
+# Clash total line 4182
+# Last updated Wed 12/31/2025 22:16:35.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -270,6 +270,7 @@ payload:
   - DOMAIN,assets.toot.cafe
   - DOMAIN,assets.tvtropes.org
   - DOMAIN,assets.twitch.tv
+  - DOMAIN,assets.unicorn.studio
   - DOMAIN,assets.unifi-ai.com
   - DOMAIN,assets.upload.io
   - DOMAIN,assets.vantage.sh
@@ -627,6 +628,7 @@ payload:
   - DOMAIN,cdn.headwayapp.co
   - DOMAIN,cdn.heapanalytics.com
   - DOMAIN,cdn.hellofresh.com
+  - DOMAIN,cdn.hero-sms.com
   - DOMAIN,cdn.hextom.com
   - DOMAIN,cdn.highporn.net
   - DOMAIN,cdn.hiive.space
