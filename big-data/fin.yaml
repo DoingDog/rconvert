@@ -1,5 +1,5 @@
-# Clash total line 8454
-# Last updated Wed 01/07/2026 22:16:47.17
+# Clash total line 8472
+# Last updated Sat 01/10/2026 22:16:08.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -172,6 +172,7 @@ payload:
   - DOMAIN,assets-v2.super.so
   - DOMAIN,assets-www.readspeaker.com
   - DOMAIN,assets-www.xbox.com
+  - DOMAIN,assets.about.me
   - DOMAIN,assets.airbuddy.app
   - DOMAIN,assets.apilayer.com
   - DOMAIN,assets.apnews.com
@@ -255,6 +256,7 @@ payload:
   - DOMAIN,assets.leetcode.com
   - DOMAIN,assets.lemonsqueezy.com
   - DOMAIN,assets.mailgun.com
+  - DOMAIN,assets.map.brightcove.com
   - DOMAIN,assets.mastercard.com
   - DOMAIN,assets.matters.news
   - DOMAIN,assets.mayoclinic.org
@@ -549,6 +551,7 @@ payload:
   - DOMAIN,cdn.adguard.com
   - DOMAIN,cdn.adguard.info
   - DOMAIN,cdn.adsninja.ca
+  - DOMAIN,cdn.affine.pro
   - DOMAIN,cdn.aimerce.ai
   - DOMAIN,cdn.amcharts.com
   - DOMAIN,cdn.announcekit.app
@@ -1211,6 +1214,7 @@ payload:
   - DOMAIN,cpan.uni-altai.ru
   - DOMAIN,cpan.webdesk.ru
   - DOMAIN,cpan.zbr.pt
+  - DOMAIN,cpp-content.bhn.cards
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,craftassets.unraid.net
   - DOMAIN,cravatar.eu
@@ -1272,6 +1276,7 @@ payload:
   - DOMAIN,db.onlinewebfonts.com
   - DOMAIN,dc-cdn.cdw.com
   - DOMAIN,dca-lm-livedazn.secure.footprint.net
+  - DOMAIN,dd.blackhawknetwork.com
   - DOMAIN,dd.dexscreener.com
   - DOMAIN,deb-mir1.naitways.net
   - DOMAIN,deb.bbxnet.sk
@@ -1404,6 +1409,7 @@ payload:
   - DOMAIN,do.featurebase.app
   - DOMAIN,docker.cloudsmith.io
   - DOMAIN,docs.brew.sh
+  - DOMAIN,docs.mrchromebox.tech
   - DOMAIN,docs.rs
   - DOMAIN,documenter-assets.pstmn.io
   - DOMAIN,domain.expiring-soon.xyz
@@ -1580,6 +1586,7 @@ payload:
   - DOMAIN,fastly-gce.allmovie.com
   - DOMAIN,fastly-s3.allmovie.com
   - DOMAIN,fastporndelivery.hqporner.com
+  - DOMAIN,favicon.im
   - DOMAIN,favicon.pirsch.io
   - DOMAIN,favicon.yandex.net
   - DOMAIN,favicons.nextdns.io
@@ -1652,6 +1659,7 @@ payload:
   - DOMAIN,frontend-apps.workos.com
   - DOMAIN,frontend-assets.supabase.com
   - DOMAIN,frontend.floatplane.com
+  - DOMAIN,fs.mingpao.com
   - DOMAIN,fs2.onlyhentaistuff.com
   - DOMAIN,fscdn.eppo.cloud
   - DOMAIN,ftp-chi.osuosl.org
@@ -1858,6 +1866,7 @@ payload:
   - DOMAIN,gimp.ip-connect.info
   - DOMAIN,gimp.ip-connect.vn.ua
   - DOMAIN,gitpkg-fork.vercel.sh
+  - DOMAIN,global-assets.fitch.group
   - DOMAIN,global.divhunt.com
   - DOMAIN,global.uhdnow.com
   - DOMAIN,glua.ua.pt
@@ -2020,6 +2029,7 @@ payload:
   - DOMAIN,image.yuntu.com.tw
   - DOMAIN,image.yymanhua.com
   - DOMAIN,imagecdn.clips4sale.com
+  - DOMAIN,imagecdn.mixlr.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
   - DOMAIN,imageproxy.ifunny.co
@@ -2217,8 +2227,10 @@ payload:
   - DOMAIN,img.yna.co.kr
   - DOMAIN,img0.socialshopwave.com
   - DOMAIN,img0.yna.co.kr
+  - DOMAIN,img04.en25.com
   - DOMAIN,img1.ak.crunchyroll.com
   - DOMAIN,img1.socialshopwave.com
+  - DOMAIN,img1.yeggi.com
   - DOMAIN,img1.yna.co.kr
   - DOMAIN,img2.gelbooru.com
   - DOMAIN,img2.javdove.com
@@ -3315,6 +3327,7 @@ payload:
   - DOMAIN,repo.usk.ac.id
   - DOMAIN,repo1.maven.org
   - DOMAIN,repo2.shinjiru.com
+  - DOMAIN,report-uri.cloudflare.com
   - DOMAIN,repos.del.extreme-ix.org
   - DOMAIN,repos.interior.edu.uy
   - DOMAIN,repository.jboss.org
@@ -3443,6 +3456,7 @@ payload:
   - DOMAIN,scdn.clerk.com
   - DOMAIN,scdn.line-apps.com
   - DOMAIN,scontent.whatsapp.net
+  - DOMAIN,screenshot.domains
   - DOMAIN,screenshots.codesandbox.io
   - DOMAIN,screenshots.debian.net
   - DOMAIN,screenshots.downloadtorrentfile.com
@@ -4121,6 +4135,7 @@ payload:
   - DOMAIN,video.dailymail.co.uk
   - DOMAIN,video1.7mmtv.sx
   - DOMAIN,video2.7mmtv.sx
+  - DOMAIN,video3.mingpao.com
   - DOMAIN,videos.elephas.app
   - DOMAIN,videos.ohentai.org
   - DOMAIN,videos2.edclub.com
@@ -4776,6 +4791,7 @@ payload:
   - DOMAIN-SUFFIX,colliderimages.com
   - DOMAIN-SUFFIX,combinatronics.io
   - DOMAIN-SUFFIX,comicporn.xxx
+  - DOMAIN-SUFFIX,commondatastorage.googleapis.com
   - DOMAIN-SUFFIX,connatix.com
   - DOMAIN-SUFFIX,containersonaws.com
   - DOMAIN-SUFFIX,content-storage-upload.googleapis.com
@@ -6525,6 +6541,7 @@ payload:
   - DOMAIN-SUFFIX,pnpm.io
   - DOMAIN-SUFFIX,pocket-image-cache.com
   - DOMAIN-SUFFIX,poecdn.net
+  - DOMAIN-SUFFIX,poki-cdn.com
   - DOMAIN-SUFFIX,pololine.ml
   - DOMAIN-SUFFIX,polyfill-fastly.io
   - DOMAIN-SUFFIX,polygon.com
@@ -6632,6 +6649,7 @@ payload:
   - DOMAIN-SUFFIX,quobuz.fr
   - DOMAIN-SUFFIX,quoracdn.net
   - DOMAIN-SUFFIX,qy0.ru
+  - DOMAIN-SUFFIX,r2.daocloud.vip
   - DOMAIN-SUFFIX,r2.dev
   - DOMAIN-SUFFIX,racaty.com
   - DOMAIN-SUFFIX,racaty.net

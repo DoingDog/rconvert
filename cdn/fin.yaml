@@ -1,5 +1,5 @@
-# Clash total line 4208
-# Last updated Wed 01/07/2026 22:16:33.07
+# Clash total line 4225
+# Last updated Sat 01/10/2026 22:15:55.73
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -121,6 +121,7 @@ payload:
   - DOMAIN,assets-v2.super.so
   - DOMAIN,assets-www.readspeaker.com
   - DOMAIN,assets-www.xbox.com
+  - DOMAIN,assets.about.me
   - DOMAIN,assets.aboutamazon.com
   - DOMAIN,assets.adobedtm.com
   - DOMAIN,assets.airbuddy.app
@@ -210,6 +211,7 @@ payload:
   - DOMAIN,assets.leetcode.com
   - DOMAIN,assets.lemonsqueezy.com
   - DOMAIN,assets.mailgun.com
+  - DOMAIN,assets.map.brightcove.com
   - DOMAIN,assets.mastercard.com
   - DOMAIN,assets.matters.news
   - DOMAIN,assets.mayoclinic.org
@@ -488,6 +490,7 @@ payload:
   - DOMAIN,cdn.adguard.com
   - DOMAIN,cdn.adguard.info
   - DOMAIN,cdn.adsninja.ca
+  - DOMAIN,cdn.affine.pro
   - DOMAIN,cdn.aimerce.ai
   - DOMAIN,cdn.amcharts.com
   - DOMAIN,cdn.announcekit.app
@@ -1108,6 +1111,7 @@ payload:
   - DOMAIN,cover.comicbz.com
   - DOMAIN,cover.yymanhua.com
   - DOMAIN,covers.openlibrary.org
+  - DOMAIN,cpp-content.bhn.cards
   - DOMAIN,cpwebassets.codepen.io
   - DOMAIN,craftassets.unraid.net
   - DOMAIN,cravatar.eu
@@ -1143,6 +1147,7 @@ payload:
   - DOMAIN,david-dm.org
   - DOMAIN,db.onlinewebfonts.com
   - DOMAIN,dc-cdn.cdw.com
+  - DOMAIN,dd.blackhawknetwork.com
   - DOMAIN,dd.dexscreener.com
   - DOMAIN,demo.unified-streaming.com
   - DOMAIN,demotiles.maplibre.org
@@ -1164,6 +1169,7 @@ payload:
   - DOMAIN,dlassets-ssl.xboxlive.com
   - DOMAIN,do.featurebase.app
   - DOMAIN,docs.brew.sh
+  - DOMAIN,docs.mrchromebox.tech
   - DOMAIN,docs.rs
   - DOMAIN,documenter-assets.pstmn.io
   - DOMAIN,domain.expiring-soon.xyz
@@ -1263,6 +1269,7 @@ payload:
   - DOMAIN,fastly-gce.allmovie.com
   - DOMAIN,fastly-s3.allmovie.com
   - DOMAIN,fastporndelivery.hqporner.com
+  - DOMAIN,favicon.im
   - DOMAIN,favicon.pirsch.io
   - DOMAIN,favicon.yandex.net
   - DOMAIN,favicons.nextdns.io
@@ -1329,6 +1336,7 @@ payload:
   - DOMAIN,frontend-apps.workos.com
   - DOMAIN,frontend-assets.supabase.com
   - DOMAIN,frontend.floatplane.com
+  - DOMAIN,fs.mingpao.com
   - DOMAIN,fs2.onlyhentaistuff.com
   - DOMAIN,fscdn.eppo.cloud
   - DOMAIN,g-static.ap4r.com
@@ -1343,6 +1351,7 @@ payload:
   - DOMAIN,geojson.io
   - DOMAIN,gfx-data.news-engineering.aws.wapo.pub
   - DOMAIN,gitpkg-fork.vercel.sh
+  - DOMAIN,global-assets.fitch.group
   - DOMAIN,global.divhunt.com
   - DOMAIN,glyph.medium.com
   - DOMAIN,gmedia.playstation.com
@@ -1492,6 +1501,7 @@ payload:
   - DOMAIN,image.yuntu.com.tw
   - DOMAIN,image.yymanhua.com
   - DOMAIN,imagecdn.clips4sale.com
+  - DOMAIN,imagecdn.mixlr.com
   - DOMAIN,imagehost.player.fm
   - DOMAIN,imageio.forbes.com
   - DOMAIN,imageproxy.ifunny.co
@@ -1697,8 +1707,10 @@ payload:
   - DOMAIN,img.youtube.com
   - DOMAIN,img0.socialshopwave.com
   - DOMAIN,img0.yna.co.kr
+  - DOMAIN,img04.en25.com
   - DOMAIN,img1.ak.crunchyroll.com
   - DOMAIN,img1.socialshopwave.com
+  - DOMAIN,img1.yeggi.com
   - DOMAIN,img1.yna.co.kr
   - DOMAIN,img2.gelbooru.com
   - DOMAIN,img2.javdove.com
@@ -2197,6 +2209,7 @@ payload:
   - DOMAIN,regmedia.co.uk
   - DOMAIN,reload.getsentry.net
   - DOMAIN,renderer-assets.typeform.com
+  - DOMAIN,report-uri.cloudflare.com
   - DOMAIN,res-etl-ssl.mypikpak.com
   - DOMAIN,res-geo.cdn.office.net
   - DOMAIN,res.abc.net.au
@@ -2318,6 +2331,7 @@ payload:
   - DOMAIN,scdn.clerk.com
   - DOMAIN,scdn.line-apps.com
   - DOMAIN,scontent.whatsapp.net
+  - DOMAIN,screenshot.domains
   - DOMAIN,screenshots.codesandbox.io
   - DOMAIN,screenshots.debian.net
   - DOMAIN,screenshots.downloadtorrentfile.com
@@ -2934,6 +2948,7 @@ payload:
   - DOMAIN,video.dailymail.co.uk
   - DOMAIN,video1.7mmtv.sx
   - DOMAIN,video2.7mmtv.sx
+  - DOMAIN,video3.mingpao.com
   - DOMAIN,videos.elephas.app
   - DOMAIN,videos.ohentai.org
   - DOMAIN,videos2-h.sendvid.com
@@ -3273,6 +3288,7 @@ payload:
   - DOMAIN-SUFFIX,codepenassets.com
   - DOMAIN-SUFFIX,colliderimages.com
   - DOMAIN-SUFFIX,combinatronics.io
+  - DOMAIN-SUFFIX,commondatastorage.googleapis.com
   - DOMAIN-SUFFIX,content-storage-upload.googleapis.com
   - DOMAIN-SUFFIX,content001.bet365.com
   - DOMAIN-SUFFIX,contenthub.allstate.com
@@ -3829,6 +3845,7 @@ payload:
   - DOMAIN-SUFFIX,pnpm.io
   - DOMAIN-SUFFIX,pocket-image-cache.com
   - DOMAIN-SUFFIX,poecdn.net
+  - DOMAIN-SUFFIX,poki-cdn.com
   - DOMAIN-SUFFIX,polyfill-fastly.io
   - DOMAIN-SUFFIX,pool.ntp.org
   - DOMAIN-SUFFIX,porn-cdn.com

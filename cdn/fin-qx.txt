@@ -1,5 +1,5 @@
-# Quantumult total line 4208
-# Last updated Wed 01/07/2026 22:16:33.03
+# Quantumult total line 4225
+# Last updated Sat 01/10/2026 22:15:55.69
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -120,6 +120,7 @@ HOST,assets-v2.i-scmp.com,LIST
 HOST,assets-v2.super.so,LIST
 HOST,assets-www.readspeaker.com,LIST
 HOST,assets-www.xbox.com,LIST
+HOST,assets.about.me,LIST
 HOST,assets.aboutamazon.com,LIST
 HOST,assets.adobedtm.com,LIST
 HOST,assets.airbuddy.app,LIST
@@ -209,6 +210,7 @@ HOST,assets.kraken.com,LIST
 HOST,assets.leetcode.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
 HOST,assets.mailgun.com,LIST
+HOST,assets.map.brightcove.com,LIST
 HOST,assets.mastercard.com,LIST
 HOST,assets.matters.news,LIST
 HOST,assets.mayoclinic.org,LIST
@@ -487,6 +489,7 @@ HOST,cdn.accounts.nintendo.com,LIST
 HOST,cdn.adguard.com,LIST
 HOST,cdn.adguard.info,LIST
 HOST,cdn.adsninja.ca,LIST
+HOST,cdn.affine.pro,LIST
 HOST,cdn.aimerce.ai,LIST
 HOST,cdn.amcharts.com,LIST
 HOST,cdn.announcekit.app,LIST
@@ -1107,6 +1110,7 @@ HOST,cors-proxy.htmldriven.com,LIST
 HOST,cover.comicbz.com,LIST
 HOST,cover.yymanhua.com,LIST
 HOST,covers.openlibrary.org,LIST
+HOST,cpp-content.bhn.cards,LIST
 HOST,cpwebassets.codepen.io,LIST
 HOST,craftassets.unraid.net,LIST
 HOST,cravatar.eu,LIST
@@ -1142,6 +1146,7 @@ HOST,data.web.clickup.com,LIST
 HOST,david-dm.org,LIST
 HOST,db.onlinewebfonts.com,LIST
 HOST,dc-cdn.cdw.com,LIST
+HOST,dd.blackhawknetwork.com,LIST
 HOST,dd.dexscreener.com,LIST
 HOST,demo.unified-streaming.com,LIST
 HOST,demotiles.maplibre.org,LIST
@@ -1163,6 +1168,7 @@ HOST,dl.airdroid.com,LIST
 HOST,dlassets-ssl.xboxlive.com,LIST
 HOST,do.featurebase.app,LIST
 HOST,docs.brew.sh,LIST
+HOST,docs.mrchromebox.tech,LIST
 HOST,docs.rs,LIST
 HOST,documenter-assets.pstmn.io,LIST
 HOST,domain.expiring-soon.xyz,LIST
@@ -1262,6 +1268,7 @@ HOST,fastly-cloud.typenetwork.com,LIST
 HOST,fastly-gce.allmovie.com,LIST
 HOST,fastly-s3.allmovie.com,LIST
 HOST,fastporndelivery.hqporner.com,LIST
+HOST,favicon.im,LIST
 HOST,favicon.pirsch.io,LIST
 HOST,favicon.yandex.net,LIST
 HOST,favicons.nextdns.io,LIST
@@ -1328,6 +1335,7 @@ HOST,front-resource.fs.com,LIST
 HOST,frontend-apps.workos.com,LIST
 HOST,frontend-assets.supabase.com,LIST
 HOST,frontend.floatplane.com,LIST
+HOST,fs.mingpao.com,LIST
 HOST,fs2.onlyhentaistuff.com,LIST
 HOST,fscdn.eppo.cloud,LIST
 HOST,g-static.ap4r.com,LIST
@@ -1342,6 +1350,7 @@ HOST,geoip-js.com,LIST
 HOST,geojson.io,LIST
 HOST,gfx-data.news-engineering.aws.wapo.pub,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
+HOST,global-assets.fitch.group,LIST
 HOST,global.divhunt.com,LIST
 HOST,glyph.medium.com,LIST
 HOST,gmedia.playstation.com,LIST
@@ -1491,6 +1500,7 @@ HOST,image.xmanhua.net,LIST
 HOST,image.yuntu.com.tw,LIST
 HOST,image.yymanhua.com,LIST
 HOST,imagecdn.clips4sale.com,LIST
+HOST,imagecdn.mixlr.com,LIST
 HOST,imagehost.player.fm,LIST
 HOST,imageio.forbes.com,LIST
 HOST,imageproxy.ifunny.co,LIST
@@ -1696,8 +1706,10 @@ HOST,img.yna.co.kr,LIST
 HOST,img.youtube.com,LIST
 HOST,img0.socialshopwave.com,LIST
 HOST,img0.yna.co.kr,LIST
+HOST,img04.en25.com,LIST
 HOST,img1.ak.crunchyroll.com,LIST
 HOST,img1.socialshopwave.com,LIST
+HOST,img1.yeggi.com,LIST
 HOST,img1.yna.co.kr,LIST
 HOST,img2.gelbooru.com,LIST
 HOST,img2.javdove.com,LIST
@@ -2196,6 +2208,7 @@ HOST,registry.oomol.com,LIST
 HOST,regmedia.co.uk,LIST
 HOST,reload.getsentry.net,LIST
 HOST,renderer-assets.typeform.com,LIST
+HOST,report-uri.cloudflare.com,LIST
 HOST,res-etl-ssl.mypikpak.com,LIST
 HOST,res-geo.cdn.office.net,LIST
 HOST,res.abc.net.au,LIST
@@ -2317,6 +2330,7 @@ HOST,scache2.vzw.com,LIST
 HOST,scdn.clerk.com,LIST
 HOST,scdn.line-apps.com,LIST
 HOST,scontent.whatsapp.net,LIST
+HOST,screenshot.domains,LIST
 HOST,screenshots.codesandbox.io,LIST
 HOST,screenshots.debian.net,LIST
 HOST,screenshots.downloadtorrentfile.com,LIST
@@ -2933,6 +2947,7 @@ HOST,video.cdnbye.com,LIST
 HOST,video.dailymail.co.uk,LIST
 HOST,video1.7mmtv.sx,LIST
 HOST,video2.7mmtv.sx,LIST
+HOST,video3.mingpao.com,LIST
 HOST,videos.elephas.app,LIST
 HOST,videos.ohentai.org,LIST
 HOST,videos2-h.sendvid.com,LIST
@@ -3272,6 +3287,7 @@ HOST-SUFFIX,codeforces.org,LIST
 HOST-SUFFIX,codepenassets.com,LIST
 HOST-SUFFIX,colliderimages.com,LIST
 HOST-SUFFIX,combinatronics.io,LIST
+HOST-SUFFIX,commondatastorage.googleapis.com,LIST
 HOST-SUFFIX,content-storage-upload.googleapis.com,LIST
 HOST-SUFFIX,content001.bet365.com,LIST
 HOST-SUFFIX,contenthub.allstate.com,LIST
@@ -3828,6 +3844,7 @@ HOST-SUFFIX,placewaifu.com,LIST
 HOST-SUFFIX,pnpm.io,LIST
 HOST-SUFFIX,pocket-image-cache.com,LIST
 HOST-SUFFIX,poecdn.net,LIST
+HOST-SUFFIX,poki-cdn.com,LIST
 HOST-SUFFIX,polyfill-fastly.io,LIST
 HOST-SUFFIX,pool.ntp.org,LIST
 HOST-SUFFIX,porn-cdn.com,LIST
