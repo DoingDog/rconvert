@@ -1,5 +1,5 @@
-# Clash total line 4225
-# Last updated Sat 01/10/2026 22:15:55.73
+# Clash total line 4237
+# Last updated Tue 01/13/2026 22:17:20.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -89,6 +89,7 @@ payload:
   - DOMAIN,appassets.mvtdev.com
   - DOMAIN,apps-static.route4me.com
   - DOMAIN,apps.bazaarvoice.com
+  - DOMAIN,apps.paidy.com
   - DOMAIN,apps.profitihub.com
   - DOMAIN,apps.sophi.io
   - DOMAIN,apps.voxmedia.com
@@ -484,9 +485,11 @@ payload:
   - DOMAIN,cdn.18jav.tv
   - DOMAIN,cdn.24.co.za
   - DOMAIN,cdn.7tv.app
+  - DOMAIN,cdn.accessibly.app
   - DOMAIN,cdn.accounts.autodesk.com
   - DOMAIN,cdn.accounts.firefox.com
   - DOMAIN,cdn.accounts.nintendo.com
+  - DOMAIN,cdn.activity.smart-bdash.com
   - DOMAIN,cdn.adguard.com
   - DOMAIN,cdn.adguard.info
   - DOMAIN,cdn.adsninja.ca
@@ -550,6 +553,7 @@ payload:
   - DOMAIN,cdn.consentmanager.net
   - DOMAIN,cdn.contentful.com
   - DOMAIN,cdn.conveythis.com
+  - DOMAIN,cdn.corso.com
   - DOMAIN,cdn.cracked.sh
   - DOMAIN,cdn.craft.cloud
   - DOMAIN,cdn.create.microsoft.com
@@ -1311,6 +1315,7 @@ payload:
   - DOMAIN,firebaselogging.googleapis.com
   - DOMAIN,firebaseremoteconfig.googleapis.com
   - DOMAIN,firefox.settings.services.mozilla.com
+  - DOMAIN,flagsapi.com
   - DOMAIN,flo.uri.sh
   - DOMAIN,flows.trysavvy.com
   - DOMAIN,font-public.canva.com
@@ -1459,6 +1464,7 @@ payload:
   - DOMAIN,ih2.redbubble.net
   - DOMAIN,ih3.redbubble.net
   - DOMAIN,ik.imgkit.net
+  - DOMAIN,im.np-payment-gateway.com
   - DOMAIN,imag.malavida.com
   - DOMAIN,image-cdn.porndig.com
   - DOMAIN,image-forwarder.notaku.so
@@ -1772,6 +1778,7 @@ payload:
   - DOMAIN,j.udn.com.tw
   - DOMAIN,jac.yahoosandbox.com
   - DOMAIN,jaws.pbs.org
+  - DOMAIN,jetpack.wordpress.com
   - DOMAIN,jfe-cdn.qualtrics.com
   - DOMAIN,jnmedia.ero-video.net
   - DOMAIN,js-1-cdn.airdroid.com
@@ -1798,6 +1805,7 @@ payload:
   - DOMAIN,js.puter.com
   - DOMAIN,js.qualified.com
   - DOMAIN,js.recurly.com
+  - DOMAIN,js.rtoaster.jp
   - DOMAIN,js.short.io
   - DOMAIN,js.smile.io
   - DOMAIN,js.stripe.com
@@ -1975,6 +1983,7 @@ payload:
   - DOMAIN,medias.meow.social
   - DOMAIN,medium-media.vgm.io
   - DOMAIN,megapx-assets.dcard.tw
+  - DOMAIN,melonbooks.akamaized.net
   - DOMAIN,meteorclient.com
   - DOMAIN,metrics.kapa.ai
   - DOMAIN,micro.rubiconproject.com
@@ -2237,6 +2246,7 @@ payload:
   - DOMAIN,rs-cdn.splashtop.com
   - DOMAIN,rsi.grafana.com
   - DOMAIN,rsms.me
+  - DOMAIN,rt.rtoaster.jp
   - DOMAIN,rtcg-access.bytevcloud.com
   - DOMAIN,rts-static-prod.freshworksapi.com
   - DOMAIN,rules.ac
@@ -2343,6 +2353,7 @@ payload:
   - DOMAIN,sdata.ndtv.com
   - DOMAIN,sdk.customfit.ai
   - DOMAIN,sdk.gleap.io
+  - DOMAIN,sdk.helloextend.com
   - DOMAIN,sdk.listenlive.co
   - DOMAIN,sdk.loyaltylion.net
   - DOMAIN,sdk.privacy-center.org
@@ -2896,6 +2907,7 @@ payload:
   - DOMAIN,ui.powerreviews.com
   - DOMAIN,ui.trailhead.com
   - DOMAIN,uim.9uu22.com
+  - DOMAIN,unavatar.io
   - DOMAIN,unlimited-cdn.waifu2x.net
   - DOMAIN,unsubscribe-imgs.leavemealone.com
   - DOMAIN,uos-support-files.svc.ui.com

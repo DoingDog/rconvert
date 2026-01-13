@@ -1,5 +1,5 @@
-# Quantumult total line 8458
-# Last updated Sat 01/10/2026 22:16:08.08
+# Quantumult total line 8469
+# Last updated Tue 01/13/2026 22:17:33.44
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -134,6 +134,7 @@ HOST,appassets.mvtdev.com,LIST
 HOST,apple.comscoreresearch.com,LIST
 HOST,apps-static.route4me.com,LIST
 HOST,apps.bazaarvoice.com,LIST
+HOST,apps.paidy.com,LIST
 HOST,apps.profitihub.com,LIST
 HOST,apps.sophi.io,LIST
 HOST,appstatico.electronic.us,LIST
@@ -544,9 +545,11 @@ HOST,cdn.17app.co,LIST
 HOST,cdn.18jav.tv,LIST
 HOST,cdn.24.co.za,LIST
 HOST,cdn.7tv.app,LIST
+HOST,cdn.accessibly.app,LIST
 HOST,cdn.accounts.autodesk.com,LIST
 HOST,cdn.accounts.firefox.com,LIST
 HOST,cdn.accounts.nintendo.com,LIST
+HOST,cdn.activity.smart-bdash.com,LIST
 HOST,cdn.adguard.com,LIST
 HOST,cdn.adguard.info,LIST
 HOST,cdn.adsninja.ca,LIST
@@ -611,6 +614,7 @@ HOST,cdn.configcat.com,LIST
 HOST,cdn.consentmanager.net,LIST
 HOST,cdn.contentful.com,LIST
 HOST,cdn.conveythis.com,LIST
+HOST,cdn.corso.com,LIST
 HOST,cdn.cracked.sh,LIST
 HOST,cdn.craft.cloud,LIST
 HOST,cdn.create.microsoft.com,LIST
@@ -1629,6 +1633,7 @@ HOST,firebaselogging-pa.googleapis.com,LIST
 HOST,firebaselogging.googleapis.com,LIST
 HOST,firebaseremoteconfig.googleapis.com,LIST
 HOST,firefox.settings.services.mozilla.com,LIST
+HOST,flagsapi.com,LIST
 HOST,flo.uri.sh,LIST
 HOST,flows.trysavvy.com,LIST
 HOST,font-public.canva.com,LIST
@@ -1988,6 +1993,7 @@ HOST,ih1.redbubble.net,LIST
 HOST,ih2.redbubble.net,LIST
 HOST,ih3.redbubble.net,LIST
 HOST,ik.imgkit.net,LIST
+HOST,im.np-payment-gateway.com,LIST
 HOST,imag.malavida.com,LIST
 HOST,image-cdn.porndig.com,LIST
 HOST,image-forwarder.notaku.so,LIST
@@ -2294,6 +2300,7 @@ HOST,isitmaintained.com,LIST
 HOST,iterm2.com,LIST
 HOST,j.udn.com.tw,LIST
 HOST,jac.yahoosandbox.com,LIST
+HOST,jetpack.wordpress.com,LIST
 HOST,jfe-cdn.qualtrics.com,LIST
 HOST,jing.rocks,LIST
 HOST,jnmedia.ero-video.net,LIST
@@ -2322,6 +2329,7 @@ HOST,js.pusher.com,LIST
 HOST,js.puter.com,LIST
 HOST,js.qualified.com,LIST
 HOST,js.recurly.com,LIST
+HOST,js.rtoaster.jp,LIST
 HOST,js.short.io,LIST
 HOST,js.smile.io,LIST
 HOST,js.stripe.com,LIST
@@ -3364,6 +3372,7 @@ HOST,rsync.icm.edu.pl,LIST
 HOST,rsync.udc.es,LIST
 HOST,rsync.uni-bayreuth.de,LIST
 HOST,rsync.yuki.net.uk,LIST
+HOST,rt.rtoaster.jp,LIST
 HOST,rtcg-access.bytevcloud.com,LIST
 HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rubygems.org,LIST
@@ -3467,6 +3476,7 @@ HOST,scripts.webeo.com,LIST
 HOST,sdata.ndtv.com,LIST
 HOST,sdk.customfit.ai,LIST
 HOST,sdk.gleap.io,LIST
+HOST,sdk.helloextend.com,LIST
 HOST,sdk.listenlive.co,LIST
 HOST,sdk.loyaltylion.net,LIST
 HOST,sdk.privacy-center.org,LIST
@@ -4064,6 +4074,7 @@ HOST,ui.powerreviews.com,LIST
 HOST,ui.trailhead.com,LIST
 HOST,uim.9uu22.com,LIST
 HOST,ulises.hostalia.com,LIST
+HOST,unavatar.io,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,unsubscribe-imgs.leavemealone.com,LIST
 HOST,uos-support-files.svc.ui.com,LIST
