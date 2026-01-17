@@ -1,5 +1,5 @@
-# Clash total line 4238
-# Last updated Fri 01/16/2026 22:16:41.37
+# Clash total line 4234
+# Last updated Sat 01/17/2026 14:08:20.25
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -11,7 +11,6 @@ payload:
   - DOMAIN,a.fireside.fm
   - DOMAIN,a.gawby.com
   - DOMAIN,a.kickstarter.com
-  - DOMAIN,a.klaviyo.com
   - DOMAIN,a.pomf.cat
   - DOMAIN,a5.behance.net
   - DOMAIN,a57.foxnews.com
@@ -402,6 +401,7 @@ payload:
   - DOMAIN,c7.patreon.com
   - DOMAIN,c8.patreon.com
   - DOMAIN,ca.nfs.pub
+  - DOMAIN,ca1.onlyhentaistuff.com
   - DOMAIN,cacerts.digicert.com
   - DOMAIN,cacerts.rapidssl.com
   - DOMAIN,cache-05.filehippo.net
@@ -535,6 +535,7 @@ payload:
   - DOMAIN,cdn.cfr.org
   - DOMAIN,cdn.changelog.com
   - DOMAIN,cdn.channel.io
+  - DOMAIN,cdn.chord.co
   - DOMAIN,cdn.circle.so
   - DOMAIN,cdn.clever-cloud.com
   - DOMAIN,cdn.cliqz.com
@@ -546,7 +547,6 @@ payload:
   - DOMAIN,cdn.cnx-software.com
   - DOMAIN,cdn.codeblackbelt.com
   - DOMAIN,cdn.commandbar.com
-  - DOMAIN,cdn.commento.io
   - DOMAIN,cdn.comparitech.com
   - DOMAIN,cdn.concert.io
   - DOMAIN,cdn.configcat.com
@@ -626,9 +626,6 @@ payload:
   - DOMAIN,cdn.ghostery.com
   - DOMAIN,cdn.giftcardpro.app
   - DOMAIN,cdn.gigya.com
-  - DOMAIN,cdn.glitch.com
-  - DOMAIN,cdn.glitch.global
-  - DOMAIN,cdn.glitch.me
   - DOMAIN,cdn.gofundme.com
   - DOMAIN,cdn.googlesource.com
   - DOMAIN,cdn.graph.office.net
@@ -733,7 +730,6 @@ payload:
   - DOMAIN,cdn.onesignal.com
   - DOMAIN,cdn.onetime.dog
   - DOMAIN,cdn.onfastspring.com
-  - DOMAIN,cdn.onlyhentaistuff.com
   - DOMAIN,cdn.openai.com
   - DOMAIN,cdn.osxdaily.com
   - DOMAIN,cdn.paddle.com
@@ -1050,7 +1046,6 @@ payload:
   - DOMAIN,cloudflare.tv
   - DOMAIN,cloudfront.barilliance.com
   - DOMAIN,cloudfront.codeproject.com
-  - DOMAIN,cm1.aminoapps.com
   - DOMAIN,cmd-cdn.cleanmymac.com
   - DOMAIN,cmp-cdn.p.aws.economist.com
   - DOMAIN,cms-assets.nodecraft.com
@@ -1105,7 +1100,6 @@ payload:
   - DOMAIN,content.kaspersky-labs.com
   - DOMAIN,content.overwolf.com
   - DOMAIN,content.powerapps.com
-  - DOMAIN,content.product.glitch.com
   - DOMAIN,content.wepik.com
   - DOMAIN,contents-thumbnail2.fc2.com
   - DOMAIN,conversiongorilla.com
@@ -1162,6 +1156,7 @@ payload:
   - DOMAIN,design.mayoclinic.org
   - DOMAIN,designsystem.brevo.com
   - DOMAIN,detectportal.firefox.com
+  - DOMAIN,devicons.railway.com
   - DOMAIN,devnull.perfops.net
   - DOMAIN,dh-site.b-cdn.net
   - DOMAIN,dims.apnews.com
@@ -1372,7 +1367,6 @@ payload:
   - DOMAIN,groundnews.b-cdn.net
   - DOMAIN,gstatic.com
   - DOMAIN,gstatic.olympics.com
-  - DOMAIN,gt1.onlyhentaistuff.com
   - DOMAIN,gtranslate.io
   - DOMAIN,hawk.tomsguide.com
   - DOMAIN,hawky.pcgamer.com
@@ -2450,6 +2444,7 @@ payload:
   - DOMAIN,static-3.bitchute.com
   - DOMAIN,static-4.bitchute.com
   - DOMAIN,static-act.imoim.net
+  - DOMAIN,static-app.klaviyo.com
   - DOMAIN,static-assets-1.truthsocial.com
   - DOMAIN,static-assets-prod.epicgames.com
   - DOMAIN,static-assets-prod.unrealengine.com
@@ -3085,6 +3080,7 @@ payload:
   - DOMAIN-SUFFIX,91pic.org
   - DOMAIN-SUFFIX,98avcdn.xyz
   - DOMAIN-SUFFIX,9cache.com
+  - DOMAIN-SUFFIX,a.klaviyo.com
   - DOMAIN-SUFFIX,a.storyblok.com
   - DOMAIN-SUFFIX,a1tb.com
   - DOMAIN-SUFFIX,a7s.imgix.com

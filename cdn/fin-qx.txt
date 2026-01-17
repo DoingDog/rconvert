@@ -1,5 +1,5 @@
-# Quantumult total line 4238
-# Last updated Fri 01/16/2026 22:16:41.32
+# Quantumult total line 4234
+# Last updated Sat 01/17/2026 14:08:20.21
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -10,7 +10,6 @@ HOST,a.deviantart.net,LIST
 HOST,a.fireside.fm,LIST
 HOST,a.gawby.com,LIST
 HOST,a.kickstarter.com,LIST
-HOST,a.klaviyo.com,LIST
 HOST,a.pomf.cat,LIST
 HOST,a5.behance.net,LIST
 HOST,a57.foxnews.com,LIST
@@ -401,6 +400,7 @@ HOST,c6.patreon.com,LIST
 HOST,c7.patreon.com,LIST
 HOST,c8.patreon.com,LIST
 HOST,ca.nfs.pub,LIST
+HOST,ca1.onlyhentaistuff.com,LIST
 HOST,cacerts.digicert.com,LIST
 HOST,cacerts.rapidssl.com,LIST
 HOST,cache-05.filehippo.net,LIST
@@ -534,6 +534,7 @@ HOST,cdn.cbd.int,LIST
 HOST,cdn.cfr.org,LIST
 HOST,cdn.changelog.com,LIST
 HOST,cdn.channel.io,LIST
+HOST,cdn.chord.co,LIST
 HOST,cdn.circle.so,LIST
 HOST,cdn.clever-cloud.com,LIST
 HOST,cdn.cliqz.com,LIST
@@ -545,7 +546,6 @@ HOST,cdn.cnn.com,LIST
 HOST,cdn.cnx-software.com,LIST
 HOST,cdn.codeblackbelt.com,LIST
 HOST,cdn.commandbar.com,LIST
-HOST,cdn.commento.io,LIST
 HOST,cdn.comparitech.com,LIST
 HOST,cdn.concert.io,LIST
 HOST,cdn.configcat.com,LIST
@@ -625,9 +625,6 @@ HOST,cdn.gettr.com,LIST
 HOST,cdn.ghostery.com,LIST
 HOST,cdn.giftcardpro.app,LIST
 HOST,cdn.gigya.com,LIST
-HOST,cdn.glitch.com,LIST
-HOST,cdn.glitch.global,LIST
-HOST,cdn.glitch.me,LIST
 HOST,cdn.gofundme.com,LIST
 HOST,cdn.googlesource.com,LIST
 HOST,cdn.graph.office.net,LIST
@@ -732,7 +729,6 @@ HOST,cdn.one.store,LIST
 HOST,cdn.onesignal.com,LIST
 HOST,cdn.onetime.dog,LIST
 HOST,cdn.onfastspring.com,LIST
-HOST,cdn.onlyhentaistuff.com,LIST
 HOST,cdn.openai.com,LIST
 HOST,cdn.osxdaily.com,LIST
 HOST,cdn.paddle.com,LIST
@@ -1049,7 +1045,6 @@ HOST,cloud.typenetwork.com,LIST
 HOST,cloudflare.tv,LIST
 HOST,cloudfront.barilliance.com,LIST
 HOST,cloudfront.codeproject.com,LIST
-HOST,cm1.aminoapps.com,LIST
 HOST,cmd-cdn.cleanmymac.com,LIST
 HOST,cmp-cdn.p.aws.economist.com,LIST
 HOST,cms-assets.nodecraft.com,LIST
@@ -1104,7 +1099,6 @@ HOST,content.jwplatform.com,LIST
 HOST,content.kaspersky-labs.com,LIST
 HOST,content.overwolf.com,LIST
 HOST,content.powerapps.com,LIST
-HOST,content.product.glitch.com,LIST
 HOST,content.wepik.com,LIST
 HOST,contents-thumbnail2.fc2.com,LIST
 HOST,conversiongorilla.com,LIST
@@ -1161,6 +1155,7 @@ HOST,design.keyoxide.org,LIST
 HOST,design.mayoclinic.org,LIST
 HOST,designsystem.brevo.com,LIST
 HOST,detectportal.firefox.com,LIST
+HOST,devicons.railway.com,LIST
 HOST,devnull.perfops.net,LIST
 HOST,dh-site.b-cdn.net,LIST
 HOST,dims.apnews.com,LIST
@@ -1371,7 +1366,6 @@ HOST,gravatar.tapglb.com,LIST
 HOST,groundnews.b-cdn.net,LIST
 HOST,gstatic.com,LIST
 HOST,gstatic.olympics.com,LIST
-HOST,gt1.onlyhentaistuff.com,LIST
 HOST,gtranslate.io,LIST
 HOST,hawk.tomsguide.com,LIST
 HOST,hawky.pcgamer.com,LIST
@@ -2449,6 +2443,7 @@ HOST,static-2v.gitbook.com,LIST
 HOST,static-3.bitchute.com,LIST
 HOST,static-4.bitchute.com,LIST
 HOST,static-act.imoim.net,LIST
+HOST,static-app.klaviyo.com,LIST
 HOST,static-assets-1.truthsocial.com,LIST
 HOST,static-assets-prod.epicgames.com,LIST
 HOST,static-assets-prod.unrealengine.com,LIST
@@ -3084,6 +3079,7 @@ HOST-SUFFIX,666565.xyz,LIST
 HOST-SUFFIX,91pic.org,LIST
 HOST-SUFFIX,98avcdn.xyz,LIST
 HOST-SUFFIX,9cache.com,LIST
+HOST-SUFFIX,a.klaviyo.com,LIST
 HOST-SUFFIX,a.storyblok.com,LIST
 HOST-SUFFIX,a1tb.com,LIST
 HOST-SUFFIX,a7s.imgix.com,LIST

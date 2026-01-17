@@ -1,5 +1,5 @@
-# Quantumult total line 8471
-# Last updated Fri 01/16/2026 22:16:54.83
+# Quantumult total line 8457
+# Last updated Sat 01/17/2026 14:08:31.83
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -8,7 +8,6 @@ HOST,a.deviantart.net,LIST
 HOST,a.fireside.fm,LIST
 HOST,a.gawby.com,LIST
 HOST,a.kickstarter.com,LIST
-HOST,a.klaviyo.com,LIST
 HOST,a.pomf.cat,LIST
 HOST,a5.behance.net,LIST
 HOST,academy-public.coinmarketcap.com,LIST
@@ -453,6 +452,7 @@ HOST,c7.patreon.com,LIST
 HOST,c8.patreon.com,LIST
 HOST,ca.dyi.ng,LIST
 HOST,ca.nfs.pub,LIST
+HOST,ca1.onlyhentaistuff.com,LIST
 HOST,cacerts.digicert.com,LIST
 HOST,cacerts.rapidssl.com,LIST
 HOST,cache-05.filehippo.net,LIST
@@ -597,6 +597,7 @@ HOST,cdn.cbd.int,LIST
 HOST,cdn.cfr.org,LIST
 HOST,cdn.changelog.com,LIST
 HOST,cdn.channel.io,LIST
+HOST,cdn.chord.co,LIST
 HOST,cdn.circle.so,LIST
 HOST,cdn.clever-cloud.com,LIST
 HOST,cdn.cliqz.com,LIST
@@ -607,7 +608,6 @@ HOST,cdn.cnx-software.com,LIST
 HOST,cdn.cocoapods.org,LIST
 HOST,cdn.codeblackbelt.com,LIST
 HOST,cdn.commandbar.com,LIST
-HOST,cdn.commento.io,LIST
 HOST,cdn.comparitech.com,LIST
 HOST,cdn.concert.io,LIST
 HOST,cdn.configcat.com,LIST
@@ -689,9 +689,6 @@ HOST,cdn.gettr.com,LIST
 HOST,cdn.ghostery.com,LIST
 HOST,cdn.giftcardpro.app,LIST
 HOST,cdn.gigya.com,LIST
-HOST,cdn.glitch.com,LIST
-HOST,cdn.glitch.global,LIST
-HOST,cdn.glitch.me,LIST
 HOST,cdn.gofundme.com,LIST
 HOST,cdn.googlesource.com,LIST
 HOST,cdn.graph.office.net,LIST
@@ -798,7 +795,6 @@ HOST,cdn.oneget.org,LIST
 HOST,cdn.onesignal.com,LIST
 HOST,cdn.onetime.dog,LIST
 HOST,cdn.onfastspring.com,LIST
-HOST,cdn.onlyhentaistuff.com,LIST
 HOST,cdn.openai.com,LIST
 HOST,cdn.opensuse.org,LIST
 HOST,cdn.organicmaps.app,LIST
@@ -1124,7 +1120,6 @@ HOST,cloudflare.tv,LIST
 HOST,cloudfront.barilliance.com,LIST
 HOST,cloudfront.codeproject.com,LIST
 HOST,cloudfront.debian.net,LIST
-HOST,cm1.aminoapps.com,LIST
 HOST,cmd-cdn.cleanmymac.com,LIST
 HOST,cminf.sfcat.link,LIST
 HOST,cmp-cdn.p.aws.economist.com,LIST
@@ -1182,7 +1177,6 @@ HOST,content.invisioncic.com,LIST
 HOST,content.kaspersky-labs.com,LIST
 HOST,content.overwolf.com,LIST
 HOST,content.powerapps.com,LIST
-HOST,content.product.glitch.com,LIST
 HOST,content.wepik.com,LIST
 HOST,contents-thumbnail2.fc2.com,LIST
 HOST,conversiongorilla.com,LIST
@@ -1252,8 +1246,6 @@ HOST,ctan.net,LIST
 HOST,ctan.space-pro.be,LIST
 HOST,ctan.tetaneutral.net,LIST
 HOST,ctan.uib.no,LIST
-HOST,ctan.um.ac.ir,LIST
-HOST,ctan.yazd.ac.ir,LIST
 HOST,ctldl.windowsupdate.com,LIST
 HOST,cuinf.sfcat.link,LIST
 HOST,curl.se,LIST
@@ -1361,6 +1353,7 @@ HOST,designsystem.brevo.com,LIST
 HOST,desktop.parallels.com,LIST
 HOST,desktop.wifiman.com,LIST
 HOST,detectportal.firefox.com,LIST
+HOST,devicons.railway.com,LIST
 HOST,devimages-cdn.apple.com,LIST
 HOST,devnull.perfops.net,LIST
 HOST,devstreaming-cdn.apple.com,LIST
@@ -1899,7 +1892,6 @@ HOST,groundnews.b-cdn.net,LIST
 HOST,gspe1-ssl.ls.apple.com,LIST
 HOST,gstatic.com,LIST
 HOST,gstatic.olympics.com,LIST
-HOST,gt1.onlyhentaistuff.com,LIST
 HOST,gtranslate.io,LIST
 HOST,h-dazn.online-metrix.net,LIST
 HOST,h-netflix.online-metrix.net,LIST
@@ -2543,7 +2535,6 @@ HOST,mirror-cdn.xtom.com,LIST
 HOST,mirror-gw.elastis.id,LIST
 HOST,mirror-hk.koddos.net,LIST
 HOST,mirror-mk.interspace.com,LIST
-HOST,mirror.0-1.cloud,LIST
 HOST,mirror.01link.hk,LIST
 HOST,mirror.0x.sg,LIST
 HOST,mirror.0x626b.com,LIST
@@ -2558,7 +2549,6 @@ HOST,mirror.aktkn.sg,LIST
 HOST,mirror.alastyr.com,LIST
 HOST,mirror.alwyzon.net,LIST
 HOST,mirror.amberit.com.bd,LIST
-HOST,mirror.aminidc.com,LIST
 HOST,mirror.ams.macarne.com,LIST
 HOST,mirror.amscloud.co.id,LIST
 HOST,mirror.anigil.com,LIST
@@ -2569,7 +2559,6 @@ HOST,mirror.aptus.co.tz,LIST
 HOST,mirror.arizona.edu,LIST
 HOST,mirror.arvancloud.ir,LIST
 HOST,mirror.as.kamatera.com,LIST
-HOST,mirror.as24220.net,LIST
 HOST,mirror.as29550.net,LIST
 HOST,mirror.as35701.net,LIST
 HOST,mirror.as43289.net,LIST
@@ -2866,7 +2855,6 @@ HOST,mirror.twds.com.tw,LIST
 HOST,mirror.ubuntu.ikoula.com,LIST
 HOST,mirror.ubuntu.serverforge.org,LIST
 HOST,mirror.uchile.cl,LIST
-HOST,mirror.ucu.ac.ug,LIST
 HOST,mirror.uepg.br,LIST
 HOST,mirror.ufam.edu.br,LIST
 HOST,mirror.ufro.cl,LIST
@@ -3019,7 +3007,6 @@ HOST,mirrors.saswata.cc,LIST
 HOST,mirrors.sonic.net,LIST
 HOST,mirrors.standaloneinstaller.com,LIST
 HOST,mirrors.storpool.com,LIST
-HOST,mirrors.switch.ca,LIST
 HOST,mirrors.teamcloud.am,LIST
 HOST,mirrors.tino.org,LIST
 HOST,mirrors.ubuntu.dimit.cloud,LIST
@@ -3324,7 +3311,6 @@ HOST,repo.extreme-ix.org,LIST
 HOST,repo.hex.pm,LIST
 HOST,repo.ialab.dsu.edu,LIST
 HOST,repo.ifca.es,LIST
-HOST,repo.iut.ac.ir,LIST
 HOST,repo.jztkft.hu,LIST
 HOST,repo.linuxmirrors.ir,LIST
 HOST,repo.morgan.kr,LIST
@@ -3577,6 +3563,7 @@ HOST,static-2v.gitbook.com,LIST
 HOST,static-3.bitchute.com,LIST
 HOST,static-4.bitchute.com,LIST
 HOST,static-act.imoim.net,LIST
+HOST,static-app.klaviyo.com,LIST
 HOST,static-assets-1.truthsocial.com,LIST
 HOST,static-assets-prod.epicgames.com,LIST
 HOST,static-assets-prod.unrealengine.com,LIST
@@ -4005,7 +3992,6 @@ HOST,ubuntu-archive.interhost.co.il,LIST
 HOST,ubuntu-archive.locaweb.com.br,LIST
 HOST,ubuntu-mirror.ati.tn,LIST
 HOST,ubuntu-mirror.bhtelecom.ba,LIST
-HOST,ubuntu-mirror.kimiahost.com,LIST
 HOST,ubuntu-mirror.puq.apoapsis.cl,LIST
 HOST,ubuntu-mirror.snu.edu.in,LIST
 HOST,ubuntu.anexia.at,LIST
@@ -4044,7 +4030,6 @@ HOST,ubuntu.otenet.gr,LIST
 HOST,ubuntu.pars.host,LIST
 HOST,ubuntu.parsvds.com,LIST
 HOST,ubuntu.phoenixnap.com,LIST
-HOST,ubuntu.pishgaman.net,LIST
 HOST,ubuntu.repo.cure.edu.uy,LIST
 HOST,ubuntu.rootlicense.com,LIST
 HOST,ubuntu.securedservers.com,LIST
@@ -4317,6 +4302,7 @@ HOST-SUFFIX,9521732.xyz,LIST
 HOST-SUFFIX,98avcdn.xyz,LIST
 HOST-SUFFIX,9cache.com,LIST
 HOST-SUFFIX,9xupload.xyz,LIST
+HOST-SUFFIX,a.klaviyo.com,LIST
 HOST-SUFFIX,a.o333o.com,LIST
 HOST-SUFFIX,a.storyblok.com,LIST
 HOST-SUFFIX,a1tb.com,LIST
