@@ -1,5 +1,5 @@
-# Quantumult total line 4234
-# Last updated Sat 01/17/2026 14:35:46.32
+# Quantumult total line 4239
+# Last updated Mon 01/19/2026 22:17:41.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -110,6 +110,7 @@ HOST,assets-cdn.porn.com,LIST
 HOST,assets-cdn.watchdisneyfe.com,LIST
 HOST,assets-cms.kraken.com,LIST
 HOST,assets-docs.circleci.com,LIST
+HOST,assets-docs.dify.ai,LIST
 HOST,assets-fe.change.org,LIST
 HOST,assets-growth-common.circleci.com,LIST
 HOST,assets-next.matters.news,LIST
@@ -903,6 +904,7 @@ HOST,cdn02.jotfor.ms,LIST
 HOST,cdn03.jotfor.ms,LIST
 HOST,cdn1.affirm.com,LIST
 HOST,cdn1.airdroid.com,LIST
+HOST,cdn1.bambulab.com,LIST
 HOST,cdn1.bigcommerce.com,LIST
 HOST,cdn1.dan.com,LIST
 HOST,cdn1.edgedatg.com,LIST
@@ -1979,6 +1981,7 @@ HOST,megapx-assets.dcard.tw,LIST
 HOST,melonbooks.akamaized.net,LIST
 HOST,meteorclient.com,LIST
 HOST,metrics.kapa.ai,LIST
+HOST,mgx-backend-cdn.metadl.com,LIST
 HOST,micro.rubiconproject.com,LIST
 HOST,mintlify.b-cdn.net,LIST
 HOST,mir-s3-cdn-cf.behance.net,LIST
@@ -2174,6 +2177,7 @@ HOST,public-assets.postmarkapp.com,LIST
 HOST,public-assets.typeform.com,LIST
 HOST,public-cdn.bblmw.com,LIST
 HOST,public-files.gumroad.com,LIST
+HOST,public-frontend-cos.metadl.com,LIST
 HOST,public-img.mewe.com,LIST
 HOST,public-pages.cbinsights.com,LIST
 HOST,public.flourish.studio,LIST
@@ -3573,6 +3577,7 @@ HOST-SUFFIX,imhentai.xxx,LIST
 HOST-SUFFIX,imostatic.com,LIST
 HOST-SUFFIX,in.appcenter.ms,LIST
 HOST-SUFFIX,infura-ipfs.io,LIST
+HOST-SUFFIX,ingest.atoms.dev,LIST
 HOST-SUFFIX,ingest.de.sentry.io,LIST
 HOST-SUFFIX,ingest.sentry.io,LIST
 HOST-SUFFIX,ingest.us.sentry.io,LIST

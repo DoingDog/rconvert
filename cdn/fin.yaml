@@ -1,5 +1,5 @@
-# Clash total line 4234
-# Last updated Sat 01/17/2026 14:35:46.36
+# Clash total line 4239
+# Last updated Mon 01/19/2026 22:17:41.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -111,6 +111,7 @@ payload:
   - DOMAIN,assets-cdn.watchdisneyfe.com
   - DOMAIN,assets-cms.kraken.com
   - DOMAIN,assets-docs.circleci.com
+  - DOMAIN,assets-docs.dify.ai
   - DOMAIN,assets-fe.change.org
   - DOMAIN,assets-growth-common.circleci.com
   - DOMAIN,assets-next.matters.news
@@ -904,6 +905,7 @@ payload:
   - DOMAIN,cdn03.jotfor.ms
   - DOMAIN,cdn1.affirm.com
   - DOMAIN,cdn1.airdroid.com
+  - DOMAIN,cdn1.bambulab.com
   - DOMAIN,cdn1.bigcommerce.com
   - DOMAIN,cdn1.dan.com
   - DOMAIN,cdn1.edgedatg.com
@@ -1980,6 +1982,7 @@ payload:
   - DOMAIN,melonbooks.akamaized.net
   - DOMAIN,meteorclient.com
   - DOMAIN,metrics.kapa.ai
+  - DOMAIN,mgx-backend-cdn.metadl.com
   - DOMAIN,micro.rubiconproject.com
   - DOMAIN,mintlify.b-cdn.net
   - DOMAIN,mir-s3-cdn-cf.behance.net
@@ -2175,6 +2178,7 @@ payload:
   - DOMAIN,public-assets.typeform.com
   - DOMAIN,public-cdn.bblmw.com
   - DOMAIN,public-files.gumroad.com
+  - DOMAIN,public-frontend-cos.metadl.com
   - DOMAIN,public-img.mewe.com
   - DOMAIN,public-pages.cbinsights.com
   - DOMAIN,public.flourish.studio
@@ -3574,6 +3578,7 @@ payload:
   - DOMAIN-SUFFIX,imostatic.com
   - DOMAIN-SUFFIX,in.appcenter.ms
   - DOMAIN-SUFFIX,infura-ipfs.io
+  - DOMAIN-SUFFIX,ingest.atoms.dev
   - DOMAIN-SUFFIX,ingest.de.sentry.io
   - DOMAIN-SUFFIX,ingest.sentry.io
   - DOMAIN-SUFFIX,ingest.us.sentry.io
