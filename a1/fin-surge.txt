@@ -1,5 +1,5 @@
-# Surge Rules total line 1293
-# Last updated Mon 01/19/2026 22:17:36.68
+# Surge Rules total line 1292
+# Last updated Thu 01/22/2026 22:18:11.01
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-ad.a.yximgs.com
 DOMAIN-KEYWORD,-ad.ixigua.com
@@ -1092,7 +1092,6 @@ IP-CIDR,34.204.214.165/32,no-resolve
 IP-CIDR,34.215.155.61/32,no-resolve
 IP-CIDR,34.230.160.215/32,no-resolve
 IP-CIDR,35.194.26.233/32,no-resolve
-IP-CIDR,35.224.227.218/32,no-resolve
 IP-CIDR,35.227.234.222/32,no-resolve
 IP-CIDR,35.232.188.118/32,no-resolve
 IP-CIDR,35.238.205.163/32,no-resolve

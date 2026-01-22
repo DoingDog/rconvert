@@ -1,5 +1,5 @@
-# Main total line 8477
-# Last updated Mon 01/19/2026 22:17:54.37
+# Main total line 8490
+# Last updated Thu 01/22/2026 22:18:26.77
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -182,6 +182,7 @@ DOMAIN,assets.auth.magic.link
 DOMAIN,assets.awwwards.com
 DOMAIN,assets.basehub.com
 DOMAIN,assets.bbhub.io
+DOMAIN,assets.bbystatic.com
 DOMAIN,assets.bitstamp.net
 DOMAIN,assets.bitwarden.com
 DOMAIN,assets.bnidx.com
@@ -500,6 +501,8 @@ DOMAIN,cdn-fck.tnaflix.com
 DOMAIN,cdn-forum.networklessons.com
 DOMAIN,cdn-front.freepik.com
 DOMAIN,cdn-icons-png.flaticon.com
+DOMAIN,cdn-image01.casetify.com
+DOMAIN,cdn-image02.casetify.com
 DOMAIN,cdn-images-1.medium.com
 DOMAIN,cdn-images.mailchimp.com
 DOMAIN,cdn-images.orbstack.dev
@@ -526,6 +529,7 @@ DOMAIN,cdn-rdstaticassets.readdle.com
 DOMAIN,cdn-seo.airdroid.com
 DOMAIN,cdn-service.jp.sumologic.com
 DOMAIN,cdn-share-sprites.flaticon.com
+DOMAIN,cdn-stamplib.casetify.com
 DOMAIN,cdn-static-1.medium.com
 DOMAIN,cdn-static-push.porndig.com
 DOMAIN,cdn-static.paw.cloud
@@ -595,6 +599,7 @@ DOMAIN,cdn.calibermind.com
 DOMAIN,cdn.cameo.com
 DOMAIN,cdn.camweara.com
 DOMAIN,cdn.candy.ai
+DOMAIN,cdn.casetify.com
 DOMAIN,cdn.cbd.int
 DOMAIN,cdn.cfr.org
 DOMAIN,cdn.changelog.com
@@ -2283,6 +2288,7 @@ DOMAIN,info.knak.com
 DOMAIN,instafeed.nfcube.com
 DOMAIN,install.virtfusion.net
 DOMAIN,int.mwbbiz.com
+DOMAIN,intake-logging.wikimedia.org
 DOMAIN,integrations.gitbook.com
 DOMAIN,interactive-examples.mdn.mozilla.net
 DOMAIN,interactive.guim.co.uk
@@ -3060,6 +3066,7 @@ DOMAIN,na-library.klarnaservices.com
 DOMAIN,namedotcom-cdn.name.tools
 DOMAIN,nav.yumenosora.co.jp
 DOMAIN,navismithapis-cdn.com
+DOMAIN,nel.bgptools-agent-cf.com
 DOMAIN,nel.heroku.com
 DOMAIN,net-fe-static-assets.network-controller.svc.ui.com
 DOMAIN,netlify.apollo.io
@@ -3125,6 +3132,7 @@ DOMAIN,oss.moe.cat
 DOMAIN,oss.ypt.com
 DOMAIN,ossmirror.mycloud.services
 DOMAIN,ota-cache1.googlezip.net
+DOMAIN,ota-downloads.nvidia.com
 DOMAIN,ota.googlezip.net
 DOMAIN,ovo.wxw.moe
 DOMAIN,p-smith.com
@@ -3878,6 +3886,7 @@ DOMAIN,steam.eca.qtlglb.com
 DOMAIN,steam.naeu.qtlglb.com
 DOMAIN,steam.ru.qtlglb.com
 DOMAIN,storage-b.picacomic.com
+DOMAIN,storage.courtlistener.com
 DOMAIN,storage.crisp.chat
 DOMAIN,storage.deepin.org
 DOMAIN,storage.gra.cloud.ovh.net
@@ -3894,6 +3903,7 @@ DOMAIN,store-images.microsoft.com
 DOMAIN,store-images.s-microsoft.com
 DOMAIN,store.setapp.com
 DOMAIN,stories.freepiklabs.com
+DOMAIN,storybooks.fluentui.dev
 DOMAIN,stream.mux.com
 DOMAIN,streaming.split.io
 DOMAIN,streetviewpixels-pa.googleapis.com
@@ -4105,6 +4115,7 @@ DOMAIN,us3.hamreus.com
 DOMAIN,use.fortawesome.com
 DOMAIN,use.typekit.com
 DOMAIN,use.typekit.net
+DOMAIN,usehooks-ts.com
 DOMAIN,user-uploads.perchance.org
 DOMAIN,usercontent.flodesk.com
 DOMAIN,userpic.redgifs.com
@@ -4158,6 +4169,7 @@ DOMAIN,vz-2222604c-50b.b-cdn.net
 DOMAIN,vz-c0fe498e-5ab.b-cdn.net
 DOMAIN,w.chatlio.com
 DOMAIN,w2.influxdata.com
+DOMAIN,w3-reporting.reddit.com
 DOMAIN,wa.arounddeal.com
 DOMAIN,wa1.aninoapps.com
 DOMAIN,wac-cdn.atlassian.com
@@ -5673,6 +5685,7 @@ DOMAIN-SUFFIX,hrcdn.net
 DOMAIN-SUFFIX,hs-scripts.com
 DOMAIN-SUFFIX,hs-scripts.net
 DOMAIN-SUFFIX,hsappstatic.net
+DOMAIN-SUFFIX,hsbrowserreports.com
 DOMAIN-SUFFIX,hscollectedforms.net
 DOMAIN-SUFFIX,hsstatic.net
 DOMAIN-SUFFIX,hsto.org
