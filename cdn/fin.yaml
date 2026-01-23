@@ -1,5 +1,5 @@
-# Clash total line 4251
-# Last updated Thu 01/22/2026 22:18:14.99
+# Clash total line 4250
+# Last updated Fri 01/23/2026 14:10:16.45
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -133,7 +133,6 @@ payload:
   - DOMAIN,assets.awwwards.com
   - DOMAIN,assets.basehub.com
   - DOMAIN,assets.bbhub.io
-  - DOMAIN,assets.bbystatic.com
   - DOMAIN,assets.bitstamp.net
   - DOMAIN,assets.bitwarden.com
   - DOMAIN,assets.bnidx.com
@@ -271,7 +270,6 @@ payload:
   - DOMAIN,assets.tatlerasia.com
   - DOMAIN,assets.the-independent.com
   - DOMAIN,assets.time.com
-  - DOMAIN,assets.toiimg.com
   - DOMAIN,assets.tokopedia.net
   - DOMAIN,assets.toot.cafe
   - DOMAIN,assets.tvtropes.org
@@ -2720,7 +2718,6 @@ payload:
   - DOMAIN,static.theguardian.com
   - DOMAIN,static.themebuilder.aws.arc.pub
   - DOMAIN,static.threatlocker.com
-  - DOMAIN,static.toiimg.com
   - DOMAIN,static.tokenview.io
   - DOMAIN,static.toss.im
   - DOMAIN,static.touhoudb.com
@@ -3169,6 +3166,7 @@ payload:
   - DOMAIN-SUFFIX,badoocdn.com
   - DOMAIN-SUFFIX,balley.top
   - DOMAIN-SUFFIX,bblcdn.com
+  - DOMAIN-SUFFIX,bbystatic.com
   - DOMAIN-SUFFIX,bdzybf7.com
   - DOMAIN-SUFFIX,bestfreecdn.com
   - DOMAIN-SUFFIX,bestjavcdn.com
@@ -4103,6 +4101,7 @@ payload:
   - DOMAIN-SUFFIX,tmsimg.com
   - DOMAIN-SUFFIX,tnastatic.com
   - DOMAIN-SUFFIX,tnmr.org
+  - DOMAIN-SUFFIX,toiimg.com
   - DOMAIN-SUFFIX,tokyvideo.com
   - DOMAIN-SUFFIX,torproject.org
   - DOMAIN-SUFFIX,tpdfiles.com

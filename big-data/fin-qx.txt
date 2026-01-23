@@ -1,5 +1,5 @@
 # Quantumult total line 8476
-# Last updated Thu 01/22/2026 22:18:26.99
+# Last updated Fri 01/23/2026 14:10:29.88
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -182,7 +182,6 @@ HOST,assets.auth.magic.link,LIST
 HOST,assets.awwwards.com,LIST
 HOST,assets.basehub.com,LIST
 HOST,assets.bbhub.io,LIST
-HOST,assets.bbystatic.com,LIST
 HOST,assets.bitstamp.net,LIST
 HOST,assets.bitwarden.com,LIST
 HOST,assets.bnidx.com,LIST
@@ -314,7 +313,6 @@ HOST,assets.swoogo.com,LIST
 HOST,assets.tatlerasia.com,LIST
 HOST,assets.the-independent.com,LIST
 HOST,assets.time.com,LIST
-HOST,assets.toiimg.com,LIST
 HOST,assets.tokopedia.net,LIST
 HOST,assets.toot.cafe,LIST
 HOST,assets.tvtropes.org,LIST
@@ -3816,7 +3814,6 @@ HOST,static.test-beta.com,LIST
 HOST,static.theguardian.com,LIST
 HOST,static.themebuilder.aws.arc.pub,LIST
 HOST,static.threatlocker.com,LIST
-HOST,static.toiimg.com,LIST
 HOST,static.tokenview.io,LIST
 HOST,static.toss.im,LIST
 HOST,static.touhoudb.com,LIST
@@ -4294,6 +4291,7 @@ HOST-SUFFIX,285286.xyz,LIST
 HOST-SUFFIX,2img.net,LIST
 HOST-SUFFIX,2mdn.net,LIST
 HOST-SUFFIX,2shared.com,LIST
+HOST-SUFFIX,313445.xyz,LIST
 HOST-SUFFIX,3767483.xyz,LIST
 HOST-SUFFIX,404.sb,LIST
 HOST-SUFFIX,4545.cf,LIST
@@ -4538,6 +4536,7 @@ HOST-SUFFIX,bbcpersian.com,LIST
 HOST-SUFFIX,bbcverticals.com,LIST
 HOST-SUFFIX,bbg.gov,LIST
 HOST-SUFFIX,bblcdn.com,LIST
+HOST-SUFFIX,bbystatic.com,LIST
 HOST-SUFFIX,bcvcdn.com,LIST
 HOST-SUFFIX,bddup.com,LIST
 HOST-SUFFIX,bdupload.asia,LIST
@@ -6946,7 +6945,6 @@ HOST-SUFFIX,strapi.logto.io,LIST
 HOST-SUFFIX,streaks.jp,LIST
 HOST-SUFFIX,stream.ntrrr.top,LIST
 HOST-SUFFIX,stream.publicradio.org,LIST
-HOST-SUFFIX,stream.synn.cc,LIST
 HOST-SUFFIX,streamango.com,LIST
 HOST-SUFFIX,streamcherry.com,LIST
 HOST-SUFFIX,streamhentai.org,LIST
@@ -6983,6 +6981,7 @@ HOST-SUFFIX,swupdate.vray.com,LIST
 HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,syfy.com,LIST
 HOST-SUFFIX,syncs.online,LIST
+HOST-SUFFIX,synn.cc,LIST
 HOST-SUFFIX,szjal.cn,LIST
 HOST-SUFFIX,t8cdn.com,LIST
 HOST-SUFFIX,takefile.link,LIST
@@ -7061,6 +7060,7 @@ HOST-SUFFIX,tmpfiles.org,LIST
 HOST-SUFFIX,tmsimg.com,LIST
 HOST-SUFFIX,tnastatic.com,LIST
 HOST-SUFFIX,tnmr.org,LIST
+HOST-SUFFIX,toiimg.com,LIST
 HOST-SUFFIX,tokyvideo.com,LIST
 HOST-SUFFIX,top4top.net,LIST
 HOST-SUFFIX,torproject.org,LIST

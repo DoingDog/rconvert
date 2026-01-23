@@ -1,5 +1,5 @@
-# Quantumult total line 4251
-# Last updated Thu 01/22/2026 22:18:14.95
+# Quantumult total line 4250
+# Last updated Fri 01/23/2026 14:10:16.41
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -132,7 +132,6 @@ HOST,assets.auth.magic.link,LIST
 HOST,assets.awwwards.com,LIST
 HOST,assets.basehub.com,LIST
 HOST,assets.bbhub.io,LIST
-HOST,assets.bbystatic.com,LIST
 HOST,assets.bitstamp.net,LIST
 HOST,assets.bitwarden.com,LIST
 HOST,assets.bnidx.com,LIST
@@ -270,7 +269,6 @@ HOST,assets.swoogo.com,LIST
 HOST,assets.tatlerasia.com,LIST
 HOST,assets.the-independent.com,LIST
 HOST,assets.time.com,LIST
-HOST,assets.toiimg.com,LIST
 HOST,assets.tokopedia.net,LIST
 HOST,assets.toot.cafe,LIST
 HOST,assets.tvtropes.org,LIST
@@ -2719,7 +2717,6 @@ HOST,static.test-beta.com,LIST
 HOST,static.theguardian.com,LIST
 HOST,static.themebuilder.aws.arc.pub,LIST
 HOST,static.threatlocker.com,LIST
-HOST,static.toiimg.com,LIST
 HOST,static.tokenview.io,LIST
 HOST,static.toss.im,LIST
 HOST,static.touhoudb.com,LIST
@@ -3168,6 +3165,7 @@ HOST-SUFFIX,badgen.net,LIST
 HOST-SUFFIX,badoocdn.com,LIST
 HOST-SUFFIX,balley.top,LIST
 HOST-SUFFIX,bblcdn.com,LIST
+HOST-SUFFIX,bbystatic.com,LIST
 HOST-SUFFIX,bdzybf7.com,LIST
 HOST-SUFFIX,bestfreecdn.com,LIST
 HOST-SUFFIX,bestjavcdn.com,LIST
@@ -4102,6 +4100,7 @@ HOST-SUFFIX,tkcdns.com,LIST
 HOST-SUFFIX,tmsimg.com,LIST
 HOST-SUFFIX,tnastatic.com,LIST
 HOST-SUFFIX,tnmr.org,LIST
+HOST-SUFFIX,toiimg.com,LIST
 HOST-SUFFIX,tokyvideo.com,LIST
 HOST-SUFFIX,torproject.org,LIST
 HOST-SUFFIX,tpdfiles.com,LIST
