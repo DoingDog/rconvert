@@ -1,5 +1,5 @@
-# Clash total line 4250
-# Last updated Fri 01/23/2026 14:10:16.45
+# Clash total line 4265
+# Last updated Sun 01/25/2026 22:16:44.94
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -159,6 +159,7 @@ payload:
   - DOMAIN,assets.context.ly
   - DOMAIN,assets.controld.com
   - DOMAIN,assets.convertkit.com
+  - DOMAIN,assets.customer.io
   - DOMAIN,assets.cyberghostvpn.com
   - DOMAIN,assets.dev.to
   - DOMAIN,assets.dictionary.com
@@ -818,6 +819,7 @@ payload:
   - DOMAIN,cdn.sketch.com
   - DOMAIN,cdn.skymavis.com
   - DOMAIN,cdn.smooch.io
+  - DOMAIN,cdn.snaptravel.com
   - DOMAIN,cdn.softswiss.net
   - DOMAIN,cdn.sphlabs.com
   - DOMAIN,cdn.split.io
@@ -834,6 +836,7 @@ payload:
   - DOMAIN,cdn.streamlabs.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
+  - DOMAIN,cdn.super.com
   - DOMAIN,cdn.svgator.com
   - DOMAIN,cdn.syftdata.com
   - DOMAIN,cdn.tailwindcss.com
@@ -1096,6 +1099,7 @@ payload:
   - DOMAIN,content-cdn.svc.ui.com
   - DOMAIN,content-management-files.canva.com
   - DOMAIN,content-prod-live.cert.starbucks.com
+  - DOMAIN,content.9gtb.com
   - DOMAIN,content.any.run
   - DOMAIN,content.api.news
   - DOMAIN,content.arduino.cc
@@ -2140,6 +2144,7 @@ payload:
   - DOMAIN,players.brightcove.net
   - DOMAIN,playgroundcdn.typescriptlang.org
   - DOMAIN,plugins.dprint.dev
+  - DOMAIN,plugins.pubtailer.com
   - DOMAIN,plus.unsplash.com
   - DOMAIN,pm1.aninoapps.com
   - DOMAIN,pmecdn.protonweb.com
@@ -2355,6 +2360,8 @@ payload:
   - DOMAIN,scripts.scriptwrapper.com
   - DOMAIN,scripts.webeo.com
   - DOMAIN,sdata.ndtv.com
+  - DOMAIN,sdk-cdn.fun.xyz
+  - DOMAIN,sdk-static.loyaltylion.net
   - DOMAIN,sdk.customfit.ai
   - DOMAIN,sdk.gleap.io
   - DOMAIN,sdk.helloextend.com
@@ -2477,6 +2484,7 @@ payload:
   - DOMAIN,static-clst.avgle.com
   - DOMAIN,static-community.tp-link.com
   - DOMAIN,static-dm.ubisoft.com
+  - DOMAIN,static-documents.wizards.com
   - DOMAIN,static-e.live.fc2.com
   - DOMAIN,static-effect.reg.ru
   - DOMAIN,static-exp1.licdn.com
@@ -2506,6 +2514,7 @@ payload:
   - DOMAIN,static-web.grammarly.com
   - DOMAIN,static-webfonts.myfonts.com
   - DOMAIN,static-www.onlyoffice.com
+  - DOMAIN,static-www.sendsafely.com
   - DOMAIN,static.3dporndude.com
   - DOMAIN,static.4shared.com
   - DOMAIN,static.ada.support
@@ -2600,6 +2609,7 @@ payload:
   - DOMAIN,static.global.visioncritical.com
   - DOMAIN,static.gmgard.com
   - DOMAIN,static.gnome.org
+  - DOMAIN,static.goaffpro.com
   - DOMAIN,static.gopro.com
   - DOMAIN,static.guim.co.uk
   - DOMAIN,static.heavy-r.com
@@ -2798,6 +2808,7 @@ payload:
   - DOMAIN,storage.ko-fi.com
   - DOMAIN,storage.moegirl.tw
   - DOMAIN,storage.sciencecast.org
+  - DOMAIN,storage.synctrack.io
   - DOMAIN,storage.tally.so
   - DOMAIN,storage.windiscover.com
   - DOMAIN,storage.withfabric.xyz
@@ -3057,6 +3068,7 @@ payload:
   - DOMAIN,ws2-cache.aptoide.com
   - DOMAIN,ww2-secure.justanswer.com
   - DOMAIN,ww2.justanswer.com
+  - DOMAIN,www-cdn.anthropic.com
   - DOMAIN,www-cdn.uscardforum.com
   - DOMAIN,www-res.cablelabs.com
   - DOMAIN,www-static.ripe.net
@@ -3472,6 +3484,7 @@ payload:
   - DOMAIN-SUFFIX,gcr.si
   - DOMAIN-SUFFIX,gdvid.info
   - DOMAIN-SUFFIX,gentcdn.com
+  - DOMAIN-SUFFIX,getaroom-cdn.com
   - DOMAIN-SUFFIX,ggpht.com
   - DOMAIN-SUFFIX,girlsgogamescdn.com
   - DOMAIN-SUFFIX,giscus.app
@@ -4009,6 +4022,7 @@ payload:
   - DOMAIN-SUFFIX,squarespace-cdn.com
   - DOMAIN-SUFFIX,srcdn.com
   - DOMAIN-SUFFIX,ss-cdn.com
+  - DOMAIN-SUFFIX,ss-domain.com
   - DOMAIN-SUFFIX,ssl-images-amazon.com
   - DOMAIN-SUFFIX,sstatic.net
   - DOMAIN-SUFFIX,stack.imgur.com
@@ -4071,6 +4085,7 @@ payload:
   - DOMAIN-SUFFIX,sxccdn.com
   - DOMAIN-SUFFIX,szjal.cn
   - DOMAIN-SUFFIX,t8cdn.com
+  - DOMAIN-SUFFIX,tacdn.com
   - DOMAIN-SUFFIX,tapecontent.net
   - DOMAIN-SUFFIX,targetimg1.com
   - DOMAIN-SUFFIX,tauri.app

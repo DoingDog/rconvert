@@ -1,5 +1,5 @@
-# Quantumult total line 4250
-# Last updated Fri 01/23/2026 14:10:16.41
+# Quantumult total line 4265
+# Last updated Sun 01/25/2026 22:16:44.90
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -158,6 +158,7 @@ HOST,assets.coingecko.com,LIST
 HOST,assets.context.ly,LIST
 HOST,assets.controld.com,LIST
 HOST,assets.convertkit.com,LIST
+HOST,assets.customer.io,LIST
 HOST,assets.cyberghostvpn.com,LIST
 HOST,assets.dev.to,LIST
 HOST,assets.dictionary.com,LIST
@@ -817,6 +818,7 @@ HOST,cdn.sitesearch360.com,LIST
 HOST,cdn.sketch.com,LIST
 HOST,cdn.skymavis.com,LIST
 HOST,cdn.smooch.io,LIST
+HOST,cdn.snaptravel.com,LIST
 HOST,cdn.softswiss.net,LIST
 HOST,cdn.sphlabs.com,LIST
 HOST,cdn.split.io,LIST
@@ -833,6 +835,7 @@ HOST,cdn.stonly.com,LIST
 HOST,cdn.streamlabs.com,LIST
 HOST,cdn.substack.com,LIST
 HOST,cdn.sunofbeaches.com,LIST
+HOST,cdn.super.com,LIST
 HOST,cdn.svgator.com,LIST
 HOST,cdn.syftdata.com,LIST
 HOST,cdn.tailwindcss.com,LIST
@@ -1095,6 +1098,7 @@ HOST,content-a.strava.com,LIST
 HOST,content-cdn.svc.ui.com,LIST
 HOST,content-management-files.canva.com,LIST
 HOST,content-prod-live.cert.starbucks.com,LIST
+HOST,content.9gtb.com,LIST
 HOST,content.any.run,LIST
 HOST,content.api.news,LIST
 HOST,content.arduino.cc,LIST
@@ -2139,6 +2143,7 @@ HOST,player.vimeo.com,LIST
 HOST,players.brightcove.net,LIST
 HOST,playgroundcdn.typescriptlang.org,LIST
 HOST,plugins.dprint.dev,LIST
+HOST,plugins.pubtailer.com,LIST
 HOST,plus.unsplash.com,LIST
 HOST,pm1.aninoapps.com,LIST
 HOST,pmecdn.protonweb.com,LIST
@@ -2354,6 +2359,8 @@ HOST,scripts.dailymail.co.uk,LIST
 HOST,scripts.scriptwrapper.com,LIST
 HOST,scripts.webeo.com,LIST
 HOST,sdata.ndtv.com,LIST
+HOST,sdk-cdn.fun.xyz,LIST
+HOST,sdk-static.loyaltylion.net,LIST
 HOST,sdk.customfit.ai,LIST
 HOST,sdk.gleap.io,LIST
 HOST,sdk.helloextend.com,LIST
@@ -2476,6 +2483,7 @@ HOST,static-cf.foxdata.com,LIST
 HOST,static-clst.avgle.com,LIST
 HOST,static-community.tp-link.com,LIST
 HOST,static-dm.ubisoft.com,LIST
+HOST,static-documents.wizards.com,LIST
 HOST,static-e.live.fc2.com,LIST
 HOST,static-effect.reg.ru,LIST
 HOST,static-exp1.licdn.com,LIST
@@ -2505,6 +2513,7 @@ HOST,static-web-prod.skillshare.com,LIST
 HOST,static-web.grammarly.com,LIST
 HOST,static-webfonts.myfonts.com,LIST
 HOST,static-www.onlyoffice.com,LIST
+HOST,static-www.sendsafely.com,LIST
 HOST,static.3dporndude.com,LIST
 HOST,static.4shared.com,LIST
 HOST,static.ada.support,LIST
@@ -2599,6 +2608,7 @@ HOST,static.gl-inet.com,LIST
 HOST,static.global.visioncritical.com,LIST
 HOST,static.gmgard.com,LIST
 HOST,static.gnome.org,LIST
+HOST,static.goaffpro.com,LIST
 HOST,static.gopro.com,LIST
 HOST,static.guim.co.uk,LIST
 HOST,static.heavy-r.com,LIST
@@ -2797,6 +2807,7 @@ HOST,storage.gra.cloud.ovh.net,LIST
 HOST,storage.ko-fi.com,LIST
 HOST,storage.moegirl.tw,LIST
 HOST,storage.sciencecast.org,LIST
+HOST,storage.synctrack.io,LIST
 HOST,storage.tally.so,LIST
 HOST,storage.windiscover.com,LIST
 HOST,storage.withfabric.xyz,LIST
@@ -3056,6 +3067,7 @@ HOST,ws-cdn.nperf.com,LIST
 HOST,ws2-cache.aptoide.com,LIST
 HOST,ww2-secure.justanswer.com,LIST
 HOST,ww2.justanswer.com,LIST
+HOST,www-cdn.anthropic.com,LIST
 HOST,www-cdn.uscardforum.com,LIST
 HOST,www-res.cablelabs.com,LIST
 HOST,www-static.ripe.net,LIST
@@ -3471,6 +3483,7 @@ HOST-SUFFIX,gayzyimage.com,LIST
 HOST-SUFFIX,gcr.si,LIST
 HOST-SUFFIX,gdvid.info,LIST
 HOST-SUFFIX,gentcdn.com,LIST
+HOST-SUFFIX,getaroom-cdn.com,LIST
 HOST-SUFFIX,ggpht.com,LIST
 HOST-SUFFIX,girlsgogamescdn.com,LIST
 HOST-SUFFIX,giscus.app,LIST
@@ -4008,6 +4021,7 @@ HOST-SUFFIX,sqspcdn.com,LIST
 HOST-SUFFIX,squarespace-cdn.com,LIST
 HOST-SUFFIX,srcdn.com,LIST
 HOST-SUFFIX,ss-cdn.com,LIST
+HOST-SUFFIX,ss-domain.com,LIST
 HOST-SUFFIX,ssl-images-amazon.com,LIST
 HOST-SUFFIX,sstatic.net,LIST
 HOST-SUFFIX,stack.imgur.com,LIST
@@ -4070,6 +4084,7 @@ HOST-SUFFIX,swiftypecdn.com,LIST
 HOST-SUFFIX,sxccdn.com,LIST
 HOST-SUFFIX,szjal.cn,LIST
 HOST-SUFFIX,t8cdn.com,LIST
+HOST-SUFFIX,tacdn.com,LIST
 HOST-SUFFIX,tapecontent.net,LIST
 HOST-SUFFIX,targetimg1.com,LIST
 HOST-SUFFIX,tauri.app,LIST

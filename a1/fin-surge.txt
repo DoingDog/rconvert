@@ -1,5 +1,5 @@
-# Surge Rules total line 1292
-# Last updated Fri 01/23/2026 14:10:11.85
+# Surge Rules total line 1296
+# Last updated Sun 01/25/2026 22:16:40.44
 DOMAIN-KEYWORD,-ad-sign.byteimg.com
 DOMAIN-KEYWORD,-ad.a.yximgs.com
 DOMAIN-KEYWORD,-ad.ixigua.com
@@ -1057,6 +1057,7 @@ IP-CIDR,23.170.252.196/32,no-resolve
 IP-CIDR,23.195.91.195/32,no-resolve
 IP-CIDR,23.202.231.167/32,no-resolve
 IP-CIDR,23.217.138.108/32,no-resolve
+IP-CIDR,23.22.126.183/32,no-resolve
 IP-CIDR,23.224.199.74/32,no-resolve
 IP-CIDR,23.224.199.96/32,no-resolve
 IP-CIDR,23.224.89.2/32,no-resolve
@@ -1292,3 +1293,6 @@ PROCESS-NAME,SogouInput
 PROCESS-NAME,SogouServices
 PROCESS-NAME,SogouTaskManager
 PROCESS-NAME,TencentLemon
+api.jr.mi.com
+m.jr.mi.com
+mpush-api.aliyun.com
