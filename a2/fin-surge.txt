@@ -1,5 +1,5 @@
-# Surge Rules total line 1036
-# Last updated Sun 01/25/2026 22:10:48.46
+# Surge Rules total line 1033
+# Last updated Wed 01/28/2026 22:16:09.42
 DOMAIN-KEYWORD,-ad.a.yximgs.com
 DOMAIN-KEYWORD,-ad.ixigua.com
 DOMAIN-KEYWORD,-ad.sm.cn
@@ -1033,6 +1033,3 @@ PROCESS-NAME,SogouInput
 PROCESS-NAME,SogouServices
 PROCESS-NAME,SogouTaskManager
 PROCESS-NAME,TencentLemon
-api.jr.mi.com
-m.jr.mi.com
-mpush-api.aliyun.com

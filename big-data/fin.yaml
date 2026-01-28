@@ -1,5 +1,5 @@
-# Clash total line 8505
-# Last updated Sun 01/25/2026 22:16:58.36
+# Clash total line 8514
+# Last updated Wed 01/28/2026 22:22:31.72
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -196,6 +196,7 @@ payload:
   - DOMAIN,assets.canny.io
   - DOMAIN,assets.capterra.com
   - DOMAIN,assets.cello.so
+  - DOMAIN,assets.cgtrader.com
   - DOMAIN,assets.change.org
   - DOMAIN,assets.chaos.social
   - DOMAIN,assets.clever-cloud.com
@@ -272,6 +273,7 @@ payload:
   - DOMAIN,assets.nationbuilder.com
   - DOMAIN,assets.newrepublic.com
   - DOMAIN,assets.nintendo.com
+  - DOMAIN,assets.northflank.com
   - DOMAIN,assets.nxtrace.org
   - DOMAIN,assets.onestore.ms
   - DOMAIN,assets.ontrack.com
@@ -333,6 +335,7 @@ payload:
   - DOMAIN,assets.xmind.net
   - DOMAIN,assets.yande.re
   - DOMAIN,assets.zendesk.com
+  - DOMAIN,assets.zephr.com
   - DOMAIN,assets.zerohedge.com
   - DOMAIN,assets.zilliz.com
   - DOMAIN,assets0.headwayapp.co
@@ -495,6 +498,7 @@ payload:
   - DOMAIN,cdn-cms.tunein.com
   - DOMAIN,cdn-dynmedia-1.microsoft.com
   - DOMAIN,cdn-edge.karte.io
+  - DOMAIN,cdn-en.aptoide.com
   - DOMAIN,cdn-eu.dynamicyield.com
   - DOMAIN,cdn-eu.readspeaker.com
   - DOMAIN,cdn-fck.tnaflix.com
@@ -568,6 +572,7 @@ payload:
   - DOMAIN,cdn.app.neononepay.com
   - DOMAIN,cdn.apple-cloudkit.com
   - DOMAIN,cdn.apponic.com
+  - DOMAIN,cdn.aptoide.com
   - DOMAIN,cdn.arcade.software
   - DOMAIN,cdn.arduino.cc
   - DOMAIN,cdn.arstechnica.net
@@ -1628,6 +1633,7 @@ payload:
   - DOMAIN,files.smashing.media
   - DOMAIN,files.stripe.com
   - DOMAIN,files.svc.ui.com
+  - DOMAIN,files.thehackernews.com
   - DOMAIN,files.writefreely.org
   - DOMAIN,files.yande.re
   - DOMAIN,files2.freedownloadmanager.org
@@ -2147,6 +2153,7 @@ payload:
   - DOMAIN,img-cos.mandaoo.com
   - DOMAIN,img-en.fs.com
   - DOMAIN,img-fnc.ebc.net.tw
+  - DOMAIN,img-new.cgtrader.com
   - DOMAIN,img.177pica.com
   - DOMAIN,img.321cdn.com
   - DOMAIN,img.3movs.com
@@ -2452,6 +2459,7 @@ payload:
   - DOMAIN,media.breitbart.com
   - DOMAIN,media.bundlehunt.com
   - DOMAIN,media.canva.com
+  - DOMAIN,media.cgtrader.com
   - DOMAIN,media.cleanshot.cloud
   - DOMAIN,media.cmx.edu.kg
   - DOMAIN,media.contentapi.ea.com
@@ -3610,6 +3618,7 @@ payload:
   - DOMAIN,static-forms.klaviyo.com
   - DOMAIN,static-gcp.freepikcompany.com
   - DOMAIN,static-id.fc2.com
+  - DOMAIN,static-images.aptoide.com
   - DOMAIN,static-images.remax.com
   - DOMAIN,static-landing.probiplacehold.cot.com
   - DOMAIN,static-lccn.leetcode.com
