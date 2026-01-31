@@ -8,6 +8,7 @@ DOMAIN,img.shana-laopo.xyz
 DOMAIN,js-cdn.music.apple.com
 DOMAIN,kh.google.com
 DOMAIN,maven.google.com
+IP-CIDR,156.246.88.62/32,no-resolve
 DOMAIN,maven.kr328.app
 DOMAIN,mw1.google.com
 DOMAIN,streetviewpixels-pa.googleapis.com
