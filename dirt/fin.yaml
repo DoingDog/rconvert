@@ -1,5 +1,5 @@
-# Clash total line 29963
-# Last updated Wed 01/28/2026 22:22:53.59
+# Clash total line 29965
+# Last updated Sat 01/31/2026 22:19:02.00
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
@@ -6341,6 +6341,7 @@ payload:
   - DOMAIN-SUFFIX,dcdkjx.com
   - DOMAIN-SUFFIX,dchain.tech
   - DOMAIN-SUFFIX,dcknf.top
+  - DOMAIN-SUFFIX,dcloud.io
   - DOMAIN-SUFFIX,dcloud.xin
   - DOMAIN-SUFFIX,dcloudlive.com
   - DOMAIN-SUFFIX,dcloudlive.net
@@ -22919,6 +22920,7 @@ payload:
   - DOMAIN-SUFFIX,tongzhiwang.net
   - DOMAIN-SUFFIX,tongzhuogame.com
   - DOMAIN-SUFFIX,tongzhuoplay.com
+  - DOMAIN-SUFFIX,tool.lu
   - DOMAIN-SUFFIX,tools.team
   - DOMAIN-SUFFIX,toop.club
   - DOMAIN-SUFFIX,top100school.com

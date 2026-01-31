@@ -1,5 +1,5 @@
-# Main total line 8514
-# Last updated Wed 01/28/2026 22:22:31.43
+# Main total line 8534
+# Last updated Sat 01/31/2026 22:18:40.46
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -565,6 +565,8 @@ DOMAIN,cdn.adsninja.ca
 DOMAIN,cdn.affine.pro
 DOMAIN,cdn.aimerce.ai
 DOMAIN,cdn.amcharts.com
+DOMAIN,cdn.amgreatness.com
+DOMAIN,cdn.animenewsnetwork.com
 DOMAIN,cdn.announcekit.app
 DOMAIN,cdn.answeroverflow.com
 DOMAIN,cdn.app.fossa.com
@@ -588,6 +590,7 @@ DOMAIN,cdn.bfldr.com
 DOMAIN,cdn.bigcloud.click
 DOMAIN,cdn.birdie.so
 DOMAIN,cdn.blogarama.com
+DOMAIN,cdn.bogos.io
 DOMAIN,cdn.boldmethod.com
 DOMAIN,cdn.botframework.com
 DOMAIN,cdn.branch.io
@@ -861,6 +864,7 @@ DOMAIN,cdn.road.cc
 DOMAIN,cdn.robinpro.gallery
 DOMAIN,cdn.roboflow.com
 DOMAIN,cdn.roof.ai
+DOMAIN,cdn.roseperl.com
 DOMAIN,cdn.royaleapi.com
 DOMAIN,cdn.safecharge.com
 DOMAIN,cdn.sanity.io
@@ -939,6 +943,7 @@ DOMAIN,cdn.uptimia.com
 DOMAIN,cdn.us-east-1.prod.moon.dubai.aws.dev
 DOMAIN,cdn.usd.fan
 DOMAIN,cdn.userreport.com
+DOMAIN,cdn.userway.org
 DOMAIN,cdn.v2ex.com
 DOMAIN,cdn.vector.co
 DOMAIN,cdn.verifypass.com
@@ -1167,6 +1172,7 @@ DOMAIN,components.justanswer.com
 DOMAIN,components.trynow.net
 DOMAIN,components.unrealengine.com
 DOMAIN,componentupdater.brave.com
+DOMAIN,conf.config-security.com
 DOMAIN,config.extension.grammarly.com
 DOMAIN,connect-js.stripe.com
 DOMAIN,connect.facebook.net
@@ -1591,6 +1597,7 @@ DOMAIN,f002.backblazeb2.com
 DOMAIN,f003.backblazeb2.com
 DOMAIN,f004.backblazeb2.com
 DOMAIN,fast.appcues.com
+DOMAIN,fast.chameleon.io
 DOMAIN,fast.wistia.com
 DOMAIN,fast.wistia.net
 DOMAIN,fastly-cloud.typenetwork.com
@@ -2315,6 +2322,7 @@ DOMAIN,jetpack.wordpress.com
 DOMAIN,jfe-cdn.qualtrics.com
 DOMAIN,jing.rocks
 DOMAIN,jnmedia.ero-video.net
+DOMAIN,jotai.org
 DOMAIN,js-1-cdn.airdroid.com
 DOMAIN,js-cdn.blockchair.io
 DOMAIN,js-cdn.music.apple.com
@@ -2325,6 +2333,7 @@ DOMAIN,js.braintreegateway.com
 DOMAIN,js.chargebee.com
 DOMAIN,js.chargify.com
 DOMAIN,js.chilipiper.com
+DOMAIN,js.convertflow.co
 DOMAIN,js.createsend1.com
 DOMAIN,js.hsforms.net
 DOMAIN,js.jotform.com
@@ -2355,6 +2364,7 @@ DOMAIN,jsdelivr.ioiox.net
 DOMAIN,jslibs.blackmagicdesign.com
 DOMAIN,jsonplaceholder.typicode.com
 DOMAIN,jssdk.opin.media
+DOMAIN,jssdkcdns.mparticle.com
 DOMAIN,jssocdn.indiatimes.com
 DOMAIN,kambing.uu.sg
 DOMAIN,kartolo.sby.datautama.net.id
@@ -2412,7 +2422,9 @@ DOMAIN,log-collector.17app.co
 DOMAIN,logos.composio.dev
 DOMAIN,logos.kiwibrowser.com
 DOMAIN,logos.speedtestcustom.com
+DOMAIN,logs.blip.net
 DOMAIN,loutre.blockchair.io
+DOMAIN,lucide.dev
 DOMAIN,lug.mines.edu
 DOMAIN,lzd-img-global.slatic.net
 DOMAIN,lzip.nongnu.org
@@ -3096,6 +3108,7 @@ DOMAIN,nightly.link
 DOMAIN,no-cache.hubspot.com
 DOMAIN,nobara-images.nobaraproject.org
 DOMAIN,node.green
+DOMAIN,nodebox-runtime.codesandbox.io
 DOMAIN,nodei.co
 DOMAIN,notebooklm.google.com
 DOMAIN,notnetflix.cos.cat
@@ -3351,6 +3364,7 @@ DOMAIN,repos.del.extreme-ix.org
 DOMAIN,repos.interior.edu.uy
 DOMAIN,repository.jboss.org
 DOMAIN,repository.su
+DOMAIN,res-3.cdn.office.net
 DOMAIN,res-geo.cdn.office.net
 DOMAIN,res.abc.net.au
 DOMAIN,res.cloudinary.com
@@ -3558,6 +3572,7 @@ DOMAIN,source.roboflow.com
 DOMAIN,source.unsplash.com
 DOMAIN,sourcemaps.squarespace.net
 DOMAIN,sourcepoint.theguardian.com
+DOMAIN,sourcepointcmp.bloomberg.com
 DOMAIN,sp-spiegel-de.spiegel.de
 DOMAIN,sp.nba.com
 DOMAIN,sp.replit.com
@@ -3658,6 +3673,7 @@ DOMAIN,static.beebom.com
 DOMAIN,static.bit.cloud
 DOMAIN,static.bit.dev
 DOMAIN,static.bitfinex.com
+DOMAIN,static.blip.net
 DOMAIN,static.bodor.com
 DOMAIN,static.bravoporn.com
 DOMAIN,static.buffer.com
@@ -3774,6 +3790,7 @@ DOMAIN,static.narrativ.com
 DOMAIN,static.netify.ai
 DOMAIN,static.newmobilelife.com
 DOMAIN,static.news.bitcoin.com
+DOMAIN,static.newsbreak.com
 DOMAIN,static.nicehash.com
 DOMAIN,static.npmjs.com
 DOMAIN,static.nrk.no
@@ -3809,6 +3826,7 @@ DOMAIN,static.reo.dev
 DOMAIN,static.replay.io
 DOMAIN,static.returngo.ai
 DOMAIN,static.roboflow.com
+DOMAIN,static.rumble.com
 DOMAIN,static.rust-lang.org
 DOMAIN,static.salidzini.lv
 DOMAIN,static.scarf.sh
@@ -4150,6 +4168,7 @@ DOMAIN,v2uploads.zopim.io
 DOMAIN,vanilla-extract.style
 DOMAIN,vcdn.anysex.com
 DOMAIN,vectorified.com
+DOMAIN,version.cyberduck.io
 DOMAIN,versionbadg.es
 DOMAIN,versioncheck-bg.addons.mozilla.org
 DOMAIN,versioncheck.addons.mozilla.org
@@ -5948,7 +5967,6 @@ DOMAIN-SUFFIX,jmsooo.com
 DOMAIN-SUFFIX,joeswall.com
 DOMAIN-SUFFIX,joinmaidez.com
 DOMAIN-SUFFIX,joox.com
-DOMAIN-SUFFIX,jotai.org
 DOMAIN-SUFFIX,jpg5.su
 DOMAIN-SUFFIX,jpgjingpinx.com
 DOMAIN-SUFFIX,js-agent.newrelic.com
@@ -6728,6 +6746,7 @@ DOMAIN-SUFFIX,realamericanstories.org
 DOMAIN-SUFFIX,realamericanstories.tv
 DOMAIN-SUFFIX,realmilwaukeenow.com
 DOMAIN-SUFFIX,reasoningtheory.net
+DOMAIN-SUFFIX,rechargecdn.com
 DOMAIN-SUFFIX,recharts.org
 DOMAIN-SUFFIX,recode.net
 DOMAIN-SUFFIX,redbunker.net
@@ -7614,6 +7633,7 @@ IP-CIDR,150.109.28.51/32,no-resolve
 IP-CIDR,151.5.17.19/32,no-resolve
 IP-CIDR,151.5.17.43/32,no-resolve
 IP-CIDR,152.53.67.239/32,no-resolve
+IP-CIDR,156.246.88.62/32,no-resolve
 IP-CIDR,159.138.102.146/32,no-resolve
 IP-CIDR,161.0.157.195/32,no-resolve
 IP-CIDR,161.0.157.73/32,no-resolve

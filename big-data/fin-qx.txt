@@ -1,5 +1,5 @@
-# Quantumult total line 8500
-# Last updated Wed 01/28/2026 22:22:31.65
+# Quantumult total line 8520
+# Last updated Sat 01/31/2026 22:18:40.70
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -565,6 +565,8 @@ HOST,cdn.adsninja.ca,LIST
 HOST,cdn.affine.pro,LIST
 HOST,cdn.aimerce.ai,LIST
 HOST,cdn.amcharts.com,LIST
+HOST,cdn.amgreatness.com,LIST
+HOST,cdn.animenewsnetwork.com,LIST
 HOST,cdn.announcekit.app,LIST
 HOST,cdn.answeroverflow.com,LIST
 HOST,cdn.app.fossa.com,LIST
@@ -588,6 +590,7 @@ HOST,cdn.bfldr.com,LIST
 HOST,cdn.bigcloud.click,LIST
 HOST,cdn.birdie.so,LIST
 HOST,cdn.blogarama.com,LIST
+HOST,cdn.bogos.io,LIST
 HOST,cdn.boldmethod.com,LIST
 HOST,cdn.botframework.com,LIST
 HOST,cdn.branch.io,LIST
@@ -861,6 +864,7 @@ HOST,cdn.road.cc,LIST
 HOST,cdn.robinpro.gallery,LIST
 HOST,cdn.roboflow.com,LIST
 HOST,cdn.roof.ai,LIST
+HOST,cdn.roseperl.com,LIST
 HOST,cdn.royaleapi.com,LIST
 HOST,cdn.safecharge.com,LIST
 HOST,cdn.sanity.io,LIST
@@ -939,6 +943,7 @@ HOST,cdn.uptimia.com,LIST
 HOST,cdn.us-east-1.prod.moon.dubai.aws.dev,LIST
 HOST,cdn.usd.fan,LIST
 HOST,cdn.userreport.com,LIST
+HOST,cdn.userway.org,LIST
 HOST,cdn.v2ex.com,LIST
 HOST,cdn.vector.co,LIST
 HOST,cdn.verifypass.com,LIST
@@ -1167,6 +1172,7 @@ HOST,components.justanswer.com,LIST
 HOST,components.trynow.net,LIST
 HOST,components.unrealengine.com,LIST
 HOST,componentupdater.brave.com,LIST
+HOST,conf.config-security.com,LIST
 HOST,config.extension.grammarly.com,LIST
 HOST,connect-js.stripe.com,LIST
 HOST,connect.facebook.net,LIST
@@ -1591,6 +1597,7 @@ HOST,f002.backblazeb2.com,LIST
 HOST,f003.backblazeb2.com,LIST
 HOST,f004.backblazeb2.com,LIST
 HOST,fast.appcues.com,LIST
+HOST,fast.chameleon.io,LIST
 HOST,fast.wistia.com,LIST
 HOST,fast.wistia.net,LIST
 HOST,fastly-cloud.typenetwork.com,LIST
@@ -2315,6 +2322,7 @@ HOST,jetpack.wordpress.com,LIST
 HOST,jfe-cdn.qualtrics.com,LIST
 HOST,jing.rocks,LIST
 HOST,jnmedia.ero-video.net,LIST
+HOST,jotai.org,LIST
 HOST,js-1-cdn.airdroid.com,LIST
 HOST,js-cdn.blockchair.io,LIST
 HOST,js-cdn.music.apple.com,LIST
@@ -2325,6 +2333,7 @@ HOST,js.braintreegateway.com,LIST
 HOST,js.chargebee.com,LIST
 HOST,js.chargify.com,LIST
 HOST,js.chilipiper.com,LIST
+HOST,js.convertflow.co,LIST
 HOST,js.createsend1.com,LIST
 HOST,js.hsforms.net,LIST
 HOST,js.jotform.com,LIST
@@ -2355,6 +2364,7 @@ HOST,jsdelivr.ioiox.net,LIST
 HOST,jslibs.blackmagicdesign.com,LIST
 HOST,jsonplaceholder.typicode.com,LIST
 HOST,jssdk.opin.media,LIST
+HOST,jssdkcdns.mparticle.com,LIST
 HOST,jssocdn.indiatimes.com,LIST
 HOST,kambing.uu.sg,LIST
 HOST,kartolo.sby.datautama.net.id,LIST
@@ -2412,7 +2422,9 @@ HOST,log-collector.17app.co,LIST
 HOST,logos.composio.dev,LIST
 HOST,logos.kiwibrowser.com,LIST
 HOST,logos.speedtestcustom.com,LIST
+HOST,logs.blip.net,LIST
 HOST,loutre.blockchair.io,LIST
+HOST,lucide.dev,LIST
 HOST,lug.mines.edu,LIST
 HOST,lzd-img-global.slatic.net,LIST
 HOST,lzip.nongnu.org,LIST
@@ -3096,6 +3108,7 @@ HOST,nightly.link,LIST
 HOST,no-cache.hubspot.com,LIST
 HOST,nobara-images.nobaraproject.org,LIST
 HOST,node.green,LIST
+HOST,nodebox-runtime.codesandbox.io,LIST
 HOST,nodei.co,LIST
 HOST,notebooklm.google.com,LIST
 HOST,notnetflix.cos.cat,LIST
@@ -3351,6 +3364,7 @@ HOST,repos.del.extreme-ix.org,LIST
 HOST,repos.interior.edu.uy,LIST
 HOST,repository.jboss.org,LIST
 HOST,repository.su,LIST
+HOST,res-3.cdn.office.net,LIST
 HOST,res-geo.cdn.office.net,LIST
 HOST,res.abc.net.au,LIST
 HOST,res.cloudinary.com,LIST
@@ -3558,6 +3572,7 @@ HOST,source.roboflow.com,LIST
 HOST,source.unsplash.com,LIST
 HOST,sourcemaps.squarespace.net,LIST
 HOST,sourcepoint.theguardian.com,LIST
+HOST,sourcepointcmp.bloomberg.com,LIST
 HOST,sp-spiegel-de.spiegel.de,LIST
 HOST,sp.nba.com,LIST
 HOST,sp.replit.com,LIST
@@ -3658,6 +3673,7 @@ HOST,static.beebom.com,LIST
 HOST,static.bit.cloud,LIST
 HOST,static.bit.dev,LIST
 HOST,static.bitfinex.com,LIST
+HOST,static.blip.net,LIST
 HOST,static.bodor.com,LIST
 HOST,static.bravoporn.com,LIST
 HOST,static.buffer.com,LIST
@@ -3774,6 +3790,7 @@ HOST,static.narrativ.com,LIST
 HOST,static.netify.ai,LIST
 HOST,static.newmobilelife.com,LIST
 HOST,static.news.bitcoin.com,LIST
+HOST,static.newsbreak.com,LIST
 HOST,static.nicehash.com,LIST
 HOST,static.npmjs.com,LIST
 HOST,static.nrk.no,LIST
@@ -3809,6 +3826,7 @@ HOST,static.reo.dev,LIST
 HOST,static.replay.io,LIST
 HOST,static.returngo.ai,LIST
 HOST,static.roboflow.com,LIST
+HOST,static.rumble.com,LIST
 HOST,static.rust-lang.org,LIST
 HOST,static.salidzini.lv,LIST
 HOST,static.scarf.sh,LIST
@@ -4150,6 +4168,7 @@ HOST,v2uploads.zopim.io,LIST
 HOST,vanilla-extract.style,LIST
 HOST,vcdn.anysex.com,LIST
 HOST,vectorified.com,LIST
+HOST,version.cyberduck.io,LIST
 HOST,versionbadg.es,LIST
 HOST,versioncheck-bg.addons.mozilla.org,LIST
 HOST,versioncheck.addons.mozilla.org,LIST
@@ -5948,7 +5967,6 @@ HOST-SUFFIX,jmsooo.com,LIST
 HOST-SUFFIX,joeswall.com,LIST
 HOST-SUFFIX,joinmaidez.com,LIST
 HOST-SUFFIX,joox.com,LIST
-HOST-SUFFIX,jotai.org,LIST
 HOST-SUFFIX,jpg5.su,LIST
 HOST-SUFFIX,jpgjingpinx.com,LIST
 HOST-SUFFIX,js-agent.newrelic.com,LIST
@@ -6728,6 +6746,7 @@ HOST-SUFFIX,realamericanstories.org,LIST
 HOST-SUFFIX,realamericanstories.tv,LIST
 HOST-SUFFIX,realmilwaukeenow.com,LIST
 HOST-SUFFIX,reasoningtheory.net,LIST
+HOST-SUFFIX,rechargecdn.com,LIST
 HOST-SUFFIX,recharts.org,LIST
 HOST-SUFFIX,recode.net,LIST
 HOST-SUFFIX,redbunker.net,LIST
@@ -7614,6 +7633,7 @@ IP-CIDR,150.109.28.51/32,LIST,no-resolve
 IP-CIDR,151.5.17.19/32,LIST,no-resolve
 IP-CIDR,151.5.17.43/32,LIST,no-resolve
 IP-CIDR,152.53.67.239/32,LIST,no-resolve
+IP-CIDR,156.246.88.62/32,LIST,no-resolve
 IP-CIDR,159.138.102.146/32,LIST,no-resolve
 IP-CIDR,161.0.157.195/32,LIST,no-resolve
 IP-CIDR,161.0.157.73/32,LIST,no-resolve
