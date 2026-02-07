@@ -1,5 +1,5 @@
-# Clash total line 8543
-# Last updated Wed 02/04/2026 22:21:11.01
+# Clash total line 8597
+# Last updated Sat 02/07/2026 22:20:09.86
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -473,6 +473,7 @@ payload:
   - DOMAIN,cached.rebuyengine.com
   - DOMAIN,canny-assets.io
   - DOMAIN,canvas-lb.tubitv.com
+  - DOMAIN,cartodb-basemaps-a.global.ssl.fastly.net
   - DOMAIN,cassette.sphdigital.com.sg
   - DOMAIN,cc-embed.adobe.com
   - DOMAIN,cc.boyfriendtv.com
@@ -722,6 +723,7 @@ payload:
   - DOMAIN,cdn.hiive.space
   - DOMAIN,cdn.hk01.com
   - DOMAIN,cdn.hongkongcard.com
+  - DOMAIN,cdn.hubble.team
   - DOMAIN,cdn.hyperbeam.com
   - DOMAIN,cdn.hypershort.com
   - DOMAIN,cdn.i-scmp.com
@@ -837,6 +839,7 @@ payload:
   - DOMAIN,cdn.pkg.svc.ui.com
   - DOMAIN,cdn.plaid.com
   - DOMAIN,cdn.player.fm
+  - DOMAIN,cdn.playersupport.riotgames.com
   - DOMAIN,cdn.playwire.com
   - DOMAIN,cdn.plot.ly
   - DOMAIN,cdn.plu.mx
@@ -862,6 +865,7 @@ payload:
   - DOMAIN,cdn.reimu.net
   - DOMAIN,cdn.repo.cloudeka.id
   - DOMAIN,cdn.rex.contents.rakuten.co.jp
+  - DOMAIN,cdn.rgpub.io
   - DOMAIN,cdn.rive.app
   - DOMAIN,cdn.road.cc
   - DOMAIN,cdn.robinpro.gallery
@@ -1880,6 +1884,7 @@ payload:
   - DOMAIN,genesis-cdn.ff.com
   - DOMAIN,geoip-js.com
   - DOMAIN,geojson.io
+  - DOMAIN,geoserveis.icgc.cat
   - DOMAIN,get.pixelexperience.org
   - DOMAIN,gfx-data.news-engineering.aws.wapo.pub
   - DOMAIN,ghfast.top
@@ -3514,6 +3519,7 @@ payload:
   - DOMAIN,sdk.customfit.ai
   - DOMAIN,sdk.gleap.io
   - DOMAIN,sdk.helloextend.com
+  - DOMAIN,sdk.hubble.team
   - DOMAIN,sdk.listenlive.co
   - DOMAIN,sdk.loyaltylion.net
   - DOMAIN,sdk.privacy-center.org
@@ -4005,12 +4011,52 @@ payload:
   - DOMAIN,thumbor.forbes.com
   - DOMAIN,thumbs.onlyfans.com
   - DOMAIN,thumbsnap.com
+  - DOMAIN,tile.loc.gov
+  - DOMAIN,tile.mapzen.com
+  - DOMAIN,tile.mtbmap.cz
+  - DOMAIN,tile.nextzen.org
+  - DOMAIN,tile.opentopomap.org
+  - DOMAIN,tile.openweathermap.org
+  - DOMAIN,tile.osm.be
+  - DOMAIN,tile.osmand.net
+  - DOMAIN,tile.ourmap.us
+  - DOMAIN,tile.poloha.net
+  - DOMAIN,tile.skybrush.io
+  - DOMAIN,tile.thunderforest.com
+  - DOMAIN,tile.waymarkedtrails.org
   - DOMAIN,tile2.intervals.icu
+  - DOMAIN,tile2.opencyclemap.org
+  - DOMAIN,tilecache.rainviewer.com
+  - DOMAIN,tiledbasemaps.arcgis.com
+  - DOMAIN,tilemaps.icgc.cat
+  - DOMAIN,tiles-a.koordinates.com
+  - DOMAIN,tiles.arcgis.com
+  - DOMAIN,tiles.arcticconnect.ca
+  - DOMAIN,tiles.gsj.jp
+  - DOMAIN,tiles.immich.cloud
+  - DOMAIN,tiles.mapilion.com
+  - DOMAIN,tiles.mapillary.com
+  - DOMAIN,tiles.maps.eox.at
+  - DOMAIN,tiles.maps.opensearch.org
+  - DOMAIN,tiles.mapterhorn.com
   - DOMAIN,tiles.meteoguard.dtn.com
   - DOMAIN,tiles.openfreemap.org
+  - DOMAIN,tiles.openrailwaymap.org
+  - DOMAIN,tiles.openseamap.org
+  - DOMAIN,tiles.openskimap.org
+  - DOMAIN,tiles.planet.com
   - DOMAIN,tiles.stadiamaps.com
+  - DOMAIN,tiles.terria.io
   - DOMAIN,tiles.versatiles.org
   - DOMAIN,tiles.windy.com
+  - DOMAIN,tiles.wmflabs.org
+  - DOMAIN,tiles0.planet.com
+  - DOMAIN,tiles1.planet.com
+  - DOMAIN,tiles2.mapiful.com
+  - DOMAIN,tiles2.planet.com
+  - DOMAIN,tiles3.planet.com
+  - DOMAIN,tileserver.gnome.org
+  - DOMAIN,tileserver.memomaps.de
   - DOMAIN,time-a.nist.gov
   - DOMAIN,time.apple.com
   - DOMAIN,time.cloudflare.com
@@ -4709,6 +4755,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.angruo.com
   - DOMAIN-SUFFIX,cdn.applicationinsights.io
   - DOMAIN-SUFFIX,cdn.autoevolution.com
+  - DOMAIN-SUFFIX,cdn.bgp.yt
   - DOMAIN-SUFFIX,cdn.blizzard.com
   - DOMAIN-SUFFIX,cdn.bsky.app
   - DOMAIN-SUFFIX,cdn.chrome.marketplace.aws.dev
@@ -6497,6 +6544,7 @@ payload:
   - DOMAIN-SUFFIX,onetrust.com
   - DOMAIN-SUFFIX,onrender.com
   - DOMAIN-SUFFIX,onyra.cc
+  - DOMAIN-SUFFIX,openinframap.org
   - DOMAIN-SUFFIX,openload.co
   - DOMAIN-SUFFIX,opentelemetry.io
   - DOMAIN-SUFFIX,operacdn.com
@@ -7091,9 +7139,15 @@ payload:
   - DOMAIN-SUFFIX,tiktokw.com
   - DOMAIN-SUFFIX,tildacdn.com
   - DOMAIN-SUFFIX,tildacdn.net
+  - DOMAIN-SUFFIX,tile-cyclosm.openstreetmap.fr
+  - DOMAIN-SUFFIX,tile.openstreetmap.bzh
   - DOMAIN-SUFFIX,tile.openstreetmap.de
+  - DOMAIN-SUFFIX,tile.openstreetmap.fr
   - DOMAIN-SUFFIX,tile.openstreetmap.org
+  - DOMAIN-SUFFIX,tile.osm.ch
   - DOMAIN-SUFFIX,tile.osm.org
+  - DOMAIN-SUFFIX,tile.osmz.ru
+  - DOMAIN-SUFFIX,tile.stamen.com
   - DOMAIN-SUFFIX,tiles-api.maps.komoot.net
   - DOMAIN-SUFFIX,tiles.mapbox.com
   - DOMAIN-SUFFIX,tiles.virtualearth.net
