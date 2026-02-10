@@ -1,5 +1,5 @@
-# Clash total line 4352
-# Last updated Sat 02/07/2026 22:19:57.12
+# Clash total line 4358
+# Last updated Tue 02/10/2026 22:35:33.51
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -669,6 +669,7 @@ payload:
   - DOMAIN,cdn.img.ly
   - DOMAIN,cdn.infoq.com
   - DOMAIN,cdn.insightmediagroup.io
+  - DOMAIN,cdn.inviter.co
   - DOMAIN,cdn.ionos.de
   - DOMAIN,cdn.ip2location.com
   - DOMAIN,cdn.ip2location.io
@@ -1079,6 +1080,7 @@ payload:
   - DOMAIN,cms-cdn.goat.com
   - DOMAIN,cms-cdn.now.gg
   - DOMAIN,cms.blavity.com
+  - DOMAIN,cms.mistral.ai
   - DOMAIN,cms.myfonts.com
   - DOMAIN,cms.recordedfuture.com
   - DOMAIN,cms.therecord.media
@@ -1457,11 +1459,14 @@ payload:
   - DOMAIN,i.xgroovy.com
   - DOMAIN,i.xozilla.xxx
   - DOMAIN,i.xxxshake.com
+  - DOMAIN,i1.xiaoyakankan.com
   - DOMAIN,i2.anysex.com
   - DOMAIN,i2.bahamut.com.tw
   - DOMAIN,i2.hentaifox.com
   - DOMAIN,i2.nhentai.net
+  - DOMAIN,i2.xiaoyakankan.com
   - DOMAIN,i3.anysex.com
+  - DOMAIN,i3.xiaoyakankan.com
   - DOMAIN,i4.anysex.com
   - DOMAIN,ias.r10s.jp
   - DOMAIN,icdn.javxx.com
@@ -2163,6 +2168,7 @@ payload:
   - DOMAIN,platform.vox.com
   - DOMAIN,platforms.makemytrip.com
   - DOMAIN,play.gotolstoy.com
+  - DOMAIN,play.modujx11.com
   - DOMAIN,play.publicradio.org
   - DOMAIN,play.vidyard.com
   - DOMAIN,play.xfvod.pro
