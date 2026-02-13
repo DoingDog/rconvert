@@ -1,5 +1,5 @@
-# Clash total line 8602
-# Last updated Tue 02/10/2026 22:35:45.65
+# Clash total line 8603
+# Last updated Fri 02/13/2026 22:28:01.40
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -526,6 +526,7 @@ payload:
   - DOMAIN,cdn-msp.jmcomic-zzz.one
   - DOMAIN,cdn-msp.jmcomic.me
   - DOMAIN,cdn-node.diskpart.com
+  - DOMAIN,cdn-nsbus.ui.com
   - DOMAIN,cdn-patch.swtor.com
   - DOMAIN,cdn-public-apis.moonlock.com
   - DOMAIN,cdn-public.sociabble.com
