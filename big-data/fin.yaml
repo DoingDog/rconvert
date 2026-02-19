@@ -1,5 +1,5 @@
-# Clash total line 8604
-# Last updated Mon 02/16/2026 22:23:12.64
+# Clash total line 8606
+# Last updated Thu 02/19/2026 22:26:35.99
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1080,6 +1080,7 @@ payload:
   - DOMAIN,cdnc.imagefap.com
   - DOMAIN,cdne-pics.youjizz.com
   - DOMAIN,cdnfonts.devolutions.net
+  - DOMAIN,cdni.iconscout.com
   - DOMAIN,cdni.pornpics.com
   - DOMAIN,cdnjs.betterstack.com
   - DOMAIN,cdnjs.buymeacoffee.com
@@ -3210,6 +3211,7 @@ payload:
   - DOMAIN,pf-cdn-content-prod.azureedge.net
   - DOMAIN,pg2dhpc3p5ec22g3.jkforum.net
   - DOMAIN,pgw.udn.com.tw
+  - DOMAIN,ph.northflank.com
   - DOMAIN,phishing.army
   - DOMAIN,photos5.appleinsider.com
   - DOMAIN,pic.7mmtv.me
