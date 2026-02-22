@@ -1,5 +1,5 @@
-# Clash total line 4362
-# Last updated Thu 02/19/2026 22:26:22.91
+# Clash total line 4363
+# Last updated Sun 02/22/2026 22:19:31.55
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -2282,6 +2282,7 @@ payload:
   - DOMAIN,resource-accel.fs.com
   - DOMAIN,resource.akashic.coe.nicovideo.jp
   - DOMAIN,resource.fs.com
+  - DOMAIN,resource.logitech.com
   - DOMAIN,resource.tnlmediagene.com
   - DOMAIN,resource.video.nimg.jp
   - DOMAIN,resources-cache.prod.sketch.com
