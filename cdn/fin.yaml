@@ -1,5 +1,5 @@
-# Clash total line 4396
-# Last updated Sun 03/01/2026 22:18:56.62
+# Clash total line 4398
+# Last updated Wed 03/04/2026 22:26:00.78
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -594,6 +594,7 @@ payload:
   - DOMAIN,cdn.decrypt.co
   - DOMAIN,cdn.decrypt.day
   - DOMAIN,cdn.delight-vr.com
+  - DOMAIN,cdn.delve.co
   - DOMAIN,cdn.designerapp.osi.office.net
   - DOMAIN,cdn.designsystem.arm.com
   - DOMAIN,cdn.deta.space
@@ -2593,6 +2594,7 @@ payload:
   - DOMAIN,static.ahu.moe
   - DOMAIN,static.airtable.com
   - DOMAIN,static.aizanmei.org
+  - DOMAIN,static.ampcode.com
   - DOMAIN,static.animaapp.com
   - DOMAIN,static.aninoapps.com
   - DOMAIN,static.anyporn.com

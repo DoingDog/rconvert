@@ -1,5 +1,5 @@
-# Clash total line 8640
-# Last updated Sun 03/01/2026 22:19:08.77
+# Clash total line 8646
+# Last updated Wed 03/04/2026 22:26:13.04
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -569,6 +569,7 @@ payload:
   - DOMAIN,cdn.adguard.info
   - DOMAIN,cdn.adsninja.ca
   - DOMAIN,cdn.affine.pro
+  - DOMAIN,cdn.affonso.io
   - DOMAIN,cdn.aimerce.ai
   - DOMAIN,cdn.amcharts.com
   - DOMAIN,cdn.amgreatness.com
@@ -655,6 +656,7 @@ payload:
   - DOMAIN,cdn.decrypt.co
   - DOMAIN,cdn.decrypt.day
   - DOMAIN,cdn.delight-vr.com
+  - DOMAIN,cdn.delve.co
   - DOMAIN,cdn.designerapp.osi.office.net
   - DOMAIN,cdn.designsystem.arm.com
   - DOMAIN,cdn.deta.space
@@ -960,6 +962,7 @@ payload:
   - DOMAIN,cdn.userway.org
   - DOMAIN,cdn.v2ex.com
   - DOMAIN,cdn.vector.co
+  - DOMAIN,cdn.vemetric.com
   - DOMAIN,cdn.verifypass.com
   - DOMAIN,cdn.viafoura.net
   - DOMAIN,cdn.vidyard.com
@@ -1500,6 +1503,7 @@ payload:
   - DOMAIN,download.tensorflow.google.com
   - DOMAIN,download.todesktop.com
   - DOMAIN,download.typora.io
+  - DOMAIN,download.umbrel.com
   - DOMAIN,download.visualstudio.microsoft.com
   - DOMAIN,download.xbox.com
   - DOMAIN,download2.epicgames.com
@@ -3706,6 +3710,7 @@ payload:
   - DOMAIN,static.ahu.moe
   - DOMAIN,static.airtable.com
   - DOMAIN,static.aizanmei.org
+  - DOMAIN,static.ampcode.com
   - DOMAIN,static.animaapp.com
   - DOMAIN,static.aninoapps.com
   - DOMAIN,static.anyporn.com
@@ -4121,6 +4126,7 @@ payload:
   - DOMAIN,turbo.build
   - DOMAIN,tux.rainside.sk
   - DOMAIN,twenty-icons.com
+  - DOMAIN,typeless-static.com
   - DOMAIN,typescript-eslint.io
   - DOMAIN,typescript.azureedge.net
   - DOMAIN,typescript.visualstudio.com
