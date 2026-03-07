@@ -1,5 +1,5 @@
-# Clash total line 4398
-# Last updated Wed 03/04/2026 22:26:00.78
+# Clash total line 4403
+# Last updated Sat 03/07/2026 22:18:42.06
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -167,6 +167,7 @@ payload:
   - DOMAIN,assets.dify.ai
   - DOMAIN,assets.dnsfilter.com
   - DOMAIN,assets.documentcloud.org
+  - DOMAIN,assets.driffle.com
   - DOMAIN,assets.dub.co
   - DOMAIN,assets.ecomm.ui.com
   - DOMAIN,assets.embeddables.com
@@ -253,6 +254,7 @@ payload:
   - DOMAIN,assets.raspberrypi.com
   - DOMAIN,assets.redbullshop.com
   - DOMAIN,assets.repair.org
+  - DOMAIN,assets.reviews.io
   - DOMAIN,assets.safing.io
   - DOMAIN,assets.salesmartly.com
   - DOMAIN,assets.scaleflex.com
@@ -509,6 +511,7 @@ payload:
   - DOMAIN,cdn.adsninja.ca
   - DOMAIN,cdn.affine.pro
   - DOMAIN,cdn.aimerce.ai
+  - DOMAIN,cdn.allkeyshop.com
   - DOMAIN,cdn.amcharts.com
   - DOMAIN,cdn.amgreatness.com
   - DOMAIN,cdn.animenewsnetwork.com
@@ -1881,7 +1884,6 @@ payload:
   - DOMAIN,launcher.spot.im
   - DOMAIN,launchercontent.mojang.com
   - DOMAIN,lc.nssurge.com
-  - DOMAIN,lcdn-locator.apple.com
   - DOMAIN,learn-attachment.microsoft.com
   - DOMAIN,learn.optimizely.com
   - DOMAIN,lecontent.sololearn.com
@@ -2643,6 +2645,7 @@ payload:
   - DOMAIN,static.crypto.com
   - DOMAIN,static.deepl.com
   - DOMAIN,static.doujins.com
+  - DOMAIN,static.driffle.com
   - DOMAIN,static.drtuber.com
   - DOMAIN,static.dw.com
   - DOMAIN,static.dzeninfra.ru
@@ -3148,6 +3151,7 @@ payload:
   - DOMAIN,website-media.deel.com
   - DOMAIN,website-prod.cache.wpscdn.com
   - DOMAIN,webstatic.chargebee.com
+  - DOMAIN,widget.allkeyshop.com
   - DOMAIN,widget.automizely.com
   - DOMAIN,widget.datablocks.se
   - DOMAIN,widget.docsbot.ai
@@ -3156,6 +3160,7 @@ payload:
   - DOMAIN,widget.gotolstoy.com
   - DOMAIN,widget.intercom.io
   - DOMAIN,widget.kapa.ai
+  - DOMAIN,widget.reviews.io
   - DOMAIN,widget.trustpilot.com
   - DOMAIN,widget.usepylon.com
   - DOMAIN,widget.user.com
