@@ -1,5 +1,5 @@
-# Clash total line 8650
-# Last updated Sat 03/07/2026 22:18:55.51
+# Clash total line 8656
+# Last updated Tue 03/10/2026 22:22:39.78
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -602,6 +602,7 @@ payload:
   - DOMAIN,cdn.blogarama.com
   - DOMAIN,cdn.bogos.io
   - DOMAIN,cdn.boldmethod.com
+  - DOMAIN,cdn.boostcommerce.io
   - DOMAIN,cdn.botframework.com
   - DOMAIN,cdn.branch.io
   - DOMAIN,cdn.brandfetch.io
@@ -702,6 +703,7 @@ payload:
   - DOMAIN,cdn.forms.office.net
   - DOMAIN,cdn.fosstodon.org
   - DOMAIN,cdn.fourthwall.com
+  - DOMAIN,cdn.foxycart.com
   - DOMAIN,cdn.freebiesupply.com
   - DOMAIN,cdn.freecodecamp.org
   - DOMAIN,cdn.freesound.org
@@ -731,6 +733,7 @@ payload:
   - DOMAIN,cdn.hextom.com
   - DOMAIN,cdn.highporn.net
   - DOMAIN,cdn.hiive.space
+  - DOMAIN,cdn.himetrica.com
   - DOMAIN,cdn.hk01.com
   - DOMAIN,cdn.hongkongcard.com
   - DOMAIN,cdn.hubble.team
@@ -1311,6 +1314,7 @@ payload:
   - DOMAIN,data.pendo.io
   - DOMAIN,data.schemaapp.com
   - DOMAIN,data.web.clickup.com
+  - DOMAIN,data3.answerbase.com
   - DOMAIN,david-dm.org
   - DOMAIN,daznfeeds.com.edgekey.net
   - DOMAIN,db.onlinewebfonts.com
@@ -3378,6 +3382,7 @@ payload:
   - DOMAIN,release.runcloud.io
   - DOMAIN,releases.arc.net
   - DOMAIN,releases.grapheneos.org
+  - DOMAIN,releases.landrop.app
   - DOMAIN,releases.obsidian.md
   - DOMAIN,releases.stash.ws
   - DOMAIN,releases.warp.dev
@@ -7044,6 +7049,7 @@ payload:
   - DOMAIN-SUFFIX,st.dl.eccdnx.com
   - DOMAIN-SUFFIX,st.dl.pinyuncloud.com
   - DOMAIN-SUFFIX,stack.imgur.com
+  - DOMAIN-SUFFIX,stackassets.com
   - DOMAIN-SUFFIX,stackblitz.io
   - DOMAIN-SUFFIX,stackpathcdn.com
   - DOMAIN-SUFFIX,stapecdn.com
