@@ -1,5 +1,5 @@
-# Quantumult total line 29923
-# Last updated Tue 03/10/2026 22:23:00.47
+# Quantumult total line 29921
+# Last updated Fri 03/13/2026 22:25:17.26
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe,LIST
 HOST,a.iqmtp.live,LIST
@@ -31,6 +31,7 @@ HOST,ocsp2.globalsign.com,LIST
 HOST,origin-a.akamaihd.ne,LIST
 HOST,origin-a.akamaihd.net,LIST
 HOST,pi.hole,LIST
+HOST,public.localsend.org,LIST
 HOST,raw.iqiq.io,LIST
 HOST,repeater.asus.com,LIST
 HOST,router.asus.com,LIST
@@ -6982,7 +6983,6 @@ HOST-SUFFIX,downbei.com,LIST
 HOST-SUFFIX,downcc.com,LIST
 HOST-SUFFIX,downjoy.com,LIST
 HOST-SUFFIX,downjoy.net,LIST
-HOST-SUFFIX,download.555mac.com,LIST
 HOST-SUFFIX,downxia.com,LIST
 HOST-SUFFIX,downyi.com,LIST
 HOST-SUFFIX,downza.com,LIST
@@ -22949,7 +22949,6 @@ HOST-SUFFIX,toptowntravel.com,LIST
 HOST-SUFFIX,toptoyglobal.com,LIST
 HOST-SUFFIX,topyun.tv,LIST
 HOST-SUFFIX,torportech.com,LIST
-HOST-SUFFIX,torrentmac.net,LIST
 HOST-SUFFIX,toscdn.com,LIST
 HOST-SUFFIX,tosspai.com,LIST
 HOST-SUFFIX,totapps.com,LIST
@@ -29622,7 +29621,6 @@ HOST-KEYWORD,cnki.net,LIST
 HOST-KEYWORD,deepdyve,LIST
 HOST-KEYWORD,els-cdn,LIST
 HOST-KEYWORD,elsevier,LIST
-HOST-KEYWORD,mac-torrent-download,LIST
 HOST-KEYWORD,microsoft,LIST
 HOST-KEYWORD,officecdn,LIST
 HOST-KEYWORD,pkulaw,LIST

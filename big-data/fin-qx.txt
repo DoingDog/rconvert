@@ -1,5 +1,5 @@
-# Quantumult total line 8642
-# Last updated Tue 03/10/2026 22:22:39.72
+# Quantumult total line 8646
+# Last updated Fri 03/13/2026 22:24:57.51
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1604,6 +1604,7 @@ HOST,eu1.hamreus.com,LIST
 HOST,eu2.hamreus.com,LIST
 HOST,eu3.hamreus.com,LIST
 HOST,euc-widget.freshworks.com,LIST
+HOST,event-assets.gsma.com,LIST
 HOST,event.ithome.com.tw,LIST
 HOST,events-delivery.apple.com,LIST
 HOST,events-live.apple.com,LIST
@@ -1623,6 +1624,7 @@ HOST,f001.backblazeb2.com,LIST
 HOST,f002.backblazeb2.com,LIST
 HOST,f003.backblazeb2.com,LIST
 HOST,f004.backblazeb2.com,LIST
+HOST,fa.gsma.com,LIST
 HOST,fast.appcues.com,LIST
 HOST,fast.chameleon.io,LIST
 HOST,fast.wistia.com,LIST
@@ -5471,6 +5473,7 @@ HOST-SUFFIX,fnbuilds.services,LIST
 HOST-SUFFIX,fncstatic.com,LIST
 HOST-SUFFIX,fontawesome.com,LIST
 HOST-SUFFIX,fonts.com,LIST
+HOST-SUFFIX,fonts.gsma.com,LIST
 HOST-SUFFIX,fonts.net,LIST
 HOST-SUFFIX,forbesimg.com,LIST
 HOST-SUFFIX,forgecdn.net,LIST
@@ -7626,6 +7629,7 @@ HOST-SUFFIX,ziddu.com,LIST
 HOST-SUFFIX,ziffstatic.com,LIST
 HOST-SUFFIX,ziglang.org,LIST
 HOST-SUFFIX,zippyshare.com,LIST
+HOST-SUFFIX,zkcdn.net,LIST
 HOST-SUFFIX,zn.al,LIST
 HOST-SUFFIX,zofile.com,LIST
 HOST-SUFFIX,zohocdn.com,LIST

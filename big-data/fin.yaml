@@ -1,5 +1,5 @@
-# Clash total line 8656
-# Last updated Tue 03/10/2026 22:22:39.78
+# Clash total line 8660
+# Last updated Fri 03/13/2026 22:24:57.57
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1605,6 +1605,7 @@ payload:
   - DOMAIN,eu2.hamreus.com
   - DOMAIN,eu3.hamreus.com
   - DOMAIN,euc-widget.freshworks.com
+  - DOMAIN,event-assets.gsma.com
   - DOMAIN,event.ithome.com.tw
   - DOMAIN,events-delivery.apple.com
   - DOMAIN,events-live.apple.com
@@ -1624,6 +1625,7 @@ payload:
   - DOMAIN,f002.backblazeb2.com
   - DOMAIN,f003.backblazeb2.com
   - DOMAIN,f004.backblazeb2.com
+  - DOMAIN,fa.gsma.com
   - DOMAIN,fast.appcues.com
   - DOMAIN,fast.chameleon.io
   - DOMAIN,fast.wistia.com
@@ -5472,6 +5474,7 @@ payload:
   - DOMAIN-SUFFIX,fncstatic.com
   - DOMAIN-SUFFIX,fontawesome.com
   - DOMAIN-SUFFIX,fonts.com
+  - DOMAIN-SUFFIX,fonts.gsma.com
   - DOMAIN-SUFFIX,fonts.net
   - DOMAIN-SUFFIX,forbesimg.com
   - DOMAIN-SUFFIX,forgecdn.net
@@ -7627,6 +7630,7 @@ payload:
   - DOMAIN-SUFFIX,ziffstatic.com
   - DOMAIN-SUFFIX,ziglang.org
   - DOMAIN-SUFFIX,zippyshare.com
+  - DOMAIN-SUFFIX,zkcdn.net
   - DOMAIN-SUFFIX,zn.al
   - DOMAIN-SUFFIX,zofile.com
   - DOMAIN-SUFFIX,zohocdn.com

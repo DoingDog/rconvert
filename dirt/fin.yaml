@@ -1,5 +1,5 @@
-# Clash total line 29967
-# Last updated Tue 03/10/2026 22:23:00.58
+# Clash total line 29964
+# Last updated Fri 03/13/2026 22:25:17.36
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
@@ -32,6 +32,7 @@ payload:
   - DOMAIN,origin-a.akamaihd.ne
   - DOMAIN,origin-a.akamaihd.net
   - DOMAIN,pi.hole
+  - DOMAIN,public.localsend.org
   - DOMAIN,raw.iqiq.io
   - DOMAIN,repeater.asus.com
   - DOMAIN,router.asus.com
@@ -6983,7 +6984,6 @@ payload:
   - DOMAIN-SUFFIX,downcc.com
   - DOMAIN-SUFFIX,downjoy.com
   - DOMAIN-SUFFIX,downjoy.net
-  - DOMAIN-SUFFIX,download.555mac.com
   - DOMAIN-SUFFIX,downxia.com
   - DOMAIN-SUFFIX,downyi.com
   - DOMAIN-SUFFIX,downza.com
@@ -22950,7 +22950,6 @@ payload:
   - DOMAIN-SUFFIX,toptoyglobal.com
   - DOMAIN-SUFFIX,topyun.tv
   - DOMAIN-SUFFIX,torportech.com
-  - DOMAIN-SUFFIX,torrentmac.net
   - DOMAIN-SUFFIX,toscdn.com
   - DOMAIN-SUFFIX,tosspai.com
   - DOMAIN-SUFFIX,totapps.com
@@ -29623,7 +29622,6 @@ payload:
   - DOMAIN-KEYWORD,deepdyve
   - DOMAIN-KEYWORD,els-cdn
   - DOMAIN-KEYWORD,elsevier
-  - DOMAIN-KEYWORD,mac-torrent-download
   - DOMAIN-KEYWORD,microsoft
   - DOMAIN-KEYWORD,officecdn
   - DOMAIN-KEYWORD,pkulaw
@@ -29925,7 +29923,6 @@ payload:
   - IP-CIDR6,::ffff:60.171.183.161/128,no-resolve
   - IP-CIDR6,::ffff:60.171.183.186/128,no-resolve
   - IP-CIDR6,::ffff:60.171.183.98/128,no-resolve
-  - PROCESS-NAME,AdGuardHome
   - PROCESS-NAME,BaiduNetdisk_mac
   - PROCESS-NAME,BitComet
   - PROCESS-NAME,ClashX
