@@ -1,5 +1,5 @@
-# Clash total line 4413
-# Last updated Fri 03/13/2026 22:24:45.88
+# Clash total line 4417
+# Last updated Mon 03/16/2026 22:28:09.53
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -263,6 +263,7 @@ payload:
   - DOMAIN,assets.science.nasa.gov
   - DOMAIN,assets.sendinblue.com
   - DOMAIN,assets.shazam.com
+  - DOMAIN,assets.shots.so
   - DOMAIN,assets.slater.app
   - DOMAIN,assets.sololearn.com
   - DOMAIN,assets.speedvitals.com
@@ -1403,6 +1404,7 @@ payload:
   - DOMAIN,geojson.io
   - DOMAIN,geoserveis.icgc.cat
   - DOMAIN,gfx-data.news-engineering.aws.wapo.pub
+  - DOMAIN,gibs-c.earthdata.nasa.gov
   - DOMAIN,gitpkg-fork.vercel.sh
   - DOMAIN,global-assets.fitch.group
   - DOMAIN,global.divhunt.com
@@ -1935,6 +1937,7 @@ payload:
   - DOMAIN,mangaz-books.j-comi.jp
   - DOMAIN,mangaz-static.j-comi.jp
   - DOMAIN,mantisloader.mantis-awx.com
+  - DOMAIN,map.adsbexchange.com
   - DOMAIN,map.vesselfinder.net
   - DOMAIN,maps.geoapify.com
   - DOMAIN,maps.gstatic.com
@@ -3826,6 +3829,7 @@ payload:
   - DOMAIN-SUFFIX,jsdelivr.net
   - DOMAIN-SUFFIX,jspm.dev
   - DOMAIN-SUFFIX,jspm.io
+  - DOMAIN-SUFFIX,jspm.org
   - DOMAIN-SUFFIX,jstatic.xyz
   - DOMAIN-SUFFIX,jw-cdn.org
   - DOMAIN-SUFFIX,jwpcdn.com

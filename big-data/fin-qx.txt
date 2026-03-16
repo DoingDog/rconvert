@@ -1,5 +1,5 @@
-# Quantumult total line 8646
-# Last updated Fri 03/13/2026 22:24:57.51
+# Quantumult total line 8651
+# Last updated Mon 03/16/2026 22:28:21.84
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -305,6 +305,7 @@ HOST,assets.scaleway.com,LIST
 HOST,assets.science.nasa.gov,LIST
 HOST,assets.sendinblue.com,LIST
 HOST,assets.shazam.com,LIST
+HOST,assets.shots.so,LIST
 HOST,assets.slater.app,LIST
 HOST,assets.sololearn.com,LIST
 HOST,assets.speedvitals.com,LIST
@@ -1523,6 +1524,7 @@ HOST,downloads.coindesk.com,LIST
 HOST,downloads.lemonsqueezy.com,LIST
 HOST,downloads.majestic.com,LIST
 HOST,downloads.openwrt.org,LIST
+HOST,downloads.portainer.io,LIST
 HOST,downloads.raspberrypi.com,LIST
 HOST,downloads.wordpress.org,LIST
 HOST,downloads.x-wrt.com,LIST
@@ -1913,6 +1915,7 @@ HOST,ghfast.top,LIST
 HOST,ghgo.xyz,LIST
 HOST,ghp.ci,LIST
 HOST,giano.com.dist.unige.it,LIST
+HOST,gibs-c.earthdata.nasa.gov,LIST
 HOST,gimp.astra.in.ua,LIST
 HOST,gimp.ca,LIST
 HOST,gimp.ip-connect.info,LIST
@@ -2478,6 +2481,7 @@ HOST,makerworld.bblmw.com,LIST
 HOST,mangaz-books.j-comi.jp,LIST
 HOST,mangaz-static.j-comi.jp,LIST
 HOST,mantisloader.mantis-awx.com,LIST
+HOST,map.adsbexchange.com,LIST
 HOST,map.vesselfinder.net,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
@@ -6100,6 +6104,7 @@ HOST-SUFFIX,jsdelivr.com,LIST
 HOST-SUFFIX,jsdelivr.net,LIST
 HOST-SUFFIX,jspm.dev,LIST
 HOST-SUFFIX,jspm.io,LIST
+HOST-SUFFIX,jspm.org,LIST
 HOST-SUFFIX,jstatic.xyz,LIST
 HOST-SUFFIX,jtvnw.net,LIST
 HOST-SUFFIX,ju.dog,LIST

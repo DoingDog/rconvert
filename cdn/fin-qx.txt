@@ -1,5 +1,5 @@
-# Quantumult total line 4413
-# Last updated Fri 03/13/2026 22:24:45.84
+# Quantumult total line 4417
+# Last updated Mon 03/16/2026 22:28:09.49
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -262,6 +262,7 @@ HOST,assets.scaleway.com,LIST
 HOST,assets.science.nasa.gov,LIST
 HOST,assets.sendinblue.com,LIST
 HOST,assets.shazam.com,LIST
+HOST,assets.shots.so,LIST
 HOST,assets.slater.app,LIST
 HOST,assets.sololearn.com,LIST
 HOST,assets.speedvitals.com,LIST
@@ -1402,6 +1403,7 @@ HOST,geoip-js.com,LIST
 HOST,geojson.io,LIST
 HOST,geoserveis.icgc.cat,LIST
 HOST,gfx-data.news-engineering.aws.wapo.pub,LIST
+HOST,gibs-c.earthdata.nasa.gov,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
 HOST,global-assets.fitch.group,LIST
 HOST,global.divhunt.com,LIST
@@ -1934,6 +1936,7 @@ HOST,makerworld.bblmw.com,LIST
 HOST,mangaz-books.j-comi.jp,LIST
 HOST,mangaz-static.j-comi.jp,LIST
 HOST,mantisloader.mantis-awx.com,LIST
+HOST,map.adsbexchange.com,LIST
 HOST,map.vesselfinder.net,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
@@ -3825,6 +3828,7 @@ HOST-SUFFIX,jsdelivr.com,LIST
 HOST-SUFFIX,jsdelivr.net,LIST
 HOST-SUFFIX,jspm.dev,LIST
 HOST-SUFFIX,jspm.io,LIST
+HOST-SUFFIX,jspm.org,LIST
 HOST-SUFFIX,jstatic.xyz,LIST
 HOST-SUFFIX,jw-cdn.org,LIST
 HOST-SUFFIX,jwpcdn.com,LIST
