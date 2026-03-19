@@ -1,5 +1,5 @@
-# Clash total line 4417
-# Last updated Mon 03/16/2026 22:28:09.53
+# Clash total line 4422
+# Last updated Thu 03/19/2026 22:22:57.63
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -43,6 +43,7 @@ payload:
   - DOMAIN,analytics.welcomesoftware.com
   - DOMAIN,anchor.digitalocean.com
   - DOMAIN,android-safebrowsing.google.com
+  - DOMAIN,antiqua-ux-cdn.monotype.com
   - DOMAIN,api-cdn.shutterstock.com
   - DOMAIN,api-esp-ap.piano.io
   - DOMAIN,api-eu.mixpanel.com
@@ -71,6 +72,7 @@ payload:
   - DOMAIN,app-api.vidjet.io
   - DOMAIN,app-cdn.logo.com
   - DOMAIN,app-spm.com
+  - DOMAIN,app-static-prod.posthog.com
   - DOMAIN,app-static.eu.posthog.com
   - DOMAIN,app-static.turtl.co
   - DOMAIN,app.1password.com
@@ -1204,6 +1206,7 @@ payload:
   - DOMAIN,design.mayoclinic.org
   - DOMAIN,designsystem.brevo.com
   - DOMAIN,detectportal.firefox.com
+  - DOMAIN,dev.visualwebsiteoptimizer.com
   - DOMAIN,devicons.railway.com
   - DOMAIN,devnull.perfops.net
   - DOMAIN,dh-site.b-cdn.net
@@ -2737,6 +2740,7 @@ payload:
   - DOMAIN,static.mocortech.com
   - DOMAIN,static.moegoat.com
   - DOMAIN,static.monei.net
+  - DOMAIN,static.monotype.com
   - DOMAIN,static.moomoo.com
   - DOMAIN,static.moonpay.com
   - DOMAIN,static.music.com
@@ -3017,6 +3021,7 @@ payload:
   - DOMAIN,tn.upornia.com
   - DOMAIN,tn.vjav.com
   - DOMAIN,todoist.b-cdn.net
+  - DOMAIN,tomshardware-data.community.forum
   - DOMAIN,tools-static.wmflabs.org
   - DOMAIN,tools.refokus.com
   - DOMAIN,top1cdn.top1health.com

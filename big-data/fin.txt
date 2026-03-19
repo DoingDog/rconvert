@@ -1,5 +1,5 @@
-# Main total line 8665
-# Last updated Mon 03/16/2026 22:28:21.61
+# Main total line 8675
+# Last updated Thu 03/19/2026 22:23:09.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -50,6 +50,7 @@ DOMAIN,analytics.twitter.com
 DOMAIN,analytics.welcomesoftware.com
 DOMAIN,android-safebrowsing.google.com
 DOMAIN,anorien.csc.warwick.ac.uk
+DOMAIN,antiqua-ux-cdn.monotype.com
 DOMAIN,apache-mirror.rbc.ru
 DOMAIN,apache.40b.nl
 DOMAIN,apache.cbox.biz
@@ -115,6 +116,7 @@ DOMAIN,apm-misaka.biliapi.net
 DOMAIN,app-api.vidjet.io
 DOMAIN,app-cdn.logo.com
 DOMAIN,app-spm.com
+DOMAIN,app-static-prod.posthog.com
 DOMAIN,app-static.eu.posthog.com
 DOMAIN,app-static.turtl.co
 DOMAIN,app-updates.agilebits.com
@@ -145,6 +147,7 @@ DOMAIN,archive.g4t1.pro
 DOMAIN,archive.kali.org
 DOMAIN,archive.linux.duke.edu
 DOMAIN,archive.mozilla.org
+DOMAIN,archive.raspberrypi.com
 DOMAIN,artifacts.electronjs.org
 DOMAIN,artworks.thetvdb.com
 DOMAIN,asset-cdn.uscardforum.com
@@ -1260,6 +1263,7 @@ DOMAIN,cpan.webdesk.ru
 DOMAIN,cpan.zbr.pt
 DOMAIN,cpp-content.bhn.cards
 DOMAIN,cpwebassets.codepen.io
+DOMAIN,cr.yandex
 DOMAIN,craftassets.unraid.net
 DOMAIN,cravatar.eu
 DOMAIN,creativajs.altervista.org
@@ -1402,6 +1406,7 @@ DOMAIN,designsystem.brevo.com
 DOMAIN,desktop.parallels.com
 DOMAIN,desktop.wifiman.com
 DOMAIN,detectportal.firefox.com
+DOMAIN,dev.visualwebsiteoptimizer.com
 DOMAIN,devicons.railway.com
 DOMAIN,devimages-cdn.apple.com
 DOMAIN,devnull.perfops.net
@@ -1513,6 +1518,7 @@ DOMAIN,download.typora.io
 DOMAIN,download.umbrel.com
 DOMAIN,download.visualstudio.microsoft.com
 DOMAIN,download.xbox.com
+DOMAIN,download01.logi.com
 DOMAIN,download2.epicgames.com
 DOMAIN,download3.epicgames.com
 DOMAIN,download4.epicgames.com
@@ -2499,6 +2505,7 @@ DOMAIN,maven.neoforged.net
 DOMAIN,mcdn.vrporn.com
 DOMAIN,mcdnds.vrporn.com
 DOMAIN,mcdns.vrporn.com
+DOMAIN,mcr.microsoft.com
 DOMAIN,media-cdn.atlassian.com
 DOMAIN,media-cdn.comfy.social
 DOMAIN,media-cdn.epicgames.com
@@ -3843,6 +3850,7 @@ DOMAIN,static.missav.com
 DOMAIN,static.mocortech.com
 DOMAIN,static.moegoat.com
 DOMAIN,static.monei.net
+DOMAIN,static.monotype.com
 DOMAIN,static.moomoo.com
 DOMAIN,static.moonpay.com
 DOMAIN,static.music.com
@@ -4117,6 +4125,7 @@ DOMAIN,tn.txxx.tube
 DOMAIN,tn.upornia.com
 DOMAIN,tn.vjav.com
 DOMAIN,todoist.b-cdn.net
+DOMAIN,tomshardware-data.community.forum
 DOMAIN,tools-static.wmflabs.org
 DOMAIN,tools.refokus.com
 DOMAIN,top1cdn.top1health.com
@@ -5431,6 +5440,7 @@ DOMAIN-SUFFIX,filer.net
 DOMAIN-SUFFIX,filerio.com
 DOMAIN-SUFFIX,filerio.in
 DOMAIN-SUFFIX,files.fm
+DOMAIN-SUFFIX,files.ghostty.org
 DOMAIN-SUFFIX,files.gitbook.io
 DOMAIN-SUFFIX,files.wordpress.com
 DOMAIN-SUFFIX,filesabc.com

@@ -1,5 +1,5 @@
-# Quantumult total line 4417
-# Last updated Mon 03/16/2026 22:28:09.49
+# Quantumult total line 4422
+# Last updated Thu 03/19/2026 22:22:57.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -42,6 +42,7 @@ HOST,analytics.twitter.com,LIST
 HOST,analytics.welcomesoftware.com,LIST
 HOST,anchor.digitalocean.com,LIST
 HOST,android-safebrowsing.google.com,LIST
+HOST,antiqua-ux-cdn.monotype.com,LIST
 HOST,api-cdn.shutterstock.com,LIST
 HOST,api-esp-ap.piano.io,LIST
 HOST,api-eu.mixpanel.com,LIST
@@ -70,6 +71,7 @@ HOST,apim.m3pd.com,LIST
 HOST,app-api.vidjet.io,LIST
 HOST,app-cdn.logo.com,LIST
 HOST,app-spm.com,LIST
+HOST,app-static-prod.posthog.com,LIST
 HOST,app-static.eu.posthog.com,LIST
 HOST,app-static.turtl.co,LIST
 HOST,app.1password.com,LIST
@@ -1203,6 +1205,7 @@ HOST,design.keyoxide.org,LIST
 HOST,design.mayoclinic.org,LIST
 HOST,designsystem.brevo.com,LIST
 HOST,detectportal.firefox.com,LIST
+HOST,dev.visualwebsiteoptimizer.com,LIST
 HOST,devicons.railway.com,LIST
 HOST,devnull.perfops.net,LIST
 HOST,dh-site.b-cdn.net,LIST
@@ -2736,6 +2739,7 @@ HOST,static.missav.com,LIST
 HOST,static.mocortech.com,LIST
 HOST,static.moegoat.com,LIST
 HOST,static.monei.net,LIST
+HOST,static.monotype.com,LIST
 HOST,static.moomoo.com,LIST
 HOST,static.moonpay.com,LIST
 HOST,static.music.com,LIST
@@ -3016,6 +3020,7 @@ HOST,tn.txxx.tube,LIST
 HOST,tn.upornia.com,LIST
 HOST,tn.vjav.com,LIST
 HOST,todoist.b-cdn.net,LIST
+HOST,tomshardware-data.community.forum,LIST
 HOST,tools-static.wmflabs.org,LIST
 HOST,tools.refokus.com,LIST
 HOST,top1cdn.top1health.com,LIST

@@ -1,5 +1,5 @@
-# Quantumult total line 8651
-# Last updated Mon 03/16/2026 22:28:21.84
+# Quantumult total line 8661
+# Last updated Thu 03/19/2026 22:23:09.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -50,6 +50,7 @@ HOST,analytics.twitter.com,LIST
 HOST,analytics.welcomesoftware.com,LIST
 HOST,android-safebrowsing.google.com,LIST
 HOST,anorien.csc.warwick.ac.uk,LIST
+HOST,antiqua-ux-cdn.monotype.com,LIST
 HOST,apache-mirror.rbc.ru,LIST
 HOST,apache.40b.nl,LIST
 HOST,apache.cbox.biz,LIST
@@ -115,6 +116,7 @@ HOST,apm-misaka.biliapi.net,LIST
 HOST,app-api.vidjet.io,LIST
 HOST,app-cdn.logo.com,LIST
 HOST,app-spm.com,LIST
+HOST,app-static-prod.posthog.com,LIST
 HOST,app-static.eu.posthog.com,LIST
 HOST,app-static.turtl.co,LIST
 HOST,app-updates.agilebits.com,LIST
@@ -145,6 +147,7 @@ HOST,archive.g4t1.pro,LIST
 HOST,archive.kali.org,LIST
 HOST,archive.linux.duke.edu,LIST
 HOST,archive.mozilla.org,LIST
+HOST,archive.raspberrypi.com,LIST
 HOST,artifacts.electronjs.org,LIST
 HOST,artworks.thetvdb.com,LIST
 HOST,asset-cdn.uscardforum.com,LIST
@@ -1260,6 +1263,7 @@ HOST,cpan.webdesk.ru,LIST
 HOST,cpan.zbr.pt,LIST
 HOST,cpp-content.bhn.cards,LIST
 HOST,cpwebassets.codepen.io,LIST
+HOST,cr.yandex,LIST
 HOST,craftassets.unraid.net,LIST
 HOST,cravatar.eu,LIST
 HOST,creativajs.altervista.org,LIST
@@ -1402,6 +1406,7 @@ HOST,designsystem.brevo.com,LIST
 HOST,desktop.parallels.com,LIST
 HOST,desktop.wifiman.com,LIST
 HOST,detectportal.firefox.com,LIST
+HOST,dev.visualwebsiteoptimizer.com,LIST
 HOST,devicons.railway.com,LIST
 HOST,devimages-cdn.apple.com,LIST
 HOST,devnull.perfops.net,LIST
@@ -1513,6 +1518,7 @@ HOST,download.typora.io,LIST
 HOST,download.umbrel.com,LIST
 HOST,download.visualstudio.microsoft.com,LIST
 HOST,download.xbox.com,LIST
+HOST,download01.logi.com,LIST
 HOST,download2.epicgames.com,LIST
 HOST,download3.epicgames.com,LIST
 HOST,download4.epicgames.com,LIST
@@ -2499,6 +2505,7 @@ HOST,maven.neoforged.net,LIST
 HOST,mcdn.vrporn.com,LIST
 HOST,mcdnds.vrporn.com,LIST
 HOST,mcdns.vrporn.com,LIST
+HOST,mcr.microsoft.com,LIST
 HOST,media-cdn.atlassian.com,LIST
 HOST,media-cdn.comfy.social,LIST
 HOST,media-cdn.epicgames.com,LIST
@@ -3843,6 +3850,7 @@ HOST,static.missav.com,LIST
 HOST,static.mocortech.com,LIST
 HOST,static.moegoat.com,LIST
 HOST,static.monei.net,LIST
+HOST,static.monotype.com,LIST
 HOST,static.moomoo.com,LIST
 HOST,static.moonpay.com,LIST
 HOST,static.music.com,LIST
@@ -4117,6 +4125,7 @@ HOST,tn.txxx.tube,LIST
 HOST,tn.upornia.com,LIST
 HOST,tn.vjav.com,LIST
 HOST,todoist.b-cdn.net,LIST
+HOST,tomshardware-data.community.forum,LIST
 HOST,tools-static.wmflabs.org,LIST
 HOST,tools.refokus.com,LIST
 HOST,top1cdn.top1health.com,LIST
@@ -5431,6 +5440,7 @@ HOST-SUFFIX,filer.net,LIST
 HOST-SUFFIX,filerio.com,LIST
 HOST-SUFFIX,filerio.in,LIST
 HOST-SUFFIX,files.fm,LIST
+HOST-SUFFIX,files.ghostty.org,LIST
 HOST-SUFFIX,files.gitbook.io,LIST
 HOST-SUFFIX,files.wordpress.com,LIST
 HOST-SUFFIX,filesabc.com,LIST
