@@ -1,5 +1,5 @@
-# Clash total line 8675
-# Last updated Thu 03/19/2026 22:23:09.64
+# Clash total line 8677
+# Last updated Sun 03/22/2026 22:21:15.08
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -417,6 +417,7 @@ payload:
   - DOMAIN,blob.sololearn.com
   - DOMAIN,boards.greenhouse.io
   - DOMAIN,bookface-static.ycombinator.com
+  - DOMAIN,boot.arcboxcdn.com
   - DOMAIN,boot.netboot.xyz
   - DOMAIN,bot.ivy.ai
   - DOMAIN,brand-sdk.kmsmep.com
@@ -1016,7 +1017,6 @@ payload:
   - DOMAIN,cdn03.jotfor.ms
   - DOMAIN,cdn1.affirm.com
   - DOMAIN,cdn1.airdroid.com
-  - DOMAIN,cdn1.bambulab.com
   - DOMAIN,cdn1.bigcommerce.com
   - DOMAIN,cdn1.dan.com
   - DOMAIN,cdn1.epicgames.com
@@ -1437,6 +1437,7 @@ payload:
   - DOMAIN,dl.iina.io
   - DOMAIN,dl.imobie.com
   - DOMAIN,dl.l.google.com
+  - DOMAIN,dl.min.io
   - DOMAIN,dl.motrix.app
   - DOMAIN,dl.nssurge.com
   - DOMAIN,dl.nwjs.io
@@ -3563,6 +3564,7 @@ payload:
   - DOMAIN,script.custobar.com
   - DOMAIN,scripts.dailymail.co.uk
   - DOMAIN,scripts.scriptwrapper.com
+  - DOMAIN,scripts.tabler.io
   - DOMAIN,scripts.webeo.com
   - DOMAIN,sdata.ndtv.com
   - DOMAIN,sdk-cdn.fun.xyz
