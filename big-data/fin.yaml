@@ -1,5 +1,5 @@
-# Clash total line 8677
-# Last updated Sun 03/22/2026 22:21:15.08
+# Clash total line 8683
+# Last updated Wed 03/25/2026 22:30:53.88
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -350,6 +350,7 @@ payload:
   - DOMAIN,assets1.lottiefiles.com
   - DOMAIN,assets1.xboxlive.com
   - DOMAIN,assets10.lottiefiles.com
+  - DOMAIN,assets2.blubrry.com
   - DOMAIN,assets2.canny.io
   - DOMAIN,assets2.lottiefiles.com
   - DOMAIN,assets2.xboxlive.com
@@ -1007,6 +1008,7 @@ payload:
   - DOMAIN,cdn.zeabur.com
   - DOMAIN,cdn.zhujiwiki.com
   - DOMAIN,cdn.zigpoll.com
+  - DOMAIN,cdn.zolplay.com
   - DOMAIN,cdn.zoom.us
   - DOMAIN,cdn0-i.techbang.com
   - DOMAIN,cdn0.dan.com
@@ -2158,6 +2160,7 @@ payload:
   - DOMAIN,images.profile.autodesk.com
   - DOMAIN,images.ptt.cc
   - DOMAIN,images.purevpn-tools.com
+  - DOMAIN,images.rss.app
   - DOMAIN,images.samsung.com
   - DOMAIN,images.scalero.io
   - DOMAIN,images.scrolller.com
@@ -2361,6 +2364,7 @@ payload:
   - DOMAIN,interwiki.scpwiki.com
   - DOMAIN,interwiki.scpwikicn.com
   - DOMAIN,invent.kde.org
+  - DOMAIN,ipxy.io
   - DOMAIN,ir.ubuntu.sindad.cloud
   - DOMAIN,irp-cdn.multiscreensite.com
   - DOMAIN,isitmaintained.com
@@ -3739,6 +3743,7 @@ payload:
   - DOMAIN,static.anysex.com
   - DOMAIN,static.arxiv.org
   - DOMAIN,static.assetlab.io
+  - DOMAIN,static.assets-stash.eet-china.com
   - DOMAIN,static.axios.com
   - DOMAIN,static.bad.news
   - DOMAIN,static.bangumi.moe
@@ -4406,6 +4411,7 @@ payload:
   - DOMAIN,www.bbthat.com
   - DOMAIN,www.club.cc.cmu.edu
   - DOMAIN,www.envoyproxy.io
+  - DOMAIN,www.fumadocs.dev
   - DOMAIN,www.gnu.org
   - DOMAIN,www.gnupg.org
   - DOMAIN,www.googleapis.com
