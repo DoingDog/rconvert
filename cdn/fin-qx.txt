@@ -1,5 +1,5 @@
-# Quantumult total line 4431
-# Last updated Sat 03/28/2026 22:23:25.52
+# Quantumult total line 4440
+# Last updated Tue 03/31/2026 22:30:07.98
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1375,6 +1375,7 @@ HOST,font-public.canva.com,LIST
 HOST,fonts.bunny.net,LIST
 HOST,fonts.cat.net,LIST
 HOST,fonts.codeberg.org,LIST
+HOST,fonts.garmin.com,LIST
 HOST,fonts.gishan.cc,LIST
 HOST,fonts.googleapis.com,LIST
 HOST,fonts.gstatic.com,LIST
@@ -1619,6 +1620,7 @@ HOST,images.microcms-assets.io,LIST
 HOST,images.mobilism.org,LIST
 HOST,images.moegoat.com,LIST
 HOST,images.moovitapp.com,LIST
+HOST,images.nebula.tv,LIST
 HOST,images.newrepublic.com,LIST
 HOST,images.now-tv.com,LIST
 HOST,images.nvidia.com,LIST
@@ -2312,6 +2314,7 @@ HOST,res-geo.cdn.office.net,LIST
 HOST,res.abc.net.au,LIST
 HOST,res.cloudinary.com,LIST
 HOST,res.craft.do,LIST
+HOST,res.garmin.com,LIST
 HOST,res2.weblium.site,LIST
 HOST,resize-image.vocus.cc,LIST
 HOST,resize.blogsys.jp,LIST
@@ -2482,6 +2485,7 @@ HOST,sf-ibf-va.larksuitecdn.com,LIST
 HOST,sf19-scmcdn.larksuitecdn.com,LIST
 HOST,sfiles.cnyes.cool,LIST
 HOST,sg-thumbnail-drive.mypikpak.com,LIST
+HOST,share-assets.fe.garmin.com,LIST
 HOST,share.chessbase.com,LIST
 HOST,shell.cdn.office.net,LIST
 HOST,shopify.cleverecommerce.com,LIST
@@ -2538,6 +2542,7 @@ HOST,st2.zoom.us,LIST
 HOST,st3.zoom.us,LIST
 HOST,st6-20.vk.com,LIST
 HOST,staging-pubfeed.linkby.com,LIST
+HOST,starlight.nebula.tv,LIST
 HOST,start-page.buffer.com,LIST
 HOST,static-00.iconduck.com,LIST
 HOST,static-1.bitchute.com,LIST
@@ -2691,6 +2696,7 @@ HOST,static.foxnews.com,LIST
 HOST,static.frame.work,LIST
 HOST,static.freedownloadmanager.org,LIST
 HOST,static.freeimages.com,LIST
+HOST,static.garmin.com,LIST
 HOST,static.generated.photos,LIST
 HOST,static.getbutton.io,LIST
 HOST,static.getpostman.com,LIST
@@ -3623,6 +3629,7 @@ HOST-SUFFIX,gadgets360cdn.com,LIST
 HOST-SUFFIX,gamccdn.com,LIST
 HOST-SUFFIX,gamesgamescdn.com,LIST
 HOST-SUFFIX,gammacdn.com,LIST
+HOST-SUFFIX,garmincdn.com,LIST
 HOST-SUFFIX,gateway.originprotocol.com,LIST
 HOST-SUFFIX,gateway.pinata.cloud,LIST
 HOST-SUFFIX,gateway.serph.network,LIST
@@ -3656,6 +3663,7 @@ HOST-SUFFIX,googleusercontent.com,LIST
 HOST-SUFFIX,graphql.org,LIST
 HOST-SUFFIX,gravatar.com,LIST
 HOST-SUFFIX,gravity.jup.io,LIST
+HOST-SUFFIX,grouponcdn.com,LIST
 HOST-SUFFIX,gsuus.com,LIST
 HOST-SUFFIX,gszyi.com,LIST
 HOST-SUFFIX,gtranslate.net,LIST
@@ -4406,6 +4414,7 @@ HOST-SUFFIX,ziffstatic.com,LIST
 HOST-SUFFIX,ziglang.org,LIST
 HOST-SUFFIX,zippyshare.com,LIST
 HOST-SUFFIX,zkcdn.net,LIST
+HOST-SUFFIX,zobj.net,LIST
 HOST-SUFFIX,zohocdn.com,LIST
 HOST-SUFFIX,zohostatic.com,LIST
 HOST-SUFFIX,zohostatic.eu,LIST
