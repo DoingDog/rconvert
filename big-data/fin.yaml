@@ -1,5 +1,5 @@
-# Clash total line 8698
-# Last updated Tue 03/31/2026 22:30:38.72
+# Clash total line 8700
+# Last updated Wed 04/01/2026 22:32:44.93
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -325,6 +325,7 @@ payload:
   - DOMAIN,assets.swoogo.com
   - DOMAIN,assets.tatlerasia.com
   - DOMAIN,assets.the-independent.com
+  - DOMAIN,assets.tigerdata.com
   - DOMAIN,assets.time.com
   - DOMAIN,assets.tokopedia.net
   - DOMAIN,assets.toot.cafe
@@ -650,6 +651,7 @@ payload:
   - DOMAIN,cdn.convertbox.com
   - DOMAIN,cdn.conveythis.com
   - DOMAIN,cdn.corso.com
+  - DOMAIN,cdn.cr-proxy.com
   - DOMAIN,cdn.cracked.sh
   - DOMAIN,cdn.craft.cloud
   - DOMAIN,cdn.create.microsoft.com
