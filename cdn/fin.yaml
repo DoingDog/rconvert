@@ -1,5 +1,5 @@
-# Clash total line 4442
-# Last updated Wed 04/01/2026 22:32:30.49
+# Clash total line 4446
+# Last updated Sat 04/04/2026 22:23:56.24
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -279,6 +279,7 @@ payload:
   - DOMAIN,assets.stigg.io
   - DOMAIN,assets.streamlinehq.com
   - DOMAIN,assets.swoogo.com
+  - DOMAIN,assets.tangled.network
   - DOMAIN,assets.tatlerasia.com
   - DOMAIN,assets.the-independent.com
   - DOMAIN,assets.tigerdata.com
@@ -334,6 +335,7 @@ payload:
   - DOMAIN,auth.split.io
   - DOMAIN,avatar.freepik.com
   - DOMAIN,avatar.stefanjudis.com
+  - DOMAIN,avatar.tangled.sh
   - DOMAIN,avatar2.bahamut.com.tw
   - DOMAIN,avatars.dicebear.com
   - DOMAIN,avatars.dzeninfra.ru
@@ -1287,6 +1289,7 @@ payload:
   - DOMAIN,eomd1.fembeqq.xyz
   - DOMAIN,epic-social-social-modules-prod.ol.epicgames.com
   - DOMAIN,error.rakuten.co.jp
+  - DOMAIN,errors.figma.com
   - DOMAIN,eslint-react.xyz
   - DOMAIN,eslint.org
   - DOMAIN,eslint.style
@@ -3635,6 +3638,7 @@ payload:
   - DOMAIN-SUFFIX,garmincdn.com
   - DOMAIN-SUFFIX,gateway.originprotocol.com
   - DOMAIN-SUFFIX,gateway.pinata.cloud
+  - DOMAIN-SUFFIX,gateway.scarf.sh
   - DOMAIN-SUFFIX,gateway.serph.network
   - DOMAIN-SUFFIX,gauthstatic.com
   - DOMAIN-SUFFIX,gayzyimage.com

@@ -1,5 +1,5 @@
-# Clash total line 8700
-# Last updated Wed 04/01/2026 22:32:44.93
+# Clash total line 8707
+# Last updated Sat 04/04/2026 22:24:07.78
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -323,6 +323,7 @@ payload:
   - DOMAIN,assets.stigg.io
   - DOMAIN,assets.streamlinehq.com
   - DOMAIN,assets.swoogo.com
+  - DOMAIN,assets.tangled.network
   - DOMAIN,assets.tatlerasia.com
   - DOMAIN,assets.the-independent.com
   - DOMAIN,assets.tigerdata.com
@@ -379,6 +380,7 @@ payload:
   - DOMAIN,autoupdate.termius.com
   - DOMAIN,avatar.freepik.com
   - DOMAIN,avatar.stefanjudis.com
+  - DOMAIN,avatar.tangled.sh
   - DOMAIN,avatars.dicebear.com
   - DOMAIN,avatars.dzeninfra.ru
   - DOMAIN,avatars.hubspot.net
@@ -1521,6 +1523,7 @@ payload:
   - DOMAIN,download.sketch.com
   - DOMAIN,download.snipaste.com
   - DOMAIN,download.sysinternals.com
+  - DOMAIN,download.technitium.com
   - DOMAIN,download.tensorflow.google.com
   - DOMAIN,download.todesktop.com
   - DOMAIN,download.typora.io
@@ -1607,6 +1610,7 @@ payload:
   - DOMAIN,eomd1.fembeqq.xyz
   - DOMAIN,epic-social-social-modules-prod.ol.epicgames.com
   - DOMAIN,error.rakuten.co.jp
+  - DOMAIN,errors.figma.com
   - DOMAIN,eslint-react.xyz
   - DOMAIN,eslint.org
   - DOMAIN,eslint.style
@@ -1632,6 +1636,7 @@ payload:
   - DOMAIN,evt.24.com
   - DOMAIN,experience-ap.piano.io
   - DOMAIN,explorer-api.walletconnect.com
+  - DOMAIN,extensionupdater.brave.com
   - DOMAIN,external-content.duckduckgo.com
   - DOMAIN,f-droid.org
   - DOMAIN,f.convertkit.com
@@ -5724,6 +5729,7 @@ payload:
   - DOMAIN-SUFFIX,gammacdn.com
   - DOMAIN-SUFFIX,garmincdn.com
   - DOMAIN-SUFFIX,gateway.originprotocol.com
+  - DOMAIN-SUFFIX,gateway.scarf.sh
   - DOMAIN-SUFFIX,gateway.serph.network
   - DOMAIN-SUFFIX,gauthstatic.com
   - DOMAIN-SUFFIX,gayzyimage.com
@@ -6193,6 +6199,7 @@ payload:
   - DOMAIN-SUFFIX,launcher.mojang.com
   - DOMAIN-SUFFIX,launchercontent.mojang.com
   - DOMAIN-SUFFIX,launchermeta.mojang.com
+  - DOMAIN-SUFFIX,launchpadcontent.net
   - DOMAIN-SUFFIX,launchpadlibrarian.net
   - DOMAIN-SUFFIX,lazcdn.com
   - DOMAIN-SUFFIX,lbpicpic.com
