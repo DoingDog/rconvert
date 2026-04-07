@@ -1,5 +1,5 @@
-# Quantumult total line 8693
-# Last updated Sat 04/04/2026 22:24:07.72
+# Quantumult total line 8697
+# Last updated Tue 04/07/2026 22:32:11.96
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -288,6 +288,7 @@ HOST,assets.openshift.com,LIST
 HOST,assets.openshift.net,LIST
 HOST,assets.orz.uno,LIST
 HOST,assets.peatio.com,LIST
+HOST,assets.pingie.com,LIST
 HOST,assets.pixlee.com,LIST
 HOST,assets.play.xbox.com,LIST
 HOST,assets.plurk.com,LIST
@@ -1099,6 +1100,7 @@ HOST,cdn77.pornoxo.com,LIST
 HOST,cdn8.bigcommerce.com,LIST
 HOST,cdn9.bigcommerce.com,LIST
 HOST,cdna.artstation.com,LIST
+HOST,cdna.pcpartpicker.com,LIST
 HOST,cdnapi.kaltura.com,LIST
 HOST,cdnassets.roboflow.com,LIST
 HOST,cdnb.artstation.com,LIST
@@ -1454,6 +1456,7 @@ HOST,dl.tailscale.com,LIST
 HOST,dl.thorium.rocks,LIST
 HOST,dl.ui.com,LIST
 HOST,dl.vanadium.app,LIST
+HOST,dl.vibeisland.app,LIST
 HOST,dl.wechat.com,LIST
 HOST,dl2.nwjs.io,LIST
 HOST,dl2.osmand.net,LIST
@@ -3219,6 +3222,7 @@ HOST,opfiles.b-cdn.net,LIST
 HOST,optimizationguide-pa.googleapis.com,LIST
 HOST,optimizely.com,LIST
 HOST,organizer.bizzabo.com,LIST
+HOST,origin.picgo.net,LIST
 HOST,os-cdn.virtfusion.net,LIST
 HOST,osint.digitalside.it,LIST
 HOST,osl.ugr.es,LIST
@@ -3241,7 +3245,6 @@ HOST,p16-hera-sg.larksuitecdn.com,LIST
 HOST,p16-hera-va.larksuitecdn.com,LIST
 HOST,pa1.aninoapps.com,LIST
 HOST,pacdn.500px.org,LIST
-HOST,package-assets.oomol.com,LIST
 HOST,packagecloud.io,LIST
 HOST,packages-cf.termux.dev,LIST
 HOST,packages.hs-regensburg.de,LIST
@@ -3409,6 +3412,7 @@ HOST,registry.npmjs.org,LIST
 HOST,registry.oomol.com,LIST
 HOST,registry.terraform.io,LIST
 HOST,regmedia.co.uk,LIST
+HOST,release.arcboxcdn.com,LIST
 HOST,release.runcloud.io,LIST
 HOST,releases.arc.net,LIST
 HOST,releases.grapheneos.org,LIST
@@ -3896,7 +3900,6 @@ HOST,static.oklink.com,LIST
 HOST,static.okx.com,LIST
 HOST,static.onlinewebfonts.com,LIST
 HOST,static.onlyfans.com,LIST
-HOST,static.oomol.com,LIST
 HOST,static.openreplay.com,LIST
 HOST,static.opensea.io,LIST
 HOST,static.opensuse.org,LIST
@@ -4414,6 +4417,7 @@ HOST,wl-apps.yourwebsite.life,LIST
 HOST,worldwide.omtmapupdate.garmin.com,LIST
 HOST,wp.salesforce.com,LIST
 HOST,wpmedia.tealium.com,LIST
+HOST,wre-assets.prod.mapping.strava.com,LIST
 HOST,ws-assets.zoominfo.com,LIST
 HOST,ws-cdn.nperf.com,LIST
 HOST,ws2-cache.aptoide.com,LIST
