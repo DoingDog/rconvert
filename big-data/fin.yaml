@@ -1,5 +1,5 @@
-# Clash total line 8711
-# Last updated Tue 04/07/2026 22:32:12.01
+# Clash total line 8715
+# Last updated Fri 04/10/2026 22:31:11.26
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -929,6 +929,7 @@ payload:
   - DOMAIN,cdn.skymavis.com
   - DOMAIN,cdn.smooch.io
   - DOMAIN,cdn.snaptravel.com
+  - DOMAIN,cdn.socket.io
   - DOMAIN,cdn.softswiss.net
   - DOMAIN,cdn.sphlabs.com
   - DOMAIN,cdn.split.io
@@ -1591,6 +1592,7 @@ payload:
   - DOMAIN,embed-ssl.wistia.com
   - DOMAIN,embed-v2.testimonial.to
   - DOMAIN,embed.culturalspot.org
+  - DOMAIN,embed.getwally.net
   - DOMAIN,embed.reddit.com
   - DOMAIN,embed.runkit.com
   - DOMAIN,embed.savvycal.com
@@ -2547,6 +2549,7 @@ payload:
   - DOMAIN,media.contentapi.ea.com
   - DOMAIN,media.convertkit.com
   - DOMAIN,media.crazyshit.com
+  - DOMAIN,media.currys.biz
   - DOMAIN,media.d.tube
   - DOMAIN,media.daily.dev
   - DOMAIN,media.datacenterdynamics.com
@@ -3858,6 +3861,7 @@ payload:
   - DOMAIN,static.ipgeolocation.io
   - DOMAIN,static.iplocate.io
   - DOMAIN,static.iris.informa.com
+  - DOMAIN,static.isitetv.com
   - DOMAIN,static.itch.io
   - DOMAIN,static.iyf.tv
   - DOMAIN,static.izanmei.icu
