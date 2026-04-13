@@ -1,5 +1,5 @@
-# Clash total line 8715
-# Last updated Fri 04/10/2026 22:31:11.26
+# Clash total line 8720
+# Last updated Mon 04/13/2026 22:41:52.02
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -204,6 +204,7 @@ payload:
   - DOMAIN,assets.change.org
   - DOMAIN,assets.chaos.social
   - DOMAIN,assets.clever-cloud.com
+  - DOMAIN,assets.clibo.tw
   - DOMAIN,assets.clickfunnels.com
   - DOMAIN,assets.cloudpilot.ai
   - DOMAIN,assets.cmcmarkets.com
@@ -494,6 +495,7 @@ payload:
   - DOMAIN,cc.boyfriendtv.com
   - DOMAIN,cc.coemn.com
   - DOMAIN,cdimage.kali.org
+  - DOMAIN,cdimage.ubuntu.com
   - DOMAIN,cdn-1.ggjav.com
   - DOMAIN,cdn-1.porn87.com
   - DOMAIN,cdn-1.strava.com
@@ -2582,6 +2584,7 @@ payload:
   - DOMAIN,media.letsdeel.com
   - DOMAIN,media.loom-app.com
   - DOMAIN,media.maptiler.com
+  - DOMAIN,media.marshmallow-qa.com
   - DOMAIN,media.mas.to
   - DOMAIN,media.masto.nu
   - DOMAIN,media.minecraftforum.net
@@ -2958,6 +2961,7 @@ payload:
   - DOMAIN,mirror.tochlab.net
   - DOMAIN,mirror.transip.net
   - DOMAIN,mirror.truenetwork.ru
+  - DOMAIN,mirror.tw.ossplanet.net
   - DOMAIN,mirror.twds.com.tw
   - DOMAIN,mirror.ubuntu.ikoula.com
   - DOMAIN,mirror.ubuntu.serverforge.org
@@ -6686,6 +6690,7 @@ payload:
   - DOMAIN-SUFFIX,oss-me-east-1.aliyuncs.com
   - DOMAIN-SUFFIX,oss-us-east-1.aliyuncs.com
   - DOMAIN-SUFFIX,oss-us-west-1.aliyuncs.com
+  - DOMAIN-SUFFIX,ossplanet.org
   - DOMAIN-SUFFIX,otakudrive.life
   - DOMAIN-SUFFIX,otstatic.com
   - DOMAIN-SUFFIX,ouonet.org

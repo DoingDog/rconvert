@@ -1,5 +1,5 @@
-# Clash total line 4452
-# Last updated Fri 04/10/2026 22:30:58.49
+# Clash total line 4454
+# Last updated Mon 04/13/2026 22:41:39.18
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -154,6 +154,7 @@ payload:
   - DOMAIN,assets.change.org
   - DOMAIN,assets.chaos.social
   - DOMAIN,assets.clever-cloud.com
+  - DOMAIN,assets.clibo.tw
   - DOMAIN,assets.clickfunnels.com
   - DOMAIN,assets.cloudpilot.ai
   - DOMAIN,assets.cmcmarkets.com
@@ -2025,6 +2026,7 @@ payload:
   - DOMAIN,media.licdn.com
   - DOMAIN,media.loom-app.com
   - DOMAIN,media.maptiler.com
+  - DOMAIN,media.marshmallow-qa.com
   - DOMAIN,media.mas.to
   - DOMAIN,media.masto.nu
   - DOMAIN,media.minecraftforum.net
