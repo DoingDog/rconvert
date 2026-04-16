@@ -1,5 +1,5 @@
-# Adblock total line 4454
-# Last updated Mon 04/13/2026 22:41:39.31
+# Adblock total line 4460
+# Last updated Thu 04/16/2026 22:35:36.19
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -24,6 +24,7 @@
 ||affportal.bhphoto.com^
 ||agi.armorgames.com^
 ||ah-cdn.merge.dev^
+||ahrefscomscreenshot-3b70.kxcdn.com^
 ||aimg.fc2.com^
 ||ajax.cat.net^
 ||ajax.cdnjs.com^
@@ -34,7 +35,6 @@
 ||akamai-assets.squarespace.com^
 ||akamai-origin.myanimelist.net^
 ||alcdn.msauth.net^
-||alt.idgesg.net^
 ||amazon-omni-cdn.com^
 ||amp.akamaized.net^
 ||amp.azure.net^
@@ -107,7 +107,6 @@
 ||assets-cdn.123rf.com^
 ||assets-cdn.abcnews.com^
 ||assets-cdn.abcotvs.net^
-||assets-cdn.anh.moe^
 ||assets-cdn.jable.tv^
 ||assets-cdn.porn.com^
 ||assets-cdn.watchdisneyfe.com^
@@ -301,7 +300,7 @@
 ||assets.vodafone.co.uk^
 ||assets.vogue.com^
 ||assets.volvo.com^
-||assets.wikiwand.com^
+||assets.vrchat.com^
 ||assets.xboxservices.com^
 ||assets.xmind.net^
 ||assets.yande.re^
@@ -309,6 +308,7 @@
 ||assets.zephr.com^
 ||assets.zerohedge.com^
 ||assets.zilliz.com^
+||assets.zpic.biz^
 ||assets0.headwayapp.co^
 ||assets1.lottiefiles.com^
 ||assets10.lottiefiles.com^
@@ -362,6 +362,7 @@
 ||banners.chessbase.com^
 ||barracuda-assets.zoovu.com^
 ||barracuda-cdn.zoovu.com^
+||bcdn.alotporn.com^
 ||bcdn.starapps.studio^
 ||bcmedia.bitchute.com^
 ||before.good-apps.co^
@@ -421,6 +422,7 @@
 ||c8.patreon.com^
 ||ca.nfs.pub^
 ||ca1.onlyhentaistuff.com^
+||ca2.onlyhentaistuff.com^
 ||cacerts.digicert.com^
 ||cacerts.rapidssl.com^
 ||cache-05.filehippo.net^
@@ -564,6 +566,7 @@
 ||cdn.calibermind.com^
 ||cdn.cameo.com^
 ||cdn.camweara.com^
+||cdn.candu.ai^
 ||cdn.candy.ai^
 ||cdn.casestudies.svc.ui.com^
 ||cdn.casetify.com^
@@ -592,7 +595,6 @@
 ||cdn.conveythis.com^
 ||cdn.corso.com^
 ||cdn.cr-proxy.com^
-||cdn.cracked.sh^
 ||cdn.craft.cloud^
 ||cdn.create.microsoft.com^
 ||cdn.credible.com^
@@ -668,7 +670,6 @@
 ||cdn.gigya.com^
 ||cdn.gofundme.com^
 ||cdn.googlesource.com^
-||cdn.graph.office.net^
 ||cdn.growthbook.io^
 ||cdn.hackaday.io^
 ||cdn.hackernoon.com^
@@ -905,6 +906,7 @@
 ||cdn.ttgtmedia.com^
 ||cdn.ttloli.com^
 ||cdn.tuk.dev^
+||cdn.tvpagewidgets.com^
 ||cdn.unrealengine.com^
 ||cdn.unwire.hk^
 ||cdn.up-timely.com^
@@ -928,7 +930,6 @@
 ||cdn.weglot.com^
 ||cdn.whoer.com^
 ||cdn.wikimg.net^
-||cdn.wikiwand.com^
 ||cdn.wikiwiki.jp^
 ||cdn.windowsreport.com^
 ||cdn.wishpond.net^
@@ -1068,7 +1069,6 @@
 ||cds.connatix.com^
 ||celebrities-small.porndig.com^
 ||certificates.godaddy.com^
-||certona.gap.com^
 ||cf-assets.www.cloudflare.com^
 ||cf-images.ap-northeast-1.prod.boltdns.net^
 ||cf-images.us-east-1.prod.boltdns.net^
@@ -1100,7 +1100,6 @@
 ||cloud.typenetwork.com^
 ||cloudflare.tv^
 ||cloudfront.barilliance.com^
-||cloudfront.codeproject.com^
 ||cmd-cdn.cleanmymac.com^
 ||cmp-cdn.p.aws.economist.com^
 ||cms-assets.nodecraft.com^
@@ -1153,12 +1152,14 @@
 ||content.any.run^
 ||content.api.news^
 ||content.arduino.cc^
+||content.gapinc.com^
 ||content.gitbook.com^
 ||content.invisioncic.com^
 ||content.jwplatform.com^
 ||content.kaspersky-labs.com^
 ||content.overwolf.com^
 ||content.powerapps.com^
+||content.presspage.com^
 ||content.wepik.com^
 ||contents-thumbnail2.fc2.com^
 ||conversiongorilla.com^
@@ -1215,6 +1216,7 @@
 ||design.keyoxide.org^
 ||design.mayoclinic.org^
 ||designsystem.brevo.com^
+||detectportal.brave-http-only.com^
 ||detectportal.firefox.com^
 ||dev.visualwebsiteoptimizer.com^
 ||devicons.railway.com^
@@ -1257,7 +1259,6 @@
 ||edge.nodeseek.com^
 ||edge.personalizer.io^
 ||edge.sitecorecloud.io^
-||edge1.certona.net^
 ||edgeassetservice.azureedge.net^
 ||edgecdn-embza6g8cacagcbn.z01.azurefd.net^
 ||edgestatic.azureedge.net^
@@ -1320,6 +1321,7 @@
 ||external-content.duckduckgo.com^
 ||f.convertkit.com^
 ||f.start.me^
+||f.upanh.tv^
 ||f000.backblazeb2.com^
 ||f001.backblazeb2.com^
 ||f002.backblazeb2.com^
@@ -1346,8 +1348,7 @@
 ||fiddle.fastly.dev^
 ||fiddle.jshell.net^
 ||file.ahu.moe^
-||file.izanmei.net^
-||file.xiaohai.ai^
+||file.izanm.org^
 ||file.zoom.us^
 ||file1.hkepc.net^
 ||files.armorgames.com^
@@ -1406,7 +1407,6 @@
 ||frontend-assets.supabase.com^
 ||frontend.floatplane.com^
 ||fs.mingpao.com^
-||fs2.onlyhentaistuff.com^
 ||fscdn.eppo.cloud^
 ||g-static.ap4r.com^
 ||g.newsweek.com^
@@ -1563,13 +1563,11 @@
 ||image.ship.vercel.com^
 ||image.shutterstock.com^
 ||image.status.io^
-||image.stheadline.com^
 ||image.telanganatoday.com^
 ||image.theblockbeats.info^
 ||image.thefly.com^
 ||image.tmdb.org^
 ||image.vuukle.com^
-||image.westinyou.com^
 ||image.worthepenny.com^
 ||image.xmanhua.net^
 ||image.yuntu.com.tw^
@@ -1617,7 +1615,6 @@
 ||images.github.media^
 ||images.hothardware.com^
 ||images.icon-icons.com^
-||images.idgesg.net^
 ||images.indianexpress.com^
 ||images.justwatch.com^
 ||images.kick.com^
@@ -1704,6 +1701,7 @@
 ||img.adspower.net^
 ||img.agrd.eu^
 ||img.announcekit.app^
+||img.api.tryprofound.com^
 ||img.api.video^
 ||img.apk.cafe^
 ||img.applealmond.com^
@@ -1779,6 +1777,7 @@
 ||img.vim-cn.com^
 ||img.voguehk.com^
 ||img.washingtonpost.com^
+||img.wikiwand.com^
 ||img.windy.com^
 ||img.xbooru.com^
 ||img.xhacgn.com^
@@ -1860,7 +1859,6 @@
 ||jnmedia.ero-video.net^
 ||jotai.org^
 ||js-1-cdn.airdroid.com^
-||js-cdn.blockchair.io^
 ||js-eu1.hsforms.net^
 ||js-s3.quickcep.com^
 ||js.assemblyexchange.com^
@@ -1932,6 +1930,7 @@
 ||live.fanmingming.com^
 ||live.visually-io.com^
 ||livedoor.blogimg.jp^
+||liveimg.sooplive.com^
 ||livemap-tiles1.waze.com^
 ||lm.visualon.info^
 ||load.csell.co^
@@ -1942,7 +1941,6 @@
 ||logos.speedtestcustom.com^
 ||logs.blip.net^
 ||lolstatic-a.akamaihd.net^
-||loutre.blockchair.io^
 ||lucide.dev^
 ||lumiere-a.akamaihd.net^
 ||lzd-img-global.slatic.net^
@@ -1992,7 +1990,6 @@
 ||media.convertkit.com^
 ||media.crazyshit.com^
 ||media.currys.biz^
-||media.d.tube^
 ||media.daily.dev^
 ||media.datacenterdynamics.com^
 ||media.dev.to^
@@ -2045,7 +2042,6 @@
 ||media.pullopen.xyz^
 ||media.ra.kroll.com^
 ||media.raven.news^
-||media.remax-prod.eng.remax.tech^
 ||media.shopimind.com^
 ||media.smooch.io^
 ||media.steampowered.com^
@@ -2097,9 +2093,9 @@
 ||mwcm.nyt.com^
 ||mwf-service.akamaized.net^
 ||my-json-server.typicode.com^
-||mycommerce.akamaized.net^
 ||na-library.klarnaservices.com^
 ||namedotcom-cdn.name.tools^
+||nas2.d.tube^
 ||nav.yumenosora.co.jp^
 ||navismithapis-cdn.com^
 ||nbcnewsdigital-static.nbcuni.com^
@@ -2186,6 +2182,7 @@
 ||pg2dhpc3p5ec22g3.jkforum.net^
 ||pgw.udn.com.tw^
 ||ph.northflank.com^
+||ph.tryprofound.com^
 ||phishing.army^
 ||photos5.appleinsider.com^
 ||pic-bstarstatic.akamaized.net^
@@ -2208,6 +2205,7 @@
 ||pics2.serviporno.com^
 ||pictures-cdn.porn.com^
 ||pim-media.intel.com^
+||pixel-cdn.default.com^
 ||pixoraa.cc^
 ||pkg-cdn.jetbrains.team^
 ||pkg-size.dev^
@@ -2221,12 +2219,12 @@
 ||platform.twitter.com^
 ||platform.vox.com^
 ||platforms.makemytrip.com^
+||play.d.tube^
 ||play.gotolstoy.com^
 ||play.modujx11.com^
 ||play.publicradio.org^
 ||play.vidyard.com^
 ||play.xfvod.pro^
-||play.xiaoh.ai^
 ||player-frontend.cnevids.com^
 ||player.cnevids.com^
 ||player.interactivity.brightcove.com^
@@ -2327,6 +2325,7 @@
 ||res.cloudinary.com^
 ||res.craft.do^
 ||res.garmin.com^
+||res.sooplive.com^
 ||res2.weblium.site^
 ||resize-image.vocus.cc^
 ||resize.blogsys.jp^
@@ -2500,7 +2499,6 @@
 ||share-assets.fe.garmin.com^
 ||share.chessbase.com^
 ||shell.cdn.office.net^
-||shopify.cleverecommerce.com^
 ||shots.codepen.io^
 ||showcase.abovemarket.com^
 ||sig.grumpybumpers.com^
@@ -2564,6 +2562,7 @@
 ||static-3.bitchute.com^
 ||static-4.bitchute.com^
 ||static-act.imoim.net^
+||static-app.ahrefs.com^
 ||static-app.klaviyo.com^
 ||static-assets-1.truthsocial.com^
 ||static-assets-prod.epicgames.com^
@@ -2601,7 +2600,6 @@
 ||static-id.fc2.com^
 ||static-images.aptoide.com^
 ||static-images.remax.com^
-||static-landing.probiplacehold.cot.com^
 ||static-lccn.leetcode.com^
 ||static-main.moovit.com^
 ||static-media.fox.com^
@@ -2674,9 +2672,12 @@
 ||static.coingecko.com^
 ||static.comicbz.com^
 ||static.community.workday.com^
+||static.contentpass.net^
 ||static.convertio.co^
 ||static.corespeed.io^
 ||static.corp.google.com^
+||static.cracked.ax^
+||static.cracked.sh^
 ||static.crunchyroll.com^
 ||static.crypto.com^
 ||static.deepl.com^
@@ -2773,7 +2774,6 @@
 ||static.mysph.sph.com.sg^
 ||static.mytonwallet.io^
 ||static.na1.visioncritical.com^
-||static.namebeta.com^
 ||static.narrativ.com^
 ||static.netify.ai^
 ||static.newmobilelife.com^
@@ -2791,7 +2791,6 @@
 ||static.onlinewebfonts.com^
 ||static.onlyfans.com^
 ||static.openreplay.com^
-||static.opensea.io^
 ||static.opensuse.org^
 ||static.oracle.com^
 ||static.parallels.com^
@@ -2820,6 +2819,7 @@
 ||static.scarf.sh^
 ||static.sdkassets.chime.aws^
 ||static.seel.com^
+||static.semrush.com^
 ||static.serverhunter.com^
 ||static.skyassets.com^
 ||static.smartframe.io^
@@ -2828,6 +2828,7 @@
 ||static.snyk.io^
 ||static.socialshopwave.com^
 ||static.solarwinds.com^
+||static.sooplive.com^
 ||static.spankbang.com^
 ||static.spigotmc.org^
 ||static.srcspot.com^
@@ -2848,6 +2849,7 @@
 ||static.tp-link.com^
 ||static.tradingview.com^
 ||static.tronscan.org^
+||static.tryprofound.com^
 ||static.tumblr.com^
 ||static.tvtropes.org^
 ||static.twitchcdn.net^
@@ -2869,6 +2871,7 @@
 ||static.xns.one^
 ||static.xxxshake.com^
 ||static.yfsp.tv^
+||static.zanmei.ai^
 ||static.zaobao.com^
 ||static.zaobao.com.sg^
 ||static.zenn.studio^
@@ -2915,6 +2918,7 @@
 ||steamusercontent-a.akamaihd.net^
 ||steamuserimages-a.akamaihd.net^
 ||steamvideo-a.akamaihd.net^
+||stimg.sooplive.com^
 ||storage-b.picacomic.com^
 ||storage.courtlistener.com^
 ||storage.crisp.chat^
@@ -2972,6 +2976,7 @@
 ||telemetry.nextjs.org^
 ||telemetry.split.io^
 ||telemetry.stepsecurity.io^
+||telemetry.timescale.com^
 ||telemetry.vercel.com^
 ||telemetry2.devolutions.net^
 ||test.manyse.com^
@@ -2989,7 +2994,6 @@
 ||thumbs2.sendvid.com^
 ||thumbsnap.com^
 ||tile.loc.gov^
-||tile.mapzen.com^
 ||tile.mtbmap.cz^
 ||tile.nextzen.org^
 ||tile.opentopomap.org^
@@ -3026,7 +3030,6 @@
 ||tiles.terria.io^
 ||tiles.versatiles.org^
 ||tiles.windy.com^
-||tiles.wmflabs.org^
 ||tiles0.planet.com^
 ||tiles1.planet.com^
 ||tiles2.mapiful.com^
@@ -3146,7 +3149,6 @@
 ||vir.wsj.net^
 ||viu-static.akamaized.net^
 ||vjs.zencdn.net^
-||vod.jfly.xyz^
 ||vpncdn.protonweb.com^
 ||vscode-sync-insiders.trafficmanager.net^
 ||vscode-sync.trafficmanager.net^
@@ -3247,7 +3249,6 @@
 ||ximage.c-spanvideo.org^
 ||xpaywalletcdn.azureedge.net^
 ||y.yarn.co^
-||yep.video.yahoo.com^
 ||zephr-templates.cnbc.com^
 ||zod.dev^
 ||zzz.wxw.moe^
@@ -3316,6 +3317,7 @@
 ||appmifile.com^
 ||appsflyersdk.com^
 ||aspnetcdn.com^
+||assets-gap.com^
 ||assets-servd.host^
 ||assets-yammer.com^
 ||assets.adidas.com^
@@ -3607,6 +3609,7 @@
 ||filecunhua.top^
 ||files.bbci.co.uk^
 ||files.gitbook.io^
+||files.sooplive.co.kr^
 ||files.wordpress.com^
 ||fimfiction-static.net^
 ||firebaseapp.com^
@@ -3759,6 +3762,7 @@
 ||imagetwist.com^
 ||img-dpreview.com^
 ||img.haiwaikan.com^
+||img.sooplive.com^
 ||img1.acsta.net^
 ||img2.acsta.net^
 ||img3.acsta.net^
@@ -4434,6 +4438,8 @@
 ||zohostatic.eu^
 ||zohowebstatic.com^
 ||zorocdn.xyz^
+||zpi.cx^
+||zpicdn.lol^
 /-assets.worldsex.com/
 /-cdn.eporner.com/
 /-files.gitbook.io/
