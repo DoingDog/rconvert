@@ -1,5 +1,5 @@
-# Clash total line 4460
-# Last updated Thu 04/16/2026 22:35:36.07
+# Clash total line 4462
+# Last updated Sun 04/19/2026 22:29:35.34
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1650,6 +1650,7 @@ payload:
   - DOMAIN,images.spectrumnews1.com
   - DOMAIN,images.spot.im
   - DOMAIN,images.spr.so
+  - DOMAIN,images.status.page
   - DOMAIN,images.store.crowdstrike.com
   - DOMAIN,images.svc.ui.com
   - DOMAIN,images.tg.cc
@@ -2459,6 +2460,7 @@ payload:
   - DOMAIN,sdata.ndtv.com
   - DOMAIN,sdk-cdn.fun.xyz
   - DOMAIN,sdk-static.loyaltylion.net
+  - DOMAIN,sdk.amazonaws.com
   - DOMAIN,sdk.customfit.ai
   - DOMAIN,sdk.gleap.io
   - DOMAIN,sdk.helloextend.com
