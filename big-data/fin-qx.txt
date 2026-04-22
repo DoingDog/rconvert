@@ -1,5 +1,5 @@
-# Quantumult total line 8714
-# Last updated Sun 04/19/2026 22:29:47.44
+# Quantumult total line 8718
+# Last updated Wed 04/22/2026 22:43:44.30
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1492,6 +1492,7 @@ HOST,download.amelabs.net,LIST
 HOST,download.ameliorated.io,LIST
 HOST,download.anydesk.com,LIST
 HOST,download.bazzite.gg,LIST
+HOST,download.bbbike.org,LIST
 HOST,download.beeper.com,LIST
 HOST,download.clashverge.dev,LIST
 HOST,download.cnet.com,LIST
@@ -1505,6 +1506,7 @@ HOST,download.edovia.com,LIST
 HOST,download.fosshub.com,LIST
 HOST,download.fydeos.io,LIST
 HOST,download.garmin.com,LIST
+HOST,download.geofabrik.de,LIST
 HOST,download.gigabyte.com,LIST
 HOST,download.gimp.org,LIST
 HOST,download.hikarifield.co.jp,LIST
@@ -3309,6 +3311,7 @@ HOST,pkgs.netbird.io,LIST
 HOST,pkgs.tailscale.com,LIST
 HOST,pl.ea.com,LIST
 HOST,placeholder.pics,LIST
+HOST,planet.openstreetmap.org,LIST
 HOST,platform-assets.typekit.net,LIST
 HOST,platform.instagram.com,LIST
 HOST,platform.twitter.com,LIST
@@ -4119,7 +4122,6 @@ HOST,tile.osmand.net,LIST
 HOST,tile.ourmap.us,LIST
 HOST,tile.poloha.net,LIST
 HOST,tile.skybrush.io,LIST
-HOST,tile.thunderforest.com,LIST
 HOST,tile.waymarkedtrails.org,LIST
 HOST,tile2.intervals.icu,LIST
 HOST,tile2.opencyclemap.org,LIST
@@ -4127,6 +4129,7 @@ HOST,tilecache.rainviewer.com,LIST
 HOST,tiledbasemaps.arcgis.com,LIST
 HOST,tilemaps.icgc.cat,LIST
 HOST,tiles-a.koordinates.com,LIST
+HOST,tiles-eu.stadiamaps.com,LIST
 HOST,tiles.arcgis.com,LIST
 HOST,tiles.arcticconnect.ca,LIST
 HOST,tiles.gsj.jp,LIST
@@ -7274,6 +7277,7 @@ HOST-SUFFIX,tile.osm.ch,LIST
 HOST-SUFFIX,tile.osm.org,LIST
 HOST-SUFFIX,tile.osmz.ru,LIST
 HOST-SUFFIX,tile.stamen.com,LIST
+HOST-SUFFIX,tile.thunderforest.com,LIST
 HOST-SUFFIX,tiles-api.maps.komoot.net,LIST
 HOST-SUFFIX,tiles.mapbox.com,LIST
 HOST-SUFFIX,tiles.virtualearth.net,LIST

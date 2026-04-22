@@ -1,5 +1,5 @@
-# Clash total line 8728
-# Last updated Sun 04/19/2026 22:29:47.49
+# Clash total line 8732
+# Last updated Wed 04/22/2026 22:43:44.35
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1493,6 +1493,7 @@ payload:
   - DOMAIN,download.ameliorated.io
   - DOMAIN,download.anydesk.com
   - DOMAIN,download.bazzite.gg
+  - DOMAIN,download.bbbike.org
   - DOMAIN,download.beeper.com
   - DOMAIN,download.clashverge.dev
   - DOMAIN,download.cnet.com
@@ -1506,6 +1507,7 @@ payload:
   - DOMAIN,download.fosshub.com
   - DOMAIN,download.fydeos.io
   - DOMAIN,download.garmin.com
+  - DOMAIN,download.geofabrik.de
   - DOMAIN,download.gigabyte.com
   - DOMAIN,download.gimp.org
   - DOMAIN,download.hikarifield.co.jp
@@ -3310,6 +3312,7 @@ payload:
   - DOMAIN,pkgs.tailscale.com
   - DOMAIN,pl.ea.com
   - DOMAIN,placeholder.pics
+  - DOMAIN,planet.openstreetmap.org
   - DOMAIN,platform-assets.typekit.net
   - DOMAIN,platform.instagram.com
   - DOMAIN,platform.twitter.com
@@ -4120,7 +4123,6 @@ payload:
   - DOMAIN,tile.ourmap.us
   - DOMAIN,tile.poloha.net
   - DOMAIN,tile.skybrush.io
-  - DOMAIN,tile.thunderforest.com
   - DOMAIN,tile.waymarkedtrails.org
   - DOMAIN,tile2.intervals.icu
   - DOMAIN,tile2.opencyclemap.org
@@ -4128,6 +4130,7 @@ payload:
   - DOMAIN,tiledbasemaps.arcgis.com
   - DOMAIN,tilemaps.icgc.cat
   - DOMAIN,tiles-a.koordinates.com
+  - DOMAIN,tiles-eu.stadiamaps.com
   - DOMAIN,tiles.arcgis.com
   - DOMAIN,tiles.arcticconnect.ca
   - DOMAIN,tiles.gsj.jp
@@ -7275,6 +7278,7 @@ payload:
   - DOMAIN-SUFFIX,tile.osm.org
   - DOMAIN-SUFFIX,tile.osmz.ru
   - DOMAIN-SUFFIX,tile.stamen.com
+  - DOMAIN-SUFFIX,tile.thunderforest.com
   - DOMAIN-SUFFIX,tiles-api.maps.komoot.net
   - DOMAIN-SUFFIX,tiles.mapbox.com
   - DOMAIN-SUFFIX,tiles.virtualearth.net

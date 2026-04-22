@@ -1,5 +1,5 @@
-# Quantumult total line 4462
-# Last updated Sun 04/19/2026 22:29:35.30
+# Quantumult total line 4463
+# Last updated Wed 04/22/2026 22:43:31.25
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -3005,7 +3005,6 @@ HOST,tile.osmand.net,LIST
 HOST,tile.ourmap.us,LIST
 HOST,tile.poloha.net,LIST
 HOST,tile.skybrush.io,LIST
-HOST,tile.thunderforest.com,LIST
 HOST,tile.waymarkedtrails.org,LIST
 HOST,tile2.intervals.icu,LIST
 HOST,tile2.opencyclemap.org,LIST
@@ -3013,6 +3012,7 @@ HOST,tilecache.rainviewer.com,LIST
 HOST,tiledbasemaps.arcgis.com,LIST
 HOST,tilemaps.icgc.cat,LIST
 HOST,tiles-a.koordinates.com,LIST
+HOST,tiles-eu.stadiamaps.com,LIST
 HOST,tiles.arcgis.com,LIST
 HOST,tiles.arcticconnect.ca,LIST
 HOST,tiles.gsj.jp,LIST
@@ -4298,6 +4298,7 @@ HOST-SUFFIX,tile.osm.ch,LIST
 HOST-SUFFIX,tile.osm.org,LIST
 HOST-SUFFIX,tile.osmz.ru,LIST
 HOST-SUFFIX,tile.stamen.com,LIST
+HOST-SUFFIX,tile.thunderforest.com,LIST
 HOST-SUFFIX,tiles-api.maps.komoot.net,LIST
 HOST-SUFFIX,tiles.mapbox.com,LIST
 HOST-SUFFIX,tiles.virtualearth.net,LIST
