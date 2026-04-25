@@ -1,5 +1,5 @@
-# Clash total line 31095
-# Last updated Wed 04/22/2026 22:44:04.30
+# Clash total line 31114
+# Last updated Sat 04/25/2026 22:31:01.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,127.skk.moe
@@ -2140,6 +2140,7 @@ payload:
   - DOMAIN-SUFFIX,ai-stm.com
   - DOMAIN-SUFFIX,ai-topia.com
   - DOMAIN-SUFFIX,ai-ym.com
+  - DOMAIN-SUFFIX,ai-yuanjing.com
   - DOMAIN-SUFFIX,ai9f.com
   - DOMAIN-SUFFIX,aiaa.org
   - DOMAIN-SUFFIX,aianno.com
@@ -7890,6 +7891,7 @@ payload:
   - DOMAIN-SUFFIX,efzcity.com
   - DOMAIN-SUFFIX,efzhou.com
   - DOMAIN-SUFFIX,egceikkai.com
+  - DOMAIN-SUFFIX,egdd.cc
   - DOMAIN-SUFFIX,egdnp.top
   - DOMAIN-SUFFIX,egdtp.top
   - DOMAIN-SUFFIX,egdtv.com
@@ -11795,6 +11797,7 @@ payload:
   - DOMAIN-SUFFIX,iaaqxezba.com
   - DOMAIN-SUFFIX,iadiae.com
   - DOMAIN-SUFFIX,iagwiugzw.com
+  - DOMAIN-SUFFIX,iaif.tech
   - DOMAIN-SUFFIX,iaimarx.com
   - DOMAIN-SUFFIX,ialloc.com
   - DOMAIN-SUFFIX,iamvloger.com
@@ -15564,7 +15567,9 @@ payload:
   - DOMAIN-SUFFIX,mamecn.com
   - DOMAIN-SUFFIX,mamiyouys.com
   - DOMAIN-SUFFIX,mampod.com
+  - DOMAIN-SUFFIX,mampod.net
   - DOMAIN-SUFFIX,mampod.work
+  - DOMAIN-SUFFIX,mampodgroup.com
   - DOMAIN-SUFFIX,manbang.tech
   - DOMAIN-SUFFIX,manbangbbs.com
   - DOMAIN-SUFFIX,manbangcredit.com
@@ -16670,6 +16675,7 @@ payload:
   - DOMAIN-SUFFIX,mthreads.com
   - DOMAIN-SUFFIX,mthreads.net
   - DOMAIN-SUFFIX,mti100.com
+  - DOMAIN-SUFFIX,mtime.com
   - DOMAIN-SUFFIX,mting.info
   - DOMAIN-SUFFIX,mtjk.com
   - DOMAIN-SUFFIX,mtjtgh.com
@@ -16727,6 +16733,7 @@ payload:
   - DOMAIN-SUFFIX,muomou.com
   - DOMAIN-SUFFIX,muqingmedia.com
   - DOMAIN-SUFFIX,murheatech.com
+  - DOMAIN-SUFFIX,murl.tv
   - DOMAIN-SUFFIX,murluntech.com
   - DOMAIN-SUFFIX,music-z.com
   - DOMAIN-SUFFIX,musical.ly
@@ -17655,8 +17662,10 @@ payload:
   - DOMAIN-SUFFIX,openapp.run
   - DOMAIN-SUFFIX,openbcs.com
   - DOMAIN-SUFFIX,opencloudos.tech
+  - DOMAIN-SUFFIX,opendatalab.com
   - DOMAIN-SUFFIX,openfuyao.com
   - DOMAIN-SUFFIX,opengame0.com
+  - DOMAIN-SUFFIX,opengvlab.com
   - DOMAIN-SUFFIX,openhippy.com
   - DOMAIN-SUFFIX,openhitls.net
   - DOMAIN-SUFFIX,openhn.com
@@ -17694,6 +17703,7 @@ payload:
   - DOMAIN-SUFFIX,openviking.net
   - DOMAIN-SUFFIX,openweimai.com
   - DOMAIN-SUFFIX,openxedu.com
+  - DOMAIN-SUFFIX,openxlab.space
   - DOMAIN-SUFFIX,opgcloud.com
   - DOMAIN-SUFFIX,oplustrust.com
   - DOMAIN-SUFFIX,oponse.com
@@ -18197,6 +18207,7 @@ payload:
   - DOMAIN-SUFFIX,piaogroup.com
   - DOMAIN-SUFFIX,piaoliang.com
   - DOMAIN-SUFFIX,piaoquantv.com
+  - DOMAIN-SUFFIX,piaoxingqiu.com
   - DOMAIN-SUFFIX,piaoxuechaye.com
   - DOMAIN-SUFFIX,piaoyanghn.com
   - DOMAIN-SUFFIX,piaxiya.com
@@ -18552,7 +18563,9 @@ payload:
   - DOMAIN-SUFFIX,psahd.top
   - DOMAIN-SUFFIX,psasp.net
   - DOMAIN-SUFFIX,psbc-ubank.com
+  - DOMAIN-SUFFIX,psbc-wm.com
   - DOMAIN-SUFFIX,psbc.com
+  - DOMAIN-SUFFIX,psbccfc.com
   - DOMAIN-SUFFIX,pscloud.info
   - DOMAIN-SUFFIX,pshct.top
   - DOMAIN-SUFFIX,psmxp.com
@@ -21428,6 +21441,7 @@ payload:
   - DOMAIN-SUFFIX,shjr-tencentclb.net
   - DOMAIN-SUFFIX,shjr-tencentclb.work
   - DOMAIN-SUFFIX,shjyjk.com
+  - DOMAIN-SUFFIX,shlab.tech
   - DOMAIN-SUFFIX,shlsyb.com
   - DOMAIN-SUFFIX,shmaishu.com
   - DOMAIN-SUFFIX,shmama.net
@@ -22150,6 +22164,7 @@ payload:
   - DOMAIN-SUFFIX,starcharge.cloud
   - DOMAIN-SUFFIX,starcharge.com
   - DOMAIN-SUFFIX,stardustlm.com
+  - DOMAIN-SUFFIX,starfans.com
   - DOMAIN-SUFFIX,starfunpro.com
   - DOMAIN-SUFFIX,stargame.com
   - DOMAIN-SUFFIX,starlakelab.com
@@ -22168,6 +22183,7 @@ payload:
   - DOMAIN-SUFFIX,starschinalive.com
   - DOMAIN-SUFFIX,starsgoods.com
   - DOMAIN-SUFFIX,starspulse.com
+  - DOMAIN-SUFFIX,startfans.com
   - DOMAIN-SUFFIX,startssl.com
   - DOMAIN-SUFFIX,starvi.com
   - DOMAIN-SUFFIX,starworldgames.com
@@ -29072,6 +29088,8 @@ payload:
   - DOMAIN-SUFFIX,youba.com
   - DOMAIN-SUFFIX,youbaobao.com
   - DOMAIN-SUFFIX,youboy.com
+  - DOMAIN-SUFFIX,youcash.com
+  - DOMAIN-SUFFIX,youcfc.com
   - DOMAIN-SUFFIX,youchengdudu.com
   - DOMAIN-SUFFIX,youcheyihou.com
   - DOMAIN-SUFFIX,youdao.com
@@ -30694,6 +30712,7 @@ payload:
   - DOMAIN-SUFFIX,zyuncs.com
   - DOMAIN-SUFFIX,zyunos.com
   - DOMAIN-SUFFIX,zyvmoyfag.com
+  - DOMAIN-SUFFIX,zyxcfc.com
   - DOMAIN-SUFFIX,zyxtqk.com
   - DOMAIN-SUFFIX,zyxx11.com
   - DOMAIN-SUFFIX,zyzncloud.com

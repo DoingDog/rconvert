@@ -1,5 +1,5 @@
-# Quantumult total line 31052
-# Last updated Wed 04/22/2026 22:44:04.19
+# Quantumult total line 31071
+# Last updated Sat 04/25/2026 22:31:01.26
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,127.skk.moe,LIST
 HOST,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe,LIST
@@ -2139,6 +2139,7 @@ HOST-SUFFIX,ai-sip.com,LIST
 HOST-SUFFIX,ai-stm.com,LIST
 HOST-SUFFIX,ai-topia.com,LIST
 HOST-SUFFIX,ai-ym.com,LIST
+HOST-SUFFIX,ai-yuanjing.com,LIST
 HOST-SUFFIX,ai9f.com,LIST
 HOST-SUFFIX,aiaa.org,LIST
 HOST-SUFFIX,aianno.com,LIST
@@ -7889,6 +7890,7 @@ HOST-SUFFIX,efudanpress.com,LIST
 HOST-SUFFIX,efzcity.com,LIST
 HOST-SUFFIX,efzhou.com,LIST
 HOST-SUFFIX,egceikkai.com,LIST
+HOST-SUFFIX,egdd.cc,LIST
 HOST-SUFFIX,egdnp.top,LIST
 HOST-SUFFIX,egdtp.top,LIST
 HOST-SUFFIX,egdtv.com,LIST
@@ -11794,6 +11796,7 @@ HOST-SUFFIX,i9tqrc.com,LIST
 HOST-SUFFIX,iaaqxezba.com,LIST
 HOST-SUFFIX,iadiae.com,LIST
 HOST-SUFFIX,iagwiugzw.com,LIST
+HOST-SUFFIX,iaif.tech,LIST
 HOST-SUFFIX,iaimarx.com,LIST
 HOST-SUFFIX,ialloc.com,LIST
 HOST-SUFFIX,iamvloger.com,LIST
@@ -15563,7 +15566,9 @@ HOST-SUFFIX,mamayz.com,LIST
 HOST-SUFFIX,mamecn.com,LIST
 HOST-SUFFIX,mamiyouys.com,LIST
 HOST-SUFFIX,mampod.com,LIST
+HOST-SUFFIX,mampod.net,LIST
 HOST-SUFFIX,mampod.work,LIST
+HOST-SUFFIX,mampodgroup.com,LIST
 HOST-SUFFIX,manbang.tech,LIST
 HOST-SUFFIX,manbangbbs.com,LIST
 HOST-SUFFIX,manbangcredit.com,LIST
@@ -16669,6 +16674,7 @@ HOST-SUFFIX,mtgmcim.com,LIST
 HOST-SUFFIX,mthreads.com,LIST
 HOST-SUFFIX,mthreads.net,LIST
 HOST-SUFFIX,mti100.com,LIST
+HOST-SUFFIX,mtime.com,LIST
 HOST-SUFFIX,mting.info,LIST
 HOST-SUFFIX,mtjk.com,LIST
 HOST-SUFFIX,mtjtgh.com,LIST
@@ -16726,6 +16732,7 @@ HOST-SUFFIX,mununtech.com,LIST
 HOST-SUFFIX,muomou.com,LIST
 HOST-SUFFIX,muqingmedia.com,LIST
 HOST-SUFFIX,murheatech.com,LIST
+HOST-SUFFIX,murl.tv,LIST
 HOST-SUFFIX,murluntech.com,LIST
 HOST-SUFFIX,music-z.com,LIST
 HOST-SUFFIX,musical.ly,LIST
@@ -17654,8 +17661,10 @@ HOST-SUFFIX,openaboc.com,LIST
 HOST-SUFFIX,openapp.run,LIST
 HOST-SUFFIX,openbcs.com,LIST
 HOST-SUFFIX,opencloudos.tech,LIST
+HOST-SUFFIX,opendatalab.com,LIST
 HOST-SUFFIX,openfuyao.com,LIST
 HOST-SUFFIX,opengame0.com,LIST
+HOST-SUFFIX,opengvlab.com,LIST
 HOST-SUFFIX,openhippy.com,LIST
 HOST-SUFFIX,openhitls.net,LIST
 HOST-SUFFIX,openhn.com,LIST
@@ -17693,6 +17702,7 @@ HOST-SUFFIX,openvela.com,LIST
 HOST-SUFFIX,openviking.net,LIST
 HOST-SUFFIX,openweimai.com,LIST
 HOST-SUFFIX,openxedu.com,LIST
+HOST-SUFFIX,openxlab.space,LIST
 HOST-SUFFIX,opgcloud.com,LIST
 HOST-SUFFIX,oplustrust.com,LIST
 HOST-SUFFIX,oponse.com,LIST
@@ -18196,6 +18206,7 @@ HOST-SUFFIX,piaoeda.com,LIST
 HOST-SUFFIX,piaogroup.com,LIST
 HOST-SUFFIX,piaoliang.com,LIST
 HOST-SUFFIX,piaoquantv.com,LIST
+HOST-SUFFIX,piaoxingqiu.com,LIST
 HOST-SUFFIX,piaoxuechaye.com,LIST
 HOST-SUFFIX,piaoyanghn.com,LIST
 HOST-SUFFIX,piaxiya.com,LIST
@@ -18551,7 +18562,9 @@ HOST-SUFFIX,ps-chajian.com,LIST
 HOST-SUFFIX,psahd.top,LIST
 HOST-SUFFIX,psasp.net,LIST
 HOST-SUFFIX,psbc-ubank.com,LIST
+HOST-SUFFIX,psbc-wm.com,LIST
 HOST-SUFFIX,psbc.com,LIST
+HOST-SUFFIX,psbccfc.com,LIST
 HOST-SUFFIX,pscloud.info,LIST
 HOST-SUFFIX,pshct.top,LIST
 HOST-SUFFIX,psmxp.com,LIST
@@ -21427,6 +21440,7 @@ HOST-SUFFIX,shjr-tencentclb.com,LIST
 HOST-SUFFIX,shjr-tencentclb.net,LIST
 HOST-SUFFIX,shjr-tencentclb.work,LIST
 HOST-SUFFIX,shjyjk.com,LIST
+HOST-SUFFIX,shlab.tech,LIST
 HOST-SUFFIX,shlsyb.com,LIST
 HOST-SUFFIX,shmaishu.com,LIST
 HOST-SUFFIX,shmama.net,LIST
@@ -22149,6 +22163,7 @@ HOST-SUFFIX,starbaby.com,LIST
 HOST-SUFFIX,starcharge.cloud,LIST
 HOST-SUFFIX,starcharge.com,LIST
 HOST-SUFFIX,stardustlm.com,LIST
+HOST-SUFFIX,starfans.com,LIST
 HOST-SUFFIX,starfunpro.com,LIST
 HOST-SUFFIX,stargame.com,LIST
 HOST-SUFFIX,starlakelab.com,LIST
@@ -22167,6 +22182,7 @@ HOST-SUFFIX,starschina.com,LIST
 HOST-SUFFIX,starschinalive.com,LIST
 HOST-SUFFIX,starsgoods.com,LIST
 HOST-SUFFIX,starspulse.com,LIST
+HOST-SUFFIX,startfans.com,LIST
 HOST-SUFFIX,startssl.com,LIST
 HOST-SUFFIX,starvi.com,LIST
 HOST-SUFFIX,starworldgames.com,LIST
@@ -29071,6 +29087,8 @@ HOST-SUFFIX,you377.com,LIST
 HOST-SUFFIX,youba.com,LIST
 HOST-SUFFIX,youbaobao.com,LIST
 HOST-SUFFIX,youboy.com,LIST
+HOST-SUFFIX,youcash.com,LIST
+HOST-SUFFIX,youcfc.com,LIST
 HOST-SUFFIX,youchengdudu.com,LIST
 HOST-SUFFIX,youcheyihou.com,LIST
 HOST-SUFFIX,youdao.com,LIST
@@ -30693,6 +30711,7 @@ HOST-SUFFIX,zyunapp.com,LIST
 HOST-SUFFIX,zyuncs.com,LIST
 HOST-SUFFIX,zyunos.com,LIST
 HOST-SUFFIX,zyvmoyfag.com,LIST
+HOST-SUFFIX,zyxcfc.com,LIST
 HOST-SUFFIX,zyxtqk.com,LIST
 HOST-SUFFIX,zyxx11.com,LIST
 HOST-SUFFIX,zyzncloud.com,LIST

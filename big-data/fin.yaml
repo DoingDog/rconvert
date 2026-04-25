@@ -1,5 +1,5 @@
-# Clash total line 8732
-# Last updated Wed 04/22/2026 22:43:44.35
+# Clash total line 8737
+# Last updated Sat 04/25/2026 22:30:41.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -428,6 +428,7 @@ payload:
   - DOMAIN,boot.arcboxcdn.com
   - DOMAIN,boot.netboot.xyz
   - DOMAIN,bot.ivy.ai
+  - DOMAIN,brand-assets.cne.ngc.nvidia.com
   - DOMAIN,brand-sdk.kmsmep.com
   - DOMAIN,brandwidgets.outtra.com
   - DOMAIN,brew.sh
@@ -1617,9 +1618,11 @@ payload:
   - DOMAIN,encrypted-vtbn3.gstatic.com
   - DOMAIN,enterprise.proxmox.com
   - DOMAIN,eomd1.fembeqq.xyz
+  - DOMAIN,ep1.pinkbike.org
   - DOMAIN,epic-social-social-modules-prod.ol.epicgames.com
   - DOMAIN,error.rakuten.co.jp
   - DOMAIN,errors.figma.com
+  - DOMAIN,es.pinkbike.org
   - DOMAIN,eslint-react.xyz
   - DOMAIN,eslint.org
   - DOMAIN,eslint.style
@@ -1951,6 +1954,7 @@ payload:
   - DOMAIN,gimp.ca
   - DOMAIN,gimp.ip-connect.info
   - DOMAIN,gimp.ip-connect.vn.ua
+  - DOMAIN,gis.pinkbike.org
   - DOMAIN,gitpkg-fork.vercel.sh
   - DOMAIN,global-assets.fitch.group
   - DOMAIN,global.divhunt.com
@@ -7607,6 +7611,7 @@ payload:
   - DOMAIN-SUFFIX,wixmp.com
   - DOMAIN-SUFFIX,wixstatic.com
   - DOMAIN-SUFFIX,wixstudio.io
+  - DOMAIN-SUFFIX,wklcdn.com
   - DOMAIN-SUFFIX,wmfusercontent.org
   - DOMAIN-SUFFIX,wofl.tv
   - DOMAIN-SUFFIX,woflthenewsstation.com
