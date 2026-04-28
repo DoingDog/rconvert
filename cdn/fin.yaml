@@ -1,5 +1,5 @@
-# Clash total line 4468
-# Last updated Sat 04/25/2026 22:30:27.69
+# Clash total line 4469
+# Last updated Tue 04/28/2026 22:50:40.65
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1964,6 +1964,7 @@ payload:
   - DOMAIN,map.vesselfinder.net
   - DOMAIN,maps.geoapify.com
   - DOMAIN,maps.gstatic.com
+  - DOMAIN,maps.wikimedia.org
   - DOMAIN,maps.wplace.live
   - DOMAIN,maptile.osmand.net
   - DOMAIN,marber-cdn.economist.com
