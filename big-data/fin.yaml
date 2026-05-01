@@ -1,5 +1,5 @@
 # Clash total line 8738
-# Last updated Tue 04/28/2026 22:50:52.18
+# Last updated Fri 05/01/2026 22:45:29.06
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -812,6 +812,7 @@ payload:
   - DOMAIN,cdn.matterhorn.app
   - DOMAIN,cdn.mcauto-images-production.sendgrid.net
   - DOMAIN,cdn.mcr.ea.com
+  - DOMAIN,cdn.mer.run
   - DOMAIN,cdn.mercury.com
   - DOMAIN,cdn.metadata.io
   - DOMAIN,cdn.mewe.com
@@ -1958,7 +1959,6 @@ payload:
   - DOMAIN,gitpkg-fork.vercel.sh
   - DOMAIN,global-assets.fitch.group
   - DOMAIN,global.divhunt.com
-  - DOMAIN,global.uhdnow.com
   - DOMAIN,glua.ua.pt
   - DOMAIN,glyph.medium.com
   - DOMAIN,gmedia.playstation.com
@@ -4326,7 +4326,6 @@ payload:
   - DOMAIN,v-tiles2.downdetector.com
   - DOMAIN,v-tiles3.downdetector.com
   - DOMAIN,v.w-x.co
-  - DOMAIN,v1.uhdnow.com
   - DOMAIN,v2.listenloop.com
   - DOMAIN,v2uploads.zopim.io
   - DOMAIN,vanilla-extract.style
@@ -7365,6 +7364,7 @@ payload:
   - DOMAIN-SUFFIX,ubuntumirror.dei.uc.pt
   - DOMAIN-SUFFIX,ucarecdn.com
   - DOMAIN-SUFFIX,udify.app
+  - DOMAIN-SUFFIX,uhdnow.com
   - DOMAIN-SUFFIX,uicdn.net
   - DOMAIN-SUFFIX,ul.to
   - DOMAIN-SUFFIX,uloz.to
