@@ -1,5 +1,5 @@
-# Clash total line 8738
-# Last updated Fri 05/01/2026 22:45:29.06
+# Clash total line 8739
+# Last updated Mon 05/04/2026 22:52:24.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -4292,6 +4292,7 @@ payload:
   - DOMAIN,updates.edovia.com
   - DOMAIN,updates.istatmenus.app
   - DOMAIN,updates.signal.org
+  - DOMAIN,updates.vibeisland.app
   - DOMAIN,updates2.signal.org
   - DOMAIN,upload.movim.eu
   - DOMAIN,upload.teftera.com
