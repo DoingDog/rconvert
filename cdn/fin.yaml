@@ -1,5 +1,5 @@
-# Clash total line 4470
-# Last updated Mon 05/04/2026 22:52:11.02
+# Clash total line 4473
+# Last updated Thu 05/07/2026 22:56:40.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1410,6 +1410,7 @@ payload:
   - DOMAIN,front-resource.fs.com
   - DOMAIN,frontend-apps.workos.com
   - DOMAIN,frontend-assets.supabase.com
+  - DOMAIN,frontend-cdn.perplexity.ai
   - DOMAIN,frontend.floatplane.com
   - DOMAIN,fs.mingpao.com
   - DOMAIN,fscdn.eppo.cloud
@@ -1424,6 +1425,7 @@ payload:
   - DOMAIN,geoip-js.com
   - DOMAIN,geojson.io
   - DOMAIN,geoserveis.icgc.cat
+  - DOMAIN,get-it-on.codeberg.org
   - DOMAIN,gfx-data.news-engineering.aws.wapo.pub
   - DOMAIN,gibs-c.earthdata.nasa.gov
   - DOMAIN,gis.pinkbike.org
@@ -2508,6 +2510,7 @@ payload:
   - DOMAIN,share-assets.fe.garmin.com
   - DOMAIN,share.chessbase.com
   - DOMAIN,shell.cdn.office.net
+  - DOMAIN,shields.rbtlog.dev
   - DOMAIN,shots.codepen.io
   - DOMAIN,showcase.abovemarket.com
   - DOMAIN,sig.grumpybumpers.com
