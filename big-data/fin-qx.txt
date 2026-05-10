@@ -1,5 +1,5 @@
-# Quantumult total line 8727
-# Last updated Thu 05/07/2026 22:56:53.15
+# Quantumult total line 8747
+# Last updated Sun 05/10/2026 22:42:02.26
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -142,6 +142,7 @@ HOST,apps.sophi.io,LIST
 HOST,appstatico.electronic.us,LIST
 HOST,apt.tetaneutral.net,LIST
 HOST,apt.xpipe.io,LIST
+HOST,archive-4.kali.org,LIST
 HOST,archive.cs.uu.nl,LIST
 HOST,archive.g4t1.pro,LIST
 HOST,archive.kali.org,LIST
@@ -1630,7 +1631,6 @@ HOST,espejito.fder.edu.uy,LIST
 HOST,eu-assets.i.posthog.com,LIST
 HOST,eu-images.contentstack.com,LIST
 HOST,eu.cdnbye.com,LIST
-HOST,eu.edge.kernel.org,LIST
 HOST,eu.hamreus.com,LIST
 HOST,eu01ccistatic.zoom.us,LIST
 HOST,eu1.hamreus.com,LIST
@@ -1802,6 +1802,7 @@ HOST,ftp.fi.debian.org,LIST
 HOST,ftp.fi.muni.cz,LIST
 HOST,ftp.forthnet.gr,LIST
 HOST,ftp.fr.debian.org,LIST
+HOST,ftp.free.fr,LIST
 HOST,ftp.fu-berlin.de,LIST
 HOST,ftp.funet.fi,LIST
 HOST,ftp.gnome.org,LIST
@@ -2445,6 +2446,9 @@ HOST,jssdk.opin.media,LIST
 HOST,jssdkcdns.mparticle.com,LIST
 HOST,jssocdn.indiatimes.com,LIST
 HOST,kali.cs.nycu.edu.tw,LIST
+HOST,kali.darklab.sh,LIST
+HOST,kali.itsec.am,LIST
+HOST,kali.koyanet.lv,LIST
 HOST,kambing.uu.sg,LIST
 HOST,kartolo.sby.datautama.net.id,LIST
 HOST,kdata1.com,LIST
@@ -2660,6 +2664,7 @@ HOST,mirror.5i.fi,LIST
 HOST,mirror.a1.mk,LIST
 HOST,mirror.aarnet.edu.au,LIST
 HOST,mirror.accum.se,LIST
+HOST,mirror.africloud.com,LIST
 HOST,mirror.aktkn.sg,LIST
 HOST,mirror.alastyr.com,LIST
 HOST,mirror.alwyzon.net,LIST
@@ -2714,6 +2719,7 @@ HOST,mirror.cs.jmu.edu,LIST
 HOST,mirror.cs.odu.edu,LIST
 HOST,mirror.csclub.uwaterloo.ca,LIST
 HOST,mirror.cse.iitk.ac.in,LIST
+HOST,mirror.cspacehostings.com,LIST
 HOST,mirror.cyberbits.asia,LIST
 HOST,mirror.cyberbits.eu,LIST
 HOST,mirror.cyberchains.org,LIST
@@ -2748,6 +2754,7 @@ HOST,mirror.ekiphost.com,LIST
 HOST,mirror.elice.io,LIST
 HOST,mirror.eliv.digital,LIST
 HOST,mirror.enzu.com,LIST
+HOST,mirror.es.cdn-perfprod.com,LIST
 HOST,mirror.esecuredata.com,LIST
 HOST,mirror.estone.ca,LIST
 HOST,mirror.ethz.ch,LIST
@@ -2764,9 +2771,9 @@ HOST,mirror.fcix.net,LIST
 HOST,mirror.fi.ossplanet.net,LIST
 HOST,mirror.fjordos.com,LIST
 HOST,mirror.flo.c-f.ro,LIST
+HOST,mirror.fr.cdn-perfprod.com,LIST
 HOST,mirror.freedif.org,LIST
 HOST,mirror.freethought-internet.co.uk,LIST
-HOST,mirror.fsmg.org.nz,LIST
 HOST,mirror.fst.kz,LIST
 HOST,mirror.funkfreundelandshut.de,LIST
 HOST,mirror.gi.co.id,LIST
@@ -2777,6 +2784,7 @@ HOST,mirror.grid.uchicago.edu,LIST
 HOST,mirror.group.one,LIST
 HOST,mirror.gsl.icu,LIST
 HOST,mirror.hashy0917.net,LIST
+HOST,mirror.hemino.net,LIST
 HOST,mirror.hep.gg,LIST
 HOST,mirror.hnd.cl,LIST
 HOST,mirror.hoobly.com,LIST
@@ -2911,7 +2919,9 @@ HOST,mirror.pop-sc.rnp.br,LIST
 HOST,mirror.positive-internet.com,LIST
 HOST,mirror.pregi.net,LIST
 HOST,mirror.previder.nl,LIST
+HOST,mirror.primelink.net.id,LIST
 HOST,mirror.ps.kz,LIST
+HOST,mirror.pyratelan.org,LIST
 HOST,mirror.quickhost.uk,LIST
 HOST,mirror.raiolanetworks.com,LIST
 HOST,mirror.rcg.sfu.ca,LIST
@@ -2986,6 +2996,7 @@ HOST,mirror.us-midwest-1.nexcess.net,LIST
 HOST,mirror.us-ny2.kamatera.com,LIST
 HOST,mirror.us-sc.kamatera.com,LIST
 HOST,mirror.us-tx.kamatera.com,LIST
+HOST,mirror.us.cdn-perfprod.com,LIST
 HOST,mirror.us.leaseweb.net,LIST
 HOST,mirror.us.mirhosting.net,LIST
 HOST,mirror.us.oneandone.net,LIST
@@ -3003,8 +3014,10 @@ HOST,mirror.vnet.sk,LIST
 HOST,mirror.vorboss.net,LIST
 HOST,mirror.vpgrp.io,LIST
 HOST,mirror.vpsnet.com,LIST
+HOST,mirror.wane.kr,LIST
 HOST,mirror.webtastix.net,LIST
 HOST,mirror.webworld.ie,LIST
+HOST,mirror.wonchan.net,LIST
 HOST,mirror.wtnet.de,LIST
 HOST,mirror.xenyth.net,LIST
 HOST,mirror.xeonbd.com,LIST
@@ -3032,6 +3045,8 @@ HOST,mirror1.sox.rs,LIST
 HOST,mirror1.totbb.net,LIST
 HOST,mirror2.evolution-host.com,LIST
 HOST,mirror2.infomaniak.com,LIST
+HOST,mirror2.keiminem.com,LIST
+HOST,mirror2.krfoss.org,LIST
 HOST,mirror2.tuxinator.org,LIST
 HOST,mirror4.twds.com.tw,LIST
 HOST,mirror6.twds.com.tw,LIST
@@ -3061,7 +3076,6 @@ HOST,mirrors.concertpass.com,LIST
 HOST,mirrors.coreix.net,LIST
 HOST,mirrors.datapark.ro,LIST
 HOST,mirrors.de.sahilister.net,LIST
-HOST,mirrors.edge.kernel.org,LIST
 HOST,mirrors.egr.msu.edu,LIST
 HOST,mirrors.esto.network,LIST
 HOST,mirrors.evoluso.com,LIST
@@ -4470,6 +4484,7 @@ HOST,wwwimages2.adobe.com,LIST
 HOST,xenia.sote.hu,LIST
 HOST,ximage.c-spanvideo.org,LIST
 HOST,xpaywalletcdn.azureedge.net,LIST
+HOST,xsrv.moratelindo.io,LIST
 HOST,xvcf1.xboxlive.com,LIST
 HOST,xvcf2.xboxlive.com,LIST
 HOST,y.yarn.co,LIST
@@ -5350,6 +5365,7 @@ HOST-SUFFIX,ebaystatic.com,LIST
 HOST-SUFFIX,eclipsecontent.org,LIST
 HOST-SUFFIX,edditstatic.com,LIST
 HOST-SUFFIX,edge.api.brightcove.com,LIST
+HOST-SUFFIX,edge.kernel.org,LIST
 HOST-SUFFIX,edge.storage-yahoo.jp,LIST
 HOST-SUFFIX,edgecastcdn.net,LIST
 HOST-SUFFIX,edgedatg.com,LIST
@@ -5731,6 +5747,7 @@ HOST-SUFFIX,frontapp.com,LIST
 HOST-SUFFIX,fsdn.com,LIST
 HOST-SUFFIX,fse.tv,LIST
 HOST-SUFFIX,fshare.vn,LIST
+HOST-SUFFIX,fsmg.org.nz,LIST
 HOST-SUFFIX,fssta.com,LIST
 HOST-SUFFIX,fsvod1.com,LIST
 HOST-SUFFIX,ftcdn.net,LIST
@@ -6382,6 +6399,7 @@ HOST-SUFFIX,mirror.gtcomm.net,LIST
 HOST-SUFFIX,mirror.guzel.net.tr,LIST
 HOST-SUFFIX,mirror.homacloud.ai,LIST
 HOST-SUFFIX,mirror.intermax.nl,LIST
+HOST-SUFFIX,mirror.ionos.com,LIST
 HOST-SUFFIX,mirror.iphh.net,LIST
 HOST-SUFFIX,mirror.iweb.ca,LIST
 HOST-SUFFIX,mirror.iweb.com,LIST
@@ -6411,6 +6429,8 @@ HOST-SUFFIX,mirror.vu.lt,LIST
 HOST-SUFFIX,mirror.wearetriple.com,LIST
 HOST-SUFFIX,mirror.web4u.cz,LIST
 HOST-SUFFIX,mirror.zzunipark.com,LIST
+HOST-SUFFIX,mirror1.gnc.am,LIST
+HOST-SUFFIX,mirror2.gnc.am,LIST
 HOST-SUFFIX,mirrorcreator.com,LIST
 HOST-SUFFIX,mirrors.blix.com,LIST
 HOST-SUFFIX,mirrors.cicku.me,LIST

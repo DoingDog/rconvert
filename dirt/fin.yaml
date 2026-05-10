@@ -1,5 +1,5 @@
-# Clash total line 31114
-# Last updated Thu 05/07/2026 22:57:12.18
+# Clash total line 31110
+# Last updated Sun 05/10/2026 22:42:24.56
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,127.skk.moe
@@ -10,7 +10,6 @@ payload:
   - DOMAIN,blzddist1-a.akamaihd.net
   - DOMAIN,captive.apple.com
   - DOMAIN,cdn.angruo.com
-  - DOMAIN,cdn.lilyemby.com
   - DOMAIN,client.amplifi.com
   - DOMAIN,cn.download.nvidia.com
   - DOMAIN,console.gl-inet.com
@@ -38,11 +37,9 @@ payload:
   - DOMAIN,repeater.asus.com
   - DOMAIN,router.asus.com
   - DOMAIN,setmeup.arubanetworks.com
-  - DOMAIN,smart.uhdnow.com
   - DOMAIN,sms.imagetasks.com
   - DOMAIN,speedtest.macpaw.com
   - DOMAIN,steamcommunity-a.akamaihd.net
-  - DOMAIN,tx.lilyemby.com
   - DOMAIN,unifi
   - DOMAIN,www.layuicdn.com
   - DOMAIN,www.libvideo.com
@@ -13144,7 +13141,6 @@ payload:
   - DOMAIN-SUFFIX,jiebaoltd.com
   - DOMAIN-SUFFIX,jiebaotek.com
   - DOMAIN-SUFFIX,jiechenghn.com
-  - DOMAIN-SUFFIX,jiedaibao.gs
   - DOMAIN-SUFFIX,jiedian.live
   - DOMAIN-SUFFIX,jiediankeji.com
   - DOMAIN-SUFFIX,jiefangnews.com

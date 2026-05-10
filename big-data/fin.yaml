@@ -1,5 +1,5 @@
-# Clash total line 8741
-# Last updated Thu 05/07/2026 22:56:53.20
+# Clash total line 8761
+# Last updated Sun 05/10/2026 22:42:02.31
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -143,6 +143,7 @@ payload:
   - DOMAIN,appstatico.electronic.us
   - DOMAIN,apt.tetaneutral.net
   - DOMAIN,apt.xpipe.io
+  - DOMAIN,archive-4.kali.org
   - DOMAIN,archive.cs.uu.nl
   - DOMAIN,archive.g4t1.pro
   - DOMAIN,archive.kali.org
@@ -1631,7 +1632,6 @@ payload:
   - DOMAIN,eu-assets.i.posthog.com
   - DOMAIN,eu-images.contentstack.com
   - DOMAIN,eu.cdnbye.com
-  - DOMAIN,eu.edge.kernel.org
   - DOMAIN,eu.hamreus.com
   - DOMAIN,eu01ccistatic.zoom.us
   - DOMAIN,eu1.hamreus.com
@@ -1803,6 +1803,7 @@ payload:
   - DOMAIN,ftp.fi.muni.cz
   - DOMAIN,ftp.forthnet.gr
   - DOMAIN,ftp.fr.debian.org
+  - DOMAIN,ftp.free.fr
   - DOMAIN,ftp.fu-berlin.de
   - DOMAIN,ftp.funet.fi
   - DOMAIN,ftp.gnome.org
@@ -2446,6 +2447,9 @@ payload:
   - DOMAIN,jssdkcdns.mparticle.com
   - DOMAIN,jssocdn.indiatimes.com
   - DOMAIN,kali.cs.nycu.edu.tw
+  - DOMAIN,kali.darklab.sh
+  - DOMAIN,kali.itsec.am
+  - DOMAIN,kali.koyanet.lv
   - DOMAIN,kambing.uu.sg
   - DOMAIN,kartolo.sby.datautama.net.id
   - DOMAIN,kdata1.com
@@ -2661,6 +2665,7 @@ payload:
   - DOMAIN,mirror.a1.mk
   - DOMAIN,mirror.aarnet.edu.au
   - DOMAIN,mirror.accum.se
+  - DOMAIN,mirror.africloud.com
   - DOMAIN,mirror.aktkn.sg
   - DOMAIN,mirror.alastyr.com
   - DOMAIN,mirror.alwyzon.net
@@ -2715,6 +2720,7 @@ payload:
   - DOMAIN,mirror.cs.odu.edu
   - DOMAIN,mirror.csclub.uwaterloo.ca
   - DOMAIN,mirror.cse.iitk.ac.in
+  - DOMAIN,mirror.cspacehostings.com
   - DOMAIN,mirror.cyberbits.asia
   - DOMAIN,mirror.cyberbits.eu
   - DOMAIN,mirror.cyberchains.org
@@ -2749,6 +2755,7 @@ payload:
   - DOMAIN,mirror.elice.io
   - DOMAIN,mirror.eliv.digital
   - DOMAIN,mirror.enzu.com
+  - DOMAIN,mirror.es.cdn-perfprod.com
   - DOMAIN,mirror.esecuredata.com
   - DOMAIN,mirror.estone.ca
   - DOMAIN,mirror.ethz.ch
@@ -2765,9 +2772,9 @@ payload:
   - DOMAIN,mirror.fi.ossplanet.net
   - DOMAIN,mirror.fjordos.com
   - DOMAIN,mirror.flo.c-f.ro
+  - DOMAIN,mirror.fr.cdn-perfprod.com
   - DOMAIN,mirror.freedif.org
   - DOMAIN,mirror.freethought-internet.co.uk
-  - DOMAIN,mirror.fsmg.org.nz
   - DOMAIN,mirror.fst.kz
   - DOMAIN,mirror.funkfreundelandshut.de
   - DOMAIN,mirror.gi.co.id
@@ -2778,6 +2785,7 @@ payload:
   - DOMAIN,mirror.group.one
   - DOMAIN,mirror.gsl.icu
   - DOMAIN,mirror.hashy0917.net
+  - DOMAIN,mirror.hemino.net
   - DOMAIN,mirror.hep.gg
   - DOMAIN,mirror.hnd.cl
   - DOMAIN,mirror.hoobly.com
@@ -2912,7 +2920,9 @@ payload:
   - DOMAIN,mirror.positive-internet.com
   - DOMAIN,mirror.pregi.net
   - DOMAIN,mirror.previder.nl
+  - DOMAIN,mirror.primelink.net.id
   - DOMAIN,mirror.ps.kz
+  - DOMAIN,mirror.pyratelan.org
   - DOMAIN,mirror.quickhost.uk
   - DOMAIN,mirror.raiolanetworks.com
   - DOMAIN,mirror.rcg.sfu.ca
@@ -2987,6 +2997,7 @@ payload:
   - DOMAIN,mirror.us-ny2.kamatera.com
   - DOMAIN,mirror.us-sc.kamatera.com
   - DOMAIN,mirror.us-tx.kamatera.com
+  - DOMAIN,mirror.us.cdn-perfprod.com
   - DOMAIN,mirror.us.leaseweb.net
   - DOMAIN,mirror.us.mirhosting.net
   - DOMAIN,mirror.us.oneandone.net
@@ -3004,8 +3015,10 @@ payload:
   - DOMAIN,mirror.vorboss.net
   - DOMAIN,mirror.vpgrp.io
   - DOMAIN,mirror.vpsnet.com
+  - DOMAIN,mirror.wane.kr
   - DOMAIN,mirror.webtastix.net
   - DOMAIN,mirror.webworld.ie
+  - DOMAIN,mirror.wonchan.net
   - DOMAIN,mirror.wtnet.de
   - DOMAIN,mirror.xenyth.net
   - DOMAIN,mirror.xeonbd.com
@@ -3033,6 +3046,8 @@ payload:
   - DOMAIN,mirror1.totbb.net
   - DOMAIN,mirror2.evolution-host.com
   - DOMAIN,mirror2.infomaniak.com
+  - DOMAIN,mirror2.keiminem.com
+  - DOMAIN,mirror2.krfoss.org
   - DOMAIN,mirror2.tuxinator.org
   - DOMAIN,mirror4.twds.com.tw
   - DOMAIN,mirror6.twds.com.tw
@@ -3062,7 +3077,6 @@ payload:
   - DOMAIN,mirrors.coreix.net
   - DOMAIN,mirrors.datapark.ro
   - DOMAIN,mirrors.de.sahilister.net
-  - DOMAIN,mirrors.edge.kernel.org
   - DOMAIN,mirrors.egr.msu.edu
   - DOMAIN,mirrors.esto.network
   - DOMAIN,mirrors.evoluso.com
@@ -4471,6 +4485,7 @@ payload:
   - DOMAIN,xenia.sote.hu
   - DOMAIN,ximage.c-spanvideo.org
   - DOMAIN,xpaywalletcdn.azureedge.net
+  - DOMAIN,xsrv.moratelindo.io
   - DOMAIN,xvcf1.xboxlive.com
   - DOMAIN,xvcf2.xboxlive.com
   - DOMAIN,y.yarn.co
@@ -5351,6 +5366,7 @@ payload:
   - DOMAIN-SUFFIX,eclipsecontent.org
   - DOMAIN-SUFFIX,edditstatic.com
   - DOMAIN-SUFFIX,edge.api.brightcove.com
+  - DOMAIN-SUFFIX,edge.kernel.org
   - DOMAIN-SUFFIX,edge.storage-yahoo.jp
   - DOMAIN-SUFFIX,edgecastcdn.net
   - DOMAIN-SUFFIX,edgedatg.com
@@ -5732,6 +5748,7 @@ payload:
   - DOMAIN-SUFFIX,fsdn.com
   - DOMAIN-SUFFIX,fse.tv
   - DOMAIN-SUFFIX,fshare.vn
+  - DOMAIN-SUFFIX,fsmg.org.nz
   - DOMAIN-SUFFIX,fssta.com
   - DOMAIN-SUFFIX,fsvod1.com
   - DOMAIN-SUFFIX,ftcdn.net
@@ -6383,6 +6400,7 @@ payload:
   - DOMAIN-SUFFIX,mirror.guzel.net.tr
   - DOMAIN-SUFFIX,mirror.homacloud.ai
   - DOMAIN-SUFFIX,mirror.intermax.nl
+  - DOMAIN-SUFFIX,mirror.ionos.com
   - DOMAIN-SUFFIX,mirror.iphh.net
   - DOMAIN-SUFFIX,mirror.iweb.ca
   - DOMAIN-SUFFIX,mirror.iweb.com
@@ -6412,6 +6430,8 @@ payload:
   - DOMAIN-SUFFIX,mirror.wearetriple.com
   - DOMAIN-SUFFIX,mirror.web4u.cz
   - DOMAIN-SUFFIX,mirror.zzunipark.com
+  - DOMAIN-SUFFIX,mirror1.gnc.am
+  - DOMAIN-SUFFIX,mirror2.gnc.am
   - DOMAIN-SUFFIX,mirrorcreator.com
   - DOMAIN-SUFFIX,mirrors.blix.com
   - DOMAIN-SUFFIX,mirrors.cicku.me
