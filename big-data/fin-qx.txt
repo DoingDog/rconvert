@@ -1,5 +1,5 @@
-# Quantumult total line 8755
-# Last updated Wed 05/13/2026 23:02:00.35
+# Quantumult total line 8764
+# Last updated Sat 05/16/2026 22:39:37.82
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -118,6 +118,7 @@ HOST,app-cdn.logo.com,LIST
 HOST,app-spm.com,LIST
 HOST,app-static-prod.posthog.com,LIST
 HOST,app-static.eu.posthog.com,LIST
+HOST,app-static.sendsafely.com,LIST
 HOST,app-static.turtl.co,LIST
 HOST,app-updates.agilebits.com,LIST
 HOST,app.1password.com,LIST
@@ -711,6 +712,7 @@ HOST,cdn.eu.contentful.com,LIST
 HOST,cdn.european-alternatives.eu,LIST
 HOST,cdn.evbstatic.com,LIST
 HOST,cdn.evolution-x.org,LIST
+HOST,cdn.f5.com,LIST
 HOST,cdn.faire.com,LIST
 HOST,cdn.fastcomments.com,LIST
 HOST,cdn.fasterthanli.me,LIST
@@ -951,6 +953,7 @@ HOST,cdn.staticswin.com,LIST
 HOST,cdn.stellarhosted.com,LIST
 HOST,cdn.stonly.com,LIST
 HOST,cdn.streamlabs.com,LIST
+HOST,cdn.studio.f5.com,LIST
 HOST,cdn.substack.com,LIST
 HOST,cdn.sunofbeaches.com,LIST
 HOST,cdn.super.com,LIST
@@ -2043,6 +2046,7 @@ HOST,i.kickstarter.com,LIST
 HOST,i.loli.best,LIST
 HOST,i.magecdn.com,LIST
 HOST,i.mediatek.com,LIST
+HOST,i.meee.com.tw,LIST
 HOST,i.mij.rip,LIST
 HOST,i.mt.lv,LIST
 HOST,i.mydramalist.com,LIST
@@ -2252,6 +2256,7 @@ HOST,img.api.tryprofound.com,LIST
 HOST,img.api.video,LIST
 HOST,img.apk.cafe,LIST
 HOST,img.applealmond.com,LIST
+HOST,img.appledb.dev,LIST
 HOST,img.apponic.com,LIST
 HOST,img.atlasobscura.com,LIST
 HOST,img.atom.com,LIST
@@ -2680,6 +2685,7 @@ HOST,mirror.apache-kr.org,LIST
 HOST,mirror.apad.pro,LIST
 HOST,mirror.applebred.net,LIST
 HOST,mirror.aptus.co.tz,LIST
+HOST,mirror.archlinux.tw,LIST
 HOST,mirror.arizona.edu,LIST
 HOST,mirror.arvancloud.ir,LIST
 HOST,mirror.as.kamatera.com,LIST
@@ -4900,6 +4906,7 @@ HOST-SUFFIX,cdn.cloudflare.net,LIST
 HOST-SUFFIX,cdn.cwinfo.net,LIST
 HOST-SUFFIX,cdn.discordapp.com,LIST
 HOST-SUFFIX,cdn.ea.com,LIST
+HOST-SUFFIX,cdn.easyling.com,LIST
 HOST-SUFFIX,cdn.entelectonline.co.za,LIST
 HOST-SUFFIX,cdn.getfeedback.com,LIST
 HOST-SUFFIX,cdn.greenhouse.io,LIST
@@ -6416,6 +6423,7 @@ HOST-SUFFIX,mirror.lrz.de,LIST
 HOST-SUFFIX,mirror.nl,LIST
 HOST-SUFFIX,mirror.noc.one,LIST
 HOST-SUFFIX,mirror.norbert-ruehl.de,LIST
+HOST-SUFFIX,mirror.pkgbuild.com,LIST
 HOST-SUFFIX,mirror.rackspace.com,LIST
 HOST-SUFFIX,mirror.rafal.ca,LIST
 HOST-SUFFIX,mirror.rain.co.za,LIST
@@ -7247,6 +7255,7 @@ HOST-SUFFIX,synn.cc,LIST
 HOST-SUFFIX,szjal.cn,LIST
 HOST-SUFFIX,t8cdn.com,LIST
 HOST-SUFFIX,tacdn.com,LIST
+HOST-SUFFIX,tags.f5.com,LIST
 HOST-SUFFIX,takefile.link,LIST
 HOST-SUFFIX,tanhuatv.site,LIST
 HOST-SUFFIX,tapecontent.net,LIST

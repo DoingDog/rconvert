@@ -1,5 +1,5 @@
-# Clash total line 4481
-# Last updated Wed 05/13/2026 23:01:46.57
+# Clash total line 4488
+# Last updated Sat 05/16/2026 22:39:28.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -75,6 +75,7 @@ payload:
   - DOMAIN,app-spm.com
   - DOMAIN,app-static-prod.posthog.com
   - DOMAIN,app-static.eu.posthog.com
+  - DOMAIN,app-static.sendsafely.com
   - DOMAIN,app-static.turtl.co
   - DOMAIN,app.1password.com
   - DOMAIN,app.backinstock.org
@@ -645,6 +646,7 @@ payload:
   - DOMAIN,cdn.eu.contentful.com
   - DOMAIN,cdn.european-alternatives.eu
   - DOMAIN,cdn.evbstatic.com
+  - DOMAIN,cdn.f5.com
   - DOMAIN,cdn.faire.com
   - DOMAIN,cdn.fastcomments.com
   - DOMAIN,cdn.fasterthanli.me
@@ -883,6 +885,7 @@ payload:
   - DOMAIN,cdn.stellarhosted.com
   - DOMAIN,cdn.stonly.com
   - DOMAIN,cdn.streamlabs.com
+  - DOMAIN,cdn.studio.f5.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
   - DOMAIN,cdn.super.com
@@ -1497,6 +1500,7 @@ payload:
   - DOMAIN,i.loli.best
   - DOMAIN,i.magecdn.com
   - DOMAIN,i.mediatek.com
+  - DOMAIN,i.meee.com.tw
   - DOMAIN,i.mij.rip
   - DOMAIN,i.mt.lv
   - DOMAIN,i.mydramalist.com
@@ -1718,6 +1722,7 @@ payload:
   - DOMAIN,img.api.video
   - DOMAIN,img.apk.cafe
   - DOMAIN,img.applealmond.com
+  - DOMAIN,img.appledb.dev
   - DOMAIN,img.apponic.com
   - DOMAIN,img.atlasobscura.com
   - DOMAIN,img.atom.com
@@ -3423,6 +3428,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.cookielaw.org
   - DOMAIN-SUFFIX,cdn.cwinfo.net
   - DOMAIN-SUFFIX,cdn.discordapp.com
+  - DOMAIN-SUFFIX,cdn.easyling.com
   - DOMAIN-SUFFIX,cdn.getfeedback.com
   - DOMAIN-SUFFIX,cdn.greenhouse.io
   - DOMAIN-SUFFIX,cdn.icann.org
@@ -4288,6 +4294,7 @@ payload:
   - DOMAIN-SUFFIX,szjal.cn
   - DOMAIN-SUFFIX,t8cdn.com
   - DOMAIN-SUFFIX,tacdn.com
+  - DOMAIN-SUFFIX,tags.f5.com
   - DOMAIN-SUFFIX,tapecontent.net
   - DOMAIN-SUFFIX,targetimg1.com
   - DOMAIN-SUFFIX,tauri.app

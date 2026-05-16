@@ -1,5 +1,5 @@
-# Clash total line 8769
-# Last updated Wed 05/13/2026 23:02:00.41
+# Clash total line 8778
+# Last updated Sat 05/16/2026 22:39:37.86
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -119,6 +119,7 @@ payload:
   - DOMAIN,app-spm.com
   - DOMAIN,app-static-prod.posthog.com
   - DOMAIN,app-static.eu.posthog.com
+  - DOMAIN,app-static.sendsafely.com
   - DOMAIN,app-static.turtl.co
   - DOMAIN,app-updates.agilebits.com
   - DOMAIN,app.1password.com
@@ -712,6 +713,7 @@ payload:
   - DOMAIN,cdn.european-alternatives.eu
   - DOMAIN,cdn.evbstatic.com
   - DOMAIN,cdn.evolution-x.org
+  - DOMAIN,cdn.f5.com
   - DOMAIN,cdn.faire.com
   - DOMAIN,cdn.fastcomments.com
   - DOMAIN,cdn.fasterthanli.me
@@ -952,6 +954,7 @@ payload:
   - DOMAIN,cdn.stellarhosted.com
   - DOMAIN,cdn.stonly.com
   - DOMAIN,cdn.streamlabs.com
+  - DOMAIN,cdn.studio.f5.com
   - DOMAIN,cdn.substack.com
   - DOMAIN,cdn.sunofbeaches.com
   - DOMAIN,cdn.super.com
@@ -2044,6 +2047,7 @@ payload:
   - DOMAIN,i.loli.best
   - DOMAIN,i.magecdn.com
   - DOMAIN,i.mediatek.com
+  - DOMAIN,i.meee.com.tw
   - DOMAIN,i.mij.rip
   - DOMAIN,i.mt.lv
   - DOMAIN,i.mydramalist.com
@@ -2253,6 +2257,7 @@ payload:
   - DOMAIN,img.api.video
   - DOMAIN,img.apk.cafe
   - DOMAIN,img.applealmond.com
+  - DOMAIN,img.appledb.dev
   - DOMAIN,img.apponic.com
   - DOMAIN,img.atlasobscura.com
   - DOMAIN,img.atom.com
@@ -2681,6 +2686,7 @@ payload:
   - DOMAIN,mirror.apad.pro
   - DOMAIN,mirror.applebred.net
   - DOMAIN,mirror.aptus.co.tz
+  - DOMAIN,mirror.archlinux.tw
   - DOMAIN,mirror.arizona.edu
   - DOMAIN,mirror.arvancloud.ir
   - DOMAIN,mirror.as.kamatera.com
@@ -4901,6 +4907,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.cwinfo.net
   - DOMAIN-SUFFIX,cdn.discordapp.com
   - DOMAIN-SUFFIX,cdn.ea.com
+  - DOMAIN-SUFFIX,cdn.easyling.com
   - DOMAIN-SUFFIX,cdn.entelectonline.co.za
   - DOMAIN-SUFFIX,cdn.getfeedback.com
   - DOMAIN-SUFFIX,cdn.greenhouse.io
@@ -6417,6 +6424,7 @@ payload:
   - DOMAIN-SUFFIX,mirror.nl
   - DOMAIN-SUFFIX,mirror.noc.one
   - DOMAIN-SUFFIX,mirror.norbert-ruehl.de
+  - DOMAIN-SUFFIX,mirror.pkgbuild.com
   - DOMAIN-SUFFIX,mirror.rackspace.com
   - DOMAIN-SUFFIX,mirror.rafal.ca
   - DOMAIN-SUFFIX,mirror.rain.co.za
@@ -7248,6 +7256,7 @@ payload:
   - DOMAIN-SUFFIX,szjal.cn
   - DOMAIN-SUFFIX,t8cdn.com
   - DOMAIN-SUFFIX,tacdn.com
+  - DOMAIN-SUFFIX,tags.f5.com
   - DOMAIN-SUFFIX,takefile.link
   - DOMAIN-SUFFIX,tanhuatv.site
   - DOMAIN-SUFFIX,tapecontent.net
