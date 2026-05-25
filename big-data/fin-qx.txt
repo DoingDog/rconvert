@@ -1,5 +1,5 @@
-# Quantumult total line 8764
-# Last updated Fri 05/22/2026 22:55:08.27
+# Quantumult total line 8767
+# Last updated Mon 05/25/2026 22:57:09.77
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -741,6 +741,7 @@ HOST,cdn.gettr.com,LIST
 HOST,cdn.ghostery.com,LIST
 HOST,cdn.giftcardpro.app,LIST
 HOST,cdn.gigya.com,LIST
+HOST,cdn.gist.ai,LIST
 HOST,cdn.gofundme.com,LIST
 HOST,cdn.googlesource.com,LIST
 HOST,cdn.growthbook.io,LIST
@@ -4439,6 +4440,7 @@ HOST,widget.freshworks.com,LIST
 HOST,widget.gotolstoy.com,LIST
 HOST,widget.intercom.io,LIST
 HOST,widget.kapa.ai,LIST
+HOST,widget.prod.equally.ai,LIST
 HOST,widget.reviews.io,LIST
 HOST,widget.trustpilot.com,LIST
 HOST,widget.usepylon.com,LIST
@@ -5448,6 +5450,7 @@ HOST-SUFFIX,ext-twitch.tv,LIST
 HOST-SUFFIX,externulls.com,LIST
 HOST-SUFFIX,extmatrix.com,LIST
 HOST-SUFFIX,ezocdn.com,LIST
+HOST-SUFFIX,f-cdn.com,LIST
 HOST-SUFFIX,f.hubspotemail.net,LIST
 HOST-SUFFIX,f.hubspotfree.net,LIST
 HOST-SUFFIX,f.hubspotstarter.net,LIST

@@ -1,5 +1,5 @@
-# Clash total line 8778
-# Last updated Fri 05/22/2026 22:55:08.32
+# Clash total line 8781
+# Last updated Mon 05/25/2026 22:57:09.82
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -742,6 +742,7 @@ payload:
   - DOMAIN,cdn.ghostery.com
   - DOMAIN,cdn.giftcardpro.app
   - DOMAIN,cdn.gigya.com
+  - DOMAIN,cdn.gist.ai
   - DOMAIN,cdn.gofundme.com
   - DOMAIN,cdn.googlesource.com
   - DOMAIN,cdn.growthbook.io
@@ -4440,6 +4441,7 @@ payload:
   - DOMAIN,widget.gotolstoy.com
   - DOMAIN,widget.intercom.io
   - DOMAIN,widget.kapa.ai
+  - DOMAIN,widget.prod.equally.ai
   - DOMAIN,widget.reviews.io
   - DOMAIN,widget.trustpilot.com
   - DOMAIN,widget.usepylon.com
@@ -5449,6 +5451,7 @@ payload:
   - DOMAIN-SUFFIX,externulls.com
   - DOMAIN-SUFFIX,extmatrix.com
   - DOMAIN-SUFFIX,ezocdn.com
+  - DOMAIN-SUFFIX,f-cdn.com
   - DOMAIN-SUFFIX,f.hubspotemail.net
   - DOMAIN-SUFFIX,f.hubspotfree.net
   - DOMAIN-SUFFIX,f.hubspotstarter.net
