@@ -1,5 +1,5 @@
-# Quantumult total line 8767
-# Last updated Mon 05/25/2026 22:57:09.77
+# Quantumult total line 8771
+# Last updated Thu 05/28/2026 23:12:58.14
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -1629,6 +1629,7 @@ HOST,enterprise.proxmox.com,LIST
 HOST,eomd1.fembeqq.xyz,LIST
 HOST,ep1.pinkbike.org,LIST
 HOST,epic-social-social-modules-prod.ol.epicgames.com,LIST
+HOST,error.c.cdn77.org,LIST
 HOST,error.rakuten.co.jp,LIST
 HOST,errors.figma.com,LIST
 HOST,es.pinkbike.org,LIST
@@ -4312,10 +4313,12 @@ HOST,update.googleapis.com,LIST
 HOST,update.greasyfork.org,LIST
 HOST,update.parallels.com,LIST
 HOST,update.sleazyfork.org,LIST
+HOST,updateinfo.devmate.com,LIST
 HOST,updater.snipaste.com,LIST
 HOST,updates-cdn.bravesoftware.com,LIST
 HOST,updates.64gr.am,LIST
 HOST,updates.bravesoftware.com,LIST
+HOST,updates.devmate.com,LIST
 HOST,updates.edovia.com,LIST
 HOST,updates.istatmenus.app,LIST
 HOST,updates.signal.org,LIST
@@ -5573,6 +5576,7 @@ HOST-SUFFIX,fnbuilds.services,LIST
 HOST-SUFFIX,fncstatic.com,LIST
 HOST-SUFFIX,fontawesome.com,LIST
 HOST-SUFFIX,fonts.com,LIST
+HOST-SUFFIX,fonts.coollabs.io,LIST
 HOST-SUFFIX,fonts.gsma.com,LIST
 HOST-SUFFIX,fonts.net,LIST
 HOST-SUFFIX,forbesimg.com,LIST

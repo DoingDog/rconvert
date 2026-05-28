@@ -1,5 +1,5 @@
-# Clash total line 8781
-# Last updated Mon 05/25/2026 22:57:09.82
+# Clash total line 8785
+# Last updated Thu 05/28/2026 23:12:58.20
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1630,6 +1630,7 @@ payload:
   - DOMAIN,eomd1.fembeqq.xyz
   - DOMAIN,ep1.pinkbike.org
   - DOMAIN,epic-social-social-modules-prod.ol.epicgames.com
+  - DOMAIN,error.c.cdn77.org
   - DOMAIN,error.rakuten.co.jp
   - DOMAIN,errors.figma.com
   - DOMAIN,es.pinkbike.org
@@ -4313,10 +4314,12 @@ payload:
   - DOMAIN,update.greasyfork.org
   - DOMAIN,update.parallels.com
   - DOMAIN,update.sleazyfork.org
+  - DOMAIN,updateinfo.devmate.com
   - DOMAIN,updater.snipaste.com
   - DOMAIN,updates-cdn.bravesoftware.com
   - DOMAIN,updates.64gr.am
   - DOMAIN,updates.bravesoftware.com
+  - DOMAIN,updates.devmate.com
   - DOMAIN,updates.edovia.com
   - DOMAIN,updates.istatmenus.app
   - DOMAIN,updates.signal.org
@@ -5574,6 +5577,7 @@ payload:
   - DOMAIN-SUFFIX,fncstatic.com
   - DOMAIN-SUFFIX,fontawesome.com
   - DOMAIN-SUFFIX,fonts.com
+  - DOMAIN-SUFFIX,fonts.coollabs.io
   - DOMAIN-SUFFIX,fonts.gsma.com
   - DOMAIN-SUFFIX,fonts.net
   - DOMAIN-SUFFIX,forbesimg.com
