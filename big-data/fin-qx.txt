@@ -1,5 +1,5 @@
-# Quantumult total line 8771
-# Last updated Sun 05/31/2026 22:52:07.03
+# Quantumult total line 8770
+# Last updated Mon 06/01/2026 23:27:09.37
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -833,6 +833,7 @@ HOST,cdn.music.com,LIST
 HOST,cdn.myanimelist.net,LIST
 HOST,cdn.myfonts.net,LIST
 HOST,cdn.myfutanari.com,LIST
+HOST,cdn.myopenpass.com,LIST
 HOST,cdn.myportfolio.com,LIST
 HOST,cdn.nba.com,LIST
 HOST,cdn.ndtv.com,LIST
@@ -1191,7 +1192,6 @@ HOST,cloudflare.tv,LIST
 HOST,cloudfront.barilliance.com,LIST
 HOST,cloudfront.debian.net,LIST
 HOST,cmd-cdn.cleanmymac.com,LIST
-HOST,cminf.sfcat.link,LIST
 HOST,cmp-cdn.p.aws.economist.com,LIST
 HOST,cms-assets.nodecraft.com,LIST
 HOST,cms-assets.unrealengine.com,LIST
@@ -1323,7 +1323,6 @@ HOST,ctan.space-pro.be,LIST
 HOST,ctan.tetaneutral.net,LIST
 HOST,ctan.uib.no,LIST
 HOST,ctldl.windowsupdate.com,LIST
-HOST,cuinf.sfcat.link,LIST
 HOST,curl.se,LIST
 HOST,cw-image-resizer.cwg.tw,LIST
 HOST,cwsimages.ingramcontent.com,LIST
@@ -3221,7 +3220,6 @@ HOST,node.green,LIST
 HOST,nodebox-runtime.codesandbox.io,LIST
 HOST,nodei.co,LIST
 HOST,notebooklm.google.com,LIST
-HOST,notnetflix.cos.cat,LIST
 HOST,np-edge.itunes.apple.com,LIST
 HOST,npm.antfu.dev,LIST
 HOST,npm.im,LIST
@@ -6288,6 +6286,7 @@ HOST-SUFFIX,line-scdn.net,LIST
 HOST-SUFFIX,linetv.tw,LIST
 HOST-SUFFIX,linodeobjects.com,LIST
 HOST-SUFFIX,linx.li,LIST
+HOST-SUFFIX,lite.cn2gias.uk,LIST
 HOST-SUFFIX,litix.io,LIST
 HOST-SUFFIX,litv.tv,LIST
 HOST-SUFFIX,litvp.com,LIST

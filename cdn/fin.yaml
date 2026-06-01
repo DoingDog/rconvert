@@ -1,5 +1,5 @@
-# Clash total line 4493
-# Last updated Sun 05/31/2026 22:51:55.50
+# Clash total line 4494
+# Last updated Mon 06/01/2026 23:26:56.95
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -765,6 +765,7 @@ payload:
   - DOMAIN,cdn.myanimelist.net
   - DOMAIN,cdn.myfonts.net
   - DOMAIN,cdn.myfutanari.com
+  - DOMAIN,cdn.myopenpass.com
   - DOMAIN,cdn.myportfolio.com
   - DOMAIN,cdn.nba.com
   - DOMAIN,cdn.ndtv.com
