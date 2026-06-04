@@ -1,5 +1,5 @@
-# Clash total line 8784
-# Last updated Mon 06/01/2026 23:27:09.43
+# Clash total line 8786
+# Last updated Thu 06/04/2026 23:06:28.51
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -287,6 +287,7 @@ payload:
   - DOMAIN,assets.onestore.ms
   - DOMAIN,assets.ontrack.com
   - DOMAIN,assets.openalternative.co
+  - DOMAIN,assets.openlogi.org
   - DOMAIN,assets.openshift.com
   - DOMAIN,assets.openshift.net
   - DOMAIN,assets.orz.uno
@@ -425,6 +426,7 @@ payload:
   - DOMAIN,blizzard.gcdn.cloudn.co.kr
   - DOMAIN,blob.jortage.com
   - DOMAIN,blob.sololearn.com
+  - DOMAIN,bn.d.miui.com
   - DOMAIN,boards.greenhouse.io
   - DOMAIN,bookface-static.ycombinator.com
   - DOMAIN,boot.arcboxcdn.com
@@ -549,6 +551,7 @@ payload:
   - DOMAIN,cdn-msp.jmcomic.me
   - DOMAIN,cdn-node.diskpart.com
   - DOMAIN,cdn-nsbus.ui.com
+  - DOMAIN,cdn-ota.azureedge.net
   - DOMAIN,cdn-patch.swtor.com
   - DOMAIN,cdn-public-apis.moonlock.com
   - DOMAIN,cdn-public.sociabble.com
@@ -5031,6 +5034,7 @@ payload:
   - DOMAIN-SUFFIX,cms-cdn.linear.app
   - DOMAIN-SUFFIX,cms-twdigitalassets.com
   - DOMAIN-SUFFIX,cms.replit.com
+  - DOMAIN-SUFFIX,cn2gias.uk
   - DOMAIN-SUFFIX,cnbc.com
   - DOMAIN-SUFFIX,cnbcfm.com
   - DOMAIN-SUFFIX,cnbetacdn.com
@@ -6287,7 +6291,6 @@ payload:
   - DOMAIN-SUFFIX,linetv.tw
   - DOMAIN-SUFFIX,linodeobjects.com
   - DOMAIN-SUFFIX,linx.li
-  - DOMAIN-SUFFIX,lite.cn2gias.uk
   - DOMAIN-SUFFIX,litix.io
   - DOMAIN-SUFFIX,litv.tv
   - DOMAIN-SUFFIX,litvp.com
@@ -6845,7 +6848,6 @@ payload:
   - DOMAIN-SUFFIX,pornhubpremium.com
   - DOMAIN-SUFFIX,pornimg.xyz
   - DOMAIN-SUFFIX,ports.ubuntu.com
-  - DOMAIN-SUFFIX,post.cn2gias.uk
   - DOMAIN-SUFFIX,postimg.cc
   - DOMAIN-SUFFIX,potplayer.tv
   - DOMAIN-SUFFIX,pplusstatic.com
