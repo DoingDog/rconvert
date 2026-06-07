@@ -1,5 +1,5 @@
-# Clash total line 8786
-# Last updated Thu 06/04/2026 23:06:28.51
+# Clash total line 8793
+# Last updated Sun 06/07/2026 23:00:59.76
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -396,6 +396,7 @@ payload:
   - DOMAIN,axiecdn.axieinfinity.com
   - DOMAIN,az700632.vo.msecnd.net
   - DOMAIN,az764295.vo.msecnd.net
+  - DOMAIN,b.manufact.com
   - DOMAIN,b.peatio.com
   - DOMAIN,b.sf-syn.com
   - DOMAIN,b2.mcarchive.net
@@ -715,6 +716,7 @@ payload:
   - DOMAIN,cdn.eu.contentful.com
   - DOMAIN,cdn.european-alternatives.eu
   - DOMAIN,cdn.evbstatic.com
+  - DOMAIN,cdn.evgnet.com
   - DOMAIN,cdn.evolution-x.org
   - DOMAIN,cdn.f5.com
   - DOMAIN,cdn.faire.com
@@ -2639,6 +2641,7 @@ payload:
   - DOMAIN,media.themoviedb.org
   - DOMAIN,media.theporndude.com
   - DOMAIN,media.theresanaiforthat.com
+  - DOMAIN,media.trakt.tv
   - DOMAIN,media.user.com
   - DOMAIN,media.webtoo.ls
   - DOMAIN,media.wired.com
@@ -3310,6 +3313,7 @@ payload:
   - DOMAIN,pf-cdn-content-prod.azureedge.net
   - DOMAIN,pg2dhpc3p5ec22g3.jkforum.net
   - DOMAIN,pgw.udn.com.tw
+  - DOMAIN,ph.langfuse.com
   - DOMAIN,ph.northflank.com
   - DOMAIN,ph.tryprofound.com
   - DOMAIN,phishing.army
@@ -4329,11 +4333,13 @@ payload:
   - DOMAIN,upload.movim.eu
   - DOMAIN,upload.teftera.com
   - DOMAIN,upload.wikimedia.org
+  - DOMAIN,uploadcare.mwcglobalprofile.com
   - DOMAIN,uploads-cdn.omnicalculator.com
   - DOMAIN,uploads.bikeindex.org
   - DOMAIN,uploads.codesandbox.io
   - DOMAIN,uploads.guim.co.uk
   - DOMAIN,uploads.linear.app
+  - DOMAIN,uploads.pullfrog.com
   - DOMAIN,uploads.sitepoint.com
   - DOMAIN,upos-sz-mirroralibstar1.bilivideo.com
   - DOMAIN,upos-sz-mirrorcosbstar1.bilivideo.com
@@ -4408,6 +4414,7 @@ payload:
   - DOMAIN,wa1.aninoapps.com
   - DOMAIN,wac-cdn.atlassian.com
   - DOMAIN,waitlisted.co
+  - DOMAIN,walter-r2.trakt.tv
   - DOMAIN,wandi-6402.kxcdn.com
   - DOMAIN,wcpstatic.microsoft.com
   - DOMAIN,wctour-images.worldchess.com
