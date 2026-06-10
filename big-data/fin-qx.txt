@@ -1,5 +1,5 @@
-# Quantumult total line 8779
-# Last updated Sun 06/07/2026 23:00:59.72
+# Quantumult total line 8787
+# Last updated Wed 06/10/2026 23:24:39.55
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -333,6 +333,7 @@ HOST,assets.tigerdata.com,LIST
 HOST,assets.time.com,LIST
 HOST,assets.tokopedia.net,LIST
 HOST,assets.toot.cafe,LIST
+HOST,assets.transfernow.net,LIST
 HOST,assets.tvtropes.org,LIST
 HOST,assets.unicorn.studio,LIST
 HOST,assets.unifi-ai.com,LIST
@@ -498,6 +499,7 @@ HOST,canny-assets.io,LIST
 HOST,canvas-lb.tubitv.com,LIST
 HOST,cartodb-basemaps-a.global.ssl.fastly.net,LIST
 HOST,cassette.sphdigital.com.sg,LIST
+HOST,catalogartifact.azureedge.net,LIST
 HOST,cc-embed.adobe.com,LIST
 HOST,cc.boyfriendtv.com,LIST
 HOST,cc.coemn.com,LIST
@@ -1020,7 +1022,6 @@ HOST,cdn.wikiwiki.jp,LIST
 HOST,cdn.windowsreport.com,LIST
 HOST,cdn.winget.microsoft.com,LIST
 HOST,cdn.wishpond.net,LIST
-HOST,cdn.workos.com,LIST
 HOST,cdn.worldvectorlogo.com,LIST
 HOST,cdn.writeas.net,LIST
 HOST,cdn.xeiaso.net,LIST
@@ -1301,6 +1302,7 @@ HOST,creative.eizzih.com,LIST
 HOST,creator-image.javhd.com,LIST
 HOST,crl.usertrust.com,LIST
 HOST,crl.verisign.com,LIST
+HOST,crl3.digicert.com,LIST
 HOST,crt.comodoca.com,LIST
 HOST,crt.sectigo.com,LIST
 HOST,crt.usertrust.com,LIST
@@ -1598,6 +1600,7 @@ HOST,edge.nodeseek.com,LIST
 HOST,edge.personalizer.io,LIST
 HOST,edge.sitecorecloud.io,LIST
 HOST,edge.steam-dns.top.comcast.net,LIST
+HOST,edge.zerofs.link,LIST
 HOST,edgeassetservice.azureedge.net,LIST
 HOST,edgecdn-embza6g8cacagcbn.z01.azurefd.net,LIST
 HOST,edgestatic.azureedge.net,LIST
@@ -2381,6 +2384,7 @@ HOST,imgcn5.bgmbk.tv,LIST
 HOST,imgfile.shop,LIST
 HOST,imgix.setapp.com,LIST
 HOST,imgopt.infoq.com,LIST
+HOST,imgproxy.flathub.org,LIST
 HOST,imgproxy.fourthwall.com,LIST
 HOST,imgrs.apkcombo.com,LIST
 HOST,imgs.plurk.com,LIST
@@ -3188,6 +3192,7 @@ HOST,momentjs.com,LIST
 HOST,moodular.jotform.com,LIST
 HOST,mosaic-blender.fxtwitter.com,LIST
 HOST,mosaic.fxtwitter.com,LIST
+HOST,mozilla-ohttp.fastly-edge.com,LIST
 HOST,mparticle.weather.com,LIST
 HOST,mr.heru.id,LIST
 HOST,msdl.microsoft.com,LIST
@@ -4368,6 +4373,7 @@ HOST,v.w-x.co,LIST
 HOST,v2.listenloop.com,LIST
 HOST,v2uploads.zopim.io,LIST
 HOST,vanilla-extract.style,LIST
+HOST,variations.brave.com,LIST
 HOST,vcdn.anysex.com,LIST
 HOST,vectorified.com,LIST
 HOST,version.cyberduck.io,LIST
@@ -4959,6 +4965,7 @@ HOST-SUFFIX,cdn.ub8.com,LIST
 HOST-SUFFIX,cdn.ubi.com,LIST
 HOST-SUFFIX,cdn.vidarequre.com,LIST
 HOST-SUFFIX,cdn.vidcrunch.com,LIST
+HOST-SUFFIX,cdn.workos.com,LIST
 HOST-SUFFIX,cdn1122.com,LIST
 HOST-SUFFIX,cdn2.hubspot.net,LIST
 HOST-SUFFIX,cdn2020.com,LIST
@@ -7268,6 +7275,7 @@ HOST-SUFFIX,syfy.com,LIST
 HOST-SUFFIX,syncs.online,LIST
 HOST-SUFFIX,synn.cc,LIST
 HOST-SUFFIX,szjal.cn,LIST
+HOST-SUFFIX,t-assets.net,LIST
 HOST-SUFFIX,t8cdn.com,LIST
 HOST-SUFFIX,tacdn.com,LIST
 HOST-SUFFIX,tags.f5.com,LIST

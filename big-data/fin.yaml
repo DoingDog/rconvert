@@ -1,5 +1,5 @@
-# Clash total line 8793
-# Last updated Sun 06/07/2026 23:00:59.76
+# Clash total line 8801
+# Last updated Wed 06/10/2026 23:24:39.60
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -334,6 +334,7 @@ payload:
   - DOMAIN,assets.time.com
   - DOMAIN,assets.tokopedia.net
   - DOMAIN,assets.toot.cafe
+  - DOMAIN,assets.transfernow.net
   - DOMAIN,assets.tvtropes.org
   - DOMAIN,assets.unicorn.studio
   - DOMAIN,assets.unifi-ai.com
@@ -499,6 +500,7 @@ payload:
   - DOMAIN,canvas-lb.tubitv.com
   - DOMAIN,cartodb-basemaps-a.global.ssl.fastly.net
   - DOMAIN,cassette.sphdigital.com.sg
+  - DOMAIN,catalogartifact.azureedge.net
   - DOMAIN,cc-embed.adobe.com
   - DOMAIN,cc.boyfriendtv.com
   - DOMAIN,cc.coemn.com
@@ -1021,7 +1023,6 @@ payload:
   - DOMAIN,cdn.windowsreport.com
   - DOMAIN,cdn.winget.microsoft.com
   - DOMAIN,cdn.wishpond.net
-  - DOMAIN,cdn.workos.com
   - DOMAIN,cdn.worldvectorlogo.com
   - DOMAIN,cdn.writeas.net
   - DOMAIN,cdn.xeiaso.net
@@ -1302,6 +1303,7 @@ payload:
   - DOMAIN,creator-image.javhd.com
   - DOMAIN,crl.usertrust.com
   - DOMAIN,crl.verisign.com
+  - DOMAIN,crl3.digicert.com
   - DOMAIN,crt.comodoca.com
   - DOMAIN,crt.sectigo.com
   - DOMAIN,crt.usertrust.com
@@ -1599,6 +1601,7 @@ payload:
   - DOMAIN,edge.personalizer.io
   - DOMAIN,edge.sitecorecloud.io
   - DOMAIN,edge.steam-dns.top.comcast.net
+  - DOMAIN,edge.zerofs.link
   - DOMAIN,edgeassetservice.azureedge.net
   - DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net
   - DOMAIN,edgestatic.azureedge.net
@@ -2382,6 +2385,7 @@ payload:
   - DOMAIN,imgfile.shop
   - DOMAIN,imgix.setapp.com
   - DOMAIN,imgopt.infoq.com
+  - DOMAIN,imgproxy.flathub.org
   - DOMAIN,imgproxy.fourthwall.com
   - DOMAIN,imgrs.apkcombo.com
   - DOMAIN,imgs.plurk.com
@@ -3189,6 +3193,7 @@ payload:
   - DOMAIN,moodular.jotform.com
   - DOMAIN,mosaic-blender.fxtwitter.com
   - DOMAIN,mosaic.fxtwitter.com
+  - DOMAIN,mozilla-ohttp.fastly-edge.com
   - DOMAIN,mparticle.weather.com
   - DOMAIN,mr.heru.id
   - DOMAIN,msdl.microsoft.com
@@ -4369,6 +4374,7 @@ payload:
   - DOMAIN,v2.listenloop.com
   - DOMAIN,v2uploads.zopim.io
   - DOMAIN,vanilla-extract.style
+  - DOMAIN,variations.brave.com
   - DOMAIN,vcdn.anysex.com
   - DOMAIN,vectorified.com
   - DOMAIN,version.cyberduck.io
@@ -4960,6 +4966,7 @@ payload:
   - DOMAIN-SUFFIX,cdn.ubi.com
   - DOMAIN-SUFFIX,cdn.vidarequre.com
   - DOMAIN-SUFFIX,cdn.vidcrunch.com
+  - DOMAIN-SUFFIX,cdn.workos.com
   - DOMAIN-SUFFIX,cdn1122.com
   - DOMAIN-SUFFIX,cdn2.hubspot.net
   - DOMAIN-SUFFIX,cdn2020.com
@@ -7269,6 +7276,7 @@ payload:
   - DOMAIN-SUFFIX,syncs.online
   - DOMAIN-SUFFIX,synn.cc
   - DOMAIN-SUFFIX,szjal.cn
+  - DOMAIN-SUFFIX,t-assets.net
   - DOMAIN-SUFFIX,t8cdn.com
   - DOMAIN-SUFFIX,tacdn.com
   - DOMAIN-SUFFIX,tags.f5.com
