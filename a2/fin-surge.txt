@@ -1,5 +1,5 @@
-# Surge Rules total line 1316
-# Last updated Wed 06/10/2026 23:17:47.22
+# Surge Rules total line 1317
+# Last updated Sat 06/13/2026 22:52:40.85
 DOMAIN-KEYWORD,-ad.a.yximgs.com
 DOMAIN-KEYWORD,-ad.ixigua.com
 DOMAIN-KEYWORD,-ad.sm.cn
@@ -375,6 +375,7 @@ IP-CIDR,103.155.214.207/32,no-resolve
 IP-CIDR,103.167.92.73/32,no-resolve
 IP-CIDR,103.169.90.205/32,no-resolve
 IP-CIDR,103.174.102.240/32,no-resolve
+IP-CIDR,103.179.189.35/32,no-resolve
 IP-CIDR,103.19.128.222/32,no-resolve
 IP-CIDR,103.224.182.210/32,no-resolve
 IP-CIDR,103.224.182.251/32,no-resolve
