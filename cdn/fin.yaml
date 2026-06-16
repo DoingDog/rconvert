@@ -1,5 +1,5 @@
-# Clash total line 4509
-# Last updated Sat 06/13/2026 22:59:07.75
+# Clash total line 4514
+# Last updated Tue 06/16/2026 23:22:52.22
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -438,6 +438,7 @@ payload:
   - DOMAIN,cache.ip-api.com
   - DOMAIN,cache.omnicalculator.com
   - DOMAIN,cached.rebuyengine.com
+  - DOMAIN,cafe.github.com
   - DOMAIN,canny-assets.io
   - DOMAIN,canvas-lb.tubitv.com
   - DOMAIN,cartodb-basemaps-a.global.ssl.fastly.net
@@ -1429,6 +1430,7 @@ payload:
   - DOMAIN,frontend.floatplane.com
   - DOMAIN,fs.mingpao.com
   - DOMAIN,fscdn.eppo.cloud
+  - DOMAIN,fullstackopen.com
   - DOMAIN,g-static.ap4r.com
   - DOMAIN,g.newsweek.com
   - DOMAIN,g1.nyt.com
@@ -1467,6 +1469,7 @@ payload:
   - DOMAIN,headway-widget.net
   - DOMAIN,heatmap-external-a.strava.com
   - DOMAIN,hello.zonos.com
+  - DOMAIN,hentai0.com
   - DOMAIN,hentaiworldtv.b-cdn.net
   - DOMAIN,heroicons.com
   - DOMAIN,hhhhhhome86227170.wordpress.com
@@ -2690,6 +2693,7 @@ payload:
   - DOMAIN,static.c-spanvideo.org
   - DOMAIN,static.canva.com
   - DOMAIN,static.captcha-delivery.com
+  - DOMAIN,static.captcha.awswaf.com
   - DOMAIN,static.carfax.com
   - DOMAIN,static.cdnlogo.com
   - DOMAIN,static.chaika.moe
@@ -3805,6 +3809,7 @@ payload:
   - DOMAIN-SUFFIX,imageshack.us
   - DOMAIN-SUFFIX,imagetwist.com
   - DOMAIN-SUFFIX,img-dpreview.com
+  - DOMAIN-SUFFIX,img.gmo.jp
   - DOMAIN-SUFFIX,img.haiwaikan.com
   - DOMAIN-SUFFIX,img.sooplive.com
   - DOMAIN-SUFFIX,img1.acsta.net
