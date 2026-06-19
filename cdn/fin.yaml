@@ -1,5 +1,5 @@
-# Clash total line 4514
-# Last updated Tue 06/16/2026 23:22:52.22
+# Clash total line 4518
+# Last updated Fri 06/19/2026 22:48:50.31
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -153,6 +153,7 @@ payload:
   - DOMAIN,assets.cgtrader.com
   - DOMAIN,assets.change.org
   - DOMAIN,assets.chaos.social
+  - DOMAIN,assets.churnkey.co
   - DOMAIN,assets.clever-cloud.com
   - DOMAIN,assets.clibo.tw
   - DOMAIN,assets.clickfunnels.com
@@ -402,6 +403,7 @@ payload:
   - DOMAIN,bundles.npr.org
   - DOMAIN,bunnycdn-video-assets.b-cdn.net
   - DOMAIN,busuanzi.ibruce.info
+  - DOMAIN,bytescale.mobbin.com
   - DOMAIN,c-bin.b-cdn.net
   - DOMAIN,c.1password.com
   - DOMAIN,c.animaapp.com
@@ -1283,6 +1285,7 @@ payload:
   - DOMAIN,edgestorewebpme-d2hnhfgbgnfmfuha.z01.azurefd.net
   - DOMAIN,eep.io
   - DOMAIN,eightcha.com
+  - DOMAIN,embed-audio.cnevids.com
   - DOMAIN,embed-cloudfront.wistia.com
   - DOMAIN,embed-ssl.wistia.com
   - DOMAIN,embed-v2.testimonial.to
@@ -3932,6 +3935,7 @@ payload:
   - DOMAIN-SUFFIX,kleecks-cdn.com
   - DOMAIN-SUFFIX,kwcdn.com
   - DOMAIN-SUFFIX,kym-cdn.com
+  - DOMAIN-SUFFIX,larksuitepkg.com
   - DOMAIN-SUFFIX,latam.orbitor.dev
   - DOMAIN-SUFFIX,lazcdn.com
   - DOMAIN-SUFFIX,lbpicpic.com
