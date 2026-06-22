@@ -1,5 +1,5 @@
-# Clash total line 8813
-# Last updated Fri 06/19/2026 22:49:02.81
+# Clash total line 8814
+# Last updated Mon 06/22/2026 23:17:09.43
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -4428,6 +4428,7 @@ payload:
   - DOMAIN,wa1.aninoapps.com
   - DOMAIN,wac-cdn.atlassian.com
   - DOMAIN,waitlisted.co
+  - DOMAIN,wall-ui-cdn.p.aws.economist.com
   - DOMAIN,walter-r2.trakt.tv
   - DOMAIN,wandi-6402.kxcdn.com
   - DOMAIN,wcpstatic.microsoft.com
