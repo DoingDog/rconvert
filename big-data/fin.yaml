@@ -1,5 +1,5 @@
-# Clash total line 8835
-# Last updated Thu 06/25/2026 23:12:26.40
+# Clash total line 8836
+# Last updated Sun 06/28/2026 22:58:46.30
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -4356,6 +4356,7 @@ payload:
   - DOMAIN,updates.devmate.com
   - DOMAIN,updates.edovia.com
   - DOMAIN,updates.istatmenus.app
+  - DOMAIN,updates.openlogi.org
   - DOMAIN,updates.signal.org
   - DOMAIN,updates.vibeisland.app
   - DOMAIN,updates2.signal.org
