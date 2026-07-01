@@ -1,5 +1,5 @@
-# Quantumult total line 4535
-# Last updated Sun 06/28/2026 22:58:34.06
+# Quantumult total line 4544
+# Last updated Wed 07/01/2026 23:05:58.92
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -938,6 +938,7 @@ HOST,cdn.userreport.com,LIST
 HOST,cdn.userway.org,LIST
 HOST,cdn.v2ex.com,LIST
 HOST,cdn.vector.co,LIST
+HOST,cdn.veeam.com,LIST
 HOST,cdn.verifypass.com,LIST
 HOST,cdn.viafoura.net,LIST
 HOST,cdn.videy.co,LIST
@@ -1101,6 +1102,7 @@ HOST,cf.javfree.me,LIST
 HOST,cf.mhgui.com,LIST
 HOST,cf.shopee.tw,LIST
 HOST,cfvod.kaltura.com,LIST
+HOST,changelog-widget.canny.io,LIST
 HOST,chart.googleapis.com,LIST
 HOST,chat-assets.front.app,LIST
 HOST,chat.digitalgenius.com,LIST
@@ -1166,6 +1168,7 @@ HOST,connectivitycheck.gstatic.com,LIST
 HOST,consent-manager.ft.com,LIST
 HOST,consent-notice.ft.com,LIST
 HOST,consent.dw.com,LIST
+HOST,consent.formula1.com,LIST
 HOST,consentdeliveryfd.azurefd.net,LIST
 HOST,content-a.strava.com,LIST
 HOST,content-cdn.svc.ui.com,LIST
@@ -1445,6 +1448,7 @@ HOST,g-static.ap4r.com,LIST
 HOST,g.newsweek.com,LIST
 HOST,g1.nyt.com,LIST
 HOST,gamemedia.armorgames.com,LIST
+HOST,gannett-cdn.ex.co,LIST
 HOST,gdb.rferl.org,LIST
 HOST,gdb.voanews.com,LIST
 HOST,gearbox.imgix.com,LIST
@@ -2045,6 +2049,7 @@ HOST,media.evolv.ai,LIST
 HOST,media.fc2.com,LIST
 HOST,media.fidoalliance.org,LIST
 HOST,media.flaticon.com,LIST
+HOST,media.formula1.com,LIST
 HOST,media.fs.com,LIST
 HOST,media.gamestop.com,LIST
 HOST,media.geeksforgeeks.org,LIST
@@ -2484,6 +2489,7 @@ HOST,safebrowsing.google.com,LIST
 HOST,safebrowsing.googleapis.com,LIST
 HOST,sandpack-cdn-staging.blazingly.io,LIST
 HOST,sandpack-cdn-v2.codesandbox.io,LIST
+HOST,sat.windy.com,LIST
 HOST,sbl.onfastspring.com,LIST
 HOST,scache.vzw.com,LIST
 HOST,scache1.vzw.com,LIST
@@ -2754,6 +2760,7 @@ HOST,static.ffx.io,LIST
 HOST,static.figma.com,LIST
 HOST,static.filehorse.com,LIST
 HOST,static.filestackapi.com,LIST
+HOST,static.formula1.com,LIST
 HOST,static.foxbusiness.com,LIST
 HOST,static.foxnews.com,LIST
 HOST,static.frame.work,LIST
@@ -3261,6 +3268,7 @@ HOST,widget.intercom.io,LIST
 HOST,widget.kapa.ai,LIST
 HOST,widget.prod.equally.ai,LIST
 HOST,widget.reviews.io,LIST
+HOST,widget.rss.app,LIST
 HOST,widget.trustpilot.com,LIST
 HOST,widget.usepylon.com,LIST
 HOST,widget.user.com,LIST
@@ -3710,6 +3718,7 @@ HOST-SUFFIX,gadgets360cdn.com,LIST
 HOST-SUFFIX,gamccdn.com,LIST
 HOST-SUFFIX,gamesgamescdn.com,LIST
 HOST-SUFFIX,gammacdn.com,LIST
+HOST-SUFFIX,gannett-cdn.com,LIST
 HOST-SUFFIX,garmincdn.com,LIST
 HOST-SUFFIX,gateway.originprotocol.com,LIST
 HOST-SUFFIX,gateway.pinata.cloud,LIST

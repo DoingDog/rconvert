@@ -1,5 +1,5 @@
-# Adblock total line 7876
-# Last updated Sun 06/28/2026 22:58:46.46
+# Adblock total line 7886
+# Last updated Wed 07/01/2026 23:06:11.27
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 ||0x0.st^
 ||3dna.nationbuilder.com^
@@ -153,6 +153,7 @@
 ||archive.raspberrypi.com^
 ||archlinux.nic.cz^
 ||artifacts.electronjs.org^
+||artifacts.nixos.org^
 ||artworks.thetvdb.com^
 ||asset-cdn.uscardforum.com^
 ||asset.booth.pm^
@@ -1012,6 +1013,7 @@
 ||cdn.userway.org^
 ||cdn.v2ex.com^
 ||cdn.vector.co^
+||cdn.veeam.com^
 ||cdn.vemetric.com^
 ||cdn.verifypass.com^
 ||cdn.viafoura.net^
@@ -1180,6 +1182,7 @@
 ||cf.mhgui.com^
 ||cf.shopee.tw^
 ||cfvod.kaltura.com^
+||changelog-widget.canny.io^
 ||chart.googleapis.com^
 ||charts.verdaccio.org^
 ||chat-assets.front.app^
@@ -1353,6 +1356,7 @@
 ||damassets.autodesk.net^
 ||dashasiafox.akamaized.netflix^
 ||dassets.shimano.com^
+||data.caida.org^
 ||data.cdn.siemens.com^
 ||data.gameflare.com^
 ||data.osmand.net^
@@ -1968,6 +1972,7 @@
 ||g-static.ap4r.com^
 ||g.newsweek.com^
 ||gamemedia.armorgames.com^
+||gannett-cdn.ex.co^
 ||gdb.rferl.org^
 ||gearbox.imgix.com^
 ||generativelanguage.googleapis.com^
@@ -3642,6 +3647,7 @@
 ||safebrowsing.googleapis.com^
 ||sandpack-cdn-staging.blazingly.io^
 ||sandpack-cdn-v2.codesandbox.io^
+||sat.windy.com^
 ||sbl.onfastspring.com^
 ||scdn.clerk.com^
 ||scdn.line-apps.com^
@@ -4099,6 +4105,8 @@
 ||steam.eca.qtlglb.com^
 ||steam.naeu.qtlglb.com^
 ||steam.ru.qtlglb.com^
+||steamdeck-images.steamos.cloud^
+||steamdeck-packages.steamos.cloud^
 ||stimg.sooplive.com^
 ||storage-b.picacomic.com^
 ||storage.courtlistener.com^
@@ -4484,6 +4492,7 @@
 ||widget.kapa.ai^
 ||widget.prod.equally.ai^
 ||widget.reviews.io^
+||widget.rss.app^
 ||widget.trustpilot.com^
 ||widget.usepylon.com^
 ||widget.user.com^
@@ -5836,6 +5845,7 @@
 ||gamer.com.tw^
 ||gamesgamescdn.com^
 ||gammacdn.com^
+||gannett-cdn.com^
 ||garmincdn.com^
 ||gateway.originprotocol.com^
 ||gateway.scarf.sh^

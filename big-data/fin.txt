@@ -1,5 +1,5 @@
-# Main total line 8836
-# Last updated Sun 06/28/2026 22:58:46.01
+# Main total line 8846
+# Last updated Wed 07/01/2026 23:06:10.84
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,0x0.st
 DOMAIN,3dna.nationbuilder.com
@@ -153,6 +153,7 @@ DOMAIN,archive.mozilla.org
 DOMAIN,archive.raspberrypi.com
 DOMAIN,archlinux.nic.cz
 DOMAIN,artifacts.electronjs.org
+DOMAIN,artifacts.nixos.org
 DOMAIN,artworks.thetvdb.com
 DOMAIN,asset-cdn.uscardforum.com
 DOMAIN,asset.booth.pm
@@ -1012,6 +1013,7 @@ DOMAIN,cdn.userreport.com
 DOMAIN,cdn.userway.org
 DOMAIN,cdn.v2ex.com
 DOMAIN,cdn.vector.co
+DOMAIN,cdn.veeam.com
 DOMAIN,cdn.vemetric.com
 DOMAIN,cdn.verifypass.com
 DOMAIN,cdn.viafoura.net
@@ -1180,6 +1182,7 @@ DOMAIN,cf.javfree.me
 DOMAIN,cf.mhgui.com
 DOMAIN,cf.shopee.tw
 DOMAIN,cfvod.kaltura.com
+DOMAIN,changelog-widget.canny.io
 DOMAIN,chart.googleapis.com
 DOMAIN,charts.verdaccio.org
 DOMAIN,chat-assets.front.app
@@ -1353,6 +1356,7 @@ DOMAIN,dam.freshworks.com
 DOMAIN,damassets.autodesk.net
 DOMAIN,dashasiafox.akamaized.netflix
 DOMAIN,dassets.shimano.com
+DOMAIN,data.caida.org
 DOMAIN,data.cdn.siemens.com
 DOMAIN,data.gameflare.com
 DOMAIN,data.osmand.net
@@ -1968,6 +1972,7 @@ DOMAIN,fw.gl-inet.com
 DOMAIN,g-static.ap4r.com
 DOMAIN,g.newsweek.com
 DOMAIN,gamemedia.armorgames.com
+DOMAIN,gannett-cdn.ex.co
 DOMAIN,gdb.rferl.org
 DOMAIN,gearbox.imgix.com
 DOMAIN,generativelanguage.googleapis.com
@@ -3642,6 +3647,7 @@ DOMAIN,safebrowsing.google.com
 DOMAIN,safebrowsing.googleapis.com
 DOMAIN,sandpack-cdn-staging.blazingly.io
 DOMAIN,sandpack-cdn-v2.codesandbox.io
+DOMAIN,sat.windy.com
 DOMAIN,sbl.onfastspring.com
 DOMAIN,scdn.clerk.com
 DOMAIN,scdn.line-apps.com
@@ -4099,6 +4105,8 @@ DOMAIN,steam.apac.qtlglb.com
 DOMAIN,steam.eca.qtlglb.com
 DOMAIN,steam.naeu.qtlglb.com
 DOMAIN,steam.ru.qtlglb.com
+DOMAIN,steamdeck-images.steamos.cloud
+DOMAIN,steamdeck-packages.steamos.cloud
 DOMAIN,stimg.sooplive.com
 DOMAIN,storage-b.picacomic.com
 DOMAIN,storage.courtlistener.com
@@ -4484,6 +4492,7 @@ DOMAIN,widget.intercom.io
 DOMAIN,widget.kapa.ai
 DOMAIN,widget.prod.equally.ai
 DOMAIN,widget.reviews.io
+DOMAIN,widget.rss.app
 DOMAIN,widget.trustpilot.com
 DOMAIN,widget.usepylon.com
 DOMAIN,widget.user.com
@@ -5836,6 +5845,7 @@ DOMAIN-SUFFIX,gamccdn.com
 DOMAIN-SUFFIX,gamer.com.tw
 DOMAIN-SUFFIX,gamesgamescdn.com
 DOMAIN-SUFFIX,gammacdn.com
+DOMAIN-SUFFIX,gannett-cdn.com
 DOMAIN-SUFFIX,garmincdn.com
 DOMAIN-SUFFIX,gateway.originprotocol.com
 DOMAIN-SUFFIX,gateway.scarf.sh

@@ -1,5 +1,5 @@
-# Quantumult total line 8822
-# Last updated Sun 06/28/2026 22:58:46.24
+# Quantumult total line 8832
+# Last updated Wed 07/01/2026 23:06:11.06
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -153,6 +153,7 @@ HOST,archive.mozilla.org,LIST
 HOST,archive.raspberrypi.com,LIST
 HOST,archlinux.nic.cz,LIST
 HOST,artifacts.electronjs.org,LIST
+HOST,artifacts.nixos.org,LIST
 HOST,artworks.thetvdb.com,LIST
 HOST,asset-cdn.uscardforum.com,LIST
 HOST,asset.booth.pm,LIST
@@ -1012,6 +1013,7 @@ HOST,cdn.userreport.com,LIST
 HOST,cdn.userway.org,LIST
 HOST,cdn.v2ex.com,LIST
 HOST,cdn.vector.co,LIST
+HOST,cdn.veeam.com,LIST
 HOST,cdn.vemetric.com,LIST
 HOST,cdn.verifypass.com,LIST
 HOST,cdn.viafoura.net,LIST
@@ -1180,6 +1182,7 @@ HOST,cf.javfree.me,LIST
 HOST,cf.mhgui.com,LIST
 HOST,cf.shopee.tw,LIST
 HOST,cfvod.kaltura.com,LIST
+HOST,changelog-widget.canny.io,LIST
 HOST,chart.googleapis.com,LIST
 HOST,charts.verdaccio.org,LIST
 HOST,chat-assets.front.app,LIST
@@ -1353,6 +1356,7 @@ HOST,dam.freshworks.com,LIST
 HOST,damassets.autodesk.net,LIST
 HOST,dashasiafox.akamaized.netflix,LIST
 HOST,dassets.shimano.com,LIST
+HOST,data.caida.org,LIST
 HOST,data.cdn.siemens.com,LIST
 HOST,data.gameflare.com,LIST
 HOST,data.osmand.net,LIST
@@ -1968,6 +1972,7 @@ HOST,fw.gl-inet.com,LIST
 HOST,g-static.ap4r.com,LIST
 HOST,g.newsweek.com,LIST
 HOST,gamemedia.armorgames.com,LIST
+HOST,gannett-cdn.ex.co,LIST
 HOST,gdb.rferl.org,LIST
 HOST,gearbox.imgix.com,LIST
 HOST,generativelanguage.googleapis.com,LIST
@@ -3642,6 +3647,7 @@ HOST,safebrowsing.google.com,LIST
 HOST,safebrowsing.googleapis.com,LIST
 HOST,sandpack-cdn-staging.blazingly.io,LIST
 HOST,sandpack-cdn-v2.codesandbox.io,LIST
+HOST,sat.windy.com,LIST
 HOST,sbl.onfastspring.com,LIST
 HOST,scdn.clerk.com,LIST
 HOST,scdn.line-apps.com,LIST
@@ -4099,6 +4105,8 @@ HOST,steam.apac.qtlglb.com,LIST
 HOST,steam.eca.qtlglb.com,LIST
 HOST,steam.naeu.qtlglb.com,LIST
 HOST,steam.ru.qtlglb.com,LIST
+HOST,steamdeck-images.steamos.cloud,LIST
+HOST,steamdeck-packages.steamos.cloud,LIST
 HOST,stimg.sooplive.com,LIST
 HOST,storage-b.picacomic.com,LIST
 HOST,storage.courtlistener.com,LIST
@@ -4484,6 +4492,7 @@ HOST,widget.intercom.io,LIST
 HOST,widget.kapa.ai,LIST
 HOST,widget.prod.equally.ai,LIST
 HOST,widget.reviews.io,LIST
+HOST,widget.rss.app,LIST
 HOST,widget.trustpilot.com,LIST
 HOST,widget.usepylon.com,LIST
 HOST,widget.user.com,LIST
@@ -5836,6 +5845,7 @@ HOST-SUFFIX,gamccdn.com,LIST
 HOST-SUFFIX,gamer.com.tw,LIST
 HOST-SUFFIX,gamesgamescdn.com,LIST
 HOST-SUFFIX,gammacdn.com,LIST
+HOST-SUFFIX,gannett-cdn.com,LIST
 HOST-SUFFIX,garmincdn.com,LIST
 HOST-SUFFIX,gateway.originprotocol.com,LIST
 HOST-SUFFIX,gateway.scarf.sh,LIST

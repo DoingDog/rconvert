@@ -1,5 +1,5 @@
-# Clash total line 8836
-# Last updated Sun 06/28/2026 22:58:46.30
+# Clash total line 8846
+# Last updated Wed 07/01/2026 23:06:11.11
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -154,6 +154,7 @@ payload:
   - DOMAIN,archive.raspberrypi.com
   - DOMAIN,archlinux.nic.cz
   - DOMAIN,artifacts.electronjs.org
+  - DOMAIN,artifacts.nixos.org
   - DOMAIN,artworks.thetvdb.com
   - DOMAIN,asset-cdn.uscardforum.com
   - DOMAIN,asset.booth.pm
@@ -1013,6 +1014,7 @@ payload:
   - DOMAIN,cdn.userway.org
   - DOMAIN,cdn.v2ex.com
   - DOMAIN,cdn.vector.co
+  - DOMAIN,cdn.veeam.com
   - DOMAIN,cdn.vemetric.com
   - DOMAIN,cdn.verifypass.com
   - DOMAIN,cdn.viafoura.net
@@ -1181,6 +1183,7 @@ payload:
   - DOMAIN,cf.mhgui.com
   - DOMAIN,cf.shopee.tw
   - DOMAIN,cfvod.kaltura.com
+  - DOMAIN,changelog-widget.canny.io
   - DOMAIN,chart.googleapis.com
   - DOMAIN,charts.verdaccio.org
   - DOMAIN,chat-assets.front.app
@@ -1354,6 +1357,7 @@ payload:
   - DOMAIN,damassets.autodesk.net
   - DOMAIN,dashasiafox.akamaized.netflix
   - DOMAIN,dassets.shimano.com
+  - DOMAIN,data.caida.org
   - DOMAIN,data.cdn.siemens.com
   - DOMAIN,data.gameflare.com
   - DOMAIN,data.osmand.net
@@ -1969,6 +1973,7 @@ payload:
   - DOMAIN,g-static.ap4r.com
   - DOMAIN,g.newsweek.com
   - DOMAIN,gamemedia.armorgames.com
+  - DOMAIN,gannett-cdn.ex.co
   - DOMAIN,gdb.rferl.org
   - DOMAIN,gearbox.imgix.com
   - DOMAIN,generativelanguage.googleapis.com
@@ -3643,6 +3648,7 @@ payload:
   - DOMAIN,safebrowsing.googleapis.com
   - DOMAIN,sandpack-cdn-staging.blazingly.io
   - DOMAIN,sandpack-cdn-v2.codesandbox.io
+  - DOMAIN,sat.windy.com
   - DOMAIN,sbl.onfastspring.com
   - DOMAIN,scdn.clerk.com
   - DOMAIN,scdn.line-apps.com
@@ -4100,6 +4106,8 @@ payload:
   - DOMAIN,steam.eca.qtlglb.com
   - DOMAIN,steam.naeu.qtlglb.com
   - DOMAIN,steam.ru.qtlglb.com
+  - DOMAIN,steamdeck-images.steamos.cloud
+  - DOMAIN,steamdeck-packages.steamos.cloud
   - DOMAIN,stimg.sooplive.com
   - DOMAIN,storage-b.picacomic.com
   - DOMAIN,storage.courtlistener.com
@@ -4485,6 +4493,7 @@ payload:
   - DOMAIN,widget.kapa.ai
   - DOMAIN,widget.prod.equally.ai
   - DOMAIN,widget.reviews.io
+  - DOMAIN,widget.rss.app
   - DOMAIN,widget.trustpilot.com
   - DOMAIN,widget.usepylon.com
   - DOMAIN,widget.user.com
@@ -5837,6 +5846,7 @@ payload:
   - DOMAIN-SUFFIX,gamer.com.tw
   - DOMAIN-SUFFIX,gamesgamescdn.com
   - DOMAIN-SUFFIX,gammacdn.com
+  - DOMAIN-SUFFIX,gannett-cdn.com
   - DOMAIN-SUFFIX,garmincdn.com
   - DOMAIN-SUFFIX,gateway.originprotocol.com
   - DOMAIN-SUFFIX,gateway.scarf.sh
