@@ -1,5 +1,5 @@
-# Clash total line 8849
-# Last updated Sat 07/04/2026 22:51:35.02
+# Clash total line 8855
+# Last updated Tue 07/07/2026 22:56:22.13
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -312,6 +312,7 @@ payload:
   - DOMAIN,assets.redbullshop.com
   - DOMAIN,assets.repair.org
   - DOMAIN,assets.reviews.io
+  - DOMAIN,assets.ryanair.com
   - DOMAIN,assets.safing.io
   - DOMAIN,assets.salesmartly.com
   - DOMAIN,assets.scaleflex.com
@@ -564,6 +565,7 @@ payload:
   - DOMAIN,cdn-msp.jmcomic.me
   - DOMAIN,cdn-node.diskpart.com
   - DOMAIN,cdn-nsbus.ui.com
+  - DOMAIN,cdn-o.suno.com
   - DOMAIN,cdn-ota.azureedge.net
   - DOMAIN,cdn-patch.swtor.com
   - DOMAIN,cdn-public-apis.moonlock.com
@@ -653,6 +655,7 @@ payload:
   - DOMAIN,cdn.calibermind.com
   - DOMAIN,cdn.cameo.com
   - DOMAIN,cdn.camweara.com
+  - DOMAIN,cdn.candid.org
   - DOMAIN,cdn.candu.ai
   - DOMAIN,cdn.candy.ai
   - DOMAIN,cdn.casestudies.svc.ui.com
@@ -835,6 +838,7 @@ payload:
   - DOMAIN,cdn.mathjax.org
   - DOMAIN,cdn.matterhorn.app
   - DOMAIN,cdn.mcauto-images-production.sendgrid.net
+  - DOMAIN,cdn.mcp-use.com
   - DOMAIN,cdn.mcr.ea.com
   - DOMAIN,cdn.mer.run
   - DOMAIN,cdn.mercury.com
@@ -1450,6 +1454,7 @@ payload:
   - DOMAIN,design.keyoxide.org
   - DOMAIN,design.mayoclinic.org
   - DOMAIN,designsystem.brevo.com
+  - DOMAIN,desktop.figma.com
   - DOMAIN,desktop.parallels.com
   - DOMAIN,desktop.wifiman.com
   - DOMAIN,detectportal.brave-http-only.com
@@ -7218,6 +7223,7 @@ payload:
   - DOMAIN-SUFFIX,spotilocal.com
   - DOMAIN-SUFFIX,spreadshirtmedia.com
   - DOMAIN-SUFFIX,sqspcdn.com
+  - DOMAIN-SUFFIX,squarecdn.com
   - DOMAIN-SUFFIX,squarespace-cdn.com
   - DOMAIN-SUFFIX,srcdn.com
   - DOMAIN-SUFFIX,ss-cdn.com
