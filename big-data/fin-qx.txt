@@ -1,5 +1,5 @@
-# Quantumult total line 8851
-# Last updated Mon 07/13/2026 22:49:24.15
+# Quantumult total line 8850
+# Last updated Thu 07/16/2026 22:50:30.12
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -541,6 +541,7 @@ HOST,cdn-en.aptoide.com,LIST
 HOST,cdn-eu.dynamicyield.com,LIST
 HOST,cdn-eu.readspeaker.com,LIST
 HOST,cdn-fck.tnaflix.com,LIST
+HOST,cdn-fi-1.comaps.app,LIST
 HOST,cdn-forum.networklessons.com,LIST
 HOST,cdn-front.freepik.com,LIST
 HOST,cdn-icons-png.flaticon.com,LIST
@@ -563,10 +564,10 @@ HOST,cdn-msp.18comic.org,LIST
 HOST,cdn-msp.18comic.vip,LIST
 HOST,cdn-msp.jmcomic-zzz.one,LIST
 HOST,cdn-msp.jmcomic.me,LIST
+HOST,cdn-nl1.organicmaps.app,LIST
 HOST,cdn-node.diskpart.com,LIST
 HOST,cdn-nsbus.ui.com,LIST
 HOST,cdn-o.suno.com,LIST
-HOST,cdn-ota.azureedge.net,LIST
 HOST,cdn-patch.swtor.com,LIST
 HOST,cdn-public-apis.moonlock.com,LIST
 HOST,cdn-public.sociabble.com,LIST
@@ -585,7 +586,10 @@ HOST,cdn-swell-assets.yotpo.com,LIST
 HOST,cdn-teams-slug.flaticon.com,LIST
 HOST,cdn-thumbs.imagevenue.com,LIST
 HOST,cdn-uicons.flaticon.com,LIST
+HOST,cdn-uk1.organicmaps.app,LIST
 HOST,cdn-updates.orbstack.dev,LIST
+HOST,cdn-us-1.comaps.app,LIST
+HOST,cdn-us-2.comaps.tech,LIST
 HOST,cdn-us.readspeaker.com,LIST
 HOST,cdn-web.fydeos.io,LIST
 HOST,cdn-web.orbstack.dev,LIST
@@ -943,7 +947,6 @@ HOST,cdn.scaleflex.it,LIST
 HOST,cdn.schemaapp.com,LIST
 HOST,cdn.sciencecast.org,LIST
 HOST,cdn.scpwiki.com,LIST
-HOST,cdn.scripts.wtwhmedia.com,LIST
 HOST,cdn.search.brave.com,LIST
 HOST,cdn.sedo.com,LIST
 HOST,cdn.seline.so,LIST
@@ -1052,7 +1055,6 @@ HOST,cdn.you.com,LIST
 HOST,cdn.ywxi.net,LIST
 HOST,cdn.zapier.com,LIST
 HOST,cdn.zeabur.com,LIST
-HOST,cdn.zhujiwiki.com,LIST
 HOST,cdn.zigpoll.com,LIST
 HOST,cdn.zolplay.com,LIST
 HOST,cdn.zoom.us,LIST
@@ -1090,6 +1092,7 @@ HOST,cdn2.abiresearch.com,LIST
 HOST,cdn2.airdroid.com,LIST
 HOST,cdn2.auth0.com,LIST
 HOST,cdn2.bigcommerce.com,LIST
+HOST,cdn2.cameo.com,LIST
 HOST,cdn2.dan.com,LIST
 HOST,cdn2.downdetector.com,LIST
 HOST,cdn2.editmysite.com,LIST
@@ -1175,7 +1178,6 @@ HOST,centos-stream.ip-connect.info,LIST
 HOST,centos-stream.koyanet.lv,LIST
 HOST,centos.anexia.at,LIST
 HOST,centos.is,LIST
-HOST,centos.nic.cz,LIST
 HOST,certificates.godaddy.com,LIST
 HOST,cesium.di.uminho.pt,LIST
 HOST,cf-assets.www.cloudflare.com,LIST
@@ -1194,7 +1196,6 @@ HOST,chart.googleapis.com,LIST
 HOST,charts.verdaccio.org,LIST
 HOST,chat-assets.front.app,LIST
 HOST,chat.digitalgenius.com,LIST
-HOST,chatwidgetmetrics-proxy.usepylon.com,LIST
 HOST,checkout-sdk.bigcommerce.com,LIST
 HOST,checkout.stripe.com,LIST
 HOST,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv,LIST
@@ -1242,6 +1243,9 @@ HOST,code.jquery.com,LIST
 HOST,code.piano.io,LIST
 HOST,code.upscope.io,LIST
 HOST,codeload.github.com,LIST
+HOST,comaps-it1.unfoxo.it,LIST
+HOST,comaps.firewall-gateway.de,LIST
+HOST,comaps.openstreetmap.fr,LIST
 HOST,comm.res.easebar.com,LIST
 HOST,components.clever-cloud.com,LIST
 HOST,components.cyclingfactory.be,LIST
@@ -1367,6 +1371,7 @@ HOST,data.caida.org,LIST
 HOST,data.cdn.siemens.com,LIST
 HOST,data.gameflare.com,LIST
 HOST,data.osmand.net,LIST
+HOST,data.peer.as,LIST
 HOST,data.pendo.io,LIST
 HOST,data.schemaapp.com,LIST
 HOST,data.web.clickup.com,LIST
@@ -1544,7 +1549,6 @@ HOST,download.dlsite.com,LIST
 HOST,download.docker.com,LIST
 HOST,download.eassos.com,LIST
 HOST,download.edovia.com,LIST
-HOST,download.fosshub.com,LIST
 HOST,download.fydeos.io,LIST
 HOST,download.garmin.com,LIST
 HOST,download.geofabrik.de,LIST
@@ -1885,7 +1889,6 @@ HOST,ftp.linux.ro,LIST
 HOST,ftp.lip6.fr,LIST
 HOST,ftp.litnet.lt,LIST
 HOST,ftp.lt.debian.org,LIST
-HOST,ftp.ludd.ltu.se,LIST
 HOST,ftp.lug.ro,LIST
 HOST,ftp.lysator.liu.se,LIST
 HOST,ftp.man.poznan.pl,LIST
@@ -2204,7 +2207,6 @@ HOST,images.filepuma.com,LIST
 HOST,images.financemagnates.com,LIST
 HOST,images.findagrave.com,LIST
 HOST,images.flightradar24.com,LIST
-HOST,images.freeimages.com,LIST
 HOST,images.g2crowd.com,LIST
 HOST,images.github.media,LIST
 HOST,images.hothardware.com,LIST
@@ -2303,7 +2305,6 @@ HOST,img.atom.com,LIST
 HOST,img.atwiki.jp,LIST
 HOST,img.badgesize.io,LIST
 HOST,img.biguz.net,LIST
-HOST,img.bttimg.com,LIST
 HOST,img.catwvod.xyz,LIST
 HOST,img.clerk.com,LIST
 HOST,img.community.ui.com,LIST
@@ -2333,7 +2334,6 @@ HOST,img.kemono.cr,LIST
 HOST,img.logokit.com,LIST
 HOST,img.ltyears.com,LIST
 HOST,img.lvv2.com,LIST
-HOST,img.m.mw,LIST
 HOST,img.majors.im,LIST
 HOST,img.manyse.com,LIST
 HOST,img.ml0987.com,LIST
@@ -2351,7 +2351,6 @@ HOST,img.picacomic.com,LIST
 HOST,img.redbull.com,LIST
 HOST,img.reg.ru,LIST
 HOST,img.reimu.net,LIST
-HOST,img.represent.com,LIST
 HOST,img.riskified.com,LIST
 HOST,img.sflix.to,LIST
 HOST,img.shana-laopo.xyz,LIST
@@ -2383,7 +2382,6 @@ HOST,img1.socialshopwave.com,LIST
 HOST,img1.yeggi.com,LIST
 HOST,img1.yna.co.kr,LIST
 HOST,img2.gelbooru.com,LIST
-HOST,img2.javdove.com,LIST
 HOST,img2.javmost.com,LIST
 HOST,img2.socialshopwave.com,LIST
 HOST,img2.tnaflix.com,LIST
@@ -2561,7 +2559,6 @@ HOST,logos.kiwibrowser.com,LIST
 HOST,logos.speedtestcustom.com,LIST
 HOST,logs.blip.net,LIST
 HOST,lucide.dev,LIST
-HOST,lug.mines.edu,LIST
 HOST,luminaire.railway.com,LIST
 HOST,lzd-img-global.slatic.net,LIST
 HOST,lzip.nongnu.org,LIST
@@ -2579,6 +2576,7 @@ HOST,mangaz-static.j-comi.jp,LIST
 HOST,mantisloader.mantis-awx.com,LIST
 HOST,map.adsbexchange.com,LIST
 HOST,map.vesselfinder.net,LIST
+HOST,mapgen-fi-1.comaps.app,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
 HOST,maps.wikimedia.org,LIST
@@ -2744,7 +2742,6 @@ HOST,mirror.aut.ac.nz,LIST
 HOST,mirror.azvps.vn,LIST
 HOST,mirror.bacloud.com,LIST
 HOST,mirror.bahnhof.net,LIST
-HOST,mirror.battern.eu,LIST
 HOST,mirror.bg.host.ag,LIST
 HOST,mirror.bgp.rodeo,LIST
 HOST,mirror.bharatdatacenter.com,LIST
@@ -2883,7 +2880,6 @@ HOST,mirror.isoc.org.il,LIST
 HOST,mirror.it.ubc.ca,LIST
 HOST,mirror.it4i.cz,LIST
 HOST,mirror.its-tps.fr,LIST
-HOST,mirror.its.dal.ca,LIST
 HOST,mirror.its.umich.edu,LIST
 HOST,mirror.iway.ch,LIST
 HOST,mirror.ixirhost.com,LIST
@@ -2895,7 +2891,6 @@ HOST,mirror.kapteyan.com.tr,LIST
 HOST,mirror.karneval.cz,LIST
 HOST,mirror.katapult.io,LIST
 HOST,mirror.keiminem.com,LIST
-HOST,mirror.kernel.ir,LIST
 HOST,mirror.keystealth.org,LIST
 HOST,mirror.kkg.berlin,LIST
 HOST,mirror.kku.ac.th,LIST
@@ -3096,7 +3091,7 @@ HOST,mirror.yer.az,LIST
 HOST,mirror.yuki.net.uk,LIST
 HOST,mirror.za.abantu.cloud,LIST
 HOST,mirror.za.web4africa.net,LIST
-HOST,mirror1.hs-esslingen.de,LIST
+HOST,mirror1.hcgen.de,LIST
 HOST,mirror1.infomaniak.com,LIST
 HOST,mirror1.ku.ac.th,LIST
 HOST,mirror1.sox.rs,LIST
@@ -3573,6 +3568,9 @@ HOST,rsync.udc.es,LIST
 HOST,rsync.uni-bayreuth.de,LIST
 HOST,rsync.yuki.net.uk,LIST
 HOST,rt.rtoaster.jp,LIST
+HOST,rt1.maphub.net,LIST
+HOST,rt2.maphub.net,LIST
+HOST,rt3.maphub.net,LIST
 HOST,rtcg-access.bytevcloud.com,LIST
 HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rubygems.org,LIST
@@ -3631,7 +3629,6 @@ HOST,s3.c.im,LIST
 HOST,s3.coinmarketcap.com,LIST
 HOST,s3.cointelegraph.com,LIST
 HOST,s3.documentcloud.org,LIST
-HOST,s3.doujin.sh,LIST
 HOST,s3.duellinksmeta.com,LIST
 HOST,s3.dzeninfra.ru,LIST
 HOST,s3.envato.com,LIST
@@ -3805,7 +3802,6 @@ HOST,static-assets.mapbox.com,LIST
 HOST,static-assets.npr.org,LIST
 HOST,static-assets.vinted.com,LIST
 HOST,static-cdn.123rf.com,LIST
-HOST,static-cdn.bytegiftia.top,LIST
 HOST,static-cdn.spot.im,LIST
 HOST,static-cdn.usertesting.com,LIST
 HOST,static-cf.foxdata.com,LIST
@@ -3920,7 +3916,6 @@ HOST,static.filehorse.com,LIST
 HOST,static.filestackapi.com,LIST
 HOST,static.frame.work,LIST
 HOST,static.freedownloadmanager.org,LIST
-HOST,static.freeimages.com,LIST
 HOST,static.fundraiseup.com,LIST
 HOST,static.garmin.com,LIST
 HOST,static.generated.photos,LIST
@@ -3956,6 +3951,7 @@ HOST,static.ipgeolocation.io,LIST
 HOST,static.iplocate.io,LIST
 HOST,static.iris.informa.com,LIST
 HOST,static.isitetv.com,LIST
+HOST,static.istockphoto.com,LIST
 HOST,static.itch.io,LIST
 HOST,static.iyf.tv,LIST
 HOST,static.izanmei.icu,LIST
@@ -3970,6 +3966,7 @@ HOST,static.linear.app,LIST
 HOST,static.lingq.com,LIST
 HOST,static.lwn.net,LIST
 HOST,static.macupdate.com,LIST
+HOST,static.maphub.net,LIST
 HOST,static.maxmind.com,LIST
 HOST,static.meiguo.com,LIST
 HOST,static.mendeley.com,LIST
@@ -7101,6 +7098,7 @@ HOST-SUFFIX,rum.cronitor.io,LIST
 HOST-SUFFIX,runkit-packages.com,LIST
 HOST-SUFFIX,runkitcdn.com,LIST
 HOST-SUFFIX,s-nbcnews.com,LIST
+HOST-SUFFIX,s3-website.cloud.ru,LIST
 HOST-SUFFIX,s3-website.fr-par.scw.cloud,LIST
 HOST-SUFFIX,s3-website.nl-ams.scw.cloud,LIST
 HOST-SUFFIX,s3-website.pl-waw.scw.cloud,LIST
@@ -7410,6 +7408,7 @@ HOST-SUFFIX,tile.thunderforest.com,LIST
 HOST-SUFFIX,tiles-api.maps.komoot.net,LIST
 HOST-SUFFIX,tiles.freemap.sk,LIST
 HOST-SUFFIX,tiles.mapbox.com,LIST
+HOST-SUFFIX,tiles.openstreetmap.us,LIST
 HOST-SUFFIX,tiles.virtualearth.net,LIST
 HOST-SUFFIX,timestalks.com,LIST
 HOST-SUFFIX,tindiemedia.com,LIST

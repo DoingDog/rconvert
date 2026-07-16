@@ -1,5 +1,5 @@
-# Clash total line 8865
-# Last updated Mon 07/13/2026 22:49:24.21
+# Clash total line 8864
+# Last updated Thu 07/16/2026 22:50:30.16
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -542,6 +542,7 @@ payload:
   - DOMAIN,cdn-eu.dynamicyield.com
   - DOMAIN,cdn-eu.readspeaker.com
   - DOMAIN,cdn-fck.tnaflix.com
+  - DOMAIN,cdn-fi-1.comaps.app
   - DOMAIN,cdn-forum.networklessons.com
   - DOMAIN,cdn-front.freepik.com
   - DOMAIN,cdn-icons-png.flaticon.com
@@ -564,10 +565,10 @@ payload:
   - DOMAIN,cdn-msp.18comic.vip
   - DOMAIN,cdn-msp.jmcomic-zzz.one
   - DOMAIN,cdn-msp.jmcomic.me
+  - DOMAIN,cdn-nl1.organicmaps.app
   - DOMAIN,cdn-node.diskpart.com
   - DOMAIN,cdn-nsbus.ui.com
   - DOMAIN,cdn-o.suno.com
-  - DOMAIN,cdn-ota.azureedge.net
   - DOMAIN,cdn-patch.swtor.com
   - DOMAIN,cdn-public-apis.moonlock.com
   - DOMAIN,cdn-public.sociabble.com
@@ -586,7 +587,10 @@ payload:
   - DOMAIN,cdn-teams-slug.flaticon.com
   - DOMAIN,cdn-thumbs.imagevenue.com
   - DOMAIN,cdn-uicons.flaticon.com
+  - DOMAIN,cdn-uk1.organicmaps.app
   - DOMAIN,cdn-updates.orbstack.dev
+  - DOMAIN,cdn-us-1.comaps.app
+  - DOMAIN,cdn-us-2.comaps.tech
   - DOMAIN,cdn-us.readspeaker.com
   - DOMAIN,cdn-web.fydeos.io
   - DOMAIN,cdn-web.orbstack.dev
@@ -944,7 +948,6 @@ payload:
   - DOMAIN,cdn.schemaapp.com
   - DOMAIN,cdn.sciencecast.org
   - DOMAIN,cdn.scpwiki.com
-  - DOMAIN,cdn.scripts.wtwhmedia.com
   - DOMAIN,cdn.search.brave.com
   - DOMAIN,cdn.sedo.com
   - DOMAIN,cdn.seline.so
@@ -1053,7 +1056,6 @@ payload:
   - DOMAIN,cdn.ywxi.net
   - DOMAIN,cdn.zapier.com
   - DOMAIN,cdn.zeabur.com
-  - DOMAIN,cdn.zhujiwiki.com
   - DOMAIN,cdn.zigpoll.com
   - DOMAIN,cdn.zolplay.com
   - DOMAIN,cdn.zoom.us
@@ -1091,6 +1093,7 @@ payload:
   - DOMAIN,cdn2.airdroid.com
   - DOMAIN,cdn2.auth0.com
   - DOMAIN,cdn2.bigcommerce.com
+  - DOMAIN,cdn2.cameo.com
   - DOMAIN,cdn2.dan.com
   - DOMAIN,cdn2.downdetector.com
   - DOMAIN,cdn2.editmysite.com
@@ -1176,7 +1179,6 @@ payload:
   - DOMAIN,centos-stream.koyanet.lv
   - DOMAIN,centos.anexia.at
   - DOMAIN,centos.is
-  - DOMAIN,centos.nic.cz
   - DOMAIN,certificates.godaddy.com
   - DOMAIN,cesium.di.uminho.pt
   - DOMAIN,cf-assets.www.cloudflare.com
@@ -1195,7 +1197,6 @@ payload:
   - DOMAIN,charts.verdaccio.org
   - DOMAIN,chat-assets.front.app
   - DOMAIN,chat.digitalgenius.com
-  - DOMAIN,chatwidgetmetrics-proxy.usepylon.com
   - DOMAIN,checkout-sdk.bigcommerce.com
   - DOMAIN,checkout.stripe.com
   - DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
@@ -1243,6 +1244,9 @@ payload:
   - DOMAIN,code.piano.io
   - DOMAIN,code.upscope.io
   - DOMAIN,codeload.github.com
+  - DOMAIN,comaps-it1.unfoxo.it
+  - DOMAIN,comaps.firewall-gateway.de
+  - DOMAIN,comaps.openstreetmap.fr
   - DOMAIN,comm.res.easebar.com
   - DOMAIN,components.clever-cloud.com
   - DOMAIN,components.cyclingfactory.be
@@ -1368,6 +1372,7 @@ payload:
   - DOMAIN,data.cdn.siemens.com
   - DOMAIN,data.gameflare.com
   - DOMAIN,data.osmand.net
+  - DOMAIN,data.peer.as
   - DOMAIN,data.pendo.io
   - DOMAIN,data.schemaapp.com
   - DOMAIN,data.web.clickup.com
@@ -1545,7 +1550,6 @@ payload:
   - DOMAIN,download.docker.com
   - DOMAIN,download.eassos.com
   - DOMAIN,download.edovia.com
-  - DOMAIN,download.fosshub.com
   - DOMAIN,download.fydeos.io
   - DOMAIN,download.garmin.com
   - DOMAIN,download.geofabrik.de
@@ -1886,7 +1890,6 @@ payload:
   - DOMAIN,ftp.lip6.fr
   - DOMAIN,ftp.litnet.lt
   - DOMAIN,ftp.lt.debian.org
-  - DOMAIN,ftp.ludd.ltu.se
   - DOMAIN,ftp.lug.ro
   - DOMAIN,ftp.lysator.liu.se
   - DOMAIN,ftp.man.poznan.pl
@@ -2205,7 +2208,6 @@ payload:
   - DOMAIN,images.financemagnates.com
   - DOMAIN,images.findagrave.com
   - DOMAIN,images.flightradar24.com
-  - DOMAIN,images.freeimages.com
   - DOMAIN,images.g2crowd.com
   - DOMAIN,images.github.media
   - DOMAIN,images.hothardware.com
@@ -2304,7 +2306,6 @@ payload:
   - DOMAIN,img.atwiki.jp
   - DOMAIN,img.badgesize.io
   - DOMAIN,img.biguz.net
-  - DOMAIN,img.bttimg.com
   - DOMAIN,img.catwvod.xyz
   - DOMAIN,img.clerk.com
   - DOMAIN,img.community.ui.com
@@ -2334,7 +2335,6 @@ payload:
   - DOMAIN,img.logokit.com
   - DOMAIN,img.ltyears.com
   - DOMAIN,img.lvv2.com
-  - DOMAIN,img.m.mw
   - DOMAIN,img.majors.im
   - DOMAIN,img.manyse.com
   - DOMAIN,img.ml0987.com
@@ -2352,7 +2352,6 @@ payload:
   - DOMAIN,img.redbull.com
   - DOMAIN,img.reg.ru
   - DOMAIN,img.reimu.net
-  - DOMAIN,img.represent.com
   - DOMAIN,img.riskified.com
   - DOMAIN,img.sflix.to
   - DOMAIN,img.shana-laopo.xyz
@@ -2384,7 +2383,6 @@ payload:
   - DOMAIN,img1.yeggi.com
   - DOMAIN,img1.yna.co.kr
   - DOMAIN,img2.gelbooru.com
-  - DOMAIN,img2.javdove.com
   - DOMAIN,img2.javmost.com
   - DOMAIN,img2.socialshopwave.com
   - DOMAIN,img2.tnaflix.com
@@ -2562,7 +2560,6 @@ payload:
   - DOMAIN,logos.speedtestcustom.com
   - DOMAIN,logs.blip.net
   - DOMAIN,lucide.dev
-  - DOMAIN,lug.mines.edu
   - DOMAIN,luminaire.railway.com
   - DOMAIN,lzd-img-global.slatic.net
   - DOMAIN,lzip.nongnu.org
@@ -2580,6 +2577,7 @@ payload:
   - DOMAIN,mantisloader.mantis-awx.com
   - DOMAIN,map.adsbexchange.com
   - DOMAIN,map.vesselfinder.net
+  - DOMAIN,mapgen-fi-1.comaps.app
   - DOMAIN,maps.geoapify.com
   - DOMAIN,maps.gstatic.com
   - DOMAIN,maps.wikimedia.org
@@ -2745,7 +2743,6 @@ payload:
   - DOMAIN,mirror.azvps.vn
   - DOMAIN,mirror.bacloud.com
   - DOMAIN,mirror.bahnhof.net
-  - DOMAIN,mirror.battern.eu
   - DOMAIN,mirror.bg.host.ag
   - DOMAIN,mirror.bgp.rodeo
   - DOMAIN,mirror.bharatdatacenter.com
@@ -2884,7 +2881,6 @@ payload:
   - DOMAIN,mirror.it.ubc.ca
   - DOMAIN,mirror.it4i.cz
   - DOMAIN,mirror.its-tps.fr
-  - DOMAIN,mirror.its.dal.ca
   - DOMAIN,mirror.its.umich.edu
   - DOMAIN,mirror.iway.ch
   - DOMAIN,mirror.ixirhost.com
@@ -2896,7 +2892,6 @@ payload:
   - DOMAIN,mirror.karneval.cz
   - DOMAIN,mirror.katapult.io
   - DOMAIN,mirror.keiminem.com
-  - DOMAIN,mirror.kernel.ir
   - DOMAIN,mirror.keystealth.org
   - DOMAIN,mirror.kkg.berlin
   - DOMAIN,mirror.kku.ac.th
@@ -3097,7 +3092,7 @@ payload:
   - DOMAIN,mirror.yuki.net.uk
   - DOMAIN,mirror.za.abantu.cloud
   - DOMAIN,mirror.za.web4africa.net
-  - DOMAIN,mirror1.hs-esslingen.de
+  - DOMAIN,mirror1.hcgen.de
   - DOMAIN,mirror1.infomaniak.com
   - DOMAIN,mirror1.ku.ac.th
   - DOMAIN,mirror1.sox.rs
@@ -3574,6 +3569,9 @@ payload:
   - DOMAIN,rsync.uni-bayreuth.de
   - DOMAIN,rsync.yuki.net.uk
   - DOMAIN,rt.rtoaster.jp
+  - DOMAIN,rt1.maphub.net
+  - DOMAIN,rt2.maphub.net
+  - DOMAIN,rt3.maphub.net
   - DOMAIN,rtcg-access.bytevcloud.com
   - DOMAIN,rts-static-prod.freshworksapi.com
   - DOMAIN,rubygems.org
@@ -3632,7 +3630,6 @@ payload:
   - DOMAIN,s3.coinmarketcap.com
   - DOMAIN,s3.cointelegraph.com
   - DOMAIN,s3.documentcloud.org
-  - DOMAIN,s3.doujin.sh
   - DOMAIN,s3.duellinksmeta.com
   - DOMAIN,s3.dzeninfra.ru
   - DOMAIN,s3.envato.com
@@ -3806,7 +3803,6 @@ payload:
   - DOMAIN,static-assets.npr.org
   - DOMAIN,static-assets.vinted.com
   - DOMAIN,static-cdn.123rf.com
-  - DOMAIN,static-cdn.bytegiftia.top
   - DOMAIN,static-cdn.spot.im
   - DOMAIN,static-cdn.usertesting.com
   - DOMAIN,static-cf.foxdata.com
@@ -3921,7 +3917,6 @@ payload:
   - DOMAIN,static.filestackapi.com
   - DOMAIN,static.frame.work
   - DOMAIN,static.freedownloadmanager.org
-  - DOMAIN,static.freeimages.com
   - DOMAIN,static.fundraiseup.com
   - DOMAIN,static.garmin.com
   - DOMAIN,static.generated.photos
@@ -3957,6 +3952,7 @@ payload:
   - DOMAIN,static.iplocate.io
   - DOMAIN,static.iris.informa.com
   - DOMAIN,static.isitetv.com
+  - DOMAIN,static.istockphoto.com
   - DOMAIN,static.itch.io
   - DOMAIN,static.iyf.tv
   - DOMAIN,static.izanmei.icu
@@ -3971,6 +3967,7 @@ payload:
   - DOMAIN,static.lingq.com
   - DOMAIN,static.lwn.net
   - DOMAIN,static.macupdate.com
+  - DOMAIN,static.maphub.net
   - DOMAIN,static.maxmind.com
   - DOMAIN,static.meiguo.com
   - DOMAIN,static.mendeley.com
@@ -7102,6 +7099,7 @@ payload:
   - DOMAIN-SUFFIX,runkit-packages.com
   - DOMAIN-SUFFIX,runkitcdn.com
   - DOMAIN-SUFFIX,s-nbcnews.com
+  - DOMAIN-SUFFIX,s3-website.cloud.ru
   - DOMAIN-SUFFIX,s3-website.fr-par.scw.cloud
   - DOMAIN-SUFFIX,s3-website.nl-ams.scw.cloud
   - DOMAIN-SUFFIX,s3-website.pl-waw.scw.cloud
@@ -7411,6 +7409,7 @@ payload:
   - DOMAIN-SUFFIX,tiles-api.maps.komoot.net
   - DOMAIN-SUFFIX,tiles.freemap.sk
   - DOMAIN-SUFFIX,tiles.mapbox.com
+  - DOMAIN-SUFFIX,tiles.openstreetmap.us
   - DOMAIN-SUFFIX,tiles.virtualearth.net
   - DOMAIN-SUFFIX,timestalks.com
   - DOMAIN-SUFFIX,tindiemedia.com

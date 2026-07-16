@@ -1,5 +1,5 @@
-# Quantumult total line 4563
-# Last updated Mon 07/13/2026 22:49:10.24
+# Quantumult total line 4560
+# Last updated Thu 07/16/2026 22:50:19.34
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -868,7 +868,6 @@ HOST,cdn.scaleflex.it,LIST
 HOST,cdn.schemaapp.com,LIST
 HOST,cdn.sciencecast.org,LIST
 HOST,cdn.scpwiki.com,LIST
-HOST,cdn.scripts.wtwhmedia.com,LIST
 HOST,cdn.search.brave.com,LIST
 HOST,cdn.sedo.com,LIST
 HOST,cdn.segment.com,LIST
@@ -976,7 +975,6 @@ HOST,cdn.you.com,LIST
 HOST,cdn.ywxi.net,LIST
 HOST,cdn.zapier.com,LIST
 HOST,cdn.zeabur.com,LIST
-HOST,cdn.zhujiwiki.com,LIST
 HOST,cdn.zigpoll.com,LIST
 HOST,cdn.zolplay.com,LIST
 HOST,cdn0-i.techbang.com,LIST
@@ -1014,6 +1012,7 @@ HOST,cdn2.abiresearch.com,LIST
 HOST,cdn2.airdroid.com,LIST
 HOST,cdn2.auth0.com,LIST
 HOST,cdn2.bigcommerce.com,LIST
+HOST,cdn2.cameo.com,LIST
 HOST,cdn2.dan.com,LIST
 HOST,cdn2.downdetector.com,LIST
 HOST,cdn2.edgedatg.com,LIST
@@ -1114,7 +1113,6 @@ HOST,changelog-widget.canny.io,LIST
 HOST,chart.googleapis.com,LIST
 HOST,chat-assets.front.app,LIST
 HOST,chat.digitalgenius.com,LIST
-HOST,chatwidgetmetrics-proxy.usepylon.com,LIST
 HOST,checkout-sdk.bigcommerce.com,LIST
 HOST,checkout.stripe.com,LIST
 HOST,chunk-composing.canva.com,LIST
@@ -1234,6 +1232,7 @@ HOST,damassets.autodesk.net,LIST
 HOST,dassets.shimano.com,LIST
 HOST,data.cdn.siemens.com,LIST
 HOST,data.osmand.net,LIST
+HOST,data.peer.as,LIST
 HOST,data.pendo.io,LIST
 HOST,data.schemaapp.com,LIST
 HOST,data.web.clickup.com,LIST
@@ -1661,7 +1660,6 @@ HOST,images.filepuma.com,LIST
 HOST,images.financemagnates.com,LIST
 HOST,images.findagrave.com,LIST
 HOST,images.flightradar24.com,LIST
-HOST,images.freeimages.com,LIST
 HOST,images.g2crowd.com,LIST
 HOST,images.github.media,LIST
 HOST,images.hothardware.com,LIST
@@ -1764,7 +1762,6 @@ HOST,img.atom.com,LIST
 HOST,img.atwiki.jp,LIST
 HOST,img.badgesize.io,LIST
 HOST,img.biguz.net,LIST
-HOST,img.bttimg.com,LIST
 HOST,img.catwvod.xyz,LIST
 HOST,img.clerk.com,LIST
 HOST,img.community.ui.com,LIST
@@ -1796,7 +1793,6 @@ HOST,img.kemono.cr,LIST
 HOST,img.logokit.com,LIST
 HOST,img.ltyears.com,LIST
 HOST,img.lvv2.com,LIST
-HOST,img.m.mw,LIST
 HOST,img.majors.im,LIST
 HOST,img.manyse.com,LIST
 HOST,img.ml0987.com,LIST
@@ -1814,7 +1810,6 @@ HOST,img.picacomic.com,LIST
 HOST,img.redbull.com,LIST
 HOST,img.reg.ru,LIST
 HOST,img.reimu.net,LIST
-HOST,img.represent.com,LIST
 HOST,img.riskified.com,LIST
 HOST,img.sflix.to,LIST
 HOST,img.shoplineapp.com,LIST
@@ -1846,7 +1841,6 @@ HOST,img1.socialshopwave.com,LIST
 HOST,img1.yeggi.com,LIST
 HOST,img1.yna.co.kr,LIST
 HOST,img2.gelbooru.com,LIST
-HOST,img2.javdove.com,LIST
 HOST,img2.javmost.com,LIST
 HOST,img2.socialshopwave.com,LIST
 HOST,img2.tnaflix.com,LIST
@@ -2417,6 +2411,9 @@ HOST,rs-cdn.splashtop.com,LIST
 HOST,rsi.grafana.com,LIST
 HOST,rsms.me,LIST
 HOST,rt.rtoaster.jp,LIST
+HOST,rt1.maphub.net,LIST
+HOST,rt2.maphub.net,LIST
+HOST,rt3.maphub.net,LIST
 HOST,rtcg-access.bytevcloud.com,LIST
 HOST,rts-static-prod.freshworksapi.com,LIST
 HOST,rules.ac,LIST
@@ -2473,7 +2470,6 @@ HOST,s3.c.im,LIST
 HOST,s3.coinmarketcap.com,LIST
 HOST,s3.cointelegraph.com,LIST
 HOST,s3.documentcloud.org,LIST
-HOST,s3.doujin.sh,LIST
 HOST,s3.duellinksmeta.com,LIST
 HOST,s3.dzeninfra.ru,LIST
 HOST,s3.envato.com,LIST
@@ -2650,7 +2646,6 @@ HOST,static-beta.curseforge.com,LIST
 HOST,static-cache.fboom.me,LIST
 HOST,static-cache.k2s.cc,LIST
 HOST,static-cdn.123rf.com,LIST
-HOST,static-cdn.bytegiftia.top,LIST
 HOST,static-cdn.jtvnw.net,LIST
 HOST,static-cdn.spot.im,LIST
 HOST,static-cdn.usertesting.com,LIST
@@ -2781,7 +2776,6 @@ HOST,static.foxbusiness.com,LIST
 HOST,static.foxnews.com,LIST
 HOST,static.frame.work,LIST
 HOST,static.freedownloadmanager.org,LIST
-HOST,static.freeimages.com,LIST
 HOST,static.fundraiseup.com,LIST
 HOST,static.garmin.com,LIST
 HOST,static.generated.photos,LIST
@@ -2816,6 +2810,7 @@ HOST,static.ipgeolocation.io,LIST
 HOST,static.iplocate.io,LIST
 HOST,static.iris.informa.com,LIST
 HOST,static.isitetv.com,LIST
+HOST,static.istockphoto.com,LIST
 HOST,static.itch.io,LIST
 HOST,static.iyf.tv,LIST
 HOST,static.izanmei.icu,LIST
@@ -2832,6 +2827,7 @@ HOST,static.linear.app,LIST
 HOST,static.lingq.com,LIST
 HOST,static.lwn.net,LIST
 HOST,static.macupdate.com,LIST
+HOST,static.maphub.net,LIST
 HOST,static.maxmind.com,LIST
 HOST,static.mediafire.com,LIST
 HOST,static.meiguo.com,LIST
@@ -4399,6 +4395,7 @@ HOST-SUFFIX,tile.thunderforest.com,LIST
 HOST-SUFFIX,tiles-api.maps.komoot.net,LIST
 HOST-SUFFIX,tiles.freemap.sk,LIST
 HOST-SUFFIX,tiles.mapbox.com,LIST
+HOST-SUFFIX,tiles.openstreetmap.us,LIST
 HOST-SUFFIX,tiles.virtualearth.net,LIST
 HOST-SUFFIX,tindiemedia.com,LIST
 HOST-SUFFIX,tinifycdn.com,LIST
