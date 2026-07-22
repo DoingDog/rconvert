@@ -1,5 +1,5 @@
-# Clash total line 4562
-# Last updated Sun 07/19/2026 22:45:43.59
+# Clash total line 4566
+# Last updated Wed 07/22/2026 22:57:11.42
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1157,6 +1157,7 @@ payload:
   - DOMAIN,code.ionicframework.com
   - DOMAIN,code.jquery.com
   - DOMAIN,code.piano.io
+  - DOMAIN,code.trygravity.ai
   - DOMAIN,code.upscope.io
   - DOMAIN,comm.res.easebar.com
   - DOMAIN,common-header.nimg.jp
@@ -1955,6 +1956,7 @@ payload:
   - DOMAIN,jssocdn.indiatimes.com
   - DOMAIN,kdata1.com
   - DOMAIN,keyframe-cdn.abcnews.com
+  - DOMAIN,kh.google.com
   - DOMAIN,lain.bgm.tv
   - DOMAIN,lastfm.freetls.fastly.net
   - DOMAIN,latency-test.lab.skk.moe
@@ -2619,6 +2621,7 @@ payload:
   - DOMAIN,st.transfer.it
   - DOMAIN,st1.zoom.us
   - DOMAIN,st2.zoom.us
+  - DOMAIN,st3.depositphotos.com
   - DOMAIN,st3.zoom.us
   - DOMAIN,st6-20.vk.com
   - DOMAIN,staging-pubfeed.linkby.com
@@ -3104,6 +3107,7 @@ payload:
   - DOMAIN,tiles.terria.io
   - DOMAIN,tiles.versatiles.org
   - DOMAIN,tiles.windy.com
+  - DOMAIN,tiles.zoom.earth
   - DOMAIN,tiles0.planet.com
   - DOMAIN,tiles1.planet.com
   - DOMAIN,tiles2.mapiful.com

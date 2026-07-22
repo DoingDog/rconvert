@@ -1,5 +1,5 @@
-# Clash total line 8867
-# Last updated Sun 07/19/2026 22:45:56.91
+# Clash total line 8870
+# Last updated Wed 07/22/2026 22:57:26.77
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -1243,6 +1243,7 @@ payload:
   - DOMAIN,code.ionicframework.com
   - DOMAIN,code.jquery.com
   - DOMAIN,code.piano.io
+  - DOMAIN,code.trygravity.ai
   - DOMAIN,code.upscope.io
   - DOMAIN,codeload.github.com
   - DOMAIN,comaps-it1.unfoxo.it
@@ -3777,6 +3778,7 @@ payload:
   - DOMAIN,st.transfer.it
   - DOMAIN,st1.zoom.us
   - DOMAIN,st2.zoom.us
+  - DOMAIN,st3.depositphotos.com
   - DOMAIN,st3.zoom.us
   - DOMAIN,staging-pubfeed.linkby.com
   - DOMAIN,starharn-cf.nebula-media.org
@@ -4240,6 +4242,7 @@ payload:
   - DOMAIN,tiles.terria.io
   - DOMAIN,tiles.versatiles.org
   - DOMAIN,tiles.windy.com
+  - DOMAIN,tiles.zoom.earth
   - DOMAIN,tiles0.planet.com
   - DOMAIN,tiles1.planet.com
   - DOMAIN,tiles2.mapiful.com
