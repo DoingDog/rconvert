@@ -1,10 +1,10 @@
-# Clash total line 8871
-# Last updated Tue 07/28/2026 22:55:42.14
+# Clash total line 8880
+# Last updated Fri 07/31/2026 22:54:58.70
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
   - DOMAIN,3dna.nationbuilder.com
-  - DOMAIN,7h1s_rul35et_i5_mad3_by_5ukk4w-ruleset.skk.moe
+  - DOMAIN,7h15_ru1353t_1s_m4d3_by_5ukk4w.skk.moe
   - DOMAIN,a.deviantart.net
   - DOMAIN,a.fireside.fm
   - DOMAIN,a.gawby.com
@@ -1250,6 +1250,7 @@ payload:
   - DOMAIN,comaps.firewall-gateway.de
   - DOMAIN,comaps.openstreetmap.fr
   - DOMAIN,comm.res.easebar.com
+  - DOMAIN,community-cdn.openstreetmap.org
   - DOMAIN,components.clever-cloud.com
   - DOMAIN,components.cyclingfactory.be
   - DOMAIN,components.justanswer.com
@@ -2346,6 +2347,13 @@ payload:
   - DOMAIN,img.moviefap.com
   - DOMAIN,img.mresou.com
   - DOMAIN,img.news.ebc.net.tw
+  - DOMAIN,img.novipnoad.ca
+  - DOMAIN,img.novipnoad.cc
+  - DOMAIN,img.novipnoad.com
+  - DOMAIN,img.novipnoad.net
+  - DOMAIN,img.novipnoad.uk
+  - DOMAIN,img.novipnoad.us
+  - DOMAIN,img.novipnoad.xyz
   - DOMAIN,img.noy.asia
   - DOMAIN,img.olympics.com
   - DOMAIN,img.openshop.com.hk
@@ -3929,6 +3937,7 @@ payload:
   - DOMAIN,static.getpostman.com
   - DOMAIN,static.gettyimages.com
   - DOMAIN,static.giant-bicycles.com
+  - DOMAIN,static.giffgaff.com
   - DOMAIN,static.gigabyte.com
   - DOMAIN,static.gitbook.com
   - DOMAIN,static.gl-inet.com
