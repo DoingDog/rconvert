@@ -1,5 +1,5 @@
-# Clash total line 4575
-# Last updated Fri 07/31/2026 22:54:46.28
+# Clash total line 4578
+# Last updated Sat 08/01/2026 22:49:05.29
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -639,6 +639,7 @@ payload:
   - DOMAIN,cdn.devdojo.com
   - DOMAIN,cdn.devolutions.net
   - DOMAIN,cdn.dexscreener.com
+  - DOMAIN,cdn.dictionary.com
   - DOMAIN,cdn.dnsimple.com
   - DOMAIN,cdn.docsbot.com
   - DOMAIN,cdn.document360.io
@@ -920,6 +921,7 @@ payload:
   - DOMAIN,cdn.termius.com
   - DOMAIN,cdn.theatlantic.com
   - DOMAIN,cdn.thenewstack.io
+  - DOMAIN,cdn.theregister.com
   - DOMAIN,cdn.thewirecutter.com
   - DOMAIN,cdn.thingiverse.com
   - DOMAIN,cdn.tiny.cloud
@@ -1620,6 +1622,7 @@ payload:
   - DOMAIN,image.telanganatoday.com
   - DOMAIN,image.theblockbeats.info
   - DOMAIN,image.thefly.com
+  - DOMAIN,image.theregister.com
   - DOMAIN,image.tmdb.org
   - DOMAIN,image.vuukle.com
   - DOMAIN,image.worthepenny.com
