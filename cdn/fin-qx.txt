@@ -1,5 +1,5 @@
-# Quantumult total line 4578
-# Last updated Sat 08/01/2026 22:49:05.24
+# Quantumult total line 4583
+# Last updated Tue 08/04/2026 22:57:12.04
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -292,11 +292,13 @@ HOST,assets.tigerdata.com,LIST
 HOST,assets.time.com,LIST
 HOST,assets.tokopedia.net,LIST
 HOST,assets.toot.cafe,LIST
+HOST,assets.trainingpeaks.com,LIST
 HOST,assets.transfernow.net,LIST
 HOST,assets.tvtropes.org,LIST
 HOST,assets.twitch.tv,LIST
 HOST,assets.unicorn.studio,LIST
 HOST,assets.unifi-ai.com,LIST
+HOST,assets.unredacted.org,LIST
 HOST,assets.upload.io,LIST
 HOST,assets.vantage.sh,LIST
 HOST,assets.vercel.com,LIST
@@ -1174,6 +1176,7 @@ HOST,connect-js.stripe.com,LIST
 HOST,connect.facebook.net,LIST
 HOST,connect.getflowbox.com,LIST
 HOST,connect.nosto.com,LIST
+HOST,connectcache20.azureedge.net,LIST
 HOST,connectivitycheck.android.com,LIST
 HOST,connectivitycheck.gstatic.com,LIST
 HOST,consent-manager.ft.com,LIST
@@ -2026,6 +2029,7 @@ HOST,map.adsbexchange.com,LIST
 HOST,map.vesselfinder.net,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
+HOST,maps.hereapi.com,LIST
 HOST,maps.wikimedia.org,LIST
 HOST,maps.wplace.live,LIST
 HOST,mapserver.mapy.cz,LIST
@@ -3280,6 +3284,7 @@ HOST,web-toolbar.playstation.com,LIST
 HOST,webappassets.smartsheet.com,LIST
 HOST,webassets.linear.app,LIST
 HOST,webcdn.17app.co,LIST
+HOST,webdist.data.apnic.net,LIST
 HOST,webfonts.zoho.com,LIST
 HOST,webobjects2.cdw.com,LIST
 HOST,webp.frostming.com,LIST

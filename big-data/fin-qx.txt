@@ -1,5 +1,5 @@
-# Quantumult total line 8869
-# Last updated Sat 08/01/2026 22:49:18.13
+# Quantumult total line 8876
+# Last updated Tue 08/04/2026 22:57:23.53
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -339,10 +339,12 @@ HOST,assets.tigerdata.com,LIST
 HOST,assets.time.com,LIST
 HOST,assets.tokopedia.net,LIST
 HOST,assets.toot.cafe,LIST
+HOST,assets.trainingpeaks.com,LIST
 HOST,assets.transfernow.net,LIST
 HOST,assets.tvtropes.org,LIST
 HOST,assets.unicorn.studio,LIST
 HOST,assets.unifi-ai.com,LIST
+HOST,assets.unredacted.org,LIST
 HOST,assets.upload.io,LIST
 HOST,assets.vantage.sh,LIST
 HOST,assets.vercel.com,LIST
@@ -1264,6 +1266,7 @@ HOST,connect-js.stripe.com,LIST
 HOST,connect.facebook.net,LIST
 HOST,connect.getflowbox.com,LIST
 HOST,connect.nosto.com,LIST
+HOST,connectcache20.azureedge.net,LIST
 HOST,connectivitycheck.android.com,LIST
 HOST,connectivitycheck.gstatic.com,LIST
 HOST,consent-manager.ft.com,LIST
@@ -1505,6 +1508,7 @@ HOST,dl.min.io,LIST
 HOST,dl.motrix.app,LIST
 HOST,dl.nssurge.com,LIST
 HOST,dl.nwjs.io,LIST
+HOST,dl.pikpak.site,LIST
 HOST,dl.pstmn.io,LIST
 HOST,dl.snipaste.com,LIST
 HOST,dl.tailscale.com,LIST
@@ -2593,6 +2597,7 @@ HOST,map.vesselfinder.net,LIST
 HOST,mapgen-fi-1.comaps.app,LIST
 HOST,maps.geoapify.com,LIST
 HOST,maps.gstatic.com,LIST
+HOST,maps.hereapi.com,LIST
 HOST,maps.wikimedia.org,LIST
 HOST,maps.wplace.live,LIST
 HOST,mapserver.mapy.cz,LIST
@@ -3272,6 +3277,7 @@ HOST,ni-assets.azureedge.net,LIST
 HOST,nightly.link,LIST
 HOST,no-cache.hubspot.com,LIST
 HOST,nobara-images.nobaraproject.org,LIST
+HOST,node-registry.bit.cloud,LIST
 HOST,node.green,LIST
 HOST,nodebox-runtime.codesandbox.io,LIST
 HOST,nodei.co,LIST
@@ -4505,6 +4511,7 @@ HOST,web.nebula-media.org,LIST
 HOST,webappassets.smartsheet.com,LIST
 HOST,webassets.linear.app,LIST
 HOST,webcdn.17app.co,LIST
+HOST,webdist.data.apnic.net,LIST
 HOST,webfonts.zoho.com,LIST
 HOST,webobjects2.cdw.com,LIST
 HOST,webp.frostming.com,LIST
