@@ -1,11 +1,12 @@
-# Quantumult total line 4583
-# Last updated Tue 08/04/2026 22:57:12.04
+# Quantumult total line 4592
+# Last updated Fri 08/07/2026 22:29:52.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
-HOST,7h15_ru1353t_1s_m4d3_by_5ukk4w.skk.moe,LIST
+HOST,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe,LIST
 HOST,a-cdn.anthropic.com,LIST
+HOST,a-tiles.locationiq.com,LIST
 HOST,a.deviantart.net,LIST
 HOST,a.fireside.fm,LIST
 HOST,a.gawby.com,LIST
@@ -310,6 +311,7 @@ HOST,assets.vodafone.co.uk,LIST
 HOST,assets.vogue.com,LIST
 HOST,assets.volvo.com,LIST
 HOST,assets.vrchat.com,LIST
+HOST,assets.weather-forecast.com,LIST
 HOST,assets.xboxservices.com,LIST
 HOST,assets.xmind.net,LIST
 HOST,assets.yande.re,LIST
@@ -357,6 +359,7 @@ HOST,avts.wmlabs.net,LIST
 HOST,awsimgsrc.dmm.co.jp,LIST
 HOST,axiecdn.axieinfinity.com,LIST
 HOST,az700632.vo.msecnd.net,LIST
+HOST,b-tiles.locationiq.com,LIST
 HOST,b.manufact.com,LIST
 HOST,b.peatio.com,LIST
 HOST,b.sf-syn.com,LIST
@@ -373,6 +376,7 @@ HOST,badges.greenkeeper.io,LIST
 HOST,banners.chessbase.com,LIST
 HOST,barracuda-assets.zoovu.com,LIST
 HOST,barracuda-cdn.zoovu.com,LIST
+HOST,basemap.beacondb.net,LIST
 HOST,bcdn.alotporn.com,LIST
 HOST,bcdn.starapps.studio,LIST
 HOST,bcmedia.bitchute.com,LIST
@@ -410,6 +414,7 @@ HOST,bunnycdn-video-assets.b-cdn.net,LIST
 HOST,busuanzi.ibruce.info,LIST
 HOST,bytescale.mobbin.com,LIST
 HOST,c-bin.b-cdn.net,LIST
+HOST,c-tiles.locationiq.com,LIST
 HOST,c.1password.com,LIST
 HOST,c.animaapp.com,LIST
 HOST,c.fantia.jp,LIST
@@ -470,6 +475,7 @@ HOST,cdn-blocks.karte.io,LIST
 HOST,cdn-bundler.nice-team.net,LIST
 HOST,cdn-c.leavemealone.com,LIST
 HOST,cdn-cf-east.streamable.com,LIST
+HOST,cdn-city.livere.com,LIST
 HOST,cdn-client.medium.com,LIST
 HOST,cdn-cms.tunein.com,LIST
 HOST,cdn-dynmedia-1.microsoft.com,LIST
@@ -3106,6 +3112,7 @@ HOST,tiles.arcgis.com,LIST
 HOST,tiles.arcticconnect.ca,LIST
 HOST,tiles.gsj.jp,LIST
 HOST,tiles.immich.cloud,LIST
+HOST,tiles.locationiq.com,LIST
 HOST,tiles.mapilion.com,LIST
 HOST,tiles.mapillary.com,LIST
 HOST,tiles.maps.eox.at,LIST
@@ -3438,6 +3445,7 @@ HOST-SUFFIX,assettype.com,LIST
 HOST-SUFFIX,avximg.com,LIST
 HOST-SUFFIX,aweber-static.com,LIST
 HOST-SUFFIX,awsstatic.com,LIST
+HOST-SUFFIX,awxcdn.com,LIST
 HOST-SUFFIX,ax1x.com,LIST
 HOST-SUFFIX,azurestaticapps.net,LIST
 HOST-SUFFIX,b2c-contenthub.com,LIST
@@ -3705,6 +3713,7 @@ HOST-SUFFIX,f.hubspotstarter.net,LIST
 HOST-SUFFIX,faceit-cdn.net,LIST
 HOST-SUFFIX,fakeimg.pl,LIST
 HOST-SUFFIX,fakestoreapi.com,LIST
+HOST-SUFFIX,fast-sfc.com,LIST
 HOST-SUFFIX,fastlycdn.com,LIST
 HOST-SUFFIX,favicone.com,LIST
 HOST-SUFFIX,fbcdn.com,LIST

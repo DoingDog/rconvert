@@ -1,10 +1,11 @@
-# Clash total line 8890
-# Last updated Tue 08/04/2026 22:57:23.58
+# Clash total line 8899
+# Last updated Fri 08/07/2026 22:30:05.54
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
   - DOMAIN,3dna.nationbuilder.com
-  - DOMAIN,7h15_ru1353t_1s_m4d3_by_5ukk4w.skk.moe
+  - DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
+  - DOMAIN,a-tiles.locationiq.com
   - DOMAIN,a.deviantart.net
   - DOMAIN,a.fireside.fm
   - DOMAIN,a.gawby.com
@@ -356,6 +357,7 @@ payload:
   - DOMAIN,assets.vogue.com
   - DOMAIN,assets.volvo.com
   - DOMAIN,assets.vrchat.com
+  - DOMAIN,assets.weather-forecast.com
   - DOMAIN,assets.xmind.net
   - DOMAIN,assets.yande.re
   - DOMAIN,assets.zendesk.com
@@ -405,6 +407,7 @@ payload:
   - DOMAIN,axiecdn.axieinfinity.com
   - DOMAIN,az700632.vo.msecnd.net
   - DOMAIN,az764295.vo.msecnd.net
+  - DOMAIN,b-tiles.locationiq.com
   - DOMAIN,b.manufact.com
   - DOMAIN,b.peatio.com
   - DOMAIN,b.sf-syn.com
@@ -422,6 +425,7 @@ payload:
   - DOMAIN,banners.chessbase.com
   - DOMAIN,barracuda-assets.zoovu.com
   - DOMAIN,barracuda-cdn.zoovu.com
+  - DOMAIN,basemap.beacondb.net
   - DOMAIN,bbc.mp-pxcdn.com
   - DOMAIN,bcdn.alotporn.com
   - DOMAIN,bcdn.starapps.studio
@@ -468,6 +472,7 @@ payload:
   - DOMAIN,bytescale.mobbin.com
   - DOMAIN,bzip.org
   - DOMAIN,c-bin.b-cdn.net
+  - DOMAIN,c-tiles.locationiq.com
   - DOMAIN,c.1password.com
   - DOMAIN,c.animaapp.com
   - DOMAIN,c.fantia.jp
@@ -536,6 +541,7 @@ payload:
   - DOMAIN,cdn-bundler.nice-team.net
   - DOMAIN,cdn-c.leavemealone.com
   - DOMAIN,cdn-cf-east.streamable.com
+  - DOMAIN,cdn-city.livere.com
   - DOMAIN,cdn-client.medium.com
   - DOMAIN,cdn-cms.tunein.com
   - DOMAIN,cdn-dynmedia-1.microsoft.com
@@ -4245,6 +4251,7 @@ payload:
   - DOMAIN,tiles.arcticconnect.ca
   - DOMAIN,tiles.gsj.jp
   - DOMAIN,tiles.immich.cloud
+  - DOMAIN,tiles.locationiq.com
   - DOMAIN,tiles.mapilion.com
   - DOMAIN,tiles.mapillary.com
   - DOMAIN,tiles.maps.eox.at
@@ -4836,6 +4843,7 @@ payload:
   - DOMAIN-SUFFIX,awsthinkbox.com
   - DOMAIN-SUFFIX,awstrack.me
   - DOMAIN-SUFFIX,awstrust.com
+  - DOMAIN-SUFFIX,awxcdn.com
   - DOMAIN-SUFFIX,ax1x.com
   - DOMAIN-SUFFIX,azurecomcdn.net
   - DOMAIN-SUFFIX,azurestaticapps.net
@@ -5560,6 +5568,7 @@ payload:
   - DOMAIN-SUFFIX,fakeimg.pl
   - DOMAIN-SUFFIX,fakestoreapi.com
   - DOMAIN-SUFFIX,fanfox.net
+  - DOMAIN-SUFFIX,fast-sfc.com
   - DOMAIN-SUFFIX,fast.com
   - DOMAIN-SUFFIX,fastbit.cc
   - DOMAIN-SUFFIX,fastclick.to
