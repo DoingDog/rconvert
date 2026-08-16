@@ -1,5 +1,5 @@
-# Clash total line 8931
-# Last updated Thu 08/13/2026 22:35:47.55
+# Clash total line 8932
+# Last updated Sun 08/16/2026 22:15:31.70
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -6468,6 +6468,7 @@ payload:
   - DOMAIN-SUFFIX,mangadex.network
   - DOMAIN-SUFFIX,mangafox.me
   - DOMAIN-SUFFIX,manifest.prod.boltdns.net
+  - DOMAIN-SUFFIX,manuscdn.com
   - DOMAIN-SUFFIX,mapi.4kvm.net
   - DOMAIN-SUFFIX,marketing.aws.dev
   - DOMAIN-SUFFIX,marvel.com
