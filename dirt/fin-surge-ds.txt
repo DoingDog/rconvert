@@ -1,5 +1,5 @@
-# Surge Domain total line 30761
-# Last updated Sun 08/16/2026 22:15:52.81
+# Surge Domain total line 30762
+# Last updated Wed 08/19/2026 22:19:10.23
 127.skk.moe
 7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 a.iqmtp.live
@@ -7,6 +7,7 @@ analytics.strava.com
 app.viayoo.com
 aterm.me
 blzddist1-a.akamaihd.net
+body{
 captive.apple.com
 cdn.angruo.com
 client.amplifi.com
@@ -14,6 +15,7 @@ cn.download.nvidia.com
 console.gl-inet.com
 download.jetbrains.com
 gstore.val.manlaxy.com
+h1{
 homerouter.cpe
 hotspot.cslwifi.com
 i.dell.com
@@ -30,8 +32,11 @@ ocsp.globalsign.com
 ocsp2.globalsign.com
 origin-a.akamaihd.ne
 origin-a.akamaihd.net
+p-bstarstatic.akamaized.net
+p.bstarstatic.com
 pi.hole
 public.localsend.org
+p{
 raw.iqiq.io
 repeater.asus.com
 res.viayoo.com
@@ -41,11 +46,15 @@ sms.imagetasks.com
 speedtest.macpaw.com
 steamcommunity-a.akamaihd.net
 unifi
+upos-bstar-mirrorakam.akamaized.net
+upos-bstar1-mirrorakam.akamaized.net
 viayoo.com
 www.layuicdn.com
 www.libvideo.com
 www.viayoo.com
 www.yxssp.com
+}
+},1000);
 .000607.net
 .000681.com
 .000793.com
@@ -5826,6 +5835,7 @@ www.yxssp.com
 .congming365.com
 .congtu.cloud
 .connectedpdf.com
+.container{
 .content4ads.com
 .contentchina.com
 .conthings.com
@@ -5887,6 +5897,7 @@ www.yxssp.com
 .cosmos-intl.com
 .cosypaipai.com
 .cotticoffee.com
+.countdown{
 .coursein.vip
 .cowcs.com
 .cowlevel.net
@@ -7142,14 +7153,6 @@ www.yxssp.com
 .dolfindnsx.net
 .dolfindnsx.top
 .domainexpired-dnspod.com
-.domesticmedia.cc
-.domesticmedia.co
-.domesticmedia.com
-.domesticmedia.net
-.domesticmedia.tv
-.domesticmediagame.co
-.domesticmediagame.net
-.domesticmediapay.com
 .dominogames.net
 .dondonlock.com
 .dondonwenda.com
@@ -8881,6 +8884,7 @@ www.yxssp.com
 .fontong.com
 .fonwill.com
 .foooooot.com
+.footer{
 .forbidaaa.net
 .forceclouds.com
 .forceecrm.com
@@ -17128,6 +17132,7 @@ www.yxssp.com
 .neuroxiv.com
 .neuroxiv.net
 .neverbugs.com
+.new-domain{
 .new1cloud.com
 .new1dns.com
 .new253.com
@@ -17934,11 +17939,9 @@ www.yxssp.com
 .ozuotkar.com
 .ozzygmais.com
 .p-7.co
-.p-bstarstatic.akamaized.net
 .p-sig-dom.com
 .p-sig-dom.net
 .p-xiaopeng.com
-.p.bstarstatic.com
 .p1staff.com
 .p24p75149p.com
 .p2cdn.com
@@ -24685,8 +24688,6 @@ www.yxssp.com
 .uplog.cc
 .upmgaoepw.com
 .upmgtvcto.com
-.upos-bstar-mirrorakam.akamaized.net
-.upos-bstar1-mirrorakam.akamaized.net
 .upos-hz-mirrorakam.akamaized.net
 .upowerchain.com
 .upowerchain.xyz

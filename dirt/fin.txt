@@ -1,5 +1,5 @@
-# Main total line 31116
-# Last updated Sun 08/16/2026 22:15:51.51
+# Main total line 31107
+# Last updated Wed 08/19/2026 22:19:08.98
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 DOMAIN,127.skk.moe
 DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
@@ -8,6 +8,7 @@ DOMAIN,analytics.strava.com
 DOMAIN,app.viayoo.com
 DOMAIN,aterm.me
 DOMAIN,blzddist1-a.akamaihd.net
+DOMAIN,body{
 DOMAIN,captive.apple.com
 DOMAIN,cdn.angruo.com
 DOMAIN,client.amplifi.com
@@ -15,6 +16,7 @@ DOMAIN,cn.download.nvidia.com
 DOMAIN,console.gl-inet.com
 DOMAIN,download.jetbrains.com
 DOMAIN,gstore.val.manlaxy.com
+DOMAIN,h1{
 DOMAIN,homerouter.cpe
 DOMAIN,hotspot.cslwifi.com
 DOMAIN,i.dell.com
@@ -31,8 +33,11 @@ DOMAIN,ocsp.globalsign.com
 DOMAIN,ocsp2.globalsign.com
 DOMAIN,origin-a.akamaihd.ne
 DOMAIN,origin-a.akamaihd.net
+DOMAIN,p-bstarstatic.akamaized.net
+DOMAIN,p.bstarstatic.com
 DOMAIN,pi.hole
 DOMAIN,public.localsend.org
+DOMAIN,p{
 DOMAIN,raw.iqiq.io
 DOMAIN,repeater.asus.com
 DOMAIN,res.viayoo.com
@@ -42,11 +47,15 @@ DOMAIN,sms.imagetasks.com
 DOMAIN,speedtest.macpaw.com
 DOMAIN,steamcommunity-a.akamaihd.net
 DOMAIN,unifi
+DOMAIN,upos-bstar-mirrorakam.akamaized.net
+DOMAIN,upos-bstar1-mirrorakam.akamaized.net
 DOMAIN,viayoo.com
 DOMAIN,www.layuicdn.com
 DOMAIN,www.libvideo.com
 DOMAIN,www.viayoo.com
 DOMAIN,www.yxssp.com
+DOMAIN,}
+DOMAIN,},1000);
 DOMAIN-SUFFIX,000607.net
 DOMAIN-SUFFIX,000681.com
 DOMAIN-SUFFIX,000793.com
@@ -5827,6 +5836,7 @@ DOMAIN-SUFFIX,confong.net
 DOMAIN-SUFFIX,congming365.com
 DOMAIN-SUFFIX,congtu.cloud
 DOMAIN-SUFFIX,connectedpdf.com
+DOMAIN-SUFFIX,container{
 DOMAIN-SUFFIX,content4ads.com
 DOMAIN-SUFFIX,contentchina.com
 DOMAIN-SUFFIX,conthings.com
@@ -5888,6 +5898,7 @@ DOMAIN-SUFFIX,coslake.com
 DOMAIN-SUFFIX,cosmos-intl.com
 DOMAIN-SUFFIX,cosypaipai.com
 DOMAIN-SUFFIX,cotticoffee.com
+DOMAIN-SUFFIX,countdown{
 DOMAIN-SUFFIX,coursein.vip
 DOMAIN-SUFFIX,cowcs.com
 DOMAIN-SUFFIX,cowlevel.net
@@ -7143,14 +7154,6 @@ DOMAIN-SUFFIX,dolfindnsx.com
 DOMAIN-SUFFIX,dolfindnsx.net
 DOMAIN-SUFFIX,dolfindnsx.top
 DOMAIN-SUFFIX,domainexpired-dnspod.com
-DOMAIN-SUFFIX,domesticmedia.cc
-DOMAIN-SUFFIX,domesticmedia.co
-DOMAIN-SUFFIX,domesticmedia.com
-DOMAIN-SUFFIX,domesticmedia.net
-DOMAIN-SUFFIX,domesticmedia.tv
-DOMAIN-SUFFIX,domesticmediagame.co
-DOMAIN-SUFFIX,domesticmediagame.net
-DOMAIN-SUFFIX,domesticmediapay.com
 DOMAIN-SUFFIX,dominogames.net
 DOMAIN-SUFFIX,dondonlock.com
 DOMAIN-SUFFIX,dondonwenda.com
@@ -8882,6 +8885,7 @@ DOMAIN-SUFFIX,folo8.com
 DOMAIN-SUFFIX,fontong.com
 DOMAIN-SUFFIX,fonwill.com
 DOMAIN-SUFFIX,foooooot.com
+DOMAIN-SUFFIX,footer{
 DOMAIN-SUFFIX,forbidaaa.net
 DOMAIN-SUFFIX,forceclouds.com
 DOMAIN-SUFFIX,forceecrm.com
@@ -17129,6 +17133,7 @@ DOMAIN-SUFFIX,networksim123.com
 DOMAIN-SUFFIX,neuroxiv.com
 DOMAIN-SUFFIX,neuroxiv.net
 DOMAIN-SUFFIX,neverbugs.com
+DOMAIN-SUFFIX,new-domain{
 DOMAIN-SUFFIX,new1cloud.com
 DOMAIN-SUFFIX,new1dns.com
 DOMAIN-SUFFIX,new253.com
@@ -17935,11 +17940,9 @@ DOMAIN-SUFFIX,oztsyghmg.com
 DOMAIN-SUFFIX,ozuotkar.com
 DOMAIN-SUFFIX,ozzygmais.com
 DOMAIN-SUFFIX,p-7.co
-DOMAIN-SUFFIX,p-bstarstatic.akamaized.net
 DOMAIN-SUFFIX,p-sig-dom.com
 DOMAIN-SUFFIX,p-sig-dom.net
 DOMAIN-SUFFIX,p-xiaopeng.com
-DOMAIN-SUFFIX,p.bstarstatic.com
 DOMAIN-SUFFIX,p1staff.com
 DOMAIN-SUFFIX,p24p75149p.com
 DOMAIN-SUFFIX,p2cdn.com
@@ -24686,8 +24689,6 @@ DOMAIN-SUFFIX,uplay163.com
 DOMAIN-SUFFIX,uplog.cc
 DOMAIN-SUFFIX,upmgaoepw.com
 DOMAIN-SUFFIX,upmgtvcto.com
-DOMAIN-SUFFIX,upos-bstar-mirrorakam.akamaized.net
-DOMAIN-SUFFIX,upos-bstar1-mirrorakam.akamaized.net
 DOMAIN-SUFFIX,upos-hz-mirrorakam.akamaized.net
 DOMAIN-SUFFIX,upowerchain.com
 DOMAIN-SUFFIX,upowerchain.xyz
@@ -30890,7 +30891,6 @@ IP-CIDR,121.37.0.0/17,no-resolve
 IP-CIDR,121.51.0.0/16,no-resolve
 IP-CIDR,122.112.128.0/17,no-resolve
 IP-CIDR,123.58.160.0/19,no-resolve
-IP-CIDR,128.1.62.200/31,no-resolve
 IP-CIDR,129.204.0.0/16,no-resolve
 IP-CIDR,129.211.0.0/16,no-resolve
 IP-CIDR,129.226.0.0/16,no-resolve
@@ -30921,7 +30921,6 @@ IP-CIDR,149.129.64.0/18,no-resolve
 IP-CIDR,150.109.32.0/19,no-resolve
 IP-CIDR,150.109.64.0/20,no-resolve
 IP-CIDR,150.109.96.0/19,no-resolve
-IP-CIDR,150.116.92.250/32,no-resolve
 IP-CIDR,152.136.0.0/16,no-resolve
 IP-CIDR,159.138.0.0/18,no-resolve
 IP-CIDR,159.138.112.0/21,no-resolve
@@ -30934,7 +30933,6 @@ IP-CIDR,159.138.96.0/20,no-resolve
 IP-CIDR,162.14.0.0/16,no-resolve
 IP-CIDR,163.181.32.0/22,no-resolve
 IP-CIDR,163.181.40.0/24,no-resolve
-IP-CIDR,164.52.76.18/32,no-resolve
 IP-CIDR,170.33.0.0/22,no-resolve
 IP-CIDR,180.76.0.0/16,no-resolve
 IP-CIDR,182.254.0.0/16,no-resolve
@@ -30992,7 +30990,6 @@ IP-CIDR,45.253.132.0/22,no-resolve
 IP-CIDR,45.253.240.0/22,no-resolve
 IP-CIDR,45.254.48.0/23,no-resolve
 IP-CIDR,45.40.192.0/19,no-resolve
-IP-CIDR,45.43.32.234/32,no-resolve
 IP-CIDR,47.100.127.239/32,no-resolve
 IP-CIDR,47.240.0.0/16,no-resolve
 IP-CIDR,47.242.0.0/15,no-resolve
@@ -31095,10 +31092,6 @@ PROCESS-NAME,amuled
 PROCESS-NAME,aria2c
 PROCESS-NAME,clash
 PROCESS-NAME,cloudflared
-PROCESS-NAME,com.bilibili.app.blue
-PROCESS-NAME,com.bilibili.app.in
-PROCESS-NAME,com.bilibili.comic
-PROCESS-NAME,com.bilibili.comic.intl
 PROCESS-NAME,fdm
 PROCESS-NAME,nmap
 PROCESS-NAME,parsecd
@@ -31112,8 +31105,6 @@ PROCESS-NAME,transmission-daemon
 PROCESS-NAME,transmission-qt
 PROCESS-NAME,trojan
 PROCESS-NAME,trojan-go
-PROCESS-NAME,tv.danmaku.bili
-PROCESS-NAME,tv.danmaku.bilibilihd
 PROCESS-NAME,uTorrent
 PROCESS-NAME,v2ray
 PROCESS-NAME,xray

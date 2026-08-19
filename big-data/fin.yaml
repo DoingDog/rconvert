@@ -1,5 +1,5 @@
-# Clash total line 8932
-# Last updated Sun 08/16/2026 22:15:31.70
+# Clash total line 8931
+# Last updated Wed 08/19/2026 22:18:50.88
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -744,6 +744,7 @@ payload:
   - DOMAIN,cdn.download.it
   - DOMAIN,cdn.drata.com
   - DOMAIN,cdn.dribbble.com
+  - DOMAIN,cdn.dyn.com
   - DOMAIN,cdn.dynamicyield.com
   - DOMAIN,cdn.earthroulette.com
   - DOMAIN,cdn.ecomm.ui.com
@@ -7941,7 +7942,6 @@ payload:
   - DOMAIN-KEYWORD,emby.
   - DOMAIN-KEYWORD,emby2.
   - DOMAIN-KEYWORD,embyssl.
-  - DOMAIN-KEYWORD,fonts.hanime1
   - DOMAIN-KEYWORD,hamivideo.cdn.hinet.net
   - DOMAIN-KEYWORD,hbogoasia
   - DOMAIN-KEYWORD,images.trustpilot.com
@@ -7969,7 +7969,6 @@ payload:
   - DOMAIN-KEYWORD,ttvnw
   - DOMAIN-KEYWORD,tvbanywhere
   - DOMAIN-KEYWORD,uk-live
-  - DOMAIN-KEYWORD,vdownload.hanime1
   - DOMAIN-KEYWORD,vod-adaptive.akamaized.net
   - DOMAIN-KEYWORD,voddazn
   - DOMAIN-KEYWORD,web-assets.zendesk

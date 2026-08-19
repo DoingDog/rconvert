@@ -1,5 +1,5 @@
-# Quantumult total line 31073
-# Last updated Sun 08/16/2026 22:15:52.00
+# Quantumult total line 31070
+# Last updated Wed 08/19/2026 22:19:09.45
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,127.skk.moe,LIST
 HOST,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe,LIST
@@ -8,6 +8,7 @@ HOST,analytics.strava.com,LIST
 HOST,app.viayoo.com,LIST
 HOST,aterm.me,LIST
 HOST,blzddist1-a.akamaihd.net,LIST
+HOST,body{,LIST
 HOST,captive.apple.com,LIST
 HOST,cdn.angruo.com,LIST
 HOST,client.amplifi.com,LIST
@@ -15,6 +16,7 @@ HOST,cn.download.nvidia.com,LIST
 HOST,console.gl-inet.com,LIST
 HOST,download.jetbrains.com,LIST
 HOST,gstore.val.manlaxy.com,LIST
+HOST,h1{,LIST
 HOST,homerouter.cpe,LIST
 HOST,hotspot.cslwifi.com,LIST
 HOST,i.dell.com,LIST
@@ -31,8 +33,11 @@ HOST,ocsp.globalsign.com,LIST
 HOST,ocsp2.globalsign.com,LIST
 HOST,origin-a.akamaihd.ne,LIST
 HOST,origin-a.akamaihd.net,LIST
+HOST,p-bstarstatic.akamaized.net,LIST
+HOST,p.bstarstatic.com,LIST
 HOST,pi.hole,LIST
 HOST,public.localsend.org,LIST
+HOST,p{,LIST
 HOST,raw.iqiq.io,LIST
 HOST,repeater.asus.com,LIST
 HOST,res.viayoo.com,LIST
@@ -42,11 +47,15 @@ HOST,sms.imagetasks.com,LIST
 HOST,speedtest.macpaw.com,LIST
 HOST,steamcommunity-a.akamaihd.net,LIST
 HOST,unifi,LIST
+HOST,upos-bstar-mirrorakam.akamaized.net,LIST
+HOST,upos-bstar1-mirrorakam.akamaized.net,LIST
 HOST,viayoo.com,LIST
 HOST,www.layuicdn.com,LIST
 HOST,www.libvideo.com,LIST
 HOST,www.viayoo.com,LIST
 HOST,www.yxssp.com,LIST
+HOST,},LIST
+HOST,},1000);,LIST
 HOST-SUFFIX,000607.net,LIST
 HOST-SUFFIX,000681.com,LIST
 HOST-SUFFIX,000793.com,LIST
@@ -5827,6 +5836,7 @@ HOST-SUFFIX,confong.net,LIST
 HOST-SUFFIX,congming365.com,LIST
 HOST-SUFFIX,congtu.cloud,LIST
 HOST-SUFFIX,connectedpdf.com,LIST
+HOST-SUFFIX,container{,LIST
 HOST-SUFFIX,content4ads.com,LIST
 HOST-SUFFIX,contentchina.com,LIST
 HOST-SUFFIX,conthings.com,LIST
@@ -5888,6 +5898,7 @@ HOST-SUFFIX,coslake.com,LIST
 HOST-SUFFIX,cosmos-intl.com,LIST
 HOST-SUFFIX,cosypaipai.com,LIST
 HOST-SUFFIX,cotticoffee.com,LIST
+HOST-SUFFIX,countdown{,LIST
 HOST-SUFFIX,coursein.vip,LIST
 HOST-SUFFIX,cowcs.com,LIST
 HOST-SUFFIX,cowlevel.net,LIST
@@ -7143,14 +7154,6 @@ HOST-SUFFIX,dolfindnsx.com,LIST
 HOST-SUFFIX,dolfindnsx.net,LIST
 HOST-SUFFIX,dolfindnsx.top,LIST
 HOST-SUFFIX,domainexpired-dnspod.com,LIST
-HOST-SUFFIX,domesticmedia.cc,LIST
-HOST-SUFFIX,domesticmedia.co,LIST
-HOST-SUFFIX,domesticmedia.com,LIST
-HOST-SUFFIX,domesticmedia.net,LIST
-HOST-SUFFIX,domesticmedia.tv,LIST
-HOST-SUFFIX,domesticmediagame.co,LIST
-HOST-SUFFIX,domesticmediagame.net,LIST
-HOST-SUFFIX,domesticmediapay.com,LIST
 HOST-SUFFIX,dominogames.net,LIST
 HOST-SUFFIX,dondonlock.com,LIST
 HOST-SUFFIX,dondonwenda.com,LIST
@@ -8882,6 +8885,7 @@ HOST-SUFFIX,folo8.com,LIST
 HOST-SUFFIX,fontong.com,LIST
 HOST-SUFFIX,fonwill.com,LIST
 HOST-SUFFIX,foooooot.com,LIST
+HOST-SUFFIX,footer{,LIST
 HOST-SUFFIX,forbidaaa.net,LIST
 HOST-SUFFIX,forceclouds.com,LIST
 HOST-SUFFIX,forceecrm.com,LIST
@@ -17129,6 +17133,7 @@ HOST-SUFFIX,networksim123.com,LIST
 HOST-SUFFIX,neuroxiv.com,LIST
 HOST-SUFFIX,neuroxiv.net,LIST
 HOST-SUFFIX,neverbugs.com,LIST
+HOST-SUFFIX,new-domain{,LIST
 HOST-SUFFIX,new1cloud.com,LIST
 HOST-SUFFIX,new1dns.com,LIST
 HOST-SUFFIX,new253.com,LIST
@@ -17935,11 +17940,9 @@ HOST-SUFFIX,oztsyghmg.com,LIST
 HOST-SUFFIX,ozuotkar.com,LIST
 HOST-SUFFIX,ozzygmais.com,LIST
 HOST-SUFFIX,p-7.co,LIST
-HOST-SUFFIX,p-bstarstatic.akamaized.net,LIST
 HOST-SUFFIX,p-sig-dom.com,LIST
 HOST-SUFFIX,p-sig-dom.net,LIST
 HOST-SUFFIX,p-xiaopeng.com,LIST
-HOST-SUFFIX,p.bstarstatic.com,LIST
 HOST-SUFFIX,p1staff.com,LIST
 HOST-SUFFIX,p24p75149p.com,LIST
 HOST-SUFFIX,p2cdn.com,LIST
@@ -24686,8 +24689,6 @@ HOST-SUFFIX,uplay163.com,LIST
 HOST-SUFFIX,uplog.cc,LIST
 HOST-SUFFIX,upmgaoepw.com,LIST
 HOST-SUFFIX,upmgtvcto.com,LIST
-HOST-SUFFIX,upos-bstar-mirrorakam.akamaized.net,LIST
-HOST-SUFFIX,upos-bstar1-mirrorakam.akamaized.net,LIST
 HOST-SUFFIX,upos-hz-mirrorakam.akamaized.net,LIST
 HOST-SUFFIX,upowerchain.com,LIST
 HOST-SUFFIX,upowerchain.xyz,LIST
@@ -30890,7 +30891,6 @@ IP-CIDR,121.37.0.0/17,LIST,no-resolve
 IP-CIDR,121.51.0.0/16,LIST,no-resolve
 IP-CIDR,122.112.128.0/17,LIST,no-resolve
 IP-CIDR,123.58.160.0/19,LIST,no-resolve
-IP-CIDR,128.1.62.200/31,LIST,no-resolve
 IP-CIDR,129.204.0.0/16,LIST,no-resolve
 IP-CIDR,129.211.0.0/16,LIST,no-resolve
 IP-CIDR,129.226.0.0/16,LIST,no-resolve
@@ -30921,7 +30921,6 @@ IP-CIDR,149.129.64.0/18,LIST,no-resolve
 IP-CIDR,150.109.32.0/19,LIST,no-resolve
 IP-CIDR,150.109.64.0/20,LIST,no-resolve
 IP-CIDR,150.109.96.0/19,LIST,no-resolve
-IP-CIDR,150.116.92.250/32,LIST,no-resolve
 IP-CIDR,152.136.0.0/16,LIST,no-resolve
 IP-CIDR,159.138.0.0/18,LIST,no-resolve
 IP-CIDR,159.138.112.0/21,LIST,no-resolve
@@ -30934,7 +30933,6 @@ IP-CIDR,159.138.96.0/20,LIST,no-resolve
 IP-CIDR,162.14.0.0/16,LIST,no-resolve
 IP-CIDR,163.181.32.0/22,LIST,no-resolve
 IP-CIDR,163.181.40.0/24,LIST,no-resolve
-IP-CIDR,164.52.76.18/32,LIST,no-resolve
 IP-CIDR,170.33.0.0/22,LIST,no-resolve
 IP-CIDR,180.76.0.0/16,LIST,no-resolve
 IP-CIDR,182.254.0.0/16,LIST,no-resolve
@@ -30992,7 +30990,6 @@ IP-CIDR,45.253.132.0/22,LIST,no-resolve
 IP-CIDR,45.253.240.0/22,LIST,no-resolve
 IP-CIDR,45.254.48.0/23,LIST,no-resolve
 IP-CIDR,45.40.192.0/19,LIST,no-resolve
-IP-CIDR,45.43.32.234/32,LIST,no-resolve
 IP-CIDR,47.100.127.239/32,LIST,no-resolve
 IP-CIDR,47.240.0.0/16,LIST,no-resolve
 IP-CIDR,47.242.0.0/15,LIST,no-resolve
