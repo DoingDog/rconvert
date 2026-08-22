@@ -1,5 +1,5 @@
-# Quantumult total line 4635
-# Last updated Wed 08/19/2026 22:18:37.18
+# Quantumult total line 4640
+# Last updated Sat 08/22/2026 22:15:19.50
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -243,7 +243,6 @@ HOST,assets.nintendo.com,LIST
 HOST,assets.northflank.com,LIST
 HOST,assets.nxtrace.org,LIST
 HOST,assets.nypost.com,LIST
-HOST,assets.onestore.ms,LIST
 HOST,assets.ontrack.com,LIST
 HOST,assets.openalternative.co,LIST
 HOST,assets.openlogi.org,LIST
@@ -627,7 +626,6 @@ HOST,cdn.cms-twdigitalassets.com,LIST
 HOST,cdn.cnn.com,LIST
 HOST,cdn.cnx-software.com,LIST
 HOST,cdn.codeblackbelt.com,LIST
-HOST,cdn.commandbar.com,LIST
 HOST,cdn.comparitech.com,LIST
 HOST,cdn.concert.io,LIST
 HOST,cdn.configcat.com,LIST
@@ -709,6 +707,7 @@ HOST,cdn.gdl.gg,LIST
 HOST,cdn.geekzone.co.nz,LIST
 HOST,cdn.gethypervisual.com,LIST
 HOST,cdn.getkoala.com,LIST
+HOST,cdn.getmerlin.in,LIST
 HOST,cdn.gettr.com,LIST
 HOST,cdn.ghostery.com,LIST
 HOST,cdn.giftcardpro.app,LIST
@@ -771,6 +770,7 @@ HOST,cdn.kobo.com,LIST
 HOST,cdn.langshop.app,LIST
 HOST,cdn.leandata.com,LIST
 HOST,cdn.lemonsqueezy.com,LIST
+HOST,cdn.leonardo.ai,LIST
 HOST,cdn.lgrckt-in.com,LIST
 HOST,cdn.libravatar.org,LIST
 HOST,cdn.lihkg.com,LIST
@@ -1219,6 +1219,7 @@ HOST,content.overwolf.com,LIST
 HOST,content.powerapps.com,LIST
 HOST,content.presspage.com,LIST
 HOST,content.wepik.com,LIST
+HOST,contentful-asset-proxy.sd.indazn.com,LIST
 HOST,contents-thumbnail2.fc2.com,LIST
 HOST,conversiongorilla.com,LIST
 HOST,cookie-cdn.cookiepro.com,LIST
@@ -1265,6 +1266,7 @@ HOST,data.schemaapp.com,LIST
 HOST,data.web.clickup.com,LIST
 HOST,data3.answerbase.com,LIST
 HOST,david-dm.org,LIST
+HOST,dazn-content-proxy.sd.indazn.com,LIST
 HOST,db.onlinewebfonts.com,LIST
 HOST,dc-cdn.cdw.com,LIST
 HOST,dd.blackhawknetwork.com,LIST
@@ -1459,6 +1461,7 @@ HOST,fonts.googleapis.com,LIST
 HOST,fonts.gstatic.com,LIST
 HOST,fonts.loox.io,LIST
 HOST,fonts.mailerlite.com,LIST
+HOST,fonts.reown.com,LIST
 HOST,fonts.sony.net,LIST
 HOST,fonts.svc.ui.com,LIST
 HOST,fonts.twitter.com,LIST
@@ -1468,7 +1471,6 @@ HOST,fonts.zapier.com,LIST
 HOST,fonts1.unidays.world,LIST
 HOST,forest-mt-s3.seekrtech.com,LIST
 HOST,form-assets.mailchimp.com,LIST
-HOST,frames-commandbar-prod.commandbar.com,LIST
 HOST,freeshippingbar.herokuapp.com,LIST
 HOST,front-resource.fs.com,LIST
 HOST,frontend-apps-multi-region.workos.com,LIST
@@ -1624,6 +1626,7 @@ HOST,image.civitai.com,LIST
 HOST,image.cnbcfm.com,LIST
 HOST,image.comicbz.com,LIST
 HOST,image.crisp.chat,LIST
+HOST,image.discovery.indazn.com,LIST
 HOST,image.dooo.ng,LIST
 HOST,image.email.microsoftemail.com,LIST
 HOST,image.freepik.com,LIST
@@ -2445,6 +2448,7 @@ HOST,resource-accel.fs.com,LIST
 HOST,resource.akashic.coe.nicovideo.jp,LIST
 HOST,resource.fs.com,LIST
 HOST,resource.logitech.com,LIST
+HOST,resource.logitechg.com,LIST
 HOST,resource.tnlmediagene.com,LIST
 HOST,resource.video.nimg.jp,LIST
 HOST,resources-cache.prod.sketch.com,LIST
@@ -2510,10 +2514,10 @@ HOST,s3-figma-force-client-reloads-production.figma.com,LIST
 HOST,s3-figma-plugin-images-production-sig.figma.com,LIST
 HOST,s3-symbol-logo.tradingview.com,LIST
 HOST,s3.2233778.xyz,LIST
-HOST,s3.aaaaa.io,LIST
 HOST,s3.acg.mn,LIST
 HOST,s3.anilist.co,LIST
 HOST,s3.arkjp.net,LIST
+HOST,s3.beta.coinmarketcap.com,LIST
 HOST,s3.c.im,LIST
 HOST,s3.coinmarketcap.com,LIST
 HOST,s3.cointelegraph.com,LIST
@@ -2755,7 +2759,6 @@ HOST,static.arxiv.org,LIST
 HOST,static.assetlab.io,LIST
 HOST,static.assets-stash.eet-china.com,LIST
 HOST,static.axios.com,LIST
-HOST,static.bad.news,LIST
 HOST,static.bangumi.moe,LIST
 HOST,static.bbc.co.uk,LIST
 HOST,static.bbci.co.uk,LIST
@@ -2797,6 +2800,7 @@ HOST,static.cracked.ax,LIST
 HOST,static.cracked.sh,LIST
 HOST,static.crunchyroll.com,LIST
 HOST,static.crypto.com,LIST
+HOST,static.dazndn.com,LIST
 HOST,static.deepl.com,LIST
 HOST,static.doujins.com,LIST
 HOST,static.driffle.com,LIST
@@ -3753,6 +3757,7 @@ HOST-SUFFIX,favicone.com,LIST
 HOST-SUFFIX,fbcdn.com,LIST
 HOST-SUFFIX,fbcdn.net,LIST
 HOST-SUFFIX,fbsbx.com,LIST
+HOST-SUFFIX,fe.indazn.com,LIST
 HOST-SUFFIX,featureassets.org,LIST
 HOST-SUFFIX,feedercdn.com,LIST
 HOST-SUFFIX,fembeqv2.xyz,LIST
