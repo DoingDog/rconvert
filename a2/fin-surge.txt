@@ -1,5 +1,5 @@
-# Surge Rules total line 1317
-# Last updated Sat 08/22/2026 22:09:19.80
+# Surge Rules total line 1320
+# Last updated Tue 08/25/2026 22:13:35.09
 DOMAIN-KEYWORD,-ad.a.yximgs.com
 DOMAIN-KEYWORD,-ad.ixigua.com
 DOMAIN-KEYWORD,-ad.sm.cn
@@ -383,6 +383,7 @@ IP-CIDR,103.224.182.251/32,no-resolve
 IP-CIDR,103.224.222.208/32,no-resolve
 IP-CIDR,103.233.216.77/32,no-resolve
 IP-CIDR,103.249.254.113/32,no-resolve
+IP-CIDR,103.29.182.53/32,no-resolve
 IP-CIDR,103.37.152.97/32,no-resolve
 IP-CIDR,103.37.155.60/32,no-resolve
 IP-CIDR,103.49.209.27/32,no-resolve
@@ -580,6 +581,7 @@ IP-CIDR,125.47.205.109/32,no-resolve
 IP-CIDR,125.47.243.187/32,no-resolve
 IP-CIDR,125.76.239.244/31,no-resolve
 IP-CIDR,125.89.69.5/32,no-resolve
+IP-CIDR,13.140.171.211/32,no-resolve
 IP-CIDR,13.248.148.254/32,no-resolve
 IP-CIDR,132.148.220.142/32,no-resolve
 IP-CIDR,134.122.115.190/32,no-resolve
@@ -841,6 +843,7 @@ IP-CIDR,198.23.255.14/32,no-resolve
 IP-CIDR,198.251.82.186/32,no-resolve
 IP-CIDR,198.40.52.11/32,no-resolve
 IP-CIDR,198.58.118.167/32,no-resolve
+IP-CIDR,199.168.185.4/32,no-resolve
 IP-CIDR,199.59.243.222/32,no-resolve
 IP-CIDR,2.87.160.7/32,no-resolve
 IP-CIDR,200.72.40.46/32,no-resolve
