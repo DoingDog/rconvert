@@ -1,5 +1,5 @@
-# Clash total line 4641
-# Last updated Sat 08/29/2026  3:30:22.08
+# Clash total line 4655
+# Last updated Tue 09/01/2026  0:57:37.33
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -608,6 +608,7 @@ payload:
   - DOMAIN,cdn.candid.org
   - DOMAIN,cdn.candu.ai
   - DOMAIN,cdn.candy.ai
+  - DOMAIN,cdn.candycode.com
   - DOMAIN,cdn.casestudies.svc.ui.com
   - DOMAIN,cdn.casetify.com
   - DOMAIN,cdn.catch.dmm.co.jp
@@ -1050,6 +1051,8 @@ payload:
   - DOMAIN,cdn2.suno.ai
   - DOMAIN,cdn2.sysgears.com
   - DOMAIN,cdn2.techbang.com
+  - DOMAIN,cdn2.telegram.space
+  - DOMAIN,cdn2.telesco.pe
   - DOMAIN,cdn2.ttloli.com
   - DOMAIN,cdn2.tubeteen18.com
   - DOMAIN,cdn2.turboviplay.cc
@@ -1062,6 +1065,8 @@ payload:
   - DOMAIN,cdn3.onlyfans.com
   - DOMAIN,cdn3.stamped.io
   - DOMAIN,cdn3.sysgears.com
+  - DOMAIN,cdn3.telegram.space
+  - DOMAIN,cdn3.telesco.pe
   - DOMAIN,cdn3.tubeteen18.com
   - DOMAIN,cdn3.unrealengine.com
   - DOMAIN,cdn4.bigcommerce.com
@@ -1145,6 +1150,7 @@ payload:
   - DOMAIN,clara.iwara.tv
   - DOMAIN,claritystatic.azureedge.net
   - DOMAIN,clickup.marketlinc.com
+  - DOMAIN,client-log-forwarder.1password.com
   - DOMAIN,clientsdk.launchdarkly.com
   - DOMAIN,clientstream.launchdarkly.com
   - DOMAIN,clips-media-assets2.twitch.tv
@@ -1272,6 +1278,7 @@ payload:
   - DOMAIN,dc-cdn.cdw.com
   - DOMAIN,dd.blackhawknetwork.com
   - DOMAIN,dd.dexscreener.com
+  - DOMAIN,delivery.twentythree.com
   - DOMAIN,demo.unified-streaming.com
   - DOMAIN,demotiles.maplibre.org
   - DOMAIN,design-assets.hubspot.com
@@ -1422,6 +1429,7 @@ payload:
   - DOMAIN,file.zoom.us
   - DOMAIN,file1.hkepc.net
   - DOMAIN,files.armorgames.com
+  - DOMAIN,files.blocktempo.ai
   - DOMAIN,files.buildwithfern.com
   - DOMAIN,files.gempages.net
   - DOMAIN,files.iwara.tv
@@ -1623,6 +1631,7 @@ payload:
   - DOMAIN,image-us.samsung.com
   - DOMAIN,image.acg.lol
   - DOMAIN,image.ap-mail.org
+  - DOMAIN,image.blocktempo.com
   - DOMAIN,image.civitai.com
   - DOMAIN,image.cnbcfm.com
   - DOMAIN,image.comicbz.com
@@ -3014,6 +3023,7 @@ payload:
   - DOMAIN,static1.squarespace.com
   - DOMAIN,static10.lottiefiles.com
   - DOMAIN,static2.avg.com
+  - DOMAIN,static2.giroditalia.it
   - DOMAIN,static2.lottiefiles.com
   - DOMAIN,static2.onlyfans.com
   - DOMAIN,static2.sharepointonline.com
@@ -3273,6 +3283,7 @@ payload:
   - DOMAIN,video.bsky.app
   - DOMAIN,video.cdnbye.com
   - DOMAIN,video.dailymail.co.uk
+  - DOMAIN,video.giroditalia.it
   - DOMAIN,video1.7mmtv.sx
   - DOMAIN,video2.7mmtv.sx
   - DOMAIN,video3.mingpao.com
@@ -3330,6 +3341,7 @@ payload:
   - DOMAIN,website-cdn.ipinfo.io
   - DOMAIN,website-media.deel.com
   - DOMAIN,website-prod.cache.wpscdn.com
+  - DOMAIN,websiteres.nmteam.xyz
   - DOMAIN,webstatic.chargebee.com
   - DOMAIN,widget.allkeyshop.com
   - DOMAIN,widget.automizely.com
@@ -3811,6 +3823,7 @@ payload:
   - DOMAIN-SUFFIX,gateway.serph.network
   - DOMAIN-SUFFIX,gauthstatic.com
   - DOMAIN-SUFFIX,gayzyimage.com
+  - DOMAIN-SUFFIX,gazzettaobjects.it
   - DOMAIN-SUFFIX,gcr.si
   - DOMAIN-SUFFIX,gdvid.info
   - DOMAIN-SUFFIX,gentcdn.com
@@ -4286,6 +4299,7 @@ payload:
   - DOMAIN-SUFFIX,raxcdn.com
   - DOMAIN-SUFFIX,raygun.io
   - DOMAIN-SUFFIX,rbxcdn.com
+  - DOMAIN-SUFFIX,rcsobjects.it
   - DOMAIN-SUFFIX,rdtcdn.com
   - DOMAIN-SUFFIX,react.dev
   - DOMAIN-SUFFIX,reactjs.org

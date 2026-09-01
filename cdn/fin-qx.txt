@@ -1,5 +1,5 @@
-# Quantumult total line 4641
-# Last updated Sat 08/29/2026  3:30:22.04
+# Quantumult total line 4655
+# Last updated Tue 09/01/2026  0:57:37.28
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -607,6 +607,7 @@ HOST,cdn.camweara.com,LIST
 HOST,cdn.candid.org,LIST
 HOST,cdn.candu.ai,LIST
 HOST,cdn.candy.ai,LIST
+HOST,cdn.candycode.com,LIST
 HOST,cdn.casestudies.svc.ui.com,LIST
 HOST,cdn.casetify.com,LIST
 HOST,cdn.catch.dmm.co.jp,LIST
@@ -1049,6 +1050,8 @@ HOST,cdn2.stamped.io,LIST
 HOST,cdn2.suno.ai,LIST
 HOST,cdn2.sysgears.com,LIST
 HOST,cdn2.techbang.com,LIST
+HOST,cdn2.telegram.space,LIST
+HOST,cdn2.telesco.pe,LIST
 HOST,cdn2.ttloli.com,LIST
 HOST,cdn2.tubeteen18.com,LIST
 HOST,cdn2.turboviplay.cc,LIST
@@ -1061,6 +1064,8 @@ HOST,cdn3.iconfinder.com,LIST
 HOST,cdn3.onlyfans.com,LIST
 HOST,cdn3.stamped.io,LIST
 HOST,cdn3.sysgears.com,LIST
+HOST,cdn3.telegram.space,LIST
+HOST,cdn3.telesco.pe,LIST
 HOST,cdn3.tubeteen18.com,LIST
 HOST,cdn3.unrealengine.com,LIST
 HOST,cdn4.bigcommerce.com,LIST
@@ -1144,6 +1149,7 @@ HOST,circle-flags.zeljko.me,LIST
 HOST,clara.iwara.tv,LIST
 HOST,claritystatic.azureedge.net,LIST
 HOST,clickup.marketlinc.com,LIST
+HOST,client-log-forwarder.1password.com,LIST
 HOST,clientsdk.launchdarkly.com,LIST
 HOST,clientstream.launchdarkly.com,LIST
 HOST,clips-media-assets2.twitch.tv,LIST
@@ -1271,6 +1277,7 @@ HOST,db.onlinewebfonts.com,LIST
 HOST,dc-cdn.cdw.com,LIST
 HOST,dd.blackhawknetwork.com,LIST
 HOST,dd.dexscreener.com,LIST
+HOST,delivery.twentythree.com,LIST
 HOST,demo.unified-streaming.com,LIST
 HOST,demotiles.maplibre.org,LIST
 HOST,design-assets.hubspot.com,LIST
@@ -1421,6 +1428,7 @@ HOST,file.izanm.org,LIST
 HOST,file.zoom.us,LIST
 HOST,file1.hkepc.net,LIST
 HOST,files.armorgames.com,LIST
+HOST,files.blocktempo.ai,LIST
 HOST,files.buildwithfern.com,LIST
 HOST,files.gempages.net,LIST
 HOST,files.iwara.tv,LIST
@@ -1622,6 +1630,7 @@ HOST,image-stgus.samsung.com,LIST
 HOST,image-us.samsung.com,LIST
 HOST,image.acg.lol,LIST
 HOST,image.ap-mail.org,LIST
+HOST,image.blocktempo.com,LIST
 HOST,image.civitai.com,LIST
 HOST,image.cnbcfm.com,LIST
 HOST,image.comicbz.com,LIST
@@ -3013,6 +3022,7 @@ HOST,static1.smartbear.co,LIST
 HOST,static1.squarespace.com,LIST
 HOST,static10.lottiefiles.com,LIST
 HOST,static2.avg.com,LIST
+HOST,static2.giroditalia.it,LIST
 HOST,static2.lottiefiles.com,LIST
 HOST,static2.onlyfans.com,LIST
 HOST,static2.sharepointonline.com,LIST
@@ -3272,6 +3282,7 @@ HOST,video-meta.humix.com,LIST
 HOST,video.bsky.app,LIST
 HOST,video.cdnbye.com,LIST
 HOST,video.dailymail.co.uk,LIST
+HOST,video.giroditalia.it,LIST
 HOST,video1.7mmtv.sx,LIST
 HOST,video2.7mmtv.sx,LIST
 HOST,video3.mingpao.com,LIST
@@ -3329,6 +3340,7 @@ HOST,webp.frostming.com,LIST
 HOST,website-cdn.ipinfo.io,LIST
 HOST,website-media.deel.com,LIST
 HOST,website-prod.cache.wpscdn.com,LIST
+HOST,websiteres.nmteam.xyz,LIST
 HOST,webstatic.chargebee.com,LIST
 HOST,widget.allkeyshop.com,LIST
 HOST,widget.automizely.com,LIST
@@ -3810,6 +3822,7 @@ HOST-SUFFIX,gateway.scarf.sh,LIST
 HOST-SUFFIX,gateway.serph.network,LIST
 HOST-SUFFIX,gauthstatic.com,LIST
 HOST-SUFFIX,gayzyimage.com,LIST
+HOST-SUFFIX,gazzettaobjects.it,LIST
 HOST-SUFFIX,gcr.si,LIST
 HOST-SUFFIX,gdvid.info,LIST
 HOST-SUFFIX,gentcdn.com,LIST
@@ -4285,6 +4298,7 @@ HOST-SUFFIX,rawgithub.com,LIST
 HOST-SUFFIX,raxcdn.com,LIST
 HOST-SUFFIX,raygun.io,LIST
 HOST-SUFFIX,rbxcdn.com,LIST
+HOST-SUFFIX,rcsobjects.it,LIST
 HOST-SUFFIX,rdtcdn.com,LIST
 HOST-SUFFIX,react.dev,LIST
 HOST-SUFFIX,reactjs.org,LIST

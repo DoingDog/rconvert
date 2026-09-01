@@ -1,5 +1,5 @@
-# Clash total line 31107
-# Last updated Sat 08/29/2026  3:30:52.20
+# Clash total line 31108
+# Last updated Tue 09/01/2026  0:58:10.92
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,127.skk.moe
@@ -28,6 +28,7 @@ payload:
   - DOMAIN,kc.kexinshe.com
   - DOMAIN,kms.03k.org
   - DOMAIN,local.adguard.org
+  - DOMAIN,mirrorlist.cdn.skk.moe
   - DOMAIN,mobile.hotspot
   - DOMAIN,ntt.setup
   - DOMAIN,ocsp.globalsign.com
