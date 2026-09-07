@@ -1,5 +1,5 @@
-# Clash total line 8952
-# Last updated Fri 09/04/2026 23:36:40.81
+# Clash total line 8954
+# Last updated Mon 09/07/2026 23:56:24.48
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -332,7 +332,6 @@ payload:
   - DOMAIN,assets.squarewebsites.org
   - DOMAIN,assets.st-note.com
   - DOMAIN,assets.stash.com
-  - DOMAIN,assets.static-upwork.com
   - DOMAIN,assets.stickpng.com
   - DOMAIN,assets.stigg.io
   - DOMAIN,assets.streamlinehq.com
@@ -3995,6 +3994,7 @@ payload:
   - DOMAIN,static.hotjar.com
   - DOMAIN,static.hubspot.com
   - DOMAIN,static.hugedomains.com
+  - DOMAIN,static.idp.sph.com.sg
   - DOMAIN,static.ietf.org
   - DOMAIN,static.ifunny.co
   - DOMAIN,static.incapsula.com
@@ -6943,6 +6943,7 @@ payload:
   - DOMAIN-SUFFIX,permaweb.io
   - DOMAIN-SUFFIX,perplexity.ai
   - DOMAIN-SUFFIX,persagg.com
+  - DOMAIN-SUFFIX,pgimgs.com
   - DOMAIN-SUFFIX,pgl.yoyo.org
   - DOMAIN-SUFFIX,phncdn.com
   - DOMAIN-SUFFIX,photobucket.com
@@ -7344,6 +7345,7 @@ payload:
   - DOMAIN-SUFFIX,static-assets.photoshop.adobe.com
   - DOMAIN-SUFFIX,static-prod-web.miniclip.com
   - DOMAIN-SUFFIX,static-qobuz.com
+  - DOMAIN-SUFFIX,static-upwork.com
   - DOMAIN-SUFFIX,static-verizon.com
   - DOMAIN-SUFFIX,static.amplience.net
   - DOMAIN-SUFFIX,static.chaosgroup.com
