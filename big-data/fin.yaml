@@ -1,5 +1,5 @@
-# Clash total line 8954
-# Last updated Thu 09/10/2026 23:36:22.82
+# Clash total line 8963
+# Last updated Sun 09/13/2026 23:50:25.59
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -309,6 +309,7 @@ payload:
   - DOMAIN,assets.poool.fr
   - DOMAIN,assets.porndig.com
   - DOMAIN,assets.positional-bucket.com
+  - DOMAIN,assets.production.linktr.ee
   - DOMAIN,assets.prowritingaid.com
   - DOMAIN,assets.queue-it.net
   - DOMAIN,assets.quillbot.com
@@ -1273,6 +1274,7 @@ payload:
   - DOMAIN,code.trygravity.ai
   - DOMAIN,code.upscope.io
   - DOMAIN,codeload.github.com
+  - DOMAIN,coin-images.coingecko.com
   - DOMAIN,comaps-it1.unfoxo.it
   - DOMAIN,comaps.firewall-gateway.de
   - DOMAIN,comaps.openstreetmap.fr
@@ -1527,6 +1529,7 @@ payload:
   - DOMAIN,dl.devmate.com
   - DOMAIN,dl.flathub.org
   - DOMAIN,dl.getaurora.dev
+  - DOMAIN,dl.gl-inet.com
   - DOMAIN,dl.google.com
   - DOMAIN,dl.iina.io
   - DOMAIN,dl.imobie.com
@@ -3606,6 +3609,7 @@ payload:
   - DOMAIN,resources.chessbase.com
   - DOMAIN,resources.digital-cloud.medallia.com
   - DOMAIN,resources.help.salesforce.com
+  - DOMAIN,resources.redbull.tv
   - DOMAIN,resources.whatwg.org
   - DOMAIN,rest.happierleads.com
   - DOMAIN,reviews-badge.capterra.com
@@ -4014,6 +4018,7 @@ payload:
   - DOMAIN,static.j51.net
   - DOMAIN,static.javhd.com
   - DOMAIN,static.jsbin.com
+  - DOMAIN,static.jup.ag
   - DOMAIN,static.killedbygoogle.com
   - DOMAIN,static.klaviyo.com
   - DOMAIN,static.kobo.com
@@ -4254,9 +4259,11 @@ payload:
   - DOMAIN,th.bing.com
   - DOMAIN,themes.fourthwall.com
   - DOMAIN,themes.hibootstrap.com
+  - DOMAIN,thumb.wikimedia.org
   - DOMAIN,thumbnail.missav.com
   - DOMAIN,thumbnailer.mixcloud.com
   - DOMAIN,thumbnails.applegamingwiki.com
+  - DOMAIN,thumbnails.padre.gg
   - DOMAIN,thumbor.4gamers.com.tw
   - DOMAIN,thumbor.forbes.com
   - DOMAIN,thumbs.onlyfans.com
@@ -4409,6 +4416,7 @@ payload:
   - DOMAIN,ucho.ignum.cz
   - DOMAIN,ucmirror.canterbury.ac.nz
   - DOMAIN,udata.namespace.so
+  - DOMAIN,ugc.production.linktr.ee
   - DOMAIN,uhf.microsoft.com
   - DOMAIN,ui-cdn.digitalocean-ui.com
   - DOMAIN,ui-statics-cf.streamable.com
@@ -4877,6 +4885,7 @@ payload:
   - DOMAIN-SUFFIX,awstrust.com
   - DOMAIN-SUFFIX,awxcdn.com
   - DOMAIN-SUFFIX,ax1x.com
+  - DOMAIN-SUFFIX,axiom-cdn.io
   - DOMAIN-SUFFIX,axis-cdn.net
   - DOMAIN-SUFFIX,azurecomcdn.net
   - DOMAIN-SUFFIX,azurestaticapps.net

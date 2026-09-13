@@ -1,5 +1,5 @@
-# Clash total line 4662
-# Last updated Thu 09/10/2026 23:36:08.26
+# Clash total line 4670
+# Last updated Sun 09/13/2026 23:50:11.79
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 payload:
   - DOMAIN,0x0.st
@@ -260,6 +260,7 @@ payload:
   - DOMAIN,assets.poool.fr
   - DOMAIN,assets.porndig.com
   - DOMAIN,assets.positional-bucket.com
+  - DOMAIN,assets.production.linktr.ee
   - DOMAIN,assets.prowritingaid.com
   - DOMAIN,assets.pscp.tv
   - DOMAIN,assets.queue-it.net
@@ -1186,6 +1187,7 @@ payload:
   - DOMAIN,code.piano.io
   - DOMAIN,code.trygravity.ai
   - DOMAIN,code.upscope.io
+  - DOMAIN,coin-images.coingecko.com
   - DOMAIN,comm.res.easebar.com
   - DOMAIN,common-header.nimg.jp
   - DOMAIN,community-cdn.openstreetmap.org
@@ -2468,6 +2470,7 @@ payload:
   - DOMAIN,resources.chessbase.com
   - DOMAIN,resources.digital-cloud.medallia.com
   - DOMAIN,resources.help.salesforce.com
+  - DOMAIN,resources.redbull.tv
   - DOMAIN,resources.whatwg.org
   - DOMAIN,rest.happierleads.com
   - DOMAIN,reviews-badge.capterra.com
@@ -2884,6 +2887,7 @@ payload:
   - DOMAIN,static.j51.net
   - DOMAIN,static.javhd.com
   - DOMAIN,static.jsbin.com
+  - DOMAIN,static.jup.ag
   - DOMAIN,static.k2s.cc
   - DOMAIN,static.killedbygoogle.com
   - DOMAIN,static.klaviyo.com
@@ -3128,10 +3132,12 @@ payload:
   - DOMAIN,th.bing.com
   - DOMAIN,themes.fourthwall.com
   - DOMAIN,themes.hibootstrap.com
+  - DOMAIN,thumb.wikimedia.org
   - DOMAIN,thumbnail.missav.com
   - DOMAIN,thumbnailer.mixcloud.com
   - DOMAIN,thumbnails.applegamingwiki.com
   - DOMAIN,thumbnails.cbsig.net
+  - DOMAIN,thumbnails.padre.gg
   - DOMAIN,thumbor.4gamers.com.tw
   - DOMAIN,thumbor.forbes.com
   - DOMAIN,thumbs.onlyfans.com
@@ -3220,6 +3226,7 @@ payload:
   - DOMAIN,ubistatic2-a.akamaihd.net
   - DOMAIN,ubistatic2-a.ubisoft.com
   - DOMAIN,udata.namespace.so
+  - DOMAIN,ugc.production.linktr.ee
   - DOMAIN,uhf.microsoft.com
   - DOMAIN,ui-cdn.digitalocean-ui.com
   - DOMAIN,ui-cdn.digitalocean.com
@@ -3495,6 +3502,7 @@ payload:
   - DOMAIN-SUFFIX,awsstatic.com
   - DOMAIN-SUFFIX,awxcdn.com
   - DOMAIN-SUFFIX,ax1x.com
+  - DOMAIN-SUFFIX,axiom-cdn.io
   - DOMAIN-SUFFIX,axis-cdn.net
   - DOMAIN-SUFFIX,azurestaticapps.net
   - DOMAIN-SUFFIX,b2c-contenthub.com
