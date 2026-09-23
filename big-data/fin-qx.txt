@@ -1,5 +1,5 @@
-# Quantumult total line 8954
-# Last updated Sat 09/19/2026 23:50:32.13
+# Quantumult total line 8962
+# Last updated Wed 09/23/2026  0:00:30.07
 # -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
@@ -821,6 +821,7 @@ HOST,cdn.imago-images.com,LIST
 HOST,cdn.img.ly,LIST
 HOST,cdn.imgchest.com,LIST
 HOST,cdn.infoq.com,LIST
+HOST,cdn.infrawire.net,LIST
 HOST,cdn.insightmediagroup.io,LIST
 HOST,cdn.inviter.co,LIST
 HOST,cdn.ionos.de,LIST
@@ -1102,6 +1103,7 @@ HOST,cdn1.iconfinder.com,LIST
 HOST,cdn1.identitymind.com,LIST
 HOST,cdn1.nebula-media.org,LIST
 HOST,cdn1.plesk.com,LIST
+HOST,cdn1.singteldigital.com,LIST
 HOST,cdn1.stamped.io,LIST
 HOST,cdn1.suno.ai,LIST
 HOST,cdn1.sysgears.com,LIST
@@ -2181,6 +2183,7 @@ HOST,imag.malavida.com,LIST
 HOST,image-cdn.porndig.com,LIST
 HOST,image-forwarder.notaku.so,LIST
 HOST,image-stgus.samsung.com,LIST
+HOST,image-tc.galaxy.tf,LIST
 HOST,image-us.samsung.com,LIST
 HOST,image.acg.lol,LIST
 HOST,image.ap-mail.org,LIST
@@ -2255,6 +2258,7 @@ HOST,images.flightradar24.com,LIST
 HOST,images.g2crowd.com,LIST
 HOST,images.github.media,LIST
 HOST,images.gog.com,LIST
+HOST,images.hibob.com,LIST
 HOST,images.hothardware.com,LIST
 HOST,images.icon-icons.com,LIST
 HOST,images.indianexpress.com,LIST
@@ -2662,6 +2666,7 @@ HOST,media-central.indianexpress.com,LIST
 HOST,media-cms.ayoba.me,LIST
 HOST,media-cms.onesignal.com,LIST
 HOST,media-hls.growcdnssedge.com,LIST
+HOST,media-process.hibob.com,LIST
 HOST,media-s3-us-east-1.ceros.com,LIST
 HOST,media.beehiiv.com,LIST
 HOST,media.breitbart.com,LIST
@@ -3411,6 +3416,7 @@ HOST,ph.northflank.com,LIST
 HOST,ph.tryprofound.com,LIST
 HOST,pha-prx.ops.cloud.nx.app,LIST
 HOST,phishing.army,LIST
+HOST,photos.flightaware.com,LIST
 HOST,photos5.appleinsider.com,LIST
 HOST,pic.7mmtv.me,LIST
 HOST,pic.cangku.moe,LIST
@@ -4289,6 +4295,7 @@ HOST,tilemaps.icgc.cat,LIST
 HOST,tiles-a.koordinates.com,LIST
 HOST,tiles-eu.stadiamaps.com,LIST
 HOST,tiles.arcgis.com,LIST
+HOST,tiles.flightaware.com,LIST
 HOST,tiles.gsj.jp,LIST
 HOST,tiles.immich.cloud,LIST
 HOST,tiles.locationiq.com,LIST
@@ -4314,6 +4321,7 @@ HOST,tiles1.planet.com,LIST
 HOST,tiles2.mapiful.com,LIST
 HOST,tiles2.planet.com,LIST
 HOST,tiles3.planet.com,LIST
+HOST,tileserver.b10s.net,LIST
 HOST,tileserver.gnome.org,LIST
 HOST,tileserver.memomaps.de,LIST
 HOST,time-a.nist.gov,LIST
