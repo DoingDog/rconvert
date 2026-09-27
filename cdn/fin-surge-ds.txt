@@ -1,5 +1,4 @@
-# Surge Domain total line 4663
-# Last updated Sat 09/26/2026  0:18:45.29
+# cdn rules: 4687
 0x0.st
 3dna.nationbuilder.com
 4gtvimg2.4gtv.tv
@@ -422,6 +421,7 @@ bundler.nice-team.net
 bundler.wix-code.com
 bundles.npr.org
 bunnycdn-video-assets.b-cdn.net
+businessunitprofile-cdn.trustpilot.net
 busuanzi.ibruce.info
 bytescale.mobbin.com
 c-bin.b-cdn.net
@@ -469,6 +469,7 @@ canvas-lb.tubitv.com
 cartodb-basemaps-a.global.ssl.fastly.net
 cassette.sphdigital.com.sg
 catalogartifact.azureedge.net
+categoriespages-cdn.trustpilot.net
 cc-embed.adobe.com
 cc.boyfriendtv.com
 cdn-1.ggjav.com
@@ -958,6 +959,7 @@ cdn.travis-ci.com
 cdn.travis-ci.org
 cdn.tronscan.org
 cdn.trustedsite.com
+cdn.trustpilot.net
 cdn.ttgtmedia.com
 cdn.ttloli.com
 cdn.tvpagewidgets.com
@@ -1162,6 +1164,7 @@ cloud.redhat.com
 cloud.typenetwork.com
 cloudflare.tv
 cloudfront.barilliance.com
+cloudinary-res.cloudinary.com
 cmd-cdn.cleanmymac.com
 cmp-cdn.p.aws.economist.com
 cms-assets.nodecraft.com
@@ -1213,6 +1216,8 @@ consent.dw.com
 consent.fmm.io
 consent.formula1.com
 consentdeliveryfd.azurefd.net
+consumersite-assets.trustpilot.net
+consumersiteimages.trustpilot.net
 content-a.strava.com
 content-cdn.svc.ui.com
 content-management-files.canva.com
@@ -1285,6 +1290,7 @@ dd.dexscreener.com
 delivery.twentythree.com
 demo.unified-streaming.com
 demotiles.maplibre.org
+denali-static.grammarly.com
 design-assets.hubspot.com
 design-system.yext.com
 design.codeberg.org
@@ -1306,6 +1312,7 @@ divhunt.b-cdn.net
 dl.airdroid.com
 dlassets-ssl.xboxlive.com
 dlstats.izzyondroid.org
+dma.canyon.com
 dmm-extension.com
 do.featurebase.app
 docs.brew.sh
@@ -1313,6 +1320,7 @@ docs.mrchromebox.tech
 docs.rs
 documenter-assets.pstmn.io
 doppler-config.cbsivideo.com
+doujin-assets.dmm.co.jp
 downloads.coindesk.com
 drop.ndtv.com
 drscdn.500px.org
@@ -1325,7 +1333,9 @@ e.linear.app
 e3.365dm.com
 eaassets-a.akamaihd.net
 easylist-downloads.adblockplus.org
+ebook-assets.dmm.co.jp
 ecn.dev.virtualearth.net
+ecommplugins-scripts.trustpilot.com
 ecommplugins-trustboxsettings.trustpilot.com
 edata.ndtv.com
 edge-cloud-resource-static.azureedge.net
@@ -1461,6 +1471,7 @@ firebaselogging-pa.googleapis.com
 firebaselogging.googleapis.com
 firebaseremoteconfig.googleapis.com
 firefox.settings.services.mozilla.com
+fiverr-res.cloudinary.com
 flagsapi.com
 flo.uri.sh
 flows.trysavvy.com
@@ -1682,6 +1693,7 @@ images-ext-1.discordapp.net
 images-ext-2.discordapp.net
 images-news.now.com
 images-sports.now.com
+images-static.trustpilot.com
 images.991.com
 images.airdroid.com
 images.anandtech.com
@@ -2138,6 +2150,7 @@ media.infosec.exchange
 media.inhumanity.com
 media.invisioncic.com
 media.istockphoto.com
+media.karousell.com
 media.kit.com
 media.lantern.io
 media.letsdeel.com
@@ -2376,6 +2389,7 @@ pomf2.lain.la
 pool.jortage.com
 pp-static.monotype.com
 pplx-next-static-public.perplexity.ai
+pplx-res.cloudinary.com
 pptstatic.iyf.tv
 practicaldev-herokuapp-com.freetls.fastly.net
 prd-www-cdn.ubnt.com
@@ -2719,6 +2733,7 @@ static-assets.mapbox.com
 static-assets.npr.org
 static-assets.vinted.com
 static-beta.curseforge.com
+static-ca-cdn.eporner.com
 static-cache.fboom.me
 static-cache.k2s.cc
 static-cdn.123rf.com
@@ -2754,6 +2769,7 @@ static-r2.gear4music.com
 static-redesign.cnbcfm.com
 static-resource.np.community.playstation.net
 static-secure-uploads.ui.com
+static-sg-cdn.eporner.com
 static-sv.fc2.com
 static-us.afterpay.com
 static-web-prod.skillshare.com
@@ -2868,6 +2884,7 @@ static.gmgard.com
 static.gnome.org
 static.goaffpro.com
 static.gopro.com
+static.grammarly.com
 static.guim.co.uk
 static.heavy-r.com
 static.helpjuice.com
@@ -3270,6 +3287,7 @@ us-js.zonka.co
 us.123rf.com
 us.hamreus.com
 us01ccistatic.zoom.us
+us1-prod-images.disco-api.com
 us1.hamreus.com
 us2.hamreus.com
 us3.hamreus.com
@@ -3277,6 +3295,7 @@ use.fortawesome.com
 use.typekit.com
 use.typekit.net
 usehooks-ts.com
+user-images.trustpilot.com
 user-uploads.perchance.org
 usercontent.flodesk.com
 userpic.redgifs.com
@@ -3345,6 +3364,8 @@ web-assets.ifttt.com
 web-assets.otogi-frontier.com
 web-assets.strava.com
 web-assets.waze.com
+web-assets.zendesk.co.jp
+web-assets.zendesk.com
 web-cdn.bitrise.io
 web-cdn.bsky.app
 web-sdk-cdn.eyefitu.com
@@ -3441,6 +3462,9 @@ zzz.wxw.moe
 .666565.xyz
 .91pic.org
 .98avcdn.xyz
+.99avcdn.com
+.99avcdn.net
+.99avcdn.org
 .9cache.com
 .a.klaviyo.com
 .a.storyblok.com
@@ -4004,7 +4028,6 @@ zzz.wxw.moe
 .ipfs.cyou
 .ipfs.decoo.io
 .ipfs.denarius.io
-.ipfs.ecolatam.com
 .ipfs.eternum.io
 .ipfs.eth.aragon.network
 .ipfs.filebase.io

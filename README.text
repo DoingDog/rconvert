@@ -1,103 +1,47 @@
 # rconvert
 
-------------------------------------------------------
+使用 Python 3.11+ 标准库将上游规则合并、按匹配范围去重，生成 Surge、Quantumult X、Mihomo 和 AdGuard DNS／浏览器规则。构建不会下载或执行外部代码、客户端或二进制程序。`static/` 保持原样。
 
-log
+## 规则集
 
-05.03 - 准备借助gpt用python重写此项目，加入子域名去重功能，优化速度
-05.07 - 子域名去重完成。bug已修复。速度优化到3分钟
-05.07 - 准备完全用python重写
-05.20 - 注意： CF 加速域名过期，已更换地址
-07.07 - 注意： CF 加速域名再次更换
+| 目录 | 用途 | 完整 Surge RULE-SET |
+| --- | --- | --- |
+| `a1` | 实验性广告拦截，包含 `a2` | [a1/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a1/fin.txt) |
+| `a2` | 常用广告拦截 | [a2/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a2/fin.txt) |
+| `a3` | AdRules、AntiAD、AWAvenue 完整版及 fmz200 广告拦截 | [a3/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin.txt) |
+| `cdn` | CDN 分流 | [cdn/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.txt) |
+| `big-data` | 大流量服务分流，包含 `cdn` | [big-data/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.txt) |
+| `dirt` | 国内直连，含 Sukka 和中国 IPv4／IPv6 网段 | [dirt/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.txt) |
 
-------------------------------------------------------
+六个目录均生成以下固定文件；将上表链接的 `fin.txt` 替换为相应文件名即可使用。不要把 `cdn`、`big-data` 或 `dirt` 当作广告拦截列表。
 
-又要广告拦截又要扶墙，你可以试试给扶墙软件加规则！
-dd自用 clash，小火箭， qx， surge 分流
+| 文件 | 用法 |
+| --- | --- |
+| `fin.txt` | 完整、无策略的 Surge RULE-SET。调用方指定 `REJECT`、`DIRECT` 或代理策略。 |
+| `fin-qx.txt` | Quantumult X 远程过滤规则，使用 `LIST` 策略占位。订阅时设置有效的 `force-policy`（广告用 `REJECT`、国内直连用 `DIRECT`、分流用代理策略），或自行定义名为 `LIST` 的策略；否则不能直接依赖占位策略。 |
+| `fin.yaml` | Mihomo `rule-providers` 的 `behavior: classical`、`format: yaml` 文件。引用时使用 `RULE-SET,<provider>,<policy>`；这不是已停止维护的旧 Clash 兼容承诺。 |
+| `fin-adb.txt` | 仅 `a1`、`a2`、`a3` 有可用于 AdGuard DNS／浏览器的无条件域名拦截及适用的放行例外。其余三组只有说明注释。 |
+| `fin-surge.txt` | Surge 非 DOMAIN-SET 规则，与 `fin-surge-ds.txt` 配合使用。 |
+| `fin-surge-ds.txt` | Surge DOMAIN-SET，精确域名与前导点后缀。使用这对文件时不要再重复加载完整的 `fin.txt`。 |
 
-[注意]这是一个极端的拦截规则列表，只给需要的人使用
+格式参考：[Surge 规则文档](https://manual.nssurge.com/rules/overview.html)、[Quantumult X 官方配置样例](https://github.com/crossutility/Quantumult-X/blob/master/sample.conf)、[Mihomo rule-providers 文档](https://wiki.metacubex.one/config/rule-providers/) 和 [AdGuard 过滤规则文档](https://adguard.com/kb/general/ad-filtering/create-own-filters/)。
 
-具体 QX 示例配置文件见 https://github.com/DoingDog/qxprofile/blob/main/Profile.ini
+仅在客户端支持的目标 IP 规则上，`a1`、`a2`、`a3`、`cdn` 和 `big-data` 自动添加 `no-resolve`；`dirt` 仅保留来源已有的选项。来源 IP 规则不被转换为目标 IP。`del.ini` 的裸域名排除其域名树，`DOMAIN,example.com` 只排除精确域名；路由规则无法表达部分放行时，会舍弃与排除项冲突的宽规则；存在域名排除时，无法安全证明不相交的 `DOMAIN-REGEX` 一律舍弃，且不执行来源正则。进程、端口、ASN、IP 等规则可能仍命中这些域名，需要在规则集之前放置显式放行规则。
 
-[所有上游规则权利属于原作者]
+## 本地构建
 
-issues 随便提，(我也不会看吧
-pr 你写了就会接收
+在仓库的隔离 worktree 内运行，Python 虚拟环境及临时目录均留在该 worktree：
 
-利用 Github Actions 每隔3天早上 6 点，脚本自动更新一次所有规则。（规则 4 除外）
+```sh
+python3 -m venv .venv
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python generate.py
+```
 
-awsl.app 地址为 cloudflare 镜像
-两条链接选择一条即可
+Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源配置位于每组 `attach/rule-list.ini`，排除项位于 `attach/del.ini`。下载或校验失败会停止构建，不发布部分生成文件；日志包含来源行号与目标格式的跳过计数。GitHub Actions 的 PR job 只运行离线测试；定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，变更仅提交受控的 36 个文件，不强推。
 
-------------------------------------------------------
+## 上游与许可
 
-关于格式
-默认fin.txt为不带目标策略的Rule-set格式
-在 clash 和 surge 上使用时，请选择 RULE-SET 而不是 DOMAIN-SET 格式
-在 quanx 上使用时，请把 fin.txt 换成 fin-qx.txt （规则 4 除外）
-在 Clash Rule Provider 上使用时，请把 fin.txt 换成 fin.yaml （规则 4 除外）
-在 Adblock 上使用时 (去广告规则) ，请把 fin.txt 换成 fin-adb.txt
+上游的完整 URL 清单分别见 [a1](a1/attach/rule-list.ini)、[a2](a2/attach/rule-list.ini)、[a3](a3/attach/rule-list.ini)、[cdn](cdn/attach/rule-list.ini)、[big-data](big-data/attach/rule-list.ini) 和 [dirt](dirt/attach/rule-list.ini)。`a3` 使用 [AdRules](https://github.com/Cats-Team/AdRules)、[anti-AD](https://github.com/privacy-protection-tools/anti-AD)、[AWAvenue](https://github.com/TG-Twilight/AWAvenue-Ads-Rule) 及 [fmz200/wool_scripts](https://github.com/fmz200/wool_scripts) 中标注作者奶思的 Quantumult X 广告列表；国内直连还使用 [Sukka Ruleset](https://ruleset.skk.moe/)、[gaoyifan/china-operator-ip](https://github.com/gaoyifan/china-operator-ip) 与 [Loyalsoldier/surge-rules](https://github.com/Loyalsoldier/surge-rules)。Sukka 新增的 [IPv4 列表](https://ruleset.skk.moe/Clash/ip/china_ip.txt) 文件头标示 CC BY-SA 2.0；其 IPv6 候选经网段覆盖核对全部重复，未另加。其他来源、作者声明和具体许可请按上述清单访问原仓库。聚合过程仅提取可适配的规则、规范化、排除、去重和转换格式，不包含上游构建代码。
 
-------------------------------------------------------
-
-DNS 广告拦截规则
-
-1 黑名单
-https://raw.githubusercontent.com/DoingDog/rconvert/main/a1/fin-adb.txt
-https://r.awsl.app/a1/fin-adb.txt
-
-2 白名单
-https://raw.githubusercontent.com/DoingDog/rconvert/main/static/main/Adb-unblock.list
-https://r.awsl.app/static/main/Adb-unblock.list
-
-------------------------------------------------------
-
-去广告
-
-1 去广告完整版 （合并 blackmatrix7 毒奶 sukka 的规则，最好的） 大概10万条
-https://raw.githubusercontent.com/DoingDog/rconvert/main/a2/fin.txt
-https://r.awsl.app/a2/fin.txt
-
-2 去广告实验版 （合并 完整版 Adguard EasyPrivacy 和一些额外规则 不建议使用） 大概20万条 自用
-https://raw.githubusercontent.com/DoingDog/rconvert/main/a1/fin.txt
-https://r.awsl.app/a1/fin.txt
-
-------------------------------------------------------
-
-文件分享
-
-4 外国文件分享站列表 （网赚网盘） 手动维护 大概3百条 有错误可以发issues
-https://raw.githubusercontent.com/DoingDog/rconvert/main/static/serv/sharing.list
-https://r.awsl.app/static/serv/sharing.list
-
-大流量
-
-5 CDN （合并 sukka 的规则 1000条） 很少
-https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.txt
-https://r.awsl.app/cdn/fin.txt
-
-6 大流量分流 （合并 4 5 blackmatrix7流媒体规则 和 static/mycdn.txt） 大概4千条 自用
-https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.txt
-https://r.awsl.app/big-data/fin.txt
-
-------------------------------------------------------
-
-直连
-
-7 国内直连 （合并 sukka 和 blackmatrix7 ）大概4千条 不建议
-https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.txt
-https://r.awsl.app/dirt/fin.txt
-
-------------------------------------------------------
-
-说明 4 5 6 规则，仅用于像我这种（机场流量小的可怜）分出去给便宜备用机场
-每月几TB的大佬不建议使用以免导致错误
-
-自己fork可以改规则
-
-脚本在这 https://github.com/DoingDog/rconvert/blob/main/r.cmd
-功能是是自动转换合并去重
-ini放的是上游规则链接
-脚本可以直接接受 DOMAINSET, RULESET, QX, Clash yaml, AdBlock DNS格式的规则，自动识别转换为 4 种格式
-
-------------------------------------------------------
+本仓库的 `LICENSE` 只说明本仓库原创代码的许可，不将聚合后的上游规则重新许可为 WTFPL。上游可能有 GPL、AGPL、MIT 或其他不同许可与署名要求；使用和再分发时分别遵守原作者的声明。[AWAvenue 当前 GitHub 仓库](https://github.com/TG-Twilight/AWAvenue-Ads-Rule/blob/main/LICENSE) 标示 GPL-3.0，其旧网站的许可文字与当前仓库不一致，以实际使用的来源及其当前声明为准。[fmz200/wool_scripts 的 LICENSE](https://github.com/fmz200/wool_scripts/blob/main/LICENSE) 为 GPL-3.0；该仓库说明其中部分内容收集自其他开源项目，原作者声明仍需分别遵守。

@@ -4,3 +4,7 @@
 ~*.*
 #fi*.txt
 #*.yaml
+.venv/
+.tmp/
+__pycache__/
+.claude/worktrees/
