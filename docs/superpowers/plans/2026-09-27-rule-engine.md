@@ -61,7 +61,7 @@ class RuleTests(unittest.TestCase):
 
 **Interfaces:**
 - Consumes: Task 1 的 `Rule`。
-- Produces: `parse(text: str, *, purpose: str) -> tuple[list[Rule], list[str]]`，purpose 仅为 `"block"` 或 `"route"`，第二项含来源行号与未转换原因；`normalize(rules: Iterable[Rule], exclusions: Iterable[str] = ()) -> list[Rule]`，返回稳定顺序且不含已排除或被可靠覆盖的规则。调用方在下载、解码和限制响应大小后传入正文。
+- Produces: `parse(text: str, *, purpose: str) -> tuple[list[Rule], list[str]]`，purpose 为 `"block"`、`"direct"` 或 `"proxy"`，分别只接受同用途动作或无动作规则，第二项含来源行号与未转换原因；`normalize(rules: Iterable[Rule], exclusions: Iterable[str] = ()) -> list[Rule]`，返回稳定顺序且不含已排除或被可靠覆盖的规则。调用方在下载、解码和限制响应大小后传入正文。
 
 - [ ] **Step 1: Write first failing test**
 
