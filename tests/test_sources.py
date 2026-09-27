@@ -24,12 +24,20 @@ class SourcesTests(unittest.TestCase):
                 ["https://example.org/rules.txt", root / "static" / "rules.txt"],
             )
 
+    def test_utf8_bom_does_not_change_first_source(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            config = root / "sample" / "attach" / "rule-list.ini"
+            config.parent.mkdir(parents=True)
+            config.write_text(chr(0xfeff) + "https://example.org/rules.txt\n", encoding="utf-8")
+            self.assertEqual(load_sources(root, "sample"), ["https://example.org/rules.txt"])
+
     def test_rejects_non_https_and_malformed_urls(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             config = root / "sample" / "attach" / "rule-list.ini"
             config.parent.mkdir(parents=True)
-            for url in ("http://example.org/rules", "ftp://example.org/rules", "https://"):
+            for url in ("http://example.org/rules", "ftp://example.org/rules", "https://", "https://example.org:abc/rules"):
                 with self.subTest(url=url):
                     config.write_text(url, encoding="utf-8")
                     with self.assertRaises(ValueError):

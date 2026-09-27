@@ -8,7 +8,7 @@ def load_sources(root: Path, group: str) -> list[str | Path]:
     if not config.is_relative_to(root):
         raise ValueError(f"Group escapes root: {group}")
     sources: list[str | Path] = []
-    for line in config.read_text(encoding="utf-8").splitlines():
+    for line in config.read_text(encoding="utf-8-sig").splitlines():
         entry = line.strip()
         if not entry or entry.startswith("#"):
             continue
@@ -16,6 +16,10 @@ def load_sources(root: Path, group: str) -> list[str | Path]:
         if url.scheme:
             if url.scheme != "https" or not url.hostname:
                 raise ValueError(f"Invalid HTTPS source: {entry}")
+            try:
+                url.port
+            except ValueError as exc:
+                raise ValueError(f"Invalid HTTPS source: {entry}") from exc
             sources.append(entry)
         else:
             path = (config.parent / entry.replace("\\", "/")).resolve()
