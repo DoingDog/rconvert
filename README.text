@@ -38,7 +38,7 @@ python3 -m venv .venv
 .venv/bin/python generate.py
 ```
 
-Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源配置位于每组 `attach/rule-list.ini`，排除项位于 `attach/del.ini`。下载或校验失败会停止构建，不发布部分生成文件；日志包含来源行号与目标格式的跳过计数。GitHub Actions 的 PR job 只运行离线测试；定时和手动更新仅在 `main` 分支运行，变更仅提交受控的 36 个文件，不强推。
+Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源配置位于每组 `attach/rule-list.ini`，排除项位于 `attach/del.ini`。下载或校验失败会停止构建，不发布部分生成文件；日志包含来源行号与目标格式的跳过计数。GitHub Actions 的 PR job 只运行离线测试；定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，变更仅提交受控的 36 个文件，不强推。
 
 ## 上游与许可
 

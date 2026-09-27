@@ -2,7 +2,8 @@ name: make rules
 on:
   pull_request:
   schedule:
-    - cron: '17 22 */3 * *'
+    - cron: '0 0 * * *'
+      timezone: "Asia/Shanghai"
   workflow_dispatch:
 
 permissions:
