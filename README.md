@@ -4,16 +4,16 @@
 
 ## 规则集
 
-| 目录 | 用途 | 完整 Surge RULE-SET |
-| --- | --- | --- |
-| `a1` | 实验性广告拦截，包含 `a2` | [a1/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a1/fin.txt) |
-| `a2` | 常用广告拦截 | [a2/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a2/fin.txt) |
-| `a3` | AdRules、AntiAD、AWAvenue 完整版及 fmz200 广告拦截 | [a3/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin.txt) |
-| `cdn` | CDN 分流 | [cdn/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.txt) |
-| `big-data` | 大流量服务分流，包含 `cdn` | [big-data/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.txt) |
-| `dirt` | 国内直连，含 Sukka 和中国 IPv4／IPv6 网段 | [dirt/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.txt) |
+| 目录 | 用途 | 完整 Surge RULE-SET | Cloudflare 加速 |
+| --- | --- | --- | --- |
+| `a1` | 实验性广告拦截，包含 `a2` | [a1/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a1/fin.txt) | [a1/fin.txt 加速](https://r.awsl.app/a1/fin.txt) |
+| `a2` | 常用广告拦截 | [a2/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a2/fin.txt) | [a2/fin.txt 加速](https://r.awsl.app/a2/fin.txt) |
+| `a3` | AdRules、AntiAD、AWAvenue 完整版及 fmz200 广告拦截 | [a3/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin.txt) | [a3/fin.txt 加速](https://r.awsl.app/a3/fin.txt) |
+| `cdn` | CDN 分流 | [cdn/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.txt) | [cdn/fin.txt 加速](https://r.awsl.app/cdn/fin.txt) |
+| `big-data` | 大流量服务分流，包含 `cdn` | [big-data/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.txt) | [big-data/fin.txt 加速](https://r.awsl.app/big-data/fin.txt) |
+| `dirt` | 国内直连，含 Sukka 和中国 IPv4／IPv6 网段 | [dirt/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.txt) | [dirt/fin.txt 加速](https://r.awsl.app/dirt/fin.txt) |
 
-六个目录均生成以下固定文件；将上表链接的 `fin.txt` 替换为相应文件名即可使用。不要把 `cdn`、`big-data` 或 `dirt` 当作广告拦截列表。
+`r.awsl.app` 的 Cloudflare 加速链接自动跟踪仓库 `main` 的文件。六个目录均生成以下固定文件；将上表任一链接的 `fin.txt` 替换为相应文件名即可使用。原有的其他加速入口：[a1/fin-adb.txt](https://r.awsl.app/a1/fin-adb.txt)、[static/main/Adb-unblock.list](https://r.awsl.app/static/main/Adb-unblock.list) 和 [static/serv/sharing.list](https://r.awsl.app/static/serv/sharing.list)。不要把 `cdn`、`big-data` 或 `dirt` 当作广告拦截列表。
 
 | 文件 | 用法 |
 | --- | --- |
