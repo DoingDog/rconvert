@@ -4,15 +4,17 @@
 
 使用 Python 3.11+ 标准库替换 `r.cmd`，不下载或执行外部程序与构建脚本。五个现有目录 `a1`、`a2`、`big-data`、`cdn`、`dirt` 的六个 `fin*` 路径保持不变；新增 `a3` 的同名六个文件。`static/` 的 18 个受版本控制文件及路径、内容均不修改。运行、测试、暂存文件和虚拟环境全部位于仓库 worktree 内。最终 GitHub Actions 使用 Linux，正常提交并推送，不改写历史。
 
-`a3` 的输入严格限于 AdRules `qx.conf`、AntiAD `anti-ad-surge.txt`、AWAvenue 完整 Quantumult X 列表。`dirt` 保留已有 Sukka 国内直连规则，新增 gaoyifan 的中国运营商 IPv4／IPv6 文本和 Loyalsoldier 的 Apple 中国规则；不再下载已经包含在 Sukka `domestic.conf` 中的 `domestic_cdn.conf`，也不叠加约 11 万条的 `china-list` 或 `ChinaMax`。删除已核实的五个 404 源：a1 的 neodevhost/customblocklist、fmz200/fenliu.list、ZenmoFeiShi/Pinduoduo.list，big-data 的 GeQ1an/GMedia.list，dirt 的 GeQ1an/CMedia.list；同时移除已停用的 whatshub.top、返回登录页的 CoinBlocker 和过时且超时的 DigitalSide。neodevhost 使用仍更新的 ownblocklist 替代；不能把服务分流列表当作广告列表。参考仓库只作为语法和算法资料，不复制 SukkaW/Surge 的 AGPL 代码。
+`a3` 的基础输入为 AdRules `qx.conf`、AntiAD `anti-ad-surge.txt`、AWAvenue 完整 Quantumult X 列表。后续用户指定的 fmz200 `QuantumultX/filter/filter.list` 已核实为 HTTPS 有效拦截源，原始文件 3888 行，在现有 `a3` 规则的精确、后缀及关键词基础去重后仍有约 543 条新增规则；其仓库为 GPL-3.0，但部分内容来自其他上游，必须保留署名和混合许可说明，因此加入 `a3`。`dirt` 的 Sukka `Clash/ip/china_ip.txt` 相对当前产物有 145 个候选 IPv4 网段包含未覆盖地址，因此加入；`china_ip_ipv6.txt` 的 3415 个 IPv6 网段均已被当前规则覆盖，不再叠加。`dirt` 保留已有 Sukka 国内直连规则，新增 gaoyifan 的中国运营商 IPv4／IPv6 文本和 Loyalsoldier 的 Apple 中国规则；不再下载已经包含在 Sukka `domestic.conf` 中的 `domestic_cdn.conf`，也不叠加约 11 万条的 `china-list` 或 `ChinaMax`。删除已核实的五个 404 源：a1 的 neodevhost/customblocklist、fmz200/fenliu.list、ZenmoFeiShi/Pinduoduo.list，big-data 的 GeQ1an/GMedia.list，dirt 的 GeQ1an/CMedia.list；同时移除已停用的 whatshub.top、返回登录页的 CoinBlocker 和过时且超时的 DigitalSide。neodevhost 使用仍更新的 ownblocklist 替代；不能把服务分流列表当作广告列表。参考仓库只作为语法和算法资料，不复制 SukkaW/Surge 的 AGPL 代码。
+
+核查快照（2026-09-27，原始 UTF-8 文件 SHA-256）：Sukka IPv4 `f8d143db15609efe4dcb0480840f7292c5075385818733aefc68581156a6b291`，Sukka IPv6 `bcf2ea86e3b6f2d44c606c71662945d5296230e4080357fc18e8324caf410129`，fmz200 `93bb242ac745e659de66764a0e4aa4715b92d0bf041b2984fe02ab424868eb0c`。上游会更新，这些数字仅描述当次差集；Sukka 文件头声明 CC BY-SA 2.0，fmz200 仓库 `LICENSE` 为 GPL-3.0 且其说明部分内容来自其他项目。
 
 ## 输入与规则语义
 
 `attach/rule-list.ini` 每行是 HTTPS 文本来源或仓库内相对路径；相对路径中的反斜杠在 Linux 上也能解析，但不得越出仓库。`a1` 读取本次生成的 `a2/fin.txt`，`big-data` 读取本次生成的 `cdn/fin.txt`；每个远端 URL 在同次构建中至多下载一次。按行辨认 Surge、Quantumult X、受限的 Mihomo classical YAML、Surge DOMAIN-SET、hosts 和无条件 AdBlock 域名规则。来源的动作字段只在与目标组用途相符时去掉，不能把 `DIRECT` 或放行规则当作广告拦截。拒绝 HTML、错误正文、非法域名或 CIDR，记录来源、行号和未适配类型的数量；不能按整份文件的某一行推断全部格式。
 
-内部规则保留原有类型、值及适用的 `no-resolve` 等选项。排除条目支持域名本身及任意层级的子域名，比较完整 DNS 标签而非任意子串；仅精确排除可以显式写 `DOMAIN,example.com`。旧式 `,example.com` 和裸 `example.com` 兼容域名树排除，非域名裸词只按完整规则值或 `DOMAIN-KEYWORD` 值匹配。对无法表示放行例外的路由规则集，排除要检测精确、后缀、wildcard 和 `DOMAIN-KEYWORD` 的命中冲突；宁可舍弃冲突的宽域名规则并报告，也不重新拦截被排除的域名。IP、ASN、端口、进程等非域名规则无法静态证明不命中某个域名，域名排除不保证绕过这些规则，使用者须把显式放行规则置于 RULE-SET 之前。AdGuard DNS 能在同一文件里用 `||domain^` 与 `@@||domain^` 表达部分例外，应从排除前的规则另行渲染，保留不冲突的拦截覆盖，而非共用已删除宽后缀的结果。
+内部规则保留原有类型、值及适用的 `no-resolve` 等选项。排除条目支持域名本身及任意层级的子域名，比较完整 DNS 标签而非任意子串；仅精确排除可以显式写 `DOMAIN,example.com`。旧式 `,example.com` 和裸 `example.com` 兼容域名树排除，非域名裸词只按完整规则值或 `DOMAIN-KEYWORD` 值匹配。对无法表示放行例外的路由规则集，排除要检测精确、后缀、wildcard、`DOMAIN-KEYWORD` 和 `DOMAIN-REGEX` 的命中冲突；regex 无法安全证明与任何被保护域名或域名树不相交时不保留阻断规则，也不执行来源正则进行探测；需报告此舍弃，不重新拦截被排除的域名。IP、ASN、端口、进程等非域名规则无法静态证明不命中某个域名，域名排除不保证绕过这些规则，使用者须把显式放行规则置于 RULE-SET 之前。AdGuard DNS 能在同一文件里用 `||domain^` 与 `@@||domain^` 表达部分例外，应从排除前的规则另行渲染，保留不冲突的拦截覆盖，而非共用已删除宽后缀的结果。
 
-相同类型及参数的规则精确去重；`DOMAIN-SUFFIX,example.com` 确定性覆盖 `DOMAIN,example.com`、其子域精确规则和较窄后缀。只有能证明整个 wildcard 匹配集合都被后缀覆盖时，才移除该 wildcard；通配符不能一律改写为后缀。`DOMAIN-KEYWORD` 的包含关系仅在确实成立时去重。CIDR 使用 `ipaddress.collapse_addresses`，按地址族、方向和参数分别合并包含及相邻网段，不跨 `no-resolve`、来源 IP 和目标 IP 混合。排序与 UTF-8 LF 输出确定，内容相同的再次构建不改变文件字节。
+相同类型及参数的规则精确去重；`DOMAIN-SUFFIX,example.com` 确定性覆盖 `DOMAIN,example.com`、其子域精确规则和较窄后缀。只有能证明整个 wildcard 匹配集合都被后缀覆盖时，才移除该 wildcard；通配符不能一律改写为后缀。`DOMAIN-KEYWORD` 的包含关系仅在确实成立时去重。CIDR 使用 `ipaddress.collapse_addresses`，按地址族、方向和参数分别合并包含及相邻网段，不跨 `no-resolve`、来源 IP 和目标 IP 混合。除 `dirt` 外，每个目标客户端对其确实支持 `no-resolve` 的 IP 类规则都自动添加该选项；`dirt` 只保留来源原有选项。排序与 UTF-8 LF 输出确定，内容相同的再次构建不改变文件字节。
 
 ## 输出能力
 

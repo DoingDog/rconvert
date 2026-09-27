@@ -86,6 +86,24 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertEqual(warnings, [])
 
+    def test_renderer_double_quoted_yaml_payload_round_trips(self):
+        from formats import render
+
+        document = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")])[0]["fin.yaml"]
+        rules, messages = parse(document, purpose="block")
+        self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+        self.assertEqual(messages, [])
+
+    def test_unquoted_mihomo_yaml_payload_retains_rules(self):
+        rules, warnings = parse(
+            "# Total Lines: 2\npayload:\n  - DOMAIN-SUFFIX,000607.com.cn\n"
+            "  - IP-CIDR,203.0.113.0/24\n", purpose="direct",
+        )
+        self.assertEqual(rules, [
+            Rule("DOMAIN-SUFFIX", "000607.com.cn"), Rule("IP-CIDR", "203.0.113.0/24"),
+        ])
+        self.assertEqual(warnings, [])
+
     def test_yaml_payload_stops_at_next_top_level_key(self):
         rules, warnings = parse(
             "payload:\n  - 'DOMAIN,good.example.com'\nmetadata:\n"
@@ -112,6 +130,63 @@ class ParseTests(unittest.TestCase):
                 ])
                 self.assertEqual(len(warnings), 2)
 
+    def test_adblock_named_policy_is_only_accepted_in_block_group(self):
+        source = "HOST-SUFFIX,ads.example.com,ADBLOCK"
+        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+        self.assertEqual(parse(source, purpose="direct")[0], [])
+
+    def test_advertisinglite_named_policy_is_only_accepted_in_block_group(self):
+        source = "HOST-SUFFIX,ads.example.com,AdvertisingLite"
+        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+        self.assertEqual(parse(source, purpose="direct")[0], [])
+
+    def test_hijacking_named_policy_is_only_accepted_in_block_group(self):
+        source = "HOST-SUFFIX,hijack.example.com,Hijacking"
+        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "hijack.example.com")])
+        self.assertEqual(parse(source, purpose="direct")[0], [])
+
+    def test_curated_privacy_and_zhihu_ads_policies_are_block_only(self):
+        for policy in ("Privacy", "ZhihuAds"):
+            with self.subTest(policy=policy):
+                source = f"HOST-SUFFIX,ads.example.com,{policy}"
+                self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+                self.assertEqual(parse(source, purpose="direct")[0], [])
+
+    def test_named_routing_policies_are_accepted_without_reclassifying_reject(self):
+        self.assertEqual(
+            parse("HOST-SUFFIX,cdn.example.com,JSDELIVR", purpose="proxy")[0],
+            [Rule("DOMAIN-SUFFIX", "cdn.example.com")],
+        )
+        self.assertEqual(
+            parse("HOST-SUFFIX,cn.example.com,China", purpose="direct")[0],
+            [Rule("DOMAIN-SUFFIX", "cn.example.com")],
+        )
+        self.assertEqual(parse("HOST-SUFFIX,cdn.example.com,REJECT", purpose="proxy")[0], [])
+        self.assertEqual(parse("HOST-SUFFIX,cn.example.com,DIRECT", purpose="block")[0], [])
+
+    def test_curated_a1_filter_policies_remain_block_only(self):
+        for policy in ("AdGuardSDNSFilter", "AdvertisingMiTV", "BlockHttpDNS", "EasyPrivacy"):
+            with self.subTest(policy=policy):
+                source = f"HOST-SUFFIX,ads.example.com,{policy}"
+                self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+                self.assertEqual(parse(source, purpose="proxy")[0], [])
+
+    def test_ruleset_wide_option_is_not_mistaken_for_a_routing_policy(self):
+        rules, messages = parse(
+            "DOMAIN-SUFFIX,ads.example.com,extended-matching\n"
+            "DOMAIN,keep.example.com,PROXY", purpose="proxy",
+        )
+        self.assertEqual(rules, [Rule("DOMAIN", "keep.example.com")])
+        self.assertTrue(any("extended-matching" in message for message in messages))
+
+    def test_unknown_reject_like_action_cannot_be_treated_as_a_routing_policy(self):
+        for purpose in ("direct", "proxy"):
+            with self.subTest(purpose=purpose):
+                source = "DOMAIN,wrong.example.com,REJECT-FAKE\nDOMAIN,right.example.com,China"
+                rules, messages = parse(source, purpose=purpose)
+                self.assertEqual(rules, [Rule("DOMAIN", "right.example.com")])
+                self.assertTrue(any("REJECT-FAKE" in message for message in messages))
+
     def test_unknown_action_cannot_be_treated_as_block(self):
         rules, warnings = parse(
             "DOMAIN,wrong.example.com,REJECTION\nDOMAIN,also-wrong.example.com,REJECT-FAKE\n"
@@ -124,6 +199,24 @@ class ParseTests(unittest.TestCase):
     def test_qx_host_keyword_retains_keyword_type(self):
         rules, warnings = parse("HOST-KEYWORD,TrackAds,REJECT", purpose="block")
         self.assertEqual(rules, [Rule("DOMAIN-KEYWORD", "trackads")])
+        self.assertEqual(warnings, [])
+
+    def test_explicit_single_label_hosts_and_tld_suffixes_are_kept(self):
+        rules, messages = parse(
+            "DOMAIN-SUFFIX,cn,DIRECT\nDOMAIN-SUFFIX,xn--fiqs8s,DIRECT\n"
+            "DOMAIN,unifi,DIRECT\nunifi", purpose="direct",
+        )
+        self.assertEqual(rules, [
+            Rule("DOMAIN-SUFFIX", "cn"), Rule("DOMAIN-SUFFIX", "xn--fiqs8s"),
+            Rule("DOMAIN", "unifi"),
+        ])
+        self.assertTrue(any("line 4" in message for message in messages))
+
+    def test_bare_ipv4_and_ipv6_network_lists_remain_ip_rules(self):
+        rules, warnings = parse("203.0.113.0/24\n2001:db8::/32\n", purpose="direct")
+        self.assertEqual(rules, [
+            Rule("IP-CIDR", "203.0.113.0/24"), Rule("IP-CIDR6", "2001:db8::/32"),
+        ])
         self.assertEqual(warnings, [])
 
     def test_ipv4_ipv6_source_and_destination_cidr_keep_direction_and_options(self):
@@ -153,6 +246,36 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertEqual(len(warnings), 1)
 
+    def test_in_port_is_kept_for_compatible_targets(self):
+        rules, warnings = parse("IN-PORT,443,PROXY", purpose="proxy")
+        self.assertEqual(rules, [Rule("IN-PORT", "443")])
+        self.assertEqual(warnings, [])
+
+    def test_rendered_surge_regex_with_literal_comma_round_trips(self):
+        from formats import render
+
+        original = Rule("URL-REGEX", r"^https://ads\.example/promo,a$")
+        text = render("a3", [original])[0]["fin.txt"]
+        parsed, messages = parse(text, purpose="block")
+        self.assertEqual(parsed, [original])
+        self.assertEqual(messages, [])
+
+    def test_surge_url_regex_survives_parsing(self):
+        rules, warnings = parse(r"URL-REGEX,^https://ads\.example/,REJECT", purpose="block")
+        self.assertEqual(rules, [Rule("URL-REGEX", r"^https://ads\.example/")])
+        self.assertEqual(warnings, [])
+
+    def test_process_wildcard_types_survive_parsing(self):
+        rules, warnings = parse(
+            "PROCESS-NAME-WILDCARD,*telegram*,PROXY\n"
+            "PROCESS-PATH-WILDCARD,/Applications/*,PROXY", purpose="proxy",
+        )
+        self.assertEqual(rules, [
+            Rule("PROCESS-NAME-WILDCARD", "*telegram*"),
+            Rule("PROCESS-PATH-WILDCARD", "/Applications/*"),
+        ])
+        self.assertEqual(warnings, [])
+
     def test_process_values_retain_case_and_path(self):
         rules, warnings = parse(
             "PROCESS-NAME,MyBrowser.exe,DIRECT\nPROCESS-PATH,C:\\Apps\\Browser.exe,DIRECT",
@@ -162,6 +285,11 @@ class ParseTests(unittest.TestCase):
             Rule("PROCESS-NAME", "MyBrowser.exe"),
             Rule("PROCESS-PATH", "C:\\Apps\\Browser.exe"),
         ])
+        self.assertEqual(warnings, [])
+
+    def test_surge_protocol_is_retained_for_compatible_outputs(self):
+        rules, warnings = parse("PROTOCOL,UDP,PROXY", purpose="proxy")
+        self.assertEqual(rules, [Rule("PROTOCOL", "UDP")])
         self.assertEqual(warnings, [])
 
     def test_non_domain_types_are_retained_without_domain_coercion(self):
@@ -185,6 +313,41 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [Rule("DOMAIN-REGEX", r"^ad{2,3}\.example\.com$")])
         self.assertEqual(warnings, [])
 
+    def test_invalid_domain_regex_is_skipped_before_exclusion_matching(self):
+        rules, messages = parse(
+            "DOMAIN-REGEX,*ads,REJECT\nDOMAIN,valid.example.com,REJECT", purpose="block",
+        )
+        self.assertEqual(rules, [Rule("DOMAIN", "valid.example.com")])
+        self.assertTrue(any("line 1" in message and "invalid" in message for message in messages))
+        self.assertEqual(normalize(rules, ["valid.example.org"]), rules)
+
+    def test_logical_regex_character_class_parenthesis_survives_parse(self):
+        expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
+        rules, warnings = parse(f"AND,{expression},REJECT", purpose="block")
+        self.assertEqual(rules, [Rule("AND", expression)])
+        self.assertEqual(warnings, [])
+
+    def test_logical_child_rejects_invalid_regex(self):
+        rules, messages = parse(
+            "AND,((DOMAIN-REGEX,*ads),(DOMAIN,ads.example.com)),REJECT", purpose="block",
+        )
+        self.assertEqual(rules, [])
+        self.assertTrue(any("invalid logical" in message for message in messages))
+
+    def test_logical_child_rejects_invalid_port(self):
+        rules, warnings = parse(
+            "AND,((SRC-PORT,99999),(DOMAIN,ads.example.com)),REJECT", purpose="block"
+        )
+        self.assertEqual(rules, [])
+        self.assertTrue(any("invalid logical" in warning for warning in warnings))
+
+    def test_logical_child_rejects_invalid_asn(self):
+        rules, warnings = parse(
+            "AND,((IP-ASN,NaN),(DOMAIN,ads.example.com)),REJECT", purpose="block"
+        )
+        self.assertEqual(rules, [])
+        self.assertTrue(any("invalid logical" in warning for warning in warnings))
+
     def test_logical_rules_keep_nested_expression_and_policy(self):
         rules, warnings = parse(
             "AND,((DOMAIN,ads.example.com),(PROCESS-NAME,Game.exe)),PROXY\n"
@@ -198,6 +361,12 @@ class ParseTests(unittest.TestCase):
             Rule("NOT", "(DOMAIN,cdn.example.com)"),
         ])
         self.assertEqual(warnings, [])
+
+    def test_not_accepts_a_single_child_wrapped_for_classical_rules(self):
+        expression = "((DOMAIN,cdn.example.com))"
+        rules, messages = parse(f"NOT,{expression},PROXY", purpose="proxy")
+        self.assertEqual(rules, [Rule("NOT", expression)])
+        self.assertEqual(messages, [])
 
     def test_logical_rule_rejects_unknown_nested_type(self):
         rules, warnings = parse(
@@ -216,6 +385,23 @@ class ParseTests(unittest.TestCase):
         )
         self.assertEqual(rules, [])
         self.assertTrue(any("line 1" in message for message in warnings))
+
+    def test_generic_html_tag_rejects_source_but_comment_markup_does_not(self):
+        html, messages = parse(
+            "<main>\nDOMAIN,ads.example.com,REJECT\n</main>", purpose="block",
+        )
+        self.assertEqual(html, [])
+        self.assertTrue(any("HTML" in message for message in messages))
+        commented, messages = parse(
+            "# <div>documentation</div>\nDOMAIN,ads.example.com,REJECT", purpose="block",
+        )
+        self.assertEqual(commented, [Rule("DOMAIN", "ads.example.com")])
+        self.assertEqual(messages, [])
+
+    def test_self_closing_html_tag_cannot_hide_a_valid_rule(self):
+        rules, messages = parse("<img/>\nDOMAIN,ads.example.com,REJECT", purpose="block")
+        self.assertEqual(rules, [])
+        self.assertTrue(any("HTML" in message for message in messages))
 
     def test_html_document_cannot_hide_a_valid_rule(self):
         rules, warnings = parse(
@@ -399,6 +585,26 @@ class NormalizeTests(unittest.TestCase):
         self.assertEqual(len(output), count)
         self.assertLess(elapsed, 3.0)
 
+    def test_unrelated_exact_exclusions_do_not_scan_every_wildcard(self):
+        count = 4000
+        rules = [Rule("DOMAIN-WILDCARD", f"api-*.s{i}.example.com") for i in range(count)]
+        exclusions = [f"DOMAIN,unrelated{i}.other.com" for i in range(count)]
+        start = time.perf_counter()
+        output = normalize(rules, exclusions)
+        elapsed = time.perf_counter() - start
+        self.assertEqual(len(output), count)
+        self.assertLess(elapsed, 3.0)
+
+    def test_unrelated_tree_exclusions_do_not_scan_every_wildcard(self):
+        count = 4000
+        rules = [Rule("DOMAIN-WILDCARD", f"api-*.s{i}.example.com") for i in range(count)]
+        exclusions = [f"unrelated{i}.other.com" for i in range(count)]
+        start = time.perf_counter()
+        output = normalize(rules, exclusions)
+        elapsed = time.perf_counter() - start
+        self.assertEqual(len(output), count)
+        self.assertLess(elapsed, 3.0)
+
     def test_allow_suffix_suppresses_blocking_exact_domains_within_it(self):
         rules = [
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
@@ -466,6 +672,30 @@ class NormalizeTests(unittest.TestCase):
         self.assertEqual(normalize(rules, ["ads", "PROCESS-NAME,AdsApp"]), [
             Rule("DOMAIN", "ads.example.com"), Rule("DOMAIN-KEYWORD", "ads2"),
         ])
+
+    def test_domain_regex_conflicting_with_excluded_domain_is_discarded(self):
+        rule = Rule("DOMAIN-REGEX", r"^.+\.example\.com$")
+        with warnings.catch_warnings(record=True) as reported:
+            warnings.simplefilter("always")
+            result = normalize([rule], ["DOMAIN,safe.example.com"])
+        self.assertEqual(result, [])
+        self.assertTrue(any("DOMAIN-REGEX" in str(item.message) for item in reported))
+
+    def test_regex_is_conservatively_removed_without_running_untrusted_pattern(self):
+        rule = Rule("DOMAIN-REGEX", r"^tracker\.example\.com$")
+        with warnings.catch_warnings(record=True) as reported:
+            warnings.simplefilter("always")
+            result = normalize([rule], ["DOMAIN,safe.example.org"])
+        self.assertEqual(result, [])
+        self.assertTrue(any("DOMAIN-REGEX" in str(item.message) for item in reported))
+
+    def test_domain_regex_cannot_bypass_subtree_exclusion(self):
+        rule = Rule("DOMAIN-REGEX", r"^cdn\..+\.safe\.example\.com$")
+        with warnings.catch_warnings(record=True) as reported:
+            warnings.simplefilter("always")
+            result = normalize([rule], ["safe.example.com"])
+        self.assertEqual(result, [])
+        self.assertTrue(any("DOMAIN-REGEX" in str(item.message) for item in reported))
 
     def test_keyword_overlapping_exact_exception_is_reported_and_removed(self):
         rules = [Rule("DOMAIN-KEYWORD", "example"), Rule("DOMAIN-KEYWORD", "unrelated")]

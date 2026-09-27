@@ -78,18 +78,18 @@ class FormatTests(unittest.TestCase):
             Rule("IP-CIDR", "192.0.2.0/24"),
             Rule("IP-CIDR6", "2001:db8::/32"),
         ])
-        self.assertIn("IP-CIDR,192.0.2.0/24\n", out["fin.txt"])
-        self.assertIn("IP-CIDR6,2001:db8::/32\n", out["fin.txt"])
-        self.assertIn("IP-CIDR,192.0.2.0/24,LIST\n", out["fin-qx.txt"])
-        self.assertIn("IP6-CIDR,2001:db8::/32,LIST\n", out["fin-qx.txt"])
-        self.assertIn('  - "IP-CIDR6,2001:db8::/32"\n', out["fin.yaml"])
+        self.assertIn("IP-CIDR,192.0.2.0/24,no-resolve\n", out["fin.txt"])
+        self.assertIn("IP-CIDR6,2001:db8::/32,no-resolve\n", out["fin.txt"])
+        self.assertIn("IP-CIDR,192.0.2.0/24,LIST,no-resolve\n", out["fin-qx.txt"])
+        self.assertIn("IP6-CIDR,2001:db8::/32,LIST,no-resolve\n", out["fin-qx.txt"])
+        self.assertIn('  - "IP-CIDR6,2001:db8::/32,no-resolve"\n', out["fin.yaml"])
         self.assertEqual(skipped["fin-adb.txt:IP-CIDR"], 1)
 
     def test_ipv6_address_in_generic_cidr_uses_ipv6_target_types(self):
         out, _ = render("a3", [Rule("IP-CIDR", "2001:db8::/32")])
-        self.assertIn("IP-CIDR6,2001:db8::/32\n", out["fin.txt"])
-        self.assertIn("IP6-CIDR,2001:db8::/32,LIST\n", out["fin-qx.txt"])
-        self.assertIn('  - "IP-CIDR,2001:db8::/32"\n', out["fin.yaml"])
+        self.assertIn("IP-CIDR6,2001:db8::/32,no-resolve\n", out["fin.txt"])
+        self.assertIn("IP6-CIDR,2001:db8::/32,LIST,no-resolve\n", out["fin-qx.txt"])
+        self.assertIn('  - "IP-CIDR,2001:db8::/32,no-resolve"\n', out["fin.yaml"])
 
     def test_surge_port_names_keep_source_and_destination_distinct(self):
         out, skipped = render("a3", [Rule("SRC-PORT", "5353"), Rule("DST-PORT", "443")])
@@ -100,6 +100,47 @@ class FormatTests(unittest.TestCase):
         self.assertIn('  - "DST-PORT,443"\n', out["fin.yaml"])
         self.assertEqual(skipped["fin-qx.txt:DST-PORT"], 1)
         self.assertEqual(skipped["fin-qx.txt:SRC-PORT"], 1)
+
+    def test_surge_destination_port_maps_to_mihomo_dst_port(self):
+        out, _ = render("a3", [Rule("DEST-PORT", "443")])
+        self.assertIn('  - "DST-PORT,443"\n', out["fin.yaml"])
+
+    def test_single_source_ip_maps_to_mihomo_source_cidr(self):
+        out, _ = render("a3", [
+            Rule("SRC-IP", "192.0.2.1"), Rule("SRC-IP", "2001:db8::1"),
+        ])
+        self.assertIn('"SRC-IP-CIDR,192.0.2.1/32"', out["fin.yaml"])
+        self.assertIn('"SRC-IP-CIDR,2001:db8::1/128"', out["fin.yaml"])
+        self.assertNotIn("no-resolve", out["fin.yaml"])
+
+    def test_equivalent_port_aliases_render_once_per_target(self):
+        out, _ = render("a3", [Rule("DST-PORT", "443"), Rule("DEST-PORT", "443")])
+        self.assertEqual(out["fin.txt"].count("DEST-PORT,443\n"), 1)
+        self.assertEqual(out["fin-surge.txt"].count("DEST-PORT,443\n"), 1)
+        self.assertEqual(out["fin.yaml"].count('"DST-PORT,443"\n'), 1)
+
+    def test_mihomo_udp_network_maps_to_surge_protocol(self):
+        out, _ = render("a3", [Rule("NETWORK", "udp")])
+        self.assertIn("PROTOCOL,UDP\n", out["fin.txt"])
+        self.assertIn("PROTOCOL,UDP\n", out["fin-surge.txt"])
+        self.assertIn('"NETWORK,udp"', out["fin.yaml"])
+
+    def test_surge_udp_protocol_maps_to_mihomo_network(self):
+        out, _ = render("a3", [Rule("PROTOCOL", "UDP")])
+        self.assertIn('"NETWORK,udp"', out["fin.yaml"])
+        self.assertIn("PROTOCOL,UDP\n", out["fin.txt"])
+
+    def test_process_name_wildcard_maps_to_surge_process_name(self):
+        out, _ = render("a3", [Rule("PROCESS-NAME-WILDCARD", "*telegram*")])
+        self.assertIn("PROCESS-NAME,*telegram*\n", out["fin.txt"])
+        self.assertIn("PROCESS-NAME,*telegram*\n", out["fin-surge.txt"])
+        self.assertIn('"PROCESS-NAME-WILDCARD,*telegram*"', out["fin.yaml"])
+
+    def test_posix_process_path_maps_to_surge_process_name(self):
+        path = "/Applications/Foo.app/Contents/MacOS/Foo"
+        out, _ = render("a3", [Rule("PROCESS-PATH", path)])
+        self.assertIn(f"PROCESS-NAME,{path}\n", out["fin.txt"])
+        self.assertIn(f'"PROCESS-PATH,{path}"', out["fin.yaml"])
 
     def test_process_and_user_agent_only_go_to_confirmed_clients(self):
         out, skipped = render("a3", [Rule("PROCESS-NAME", "FooApp"), Rule("USER-AGENT", "*bot*")])
@@ -119,12 +160,12 @@ class FormatTests(unittest.TestCase):
             Rule("DOMAIN-KEYWORD", "ads"),
         ])
         for name in ("fin.txt", "fin-surge.txt"):
-            self.assertIn("IP-ASN,13335\n", out[name])
-            self.assertIn("GEOIP,CN\n", out[name])
+            self.assertIn("IP-ASN,13335,no-resolve\n", out[name])
+            self.assertIn("GEOIP,CN,no-resolve\n", out[name])
             self.assertIn("DOMAIN-KEYWORD,ads\n", out[name])
-        for entry in ("IP-ASN,13335,LIST", "GEOIP,CN,LIST", "HOST-KEYWORD,ads,LIST"):
+        for entry in ("IP-ASN,13335,LIST,no-resolve", "GEOIP,CN,LIST,no-resolve", "HOST-KEYWORD,ads,LIST"):
             self.assertIn(entry + "\n", out["fin-qx.txt"])
-        for entry in ("IP-ASN,13335", "GEOIP,CN", "DOMAIN-KEYWORD,ads"):
+        for entry in ("IP-ASN,13335,no-resolve", "GEOIP,CN,no-resolve", "DOMAIN-KEYWORD,ads"):
             self.assertIn('  - "' + entry + '"\n', out["fin.yaml"])
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-KEYWORD"], 1)
 
@@ -180,6 +221,15 @@ class FormatTests(unittest.TestCase):
             self.assertEqual(skipped[f"fin.yaml:{kind}"], 1)
         self.assertNotIn("IN-TYPE", out["fin-qx.txt"])
 
+    def test_parsed_single_child_not_is_rendered_with_valid_parentheses(self):
+        from rules import parse
+
+        parsed, messages = parse("NOT,(DOMAIN,cdn.example.com),PROXY", purpose="proxy")
+        self.assertEqual(messages, [])
+        out, _ = render("cdn", parsed)
+        self.assertIn("NOT,((DOMAIN,cdn.example.com))\n", out["fin.txt"])
+        self.assertIn('"NOT,((DOMAIN,cdn.example.com))"', out["fin.yaml"])
+
     def test_logical_rules_keep_parentheses_only_with_compatible_children(self):
         values = {
             "AND": "((DOMAIN,ads.example.com),(NETWORK,UDP))",
@@ -214,10 +264,18 @@ class FormatTests(unittest.TestCase):
         self.assertIn("OR,((IP-CIDR6,2001:db8::/32),(DOMAIN,ads.example.com))\n", out["fin.txt"])
         self.assertIn('  - "OR,' + value + '"\n', out["fin.yaml"])
 
+    def test_logical_regex_character_class_parenthesis_is_not_structural(self):
+        expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
+        out, _ = render("a3", [Rule("AND", expression)])
+        self.assertIn(
+            f"AND,{expression}",
+            [json.loads(line.removeprefix("  - ")) for line in out["fin.yaml"].splitlines()[2:]],
+        )
+
     def test_invalid_logical_children_and_parentheses_are_skipped(self):
         out, skipped = render("a3", [
             Rule("AND", "((DOMAIN,valid.example.com),(UNKNOWN,v))"),
-            Rule("NOT", "(DOMAIN,invalid.example.com)"),
+            Rule("NOT", "(UNKNOWN,invalid.example.com)"),
         ])
         self.assertEqual(out["fin.yaml"], "# a3 rules: 0\npayload:\n")
         self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
@@ -308,6 +366,17 @@ class FormatTests(unittest.TestCase):
                 self.assertIn("DOMAIN-SUFFIX,legitimate.example.com\n", out["fin.txt"])
                 self.assertEqual(skipped["fin-adb.txt:DOMAIN-SUFFIX"], 1)
 
+    def test_non_dirt_destination_cidr_adds_no_resolve_on_supported_targets(self):
+        rule = Rule("IP-CIDR", "203.0.113.0/24")
+        out, _ = render("a3", [rule])
+        self.assertIn("IP-CIDR,203.0.113.0/24,no-resolve\n", out["fin.txt"])
+        self.assertIn("IP-CIDR,203.0.113.0/24,no-resolve\n", out["fin-surge.txt"])
+        self.assertIn("IP-CIDR,203.0.113.0/24,LIST,no-resolve\n", out["fin-qx.txt"])
+        self.assertIn('"IP-CIDR,203.0.113.0/24,no-resolve"', out["fin.yaml"])
+        domestic, _ = render("dirt", [rule])
+        self.assertIn("IP-CIDR,203.0.113.0/24\n", domestic["fin.txt"])
+        self.assertNotIn("no-resolve", domestic["fin.txt"])
+
     def test_no_resolve_is_preserved_without_silently_dropping_other_options(self):
         out, skipped = render("a3", [
             Rule("IP-CIDR", "203.0.113.0/24", ("no-resolve",)),
@@ -315,7 +384,7 @@ class FormatTests(unittest.TestCase):
         ])
         self.assertIn("IP-CIDR,203.0.113.0/24,no-resolve\n", out["fin.txt"])
         self.assertIn('  - "IP-CIDR,203.0.113.0/24,no-resolve"\n', out["fin.yaml"])
-        self.assertNotIn("203.0.113.0/24", out["fin-qx.txt"])
-        self.assertEqual(skipped["fin-qx.txt:IP-CIDR"], 1)
+        self.assertIn("IP-CIDR,203.0.113.0/24,LIST,no-resolve\n", out["fin-qx.txt"])
+        self.assertEqual(skipped.get("fin-qx.txt:IP-CIDR", 0), 0)
         self.assertTrue(all("unsafe.example.com" not in body for body in out.values()))
         self.assertEqual(skipped["fin.txt:DOMAIN-SUFFIX"], 1)

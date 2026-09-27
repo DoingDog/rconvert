@@ -1,5 +1,4 @@
-# Surge Domain total line 31161
-# Last updated Sat 09/26/2026  0:19:14.17
+# dirt rules: 31828
 127.skk.moe
 7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe
 a.iqmtp.live
@@ -7,7 +6,6 @@ analytics.strava.com
 app.viayoo.com
 aterm.me
 blzddist1-a.akamaihd.net
-body{
 captive.apple.com
 cdn.angruo.com
 client.amplifi.com
@@ -15,7 +13,6 @@ cn.download.nvidia.com
 console.gl-inet.com
 download.jetbrains.com
 gstore.val.manlaxy.com
-h1{
 homerouter.cpe
 hotspot.cslwifi.com
 i.dell.com
@@ -37,7 +34,6 @@ p-bstarstatic.akamaized.net
 p.bstarstatic.com
 pi.hole
 public.localsend.org
-p{
 raw.iqiq.io
 repeater.asus.com
 res.viayoo.com
@@ -54,8 +50,6 @@ www.layuicdn.com
 www.libvideo.com
 www.viayoo.com
 www.yxssp.com
-}
-},1000);
 .000607.net
 .000681.com
 .000793.com
@@ -479,6 +473,7 @@ www.yxssp.com
 .1ju.com
 .1mdoutian.com
 .1nongjing.com
+.1pdd.cc
 .1qbdj.com
 .1rrb6s.com
 .1rtb.net
@@ -599,6 +594,7 @@ www.yxssp.com
 .2men4.top
 .2mjob.com
 .2op9.net
+.2pdd.cc
 .2pgxv.com
 .2pirq.com
 .2q10.com
@@ -847,6 +843,7 @@ www.yxssp.com
 .3odboymvqugnc.info
 .3pwg.com
 .3qxy.com
+.3sd.cc
 .3songshu.com
 .3sou7b.com
 .3uairnet.com
@@ -858,6 +855,7 @@ www.yxssp.com
 .4000-000-000.com
 .4000044400.com
 .4000066666.com
+.4000702717.com
 .4000888000.com
 .4001112233.com
 .4001113900.com
@@ -997,6 +995,7 @@ www.yxssp.com
 .51.com
 .51.la
 .5107who.com
+.510alipay.com
 .510you.com
 .5122.co
 .5155.co
@@ -1085,6 +1084,7 @@ www.yxssp.com
 .51midodo.com
 .51miduoduo.com
 .51moba.com
+.51mrz.com
 .51mypc.net
 .51nas.pro
 .51nas.vip
@@ -1166,6 +1166,7 @@ www.yxssp.com
 .5253.com
 .5266apple.com
 .528day.com
+.52alipay.com
 .52d5d.com
 .52dian.com
 .52dianshi.com
@@ -1175,6 +1176,7 @@ www.yxssp.com
 .52http.com
 .52http.tech
 .52hxw.com
+.52jiawei.com
 .52leiqu.com
 .52miji.com
 .52ml.net
@@ -1491,6 +1493,7 @@ www.yxssp.com
 .80la.com
 .80tank.com
 .816798.net
+.818.work
 .818ps.com
 .823pk.com
 .8264.com
@@ -1673,6 +1676,7 @@ www.yxssp.com
 .94j0r5.com
 .94kuai.com
 .94nure.com
+.94xsm.com
 .95015.com
 .95040.net
 .95050.com
@@ -2006,6 +2010,7 @@ www.yxssp.com
 .adbright.mobi
 .adbrkwai.com
 .adcbp.top
+.adcdownload.apple.com
 .addissector.com
 .addnewer.com
 .addpcn.com
@@ -2188,6 +2193,7 @@ www.yxssp.com
 .aibank.link
 .aibase.com
 .aibiao.com
+.aibiying.com
 .aibizu.com
 .aibns.com
 .aibrandy.com
@@ -2237,6 +2243,7 @@ www.yxssp.com
 .aiflag.net
 .aifneg.com
 .aiforceagent.com
+.aigameonline.com
 .aiganggu.com
 .aigc-cloud.com
 .aigcarena.com
@@ -2313,6 +2320,9 @@ www.yxssp.com
 .aiqicha.com
 .aiqinzj.com
 .aiqistore.com
+.aiqiyicloud-mgmt.com
+.aiqiyicloud.com
+.aiqiyicloud.net
 .air-matters.com
 .air-matters.io
 .air-spring.com
@@ -2389,6 +2399,7 @@ www.yxssp.com
 .aizhurong.com
 .aizools.com
 .aizpyxrxc.com
+.aizsw.com
 .aiztou.com
 .aizuoye100.com
 .ajae61.com
@@ -2521,6 +2532,8 @@ www.yxssp.com
 .alibabausercontent.com
 .alibtrip.com
 .alicaptcha.com
+.alicdn.com
+.alicdn.net
 .alice-mind.com
 .alicloud.com
 .alicloudapi.com
@@ -2563,6 +2576,26 @@ www.yxssp.com
 .alimei.com
 .alimmdn.com
 .alipan.com
+.alipay-biz.com
+.alipay-cloud.com
+.alipay-corp.com
+.alipay-eco.com
+.alipay-inc.com
+.alipay-traffic.com
+.alipay.com
+.alipay.hk
+.alipay.net
+.alipay18.com
+.alipay510.com
+.alipayaa.com
+.alipaydesign.com
+.alipaydev.com
+.alipaydns.com
+.alipaylog.com
+.alipayls.com
+.alipaymo.com
+.alipayobjects.com
+.alipayplus.com
 .aliplay.com
 .aliplus.com
 .alippm.com
@@ -2589,6 +2622,198 @@ www.yxssp.com
 .aliwx.net
 .alixiaomi.com
 .alixiaoyouhui.com
+.aliyun-edtech.com
+.aliyun-esa.com
+.aliyun-esa.net
+.aliyun-inc.com
+.aliyun-iot-share.com
+.aliyun-media.com
+.aliyun-workbench.com
+.aliyun.com
+.aliyun.xin
+.aliyunapaas.com
+.aliyunbaas.com
+.aliyuncc.com
+.aliyuncdn.com
+.aliyuncdn.net
+.aliyuncds.com
+.aliyunceng.com
+.aliyuncorp.com
+.aliyuncs.com
+.aliyuncsas.com
+.aliyuncsslb.com
+.aliyunctf.com
+.aliyunddos0001.com
+.aliyunddos0002.com
+.aliyunddos0003.com
+.aliyunddos0004.com
+.aliyunddos0005.com
+.aliyunddos0006.com
+.aliyunddos0007.com
+.aliyunddos0008.com
+.aliyunddos0009.com
+.aliyunddos0010.com
+.aliyunddos0011.com
+.aliyunddos0012.com
+.aliyunddos0013.com
+.aliyunddos0014.com
+.aliyunddos0015.com
+.aliyunddos0016.com
+.aliyunddos0017.com
+.aliyunddos0018.com
+.aliyunddos0019.com
+.aliyunddos0020.com
+.aliyunddos0021.com
+.aliyunddos0022.com
+.aliyunddos0023.com
+.aliyunddos0024.com
+.aliyunddos0025.com
+.aliyunddos0026.com
+.aliyunddos0027.com
+.aliyunddos0028.com
+.aliyunddos0029.com
+.aliyunddos0030.com
+.aliyunddos1001.com
+.aliyunddos1002.com
+.aliyunddos1003.com
+.aliyunddos1004.com
+.aliyunddos1005.com
+.aliyunddos1006.com
+.aliyunddos1007.com
+.aliyunddos1008.com
+.aliyunddos1009.com
+.aliyunddos1010.com
+.aliyunddos1011.com
+.aliyunddos1012.com
+.aliyunddos1013.com
+.aliyunddos1014.com
+.aliyunddos1015.com
+.aliyunddos1016.com
+.aliyunddos1017.com
+.aliyunddos1018.com
+.aliyunddos1019.com
+.aliyunddos1020.com
+.aliyunddos1021.com
+.aliyunddos1022.com
+.aliyunddos1023.com
+.aliyunddos1024.com
+.aliyunddos1025.com
+.aliyunddos1026.com
+.aliyunddos1027.com
+.aliyunddos1028.com
+.aliyunddos1029.com
+.aliyunddos1030.com
+.aliyunddos1117.com
+.aliyundrive.cloud
+.aliyundrive.com
+.aliyundrive.net
+.aliyunduncc.com
+.aliyundunddos.com
+.aliyundunwaf.com
+.aliyunedge-all.com
+.aliyunedge-all.net
+.aliyunedge-cdn.com
+.aliyunedge-cdn.net
+.aliyunedge-detect.com
+.aliyunedge-detect.net
+.aliyunedge-ena.com
+.aliyunedge-ena.net
+.aliyunedge-ens.com
+.aliyunedge-ens.net
+.aliyunedge-eps.com
+.aliyunedge-eps.net
+.aliyunedge-inc.com
+.aliyunedge-inc.net
+.aliyunedge-mock.com
+.aliyunedge-node.com
+.aliyunedge-node.net
+.aliyunedge-nodeops.com
+.aliyunedge-nodeops.net
+.aliyunedge-ops.com
+.aliyunedge-ops.net
+.aliyunedge-pipe.com
+.aliyunedge-pipe.net
+.aliyunedge-pipeops.com
+.aliyunedge-pipeops.net
+.aliyunedge-test.com
+.aliyunedu.net
+.aliyunfile.com
+.aliyunga.com
+.aliyunga0004.com
+.aliyunga0005.com
+.aliyunga0006.com
+.aliyunga0007.com
+.aliyunga0008.com
+.aliyunga0009.com
+.aliyunga0010.com
+.aliyunga0011.com
+.aliyunga0012.com
+.aliyunga0013.com
+.aliyunga0014.com
+.aliyunga0015.com
+.aliyunga0016.com
+.aliyunga0017.com
+.aliyunga0018.com
+.aliyunga0019.com
+.aliyunga0020.com
+.aliyunga0021.com
+.aliyunga0022.com
+.aliyunga0023.com
+.aliyunga0024.com
+.aliyunga0025.com
+.aliyunga0026.com
+.aliyunga0027.com
+.aliyunga0028.com
+.aliyunga0029.com
+.aliyunga0030.com
+.aliyunga0031.com
+.aliyunga0032.com
+.aliyunga0033.com
+.aliyunga0034.com
+.aliyunga0035.com
+.aliyunga0036.com
+.aliyunga0037.com
+.aliyunga0038.com
+.aliyunga0039.com
+.aliyunga0040.com
+.aliyunga0041.com
+.aliyunga0042.com
+.aliyunga0043.com
+.aliyunga0044.com
+.aliyunga0045.com
+.aliyunga0046.com
+.aliyunga0047.com
+.aliyunga0048.com
+.aliyunga0049.com
+.aliyunga0050.com
+.aliyunga860004.com
+.aliyunga8601.com
+.aliyunga8602.com
+.aliyunga8603.com
+.aliyungf.com
+.aliyungrtn.com
+.aliyunhcm.com
+.aliyunhttpdns.com
+.aliyunidaas.com
+.aliyunjinbao.com
+.aliyunlivetest.com
+.aliyunnest.com
+.aliyunpds.com
+.aliyunportal.com
+.aliyunrtc.com
+.aliyunssl1.com
+.aliyunssl2.com
+.aliyunssl3.com
+.aliyunssl4.com
+.aliyunssl5.com
+.aliyunvectorsearch.com
+.aliyunvpc.com
+.aliyunwaf.com
+.aliyunwaf1.com
+.aliyunwaf2.com
+.aliyunwaf3.com
+.aliyunwaf4.com
+.aliyunwaf5.com
 .alizch.com
 .alizhaopin.com
 .alizich.com
@@ -2642,6 +2867,7 @@ www.yxssp.com
 .amijiaoyu.net
 .amijiaoyu.xyz
 .amizsuixq.com
+.amp-api.media.apple.com
 .amphiprionsebae.com
 .ampmake.com
 .ampmind.com
@@ -2832,6 +3058,7 @@ www.yxssp.com
 .apolloxcloud.com
 .apoprsgks.com
 .app-dangdang.com
+.app-site-association.cdn-apple.com
 .app-ztna.com
 .app.so
 .app6687.com
@@ -2856,7 +3083,9 @@ www.yxssp.com
 .appjiagu.com
 .appjun.com
 .appklg.com
+.appldnld.apple.com
 .apple3799.com
+.appleid.cdn-apple.com
 .appleload.com
 .applepopo.com
 .applesitunes.com
@@ -2868,6 +3097,7 @@ www.yxssp.com
 .appmiaoda.com
 .appmiwu.com
 .apprun.cc
+.apps.apple.com
 .apps668.com
 .appscan.io
 .appsecurity.top
@@ -3048,6 +3278,7 @@ www.yxssp.com
 .avgroft.com
 .avgv.cc
 .avicsec.com
+.avinex.com
 .avistaz.to
 .avlinsight.com
 .avlsec.com
@@ -3147,6 +3378,7 @@ www.yxssp.com
 .baeapps.com
 .baetyl.tech
 .bafenshu.net
+.bafm6459.com
 .bagervper.com
 .baghm.top
 .baic-wisdom.com
@@ -3164,6 +3396,50 @@ www.yxssp.com
 .baicrx.com
 .baidiapp.com
 .baidinet.com
+.baidu-bank.com
+.baidu-cdn.com
+.baidu-cdn.net
+.baidu-int.com
+.baidu-itm.com
+.baidu-tech.com
+.baidu-venture.com
+.baidu.com
+.baidu.com.hk
+.baidu.hk
+.baidu.mobi
+.baiduads.com
+.baiduapp.com
+.baidubce.com
+.baidubce.net
+.baidubcr.com
+.baidubos.com
+.baiducloudapi.com
+.baiducontent.com
+.baidufree.com
+.baiduhui.com
+.baidujk.com
+.baidujkyl.com
+.baidulog.com
+.baidumktpromo.com
+.baidupan.com
+.baiduparking.com
+.baidupcs.com
+.baidupcs.net
+.baidusample.com
+.baidusmartapps.com
+.baidussl.cloud
+.baidussl.site
+.baidustatic.com
+.baiduux.com
+.baiduwaf.com
+.baiduwebgame.com
+.baiduxiaodai.com
+.baiduyangguang.org
+.baiduyuncdn.com
+.baiduyuncdn.net
+.baiduyundns.com
+.baiduyundns.net
+.baiduyunwaf.com
 .baifae.com
 .baifendian.com
 .baifubao.com
@@ -3220,6 +3496,9 @@ www.yxssp.com
 .baixing.com
 .baixing.net
 .baiying.com
+.baiyunairport.com
+.baiyunport.com
+.baiyunxinxi.com
 .baizhanlive.com
 .baizheng100.com
 .bajiedp.com
@@ -3252,6 +3531,7 @@ www.yxssp.com
 .bangrunkj.com
 .bangshou.cc
 .bangxue100.com
+.bangzhumai.com
 .banji01.com
 .banjixiaoguanjia.com
 .bank-of-china.com
@@ -3662,6 +3942,14 @@ www.yxssp.com
 .bike0561.com
 .biliapi.com
 .biliapi.net
+.bilibili.cc
+.bilibili.co
+.bilibili.com
+.bilibili.net
+.bilibili.tv
+.bilibiligame.co
+.bilibiligame.net
+.bilibilipay.com
 .bilicache.com
 .bilicdn1.com
 .bilicdn2.com
@@ -3722,6 +4010,7 @@ www.yxssp.com
 .bittsnaas.com
 .biubiu001.com
 .biusq.com
+.biweicloud.com
 .bixiayoule.com
 .bixinapp.net
 .bixiongchuxing.com
@@ -3751,6 +4040,7 @@ www.yxssp.com
 .bjcdc.org
 .bjceis.com
 .bjchenxin.com
+.bjdaic.com
 .bjdcsp.com
 .bjdtv.com
 .bjdxkf10000.com
@@ -3775,6 +4065,7 @@ www.yxssp.com
 .bjhxak.com
 .bjicme.com
 .bjinfobank.com
+.bjingling.com
 .bjiptv.tv
 .bjitv.tv
 .bjjingdong.com
@@ -4107,6 +4398,9 @@ www.yxssp.com
 .bus98.com
 .bushiqi.com
 .bushpai.com
+.busybootin.com
+.busyming.com
+.busysnack.com
 .butel.com
 .butelcloud.com
 .butian.net
@@ -4515,6 +4809,7 @@ www.yxssp.com
 .ccidsmart.com
 .ccint.com
 .ccinvoice.com
+.ccjrsjl.top
 .ccjtrcw.com
 .ccjuju.com
 .cckawzfmk.com
@@ -4590,19 +4885,28 @@ www.yxssp.com
 .cdn-build.com
 .cdn-build.net
 .cdn-cba.com
+.cdn-cn1.apple-mapkit.com
+.cdn-cn2.apple-mapkit.com
+.cdn-cn3.apple-mapkit.com
+.cdn-cn4.apple-mapkit.com
 .cdn-dodo.com
+.cdn.apple-mapkit.com
 .cdn.me
+.cdn1.apple-mapkit.com
 .cdn16.com
 .cdn178.com
+.cdn2.apple-mapkit.com
 .cdn20.com
 .cdn20.info
 .cdn20.net
 .cdn20.org
 .cdn26.com
+.cdn3.apple-mapkit.com
 .cdn30.com
 .cdn30.info
 .cdn30.org
 .cdn35.com
+.cdn4.apple-mapkit.com
 .cdn40.com
 .cdn50.com
 .cdn56.com
@@ -4712,7 +5016,9 @@ www.yxssp.com
 .cdnyzdww.com
 .cds-china.com
 .cds-idc.com
+.cds.apple.com
 .cdsankuai.com
+.cdsassets.apple.com
 .cdsb.com
 .cdsb.mobi
 .cdsbstz.com
@@ -4800,6 +5106,7 @@ www.yxssp.com
 .cernic.net
 .cerpark.com
 .cerschool.com
+.certs.apple.com
 .ceshi112.com
 .ceshi113.com
 .ceshi114.com
@@ -4929,6 +5236,7 @@ www.yxssp.com
 .chaojituzi.net
 .chaojizhiyuan.com
 .chaoliao.net
+.chaonengdou.com
 .chaonengoffice.com
 .chaonengwork.com
 .chaoxing.cc
@@ -5092,6 +5400,7 @@ www.yxssp.com
 .chinadongchu.com
 .chinaduo.com
 .chinadzfp.com
+.chinaebiz.biz
 .chinaethnicgroups.com
 .chinaetv.com
 .chinaexpressair.com
@@ -5284,6 +5593,7 @@ www.yxssp.com
 .cictsj.com
 .cidian.com
 .cieet.com
+.ciefc.com
 .ciepe.com
 .cignacmb-ipmi.com
 .cignacmb.com
@@ -5390,8 +5700,15 @@ www.yxssp.com
 .ckuaiji.com
 .ckzuokmfv.com
 .cl0um.com
+.cl1.apple.com
+.cl2-cn.apple.com
+.cl2.apple.com
 .cl2009.com
 .cl2wm.com
+.cl3.apple.com
+.cl4-cn.apple.com
+.cl4.apple.com
+.cl5.apple.com
 .clamc.com
 .clappcdn.com
 .clarivate.com
@@ -5427,6 +5744,7 @@ www.yxssp.com
 .clickpki.com
 .clickvisual.net
 .clickwifi.net
+.clientflow.apple.com
 .cliim.com
 .cliim.net
 .clk1.top
@@ -5730,6 +6048,7 @@ www.yxssp.com
 .cn-dps.online
 .cn-evcharge.com
 .cn-rednotecdn.com
+.cn-smp-paymentservices.apple.com
 .cn.com
 .cn114115.com
 .cn163.net
@@ -5793,6 +6112,7 @@ www.yxssp.com
 .cnitblog.com
 .cnitv.net
 .cnjp-exp.com
+.cnki.net
 .cnkidoi.com
 .cnkidoi.net
 .cnkidoi.org
@@ -5835,6 +6155,7 @@ www.yxssp.com
 .cnutcon.com
 .cnweblog.com
 .cnwuzhangai.com
+.cnxuntu.com
 .cnza71v5.com
 .cnzsqh.com
 .cnzsqh.hk
@@ -5845,6 +6166,7 @@ www.yxssp.com
 .co-luckey.com
 .co9377.com
 .co99.net
+.coboot.com
 .cocodiy.com
 .cocsms.com
 .code666.com
@@ -5919,11 +6241,11 @@ www.yxssp.com
 .comsenz.com
 .concertos.live
 .conew.com
+.configuration.apple.com
 .confong.net
 .congming365.com
 .congtu.cloud
 .connectedpdf.com
-.container{
 .content4ads.com
 .contentchina.com
 .conthings.com
@@ -5974,6 +6296,7 @@ www.yxssp.com
 .coreblazer.com
 .coreldrawchina.com
 .corlactech.com
+.corlexi.com
 .cormirtech.com
 .corpautohome.com
 .corporatectrip.com
@@ -5985,7 +6308,7 @@ www.yxssp.com
 .cosmos-intl.com
 .cosypaipai.com
 .cotticoffee.com
-.countdown{
+.cottongame.com
 .coursein.vip
 .cowcs.com
 .cowlevel.net
@@ -6110,6 +6433,7 @@ www.yxssp.com
 .crisydney.com
 .critokyo.com
 .criwashington.com
+.crl.apple.com
 .crmeb.com
 .crmeb.net
 .crmeb.store
@@ -6184,6 +6508,8 @@ www.yxssp.com
 .csslcloud.net
 .cssru.top
 .csstoday.net
+.cstat.apple.com
+.cstat.cdn-apple.com
 .cstccloud.org
 .cstcloud.net
 .csto.com
@@ -6433,6 +6759,8 @@ www.yxssp.com
 .d9db5ce7.com
 .d9ehv.com
 .d9wnd.com
+.da4.cc
+.da7.cc
 .dabiantalk.com
 .dacbingtech.com
 .dachanet.com
@@ -6595,6 +6923,7 @@ www.yxssp.com
 .daotudashi.com
 .daovoice.io
 .daoyoudao.com
+.daoyu8.com
 .dapaizhizao.com
 .dapingzhishu.com
 .dapinku.com
@@ -6800,6 +7129,7 @@ www.yxssp.com
 .defaultmeeshow.com
 .dehuichuang.top
 .deib.co
+.dejavu.apple.com
 .dekrwasb.com
 .dele.com
 .delicloud.com
@@ -6831,6 +7161,8 @@ www.yxssp.com
 .develenv.com
 .developwechat.com
 .developweixin.com
+.devimages-cdn.apple.com
+.devstreaming-cdn.apple.com
 .devui.design
 .devweixin.com
 .deweyv5.com
@@ -7096,6 +7428,7 @@ www.yxssp.com
 .dkbna.top
 .dktfwxhk.com
 .dl-meitu.com
+.dl-vip.pcfaster.baidu.co.th
 .dl.pinyuncloud.com
 .dlbaolaijiancai.com
 .dlbwm.com
@@ -7371,6 +7704,7 @@ www.yxssp.com
 .downcc.com
 .downjoy.com
 .downjoy.net
+.download.developer.apple.com
 .downxia.com
 .downyi.com
 .downza.com
@@ -7533,6 +7867,20 @@ www.yxssp.com
 .duoduoipo.com
 .duoduotuanzhang.com
 .duoerehospital.com
+.duofee.com
+.duofenai.com
+.duofenar.com
+.duofencar.com
+.duofencat.com
+.duofendoctor.com
+.duofenhome.com
+.duofenhotel.com
+.duofenlook.com
+.duofenstore.com
+.duofenvr.com
+.duofriend.com
+.duofriend.net
+.duofriendai.com
 .duogeetech.com
 .duogekeji.com
 .duojicloud.com
@@ -7759,6 +8107,7 @@ www.yxssp.com
 .eastssl.com
 .easttone.com
 .eastwinn.com
+.easy-boarding.com
 .easy4ip.com
 .easyclean.fun
 .easyconn.net
@@ -7938,6 +8287,7 @@ www.yxssp.com
 .edns1024.com
 .edtas.top
 .edu-admin.com
+.edu-aliyun.com
 .edu-luezhi.com
 .edu21cn.com
 .edu24o1.com
@@ -8413,6 +8763,7 @@ www.yxssp.com
 .exba.top
 .exbu.top
 .excasv.com
+.excean.com
 .excelhome.net
 .exd.design
 .exdoris.com
@@ -8420,12 +8771,15 @@ www.yxssp.com
 .exhera.com
 .exiao.tech
 .exitpai.com
+.exjadmin.top
 .exmailgz.com
 .exmetis.com
 .exmgovhev.com
 .exoticaz.to
+.experiments.apple.com
 .exploringtianjin.com
 .expo31.com
+.expressup.com
 .expreview.com
 .externalcoop.com
 .extfans.com
@@ -8442,6 +8796,7 @@ www.yxssp.com
 .eyokqgtez.com
 .eyoodns.com
 .eyoonet.com
+.eyoubaidu.com
 .eyouk.com
 .eyuanku.com
 .ez-game-su.com
@@ -8495,6 +8850,7 @@ www.yxssp.com
 .fadada.com
 .fadada.link
 .fadfunds.com
+.fadongxi.com
 .faeryone.com
 .fagtp.top
 .faguanx.com
@@ -8502,6 +8858,7 @@ www.yxssp.com
 .faidev.cc
 .faidns.com
 .faipod.com
+.fairytest.com
 .faisco.biz
 .faisco.com
 .faisco.net
@@ -8541,6 +8898,7 @@ www.yxssp.com
 .fangxiaoer.com
 .fangxin.com
 .fangxinjiefxj.com
+.fangxueba.com
 .fangyuan.art
 .fanhb.top
 .fanhuan.com
@@ -8581,6 +8939,9 @@ www.yxssp.com
 .fapetech.com
 .fapiao123.com
 .fariycloud.com
+.farlight84game.com
+.farlight84game.net
+.farlight84games.com
 .faseng.com
 .fasoso.net
 .fastapi.net
@@ -8806,6 +9167,7 @@ www.yxssp.com
 .fhldns.com
 .fhldns.net
 .fhmgn.top
+.fhorse.net
 .fhpnt.top
 .fhweather.com
 .fhyqw.com
@@ -8922,6 +9284,9 @@ www.yxssp.com
 .flamelephant.com
 .flamous.fit
 .flash16.com
+.flashcat.cloud
+.flashcat.com
+.flashduty.com
 .flashex.com
 .flbwm.com
 .fldd.vip
@@ -9002,7 +9367,6 @@ www.yxssp.com
 .fontong.com
 .fonwill.com
 .foooooot.com
-.footer{
 .forbidaaa.net
 .forceclouds.com
 .forceecrm.com
@@ -9029,6 +9393,7 @@ www.yxssp.com
 .founderit-bn.com
 .founderpku.com
 .foundertype.com
+.founq.com
 .four111.com
 .foxitcad.com
 .foxitcloud.com
@@ -9041,6 +9406,7 @@ www.yxssp.com
 .fpapi.com
 .fpapi.net
 .fphsg.top
+.fpsops.net
 .fqixin.net
 .fqjob.net
 .fqnovel-op.com
@@ -9097,6 +9463,7 @@ www.yxssp.com
 .ftyun.com
 .ftyzb.com
 .ftyzb.net
+.fucegaoshou.com
 .fudanpress.com
 .fudanpresserp.com
 .fudanxinxueshu.com
@@ -9140,6 +9507,8 @@ www.yxssp.com
 .funnypopmart.com
 .funo.com
 .funowechat.com
+.funqgame.com
+.funqgame.net
 .funshion.com
 .funshion.net
 .funshion.tv
@@ -9175,6 +9544,7 @@ www.yxssp.com
 .fx168api.com
 .fx168vip.com
 .fx666.com
+.fxalipay.com
 .fxduizhan.com
 .fxer5izz.com
 .fxggzxc.com
@@ -9294,10 +9664,12 @@ www.yxssp.com
 .gacrnd.com
 .gaguoiadi.com
 .gaidaiche.com
+.gaigetu.com
 .gainet.com
 .gainet.net
 .gainetbd.com
 .gainpai.com
+.gaitupian.com
 .gakbc.top
 .galacean.com
 .galaxyasset.com
@@ -9430,6 +9802,7 @@ www.yxssp.com
 .gbdydns.com
 .gbham.top
 .gbhfd.top
+.gbiac.net
 .gblhgk.com
 .gboss.tech
 .gbspa.top
@@ -9469,6 +9842,7 @@ www.yxssp.com
 .gd30off.com
 .gd4kcloud.com
 .gd8tb.top
+.gdairport.com
 .gdalpha.com
 .gdbbk.com
 .gdbkxd.com
@@ -9521,6 +9895,7 @@ www.yxssp.com
 .gdxkc.net
 .gdydszxc.com
 .gdyjrcw.com
+.gdyueyun.com
 .gdz.co
 .gdzjrcw.com
 .gdznz.com
@@ -9628,6 +10003,7 @@ www.yxssp.com
 .gh513.com
 .ghidc.net
 .ghmbk.top
+.ghmyj.com
 .ghpms.com
 .ghpym.com
 .ghsmpwalmart.com
@@ -9654,6 +10030,7 @@ www.yxssp.com
 .giocdn.com
 .gip100.com
 .gipeowhes.com
+.girobot.com
 .git-repo.info
 .gitbanana.com
 .gitcode.com
@@ -9738,6 +10115,7 @@ www.yxssp.com
 .gm119.life
 .gm119.vip
 .gm86.com
+.gmailes.com
 .gmbec.top
 .gmcc.shop
 .gmcchealth.com
@@ -9891,6 +10269,7 @@ www.yxssp.com
 .gpeth.top
 .gpic-sslvpn.com
 .gpivymaxs.com
+.gplayspace.com
 .gplus-lab.com
 .gpmhb.top
 .gpsbc.top
@@ -9961,6 +10340,8 @@ www.yxssp.com
 .grviymrxr.com
 .grzq.com
 .grzuecxrk.com
+.gs-loc-cn.apple.com
+.gs-loc.apple.com
 .gs96666.com
 .gsadds.com
 .gsayizaic.com
@@ -9980,6 +10361,20 @@ www.yxssp.com
 .gslnrcw.com
 .gslzrcw.com
 .gsoffcn.com
+.gsp10-ssl-cn.ls.apple.com
+.gsp11-cn.ls.apple.com
+.gsp12-cn.ls.apple.com
+.gsp13-cn.ls.apple.com
+.gsp4-cn.ls.apple.com
+.gsp5-cn.ls.apple.com
+.gsp85-cn-ssl.ls.apple.com
+.gspe11-2-cn-ssl.ls.apple.com
+.gspe19-2-cn-ssl.ls.apple.com
+.gspe19-cn-ssl.ls.apple.com
+.gspe19-cn.ls.apple.com
+.gspe21-ssl.ls.apple.com
+.gspe35-ssl.ls.apple.com
+.gspe79-cn-ssl.ls.apple.com
 .gspzwmetg.com
 .gsqyrcw.com
 .gsrecv.com
@@ -10210,6 +10605,8 @@ www.yxssp.com
 .guxepagmv.com
 .guyucloud.com
 .guzhangting.com
+.guzzoni.apple.com
+.guzzoni.smoot.apple.com
 .gv40.com
 .gv94.com
 .gvkguirpk.com
@@ -10293,6 +10690,7 @@ www.yxssp.com
 .gz-tencentclb.net
 .gz-tencentclb.work
 .gz11g.com
+.gz12301.com
 .gz263xmail.com
 .gz51la.com
 .gzads.com
@@ -10347,6 +10745,7 @@ www.yxssp.com
 .gzrkqmdac.com
 .gzsjht.com
 .gzstgzebv.com
+.gzsuihe.com
 .gzswiftondt.com
 .gztups.com
 .gztuyoo.com
@@ -10951,6 +11350,7 @@ www.yxssp.com
 .hiaso.com
 .hibixin.com
 .hiboos.com
+.hibusiness.com
 .hichina.com
 .hichina.net
 .hiclc.com
@@ -10970,10 +11370,12 @@ www.yxssp.com
 .hidigitalpower.com
 .hiecheimaetu.com
 .hielu.com
+.hiencode.com
 .hifengli.com
 .hifigpt.com
 .hifingtech.com
 .hifly.cc
+.hifortune.net
 .hifreefiction.com
 .hifun.tv
 .hifunlab.com
@@ -11088,6 +11490,8 @@ www.yxssp.com
 .hjsdmj.top
 .hjsdmj.xin
 .hjwxcps.com
+.hjy1314.com
+.hjy1314.net
 .hjygzh.top
 .hjymedia.com
 .hjytaoke.com
@@ -11175,6 +11579,7 @@ www.yxssp.com
 .hnidssp.com
 .hnjiaoyutong.com
 .hnjiechengtech.com
+.hnlshm.com
 .hnmsmall.com
 .hnng.com
 .hnnrtv.com
@@ -11289,6 +11694,7 @@ www.yxssp.com
 .hostacc1.com
 .hostacc2.com
 .hostbuf.com
+.hosting-aliyun.com
 .hotalk.com
 .hotata.com
 .hotduanju.com
@@ -11332,6 +11738,7 @@ www.yxssp.com
 .hqftdm.com
 .hqgwy.com
 .hqgwy.mobi
+.hqjcjt.com
 .hqjiaoshi.com
 .hqjiaoshi.net
 .hqjishi.com
@@ -11355,6 +11762,7 @@ www.yxssp.com
 .hqqt.xyz
 .hqsishu.com
 .hqsishu.net
+.hqterminal.com
 .hqwb.mobi
 .hqwx.art
 .hqwx.biz
@@ -11644,6 +12052,7 @@ www.yxssp.com
 .hudunsoft.com
 .huduntech.com
 .hugecore.net
+.huichongzhi.com
 .huicloud.com
 .huidaiche.com
 .huifudashi.com
@@ -11734,7 +12143,12 @@ www.yxssp.com
 .huodongxing.com
 .huoffcn.com
 .huohetech.com
+.huohua.asia
+.huohua.ink
+.huohua.online
+.huohuachess.com
 .huohuahudong.com
+.huohuazongheng.com
 .huojianjiasu.com
 .huojitui.com
 .huoju6.com
@@ -11877,6 +12291,8 @@ www.yxssp.com
 .hyzxyh.com
 .hyzxyh.net
 .hz.ink
+.hz.pre.tbusergw.taobao.net
+.hz.tbusergw.taobao.net
 .hz96060.com
 .hz96060.net
 .hzaiguojiang.com
@@ -11957,9 +12373,11 @@ www.yxssp.com
 .i9tqrc.com
 .iaaqxezba.com
 .iadiae.com
+.iadsdk.apple.com
 .iagwiugzw.com
 .iaif.tech
 .iaimarx.com
+.ialicdn.com
 .ialloc.com
 .iamvloger.com
 .iamvlogger.com
@@ -12004,6 +12422,7 @@ www.yxssp.com
 .ibosc.com
 .iboss8.com
 .ibossmail.com
+.ibot.ai
 .ibreader.com
 .ibreeno.com
 .ibroadlink.com
@@ -12292,6 +12711,7 @@ www.yxssp.com
 .igexin.com
 .igkzuwbdo.com
 .igo5q36ivt234.com
+.igongju.com
 .igongwu.com
 .igooi.com
 .igovcar.com
@@ -12521,6 +12941,7 @@ www.yxssp.com
 .in66.cc
 .in66.co
 .in66.com
+.in8.ink
 .inanguapi.com
 .inanning.net
 .inboyu.com
@@ -12551,6 +12972,11 @@ www.yxssp.com
 .infzm.com
 .ingkee.com
 .inindex.net
+.init-kt.apple.com
+.init-p01md.apple.com
+.init-p01st.push.apple.com
+.init-s01st.push.apple.com
+.init.ess.apple.com
 .initaa.com
 .initac.com
 .initaf.com
@@ -12701,8 +13127,10 @@ www.yxssp.com
 .ipayfor.me
 .ipaylinks.com
 .ipayun.com
+.ipcdn.apple.com
 .iper2.com
 .ipetapi.com
+.iphone-ld.apple.com
 .iphoto.ly
 .ipify.org
 .ipinyou.com
@@ -12740,6 +13168,14 @@ www.yxssp.com
 .iqevzymkv.com
 .iqianggou.com
 .iqilu.com
+.iqiyi.com
+.iqiyi.demo.uwp
+.iqiyiedge.com
+.iqiyiedge.net
+.iqiyipic.com
+.iqiyismart.com
+.iqiyisports.com
+.iqiyizhishi.com
 .iqmie.com
 .iqoo.com
 .iqplqylz.com
@@ -12844,6 +13280,7 @@ www.yxssp.com
 .itaoo.com
 .itaotuo.com
 .itaxyun.com
+.itboy.com
 .itcloudlab.com
 .itddo2page.com
 .itechsunshine.com
@@ -12860,6 +13297,8 @@ www.yxssp.com
 .itmop.com
 .itobsnssdk.com
 .itongbanjie.com
+.itongshi.com
+.itongshi.net
 .itopplay.com
 .itopsdk.com
 .itourmet.com
@@ -12869,12 +13308,15 @@ www.yxssp.com
 .itoutiaovod.com
 .itownet.com
 .itravelsaas.com
+.itsbaidu.com
 .itsgmu.com
 .itsinghua.com
 .itsk.com
 .ittuwyvem.com
 .ituchong.com
 .itugo.com
+.itunes.apple.com
+.itunesconnect.apple.com
 .itunestore.vip
 .itv.video
 .itvalueplus.com
@@ -13183,6 +13625,7 @@ www.yxssp.com
 .jdzhengqi.com
 .jeanytech.com
 .jegotrip.com
+.jenius.chat
 .jerpx.com
 .jet-ego.com
 .jet-logistics.com
@@ -13345,6 +13788,7 @@ www.yxssp.com
 .jijiaban.me
 .jijiaban.net
 .jijiaban.org
+.jijiagames.com
 .jijiancode.com
 .jijinhao.com
 .jijinhao.net
@@ -13364,6 +13808,7 @@ www.yxssp.com
 .jimeng.mobi
 .jimfuture.com
 .jimingdan.com
+.jimugem.com
 .jimuhorizon.com
 .jin10.com
 .jin99.net
@@ -13419,6 +13864,7 @@ www.yxssp.com
 .jinhongjy.com
 .jinhuang.net
 .jinianbi.com
+.jinjiaopei.com
 .jinliyu.vip
 .jinluos.com
 .jinmi.com
@@ -13465,7 +13911,14 @@ www.yxssp.com
 .jishitailai.com
 .jishouka.com
 .jisuanke.com
+.jisuapi.com
+.jisuapi.net
+.jisuapi.vip
 .jisuapp.net
+.jisucourse.com
+.jisudev.com
+.jisustudy.com
+.jisututorial.com
 .jisuxia.com
 .jit-group.com
 .jitianqi.com
@@ -13491,6 +13944,7 @@ www.yxssp.com
 .jiuzhilan.com
 .jixiaocpa.com
 .jixiaotui.com
+.jixing.net
 .jiyi.biz
 .jiyi.top
 .jiyinbao.com
@@ -13690,6 +14144,7 @@ www.yxssp.com
 .jrcreditunion.com
 .jrdaimao.com
 .jrdaimao.net
+.jrdaojia.com
 .jrdingceng.com
 .jrexam.com
 .jrhlah.com
@@ -13728,6 +14183,7 @@ www.yxssp.com
 .jsmmp.com
 .jsocr.com
 .jsoffcn.com
+.json.run
 .jsplayground.net
 .jspp.com
 .jsqiuying.com
@@ -13735,6 +14191,7 @@ www.yxssp.com
 .jsshuzijiating.com
 .jstarcloud.com
 .jstarkan.com
+.jstopay.com
 .jstor.org
 .jstti.com
 .jstucdn.com
@@ -13783,9 +14240,12 @@ www.yxssp.com
 .jufangsoft.com
 .juhaokan.org
 .juhaokanxr.com
+.juheapi.com
 .juhedxm.com
+.juhekeji.com
 .juherui.top
 .juhesaas.com
+.juhewin.com
 .juhezhenyuan.com
 .juhsgame.com
 .juhuasuan.com
@@ -13824,6 +14284,8 @@ www.yxssp.com
 .junyidz.com
 .juooo.net
 .juooot.net
+.jurandaojia.com
+.jurandaojia.net
 .jurlawtech.com
 .jushengqian.info
 .justering.com
@@ -13868,6 +14330,9 @@ www.yxssp.com
 .jxoffcn.com
 .jxphrcw.com
 .jxqy.city
+.jxuspt.com
+.jxusptpay.com
+.jxvus.net
 .jxyaxiyahz.com
 .jxydt.com
 .jxyygh.com
@@ -14758,6 +15223,7 @@ www.yxssp.com
 .laidianx.com
 .laidingba.com
 .laifengmi.com
+.laifenqi.com
 .laikan.com
 .laikemap.com
 .laiqlwye.com
@@ -15139,6 +15605,7 @@ www.yxssp.com
 .leyire.com
 .leyoumall.com
 .leyuansu.com
+.leyunxiao.com
 .lezhifuture.com
 .lezhiyou.org
 .lezhiyun.com
@@ -15260,7 +15727,9 @@ www.yxssp.com
 .lilithcdn.com
 .lilithgame.com
 .lilithgames.com
+.lilithgamestest.com
 .lilithtech.com
+.lilithtest.com
 .limengkeji.co
 .linduvillage.com
 .linezing.com
@@ -15331,6 +15800,7 @@ www.yxssp.com
 .linkedcare360.com
 .linkedcarechina.com
 .linkedmalls.com
+.linkekey.com
 .linkeye.net
 .linkgaia.com
 .linklogis.com
@@ -15354,6 +15824,7 @@ www.yxssp.com
 .lirfeatech.com
 .lishuokeji.com
 .litchifm.com
+.litessl.com
 .litevote.com
 .litisheng.net
 .litongcx.com
@@ -15586,6 +16057,7 @@ www.yxssp.com
 .lushichuanshuo.net
 .lusobank.com.mo
 .lutuankeji.com
+.luxiaochanlingshi.com
 .luxurystage.net
 .luyanhui.com
 .luyingou.com
@@ -15670,6 +16142,7 @@ www.yxssp.com
 .lyxarcw.com
 .lyybao.com
 .lyycrc.com
+.lyzaix.com
 .lz-redeem.com
 .lz183.com
 .lz225.com
@@ -16003,6 +16476,7 @@ www.yxssp.com
 .meavon.com
 .mechatim.com
 .mechina.org
+.medbiomechanics.com
 .medejob.com
 .media-zhiyue.com
 .media.paperclipclub.net
@@ -16122,6 +16596,7 @@ www.yxssp.com
 .meitidanao.com
 .meitie.com
 .meitiyun.com
+.meitongka.com
 .meitu-int.com
 .meitu-mobile.com
 .meitu.com
@@ -16216,9 +16691,11 @@ www.yxssp.com
 .mengyutech.com
 .mengziyuan.com
 .menhu.io
+.mensura.cdn-apple.com
 .mepbc.top
 .meqgmtfbv.com
 .merrorai.com
+.mesu.apple.com
 .meta.law
 .metaichi.art
 .metaichi.cc
@@ -16279,6 +16756,7 @@ www.yxssp.com
 .mhsdxl.com
 .mhxk.com
 .mhystatic.com
+.mhyyxz.com
 .mi-ae.com
 .mi-ae.net
 .mi-cache.com
@@ -16340,6 +16818,9 @@ www.yxssp.com
 .micro-game-client.com
 .microaiav.com
 .microboss.me
+.microsoft.com
+.microsoftonline.com
+.microsofttranslator.com
 .microvcard.com
 .micwsgdmu.com
 .midaqi.com
@@ -16592,6 +17073,7 @@ www.yxssp.com
 .mkzhan.net
 .mkzxmwdep.com
 .ml-summit.com
+.ml.cdn-apple.com
 .mlandray.com
 .mlcfg.online
 .mldfood.com
@@ -16608,6 +17090,10 @@ www.yxssp.com
 .mmatch.tech
 .mmbang.com
 .mmbang.info
+.mmbusy.com
+.mmbusyhy.com
+.mmbusysy.com
+.mmbusyyx.com
 .mmcops.com
 .mmears.com
 .mmegg.com
@@ -16724,6 +17210,7 @@ www.yxssp.com
 .molitv.vip
 .momagi.com
 .momaxsmartapp.net
+.momoapi.com
 .momocdn.com
 .momodesign.team
 .momopics.com
@@ -16862,7 +17349,6 @@ www.yxssp.com
 .mrts.com
 .mrw.so
 .mrwjy.top
-.ms
 .ms.show
 .msanjia.com
 .msauth.net
@@ -16982,6 +17468,7 @@ www.yxssp.com
 .multimodalmatch.com
 .mumayi.com
 .mumbuy365.com
+.mun-u.com
 .mununtech.com
 .muomou.com
 .muqingmedia.com
@@ -16989,6 +17476,7 @@ www.yxssp.com
 .murl.tv
 .murluntech.com
 .music-z.com
+.music.apple.com
 .musical.ly
 .musicd.cc
 .mutone.net
@@ -17053,6 +17541,7 @@ www.yxssp.com
 .my95k.com
 .myagoralab.com
 .myaicourse.com
+.myalicdn.com
 .myalirtc.com
 .myallvalue.com
 .myanonamouse.net
@@ -17146,6 +17635,8 @@ www.yxssp.com
 .myilibrary.com
 .myimis.com
 .myip.la
+.myjdigit.com
+.myjdt.com
 .myjyrc.com
 .mykingdee.com
 .mykraohdr.com
@@ -17377,12 +17868,12 @@ www.yxssp.com
 .netspeedtestmaster.com
 .netstarsec.com
 .netstatic.net
+.networkbench.com
 .networkcard123.com
 .networksim123.com
 .neuroxiv.com
 .neuroxiv.net
 .neverbugs.com
-.new-domain{
 .new1cloud.com
 .new1dns.com
 .new253.com
@@ -17493,6 +17984,7 @@ www.yxssp.com
 .nikaixinjiuhao.com
 .nilowtech.com
 .nim-lang-cn.org
+.nimaapi.com
 .nimbleos.com
 .ninebot.com
 .ninghangyun.com
@@ -17570,6 +18062,7 @@ www.yxssp.com
 .nnsmk.com
 .nntccfwpt.com
 .nnthink.com
+.no7.club
 .noahsdk.com
 .nock24.com
 .nocnoc.team
@@ -17704,6 +18197,7 @@ www.yxssp.com
 .nzsiteres.com
 .nzwgs.com
 .nzwjr.top
+.o11yty.com
 .o13214.com
 .o2olifestyle.com
 .o3.team
@@ -17745,6 +18239,8 @@ www.yxssp.com
 .ocpwaekzo.com
 .ocristzhw.com
 .ocs9.net
+.ocsp.apple.com
+.ocsp2.apple.com
 .octopus-ai.com
 .ocwms.com
 .ocxiw.net
@@ -18055,7 +18551,10 @@ www.yxssp.com
 .osa-tencentclb.net
 .osa-tencentclb.work
 .osapublishing.org
+.osase.cloud
+.osase.net
 .osc.cool
+.oscdn.apple.com
 .oschina.net
 .osee-live.com
 .osee-miniapp.com
@@ -18142,6 +18641,7 @@ www.yxssp.com
 .ourltc.com
 .ourpix.com
 .ourplat.net
+.ourplay.net
 .ourschool.cc
 .oursec1.com
 .oursec2.com
@@ -18258,6 +18758,7 @@ www.yxssp.com
 .pamarkets.net
 .pamnf.top
 .pan-ics.com
+.pancake.apple.com
 .pandarzli.com
 .pandaschool.com
 .panduolabox.com
@@ -18326,6 +18827,7 @@ www.yxssp.com
 .paypalobjects.com
 .paypawtech.com
 .pb1771hp.com
+.pba0.apple.com
 .pbcdci.com
 .pbctfp.com
 .pbfge.top
@@ -18626,6 +19128,7 @@ www.yxssp.com
 .pko123.com
 .pkoplink.com
 .pkueqpgzs.com
+.pkulaw.com
 .pkzuimvtx.com
 .pl5762.com
 .plantpai.com
@@ -18807,6 +19310,7 @@ www.yxssp.com
 .privatehd.to
 .privspace.net
 .prizesapp.com
+.probe.siri.apple.com
 .prodaas.com
 .prodaas.net
 .productsea.com
@@ -18872,6 +19376,7 @@ www.yxssp.com
 .pubdatamall.com
 .pubghelper.com
 .pubgtool.com
+.publicassets.cdn-apple.com
 .publicpai.com
 .pubwinol.com
 .pubyun.com
@@ -18903,6 +19408,8 @@ www.yxssp.com
 .putdl.com
 .putonghuaxuexi.com
 .putty.wang
+.pvgaerodrome.com
+.pvgairport.com
 .pvgykxbc.com
 .pvpgmrrmp.com
 .pvpworldwide.com
@@ -19138,6 +19645,7 @@ www.yxssp.com
 .qhmgs.com
 .qhmsg.com
 .qhoffcn.com
+.qhpzls.com
 .qhres.com
 .qhres2.com
 .qhrry.top
@@ -19239,6 +19747,7 @@ www.yxssp.com
 .qifuma365.com
 .qifun.com
 .qifuso.com
+.qihangyun.top
 .qihedream.com
 .qihegame.com
 .qihoo.com
@@ -19433,6 +19942,10 @@ www.yxssp.com
 .qiyepao.com
 .qiyewendang.com
 .qiyework.com
+.qiyi.com
+.qiyinda.com
+.qiyipic.com
+.qiyixt.com
 .qiyougz.com
 .qiyuanzn.com
 .qiyuesuo.com
@@ -19657,6 +20170,7 @@ www.yxssp.com
 .qu05.net
 .quality-ad.com
 .qualitycloud.top
+.quanbeixiaodai.com
 .quangao.com
 .quanma51.com
 .quanmama.com
@@ -19699,6 +20213,9 @@ www.yxssp.com
 .quchengmetro.com
 .quchongzhi.com
 .quchongzhi.net
+.qudian.com
+.qudian.net
+.qudian.online
 .qudong.com
 .qudongtianshi.com
 .quehu.com
@@ -19970,6 +20487,8 @@ www.yxssp.com
 .qunjielong.com
 .qunxiaoguan.com
 .quocptxt.com
+.quplusplus.com
+.quplusplus.net
 .quqi.com
 .qurampczu.com
 .qurl.pub
@@ -20336,6 +20855,7 @@ www.yxssp.com
 .rixuvrdq.com
 .rizzcrush.net
 .rj.link
+.rj.m.taobao.co
 .rj8lv.com
 .rkgqswdhe.com
 .rkpxj.com
@@ -20354,6 +20874,7 @@ www.yxssp.com
 .rnxsw.com
 .ro.com
 .roampaipai.com
+.roarpanda.com
 .robam.com
 .robomaster.com
 .robook.com
@@ -20568,6 +21089,7 @@ www.yxssp.com
 .s-fanli.com
 .s-linking.com
 .s-linking.net
+.s-microsoft.com
 .s-reader.com
 .s-rpki.net
 .s-tech.com
@@ -20654,6 +21176,7 @@ www.yxssp.com
 .sankuai.com
 .sankuai.info
 .sankuaiyun.com
+.sanlisukeji.asia
 .sanmaotrip.com
 .sanmaoyou.com
 .sanqiyx.com
@@ -21178,7 +21701,10 @@ www.yxssp.com
 .scict.net
 .science.org
 .scienceape.com
+.sciencedirect.com
 .sciencemag.org
+.sciener.com
+.sciener.tech
 .scipeak.com
 .scissor7.com
 .scloudmp.com
@@ -21205,6 +21731,7 @@ www.yxssp.com
 .scrmtest.top
 .scrmusmag.com
 .scsemicon.com
+.scsgxc.com
 .scsjsd.com
 .scsnrcw.com
 .scsxys.com
@@ -21252,6 +21779,8 @@ www.yxssp.com
 .sdffqaz.com
 .sdfscx.com
 .sdfvcx854.com
+.sdg-china.com
+.sdgame.com
 .sdgdmg.com
 .sdgdwljt.com
 .sdgdxt.com
@@ -21269,6 +21798,7 @@ www.yxssp.com
 .sdk-96fun.com
 .sdk-98fun.com
 .sdkanbing.com
+.sdkbus.com
 .sdkrzzjng.com
 .sdlinkgo.com
 .sdnctc.com
@@ -21282,6 +21812,7 @@ www.yxssp.com
 .sdqmyd.com
 .sdrongdan.com
 .sdrongmei.com
+.sdsp.cc
 .sdtarcw.com
 .sdtvol.com
 .sdwans.net
@@ -21328,6 +21859,9 @@ www.yxssp.com
 .secutimes.com
 .sedunt.com
 .seebug.org
+.seed-sequoia.siri.apple.com
+.seed-swallow.siri.apple.com
+.seed.siri.apple.com
 .seedpace.com
 .seekseek.com
 .seenactech.com
@@ -21380,6 +21914,7 @@ www.yxssp.com
 .sensorsdatavip.com
 .seour.top
 .seoyezcpo.com
+.sequoia.apple.com
 .sergouzi.com
 .sersmed.com
 .sersmed.net
@@ -21449,6 +21984,7 @@ www.yxssp.com
 .sgyouxi.com
 .sh-hellobike.com
 .sh-inner.com
+.sh-pod2-smp-device.apple.com
 .sh-res.com
 .sh-tencentclb.cloud
 .sh-tencentclb.com
@@ -21471,6 +22007,7 @@ www.yxssp.com
 .shafaguanjia.com
 .shafauto.com
 .shaipower.com
+.shairport.com
 .shalou.net
 .shan-yu-tech.com
 .shanbay-codetime-a1.com
@@ -21487,6 +22024,7 @@ www.yxssp.com
 .shanbay-xyz-a1.com
 .shanbay-xyz-a2.com
 .shanbay.com
+.shandagames.com
 .shandian365.com
 .shandiansiwei.com
 .shandong2009.com
@@ -21512,6 +22050,7 @@ www.yxssp.com
 .shanggukt.com
 .shanghai-air.com
 .shanghai-disneyland.com
+.shanghaiairport.com
 .shanghaidisney.com
 .shanghaidisneyresort.com
 .shanghaidisneysurvey.com
@@ -21554,6 +22093,7 @@ www.yxssp.com
 .shanximinglei.com
 .shanxiuxia.com
 .shanyancloud.work
+.shaonianzongheng.com
 .share-books.com
 .share-mine.com
 .share2dlink.com
@@ -21578,6 +22118,7 @@ www.yxssp.com
 .shayuricheng.com
 .shayusheng.com
 .shayuxianfeng.com
+.shazam-insights.cdn-apple.com
 .shbj.com
 .shbkwai.com
 .shca-inc.com
@@ -21597,6 +22138,7 @@ www.yxssp.com
 .shejibaoapp.com
 .shejibaopay.com
 .shejiben.com
+.shejiyixia.com
 .shekejiangtan.net
 .shellpub.com
 .shelter-china.com
@@ -21612,6 +22154,8 @@ www.yxssp.com
 .shengmo.xin
 .shengqianke.com
 .shengqiankuaibao.com
+.shengqu.com
+.shengqugames.com
 .shengshu-ai.com
 .shengshu.com
 .shengshu.world
@@ -21928,8 +22472,10 @@ www.yxssp.com
 .shzdmwl.com
 .shzq.com
 .shzy.cc
+.si-mate.com
 .si9377.com
 .siam.org
+.sias-sha.com
 .sibaide.com
 .sichuanair.com
 .sichuanbank.com
@@ -22106,6 +22652,7 @@ www.yxssp.com
 .sl.fun
 .slappai.com
 .slbauto.com
+.slfps.com
 .sliansoft.com
 .slide02world.top
 .slide03world.top
@@ -22132,6 +22679,7 @@ www.yxssp.com
 .smartagricompetition.com
 .smartbuilding.top
 .smartcom.cc
+.smartdoc.top
 .smartereye.com
 .smarteyetec.com
 .smartfuqing.com
@@ -22164,6 +22712,7 @@ www.yxssp.com
 .smmyzkaxa.com
 .smngt.com
 .smoba.net
+.smp-device-content.apple.com
 .smrxycfg.com
 .sms18.com
 .smsbao.com
@@ -22262,6 +22811,7 @@ www.yxssp.com
 .sojiang.com
 .sojiang.net
 .sojson.com
+.sojson.net
 .sojump.com
 .soku.com
 .sokyemhrr.com
@@ -22297,6 +22847,7 @@ www.yxssp.com
 .sortda.com
 .sortime.com
 .soso.com
+.soso.pub
 .sososnap.com
 .sou.com
 .soudongman.com
@@ -22350,6 +22901,7 @@ www.yxssp.com
 .spark-page8.com
 .spark-page9.com
 .sparkcul.com
+.sparkedtch.com
 .sparkletour.com
 .sparknexa.com
 .sparktransfer.com
@@ -22459,8 +23011,10 @@ www.yxssp.com
 .ssgxmj.top
 .ssgxmj.xin
 .ssjlicai.com
+.sslask.com
 .sslawy.com
 .sslcer.com
+.ssleye.com
 .sslibrary.com
 .ssogqufpa.com
 .sspai.com
@@ -22508,6 +23062,7 @@ www.yxssp.com
 .starxad.com
 .starztb.com
 .statau.net
+.static.gc.apple.com
 .static163.net
 .staticdn.net
 .staticfile.net
@@ -22539,6 +23094,7 @@ www.yxssp.com
 .stmpowered.com
 .stnfd.top
 .stnts.com
+.stocks-sparkline.apple.com
 .stockstar.com
 .stockstar.email
 .stockstar.ltd
@@ -22547,6 +23103,9 @@ www.yxssp.com
 .stopmn.com
 .stor-helper.com
 .storagesdk.com
+.store.apple.com
+.store.apple.com.edgekey.net
+.store.storeimages.cdn-apple.com
 .storyartcircle.com
 .stratosiot.com
 .stream-lake.com
@@ -22643,6 +23202,7 @@ www.yxssp.com
 .sunrtb.com
 .sunshineinsurance.cc
 .sunwoda-evb.com
+.suo.run
 .suopingbao.com
 .super-fanli.com
 .superbiaobiao.com
@@ -22672,10 +23232,12 @@ www.yxssp.com
 .superuclass.com
 .supet.com
 .support-skyit.com
+.support.apple.com
 .supremind.com
 .supremind.info
 .supremind.net
 .suprisebuy.com
+.surfreader.com
 .surmortech.com
 .surveyqq.com
 .surveyunion.com
@@ -22704,12 +23266,16 @@ www.yxssp.com
 .svsiomdxy.com
 .svsuwmmti.com
 .sw0r0a.com
+.swallow.apple.com
 .swan366.com
 .swaqds.com
+.swcatalog.apple.com
 .swcbg.com
+.swcdn.apple.com
 .swceqatmo.com
 .swchina.org
 .swdcmg.com
+.swdist.apple.com
 .sweet-east.com
 .swerqaphy.com
 .swgepxtaa.com
@@ -22720,6 +23286,7 @@ www.yxssp.com
 .swordsoflegends.com
 .swq242xc54.com
 .swqkxytri.com
+.swscan.apple.com
 .swsmu.com
 .swsrcw.com
 .swtewrmpx.com
@@ -22751,6 +23318,7 @@ www.yxssp.com
 .sxvseirmx.com
 .sxxarcw.com
 .sxxcrcw.com
+.sxxwd.com
 .sxyj.com
 .sxyj.net
 .sxyupzfmc.com
@@ -22766,6 +23334,7 @@ www.yxssp.com
 .sydneyorange.com
 .syhlocal.com
 .syingdata.com
+.sylvan.apple.com
 .symama.com
 .symauve.net
 .symcd.com
@@ -22800,6 +23369,8 @@ www.yxssp.com
 .sz315.org
 .sz765.com
 .sz800.com
+.szairport.com
+.szairportvip.com
 .szbdyd.com
 .szbpkj.com
 .szceri.com
@@ -22818,6 +23389,7 @@ www.yxssp.com
 .szhk.com
 .szhtp.com
 .szjc.com
+.szjchkc.com
 .szjiaodu.com
 .szjr-tencentclb.cloud
 .szjr-tencentclb.com
@@ -22989,6 +23561,12 @@ www.yxssp.com
 .tanziapp.com
 .tanzichina.com
 .tao123.com
+.taobao-design.com
+.taobao.com
+.taobao.org
+.taobao.wang
+.taobaocdn.com
+.taobaostars.com
 .taobizhong.com
 .taoc.cc
 .taochanet.com
@@ -23504,6 +24082,7 @@ www.yxssp.com
 .tencentgse.com
 .tencentgy.com
 .tencenthangjia.com
+.tencenthst.com
 .tencentiam.com
 .tencenticp.com
 .tencentid.com
@@ -23748,6 +24327,7 @@ www.yxssp.com
 .tianduntech.com
 .tianehui.net
 .tianfucup.com
+.tianfugreenroad.com
 .tiangeltd.com
 .tiangong.cloud
 .tianjiao-air.com
@@ -23757,6 +24337,7 @@ www.yxssp.com
 .tianjinweimiao.com
 .tianjinweimiao.top
 .tianjinyouliang.com
+.tianjurenhe.com
 .tianlailive.com
 .tianlala.com
 .tianmallyoupin.com
@@ -23780,6 +24361,7 @@ www.yxssp.com
 .tianxiao123.com
 .tianxiawuzei.org
 .tianxue100.com
+.tianyablog.com
 .tianyancam.com
 .tianyancha.com
 .tianyancha.pro
@@ -23897,6 +24479,7 @@ www.yxssp.com
 .tiyuwang.com
 .tizhiyun.com
 .tizijie.com
+.tj-pod1-smp-device.apple.com
 .tj0573.com
 .tjbpm.com
 .tjcme.org
@@ -24353,6 +24936,7 @@ www.yxssp.com
 .trust-courier.com
 .trustasia.com
 .trustasia.net
+.trustca.net
 .trustdta.com
 .trustedsign.com
 .trustexporter.com
@@ -24412,14 +24996,19 @@ www.yxssp.com
 .ttbyte.com
 .ttbyte.net
 .ttd27.com
+.ttdorm.com
+.ttekey.com
 .ttfunshion.com
 .ttgslb.com
 .ttgtm.com
 .tth5.cc
 .tth5.com
 .tth5.net
+.tthotelpms.com
 .ttjisu.com
 .ttkdex.com
+.ttlock.com
+.ttlock.tech
 .ttmeiju.com
 .ttmnq.com
 .ttmnq.net
@@ -24429,6 +25018,7 @@ www.yxssp.com
 .ttpod.com
 .ttpyaqefm.com
 .ttqwgf.com
+.ttrenting.com
 .ttrmiykhc.com
 .ttsim.com
 .ttsim.net
@@ -24678,12 +25268,14 @@ www.yxssp.com
 .tyiaxmzgq.com
 .tyjsq.com
 .tyjt-ai.com
+.tyo11y.com
 .tyoug.co
 .tyoug.com
 .tyoug.net
 .typatrftg.com
 .typeeasy.net
 .typistgame.com
+.tysurl.com
 .tytuyoo.com
 .tytuyoo.net
 .tytuyou.com
@@ -25017,6 +25609,8 @@ www.yxssp.com
 .upaiyun.com
 .uparpu.com
 .upcdn.net
+.updates-http.cdn-apple.com
+.updates.cdn-apple.com
 .updrv.com
 .upe.net
 .upeaoktc.com
@@ -25110,6 +25704,7 @@ www.yxssp.com
 .uudeck.com
 .uudui.com
 .uuewa.com
+.uugame.com
 .uugtv.com
 .uuhdedu.com
 .uuhimalayanqm.com
@@ -25197,10 +25792,12 @@ www.yxssp.com
 .vacuumgame.com
 .vajezi.com
 .vakirtech.com
+.valid.apple.com
 .value500.com
 .valueq-sea.com
 .valvepai.com
 .vamaker.com
+.vanchen.com
 .vancl.com
 .vanclimg.com
 .vanishys.com
@@ -25313,6 +25910,7 @@ www.yxssp.com
 .veyurbmu.com
 .vezitokxu.com
 .vfad5msw.com
+.vfan.top
 .vfcdnrd.com
 .vfvdf.com
 .vg.com
@@ -25838,6 +26436,8 @@ www.yxssp.com
 .wandie.com
 .wandoujia.com
 .wandouyoung.com
+.wanduoduo.com
+.wanfangdata.com
 .wanfangmed.com
 .wanfangmed.net
 .wangbazu.com
@@ -25880,6 +26480,9 @@ www.yxssp.com
 .wanlianma.com
 .wanlianma.net
 .wanlianwang.net
+.wanlimu.com
+.wanlimu.net
+.wanlimuapp.com
 .wanmei-cd.com
 .wanmei-sh.com
 .wanmei-sjs.com
@@ -25888,6 +26491,7 @@ www.yxssp.com
 .wanmeiqiye.com
 .wanmeiyuyan.com
 .wanmi.cc
+.wannengdian.com
 .wannengxiezuo.com
 .wannianli8.com
 .wannianqingjianzhan.com
@@ -25954,6 +26558,7 @@ www.yxssp.com
 .wcqgotemi.com
 .wcsapi.com
 .wcsapi.net
+.wcswkj.com
 .wddplay.com
 .wdfangyi.com
 .wdfok.com
@@ -25976,11 +26581,15 @@ www.yxssp.com
 .weand.com
 .weapp.com
 .wearwow.com
+.weather-data.apple.com
+.weather-map.apple.com
+.weather-map2.apple.com
 .weather.com
 .weatherat.com
 .weathercn.com
 .weatherdt.com
 .weatherdt.net
+.weatherkit.apple.com
 .weatherkol.com
 .weathlike.com
 .weavernetwork.com
@@ -26193,14 +26802,22 @@ www.yxssp.com
 .weixinkd.com
 .weixinsxy.com
 .weixintong365.com
+.weixinyunduan.com
+.weixinyunduan.net
 .weixiuinfo.com
 .weixiule.com
 .weixuncloud.com
+.weixunxcx.com
+.weixunyunduan.com
+.weixunyunduan.net
 .weiyangx.com
 .weiye.me
 .weiyouxi.com
 .weiyun.com
+.weiyun7.com
 .weiyuntop.com
+.weiyunxiu.com
+.weiyunxiu.net
 .weizhi-inc.net
 .weizhipin.com
 .wekey.com
@@ -26260,6 +26877,7 @@ www.yxssp.com
 .wenshuchacha.com
 .wenshuding.com
 .wenshushu.com
+.wentiku.com
 .wenwo.com
 .wenxiaobai.com
 .wenxiaoyan.com
@@ -26316,6 +26934,8 @@ www.yxssp.com
 .wexguivq.com
 .wezhibo.net
 .wezhibo.tv
+.wezhuiyi.com
+.wezhuiyi.top
 .wf.pub
 .wfaqrcw.com
 .wfcffd.com
@@ -26382,6 +27002,7 @@ www.yxssp.com
 .whyenjoy.com
 .whylab.com
 .whyrtc.com
+.whzscs.com
 .wia.pub
 .wicp.io
 .wicp.net
@@ -26499,6 +27120,8 @@ www.yxssp.com
 .wldmarket.com
 .wlds9.com
 .wldservice.com
+.wlm.net
+.wlmkids.work
 .wlstedu.com
 .wlstkspt.com
 .wltong.com
@@ -26597,6 +27220,7 @@ www.yxssp.com
 .woniutrip.com
 .wonnder.com
 .woodpeckermaintenance.com
+.woool.com
 .woowpollee.com
 .woowtcprc.com
 .wooyun.org
@@ -26605,6 +27229,7 @@ www.yxssp.com
 .wordpaipai.com
 .wordpress.la
 .workbenchapi.com
+.worker-aliyun.com
 .worklink.work
 .worktile.com
 .worktile.live
@@ -26623,6 +27248,7 @@ www.yxssp.com
 .wosign.net
 .wotrus.com
 .wotrust.com
+.wow-frame.com
 .wow.fun
 .wowchina.com
 .wownocode.host
@@ -26817,6 +27443,7 @@ www.yxssp.com
 .wtzpacecx.com
 .wtzpvmvu.com
 .wtzw.com
+.wu-mart.com
 .wuaijd.com
 .wuanfun.com
 .wubafc.com
@@ -26852,6 +27479,8 @@ www.yxssp.com
 .wuliuyun.com
 .wulwz.com
 .wumaer.com
+.wumart.com
+.wumarttech.com
 .wumii.com
 .wuming.com
 .wunitu.com
@@ -26895,6 +27524,7 @@ www.yxssp.com
 .wwuamqgpc.com
 .wwvdt.top
 .wwveskbct.com
+.www.apple.com
 .www2345.com
 .www37wan.net
 .www9991.com
@@ -26987,6 +27617,7 @@ www.yxssp.com
 .wztsy.com
 .wztxsaebk.com
 .wzuhao.com
+.wzykf.com
 .x-aipet.com
 .x-cloud.cc
 .x-design.com
@@ -27007,6 +27638,8 @@ www.yxssp.com
 .xafc.com
 .xahhz.com
 .xaidc.com
+.xalipay.cc
+.xalipay.co
 .xamama.net
 .xaminim.com
 .xaoymkvft.com
@@ -27025,6 +27658,7 @@ www.yxssp.com
 .xbec-tencentclb.com
 .xbec-tencentclb.net
 .xbec-tencentclb.work
+.xbeian.com
 .xbiao.com
 .xbox.com
 .xboxlive.com
@@ -27067,6 +27701,7 @@ www.yxssp.com
 .xcxwsh.com
 .xcxxiaochengxu.com
 .xcylrc.com
+.xcyouda.com
 .xczgu.top
 .xczxb.com
 .xd.com
@@ -27421,7 +28056,9 @@ www.yxssp.com
 .xiaomixiaoai.com
 .xiaomiyoupin.com
 .xiaomowork.com
+.xiaomucapital.com
 .xiaomuji.info
+.xiaomuvc.com
 .xiaonei.com
 .xiaoneiwai.com
 .xiaoniangao.com
@@ -27462,6 +28099,7 @@ www.yxssp.com
 .xiaoxiaapi.com
 .xiaoxiangbc.com
 .xiaoxiangbiancheng.com
+.xiaoxiangjianli.com
 .xiaoxiangyoupin.com
 .xiaoxiangyoupin.net
 .xiaoxiaoyusan.com
@@ -27474,9 +28112,12 @@ www.yxssp.com
 .xiaoyaoyou.com
 .xiaoyibang.com
 .xiaoying.co
+.xiaoying.com
 .xiaoying.tv
 .xiaoyingfudao.com
+.xiaoyinggroup.com
 .xiaoyingji.com
+.xiaoyingxiaodai.com
 .xiaoyisk.com
 .xiaoyixing.shop
 .xiaoyixing.top
@@ -27598,6 +28239,7 @@ www.yxssp.com
 .xinghuo.space
 .xinghuoketang.com
 .xinghuolegal.com
+.xinghuosuda.com
 .xingin.net
 .xingji-mall.com
 .xingjiesj.com
@@ -27625,6 +28267,8 @@ www.yxssp.com
 .xingyouba.com
 .xingyouc.com
 .xingyouyun.com
+.xingyu-lighting.com
+.xingyu.com
 .xingyunka.com
 .xingyunshuju.com
 .xingzuo777.com
@@ -28339,6 +28983,7 @@ www.yxssp.com
 .xoyobox.com
 .xoyocdn.com
 .xozpgakw.com
+.xp.apple.com
 .xp.ink
 .xpawi.com
 .xpccdn.com
@@ -28594,6 +29239,7 @@ www.yxssp.com
 .xunleizhichui.com
 .xunmengtu.com
 .xunrui.com
+.xuntu365.com
 .xunxi.com
 .xunxujianjinxes.com
 .xunyou.com
@@ -28665,6 +29311,7 @@ www.yxssp.com
 .xyshulu.com
 .xysmuc.com
 .xysparetime.com
+.xystatic.com
 .xytedu.com
 .xyujingji.com
 .xywy.com
@@ -28828,6 +29475,7 @@ www.yxssp.com
 .yaodu365.com
 .yaofang.com
 .yaolan.com
+.yaoqianshu.wang
 .yaoshifenxiang.com
 .yaoshifx.com
 .yaoshishare.com
@@ -29075,6 +29723,7 @@ www.yxssp.com
 .yibao.com
 .yibaogao.com
 .yibiaoda.com
+.yibot.ai
 .yicai.com
 .yicai.vip
 .yicaidata.com
@@ -29199,6 +29848,8 @@ www.yxssp.com
 .yingyoutianxia.com
 .yingyu.com
 .yingzhankc.com
+.yingzhongtong.com
+.yingzt.com
 .yinhang123.net
 .yinhe.top
 .yiniucapital.com
@@ -29210,6 +29861,7 @@ www.yxssp.com
 .yinxuanli.com
 .yinyuetai.com
 .yinzhaowang.com
+.yinzhong.cc
 .yipai360.com
 .yipaiban.com
 .yipaijichuan.com
@@ -29461,6 +30113,7 @@ www.yxssp.com
 .youcfc.com
 .youchengdudu.com
 .youcheyihou.com
+.youciju.com
 .youdao.com
 .youdaoads.com
 .youdaobowen.com
@@ -29766,6 +30419,7 @@ www.yxssp.com
 .yuetingapp.com
 .yuewen.com
 .yuewen.site
+.yuexindanbao.com
 .yueyouxs.com
 .yueyuanzhiye.com
 .yufuid.com
@@ -29872,6 +30526,7 @@ www.yxssp.com
 .yunjuli.org
 .yunkandian.com
 .yunkanpan.com
+.yunkemai.com
 .yunlanling.com
 .yunluepro.com
 .yunmai.pro
@@ -30173,6 +30828,12 @@ www.yxssp.com
 .zaodaoxgd.com
 .zaodian.com
 .zaogoods.com
+.zaohua.studio
+.zaohua.top
+.zaohua.xyz
+.zaohuabox.studio
+.zaohuabox.top
+.zaohuaboxcdn.com
 .zaonline.com
 .zaoqidaka.com
 .zapeilian.com
@@ -30575,6 +31236,7 @@ www.yxssp.com
 .zhpasq.com
 .zhrongyun.com
 .zhrtc.com
+.zhs.hk
 .zhsq.xyz
 .zhsrcw.com
 .zhtnqi.com
@@ -30607,6 +31269,7 @@ www.yxssp.com
 .zhuiguang.top
 .zhuihd.com
 .zhuishushenqi.com
+.zhuiyi.ai
 .zhujie100.com
 .zhuketong.com
 .zhuobian.com
@@ -30767,6 +31430,7 @@ www.yxssp.com
 .zkvocxbkm.com
 .zkzrpizag.com
 .zl-hj.com
+.zlb.ink
 .zldaas.com
 .zlfservice.com
 .zlibs.com
@@ -31102,6 +31766,8 @@ www.yxssp.com
 .zylyrc.com
 .zymcn.com
 .zymkcdn.com
+.zymls.com
+.zymls.net
 .zymutual.com
 .zyprevxg.com
 .zyqauehga.com

@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - 原有 a1/a2/big-data/cdn/dirt 的 30 个 `fin*` 路径不变，新增 a3 的相同六个；`static/` 18 个已跟踪文件绝不改。
-- a3 仅下载 AdRules `qx.conf`、AntiAD `anti-ad-surge.txt`、AWAvenue 完整 QX 规则；dirt 定向加入 gaoyifan IPv4/IPv6 与 Loyalsoldier Apple 中国列表，不加大型中国域名列表或重复的 domestic_cdn。
+- a3 来源为 AdRules `qx.conf`、AntiAD `anti-ad-surge.txt`、AWAvenue 完整 QX 规则及已核实有拦截增量的 fmz200 `filter.list`。dirt 加入 gaoyifan IPv4/IPv6、Loyalsoldier Apple 中国列表和已核实有 IPv4 增量的 Sukka `china_ip.txt`；不加覆盖完全重复的 `china_ip_ipv6.txt`、大型中国域名列表或重复的 domestic_cdn。
 - `a1` 用本次 `a2/fin.txt`，`big-data` 用本次 `cdn/fin.txt`；同一次网络 URL 不重复获取。
 - 失败不覆盖已有产物；成功时 UTF-8 LF、固定排序、无当前时间字段；每种输出保留其客户端所有可适配来源类型。
 - 所有运行、测试、暂存数据、虚拟环境均在 worktree 内；无第三方 Python 包及外部可执行文件；CI 不使用 `git push --force`。
@@ -63,6 +63,6 @@
 
 - [ ] **Step 1: Run live build**：用工作区 `.venv` 运行 `.venv/Scripts/python.exe generate.py`，逐源核实非零状态；不得在失败时提交部分产物。
 - [ ] **Step 2: Diagnose and TDD-fix**：遇到 200 HTML、暂时 403、格式不支持、超时或例外冲突时保留原始错误与源 URL，写一个能复现的离线失败测试，再最小改动使其通过；只有可验证的过时链接才从清单移除。
-- [ ] **Step 3: Verify deterministic artifacts**：完整测试、规则格式校验和构建连续执行两次，第二次 `git diff` 不得增加差异；核对五组旧文件路径与六个 a3 文件完整，`git diff HEAD -- static` 为空，且 static 未出现新文件。
+- [ ] **Step 3: Verify deterministic artifacts**：完整测试、规则格式校验和构建连续执行两次，第二次 `git diff` 不得增加差异；核对五组旧文件路径与六个 a3 文件完整，`git diff HEAD -- static` 为空，且 static 未出现新文件；核对非 dirt 组的可用 IP 类型输出自动包含 `no-resolve`，dirt 不强加。
 - [ ] **Step 4: Benchmark and record**：固定输入在 `.venv` 内离线运行至少三次并记录中位数、峰值内存、真实网络耗时；旧脚本不能安全执行，不能声称与旧数字逐字可比。
-- [ ] **Step 5: Final review and commit**：审阅 36 个文件及源代码差异，按 `a1 a2 a3 cdn big-data dirt` 六组暂存并提交；保留分支与 worktree，不推送或合并到 main。
+- [ ] **Step 5: Final review and commit**：审阅 36 个文件及源代码差异，按 `a1 a2 a3 cdn big-data dirt` 六组暂存并提交；保留分支与 worktree。用户后续已授权在全部验证通过后推送工作分支并触发 GitHub workflow，核查远端结果；不强推或直接合并到 main。

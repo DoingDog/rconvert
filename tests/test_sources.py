@@ -80,6 +80,7 @@ class SourcesTests(unittest.TestCase):
                 "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
                 "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-surge.txt",
                 "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
+                "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
             ],
         )
 
@@ -120,6 +121,11 @@ class SourcesTests(unittest.TestCase):
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GlobalMedia/GlobalMedia.list",
             sources,
         )
+
+    def test_dirt_adds_novel_sukka_ipv4_without_redundant_ipv6(self):
+        sources = load_sources(ROOT, "dirt")
+        self.assertEqual(sources.count("https://ruleset.skk.moe/Clash/ip/china_ip.txt"), 1)
+        self.assertNotIn("https://ruleset.skk.moe/Clash/ip/china_ip_ipv6.txt", sources)
 
     def test_dirt_drops_404_and_disabled_sources(self):
         sources = load_sources(ROOT, "dirt")
