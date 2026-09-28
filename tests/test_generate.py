@@ -94,14 +94,14 @@ class GenerateTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "206"):
                 fetch_https(url)
 
-    def test_html_response_is_rejected_even_when_it_contains_rule_text(self):
+    def test_html_response_is_passed_to_parser(self):
         url = "https://example.org/list.txt"
-        response = BytesIO(b"<html>DOMAIN,ads.example.org</html>")
+        body = b"<html>DOMAIN,ads.example.org</html>"
+        response = BytesIO(body)
         response.geturl = lambda: url
         response.headers = {"Content-Type": "text/html"}
         with patch("urllib.request.OpenerDirector.open", return_value=response):
-            with self.assertRaisesRegex(ValueError, "HTML"):
-                fetch_https(url)
+            self.assertEqual(fetch_https(url), body)
 
     def test_empty_download_is_rejected(self):
         url = "https://example.org/empty.txt"
@@ -111,14 +111,14 @@ class GenerateTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "empty"):
                 fetch_https(url)
 
-    def test_html_body_is_rejected_when_server_mislabels_it(self):
+    def test_html_body_with_wrong_media_type_is_passed_to_parser(self):
         url = "https://example.org/list.txt"
-        response = BytesIO(b"<!DOCTYPE html><html>DOMAIN,ads.example.org</html>")
+        body = b"<!DOCTYPE html><html>DOMAIN,ads.example.org</html>"
+        response = BytesIO(body)
         response.geturl = lambda: url
         response.headers = {"Content-Type": "text/plain"}
         with patch("urllib.request.OpenerDirector.open", return_value=response):
-            with self.assertRaisesRegex(ValueError, "HTML"):
-                fetch_https(url)
+            self.assertEqual(fetch_https(url), body)
 
     def test_download_uses_accepted_user_agent_for_sukka_source(self):
         url = "https://ruleset.skk.moe/List/non_ip/my_reject.conf"
@@ -888,6 +888,49 @@ class GenerateTests(unittest.TestCase):
                 publish(generate(root, fetch))
             self.assertEqual((root / "cdn" / "fin.txt").read_bytes(), b"previous version\n")
 
+    def test_html_labeled_mixed_source_keeps_rules_around_markup(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/mixed.txt"
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": [url], "whitelist": [],
+            }]), encoding="utf-8")
+            (root / "a3").mkdir()
+            for name in NAMES:
+                (root / "a3" / name).write_bytes(b"previous version\n")
+            response = BytesIO(b"DOMAIN,one.example\n<html>noise</html>\nDOMAIN,two.example\n")
+            response.geturl = lambda: url
+            response.headers = {"Content-Type": "text/html"}
+            stderr = io.StringIO()
+            with patch("urllib.request.OpenerDirector.open", return_value=response):
+                with contextlib.redirect_stderr(stderr):
+                    outputs = generate(root, fetch_https)
+            text = outputs[root / "a3" / "fin.txt"]
+            self.assertIn("DOMAIN,one.example\n", text)
+            self.assertIn("DOMAIN,two.example\n", text)
+            self.assertIn(f"{url}: line 2: HTML", stderr.getvalue())
+
+    def test_http_200_html_remote_source_is_skipped_with_warning(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/login.txt"
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": [url, "good.list"], "whitelist": [],
+            }]), encoding="utf-8")
+            (root / "good.list").write_text("DOMAIN,good.example\n", encoding="utf-8")
+            response = BytesIO(b"<html><body>DOMAIN,evil.example</body></html>")
+            response.geturl = lambda: url
+            response.headers = {"Content-Type": "text/html"}
+            stderr = io.StringIO()
+            with patch("urllib.request.OpenerDirector.open", return_value=response):
+                with contextlib.redirect_stderr(stderr):
+                    outputs = generate(root, fetch_https)
+            self.assertIn("DOMAIN,good.example\n", outputs[root / "a3" / "fin.txt"])
+            self.assertNotIn("evil.example", outputs[root / "a3" / "fin.txt"])
+            self.assertIn(f"{url}: line 1: HTML", stderr.getvalue())
+
     def test_remote_whitelist_html_200_is_skipped_with_warning(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -975,7 +1018,7 @@ class GenerateTests(unittest.TestCase):
             self.assertIn(url, stderr.getvalue())
             self.assertIn("skipped", stderr.getvalue())
 
-    def test_http_200_html_remote_whitelist_rejected_by_fetch_is_skipped(self):
+    def test_http_200_html_remote_whitelist_is_skipped_by_generate(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             url = "https://example.org/allow.txt"

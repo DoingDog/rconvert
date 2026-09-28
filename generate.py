@@ -40,8 +40,6 @@ def fetch_https(url: str) -> bytes:
                 raise ValueError(f"HTTPS redirect required: {url}")
             if getattr(response, "status", 200) != 200:
                 raise ValueError(f"Unexpected HTTP status {response.status}: {url}")
-            if "text/html" in getattr(response, "headers", {}).get("Content-Type", "").lower():
-                raise _UnusableSource(f"HTML source rejected: {url}")
             data = response.read(MAX_BYTES + 1)
             if len(data) > MAX_BYTES:
                 raise ValueError(f"Source exceeds size limit: {url}")
@@ -58,9 +56,6 @@ def fetch_https(url: str) -> bytes:
                     raise ValueError(f"Decompressed source exceeds size limit: {url}")
             if not data:
                 raise _UnusableSource(f"Source is empty: {url}")
-            head = data[:1024].lstrip().removeprefix(b"\xef\xbb\xbf").lstrip().lower()
-            if head.startswith((b"<!doctype html", b"<html", b"<head", b"<body")):
-                raise _UnusableSource(f"HTML source rejected: {url}")
             return data
     except (error.URLError, TimeoutError, IncompleteRead) as exc:
         raise RuntimeError(f"Failed to fetch {url}: {exc}") from exc
