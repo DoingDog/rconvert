@@ -1,20 +1,40 @@
 # rconvert
 
+<a name="rule-counts"></a>
+
+## 规则数量
+
+<!-- RULE_COUNTS_START -->
+| 格式 | `cdn` | `a3` | `a4` | `big-data` | `tg` | `proxy` | `dirt` |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `fin.txt` | 4766 | 210689 | 211871 | 10513 | 27 | 7019 | 41591 |
+| `fin-qx.txt` | 4766 | 210686 | 211871 | 10494 | 27 | 7019 | 41554 |
+| `fin.yaml` | 4766 | 210685 | 211870 | 10435 | 27 | 7011 | 41526 |
+| `fin-adb.txt` | 0 | 210942 | 212168 | 0 | 0 | 0 | 0 |
+| `fin-surge.txt` | 79 | 308 | 120 | 2224 | 13 | 138 | 9805 |
+| `fin-surge-ds.txt` | 4687 | 210381 | 211751 | 8289 | 14 | 6881 | 31786 |
+<!-- RULE_COUNTS_END -->
+
 使用 Python 3.11+ 标准库将上游规则合并、按匹配范围去重，生成 Surge、Quantumult X、Mihomo 和 AdGuard DNS 规则。构建不会下载或执行外部代码、客户端或二进制程序。`a3` 使用 `static/main/Direct.list` 和 `static/main/NoReject.list` 作为白名单，`dirt` 使用 `static/main/NoDirect.list` 作为白名单；构建不修改 `static/`。
 
-## 规则集
+## 下载链接
 
-| 目录 | 用途 | 完整 Surge RULE-SET | Cloudflare 加速 |
-| --- | --- | --- | --- |
-| `cdn` | CDN 分流 | [cdn/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.txt) | [cdn/fin.txt 加速](https://r.awsl.app/cdn/fin.txt) |
-| `a3` | AdRules、AntiAD、AWAvenue、fmz200 及 Sukka reject 广告拦截 | [a3/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin.txt) | [a3/fin.txt 加速](https://r.awsl.app/a3/fin.txt) |
-| `a4` | `a3` 原有来源，不含本次新增的两份 Sukka reject | [a4/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a4/fin.txt) | [a4/fin.txt 加速](https://r.awsl.app/a4/fin.txt) |
-| `big-data` | 大流量服务分流，包含 `cdn`、游戏下载及流媒体来源 | [big-data/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.txt) | [big-data/fin.txt 加速](https://r.awsl.app/big-data/fin.txt) |
-| `tg` | Telegram 分流 | [tg/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/tg/fin.txt) | [tg/fin.txt 加速](https://r.awsl.app/tg/fin.txt) |
-| `proxy` | 明确代理域名分流，客户端应放在 `dirt` 前 | [proxy/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/proxy/fin.txt) | [proxy/fin.txt 加速](https://r.awsl.app/proxy/fin.txt) |
-| `dirt` | 国内直连，含 Sukka 和中国 IPv4／IPv6 网段 | [dirt/fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.txt) | [dirt/fin.txt 加速](https://r.awsl.app/dirt/fin.txt) |
+| 格式 | `cdn` | `a3` | `a4` | `big-data` | `tg` | `proxy` | `dirt` |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `fin.txt` 非加速 | [fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.txt) | [fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin.txt) | [fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a4/fin.txt) | [fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.txt) | [fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/tg/fin.txt) | [fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/proxy/fin.txt) | [fin.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.txt) |
+| `fin.txt` 加速 | [fin.txt](https://r.awsl.app/cdn/fin.txt) | [fin.txt](https://r.awsl.app/a3/fin.txt) | [fin.txt](https://r.awsl.app/a4/fin.txt) | [fin.txt](https://r.awsl.app/big-data/fin.txt) | [fin.txt](https://r.awsl.app/tg/fin.txt) | [fin.txt](https://r.awsl.app/proxy/fin.txt) | [fin.txt](https://r.awsl.app/dirt/fin.txt) |
+| `fin-qx.txt` 非加速 | [fin-qx.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin-qx.txt) | [fin-qx.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin-qx.txt) | [fin-qx.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a4/fin-qx.txt) | [fin-qx.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin-qx.txt) | [fin-qx.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/tg/fin-qx.txt) | [fin-qx.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/proxy/fin-qx.txt) | [fin-qx.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin-qx.txt) |
+| `fin-qx.txt` 加速 | [fin-qx.txt](https://r.awsl.app/cdn/fin-qx.txt) | [fin-qx.txt](https://r.awsl.app/a3/fin-qx.txt) | [fin-qx.txt](https://r.awsl.app/a4/fin-qx.txt) | [fin-qx.txt](https://r.awsl.app/big-data/fin-qx.txt) | [fin-qx.txt](https://r.awsl.app/tg/fin-qx.txt) | [fin-qx.txt](https://r.awsl.app/proxy/fin-qx.txt) | [fin-qx.txt](https://r.awsl.app/dirt/fin-qx.txt) |
+| `fin.yaml` 非加速 | [fin.yaml](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin.yaml) | [fin.yaml](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin.yaml) | [fin.yaml](https://raw.githubusercontent.com/DoingDog/rconvert/main/a4/fin.yaml) | [fin.yaml](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin.yaml) | [fin.yaml](https://raw.githubusercontent.com/DoingDog/rconvert/main/tg/fin.yaml) | [fin.yaml](https://raw.githubusercontent.com/DoingDog/rconvert/main/proxy/fin.yaml) | [fin.yaml](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin.yaml) |
+| `fin.yaml` 加速 | [fin.yaml](https://r.awsl.app/cdn/fin.yaml) | [fin.yaml](https://r.awsl.app/a3/fin.yaml) | [fin.yaml](https://r.awsl.app/a4/fin.yaml) | [fin.yaml](https://r.awsl.app/big-data/fin.yaml) | [fin.yaml](https://r.awsl.app/tg/fin.yaml) | [fin.yaml](https://r.awsl.app/proxy/fin.yaml) | [fin.yaml](https://r.awsl.app/dirt/fin.yaml) |
+| `fin-adb.txt` 非加速 | [fin-adb.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin-adb.txt) | [fin-adb.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin-adb.txt) | [fin-adb.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a4/fin-adb.txt) | [fin-adb.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin-adb.txt) | [fin-adb.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/tg/fin-adb.txt) | [fin-adb.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/proxy/fin-adb.txt) | [fin-adb.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin-adb.txt) |
+| `fin-adb.txt` 加速 | [fin-adb.txt](https://r.awsl.app/cdn/fin-adb.txt) | [fin-adb.txt](https://r.awsl.app/a3/fin-adb.txt) | [fin-adb.txt](https://r.awsl.app/a4/fin-adb.txt) | [fin-adb.txt](https://r.awsl.app/big-data/fin-adb.txt) | [fin-adb.txt](https://r.awsl.app/tg/fin-adb.txt) | [fin-adb.txt](https://r.awsl.app/proxy/fin-adb.txt) | [fin-adb.txt](https://r.awsl.app/dirt/fin-adb.txt) |
+| `fin-surge.txt` 非加速 | [fin-surge.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin-surge.txt) | [fin-surge.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin-surge.txt) | [fin-surge.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a4/fin-surge.txt) | [fin-surge.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin-surge.txt) | [fin-surge.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/tg/fin-surge.txt) | [fin-surge.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/proxy/fin-surge.txt) | [fin-surge.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin-surge.txt) |
+| `fin-surge.txt` 加速 | [fin-surge.txt](https://r.awsl.app/cdn/fin-surge.txt) | [fin-surge.txt](https://r.awsl.app/a3/fin-surge.txt) | [fin-surge.txt](https://r.awsl.app/a4/fin-surge.txt) | [fin-surge.txt](https://r.awsl.app/big-data/fin-surge.txt) | [fin-surge.txt](https://r.awsl.app/tg/fin-surge.txt) | [fin-surge.txt](https://r.awsl.app/proxy/fin-surge.txt) | [fin-surge.txt](https://r.awsl.app/dirt/fin-surge.txt) |
+| `fin-surge-ds.txt` 非加速 | [fin-surge-ds.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/cdn/fin-surge-ds.txt) | [fin-surge-ds.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a3/fin-surge-ds.txt) | [fin-surge-ds.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/a4/fin-surge-ds.txt) | [fin-surge-ds.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/big-data/fin-surge-ds.txt) | [fin-surge-ds.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/tg/fin-surge-ds.txt) | [fin-surge-ds.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/proxy/fin-surge-ds.txt) | [fin-surge-ds.txt](https://raw.githubusercontent.com/DoingDog/rconvert/main/dirt/fin-surge-ds.txt) |
+| `fin-surge-ds.txt` 加速 | [fin-surge-ds.txt](https://r.awsl.app/cdn/fin-surge-ds.txt) | [fin-surge-ds.txt](https://r.awsl.app/a3/fin-surge-ds.txt) | [fin-surge-ds.txt](https://r.awsl.app/a4/fin-surge-ds.txt) | [fin-surge-ds.txt](https://r.awsl.app/big-data/fin-surge-ds.txt) | [fin-surge-ds.txt](https://r.awsl.app/tg/fin-surge-ds.txt) | [fin-surge-ds.txt](https://r.awsl.app/proxy/fin-surge-ds.txt) | [fin-surge-ds.txt](https://r.awsl.app/dirt/fin-surge-ds.txt) |
 
-`r.awsl.app` 的 Cloudflare 加速链接自动跟踪仓库 `main` 的文件。七个目录各生成以下六种文件，共 42 个输出；将上表任一链接的 `fin.txt` 替换为相应文件名即可使用。原有的其他加速入口：[static/main/Adb-unblock.list](https://r.awsl.app/static/main/Adb-unblock.list) 和 [static/serv/sharing.list](https://r.awsl.app/static/serv/sharing.list)。不要把 `cdn`、`big-data`、`tg`、`proxy` 或 `dirt` 当作广告拦截列表。
+七个目录各生成六种文件，共 42 个输出；各格式的行数见 [规则数量](#rule-counts)。`r.awsl.app` 的 Cloudflare 加速链接自动跟踪仓库 `main` 的文件。`cdn` 用于 CDN 分流；`a3` 是包含 Sukka reject 的广告拦截，`a4` 使用 `a3` 原有来源但不含本次新增的两份 Sukka reject；`big-data` 用于大流量服务分流，`tg` 用于 Telegram 分流，`proxy` 用于明确代理域名且应放在 `dirt` 前，`dirt` 用于国内直连。不要把 `cdn`、`big-data`、`tg`、`proxy` 或 `dirt` 当作广告拦截列表。原有的其他加速入口：[static/main/Adb-unblock.list](https://r.awsl.app/static/main/Adb-unblock.list) 和 [static/serv/sharing.list](https://r.awsl.app/static/serv/sharing.list)。
 
 | 文件 | 用法 |
 | --- | --- |
@@ -43,6 +63,7 @@
 python3 -m venv .venv
 .venv/bin/python -m unittest discover -s tests -v
 .venv/bin/python generate.py
+.venv/bin/python update_readme_counts.py
 ```
 
 Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源及白名单均在 `rulesets.json` 中配置，不再使用 INI。远端普通来源或白名单返回 404 时跳过该 URL 并继续；远端白名单整份为 HTML、坏编码或无法识别时跳过，混合内容保留可识别行。429、服务器错误、超时或传输不完整会停止本轮发布。本轮某组普通来源全部 404，或过滤后没有可路由规则时，冻结该组及依赖组原有六种产物，其他健康组继续更新；缺失旧产物则停止发布。本地白名单损坏也停止发布。日志包含来源行号与目标格式的跳过计数。GitHub Actions 的 PR job 只运行离线测试；向 `main` 推送后先测试再更新，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，仅暂存配置所列规则组的六种生成文件，不强推。

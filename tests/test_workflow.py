@@ -13,6 +13,15 @@ class WorkflowScheduleTests(unittest.TestCase):
         self.assertIn("          ref: ${{ github.sha }}", workflow)
         self.assertNotIn("          ref: main", workflow)
 
+    def test_update_refreshes_readme_counts_after_generation_and_stages_it(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
+        self.assertLess(workflow.index(".venv/bin/python generate.py"),
+                        workflow.index(".venv/bin/python update_readme_counts.py"))
+        self.assertLess(workflow.index(".venv/bin/python update_readme_counts.py"),
+                        workflow.index("git add -- README.md"))
+        self.assertLess(workflow.index("git add -- README.md"),
+                        workflow.index("if ! git diff --cached --quiet"))
+
     def test_update_stages_only_configured_generated_files(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         self.assertIn("from sources import load_config", workflow)

@@ -16,17 +16,40 @@ class ReadmeTests(unittest.TestCase):
         self.assertIn('href="./README.md"', landing)
         self.assertNotIn("README.text", landing)
 
-    def test_readme_lists_seven_groups_and_42_outputs(self):
+    def test_readme_has_all_download_links_in_alternating_rows(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        rows = (
-            line for line in readme.splitlines()
-            if line.startswith("| `") and "https://raw.githubusercontent.com/DoingDog/rconvert/main/" in line
-        )
-        self.assertEqual([line.split("`")[1] for line in rows], ["cdn", "a3", "a4", "big-data", "tg", "proxy", "dirt"])
+        groups = ("cdn", "a3", "a4", "big-data", "tg", "proxy", "dirt")
+        filenames = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
+        table = readme.split("## 下载链接", 1)[1].split("| 文件 | 用法 |", 1)[0]
+        rows = [line for line in table.splitlines() if line.startswith("| `fin")]
+        self.assertIn("| 格式 | " + " | ".join(f"`{name}`" for name in groups) + " |", table)
+        self.assertEqual(len(rows), 2 * len(filenames))
         self.assertIn("共 42 个", readme)
+        for index, filename in enumerate(filenames):
+            for offset, (label, host) in enumerate((
+                ("非加速", "https://raw.githubusercontent.com/DoingDog/rconvert/main"),
+                ("加速", "https://r.awsl.app"),
+            )):
+                with self.subTest(filename=filename, label=label):
+                    cells = [cell.strip() for cell in rows[2 * index + offset].strip("|").split("|")]
+                    self.assertEqual(cells, [f"`{filename}` {label}"] + [
+                        f"[{filename}]({host}/{name}/{filename})" for name in groups
+                    ])
+
+    def test_rule_count_table_has_stable_anchor_and_matches_output_headers(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("# rconvert\n\n<a name=\"rule-counts\"></a>\n\n## 规则数量", readme)
+        self.assertIn("[规则数量](#rule-counts)", readme)
+        self.assertIn(".venv/bin/python update_readme_counts.py", readme)
+        table = readme.split("<!-- RULE_COUNTS_START -->", 1)[1].split("<!-- RULE_COUNTS_END -->", 1)[0]
+        groups = ("cdn", "a3", "a4", "big-data", "tg", "proxy", "dirt")
+        self.assertIn("| 格式 | " + " | ".join(f"`{name}`" for name in groups) + " |", table)
         for filename in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt"):
             with self.subTest(filename=filename):
-                self.assertIn(f"| `{filename}` |", readme)
+                counts = [int((ROOT / name / filename).read_text(encoding="utf-8").splitlines()[0].split("rules: ")[1])
+                          for name in groups if (ROOT / name / filename).is_file()]
+                row = next(line for line in table.splitlines() if line.startswith(f"| `{filename}` |"))
+                self.assertEqual([int(cell.strip()) for cell in row.strip("|").split("|")[1:]], counts)
 
     def test_readme_explains_lan_whitelists_and_failures(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

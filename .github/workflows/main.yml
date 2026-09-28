@@ -43,10 +43,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-      - name: Generate rules
+      - name: Generate rules and update README counts
         run: |
           python3 -m venv .venv
           .venv/bin/python generate.py
+          .venv/bin/python update_readme_counts.py
       - name: Check static and commit generated files
         run: |
           test "$(git ls-tree -r --name-only HEAD static | wc -l)" -eq 19
@@ -61,6 +62,7 @@ jobs:
           paths = [str(Path(group['name']) / name) for group in load_config(Path('.')) for name in FILES]
           subprocess.run(['git', 'add', '--', *paths], check=True)
           PY
+          git add -- README.md
           if ! git diff --cached --quiet; then
             git -c user.name='github-actions[bot]' \
               -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
