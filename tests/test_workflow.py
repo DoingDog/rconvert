@@ -7,6 +7,12 @@ class WorkflowScheduleTests(unittest.TestCase):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         self.assertIn("    - cron: '0 0 * * *'\n      timezone: \"Asia/Shanghai\"\n", workflow)
 
+    def test_push_main_builds_the_same_commit_it_tests(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
+        self.assertIn("  push:\n    branches: [main]\n", workflow)
+        self.assertIn("          ref: ${{ github.sha }}", workflow)
+        self.assertNotIn("          ref: main", workflow)
+
     def test_update_stages_only_configured_generated_files(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         self.assertIn("from sources import load_config", workflow)
