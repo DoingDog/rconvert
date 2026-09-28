@@ -1,4 +1,4 @@
-# cdn rules: 4766
+# cdn rules: 4767
 HOST,0x0.st,LIST
 HOST,3dna.nationbuilder.com,LIST
 HOST,4gtvimg2.4gtv.tv,LIST
@@ -2869,6 +2869,7 @@ HOST,static.foxnews.com,LIST
 HOST,static.frame.work,LIST
 HOST,static.freedownloadmanager.org,LIST
 HOST,static.fundraiseup.com,LIST
+HOST,static.gamma.app,LIST
 HOST,static.garmin.com,LIST
 HOST,static.generated.photos,LIST
 HOST,static.getbutton.io,LIST

@@ -1,4 +1,4 @@
-# big-data rules: 9343
+# big-data rules: 9344
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,3dna.nationbuilder.com"
@@ -4000,6 +4000,7 @@ payload:
   - "DOMAIN,static.frame.work"
   - "DOMAIN,static.freedownloadmanager.org"
   - "DOMAIN,static.fundraiseup.com"
+  - "DOMAIN,static.gamma.app"
   - "DOMAIN,static.garmin.com"
   - "DOMAIN,static.generated.photos"
   - "DOMAIN,static.getbutton.io"
