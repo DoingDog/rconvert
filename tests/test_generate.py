@@ -1,5 +1,6 @@
 import contextlib
 import io
+import json
 from http.client import IncompleteRead
 import os
 import subprocess
@@ -217,6 +218,18 @@ class GenerateTests(unittest.TestCase):
     def test_generate_rejects_root_outside_worktree_before_reading(self):
         with self.assertRaisesRegex(ValueError, "worktree"):
             generate(ROOT.parent, lambda _: self.fail("network must not be used"))
+
+    def test_json_config_builds_a_new_group_without_hardcoded_names(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "custom", "purpose": "block", "no_resolve": "keep",
+                "sources": ["input.list"], "whitelist": [],
+            }]), encoding="utf-8")
+            (root / "input.list").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), {root / "custom" / name for name in NAMES})
+            self.assertIn("DOMAIN,ads.example.org\n", outputs[root / "custom" / "fin.txt"])
 
     def test_cli_builds_fixture_with_local_sources_only(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:

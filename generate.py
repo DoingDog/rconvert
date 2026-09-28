@@ -9,7 +9,7 @@ from typing import Callable
 from urllib import error, request
 from urllib.parse import urlsplit
 
-from sources import load_sources
+from sources import load_config, load_sources, resolve_source
 
 
 GROUPS = ("a2", "cdn", "a3", "a1", "big-data", "dirt")
@@ -93,9 +93,13 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
 
     outputs: dict[Path, str] = {}
     cache: dict[str, bytes] = {}
-    for group in GROUPS:
+    configs = load_config(root) if (root / "rulesets.json").exists() else None
+    groups = ((item["name"], [resolve_source(root, entry) for entry in item["sources"]], item["purpose"])
+              for item in configs) if configs is not None else (
+                  (group, load_sources(root, group), PURPOSES[group]) for group in GROUPS)
+    for group, sources, purpose in groups:
         rules = []
-        for source in load_sources(root, group):
+        for source in sources:
             if isinstance(source, Path):
                 data = outputs[source].encode("utf-8") if source in outputs else source.read_bytes()
             else:
@@ -106,7 +110,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 text = data.decode("utf-8-sig")
             except UnicodeError as exc:
                 raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
-            parsed, source_warnings = parse(text, purpose=PURPOSES[group])
+            parsed, source_warnings = parse(text, purpose=purpose)
             for warning in source_warnings[:5]:
                 print(f"{source}: {warning}", file=sys.stderr)
             if len(source_warnings) > 5:
