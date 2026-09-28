@@ -25,7 +25,7 @@ jobs:
       - name: Check static baseline
         run: |
           test "$(git ls-tree -r --name-only HEAD static | wc -l)" -eq 18
-          test "$(git rev-parse HEAD:static)" = 89e4626e07fc3e5d7833b4b9d87f535f596e6974
+          test "$(git rev-parse HEAD:static)" = c4506b2564072fe230c5d7e922ecb8d337921f54
           git diff HEAD --exit-code -- static
           test -z "$(git ls-files --others -- static)"
       - name: Test generator
@@ -48,7 +48,7 @@ jobs:
       - name: Check static and commit generated files
         run: |
           test "$(git ls-tree -r --name-only HEAD static | wc -l)" -eq 18
-          test "$(git rev-parse HEAD:static)" = 89e4626e07fc3e5d7833b4b9d87f535f596e6974
+          test "$(git rev-parse HEAD:static)" = c4506b2564072fe230c5d7e922ecb8d337921f54
           git diff HEAD --exit-code -- static
           test -z "$(git ls-files --others -- static)"
           for group in a1 a2 a3 cdn big-data dirt; do
