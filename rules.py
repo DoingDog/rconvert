@@ -255,13 +255,17 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         if line.lstrip().startswith(('#', ';', '//', '!')):
             continue
         line = _without_comment(line)
-        if re.search(r"<\s*(?:!doctype\b|/?(?:html|head|body)\b)", line, re.I):
+        if re.search(r"<\s*!doctype\b", line, re.I):
             return [], [f"line {number}: HTML document"]
         for tag in re.finditer(r"<\s*(/?)\s*([a-z][\w:-]*)\b[^>]*>", line, re.I):
             name = tag[2].lower()
             if tag[1] and name in opening_tags:
-                return [], [f"line {opening_tags[name]}: HTML document"]
-            if not tag[1] and not tag[0].endswith('/>'):
+                opening = opening_tags.pop(name)
+                if opening != number:
+                    return [], [f"line {opening}: HTML document"]
+            elif not tag[1] and not tag[0].endswith('/>'):
+                if name != 'html' and 'html' in opening_tags:
+                    return [], [f"line {opening_tags['html']}: HTML document"]
                 opening_tags.setdefault(name, number)
     rules, warnings = [], []
     in_payload = False

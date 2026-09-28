@@ -628,6 +628,37 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertTrue(any("line 2" in message and "HTML" in message for message in messages))
 
+    def test_single_line_html_error_does_not_discard_surrounding_rules(self):
+        parsed, messages = parse(
+            "DOMAIN,keep.example\n<html>error</html>\nDOMAIN,other.example\n",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN", "keep.example"), Rule("DOMAIN", "other.example")])
+        self.assertTrue(any("line 2" in message and "HTML" in message for message in messages))
+
+    def test_unpaired_html_opener_does_not_discard_valid_rules(self):
+        parsed, messages = parse(
+            "<html>upstream error\nDOMAIN,keep.example\nDOMAIN,other.example",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN", "keep.example"), Rule("DOMAIN", "other.example")])
+        self.assertTrue(any("line 1" in message and "HTML" in message for message in messages))
+
+    def test_complete_single_line_html_document_still_rejects_source(self):
+        parsed, messages = parse(
+            "<html><body>error</body></html>\nDOMAIN,ads.example.com",
+            purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertTrue(any("HTML document" in message for message in messages))
+
+    def test_multiline_html_wrapper_without_doctype_rejects_source(self):
+        parsed, messages = parse(
+            "<html>\nDOMAIN,ads.example.com\n</html>", purpose="block"
+        )
+        self.assertEqual(parsed, [])
+        self.assertTrue(any("HTML document" in message for message in messages))
+
     def test_html_document_cannot_hide_a_valid_rule(self):
         rules, warnings = parse(
             "<!doctype html>\n<html><body>\nDOMAIN,ads.example.com,REJECT\n</body></html>",
