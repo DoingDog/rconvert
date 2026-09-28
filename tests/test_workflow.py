@@ -7,6 +7,12 @@ class WorkflowScheduleTests(unittest.TestCase):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         self.assertIn("    - cron: '0 0 * * *'\n      timezone: \"Asia/Shanghai\"\n", workflow)
 
+    def test_update_stages_only_configured_generated_files(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
+        self.assertIn("from sources import load_config", workflow)
+        self.assertIn("for group in load_config(Path('.')) for name in FILES", workflow)
+        self.assertNotIn("for group in a1 a2 a3 cdn big-data dirt", workflow)
+
     def test_static_whitelist_entries_include_requested_domains(self):
         root = Path(__file__).resolve().parents[1]
         direct = (root / "static/main/Direct.list").read_text(encoding="utf-8")

@@ -297,6 +297,47 @@ class GenerateTests(unittest.TestCase):
             self.assertNotIn("\nremove.example.com\n", dns)
             self.assertNotIn("USER-AGENT", dns)
 
+    def test_html_whitelist_aborts_instead_of_silently_disabling_exclusions(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": ["rules.list"], "whitelist": ["allow.list"],
+            }]), encoding="utf-8")
+            (root / "rules.list").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            (root / "allow.list").write_text("<html><body>login</body></html>", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, r"allow\.list.*HTML"):
+                generate(root, lambda _: self.fail("local input must not fetch"))
+
+    def test_non_html_invalid_whitelist_aborts_but_unsupported_types_are_ignored(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": ["rules.list"], "whitelist": ["allow.list"],
+            }]), encoding="utf-8")
+            (root / "rules.list").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            (root / "allow.list").write_text("Login required\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, r"allow\.list.*invalid rule"):
+                generate(root, lambda _: self.fail("local input must not fetch"))
+            (root / "allow.list").write_text("USER-AGENT,*bot*,DIRECT\n", encoding="utf-8")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertIn("DOMAIN,ads.example.org\n", outputs[root / "a3" / "fin.txt"])
+
+    def test_configured_empty_whitelist_aborts_instead_of_disabling_exclusions(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": ["rules.list"], "whitelist": ["allow.list"],
+            }]), encoding="utf-8")
+            (root / "rules.list").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            for content in ("", "# only comments\n"):
+                with self.subTest(content=content):
+                    (root / "allow.list").write_text(content, encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, r"allow\.list.*no rules"):
+                        generate(root, lambda _: self.fail("local input must not fetch"))
+
     def test_cli_builds_fixture_with_local_sources_only(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -440,6 +481,21 @@ class GenerateTests(unittest.TestCase):
             self.assertIn("DOMAIN,from-cdn.example.org", outputs[root / "big-data" / "fin.txt"])
             self.assertFalse((root / "a2" / "fin.txt").exists())
             self.assertFalse((root / "cdn" / "fin.txt").exists())
+
+    def test_forward_generated_dependency_rejects_stale_disk_file(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "a2").mkdir()
+            (root / "a2" / "fin.txt").write_text("DOMAIN,stale.example.org\n", encoding="utf-8")
+            (root / "new.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a1", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["a2/fin.txt"], "whitelist": []},
+                {"name": "a2", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["new.list"], "whitelist": []},
+            ]), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "not yet generated"):
+                generate(root, lambda _: self.fail("local input must not fetch"))
 
     def test_changed_dependencies_change_the_same_round_outputs(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:

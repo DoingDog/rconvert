@@ -86,14 +86,18 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     root = root.resolve()
     if not root.is_relative_to(Path(__file__).resolve().parent):
         raise ValueError("Source root escapes worktree")
-    from formats import NO_RESOLVE_TYPES, render
+    from formats import FILES, NO_RESOLVE_TYPES, render
     from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 
+    configs = load_config(root)
+    generated = {root / config["name"] / name for config in configs for name in FILES}
     outputs: dict[Path, str] = {}
     cache: dict[str, bytes] = {}
 
     def read(source: str | Path) -> str:
         if isinstance(source, Path):
+            if source in generated and source not in outputs:
+                raise ValueError(f"Dependent output not yet generated: {source}")
             data = outputs[source].encode("utf-8") if source in outputs else source.read_bytes()
         else:
             if source not in cache:
@@ -104,7 +108,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
         except UnicodeError as exc:
             raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
 
-    for config in load_config(root):
+    for config in configs:
         group, purpose, no_resolve = config["name"], config["purpose"], config["no_resolve"]
         rules = []
         for entry in config["sources"]:
@@ -119,7 +123,11 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             rules.extend(parsed)
         whitelist = []
         for entry in config["whitelist"]:
-            whitelist.extend(parse_whitelist(read(resolve_source(root, entry))))
+            source = resolve_source(root, entry)
+            try:
+                whitelist.extend(parse_whitelist(read(source)))
+            except ValueError as exc:
+                raise ValueError(f"Invalid whitelist {source}: {exc}") from exc
         allowed = [rule for rule in rules if rule.allow]
         rules = exclude_covered(rules, whitelist + allowed)
         if no_resolve == "add":

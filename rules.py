@@ -18,8 +18,10 @@ class Rule:
         kind = self.kind.upper()
         object.__setattr__(self, "kind", kind)
         object.__setattr__(self, "options", tuple(sorted({option.lower() for option in self.options})))
-        if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD", "DOMAIN-KEYWORD"}:
+        if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
             object.__setattr__(self, "value", self.value.removesuffix(".").lower())
+        elif kind == "DOMAIN-KEYWORD":
+            object.__setattr__(self, "value", self.value.lower())
 
 
 _DOMAIN = re.compile(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\Z", re.I)
@@ -302,11 +304,16 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
 
 def parse_whitelist(text: str) -> list[Rule]:
     parsed, messages = parse(text, purpose="block", ignore_policy=True)
-    for message in messages:
-        warnings.warn(message, stacklevel=2)
     supported = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
                  "IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-ASN", "GEOIP"}
-    return [Rule(rule.kind, rule.value) for rule in parsed if rule.kind in supported]
+    whitelist = [Rule(rule.kind, rule.value) for rule in parsed if rule.kind in supported]
+    if not parsed and not messages:
+        raise ValueError("no rules")
+    if not whitelist and messages:
+        raise ValueError(messages[0])
+    for message in messages:
+        warnings.warn(message, stacklevel=2)
+    return whitelist
 
 
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:

@@ -473,6 +473,16 @@ class WhitelistTests(unittest.TestCase):
         self.assertTrue(any("line 4" in str(item.message) and "invalid domain" in str(item.message)
                             for item in reported))
 
+    def test_keyword_whitelist_preserves_trailing_dot_match_scope(self):
+        trailing = rules.parse_whitelist("DOMAIN-KEYWORD,ads.")
+        self.assertEqual(trailing, [Rule("DOMAIN-KEYWORD", "ads.")])
+        exact = [Rule("DOMAIN", "adsense.com")]
+        self.assertEqual(rules.exclude_covered(exact, trailing), exact)
+        dot = rules.parse_whitelist("DOMAIN-KEYWORD,.")
+        self.assertEqual(dot, [Rule("DOMAIN-KEYWORD", ".")])
+        keyword = [Rule("DOMAIN-KEYWORD", "track")]
+        self.assertEqual(rules.exclude_covered(keyword, dot), keyword)
+
     def test_keyword_whitelist_covers_rules_with_required_substring(self):
         source = [
             Rule("DOMAIN", "tracker.example.com"),
