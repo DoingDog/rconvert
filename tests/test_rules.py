@@ -96,6 +96,44 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "ads.example.com")])
         self.assertEqual(messages, [])
 
+    def test_trailing_comment_does_not_change_rule_or_escaped_regex(self):
+        parsed, messages = parse(
+            r"DOMAIN,ads.example.com,REJECT # note" "\n"
+            r"URL-REGEX,^https://ads\.example/a\#b$,REJECT # note",
+            purpose="block",
+        )
+        self.assertEqual(parsed, [
+            Rule("DOMAIN", "ads.example.com"),
+            Rule("URL-REGEX", r"^https://ads\.example/a\#b$"),
+        ])
+        self.assertEqual(messages, [])
+
+    def test_surge_trailing_comments_do_not_consume_quoted_values(self):
+        parsed, messages = parse(
+            "DOMAIN,one.example.com,REJECT // note\n"
+            "DOMAIN,two.example.com,REJECT ; note\n"
+            "URL-REGEX,'^https://ads\\.example/a // b$',REJECT // note",
+            purpose="block",
+        )
+        self.assertEqual(parsed, [
+            Rule("DOMAIN", "one.example.com"), Rule("DOMAIN", "two.example.com"),
+            Rule("URL-REGEX", r"^https://ads\.example/a // b$"),
+        ])
+        self.assertEqual(messages, [])
+
+    def test_yaml_payload_comment_and_single_quote_escape(self):
+        parsed, messages = parse(
+            "payload: # exported\n"
+            "  - 'URL-REGEX,^https://ads\\.example/it''s$,REJECT' # note\n"
+            '  - "DOMAIN,ads.example.com,REJECT" # note',
+            purpose="block",
+        )
+        self.assertEqual(parsed, [
+            Rule("URL-REGEX", r"^https://ads\.example/it's$"),
+            Rule("DOMAIN", "ads.example.com"),
+        ])
+        self.assertEqual(messages, [])
+
     def test_unquoted_mihomo_yaml_payload_retains_rules(self):
         rules, warnings = parse(
             "# Total Lines: 2\npayload:\n  - DOMAIN-SUFFIX,000607.com.cn\n"
@@ -221,6 +259,14 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertEqual(warnings, [])
 
+    def test_mihomo_ipv6_ip_cidr_alias_preserves_family_and_options(self):
+        parsed, messages = parse(
+            "IP-CIDR,2001:db8::1/32,PROXY,no-resolve\nIP-CIDR6,192.0.2.0/24,PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("IP-CIDR", "2001:db8::/32", ("no-resolve",))])
+        self.assertEqual(len(messages), 1)
+
     def test_ipv4_ipv6_source_and_destination_cidr_keep_direction_and_options(self):
         rules, warnings = parse(
             "SRC-IP-CIDR,2001:db8::1/32,DIRECT,no-resolve\n"
@@ -236,6 +282,23 @@ class ParseTests(unittest.TestCase):
         proxy, _ = parse("IP6-CIDR,2001:db8:1::/48,PROXY", purpose="proxy")
         self.assertEqual(proxy, [Rule("IP-CIDR6", "2001:db8:1::/48")])
 
+    def test_surge_src_ip_network_uses_source_cidr_for_other_targets(self):
+        parsed, messages = parse(
+            "SRC-IP,192.0.2.15/24,DIRECT\nSRC-IP,2001:db8::1/32,DIRECT\n"
+            "SRC-IP,192.0.2.15,DIRECT\nSRC-IP,invalid/24,DIRECT",
+            purpose="direct",
+        )
+        self.assertEqual(parsed, [
+            Rule("SRC-IP-CIDR", "192.0.2.0/24"),
+            Rule("SRC-IP-CIDR", "2001:db8::/32"), Rule("SRC-IP", "192.0.2.15"),
+        ])
+        self.assertEqual(len(messages), 1)
+        from formats import render
+
+        output, _ = render("group", parsed, purpose="direct", no_resolve="strip")
+        self.assertIn("SRC-IP,192.0.2.0/24\n", output["fin.txt"])
+        self.assertIn('"SRC-IP-CIDR,192.0.2.0/24"', output["fin.yaml"])
+
     def test_port_rules_keep_source_destination_and_range(self):
         rules, warnings = parse(
             "SRC-PORT,8080,PROXY\nDEST-PORT,443,PROXY\nDST-PORT,1024-2048,PROXY\nDST-PORT,65536,PROXY",
@@ -247,6 +310,46 @@ class ParseTests(unittest.TestCase):
             Rule("DST-PORT", "1024-2048"),
         ])
         self.assertEqual(len(warnings), 1)
+
+    def test_port_comparison_is_retained_as_equivalent_closed_range(self):
+        parsed, messages = parse(
+            "SRC-PORT,>=50000,PROXY\nDEST-PORT,<1024,PROXY\n"
+            "IN-PORT,>65535,PROXY\nDST-PORT,<=0,PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("SRC-PORT", "50000-65535"), Rule("DEST-PORT", "1-1023"),
+        ])
+        self.assertEqual(len(messages), 2)
+
+    def test_multi_port_segments_are_renderable_by_both_rule_engines(self):
+        parsed, messages = parse(
+            "DEST-PORT,80/443-445,PROXY\nDST-PORT,53,853,PROXY\n"
+            "IN-PORT,80/70000,PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("OR", "((DST-PORT,80),(DST-PORT,443-445))"),
+            Rule("OR", "((DST-PORT,53),(DST-PORT,853))"),
+        ])
+        self.assertEqual(len(messages), 1)
+        from formats import render
+
+        output, _ = render("group", parsed, purpose="proxy", no_resolve="strip")
+        self.assertIn("OR,((DEST-PORT,80),(DEST-PORT,443-445))\n", output["fin.txt"])
+        self.assertIn('"OR,((DST-PORT,80),(DST-PORT,443-445))"', output["fin.yaml"])
+
+    def test_long_numeric_fields_are_skipped_without_aborting_other_rules(self):
+        huge = '9' * 4400
+        parsed, messages = parse(
+            f"IP-ASN,{huge},PROXY\nSRC-PORT,{huge},PROXY\n"
+            "DOMAIN,valid.example.com,PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN", "valid.example.com")])
+        self.assertEqual(len(messages), 2)
+        self.assertTrue(any("IP-ASN" in message for message in messages))
+        self.assertTrue(any("port" in message for message in messages))
 
     def test_in_port_is_kept_for_compatible_targets(self):
         rules, warnings = parse("IN-PORT,443,PROXY", purpose="proxy")
@@ -308,6 +411,68 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertEqual(warnings, [])
 
+    def test_mihomo_additional_geo_and_ip_types_validate_values(self):
+        source = (
+            "GEOSITE,youtube,PROXY\nSRC-GEOIP,CN,PROXY\nSRC-IP-ASN,9808,PROXY\n"
+            "IP-SUFFIX,8.8.8.8/24,PROXY\nSRC-IP-SUFFIX,192.0.2.1/8,PROXY\n"
+            "SRC-GEOIP,UNKNOWN,PROXY\nSRC-IP-ASN,-1,PROXY\n"
+            "IP-SUFFIX,invalid/24,PROXY\nSRC-IP-SUFFIX,192.0.2.1/129,PROXY"
+        )
+        parsed, messages = parse(source, purpose="proxy")
+        self.assertEqual(parsed, [
+            Rule("GEOSITE", "youtube"), Rule("SRC-GEOIP", "CN"),
+            Rule("SRC-IP-ASN", "9808"), Rule("IP-SUFFIX", "8.8.8.8/24"),
+            Rule("SRC-IP-SUFFIX", "192.0.2.1/8"),
+        ])
+        self.assertEqual(len(messages), 4)
+
+    def test_mihomo_process_and_inbound_types_validate_values(self):
+        parsed, messages = parse(
+            "IN-USER,alice/bob,PROXY\nIN-NAME,home-socks,PROXY\n"
+            "REMATCH-NAME,rematch1,PROXY\nPROCESS-PATH-REGEX,.*bin/wget,PROXY\n"
+            "PROCESS-NAME-REGEX,curl$,PROXY\nUID,1001,PROXY\nDSCP,63,PROXY\n"
+            "IN-USER,alice//bob,PROXY\nPROCESS-NAME-REGEX,(*,PROXY\n"
+            "UID,-1,PROXY\nDSCP,64,PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("IN-USER", "alice/bob"), Rule("IN-NAME", "home-socks"),
+            Rule("REMATCH-NAME", "rematch1"), Rule("PROCESS-PATH-REGEX", ".*bin/wget"),
+            Rule("PROCESS-NAME-REGEX", "curl$"), Rule("UID", "1001"), Rule("DSCP", "63"),
+        ])
+        self.assertEqual(len(messages), 4)
+
+    def test_surge_protocol_accepts_documented_values_only(self):
+        parsed, messages = parse(
+            "PROTOCOL,HTTPS,DIRECT\nPROTOCOL,MTProto,DIRECT\n"
+            "PROTOCOL,INVALID,DIRECT",
+            purpose="direct",
+        )
+        self.assertEqual(parsed, [Rule("PROTOCOL", "HTTPS"), Rule("PROTOCOL", "MTProto")])
+        self.assertEqual(len(messages), 1)
+
+    def test_surge_device_network_types_validate_values(self):
+        parsed, messages = parse(
+            "DEVICE-NAME,Kids-*,DIRECT\nMAC-ADDRESS,A4:83:E7:11:22:33,DIRECT\n"
+            "HOSTNAME-TYPE,IPv6,DIRECT\nSUBNET,TYPE:CELLULAR,DIRECT\n"
+            "CELLULAR-RADIO,NR,DIRECT\nCELLULAR-CARRIER,310260,DIRECT\n"
+            "DEVICE-NAME,,DIRECT\nMAC-ADDRESS,invalid,DIRECT\n"
+            "HOSTNAME-TYPE,unknown,DIRECT\nSUBNET,TYPE:INVALID,DIRECT\n"
+            "CELLULAR-RADIO,6G,DIRECT\nCELLULAR-CARRIER,Carrier,DIRECT",
+            purpose="direct",
+        )
+        self.assertEqual(parsed, [
+            Rule("DEVICE-NAME", "Kids-*"), Rule("MAC-ADDRESS", "A4:83:E7:11:22:33"),
+            Rule("HOSTNAME-TYPE", "IPv6"), Rule("SUBNET", "TYPE:CELLULAR"),
+            Rule("CELLULAR-RADIO", "NR"), Rule("CELLULAR-CARRIER", "310260"),
+        ])
+        self.assertEqual(len(messages), 6)
+
+    def test_mihomo_in_type_accepts_documented_combined_inbound(self):
+        parsed, messages = parse("IN-TYPE,SOCKS/HTTP,PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("IN-TYPE", "SOCKS/HTTP")])
+        self.assertEqual(messages, [])
+
     def test_domain_regex_quantifier_comma_stays_in_value(self):
         rules, warnings = parse(
             r"DOMAIN-REGEX,^ad{2,3}\.example\.com$,REJECT", purpose="block"
@@ -335,6 +500,34 @@ class ParseTests(unittest.TestCase):
         )
         self.assertEqual(rules, [])
         self.assertTrue(any("invalid logical" in message for message in messages))
+
+    def test_logical_children_allow_no_resolve_only_on_destination_ip_matchers(self):
+        expression = "((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,ads.example.com))"
+        parsed, messages = parse(
+            f"AND,{expression},REJECT\n"
+            "AND,((DOMAIN,ads.example.com,no-resolve),(SRC-PORT,443)),REJECT\n"
+            "AND,((IP-CIDR,not-an-ip,no-resolve),(SRC-PORT,443)),REJECT",
+            purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("AND", expression)])
+        self.assertEqual(len(messages), 2)
+        from formats import render
+
+        output, _ = render("group", parsed, purpose="block", no_resolve="strip")
+        self.assertIn(f"AND,{expression}\n", output["fin.txt"])
+        self.assertIn(f'"AND,{expression}"', output["fin.yaml"])
+
+    def test_logical_child_skips_port_forms_not_safe_for_both_renderers(self):
+        parsed, messages = parse(
+            "AND,((SRC-PORT,>=50000),(NETWORK,UDP)),PROXY\n"
+            "OR,((DST-PORT,80/443),(DOMAIN,example.com)),PROXY\n"
+            "AND,((SRC-PORT,50000-65535),(NETWORK,UDP)),PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("AND", "((SRC-PORT,50000-65535),(NETWORK,UDP))")
+        ])
+        self.assertEqual(len(messages), 2)
 
     def test_logical_child_rejects_invalid_port(self):
         rules, warnings = parse(
@@ -400,10 +593,15 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(commented, [Rule("DOMAIN", "ads.example.com")])
         self.assertEqual(messages, [])
 
-    def test_self_closing_html_tag_cannot_hide_a_valid_rule(self):
-        rules, messages = parse("<img/>\nDOMAIN,ads.example.com,REJECT", purpose="block")
-        self.assertEqual(rules, [])
-        self.assertTrue(any("HTML" in message for message in messages))
+    def test_isolated_html_tag_is_skipped_without_discarding_valid_rules(self):
+        parsed, messages = parse(
+            "DOMAIN,first.example.com,REJECT\n<img/>\nDOMAIN,ads.example.com,REJECT",
+            purpose="block",
+        )
+        self.assertEqual(parsed, [
+            Rule("DOMAIN", "first.example.com"), Rule("DOMAIN", "ads.example.com")
+        ])
+        self.assertTrue(any("line 2" in message and "HTML" in message for message in messages))
 
     def test_html_document_cannot_hide_a_valid_rule(self):
         rules, warnings = parse(
@@ -438,6 +636,17 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [Rule("DOMAIN-WILDCARD", "cdn[0-9].example.com")])
         self.assertEqual(len(warnings), 4)
         self.assertIn("MYSTERY", warnings[-1])
+
+    def test_domain_no_resolve_option_is_rejected_before_rendering(self):
+        parsed, messages = parse(
+            "DOMAIN,ads.example.com,REJECT,no-resolve\n"
+            "DOMAIN-SUFFIX,tracking.example.com,no-resolve\n"
+            "DOMAIN,valid.example.com,REJECT",
+            purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN", "valid.example.com")])
+        self.assertEqual(len(messages), 2)
+        self.assertTrue(all("no-resolve" in message for message in messages))
 
     def test_qx_no_resolve_before_or_after_action(self):
         rules, warnings = parse(
@@ -568,6 +777,19 @@ class WhitelistTests(unittest.TestCase):
             [Rule("IP-CIDR", "192.0.2.0/25", ("no-resolve",))],
             [Rule("IP-CIDR", "192.0.2.0/24")],
         ), [])
+
+    def test_whitelist_ipv6_alias_and_surge_source_network_keep_directions(self):
+        whitelist = rules.parse_whitelist(
+            "IP-CIDR,2001:db8::/32\nSRC-IP,192.0.2.1/24"
+        )
+        self.assertEqual(whitelist, [
+            Rule("IP-CIDR", "2001:db8::/32"), Rule("SRC-IP-CIDR", "192.0.2.0/24"),
+        ])
+        original = [
+            Rule("IP-CIDR6", "2001:db8:1::/48"),
+            Rule("SRC-IP-CIDR", "192.0.2.128/25"), Rule("IP-CIDR", "192.0.2.0/24"),
+        ]
+        self.assertEqual(rules.exclude_covered(original, whitelist), original[2:])
 
     def test_ipv6_coverage_does_not_cross_family_or_direction(self):
         source = [
@@ -765,6 +987,15 @@ class NormalizeTests(unittest.TestCase):
             Rule("SRC-IP-CIDR", "192.0.2.0/24"),
             Rule("SRC-IP-CIDR", "2001:db8::/32"),
         ])
+
+    def test_normalize_deduplicates_ipv6_ip_cidr_alias(self):
+        parsed, messages = parse(
+            "IP-CIDR,2001:db8::/33,PROXY\nIP-CIDR,2001:db8:8000::/33,PROXY\n"
+            "IP-CIDR6,2001:db8::/32,PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(messages, [])
+        self.assertEqual(normalize(parsed), [Rule("IP-CIDR6", "2001:db8::/32")])
 
     def test_unrelated_allow_does_not_remove_domain_regex(self):
         rule = Rule("DOMAIN-REGEX", r"^tracker\.example\.com$")

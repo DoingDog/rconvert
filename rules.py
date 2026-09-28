@@ -27,8 +27,15 @@ class Rule:
 _DOMAIN = re.compile(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\Z", re.I)
 _PORTS = {"SRC-PORT", "DEST-PORT", "DST-PORT", "IN-PORT"}
 _PROCESS = {"PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD",
-            "PROCESS-PATH-WILDCARD", "USER-AGENT", "DOMAIN-REGEX", "URL-REGEX"}
-_SIMPLE = {"IP-ASN", "GEOIP", "SRC-IP", "NETWORK", "PROTOCOL", "IN-TYPE", "DOMAIN-KEYWORD"}
+            "PROCESS-PATH-WILDCARD", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX",
+            "IN-NAME", "REMATCH-NAME", "DEVICE-NAME", "USER-AGENT",
+            "DOMAIN-REGEX", "URL-REGEX"}
+_REGEX = {"DOMAIN-REGEX", "URL-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"}
+_SIMPLE = {"IP-ASN", "SRC-IP-ASN", "GEOIP", "SRC-GEOIP", "GEOSITE",
+           "IP-SUFFIX", "SRC-IP-SUFFIX", "SRC-IP", "NETWORK", "PROTOCOL",
+           "IN-TYPE", "IN-USER", "UID", "DSCP", "MAC-ADDRESS",
+           "HOSTNAME-TYPE", "SUBNET", "CELLULAR-RADIO", "CELLULAR-CARRIER",
+           "DOMAIN-KEYWORD"}
 _LOGICAL = {"AND", "OR", "NOT"}
 _BLOCK_ACTIONS = {"REJECT", "REJECT-DROP", "REJECT-NO-DROP", "REJECT-TINYGIF",
                   "REJECT-200", "REJECT-IMG", "REJECT-DICT", "REJECT-ARRAY", "ADBLOCK", "ADVERTISINGLITE", "HIJACKING", "PRIVACY", "ZHIHUADS",
@@ -82,29 +89,91 @@ def _valid_domain(kind: str, value: str) -> bool:
     return bool(_DOMAIN.fullmatch(value))
 
 
+def _port_comparison(value: str) -> str | None:
+    match = re.fullmatch(r"([<>]=?)([0-9]+)", value)
+    if not match or len(match[2].lstrip('0')) > 5:
+        return None
+    number = int(match[2].lstrip('0') or '0')
+    lower = number + (match[1] == '>') if match[1].startswith('>') else 1
+    upper = number - (match[1] == '<') if match[1].startswith('<') else 65535
+    if not 1 <= lower <= upper <= 65535:
+        return None
+    return str(lower) if lower == upper else f"{lower}-{upper}"
+
+
 def _valid_port(value: str) -> bool:
+    if '/' in value:
+        return all(not part.startswith(('<', '>')) and _valid_port(part)
+                   for part in value.split('/'))
+    if value.startswith(('<', '>')):
+        return _port_comparison(value) is not None
     ports = value.split('-')
+    numbers = [port.lstrip('0') for port in ports]
     return (1 <= len(ports) <= 2 and
-            all(port.isascii() and port.isdecimal() and 1 <= int(port) <= 65535
-                for port in ports) and
-            (len(ports) == 1 or int(ports[0]) <= int(ports[1])))
+            all(port.isascii() and port.isdecimal() and 0 < len(number) <= 5
+                and int(number) <= 65535 for port, number in zip(ports, numbers)) and
+            (len(ports) == 1 or int(numbers[0]) <= int(numbers[1])))
 
 
 def _valid_simple(kind: str, value: str) -> bool:
-    if kind == "IP-ASN":
-        return value.isascii() and value.isdecimal() and int(value) > 0
+    if kind in {"IP-ASN", "SRC-IP-ASN"}:
+        number = value.lstrip('0')
+        return (value.isascii() and value.isdecimal() and 0 < len(number) <= 10
+                and int(number) <= 4294967295)
+    if kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+        try:
+            ipaddress.ip_interface(value)
+            return '/' in value
+        except ValueError:
+            return False
     if kind == "SRC-IP":
         try:
-            ipaddress.ip_address(value)
+            (ipaddress.ip_network(value, strict=False) if '/' in value
+             else ipaddress.ip_address(value))
             return True
         except ValueError:
             return False
-    if kind == "GEOIP":
+    if kind in {"GEOIP", "SRC-GEOIP"}:
         return bool(re.fullmatch(r"[a-z]{2}", value, re.I))
+    if kind == "GEOSITE":
+        return bool(re.fullmatch(r"[a-z0-9_-]+(?:@[a-z0-9_-]+)?", value, re.I))
+    if kind in {"UID", "DSCP"}:
+        number = value.lstrip('0')
+        return (value.isascii() and value.isdecimal() and len(number) <= 10
+                and int(number or '0') <= (63 if kind == "DSCP" else 4294967295))
+    if kind == "IN-USER":
+        return all(re.fullmatch(r"[^/\s,<>]+", user) for user in value.split('/'))
+    if kind == "MAC-ADDRESS":
+        return bool(re.fullmatch(r"(?:[0-9a-f]{2}:){5}[0-9a-f]{2}", value, re.I))
+    if kind == "HOSTNAME-TYPE":
+        return value in {"IPv4", "IPv6", "DOMAIN", "SIMPLE"}
+    if kind == "CELLULAR-RADIO":
+        return value in {"GPRS", "Edge", "WCDMA", "HSDPA", "HSUPA", "CDMA1x",
+                         "CDMAEVDORev0", "CDMAEVDORevA", "CDMAEVDORevB", "eHRPD",
+                         "HRPD", "LTE", "NRNSA", "NR"}
+    if kind == "CELLULAR-CARRIER":
+        return bool(re.fullmatch(r"[0-9]{5,6}", value))
+    if kind == "SUBNET":
+        prefix, separator, target = value.partition(':')
+        if not separator:
+            return bool(value) and not any(c in value for c in '<>\r\n')
+        if prefix == "TYPE":
+            return target.upper() in {"WIFI", "WIRED", "CELLULAR"}
+        if prefix == "ROUTER":
+            try:
+                ipaddress.ip_address(target)
+                return True
+            except ValueError:
+                return False
+        return (prefix in {"SSID", "BSSID"} and bool(target) and '<' not in target and '>' not in target
+                or prefix == "MCCMNC" and bool(re.fullmatch(r"[0-9]{5,6}", target)))
     if kind == "NETWORK":
         return value.upper() in {"TCP", "UDP"}
+    if kind == "PROTOCOL":
+        return value in {"HTTP", "HTTPS", "TCP", "UDP", "QUIC", "STUN", "MTProto",
+                         "DOH", "DOH3", "DOQ", "DOT", "DNS"}
     if kind == "IN-TYPE":
-        return bool(re.fullmatch(r"[\w-]+", value, re.ASCII))
+        return bool(re.fullmatch(r"[\w-]+(?:/[\w-]+)*", value, re.ASCII))
     return bool(re.fullmatch(r"[a-z0-9._-]+", value, re.I))
 
 
@@ -112,27 +181,35 @@ def _valid_condition(expression: str) -> bool:
     if not expression.startswith('(') or not expression.endswith(')'):
         return False
     try:
-        kind, value = _fields(expression[1:-1])
+        fields = _fields(expression[1:-1])
     except ValueError:
+        return False
+    if len(fields) not in (2, 3):
+        return False
+    kind, value = fields[:2]
+    if len(fields) == 3 and not (kind in {"IP-CIDR", "IP-CIDR6", "GEOIP", "IP-ASN"}
+                                  and fields[2].lower() == "no-resolve"):
         return False
     if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
         return _valid_domain(kind, value) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)
     if kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
         try:
             network = ipaddress.ip_network(value, strict=False)
-            return kind == "SRC-IP-CIDR" or network.version == (6 if kind == "IP-CIDR6" else 4)
+            return kind != "IP-CIDR6" or network.version == 6
         except ValueError:
             return False
     if kind in _PORTS:
-        return _valid_port(value)
+        return '/' not in value and not value.startswith(('<', '>')) and _valid_port(value)
     if kind in _SIMPLE:
         return _valid_simple(kind, value)
-    if kind in {"DOMAIN-REGEX", "URL-REGEX"}:
+    if kind in _REGEX:
         try:
             re.compile(value)
             return bool(value)
         except re.error:
             return False
+    if kind in _PROCESS:
+        return bool(value) and not any(char in value for char in '<>\r\n')
     return bool(value) and kind in _KINDS and (
         kind not in _LOGICAL or _valid_logic(kind, value)
     )
@@ -150,19 +227,50 @@ def _valid_logic(kind: str, value: str) -> bool:
     return len(children) >= 2 and all(_valid_condition(child) for child in children)
 
 
+def _without_comment(line: str) -> str:
+    quote, escaped, in_class = None, False, False
+    for index, char in enumerate(line):
+        if escaped:
+            escaped = False
+        elif char == '\\':
+            escaped = True
+        elif char in "'\"":
+            quote = None if quote == char else char if quote is None else quote
+        elif not quote:
+            if char == '[':
+                in_class = True
+            elif char == ']':
+                in_class = False
+            elif (not in_class and index and line[index - 1].isspace()
+                  and (char in '#;' or line.startswith('//', index))):
+                return line[:index].rstrip()
+    return line
+
+
 def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list[Rule], list[str]]:
     if purpose not in {"block", "direct", "proxy"}:
         raise ValueError(f"invalid purpose: {purpose}")
+    opening_tags = {}
     for number, line in enumerate(text.splitlines(), 1):
         if line.lstrip().startswith(('#', ';', '//', '!')):
             continue
-        if re.search(r"<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", line, re.I):
+        line = _without_comment(line)
+        if re.search(r"<\s*(?:!doctype\b|/?(?:html|head|body)\b)", line, re.I):
             return [], [f"line {number}: HTML document"]
+        for tag in re.finditer(r"<\s*(/?)\s*([a-z][\w:-]*)\b[^>]*>", line, re.I):
+            name = tag[2].lower()
+            if tag[1] and name in opening_tags:
+                return [], [f"line {opening_tags[name]}: HTML document"]
+            if not tag[1] and not tag[0].endswith('/>'):
+                opening_tags.setdefault(name, number)
     rules, warnings = [], []
     in_payload = False
     for number, source in enumerate(text.splitlines(), 1):
-        line = source.strip()
+        line = _without_comment(source).strip()
         if not line or line.startswith(('#', ';', '//')):
+            continue
+        if re.search(r"<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", line, re.I):
+            warnings.append(f"line {number}: HTML markup")
             continue
         if line == 'payload:':
             in_payload = True
@@ -183,11 +291,11 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                     warnings.append(f"line {number}: invalid YAML payload")
                     continue
             else:
-                match = re.fullmatch(r"- (?:'([^']*)'|([^'\"#\s].*))", line)
+                match = re.fullmatch(r"- (?:'((?:[^']|'')*)'|([^'\"#\s].*))", line)
                 if not match:
                     warnings.append(f"line {number}: invalid YAML payload")
                     continue
-                line = match[1] if match[1] is not None else match[2]
+                line = match[1].replace("''", "'") if match[1] is not None else match[2]
         if line.startswith(('||', '@@||')) and '$' in line:
             warnings.append(f"line {number}: conditional ABP rule")
             continue
@@ -237,6 +345,13 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 "HOST-WILDCARD": "DOMAIN-WILDCARD", "HOST-KEYWORD": "DOMAIN-KEYWORD",
                 "IP6-CIDR": "IP-CIDR6",
             }.get(kind.upper(), kind.upper())
+            if kind in _PORTS and len(parts) > 3:
+                end = 2
+                while end < len(parts) - 1 and _valid_port(parts[end]):
+                    end += 1
+                if end > 2:
+                    value = '/'.join(parts[1:end])
+                    parts = [parts[0], value, *parts[end:]]
             if any(field.lower() == "extended-matching" for field in parts[2:]):
                 warnings.append(f"line {number}: unsupported ruleset option extended-matching")
                 continue
@@ -251,10 +366,15 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         if kind not in _KINDS:
             warnings.append(f"line {number}: unknown type {kind}")
             continue
+        if kind == "SRC-IP" and '/' in value:
+            kind = "SRC-IP-CIDR"
+        if options and kind not in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "GEOIP", "IP-ASN"}:
+            warnings.append(f"line {number}: unsupported no-resolve for {kind}")
+            continue
         if kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
             try:
                 network = ipaddress.ip_network(value, strict=False)
-                if kind == "IP-CIDR" and network.version != 4 or kind == "IP-CIDR6" and network.version != 6:
+                if kind == "IP-CIDR6" and network.version != 6:
                     raise ValueError("wrong address family")
                 value = str(network)
             except ValueError:
@@ -264,6 +384,12 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             if not _valid_port(value):
                 warnings.append(f"line {number}: invalid port {value}")
                 continue
+            if '/' in value:
+                port_kind = "DST-PORT" if kind == "DEST-PORT" else kind
+                value = '(' + ','.join(f"({port_kind},{part})" for part in value.split('/')) + ')'
+                kind = "OR"
+            elif value.startswith(('<', '>')):
+                value = _port_comparison(value)
         elif kind == "SRC-IP":
             try:
                 value = str(ipaddress.ip_address(value))
@@ -278,7 +404,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             if not value or any(char in value for char in '<>\r\n'):
                 warnings.append(f"line {number}: invalid value {value}")
                 continue
-            if kind in {"DOMAIN-REGEX", "URL-REGEX"}:
+            if kind in _REGEX:
                 try:
                     re.compile(value)
                 except re.error:
@@ -419,7 +545,8 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
     for rule in kept:
         if rule.kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
             network = ipaddress.ip_network(rule.value, strict=False)
-            networks.setdefault((rule.kind, network.version, rule.options, rule.allow), []).append(network)
+            kind = "IP-CIDR6" if rule.kind == "IP-CIDR" and network.version == 6 else rule.kind
+            networks.setdefault((kind, network.version, rule.options, rule.allow), []).append(network)
         else:
             others.append(rule)
     for (kind, _, options, allow), group in networks.items():
