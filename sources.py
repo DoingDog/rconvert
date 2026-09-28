@@ -32,7 +32,7 @@ def load_sources(root: Path, group: str) -> list[str | Path]:
 
 
 def resolve_source(root: Path, entry: str) -> str | Path:
-    if not isinstance(entry, str) or not entry or entry != entry.strip() or any(ord(char) < 32 or ord(char) == 127 for char in entry):
+    if not isinstance(entry, str) or not entry or entry != entry.strip() or any(ord(char) < 32 or 127 <= ord(char) <= 159 for char in entry):
         raise ValueError(f"Invalid source: {entry}")
     try:
         url = urlsplit(entry)

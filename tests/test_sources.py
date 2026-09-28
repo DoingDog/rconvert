@@ -76,7 +76,8 @@ class SourcesTests(unittest.TestCase):
             for entry in ("http://example.org/list", "ftp://example.org/list", "https://",
                           "https://example.org:bad/list", "https://example.org\\@other.example/list",
                           "https://exa mple.org/list", "\x00https://example.org/list",
-                          "https://example.org/li\x00st", "", "../outside.txt", r"..\outside.txt",
+                          "https://example.org/li\x00st", "https://example.org/li\u0080st",
+                          "", "../outside.txt", r"..\outside.txt",
                           str(ROOT / "static/main/Direct.list")):
                 with self.subTest(entry=entry):
                     with self.assertRaises(ValueError):
