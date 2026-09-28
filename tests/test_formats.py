@@ -1,9 +1,13 @@
 import json
 import re
 import unittest
+from functools import partial
 
 from rules import Rule
-from formats import render
+from formats import render as render_configured
+
+
+render = partial(render_configured, purpose="block", no_resolve="add")
 
 
 class FormatTests(unittest.TestCase):
@@ -387,6 +391,22 @@ class FormatTests(unittest.TestCase):
         self.assertTrue(all(not expression.fullmatch("api-v2.example.org.evil") for expression in expressions))
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
 
+    def test_custom_block_purpose_emits_dns_and_proxy_group_name_does_not(self):
+        custom, _ = render("custom", [Rule("DOMAIN", "ads.example.org")],
+                           purpose="block", no_resolve="keep")
+        self.assertIn("\nads.example.org\n", custom["fin-adb.txt"])
+        proxy, _ = render("a1", [Rule("DOMAIN", "ads.example.org")],
+                          purpose="proxy", no_resolve="keep")
+        self.assertNotIn("ads.example.org", proxy["fin-adb.txt"])
+
+    def test_group_name_does_not_override_add_or_strip_no_resolve(self):
+        rule = Rule("IP-CIDR", "203.0.113.0/24", ("no-resolve",))
+        added, _ = render("dirt", [rule], purpose="direct", no_resolve="add")
+        self.assertIn("IP-CIDR,203.0.113.0/24,no-resolve\n", added["fin.txt"])
+        stripped, _ = render("a1", [rule], purpose="block", no_resolve="strip")
+        self.assertIn("IP-CIDR,203.0.113.0/24\n", stripped["fin.txt"])
+        self.assertNotIn("no-resolve", stripped["fin.txt"])
+
     def test_new_whitelist_uses_exact_and_suffix_dns_exceptions_only_for_block_groups(self):
         whitelist = [
             Rule("DOMAIN", "safe.example.org"), Rule("DOMAIN-SUFFIX", "safe.org"),
@@ -396,7 +416,7 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin-adb.txt"],
                          "! a3 rules: 3\n||example.org^\n@@|safe.example.org|\n@@||safe.org^\n")
         self.assertEqual(out["fin.txt"], "# a3 rules: 1\nDOMAIN-SUFFIX,example.org\n")
-        proxy, _ = render("cdn", [], whitelist=whitelist)
+        proxy, _ = render("cdn", [], whitelist=whitelist, purpose="proxy")
         self.assertEqual(proxy["fin-adb.txt"],
                          "! cdn rules: 0\n! No AdBlock rules for non-advertising group.\n")
 
@@ -428,7 +448,7 @@ class FormatTests(unittest.TestCase):
     def test_non_advertising_groups_emit_only_adblock_explanation(self):
         for group in ("cdn", "big-data", "dirt"):
             with self.subTest(group=group):
-                out, skipped = render(group, [Rule("DOMAIN-SUFFIX", "legitimate.example.com")])
+                out, skipped = render(group, [Rule("DOMAIN-SUFFIX", "legitimate.example.com")], purpose="direct" if group == "dirt" else "proxy")
                 self.assertEqual(out["fin-adb.txt"],
                                  f"! {group} rules: 0\n! No AdBlock rules for non-advertising group.\n")
                 self.assertIn("DOMAIN-SUFFIX,legitimate.example.com\n", out["fin.txt"])
@@ -441,7 +461,7 @@ class FormatTests(unittest.TestCase):
         self.assertIn("IP-CIDR,203.0.113.0/24,no-resolve\n", out["fin-surge.txt"])
         self.assertIn("IP-CIDR,203.0.113.0/24,LIST,no-resolve\n", out["fin-qx.txt"])
         self.assertIn('"IP-CIDR,203.0.113.0/24,no-resolve"', out["fin.yaml"])
-        domestic, _ = render("dirt", [rule])
+        domestic, _ = render("dirt", [rule], purpose="direct", no_resolve="strip")
         self.assertIn("IP-CIDR,203.0.113.0/24\n", domestic["fin.txt"])
         self.assertNotIn("no-resolve", domestic["fin.txt"])
 

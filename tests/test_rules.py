@@ -90,7 +90,8 @@ class ParseTests(unittest.TestCase):
     def test_renderer_double_quoted_yaml_payload_round_trips(self):
         from formats import render
 
-        document = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")])[0]["fin.yaml"]
+        document = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")],
+                          purpose="block", no_resolve="add")[0]["fin.yaml"]
         rules, messages = parse(document, purpose="block")
         self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "ads.example.com")])
         self.assertEqual(messages, [])
@@ -256,7 +257,7 @@ class ParseTests(unittest.TestCase):
         from formats import render
 
         original = Rule("URL-REGEX", r"^https://ads\.example/promo,a$")
-        text = render("a3", [original])[0]["fin.txt"]
+        text = render("a3", [original], purpose="block", no_resolve="add")[0]["fin.txt"]
         parsed, messages = parse(text, purpose="block")
         self.assertEqual(parsed, [original])
         self.assertEqual(messages, [])
@@ -314,13 +315,13 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [Rule("DOMAIN-REGEX", r"^ad{2,3}\.example\.com$")])
         self.assertEqual(warnings, [])
 
-    def test_invalid_domain_regex_is_skipped_before_exclusion_matching(self):
+    def test_invalid_domain_regex_is_skipped_before_normalization(self):
         rules, messages = parse(
             "DOMAIN-REGEX,*ads,REJECT\nDOMAIN,valid.example.com,REJECT", purpose="block",
         )
         self.assertEqual(rules, [Rule("DOMAIN", "valid.example.com")])
         self.assertTrue(any("line 1" in message and "invalid" in message for message in messages))
-        self.assertEqual(normalize(rules, ["valid.example.org"]), rules)
+        self.assertEqual(normalize(rules), rules)
 
     def test_logical_regex_character_class_parenthesis_survives_parse(self):
         expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
@@ -617,6 +618,10 @@ class WhitelistTests(unittest.TestCase):
 
 
 class NormalizeTests(unittest.TestCase):
+    def test_normalize_accepts_only_rules(self):
+        with self.assertRaises(TypeError):
+            normalize([], [])
+
     def test_suffix_covers_only_complete_domain_labels(self):
         original = [
             Rule("DOMAIN", "api.example.com"), Rule("DOMAIN", "notexample.com"),
@@ -627,48 +632,26 @@ class NormalizeTests(unittest.TestCase):
         self.assertEqual(normalize(original), expected)
         self.assertEqual(normalize(reversed(original)), expected)
 
-    def test_explicit_domain_exclusion_is_exact(self):
-        rules = [Rule("DOMAIN", "safe.example.com"), Rule("DOMAIN", "sub.safe.example.com")]
-        self.assertEqual(normalize(rules, ["DOMAIN,safe.example.com"]), [
-            Rule("DOMAIN", "sub.safe.example.com")
+    def test_narrow_allow_coexists_with_broad_block(self):
+        original = [
+            Rule("DOMAIN-SUFFIX", "example.com"),
+            Rule("DOMAIN", "safe.example.com", allow=True),
+        ]
+        self.assertEqual(normalize(original), [
+            Rule("DOMAIN", "safe.example.com", allow=True),
+            Rule("DOMAIN-SUFFIX", "example.com"),
         ])
 
-    def test_bare_and_comma_prefixed_exclusions_remove_domain_trees(self):
-        rules = [
-            Rule("DOMAIN", "example.com"), Rule("DOMAIN", "cdn.foo.example.com"),
-            Rule("DOMAIN-SUFFIX", "foo.example.com"), Rule("DOMAIN", "notexample.com"),
-        ]
-        for exclusion in ("EXAMPLE.COM", ",example.com", ",EXAMPLE.COM."):
-            with self.subTest(exclusion=exclusion):
-                self.assertEqual(normalize(rules, [exclusion]), [Rule("DOMAIN", "notexample.com")])
-
-    def test_exact_exclusion_drops_conflicting_suffix_but_keeps_unrelated_narrow_rules(self):
-        rules = [
-            Rule("DOMAIN-SUFFIX", "example.com"), Rule("DOMAIN", "safe.example.com"),
-            Rule("DOMAIN", "ads.example.com"), Rule("DOMAIN-SUFFIX", "another.com"),
-        ]
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            result = normalize(rules, ["DOMAIN,safe.example.com"])
-        self.assertEqual(result, [
-            Rule("DOMAIN", "ads.example.com"), Rule("DOMAIN-SUFFIX", "another.com")
-        ])
-        self.assertTrue(any("DOMAIN-SUFFIX,example.com" in str(warning.message) for warning in reported))
-
-    def test_upstream_allow_removes_wide_block_without_losing_unrelated_narrow_rule(self):
+    def test_upstream_allow_keeps_wide_block_and_suffix_deduplication(self):
         parsed, parse_warnings = parse(
             "||example.com^\n@@||safe.example.com^\nDOMAIN,ads.example.com,REJECT",
             purpose="block",
         )
         self.assertEqual(parse_warnings, [])
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            output = normalize(parsed)
-        self.assertEqual(output, [
-            Rule("DOMAIN", "ads.example.com"),
+        self.assertEqual(normalize(parsed), [
+            Rule("DOMAIN-SUFFIX", "example.com"),
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
         ])
-        self.assertTrue(any("DOMAIN-SUFFIX,example.com" in str(warning.message) for warning in reported))
 
     def test_wildcards_are_only_dropped_when_suffix_proves_coverage(self):
         rules = [
@@ -685,31 +668,15 @@ class NormalizeTests(unittest.TestCase):
             Rule("DOMAIN-WILDCARD", "*.example.com")
         ])
 
-    def test_wildcard_conflicting_with_exact_allow_is_discarded(self):
+    def test_exact_allow_does_not_delete_wider_wildcard(self):
         rules = [
             Rule("DOMAIN-WILDCARD", "api-*.example.com"),
-            Rule("DOMAIN-WILDCARD", "other-*.example.com"),
-            Rule("DOMAIN", "api-other.example.com"),
+            Rule("DOMAIN", "api-safe.example.com", allow=True),
         ]
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            output = normalize(rules, ["DOMAIN,api-safe.example.com"])
-        self.assertEqual(output, [
-            Rule("DOMAIN", "api-other.example.com"),
-            Rule("DOMAIN-WILDCARD", "other-*.example.com"),
+        self.assertEqual(normalize(rules), [
+            Rule("DOMAIN", "api-safe.example.com", allow=True),
+            Rule("DOMAIN-WILDCARD", "api-*.example.com"),
         ])
-        self.assertTrue(any("DOMAIN-WILDCARD,api-*.example.com" in str(item.message) for item in reported))
-
-    def test_surge_bracket_wildcard_is_not_treated_as_glob_on_exclusions(self):
-        rules = [
-            Rule("DOMAIN-WILDCARD", "cdn[0-9].example.com"),
-            Rule("DOMAIN-WILDCARD", "api-*.other.com"),
-        ]
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            output = normalize(rules, ["DOMAIN,cdnB.example.com"])
-        self.assertEqual(output, [Rule("DOMAIN-WILDCARD", "api-*.other.com")])
-        self.assertTrue(any("cdn[0-9].example.com" in str(item.message) for item in reported))
 
     def test_large_suffix_list_normalizes_without_quadratic_scan(self):
         count = 8000
@@ -717,16 +684,6 @@ class NormalizeTests(unittest.TestCase):
         rules += [Rule("DOMAIN", f"sub.s{i}.example.com") for i in range(count)]
         start = time.perf_counter()
         output = normalize(rules)
-        elapsed = time.perf_counter() - start
-        self.assertEqual(len(output), count)
-        self.assertLess(elapsed, 3.0)
-
-    def test_unrelated_whitelist_does_not_make_suffix_scan_quadratic(self):
-        count = 8000
-        rules = [Rule("DOMAIN-SUFFIX", f"s{i}.example.com") for i in range(count)]
-        exclusions = [f"DOMAIN,unrelated{i}.other.com" for i in range(count)]
-        start = time.perf_counter()
-        output = normalize(rules, exclusions)
         elapsed = time.perf_counter() - start
         self.assertEqual(len(output), count)
         self.assertLess(elapsed, 3.0)
@@ -741,37 +698,7 @@ class NormalizeTests(unittest.TestCase):
         self.assertEqual(len(output), 2 * count)
         self.assertLess(elapsed, 3.0)
 
-    def test_unrelated_tree_exclusions_do_not_scan_every_domain(self):
-        count = 8000
-        rules = [Rule("DOMAIN", f"sub.s{i}.example.com") for i in range(count)]
-        exclusions = [f"unused{i}.other.com" for i in range(count)]
-        start = time.perf_counter()
-        output = normalize(rules, exclusions)
-        elapsed = time.perf_counter() - start
-        self.assertEqual(len(output), count)
-        self.assertLess(elapsed, 3.0)
-
-    def test_unrelated_exact_exclusions_do_not_scan_every_wildcard(self):
-        count = 4000
-        rules = [Rule("DOMAIN-WILDCARD", f"api-*.s{i}.example.com") for i in range(count)]
-        exclusions = [f"DOMAIN,unrelated{i}.other.com" for i in range(count)]
-        start = time.perf_counter()
-        output = normalize(rules, exclusions)
-        elapsed = time.perf_counter() - start
-        self.assertEqual(len(output), count)
-        self.assertLess(elapsed, 3.0)
-
-    def test_unrelated_tree_exclusions_do_not_scan_every_wildcard(self):
-        count = 4000
-        rules = [Rule("DOMAIN-WILDCARD", f"api-*.s{i}.example.com") for i in range(count)]
-        exclusions = [f"unrelated{i}.other.com" for i in range(count)]
-        start = time.perf_counter()
-        output = normalize(rules, exclusions)
-        elapsed = time.perf_counter() - start
-        self.assertEqual(len(output), count)
-        self.assertLess(elapsed, 3.0)
-
-    def test_allow_suffix_suppresses_blocking_exact_domains_within_it(self):
+    def test_allow_suffix_does_not_remove_blocking_exact_domains(self):
         rules = [
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
             Rule("DOMAIN", "safe.example.com"),
@@ -780,23 +707,22 @@ class NormalizeTests(unittest.TestCase):
         ]
         self.assertEqual(normalize(rules), [
             Rule("DOMAIN", "ads.example.com"),
+            Rule("DOMAIN", "child.safe.example.com"),
+            Rule("DOMAIN", "safe.example.com"),
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
         ])
 
-    def test_allow_suffix_also_removes_narrower_blocking_suffix(self):
+    def test_allow_suffix_does_not_remove_blocking_suffixes(self):
         rules = [
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
             Rule("DOMAIN-SUFFIX", "ads.safe.example.com"),
             Rule("DOMAIN-SUFFIX", "other.example.com"),
         ]
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            output = normalize(rules)
-        self.assertEqual(output, [
+        self.assertEqual(normalize(rules), [
+            Rule("DOMAIN-SUFFIX", "ads.safe.example.com"),
             Rule("DOMAIN-SUFFIX", "other.example.com"),
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
         ])
-        self.assertTrue(any("ads.safe.example.com" in str(item.message) for item in reported))
 
     def test_keyword_containment_requires_same_options_and_allow(self):
         rules = [
@@ -830,58 +756,30 @@ class NormalizeTests(unittest.TestCase):
             Rule("SRC-IP-CIDR", "2001:db8::/32"),
         ])
 
-    def test_nondomain_exclusion_precedes_keyword_dedup(self):
-        rules = [
-            Rule("DOMAIN-KEYWORD", "ads"), Rule("DOMAIN-KEYWORD", "ads2"),
-            Rule("PROCESS-NAME", "AdsApp"), Rule("DOMAIN", "ads.example.com"),
-        ]
-        self.assertEqual(normalize(rules, ["ads", "PROCESS-NAME,AdsApp"]), [
-            Rule("DOMAIN", "ads.example.com"), Rule("DOMAIN-KEYWORD", "ads2"),
+    def test_unrelated_allow_does_not_remove_domain_regex(self):
+        rule = Rule("DOMAIN-REGEX", r"^tracker\.example\.com$")
+        self.assertEqual(normalize([rule, Rule("DOMAIN", "safe.example.org", allow=True)]), [
+            Rule("DOMAIN", "safe.example.org", allow=True), rule,
         ])
 
-    def test_domain_regex_conflicting_with_excluded_domain_is_discarded(self):
-        rule = Rule("DOMAIN-REGEX", r"^.+\.example\.com$")
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            result = normalize([rule], ["DOMAIN,safe.example.com"])
-        self.assertEqual(result, [])
-        self.assertTrue(any("DOMAIN-REGEX" in str(item.message) for item in reported))
+    def test_keyword_overlapping_exact_allow_is_preserved(self):
+        rules = [
+            Rule("DOMAIN-KEYWORD", "example"), Rule("DOMAIN-KEYWORD", "unrelated"),
+            Rule("DOMAIN", "safe.example.com", allow=True),
+        ]
+        self.assertEqual(normalize(rules), [
+            Rule("DOMAIN", "safe.example.com", allow=True),
+            Rule("DOMAIN-KEYWORD", "example"), Rule("DOMAIN-KEYWORD", "unrelated"),
+        ])
 
-    def test_regex_is_conservatively_removed_without_running_untrusted_pattern(self):
-        rule = Rule("DOMAIN-REGEX", r"^tracker\.example\.com$")
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            result = normalize([rule], ["DOMAIN,safe.example.org"])
-        self.assertEqual(result, [])
-        self.assertTrue(any("DOMAIN-REGEX" in str(item.message) for item in reported))
-
-    def test_domain_regex_cannot_bypass_subtree_exclusion(self):
-        rule = Rule("DOMAIN-REGEX", r"^cdn\..+\.safe\.example\.com$")
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            result = normalize([rule], ["safe.example.com"])
-        self.assertEqual(result, [])
-        self.assertTrue(any("DOMAIN-REGEX" in str(item.message) for item in reported))
-
-    def test_keyword_overlapping_exact_exception_is_reported_and_removed(self):
-        rules = [Rule("DOMAIN-KEYWORD", "example"), Rule("DOMAIN-KEYWORD", "unrelated")]
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            output = normalize(rules, ["DOMAIN,safe.example.com"])
-        self.assertEqual(output, [Rule("DOMAIN-KEYWORD", "unrelated")])
-        self.assertTrue(any("DOMAIN-KEYWORD,example" in str(item.message) for item in reported))
-
-    def test_wildcard_overlap_with_excluded_subtree_is_conservatively_removed(self):
+    def test_wildcard_overlapping_allow_suffix_is_preserved(self):
         rules = [
             Rule("DOMAIN-WILDCARD", "api-*.example.com"),
             Rule("DOMAIN-WILDCARD", "api-*.other.com"),
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
         ]
-        with warnings.catch_warnings(record=True) as reported:
-            warnings.simplefilter("always")
-            output = normalize(rules)
-        self.assertEqual(output, [
+        self.assertEqual(normalize(rules), [
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
+            Rule("DOMAIN-WILDCARD", "api-*.example.com"),
             Rule("DOMAIN-WILDCARD", "api-*.other.com"),
         ])
-        self.assertTrue(any("DOMAIN-WILDCARD,api-*.example.com" in str(item.message) for item in reported))

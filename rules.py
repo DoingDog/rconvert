@@ -309,10 +309,6 @@ def parse_whitelist(text: str) -> list[Rule]:
     return [Rule(rule.kind, rule.value) for rule in parsed if rule.kind in supported]
 
 
-def _within(domain: str, suffix: str) -> bool:
-    return domain == suffix or domain.endswith('.' + suffix)
-
-
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
     exact, suffixes, keywords, wildcards, typed = set(), set(), set(), set(), set()
     networks = {"src": set(), "dst": set()}
@@ -378,80 +374,8 @@ def _has_parent(domain: str, parents: set[str]) -> bool:
     return False
 
 
-def _wildcard_overlaps_exact(pattern: str, domain: str) -> bool:
-    if '[' not in pattern:
-        return fnmatchcase(domain, pattern)
-    # Surge [] is not a shell glob character class; only an unrelated fixed suffix proves safety.
-    last_wildcard = max(pattern.rfind(char) for char in '*?]')
-    tail = pattern[last_wildcard + 1:]
-    return not tail.startswith('.') or _within(domain, tail[1:])
-
-
-def normalize(rules: Iterable[Rule], exclusions: Iterable[str] = ()) -> list[Rule]:
-    exact, trees, literals, typed = set(), set(), set(), set()
-    for exclusion in exclusions:
-        value = exclusion.strip()
-        if value.upper().startswith("DOMAIN,"):
-            exact.add(Rule("DOMAIN", value.split(',', 1)[1].strip()).value)
-        elif ',' in value and not value.startswith(','):
-            kind, item = value.split(',', 1)
-            typed.add((kind.upper(), Rule(kind, item.strip()).value))
-        elif value:
-            value = value.removeprefix(',').strip()
-            if _valid_domain("DOMAIN", value):
-                trees.add(Rule("DOMAIN", value).value)
-            else:
-                literals.add(value)
-    unique = {rule for rule in rules if not (
-        rule.kind == "DOMAIN" and rule.value in exact or
-        (rule.kind, rule.value) in typed or rule.value in literals or
-        rule.kind in {"DOMAIN", "DOMAIN-SUFFIX"} and
-        _has_parent(rule.value, trees)
-    )}
-    allowed = {rule.value for rule in unique if rule.allow and rule.kind in {"DOMAIN", "DOMAIN-SUFFIX"}}
-    allow_suffixes = {rule.value for rule in unique if rule.allow and rule.kind == "DOMAIN-SUFFIX"}
-    unique = {rule for rule in unique if not (
-        not rule.allow and rule.kind == "DOMAIN" and
-        (rule.value in allowed or _has_parent(rule.value, allow_suffixes))
-    )}
-    protected = exact | trees | allowed
-    protected_trees = trees | allow_suffixes
-    tree_ancestors = set()
-    for tree in protected_trees:
-        while tree:
-            tree_ancestors.add(tree)
-            tree = tree.partition('.')[2]
-    protected_ancestors = set()
-    protected_by_suffix = {}
-    for domain in protected:
-        suffix = domain
-        while suffix:
-            protected_ancestors.add(suffix)
-            protected_by_suffix.setdefault(suffix, []).append(domain)
-            suffix = suffix.partition('.')[2]
-    for rule in sorted(unique, key=lambda item: (item.kind, item.value, item.options, item.allow)):
-        conflicting_suffix = rule.kind == "DOMAIN-SUFFIX" and (
-            rule.value in protected_ancestors or _has_parent(rule.value, allow_suffixes)
-        )
-        conflicting_wildcard = False
-        if rule.kind == "DOMAIN-WILDCARD":
-            last_wildcard = max(rule.value.rfind(char) for char in '*?]')
-            tail = rule.value[last_wildcard + 1:]
-            wildcard_candidates = protected_by_suffix.get(tail[1:], ()) if tail.startswith('.') else protected
-            conflicting_wildcard = any(
-                _wildcard_overlaps_exact(rule.value, excluded) for excluded in wildcard_candidates
-            )
-            if tail.startswith('.'):
-                conflicting_wildcard |= tail[1:] in tree_ancestors or _has_parent(tail[1:], protected_trees)
-            else:
-                conflicting_wildcard |= bool(protected_trees)
-        conflicting_keyword = rule.kind == "DOMAIN-KEYWORD" and (
-            bool(trees | allow_suffixes) or any(rule.value in excluded for excluded in protected)
-        )
-        conflicting_regex = rule.kind == "DOMAIN-REGEX" and bool(protected)
-        if not rule.allow and (conflicting_suffix or conflicting_wildcard or conflicting_keyword or conflicting_regex):
-            unique.remove(rule)
-            warnings.warn(f"excluded conflicting broad rule {rule.kind},{rule.value}", stacklevel=2)
+def normalize(rules: Iterable[Rule]) -> list[Rule]:
+    unique = set(rules)
     suffixes = {}
     for rule in unique:
         if rule.kind == "DOMAIN-SUFFIX":

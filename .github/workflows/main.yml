@@ -51,10 +51,14 @@ jobs:
           test "$(git rev-parse HEAD:static)" = c4506b2564072fe230c5d7e922ecb8d337921f54
           git diff HEAD --exit-code -- static
           test -z "$(git ls-files --others -- static)"
-          for group in a1 a2 a3 cdn big-data dirt; do
-            git add -- "$group/fin.txt" "$group/fin-qx.txt" "$group/fin.yaml" \
-              "$group/fin-adb.txt" "$group/fin-surge.txt" "$group/fin-surge-ds.txt"
-          done
+          .venv/bin/python - <<'PY'
+          import subprocess
+          from pathlib import Path
+          from formats import FILES
+          from sources import load_config
+          paths = [str(Path(group['name']) / name) for group in load_config(Path('.')) for name in FILES]
+          subprocess.run(['git', 'add', '--', *paths], check=True)
+          PY
           if ! git diff --cached --quiet; then
             git -c user.name='github-actions[bot]' \
               -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \

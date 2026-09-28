@@ -20,6 +20,21 @@ GROUPS = ("a1", "a2", "a3", "cdn", "big-data", "dirt")
 NAMES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
 
 
+def configure_groups(root, sources=None, whitelist=None):
+    sources = sources or {}
+    whitelist = whitelist or {}
+    (root / "rulesets.json").write_text(json.dumps([
+        {"name": group, "purpose": "block" if group in {"a1", "a2", "a3"} else
+         "direct" if group == "dirt" else "proxy",
+         "no_resolve": "strip" if group == "dirt" else "add",
+         "sources": sources.get(group, [f"{group}/rules.txt"]),
+         "whitelist": whitelist.get(group, [])}
+        for group in ("a2", "cdn", "a3", "a1", "big-data", "dirt")
+    ]), encoding="utf-8")
+    for group in GROUPS:
+        (root / group).mkdir(exist_ok=True)
+
+
 class GenerateTests(unittest.TestCase):
     def test_http_source_is_rejected_before_network(self):
         with self.assertRaisesRegex(ValueError, "HTTPS"):
@@ -254,14 +269,40 @@ class GenerateTests(unittest.TestCase):
                 self.assertNotIn("no-resolve", outputs[root / "untagged" / name], name)
                 self.assertIn("no-resolve", outputs[root / "forced" / name], name)
 
+    def test_json_whitelist_removes_only_covered_rules_and_adds_dns_exceptions(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": ["block.list"], "whitelist": ["allow.list"],
+            }]), encoding="utf-8")
+            (root / "block.list").write_text(
+                "DOMAIN-SUFFIX,a.com\nDOMAIN,remove.example.com\n"
+                "DOMAIN-KEYWORD,ad.track\n@@||safe.org^\n", encoding="utf-8",
+            )
+            (root / "allow.list").write_text(
+                "DOMAIN,safe.a.com,DIRECT\nDOMAIN-SUFFIX,remove.example.com,DIRECT\n"
+                "USER-AGENT,*bot*,DIRECT\n", encoding="utf-8",
+            )
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            surge = outputs[root / "a3" / "fin.txt"]
+            dns = outputs[root / "a3" / "fin-adb.txt"]
+            self.assertIn("DOMAIN-SUFFIX,a.com\n", surge)
+            self.assertIn("DOMAIN-KEYWORD,ad.track\n", surge)
+            self.assertNotIn("remove.example.com", surge)
+            self.assertIn("||a.com^\n", dns)
+            self.assertIn("/^.*ad\\.track.*$/\n", dns)
+            self.assertIn("@@|safe.a.com|\n", dns)
+            self.assertIn("@@||safe.org^\n", dns)
+            self.assertNotIn("\nremove.example.com\n", dns)
+            self.assertNotIn("USER-AGENT", dns)
+
     def test_cli_builds_fixture_with_local_sources_only(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root)
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rule.txt\n", encoding="utf-8")
-                (config.parent / "rule.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+                (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
             result = subprocess.run(
                 [sys.executable, str(ROOT / "generate.py"), "--root", str(root)],
                 cwd=ROOT, capture_output=True, text=True, check=False,
@@ -275,62 +316,53 @@ class GenerateTests(unittest.TestCase):
     def test_adblock_keeps_wide_block_with_narrow_allow_exception(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root)
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rules.txt\n", encoding="utf-8")
-                (config.parent / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     "DOMAIN-SUFFIX,example.com\n@@||safe.example.com^\n"
                     if group == "a2" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertNotIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
+            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
             self.assertIn("||example.com^", outputs[root / "a2" / "fin-adb.txt"])
             self.assertIn("@@||safe.example.com^", outputs[root / "a2" / "fin-adb.txt"])
 
-    def test_del_ini_excludes_route_tree_and_adds_adblock_exception(self):
+    def test_whitelist_keeps_broad_route_and_adds_dns_exception(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root, whitelist={"a2": ["allow.list"]})
+            (root / "allow.list").write_text("DOMAIN-SUFFIX,safe.example.com,DIRECT\n", encoding="utf-8")
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rules.txt\n", encoding="utf-8")
-                (config.parent / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     "DOMAIN-SUFFIX,example.com\nDOMAIN,ads.example.com\n"
                     if group == "a2" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
-            (root / "a2" / "attach" / "del.ini").write_text("safe.example.com\n", encoding="utf-8")
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertNotIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
-            self.assertIn("DOMAIN,ads.example.com", outputs[root / "a2" / "fin.txt"])
+            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
             self.assertIn("||example.com^", outputs[root / "a2" / "fin-adb.txt"])
             self.assertIn("@@||safe.example.com^", outputs[root / "a2" / "fin-adb.txt"])
 
-    def test_exact_exclusion_does_not_leave_wide_adblock_without_equivalent_exception(self):
+    def test_exact_whitelist_keeps_broad_block_with_anchored_dns_exception(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root, whitelist={"a2": ["allow.list"]})
+            (root / "allow.list").write_text("DOMAIN,safe.example.com,DIRECT\n", encoding="utf-8")
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rules.txt\n", encoding="utf-8")
-                (config.parent / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     "DOMAIN-SUFFIX,example.com\n" if group == "a2"
                     else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
-            (root / "a2" / "attach" / "del.ini").write_text(
-                "DOMAIN,safe.example.com\n", encoding="utf-8",
-            )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertNotIn("||example.com^", outputs[root / "a2" / "fin-adb.txt"])
+            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
+            self.assertIn("||example.com^", outputs[root / "a2" / "fin-adb.txt"])
+            self.assertIn("@@|safe.example.com|", outputs[root / "a2" / "fin-adb.txt"])
 
     def test_empty_required_source_aborts_with_its_path(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root)
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rules.txt\n", encoding="utf-8")
-                (config.parent / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     "# no rules\n" if group == "a3" else "DOMAIN,ads.example.org\n",
                     encoding="utf-8",
                 )
@@ -341,14 +373,10 @@ class GenerateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             target = root / "a2" / "fin.txt"
+            configure_groups(root, sources={"a3": ["https://example.org/broken.txt"]})
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                if group == "a3":
-                    config.write_text("https://example.org/broken.txt\n", encoding="utf-8")
-                else:
-                    config.write_text("rules.txt\n", encoding="utf-8")
-                    (config.parent / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+                if group != "a3":
+                    (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
             target.write_bytes(b"previous version\n")
             with self.assertRaisesRegex(UnicodeError, "https://example.org/broken.txt"):
                 publish(generate(root, lambda _: b"\xff\xfe"))
@@ -357,15 +385,10 @@ class GenerateTests(unittest.TestCase):
     def test_last_source_failure_keeps_all_previous_outputs(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root, sources={"dirt": ["https://example.org/final.txt"]})
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text(
-                    "https://example.org/final.txt\n" if group == "dirt" else "rules.txt\n",
-                    encoding="utf-8",
-                )
                 if group != "dirt":
-                    (config.parent / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+                    (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
                 for name in NAMES:
                     (root / group / name).write_bytes(b"previous version\n")
             with self.assertRaisesRegex(RuntimeError, "final.txt"):
@@ -378,14 +401,10 @@ class GenerateTests(unittest.TestCase):
     def test_unsupported_source_rule_reports_url_and_line(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root, sources={"a3": ["https://example.org/mixed.txt"]})
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                if group == "a3":
-                    config.write_text("https://example.org/mixed.txt\n", encoding="utf-8")
-                else:
-                    config.write_text("rules.txt\n", encoding="utf-8")
-                    (config.parent / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+                if group != "a3":
+                    (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
             stderr = io.StringIO()
             with contextlib.redirect_stderr(stderr):
                 generate(root, lambda _: b"DOMAIN,ads.example.org\nUNKNOWN-TYPE,foo\n")
@@ -396,11 +415,9 @@ class GenerateTests(unittest.TestCase):
     def test_incompatible_target_type_reports_count(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root)
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rules.txt\n", encoding="utf-8")
-                (config.parent / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     "PROCESS-NAME,Game.exe,REJECT\n" if group == "a3"
                     else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
@@ -412,16 +429,10 @@ class GenerateTests(unittest.TestCase):
     def test_dependent_groups_use_current_in_memory_cdn_and_a2_outputs(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root, sources={"a1": ["a2/fin.txt"], "big-data": ["cdn/fin.txt"]})
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text(
-                    "..\\..\\a2\\fin.txt\n" if group == "a1" else
-                    "..\\..\\cdn\\fin.txt\n" if group == "big-data" else
-                    "rules.txt\n", encoding="utf-8",
-                )
                 if group not in {"a1", "big-data"}:
-                    (config.parent / "rules.txt").write_text(
+                    (root / group / "rules.txt").write_text(
                         f"DOMAIN,from-{group}.example.org\n", encoding="utf-8",
                     )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
@@ -433,21 +444,15 @@ class GenerateTests(unittest.TestCase):
     def test_changed_dependencies_change_the_same_round_outputs(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root, sources={"a1": ["a2/fin.txt"], "big-data": ["cdn/fin.txt"]})
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text(
-                    "..\\..\\a2\\fin.txt\n" if group == "a1" else
-                    "..\\..\\cdn\\fin.txt\n" if group == "big-data" else
-                    "rules.txt\n", encoding="utf-8",
-                )
                 if group not in {"a1", "big-data"}:
-                    (config.parent / "rules.txt").write_text(
+                    (root / group / "rules.txt").write_text(
                         f"DOMAIN,original-{group}.example.org\n", encoding="utf-8",
                     )
             first = generate(root, lambda _: self.fail("local input must not fetch"))
             for group in ("a2", "cdn"):
-                (root / group / "attach" / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     f"DOMAIN,replaced-{group}.example.org\n", encoding="utf-8",
                 )
             second = generate(root, lambda _: self.fail("local input must not fetch"))
@@ -456,16 +461,15 @@ class GenerateTests(unittest.TestCase):
             self.assertNotEqual(first[root / "a1" / "fin.txt"], second[root / "a1" / "fin.txt"])
             self.assertNotEqual(first[root / "big-data" / "fin.txt"], second[root / "big-data" / "fin.txt"])
 
-    def test_same_remote_url_is_fetched_once_for_multiple_groups(self):
+    def test_same_remote_url_is_fetched_once_for_rules_and_whitelist(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             shared = "https://example.org/shared.txt"
+            configure_groups(root, sources={"a2": [shared], "a3": [shared]},
+                             whitelist={"a3": [shared]})
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text(shared + "\n" if group in {"a2", "a3"} else "rules.txt\n", encoding="utf-8")
                 if group not in {"a2", "a3"}:
-                    (config.parent / "rules.txt").write_text("DOMAIN,baseline.example.org\n", encoding="utf-8")
+                    (root / group / "rules.txt").write_text("DOMAIN,baseline.example.org\n", encoding="utf-8")
             calls = []
 
             def fetch(url):
@@ -478,11 +482,9 @@ class GenerateTests(unittest.TestCase):
     def test_automatic_no_resolve_allows_cidr_coalescing_across_source_options(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root)
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rules.txt\n", encoding="utf-8")
-                (config.parent / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     "IP-CIDR,192.0.2.0/25\nIP-CIDR,192.0.2.128/25,no-resolve\n"
                     if group == "a3" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
@@ -494,11 +496,9 @@ class GenerateTests(unittest.TestCase):
     def test_repeat_build_has_identical_utf8_bytes(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
+            configure_groups(root)
             for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text("rules.txt\n", encoding="utf-8")
-                (config.parent / "rules.txt").write_text(
+                (root / group / "rules.txt").write_text(
                     "DOMAIN-SUFFIX,example.com\nIP-CIDR,203.0.113.0/24\n", encoding="utf-8",
                 )
             with contextlib.redirect_stderr(io.StringIO()):
@@ -512,10 +512,7 @@ class GenerateTests(unittest.TestCase):
     def test_offline_build_produces_six_files_per_group_without_writing_them(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            for group in GROUPS:
-                config = root / group / "attach" / "rule-list.ini"
-                config.parent.mkdir(parents=True)
-                config.write_text(f"https://example.org/{group}.txt\n", encoding="utf-8")
+            configure_groups(root, sources={group: [f"https://example.org/{group}.txt"] for group in GROUPS})
             contents = {
                 f"https://example.org/{group}.txt": b"DOMAIN,ads.example.org\n"
                 for group in GROUPS

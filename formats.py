@@ -8,7 +8,6 @@ from rules import Rule
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
-AD_GROUPS = {"a1", "a2", "a3"}
 DOMAIN_SET_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
 NO_RESOLVE_TYPES = {"IP-CIDR", "IP-CIDR6", "IP-ASN", "GEOIP"}
 SURGE_TYPES = {
@@ -106,15 +105,15 @@ def _dns_pattern(rule: Rule) -> str | None:
     return None
 
 
-def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = (),
-           no_resolve: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
+def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
+           whitelist: Iterable[Rule] = ()) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow)):
         kind, value = rule.kind, rule.value
         if no_resolve == "strip":
             rule = Rule(kind, value, tuple(option for option in rule.options if option != "no-resolve"), rule.allow)
-        elif (no_resolve == "add" or no_resolve is None and group != "dirt") and not rule.allow and kind in NO_RESOLVE_TYPES:
+        elif no_resolve == "add" and not rule.allow and kind in NO_RESOLVE_TYPES:
             rule = Rule(kind, value, rule.options + ("no-resolve",))
         if "\r" in value or "\n" in value:
             for name in FILES:
@@ -124,7 +123,7 @@ def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = (),
         text = f"{kind},{value}"
         logical = kind in LOGICAL
         if rule.allow:
-            if not rule.options and group in AD_GROUPS:
+            if not rule.options and purpose == "block":
                 dns_pattern = _dns_pattern(rule)
                 if dns_pattern is not None:
                     lines["fin-adb.txt"].append("@@" + (f"|{value}|" if kind == "DOMAIN" else dns_pattern))
@@ -180,7 +179,7 @@ def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = (),
             ):
                 lines["fin.yaml"].append("  - " + json.dumps(f"{mihomo_kind},{mihomo_value}", ensure_ascii=False))
                 emitted.add("fin.yaml")
-            if group in AD_GROUPS:
+            if purpose == "block":
                 dns_pattern = _dns_pattern(rule)
                 if dns_pattern is not None:
                     lines["fin-adb.txt"].append(dns_pattern)
@@ -192,7 +191,7 @@ def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = (),
             if name not in emitted and not (name == "fin-surge.txt" and kind in DOMAIN_SET_TYPES
                                             and not rule.allow and not rule.options):
                 skipped[f"{name}:{kind}"] += 1
-    if group in AD_GROUPS:
+    if purpose == "block":
         for rule in sorted(whitelist, key=lambda item: (item.kind, item.value)):
             if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
                 pattern = _dns_pattern(rule) if not any(c in rule.value for c in "\r\n") else None
@@ -204,6 +203,6 @@ def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = (),
     out = {name: f"{'!' if name == 'fin-adb.txt' else '#'} {group} rules: {len(body)}\n"
            + ("payload:\n" if name == "fin.yaml" else "") + "".join(line + "\n" for line in body)
            for name, body in lines.items()}
-    if group not in AD_GROUPS:
+    if purpose != "block":
         out["fin-adb.txt"] += "! No AdBlock rules for non-advertising group.\n"
     return out, dict(skipped)

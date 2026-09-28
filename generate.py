@@ -9,11 +9,9 @@ from typing import Callable
 from urllib import error, request
 from urllib.parse import urlsplit
 
-from sources import load_config, load_sources, resolve_source
+from sources import load_config, resolve_source
 
 
-GROUPS = ("a2", "cdn", "a3", "a1", "big-data", "dirt")
-PURPOSES = {"a1": "block", "a2": "block", "a3": "block", "cdn": "proxy", "big-data": "proxy", "dirt": "direct"}
 MAX_BYTES = 64 * 1024 * 1024
 
 
@@ -89,30 +87,29 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     if not root.is_relative_to(Path(__file__).resolve().parent):
         raise ValueError("Source root escapes worktree")
     from formats import NO_RESOLVE_TYPES, render
-    from rules import Rule, normalize, parse
+    from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 
     outputs: dict[Path, str] = {}
     cache: dict[str, bytes] = {}
-    configs = load_config(root) if (root / "rulesets.json").exists() else None
-    groups = ((item["name"], [resolve_source(root, entry) for entry in item["sources"]],
-               item["purpose"], item["no_resolve"])
-              for item in configs) if configs is not None else (
-                  (group, load_sources(root, group), PURPOSES[group], "keep" if group == "dirt" else "add")
-                  for group in GROUPS)
-    for group, sources, purpose, no_resolve in groups:
+
+    def read(source: str | Path) -> str:
+        if isinstance(source, Path):
+            data = outputs[source].encode("utf-8") if source in outputs else source.read_bytes()
+        else:
+            if source not in cache:
+                cache[source] = fetch(source)
+            data = cache[source]
+        try:
+            return data.decode("utf-8-sig")
+        except UnicodeError as exc:
+            raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
+
+    for config in load_config(root):
+        group, purpose, no_resolve = config["name"], config["purpose"], config["no_resolve"]
         rules = []
-        for source in sources:
-            if isinstance(source, Path):
-                data = outputs[source].encode("utf-8") if source in outputs else source.read_bytes()
-            else:
-                if source not in cache:
-                    cache[source] = fetch(source)
-                data = cache[source]
-            try:
-                text = data.decode("utf-8-sig")
-            except UnicodeError as exc:
-                raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
-            parsed, source_warnings = parse(text, purpose=purpose)
+        for entry in config["sources"]:
+            source = resolve_source(root, entry)
+            parsed, source_warnings = parse(read(source), purpose=purpose)
             for warning in source_warnings[:5]:
                 print(f"{source}: {warning}", file=sys.stderr)
             if len(source_warnings) > 5:
@@ -120,28 +117,21 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             if not parsed:
                 raise ValueError(f"No adaptable rules in {source}")
             rules.extend(parsed)
-        exclusions_file = root / group / "attach" / "del.ini"
-        exclusions = exclusions_file.read_text(encoding="utf-8-sig").splitlines() if exclusions_file.exists() else []
+        whitelist = []
+        for entry in config["whitelist"]:
+            whitelist.extend(parse_whitelist(read(resolve_source(root, entry))))
+        allowed = [rule for rule in rules if rule.allow]
+        rules = exclude_covered(rules, whitelist + allowed)
         if no_resolve == "add":
             rules = [Rule(rule.kind, rule.value, rule.options + ("no-resolve",), rule.allow)
                      if not rule.allow and rule.kind in NO_RESOLVE_TYPES else rule for rule in rules]
         elif no_resolve == "strip":
             rules = [Rule(rule.kind, rule.value, tuple(option for option in rule.options if option != "no-resolve"), rule.allow)
                      for rule in rules]
-        rendered, skipped = render(group, normalize(rules, exclusions), no_resolve=no_resolve)
+        rendered, skipped = render(group, normalize(rules), purpose=purpose,
+                                   whitelist=whitelist, no_resolve=no_resolve)
         for key, count in sorted(skipped.items()):
             print(f"{group} {key}: {count}", file=sys.stderr)
-        if group in {"a1", "a2", "a3"}:
-            exact = [item for item in exclusions if item.strip().upper().startswith("DOMAIN,")]
-            adb_rules = set(normalize((rule for rule in rules if not rule.allow), exact))
-            adb_rules.update(rule for rule in rules if rule.allow)
-            for exclusion in exclusions:
-                entry = exclusion.strip()
-                if entry.startswith(',') or ',' not in entry:
-                    parsed, _ = parse(entry.removeprefix(',').strip(), purpose="block")
-                    if len(parsed) == 1 and parsed[0].kind == "DOMAIN":
-                        adb_rules.add(Rule("DOMAIN-SUFFIX", parsed[0].value, allow=True))
-            rendered["fin-adb.txt"] = render(group, adb_rules)[0]["fin-adb.txt"]
         outputs.update({root / group / name: text for name, text in rendered.items()})
     return outputs
 
