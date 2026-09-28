@@ -58,7 +58,7 @@
 **Interfaces:** `render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = ()) -> tuple[dict[str, str], dict[str, int]]`。新白名单只在 block 组增加 AdGuard DNS `@@` 行；来源 `allow=True` 保留原 `@@`，但不改变其他目标格式。
 
 - [ ] 在 `tests/test_formats.py` 先写并运行 RED：`Rule('DOMAIN','exact.example.org')` 在 `fin-adb.txt` 只能输出裸 `exact.example.org`，后缀仍输出 `||example.org^`；keyword 值含 `.` 要转义正则；`api-*.example.org` 以锚定 DNS 正则表示，`[...]` 若不安全则跳过并计数。
-- [ ] 再写并运行 RED：`whitelist=[Rule('DOMAIN','safe.example.org'), Rule('DOMAIN-SUFFIX','safe.org')]` 产生精确 `@@safe.example.org` 和后缀 `@@||safe.org^`，不能把前者扩大为后缀；IP 白名单不产生 DNS 行。实现最少格式逻辑后运行全套格式测试 GREEN。
+- [ ] 再写并运行 RED：`whitelist=[Rule('DOMAIN','safe.example.org'), Rule('DOMAIN-SUFFIX','safe.org')]` 产生锚定的精确 DNS 例外 `@@|safe.example.org|` 和后缀 `@@||safe.org^`，不能把前者扩大为后缀；IP 白名单不产生 DNS 行。实现最少格式逻辑后运行全套格式测试 GREEN。
 - [ ] 新增 `DOMAIN-WILDCARD,api-*.example.org` 与独立精确域名共同渲染的测试，断言 Surge `fin-surge-ds.txt` 保留精确域名，QX/Mihomo 格式符合官方语法。
 - [ ] 在独立分支提交 Task 3 的文件，并返回 commit SHA、RED/GREEN 命令及结果。
 
