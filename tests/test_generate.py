@@ -1,4 +1,5 @@
 import contextlib
+import gzip
 import io
 import json
 from http.client import IncompleteRead
@@ -185,12 +186,49 @@ class GenerateTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, url):
                 fetch_https(url)
 
+    def test_gzip_download_is_decompressed_for_rules(self):
+        url = "https://example.org/list.txt"
+        data = b"DOMAIN,ads.example.org\n"
+        compressed = gzip.compress(data)
+        response = BytesIO(compressed)
+        response.geturl = lambda: url
+        response.headers = {"Content-Encoding": "gzip", "Content-Length": str(len(compressed))}
+        with patch("urllib.request.OpenerDirector.open", return_value=response):
+            self.assertEqual(fetch_https(url), data)
+
+    def test_gzip_checks_compressed_and_decompressed_size_limits(self):
+        url = "https://example.org/huge.txt"
+        compressed = gzip.compress(b"DOMAIN," + b"a" * 1000)
+        for maximum, label in ((len(compressed) - 1, "size"), (len(compressed), "Decompressed")):
+            with self.subTest(label=label):
+                response = BytesIO(compressed)
+                response.geturl = lambda: url
+                response.headers = {"Content-Encoding": "gzip", "Content-Length": str(len(compressed))}
+                with patch("generate.MAX_BYTES", maximum), patch("urllib.request.OpenerDirector.open", return_value=response):
+                    with self.assertRaisesRegex(ValueError, label):
+                        fetch_https(url)
+
+    def test_truncated_gzip_download_aborts_instead_of_skipping(self):
+        url = "https://example.org/broken.txt"
+        response = BytesIO(gzip.compress(b"DOMAIN,ads.example.org\n")[:-5])
+        response.geturl = lambda: url
+        response.headers = {"Content-Encoding": "gzip"}
+        with patch("urllib.request.OpenerDirector.open", return_value=response):
+            with self.assertRaisesRegex(RuntimeError, url):
+                fetch_https(url)
+
     def test_publish_writes_a_complete_utf8_file(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             output = Path(directory) / "a3" / "fin.txt"
             output.parent.mkdir()
             publish({output: "DOMAIN,例子.example\n"})
             self.assertEqual(output.read_bytes(), "DOMAIN,例子.example\n".encode("utf-8"))
+
+    def test_publish_creates_a_new_group_directory(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            output = Path(directory) / "new-group" / "fin.txt"
+            publish({output: "DOMAIN,new.example.org\n"})
+            self.assertEqual(output.read_text(encoding="utf-8"), "DOMAIN,new.example.org\n")
 
     def test_second_replacement_failure_restores_all_old_files(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -214,6 +252,29 @@ class GenerateTests(unittest.TestCase):
                     publish({first: "new first\n", second: "new second\n"})
             self.assertEqual(first.read_bytes(), b"old data\n")
             self.assertEqual(second.read_bytes(), b"old data\n")
+
+    def test_publish_failure_removes_new_group_and_keeps_prior_files(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            new = root / "new-group" / "fin.txt"
+            old = root / "cdn" / "fin.txt"
+            old.parent.mkdir()
+            old.write_bytes(b"previous version\n")
+            original_replace = os.replace
+            calls = 0
+
+            def fail_second(source, target):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    raise OSError("replacement failed")
+                return original_replace(source, target)
+
+            with patch("os.replace", side_effect=fail_second):
+                with self.assertRaisesRegex(OSError, "replacement failed"):
+                    publish({new: "new content\n", old: "new old\n"})
+            self.assertFalse(new.parent.exists())
+            self.assertEqual(old.read_bytes(), b"previous version\n")
 
     def test_publish_rejects_paths_outside_worktree(self):
         outside = ROOT.parent / "outside-fin.txt"
@@ -350,6 +411,21 @@ class GenerateTests(unittest.TestCase):
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertIn("DOMAIN,ads.example.org\n", outputs[root / "a3" / "fin.txt"])
 
+    def test_missing_or_invalid_utf8_local_whitelist_aborts_entire_round(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            configure_groups(root, whitelist={"a3": ["allow.list"]})
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+                for name in NAMES:
+                    (root / group / name).write_bytes(b"previous version\n")
+            with self.assertRaises(FileNotFoundError):
+                publish(generate(root, lambda _: self.fail("local input must not fetch")))
+            (root / "allow.list").write_bytes(b"DOMAIN,good.example.org\n\xff\n")
+            with self.assertRaisesRegex(UnicodeError, "allow.list"):
+                publish(generate(root, lambda _: self.fail("local input must not fetch")))
+            self.assertEqual((root / "cdn" / "fin.txt").read_bytes(), b"previous version\n")
+
     def test_configured_empty_whitelist_aborts_instead_of_disabling_exclusions(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -379,6 +455,25 @@ class GenerateTests(unittest.TestCase):
                 {root / group / name for group in GROUPS for name in NAMES},
                 {path for group in GROUPS for path in (root / group).glob("fin*")},
             )
+
+    def test_cli_retains_frozen_group_and_updates_healthy_group(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            configure_groups(root)
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text(
+                    "@@||safe.example.org^\n" if group == "a3" else "DOMAIN,current.example.org\n",
+                    encoding="utf-8",
+                )
+            for name in NAMES:
+                (root / "a3" / name).write_bytes(b"previous version\n")
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "generate.py"), "--root", str(root)],
+                cwd=ROOT, capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(all((root / "a3" / name).read_bytes() == b"previous version\n" for name in NAMES))
+            self.assertIn("DOMAIN,current.example.org", (root / "cdn" / "fin.txt").read_text(encoding="utf-8"))
 
     def test_adblock_keeps_wide_block_with_narrow_allow_exception(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -436,18 +531,25 @@ class GenerateTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "a3.*rules.txt"):
                 generate(root, lambda _: self.fail("local input must not fetch"))
 
-    def test_invalid_utf8_identifies_remote_source_and_does_not_publish(self):
+    def test_wholly_bad_utf8_remote_source_freezes_its_group_without_stopping_others(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            target = root / "cdn" / "fin.txt"
-            configure_groups(root, sources={"a3": ["https://example.org/broken.txt"]})
+            url = "https://example.org/broken.txt"
+            configure_groups(root, sources={"a3": [url]})
             for group in GROUPS:
                 if group != "a3":
-                    (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
-            target.write_bytes(b"previous version\n")
-            with self.assertRaisesRegex(UnicodeError, "https://example.org/broken.txt"):
-                publish(generate(root, lambda _: b"\xff\xfe"))
-            self.assertEqual(target.read_bytes(), b"previous version\n")
+                    (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            for name in NAMES:
+                (root / "a3" / name).write_bytes(b"previous version\n")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: b"\xff\xfe")
+            self.assertIn(url, stderr.getvalue())
+            self.assertIn("UTF-8", stderr.getvalue())
+            self.assertNotIn(root / "a3" / "fin.txt", outputs)
+            publish(outputs)
+            self.assertTrue(all((root / "a3" / name).read_bytes() == b"previous version\n" for name in NAMES))
+            self.assertIn("DOMAIN,current.example.org", (root / "cdn" / "fin.txt").read_text(encoding="utf-8"))
 
     def test_last_source_failure_keeps_all_previous_outputs(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -460,6 +562,53 @@ class GenerateTests(unittest.TestCase):
                     (root / group / name).write_bytes(b"previous version\n")
             with self.assertRaisesRegex(RuntimeError, "final.txt"):
                 publish(generate(root, lambda _: (_ for _ in ()).throw(RuntimeError("final.txt unavailable"))))
+            self.assertTrue(all(
+                (root / group / name).read_bytes() == b"previous version\n"
+                for group in GROUPS for name in NAMES
+            ))
+
+    def test_non404_http_errors_and_timeout_stop_all_publication(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/final.txt"
+            configure_groups(root, sources={"dirt": [url]})
+            for group in GROUPS:
+                if group != "dirt":
+                    (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+                for name in NAMES:
+                    (root / group / name).write_bytes(b"previous version\n")
+            for failure in (
+                error.HTTPError(url, 410, "Gone", {}, None),
+                error.HTTPError(url, 429, "Too Many Requests", {}, None),
+                error.HTTPError(url, 503, "Service Unavailable", {}, None),
+                TimeoutError("timed out"),
+                IncompleteRead(b"DOMAIN,partial.example.org", 50),
+            ):
+                with self.subTest(failure=str(failure)):
+                    with patch("urllib.request.OpenerDirector.open", side_effect=failure):
+                        with self.assertRaisesRegex(RuntimeError, url):
+                            publish(generate(root, fetch_https))
+                    self.assertTrue(all(
+                        (root / group / name).read_bytes() == b"previous version\n"
+                        for group in GROUPS for name in NAMES
+                    ))
+
+    def test_short_http_200_response_stops_all_publication(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/final.txt"
+            configure_groups(root, sources={"dirt": [url]})
+            for group in GROUPS:
+                if group != "dirt":
+                    (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+                for name in NAMES:
+                    (root / group / name).write_bytes(b"previous version\n")
+            response = BytesIO(b"DOMAIN,partial.example.org\n")
+            response.geturl = lambda: url
+            response.headers = {"Content-Length": "999"}
+            with patch("urllib.request.OpenerDirector.open", return_value=response):
+                with self.assertRaisesRegex(ValueError, "Incomplete source"):
+                    publish(generate(root, fetch_https))
             self.assertTrue(all(
                 (root / group / name).read_bytes() == b"previous version\n"
                 for group in GROUPS for name in NAMES
@@ -542,10 +691,10 @@ class GenerateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             shared = "https://example.org/shared.txt"
-            configure_groups(root, sources={"cdn": [shared], "a3": [shared]},
+            configure_groups(root, sources={"cdn": [shared], "a3": [shared, "a3/rules.txt"]},
                              whitelist={"a3": [shared]})
             for group in GROUPS:
-                if group not in {"cdn", "a3"}:
+                if group != "cdn":
                     (root / group / "rules.txt").write_text("DOMAIN,baseline.example.org\n", encoding="utf-8")
             calls = []
 
@@ -555,6 +704,357 @@ class GenerateTests(unittest.TestCase):
 
             generate(root, fetch)
             self.assertEqual(calls, [shared])
+
+    def test_missing_remote_source_and_whitelist_share_cached_404_and_keep_good_rules(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing.txt"
+            good = "https://example.org/good.txt"
+            configure_groups(root, sources={"a3": [missing, good]}, whitelist={"a3": [missing]})
+            for group in GROUPS:
+                if group != "a3":
+                    (root / group / "rules.txt").write_text("DOMAIN,baseline.example.org\n", encoding="utf-8")
+            calls = []
+
+            def fetch(url):
+                calls.append(url)
+                if url == missing:
+                    raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+                return b"DOMAIN,good.example.org\n"
+
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, fetch)
+            self.assertEqual(calls, [missing, good])
+            self.assertIn("404", stderr.getvalue())
+            self.assertIn(missing, stderr.getvalue())
+            self.assertIn("DOMAIN,good.example.org", outputs[root / "a3" / "fin.txt"])
+
+    def test_fetch_https_wrapped_real_http_404_freezes_existing_group(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/missing.txt"
+            configure_groups(root, sources={"a3": [url]})
+            for group in GROUPS:
+                if group != "a3":
+                    (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            for name in NAMES:
+                (root / "a3" / name).write_bytes(b"previous version\n")
+            failure = error.HTTPError(url, 404, "Not Found", {}, None)
+            stderr = io.StringIO()
+            with patch("urllib.request.OpenerDirector.open", side_effect=failure):
+                with contextlib.redirect_stderr(stderr):
+                    outputs = generate(root, fetch_https)
+            self.assertIn(f"{url}: HTTP 404", stderr.getvalue())
+            self.assertNotIn(root / "a3" / "fin.txt", outputs)
+            self.assertIn(root / "cdn" / "fin.txt", outputs)
+
+    def test_all_404_freezes_group_six_files_while_healthy_groups_publish(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing.txt"
+            configure_groups(root, sources={"a3": [missing]})
+            for group in GROUPS:
+                if group != "a3":
+                    (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            previous = {}
+            for name in NAMES:
+                path = root / "a3" / name
+                previous[path] = f"previous {name}\n".encode()
+                path.write_bytes(previous[path])
+
+            def fetch(url):
+                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+            with contextlib.redirect_stderr(io.StringIO()):
+                outputs = generate(root, fetch)
+            self.assertFalse(any(path.parent.name == "a3" for path in outputs))
+            self.assertEqual(len(outputs), 18)
+            publish(outputs)
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+            self.assertIn("DOMAIN,current.example.org", (root / "cdn" / "fin.txt").read_text(encoding="utf-8"))
+
+    def test_frozen_cdn_also_freezes_big_data_without_reading_stale_cdn_file(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing-cdn.txt"
+            configure_groups(root, sources={"cdn": [missing],
+                                            "big-data": ["cdn/fin.txt", "https://example.org/extra.txt"]})
+            for group in ("a3", "dirt"):
+                (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            previous = {}
+            for group in ("cdn", "big-data"):
+                for name in NAMES:
+                    path = root / group / name
+                    previous[path] = f"DOMAIN,stale-{group}.example.org\n".encode()
+                    path.write_bytes(previous[path])
+            calls = []
+
+            def fetch(url):
+                calls.append(url)
+                if url == missing:
+                    raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+                return b"DOMAIN,extra.example.org\n"
+
+            with contextlib.redirect_stderr(io.StringIO()):
+                outputs = generate(root, fetch)
+            self.assertEqual(calls, [missing])
+            self.assertEqual(set(outputs), {root / group / name for group in ("a3", "dirt") for name in NAMES})
+            publish(outputs)
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+    def test_freeze_propagates_through_multiple_generated_dependency_levels(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing-cdn.txt"
+            configure_groups(root, sources={"cdn": [missing], "big-data": ["cdn/fin.txt"]})
+            configs = json.loads((root / "rulesets.json").read_text(encoding="utf-8"))
+            configs.append({"name": "archive", "purpose": "proxy", "no_resolve": "keep",
+                            "sources": ["big-data/fin.txt"], "whitelist": []})
+            (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+            for group in ("a3", "dirt"):
+                (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            for group in ("cdn", "big-data", "archive"):
+                (root / group).mkdir(exist_ok=True)
+                for name in NAMES:
+                    (root / group / name).write_bytes(b"previous version\n")
+
+            def fetch(url):
+                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+            with contextlib.redirect_stderr(io.StringIO()):
+                outputs = generate(root, fetch)
+            self.assertEqual(set(outputs), {root / group / name for group in ("a3", "dirt") for name in NAMES})
+            self.assertTrue(all(
+                (root / group / name).read_bytes() == b"previous version\n"
+                for group in ("cdn", "big-data", "archive") for name in NAMES
+            ))
+
+    def test_missing_local_whitelist_still_aborts_when_source_is_404(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing.txt"
+            configure_groups(root, sources={"a3": [missing]}, whitelist={"a3": ["allow.list"]})
+            for group in GROUPS:
+                if group != "a3":
+                    (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+                for name in NAMES:
+                    (root / group / name).write_bytes(b"previous version\n")
+
+            def fetch(url):
+                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+            with contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(FileNotFoundError):
+                    publish(generate(root, fetch))
+            self.assertEqual((root / "cdn" / "fin.txt").read_bytes(), b"previous version\n")
+
+    def test_frozen_dependency_does_not_hide_missing_local_whitelist(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing.txt"
+            configure_groups(root, sources={"cdn": [missing], "big-data": ["cdn/fin.txt"]},
+                             whitelist={"big-data": ["allow.list"]})
+            for group in ("a3", "dirt"):
+                (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            for group in ("cdn", "big-data"):
+                for name in NAMES:
+                    (root / group / name).write_bytes(b"previous version\n")
+
+            def fetch(url):
+                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+            with contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(FileNotFoundError):
+                    publish(generate(root, fetch))
+            self.assertEqual((root / "cdn" / "fin.txt").read_bytes(), b"previous version\n")
+
+    def test_missing_old_file_in_frozen_group_aborts_entire_round(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing.txt"
+            configure_groups(root, sources={"dirt": [missing]})
+            for group in GROUPS:
+                if group != "dirt":
+                    (root / group / "rules.txt").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+                for name in NAMES:
+                    if group != "dirt" or name != "fin.yaml":
+                        (root / group / name).write_bytes(b"previous version\n")
+
+            def fetch(url):
+                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+            with self.assertRaisesRegex(ValueError, r"dirt.*fin.yaml"):
+                publish(generate(root, fetch))
+            self.assertEqual((root / "cdn" / "fin.txt").read_bytes(), b"previous version\n")
+
+    def test_remote_whitelist_html_200_is_skipped_with_warning(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/allow.txt"
+            configure_groups(root, whitelist={"a3": [url]})
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: b"<html><body>login</body></html>")
+            self.assertIn("DOMAIN,ads.example.org", outputs[root / "a3" / "fin.txt"])
+            self.assertIn(url, stderr.getvalue())
+            self.assertIn("HTML", stderr.getvalue())
+
+    def test_bad_utf8_remote_line_keeps_other_complete_rules_and_line_number(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/mixed.txt"
+            configure_groups(root, sources={"a3": [url]})
+            for group in GROUPS:
+                if group != "a3":
+                    (root / group / "rules.txt").write_text("DOMAIN,baseline.example.org\n", encoding="utf-8")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: b"DOMAIN,first.example.org\nDOMAIN,\xffbad.example.org\nDOMAIN,last.example.org\n")
+            text = outputs[root / "a3" / "fin.txt"]
+            self.assertIn("DOMAIN,first.example.org", text)
+            self.assertIn("DOMAIN,last.example.org", text)
+            self.assertNotIn("bad.example.org", text)
+            self.assertIn(f"{url}: line 2", stderr.getvalue())
+            self.assertIn("UTF-8", stderr.getvalue())
+
+    def test_only_dns_allow_without_routable_rules_freezes_old_group(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            configure_groups(root)
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text(
+                    "@@||safe.example.org^\n" if group == "a3" else "DOMAIN,current.example.org\n",
+                    encoding="utf-8",
+                )
+            for name in NAMES:
+                (root / "a3" / name).write_bytes(b"previous version\n")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertFalse(any(path.parent.name == "a3" for path in outputs))
+            self.assertEqual(len(outputs), 18)
+
+    def test_wholly_bad_utf8_remote_whitelist_is_skipped(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/allow.txt"
+            configure_groups(root, whitelist={"a3": [url]})
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: b"\xff\xfe")
+            self.assertIn("DOMAIN,ads.example.org", outputs[root / "a3" / "fin.txt"])
+            self.assertIn(url, stderr.getvalue())
+            self.assertIn("skipped", stderr.getvalue())
+
+    def test_whitelist_removing_all_routes_freezes_old_group(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            configure_groups(root, whitelist={"a3": ["allow.list"]})
+            (root / "allow.list").write_text("DOMAIN,ads.example.org,DIRECT\n", encoding="utf-8")
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            for name in NAMES:
+                (root / "a3" / name).write_bytes(b"previous version\n")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), {root / group / name for group in GROUPS if group != "a3" for name in NAMES})
+
+    def test_remote_whitelist_unsupported_only_warns_and_skips(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/allow.txt"
+            configure_groups(root, whitelist={"a3": [url]})
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: b"USER-AGENT,*bot*,DIRECT\n")
+            self.assertIn("DOMAIN,ads.example.org", outputs[root / "a3" / "fin.txt"])
+            self.assertIn(url, stderr.getvalue())
+            self.assertIn("skipped", stderr.getvalue())
+
+    def test_http_200_html_remote_whitelist_rejected_by_fetch_is_skipped(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/allow.txt"
+            configure_groups(root, whitelist={"a3": [url]})
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            response = BytesIO(b"<html>login</html>")
+            response.geturl = lambda: url
+            response.headers = {"Content-Type": "text/html"}
+            stderr = io.StringIO()
+            with patch("urllib.request.OpenerDirector.open", return_value=response):
+                with contextlib.redirect_stderr(stderr):
+                    outputs = generate(root, fetch_https)
+            self.assertIn("DOMAIN,ads.example.org", outputs[root / "a3" / "fin.txt"])
+            self.assertIn(url, stderr.getvalue())
+            self.assertIn("HTML", stderr.getvalue())
+
+    def test_remote_whitelist_keeps_recognized_lines_around_bad_utf8_and_unsupported(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            url = "https://example.org/allow.txt"
+            configure_groups(root, whitelist={"a3": [url]})
+            for group in GROUPS:
+                (root / group / "rules.txt").write_text(
+                    "DOMAIN,remove.example.org\nDOMAIN,keep.example.org\n"
+                    if group == "a3" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
+                )
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: b"DOMAIN,\xffbad.example.org\nUSER-AGENT,*bot*,DIRECT\nDOMAIN,remove.example.org,DIRECT\n")
+            self.assertNotIn("DOMAIN,remove.example.org", outputs[root / "a3" / "fin.txt"])
+            self.assertIn("DOMAIN,keep.example.org", outputs[root / "a3" / "fin.txt"])
+            self.assertIn("@@|remove.example.org|", outputs[root / "a3" / "fin-adb.txt"])
+            self.assertIn(f"{url}: line 1", stderr.getvalue())
+
+    def test_a3_and_a4_freeze_independently_when_configured(self):
+        for frozen in ("a3", "a4"):
+            with self.subTest(frozen=frozen), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                missing = f"https://example.org/{frozen}.txt"
+                groups = [
+                    {"name": name, "purpose": "block", "no_resolve": "keep",
+                     "sources": [missing if name == frozen else f"{name}.list"], "whitelist": []}
+                    for name in ("a3", "a4")
+                ]
+                (root / "rulesets.json").write_text(json.dumps(groups), encoding="utf-8")
+                healthy = "a4" if frozen == "a3" else "a3"
+                (root / f"{healthy}.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+                for name in NAMES:
+                    path = root / frozen / name
+                    path.parent.mkdir(exist_ok=True)
+                    path.write_bytes(b"previous version\n")
+
+                def fetch(url):
+                    raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+                with contextlib.redirect_stderr(io.StringIO()):
+                    outputs = generate(root, fetch)
+                self.assertEqual(set(outputs), {root / healthy / name for name in NAMES})
+                publish(outputs)
+                self.assertTrue(all((root / frozen / name).read_bytes() == b"previous version\n" for name in NAMES))
+                self.assertIn("DOMAIN,current.example.org", (root / healthy / "fin.txt").read_text(encoding="utf-8"))
+
+    def test_remote_html_or_unsupported_only_200_source_skips_but_keeps_good_source(self):
+        for body in (b"<html><body>login</body></html>", b"UNKNOWN-TYPE,ads.example.org\n"):
+            with self.subTest(body=body), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                bad = "https://example.org/bad.txt"
+                good = "https://example.org/good.txt"
+                configure_groups(root, sources={"a3": [bad, good]})
+                for group in GROUPS:
+                    if group != "a3":
+                        (root / group / "rules.txt").write_text("DOMAIN,baseline.example.org\n", encoding="utf-8")
+                stderr = io.StringIO()
+                with contextlib.redirect_stderr(stderr):
+                    outputs = generate(root, lambda url: body if url == bad else b"DOMAIN,good.example.org\n")
+                self.assertIn("DOMAIN,good.example.org", outputs[root / "a3" / "fin.txt"])
+                self.assertIn(bad, stderr.getvalue())
+                self.assertIn("skipped", stderr.getvalue())
 
     def test_automatic_no_resolve_allows_cidr_coalescing_across_source_options(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
