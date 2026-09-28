@@ -77,6 +77,8 @@ def _logical_value(value: str, operator: str, supported: set[str]) -> str | None
                 return None
             if kind == "PROCESS-NAME" and any(char in payload for char in "*?"):
                 kind = "PROCESS-NAME-WILDCARD"
+            if kind == "IP-CIDR" and ":" in payload:
+                kind = "IP-CIDR6"
         if supported is SURGE_TYPES:
             kind = SURGE_ALIASES.get(kind, kind)
             if kind == "IP-CIDR" and ":" in payload:

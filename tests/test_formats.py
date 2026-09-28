@@ -396,7 +396,21 @@ class FormatTests(unittest.TestCase):
         value = "((IP-CIDR,2001:db8::/32),(DOMAIN,ads.example.com))"
         out, _ = render("a3", [Rule("OR", value)])
         self.assertIn("OR,((IP-CIDR6,2001:db8::/32),(DOMAIN,ads.example.com))\n", out["fin.txt"])
-        self.assertIn('  - "OR,' + value + '"\n', out["fin.yaml"])
+        self.assertIn('  - "OR,((IP-CIDR6,2001:db8::/32),(DOMAIN,ads.example.com))"\n', out["fin.yaml"])
+
+    def test_mihomo_ipv6_cidr_inside_nested_logic_uses_ipv6_matcher(self):
+        from rules import parse
+
+        source = "AND,((OR,((IP-CIDR,2001:db8::/32),(IP-CIDR,192.0.2.0/24))),(DOMAIN,ads.example.com)),REJECT"
+        parsed, messages = parse(source, purpose="block")
+        self.assertEqual(messages, [])
+        self.assertEqual(len(parsed), 1)
+
+        out, _ = render("a3", parsed)
+        expected = "AND,((OR,((IP-CIDR6,2001:db8::/32),(IP-CIDR,192.0.2.0/24))),(DOMAIN,ads.example.com))"
+        self.assertEqual(out["fin.yaml"], f'# a3 rules: 1\npayload:\n  - "{expected}"\n')
+        self.assertEqual(out["fin.txt"], f"# a3 rules: 1\n{expected}\n")
+        self.assertEqual(out["fin-surge.txt"], f"# a3 rules: 1\n{expected}\n")
 
     def test_logical_regex_character_class_parenthesis_is_not_structural(self):
         expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
