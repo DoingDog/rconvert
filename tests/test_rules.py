@@ -267,7 +267,7 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(parsed, [Rule("IP-CIDR", "2001:db8::/32", ("no-resolve",))])
         self.assertEqual(len(messages), 1)
 
-    def test_ipv4_ipv6_source_and_destination_cidr_keep_direction_and_options(self):
+    def test_ipv4_ipv6_source_and_destination_cidr_keep_direction_and_valid_options(self):
         rules, warnings = parse(
             "SRC-IP-CIDR,2001:db8::1/32,DIRECT,no-resolve\n"
             "IP-CIDR,192.0.2.15/24,DIRECT,no-resolve\n"
@@ -275,12 +275,37 @@ class ParseTests(unittest.TestCase):
             purpose="direct",
         )
         self.assertEqual(rules, [
-            Rule("SRC-IP-CIDR", "2001:db8::/32", ("no-resolve",)),
+            Rule("SRC-IP-CIDR", "2001:db8::/32"),
             Rule("IP-CIDR", "192.0.2.0/24", ("no-resolve",)),
         ])
-        self.assertEqual(len(warnings), 1)
+        self.assertEqual(warnings[0], "line 1: unsupported no-resolve for SRC-IP-CIDR")
+        self.assertEqual(len(warnings), 2)
         proxy, _ = parse("IP6-CIDR,2001:db8:1::/48,PROXY", purpose="proxy")
         self.assertEqual(proxy, [Rule("IP-CIDR6", "2001:db8:1::/48")])
+
+    def test_source_ip_no_resolve_is_discarded_without_losing_source_match(self):
+        from formats import render
+
+        parsed, messages = parse(
+            "SRC-IP-CIDR,192.0.2.15/24,PROXY,no-resolve\n"
+            "SRC-IP,2001:db8::1,PROXY,no-resolve\n"
+            "IP-CIDR,198.51.100.0/24,PROXY,no-resolve", purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("SRC-IP-CIDR", "192.0.2.0/24"), Rule("SRC-IP", "2001:db8::1"),
+            Rule("IP-CIDR", "198.51.100.0/24", ("no-resolve",)),
+        ])
+        self.assertEqual(messages, [
+            "line 1: unsupported no-resolve for SRC-IP-CIDR",
+            "line 2: unsupported no-resolve for SRC-IP",
+        ])
+        output, _ = render("group", parsed, purpose="proxy", no_resolve="keep")
+        self.assertIn("SRC-IP,192.0.2.0/24\n", output["fin.txt"])
+        self.assertIn("SRC-IP,2001:db8::1\n", output["fin-surge.txt"])
+        self.assertIn('  - "SRC-IP-CIDR,192.0.2.0/24"\n', output["fin.yaml"])
+        self.assertIn('  - "SRC-IP-CIDR,2001:db8::1/128"\n', output["fin.yaml"])
+        self.assertNotIn("IP-CIDR,192.0.2.0/24", output["fin.txt"])
+        self.assertIn("IP-CIDR,198.51.100.0/24,no-resolve\n", output["fin.txt"])
 
     def test_surge_src_ip_network_uses_source_cidr_for_other_targets(self):
         parsed, messages = parse(

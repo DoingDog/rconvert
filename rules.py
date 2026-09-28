@@ -368,7 +368,10 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             continue
         if kind == "SRC-IP" and '/' in value:
             kind = "SRC-IP-CIDR"
-        if options and kind not in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "GEOIP", "IP-ASN"}:
+        if options and kind in {"SRC-IP", "SRC-IP-CIDR"}:
+            warnings.append(f"line {number}: unsupported no-resolve for {kind}")
+            options = ()
+        if options and kind not in {"IP-CIDR", "IP-CIDR6", "GEOIP", "IP-ASN"}:
             warnings.append(f"line {number}: unsupported no-resolve for {kind}")
             continue
         if kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
