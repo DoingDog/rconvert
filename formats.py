@@ -1,5 +1,6 @@
 import ipaddress
 import json
+import re
 from collections import Counter
 from collections.abc import Iterable
 
@@ -90,7 +91,22 @@ def _logical_value(value: str, operator: str, supported: set[str]) -> str | None
     return "(" + ",".join(parts) + ")"
 
 
-def render(group: str, rules: Iterable[Rule]) -> tuple[dict[str, str], dict[str, int]]:
+def _dns_pattern(rule: Rule) -> str | None:
+    if rule.kind == "DOMAIN":
+        return rule.value
+    if rule.kind == "DOMAIN-SUFFIX":
+        return f"||{rule.value}^"
+    if "/" in rule.value:
+        return None
+    if rule.kind == "DOMAIN-KEYWORD":
+        return f"/^.*{re.escape(rule.value)}.*$/"
+    if rule.kind == "DOMAIN-WILDCARD" and not any(char in rule.value for char in "[]"):
+        pattern = re.escape(rule.value).replace(r"\*", ".*").replace(r"\?", ".")
+        return f"/^{pattern}$/"
+    return None
+
+
+def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = ()) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow)):
@@ -105,9 +121,11 @@ def render(group: str, rules: Iterable[Rule]) -> tuple[dict[str, str], dict[str,
         text = f"{kind},{value}"
         logical = kind in LOGICAL
         if rule.allow:
-            if kind == "DOMAIN-SUFFIX" and not rule.options and group in AD_GROUPS:
-                lines["fin-adb.txt"].append(f"@@||{value}^")
-                emitted.add("fin-adb.txt")
+            if not rule.options and group in AD_GROUPS:
+                dns_pattern = _dns_pattern(rule)
+                if dns_pattern is not None:
+                    lines["fin-adb.txt"].append("@@" + (f"|{value}|" if kind == "DOMAIN" else dns_pattern))
+                    emitted.add("fin-adb.txt")
         elif rule.options:
             if rule.options == ("no-resolve",) and kind in NO_RESOLVE_TYPES:
                 surge_kind = "IP-CIDR6" if kind == "IP-CIDR" and ":" in value else kind
@@ -159,9 +177,11 @@ def render(group: str, rules: Iterable[Rule]) -> tuple[dict[str, str], dict[str,
             ):
                 lines["fin.yaml"].append("  - " + json.dumps(f"{mihomo_kind},{mihomo_value}", ensure_ascii=False))
                 emitted.add("fin.yaml")
-            if kind == "DOMAIN-SUFFIX" and group in AD_GROUPS:
-                lines["fin-adb.txt"].append(f"||{value}^")
-                emitted.add("fin-adb.txt")
+            if group in AD_GROUPS:
+                dns_pattern = _dns_pattern(rule)
+                if dns_pattern is not None:
+                    lines["fin-adb.txt"].append(dns_pattern)
+                    emitted.add("fin-adb.txt")
             if kind in DOMAIN_SET_TYPES:
                 lines["fin-surge-ds.txt"].append(("." if kind == "DOMAIN-SUFFIX" else "") + value)
                 emitted.add("fin-surge-ds.txt")
@@ -169,6 +189,14 @@ def render(group: str, rules: Iterable[Rule]) -> tuple[dict[str, str], dict[str,
             if name not in emitted and not (name == "fin-surge.txt" and kind in DOMAIN_SET_TYPES
                                             and not rule.allow and not rule.options):
                 skipped[f"{name}:{kind}"] += 1
+    if group in AD_GROUPS:
+        for rule in sorted(whitelist, key=lambda item: (item.kind, item.value)):
+            if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
+                pattern = _dns_pattern(rule) if not any(c in rule.value for c in "\r\n") else None
+                if pattern is None:
+                    skipped[f"fin-adb.txt:{rule.kind}"] += 1
+                else:
+                    lines["fin-adb.txt"].append("@@" + (f"|{rule.value}|" if rule.kind == "DOMAIN" else pattern))
     lines = {name: list(dict.fromkeys(body)) for name, body in lines.items()}
     out = {name: f"{'!' if name == 'fin-adb.txt' else '#'} {group} rules: {len(body)}\n"
            + ("payload:\n" if name == "fin.yaml" else "") + "".join(line + "\n" for line in body)

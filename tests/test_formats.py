@@ -1,4 +1,5 @@
 import json
+import re
 import unittest
 
 from rules import Rule
@@ -13,6 +14,16 @@ class FormatTests(unittest.TestCase):
         self.assertIn("DOMAIN-WILDCARD,api-*.example.com", out["fin.yaml"])
         self.assertNotIn("api-*.example.com", out["fin-surge-ds.txt"])
 
+    def test_wildcard_does_not_remove_exact_domain_from_surge_domain_set(self):
+        out, _ = render("a3", [
+            Rule("DOMAIN-WILDCARD", "api-*.example.org"), Rule("DOMAIN", "api-v2.example.org"),
+        ])
+        self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 1\napi-v2.example.org\n")
+        self.assertIn("HOST-WILDCARD,api-*.example.org,LIST\n", out["fin-qx.txt"])
+        self.assertIn("HOST,api-v2.example.org,LIST\n", out["fin-qx.txt"])
+        self.assertIn('  - "DOMAIN-WILDCARD,api-*.example.org"\n', out["fin.yaml"])
+        self.assertIn('  - "DOMAIN,api-v2.example.org"\n', out["fin.yaml"])
+
     def test_surge_character_class_wildcard_is_not_reinterpreted_by_qx_or_mihomo(self):
         out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-[0-9].example.com")])
         self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com\n", out["fin.txt"])
@@ -20,6 +31,8 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin.yaml"], "# a3 rules: 0\npayload:\n")
         self.assertEqual(skipped["fin-qx.txt:DOMAIN-WILDCARD"], 1)
         self.assertEqual(skipped["fin.yaml:DOMAIN-WILDCARD"], 1)
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
+        self.assertEqual(out["fin-adb.txt"], "! a3 rules: 0\n")
 
     def test_six_files_are_ordered_and_count_actual_lines(self):
         high = Rule("DOMAIN-WILDCARD", "z-*.example.com")
@@ -46,8 +59,8 @@ class FormatTests(unittest.TestCase):
         self.assertIn('  - "DOMAIN,exact.example.com"\n', out["fin.yaml"])
         self.assertIn("\nexact.example.com\n", out["fin-surge-ds.txt"])
         self.assertNotIn("exact.example.com", out["fin-surge.txt"])
-        self.assertNotIn("exact.example.com", out["fin-adb.txt"])
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN"], 1)
+        self.assertEqual(out["fin-adb.txt"], "! a3 rules: 1\nexact.example.com\n")
+        self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
 
     def test_suffix_is_shared_by_domain_set_and_adblock(self):
         out, skipped = render("a2", [Rule("DOMAIN-SUFFIX", "ads.example.com")])
@@ -58,6 +71,28 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin-surge.txt"], "# a2 rules: 0\n")
         self.assertEqual(out["fin-adb.txt"], "! a2 rules: 1\n||ads.example.com^\n")
         self.assertNotIn("fin-adb.txt:DOMAIN-SUFFIX", skipped)
+
+    def test_keyword_with_dot_is_literal_in_dns_regex(self):
+        out, skipped = render("a3", [Rule("DOMAIN-KEYWORD", "ad.track")])
+        self.assertGreater(len(out["fin-adb.txt"].splitlines()), 1)
+        line = out["fin-adb.txt"].splitlines()[1]
+        self.assertTrue(line.startswith("/^") and line.endswith("$/"))
+        expression = re.compile(line[1:-1])
+        self.assertIsNotNone(expression.fullmatch("cdn.ad.track.example.org"))
+        self.assertIsNone(expression.fullmatch("cdn.adXtrack.example.org"))
+        self.assertNotIn("fin-adb.txt:DOMAIN-KEYWORD", skipped)
+
+    def test_safe_wildcard_is_anchored_in_dns_regex(self):
+        out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-*.example.org")])
+        self.assertGreater(len(out["fin-adb.txt"].splitlines()), 1)
+        line = out["fin-adb.txt"].splitlines()[1]
+        self.assertTrue(line.startswith("/^") and line.endswith("$/"))
+        expression = re.compile(line[1:-1])
+        self.assertIsNotNone(expression.fullmatch("api-v2.example.org"))
+        for domain in ("other-api-v2.example.org", "api-v2.example.org.evil", "api-v2.exampleXorg"):
+            with self.subTest(domain=domain):
+                self.assertIsNone(expression.fullmatch(domain))
+        self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
 
     def test_source_cidr_keeps_direction_for_ipv4_and_ipv6(self):
         out, skipped = render("a3", [
@@ -167,7 +202,8 @@ class FormatTests(unittest.TestCase):
             self.assertIn(entry + "\n", out["fin-qx.txt"])
         for entry in ("IP-ASN,13335,no-resolve", "GEOIP,CN,no-resolve", "DOMAIN-KEYWORD,ads"):
             self.assertIn('  - "' + entry + '"\n', out["fin.yaml"])
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN-KEYWORD"], 1)
+        self.assertIn("/^.*ads.*$/\n", out["fin-adb.txt"])
+        self.assertNotIn("fin-adb.txt:DOMAIN-KEYWORD", skipped)
 
     def test_mihomo_only_types_are_json_quoted_yaml_scalars(self):
         rules = [
@@ -334,24 +370,56 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
         self.assertEqual(skipped["fin-qx.txt:USER-AGENT"], 1)
 
+    def test_whitelist_keyword_and_wildcard_preserve_dns_match_scope(self):
+        out, skipped = render("a3", [], whitelist=[
+            Rule("DOMAIN-KEYWORD", "ad.track"),
+            Rule("DOMAIN-WILDCARD", "api-*.example.org"),
+            Rule("DOMAIN-WILDCARD", "api-[0-9].example.org"),
+        ])
+        lines = out["fin-adb.txt"].splitlines()[1:]
+        self.assertEqual(len(lines), 2)
+        expressions = [re.compile(line[3:-1]) for line in lines]
+        self.assertTrue(all(line.startswith("@@/^") and line.endswith("$/") for line in lines))
+        self.assertEqual([bool(expression.fullmatch("api-v2.example.org")) for expression in expressions],
+                         [False, True])
+        self.assertEqual([bool(expression.fullmatch("cdn.ad.track.example.org")) for expression in expressions],
+                         [True, False])
+        self.assertTrue(all(not expression.fullmatch("api-v2.example.org.evil") for expression in expressions))
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
+
+    def test_new_whitelist_uses_exact_and_suffix_dns_exceptions_only_for_block_groups(self):
+        whitelist = [
+            Rule("DOMAIN", "safe.example.org"), Rule("DOMAIN-SUFFIX", "safe.org"),
+            Rule("IP-CIDR", "192.0.2.0/24"),
+        ]
+        out, _ = render("a3", [Rule("DOMAIN-SUFFIX", "example.org")], whitelist=whitelist)
+        self.assertEqual(out["fin-adb.txt"],
+                         "! a3 rules: 3\n||example.org^\n@@|safe.example.org|\n@@||safe.org^\n")
+        self.assertEqual(out["fin.txt"], "# a3 rules: 1\nDOMAIN-SUFFIX,example.org\n")
+        proxy, _ = render("cdn", [], whitelist=whitelist)
+        self.assertEqual(proxy["fin-adb.txt"],
+                         "! cdn rules: 0\n! No AdBlock rules for non-advertising group.\n")
+
     def test_simple_allow_rule_is_only_emitted_as_adblock_exception(self):
         out, skipped = render("a3", [
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
             Rule("DOMAIN", "exact.example.com", allow=True),
         ])
-        self.assertEqual(out["fin-adb.txt"], "! a3 rules: 1\n@@||safe.example.com^\n")
+        self.assertEqual(out["fin-adb.txt"],
+                         "! a3 rules: 2\n@@|exact.example.com|\n@@||safe.example.com^\n")
         self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin.yaml"], "# a3 rules: 0\npayload:\n")
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN"], 1)
+        self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
         self.assertEqual(skipped["fin.txt:DOMAIN-SUFFIX"], 1)
 
     def test_unknown_and_wildcard_omissions_are_counted_per_file(self):
         out, skipped = render("a3", [
             Rule("DOMAIN-WILDCARD", "api-*.example.com"), Rule("UNKNOWN-TYPE", "opaque"),
         ])
-        self.assertEqual(skipped.get("fin-adb.txt:DOMAIN-WILDCARD"), 1)
+        self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
+        self.assertIn("/^api\\-.*\\.example\\.com$/\n", out["fin-adb.txt"])
         self.assertEqual(skipped.get("fin-surge-ds.txt:DOMAIN-WILDCARD"), 1)
         self.assertTrue(all(skipped.get(f"{name}:UNKNOWN-TYPE") == 1 for name in out))
         self.assertNotIn("fin-surge.txt:DOMAIN-WILDCARD", skipped)
