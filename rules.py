@@ -148,7 +148,7 @@ def _valid_logic(kind: str, value: str) -> bool:
     return len(children) >= 2 and all(_valid_condition(child) for child in children)
 
 
-def parse(text: str, *, purpose: str) -> tuple[list[Rule], list[str]]:
+def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list[Rule], list[str]]:
     if purpose not in {"block", "direct", "proxy"}:
         raise ValueError(f"invalid purpose: {purpose}")
     for number, line in enumerate(text.splitlines(), 1):
@@ -289,7 +289,7 @@ def parse(text: str, *, purpose: str) -> tuple[list[Rule], list[str]]:
         elif not (_valid_domain(kind, value) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
             warnings.append(f"line {number}: invalid domain {value}")
             continue
-        if action and not (purpose == "block" and action in _BLOCK_ACTIONS or
+        if action and not ignore_policy and not (purpose == "block" and action in _BLOCK_ACTIONS or
                            action == purpose.upper() or
                            purpose in {"direct", "proxy"} and
                            action not in _BLOCK_ACTIONS | {"DIRECT", "PROXY"} and
@@ -300,8 +300,74 @@ def parse(text: str, *, purpose: str) -> tuple[list[Rule], list[str]]:
     return rules, warnings
 
 
+def parse_whitelist(text: str) -> list[Rule]:
+    parsed, messages = parse(text, purpose="block", ignore_policy=True)
+    for message in messages:
+        warnings.warn(message, stacklevel=2)
+    supported = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
+                 "IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-ASN", "GEOIP"}
+    return [Rule(rule.kind, rule.value) for rule in parsed if rule.kind in supported]
+
+
 def _within(domain: str, suffix: str) -> bool:
     return domain == suffix or domain.endswith('.' + suffix)
+
+
+def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
+    exact, suffixes, keywords, wildcards, typed = set(), set(), set(), set(), set()
+    networks = {"src": set(), "dst": set()}
+    for entry in whitelist:
+        if entry.kind == "DOMAIN":
+            exact.add(entry.value)
+        elif entry.kind == "DOMAIN-SUFFIX":
+            suffixes.add(entry.value)
+        elif entry.kind == "DOMAIN-KEYWORD":
+            keywords.add(entry.value)
+        elif entry.kind == "DOMAIN-WILDCARD":
+            wildcards.add(entry.value)
+        elif entry.kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
+            direction = "src" if entry.kind.startswith("SRC-") else "dst"
+            networks[direction].add(ipaddress.ip_network(entry.value, strict=False))
+        elif entry.kind in {"IP-ASN", "GEOIP"}:
+            typed.add((entry.kind, entry.value.upper()))
+    plain_wildcards = [pattern for pattern in wildcards if '[' not in pattern]
+    kept = []
+    for rule in rules:
+        if rule.allow:
+            kept.append(rule)
+            continue
+        kind, value = rule.kind, rule.value
+        if kind == "DOMAIN" or (kind == "DOMAIN-WILDCARD" and not any(c in value for c in "*?[]")):
+            covered = (value in exact or _has_parent(value, suffixes) or
+                       any(keyword in value for keyword in keywords) or
+                       any(fnmatchcase(value, pattern) for pattern in plain_wildcards))
+        elif kind == "DOMAIN-SUFFIX":
+            covered = _has_parent(value, suffixes) or any(keyword in value for keyword in keywords)
+        elif kind == "DOMAIN-KEYWORD":
+            covered = any(keyword in value for keyword in keywords)
+        elif kind == "DOMAIN-WILDCARD":
+            tail = value[max(value.rfind(char) for char in "*?]") + 1:]
+            covered = (value in wildcards or
+                       tail.startswith('.') and _has_parent(tail[1:], suffixes) or
+                       any(keyword in segment for keyword in keywords
+                           for segment in re.split(r"\*|\?|\[[a-z0-9-]+\]", value)))
+        elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
+            direction = "src" if kind.startswith("SRC-") else "dst"
+            covered = False
+            if networks[direction]:
+                network = ipaddress.ip_network(value, strict=False)
+                while True:
+                    if network in networks[direction]:
+                        covered = True
+                        break
+                    if network.prefixlen == 0:
+                        break
+                    network = network.supernet()
+        else:
+            covered = kind in {"IP-ASN", "GEOIP"} and (kind, value.upper()) in typed
+        if not covered:
+            kept.append(rule)
+    return kept
 
 
 def _has_parent(domain: str, parents: set[str]) -> bool:

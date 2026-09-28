@@ -2,6 +2,7 @@ import time
 import unittest
 import warnings
 
+import rules
 from rules import Rule, normalize, parse
 
 
@@ -448,6 +449,171 @@ class ParseTests(unittest.TestCase):
             Rule("IP-CIDR", "198.51.100.0/24", ("no-resolve",)),
         ])
         self.assertEqual(warnings, [])
+
+
+class WhitelistTests(unittest.TestCase):
+    def test_qx_policy_is_ignored_when_parsing_whitelist(self):
+        self.assertEqual(rules.parse_whitelist("host-suffix,a.com,DIRECT"), [
+            Rule("DOMAIN-SUFFIX", "a.com")
+        ])
+
+    def test_surge_reject_policy_is_ignored_when_parsing_whitelist(self):
+        self.assertEqual(rules.parse_whitelist("DOMAIN-KEYWORD,ads,REJECT"), [
+            Rule("DOMAIN-KEYWORD", "ads")
+        ])
+
+    def test_whitelist_skips_useragent_process_and_reports_invalid_domain(self):
+        source = ("USER-AGENT,*bot*,DIRECT\nPROCESS-NAME,App,REJECT\n"
+                  "DOMAIN-SUFFIX,ads.example.com,DIRECT\nDOMAIN,bad..com,REJECT")
+        with warnings.catch_warnings(record=True) as reported:
+            warnings.simplefilter("always")
+            parsed = rules.parse_whitelist(source)
+        self.assertEqual(parsed, [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+        self.assertTrue(any("line 4" in str(item.message) and "invalid domain" in str(item.message)
+                            for item in reported))
+
+    def test_keyword_whitelist_covers_rules_with_required_substring(self):
+        source = [
+            Rule("DOMAIN", "tracker.example.com"),
+            Rule("DOMAIN-SUFFIX", "tracker.example.com"),
+            Rule("DOMAIN-KEYWORD", "tracker"),
+            Rule("DOMAIN-KEYWORD", "tra"),
+            Rule("DOMAIN", "example.net"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("DOMAIN-KEYWORD", "track")]
+        ), source[3:])
+
+    def test_wildcard_whitelist_covers_matching_exact_domain_only(self):
+        source = [
+            Rule("DOMAIN", "api-1.example.com"),
+            Rule("DOMAIN", "api.example.com"),
+            Rule("DOMAIN-SUFFIX", "api-1.example.com"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("DOMAIN-WILDCARD", "api-*.example.com")]
+        ), source[1:])
+
+    def test_identical_surge_bracket_wildcard_is_covered(self):
+        source = [
+            Rule("DOMAIN-WILDCARD", "cdn[0-9].example.com"),
+            Rule("DOMAIN-WILDCARD", "cdn*.example.com"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("DOMAIN-WILDCARD", "cdn[0-9].example.com")]
+        ), source[1:])
+
+    def test_literal_wildcard_rule_is_treated_as_exact_domain(self):
+        self.assertEqual(rules.exclude_covered(
+            [Rule("DOMAIN-WILDCARD", "api.example.com")],
+            [Rule("DOMAIN-SUFFIX", "example.com")],
+        ), [])
+
+    def test_keyword_covers_wildcard_only_via_fixed_text(self):
+        source = [
+            Rule("DOMAIN-WILDCARD", "api-*.example.com"),
+            Rule("DOMAIN-WILDCARD", "cdn[0-9].example.com"),
+            Rule("DOMAIN-WILDCARD", "cdn*.other.com"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("DOMAIN-KEYWORD", "example")]
+        ), source[2:])
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("DOMAIN-KEYWORD", "0-9")]
+        ), source)
+
+    def test_suffix_covers_wildcards_only_with_fixed_label_boundary(self):
+        source = [
+            Rule("DOMAIN-WILDCARD", "api-*.example.com"),
+            Rule("DOMAIN-WILDCARD", "cdn[0-9].example.com"),
+            Rule("DOMAIN-WILDCARD", "api-*.notexample.com"),
+            Rule("DOMAIN-WILDCARD", "*example.com"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("DOMAIN-SUFFIX", "example.com")]
+        ), source[2:])
+
+    def test_exact_whitelist_does_not_remove_wider_suffix(self):
+        source = [Rule("DOMAIN-SUFFIX", "a.com")]
+        self.assertEqual(rules.exclude_covered(source, [Rule("DOMAIN", "a.com")]), source)
+
+    def test_parent_suffix_whitelist_removes_narrow_suffix(self):
+        self.assertEqual(rules.exclude_covered(
+            [Rule("DOMAIN-SUFFIX", "a.com")], [Rule("DOMAIN-SUFFIX", "com")]
+        ), [])
+
+    def test_suffix_whitelist_removes_child_domain_ignoring_options(self):
+        self.assertEqual(rules.exclude_covered(
+            [Rule("DOMAIN", "sub.a.com", ("no-resolve",))],
+            [Rule("DOMAIN-SUFFIX", "a.com")],
+        ), [])
+
+    def test_exact_whitelist_removes_only_same_domain(self):
+        source = [Rule("DOMAIN", "ads.a.com"), Rule("DOMAIN", "notads.a.com")]
+        self.assertEqual(rules.exclude_covered(source, [Rule("DOMAIN", "ADS.A.COM")]), source[1:])
+
+    def test_parent_destination_ipv4_cidr_covers_child_ignoring_options(self):
+        self.assertEqual(rules.exclude_covered(
+            [Rule("IP-CIDR", "192.0.2.0/25", ("no-resolve",))],
+            [Rule("IP-CIDR", "192.0.2.0/24")],
+        ), [])
+
+    def test_ipv6_coverage_does_not_cross_family_or_direction(self):
+        source = [
+            Rule("IP-CIDR6", "2001:db8:1::/48"),
+            Rule("IP-CIDR6", "2001:db8::/31"),
+            Rule("SRC-IP-CIDR", "2001:db8:1::/48"),
+            Rule("IP-CIDR", "192.0.2.0/25"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("IP-CIDR6", "2001:db8::/32")]
+        ), source[1:])
+
+    def test_source_cidr_parent_only_covers_same_family_children(self):
+        source = [
+            Rule("SRC-IP-CIDR", "192.0.2.0/25"),
+            Rule("SRC-IP-CIDR", "192.0.2.0/23"),
+            Rule("SRC-IP-CIDR", "2001:db8::/48"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("SRC-IP-CIDR", "192.0.2.0/24")]
+        ), source[1:])
+
+    def test_source_address_is_covered_by_source_network_only(self):
+        source = [Rule("SRC-IP", "192.0.2.15"), Rule("IP-CIDR", "192.0.2.0/32")]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("SRC-IP-CIDR", "192.0.2.0/24")]
+        ), source[1:])
+
+    def test_source_address_whitelist_covers_only_host_network(self):
+        source = [Rule("SRC-IP-CIDR", "2001:db8::1/128"), Rule("SRC-IP-CIDR", "2001:db8::/64")]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("SRC-IP", "2001:db8::1")]
+        ), source[1:])
+
+    def test_asn_and_geoip_only_match_same_type_and_value(self):
+        source = [
+            Rule("IP-ASN", "64512"), Rule("IP-ASN", "64513"),
+            Rule("GEOIP", "CN"), Rule("GEOIP", "US"),
+            Rule("IP-CIDR", "192.0.2.0/24"),
+        ]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("IP-ASN", "64512"), Rule("GEOIP", "cn")]
+        ), [source[1], *source[3:]])
+
+    def test_source_exception_is_kept_for_dns_output(self):
+        source = [Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True)]
+        self.assertEqual(rules.exclude_covered(
+            source, [Rule("DOMAIN-SUFFIX", "example.com")]
+        ), source)
+
+    def test_unrelated_large_whitelist_does_not_scan_every_suffix(self):
+        count = 6000
+        source = [Rule("DOMAIN-SUFFIX", f"s{i}.example.com") for i in range(count)]
+        whitelist = [Rule("DOMAIN-SUFFIX", f"x{i}.other.com") for i in range(count)]
+        start = time.perf_counter()
+        self.assertEqual(rules.exclude_covered(source, whitelist), source)
+        self.assertLess(time.perf_counter() - start, 3.0)
 
 
 class NormalizeTests(unittest.TestCase):
