@@ -65,14 +65,18 @@ def _logical_value(value: str, operator: str, supported: set[str]) -> str | None
         if depth or index >= len(value):
             return None
         kind, separator, payload = value[start:index - 1].partition(",")
-        if not separator or not payload or kind not in supported:
+        if (not separator or not payload.strip() or kind not in supported or
+                kind.startswith("PROCESS-") and "," in payload):
             return None
         if kind in LOGICAL:
             payload = _logical_value(payload, kind, supported)
             if payload is None:
                 return None
-        elif supported is MIHOMO_TYPES and kind == "DOMAIN-WILDCARD" and any(c in payload for c in "[]"):
-            return None
+        elif supported is MIHOMO_TYPES:
+            if kind == "DOMAIN-WILDCARD" and any(c in payload for c in "[]"):
+                return None
+            if kind == "PROCESS-NAME" and any(char in payload for char in "*?"):
+                kind = "PROCESS-NAME-WILDCARD"
         if supported is SURGE_TYPES:
             kind = SURGE_ALIASES.get(kind, kind)
             if kind == "IP-CIDR" and ":" in payload:
@@ -168,6 +172,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST")
                 emitted.add("fin-qx.txt")
             mihomo_kind = "DST-PORT" if kind == "DEST-PORT" else kind
+            if kind == "PROCESS-NAME" and any(char in value for char in "*?"):
+                mihomo_kind = "PROCESS-NAME-WILDCARD"
             mihomo_value = _logical_value(value, kind, MIHOMO_TYPES) if logical else value
             if kind == "SRC-IP":
                 address = ipaddress.ip_address(value)
@@ -175,7 +181,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
             if kind == "PROTOCOL" and value.upper() in {"TCP", "UDP"}:
                 mihomo_kind, mihomo_value = "NETWORK", value.lower()
             if mihomo_kind in MIHOMO_TYPES and mihomo_value is not None and not (
-                kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")
+                kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]") or
+                kind.startswith("PROCESS-") and "," in value
             ):
                 lines["fin.yaml"].append("  - " + json.dumps(f"{mihomo_kind},{mihomo_value}", ensure_ascii=False))
                 emitted.add("fin.yaml")
@@ -200,6 +207,20 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 else:
                     lines["fin-adb.txt"].append("@@" + (f"|{rule.value}|" if rule.kind == "DOMAIN" else pattern))
     lines = {name: list(dict.fromkeys(body)) for name, body in lines.items()}
+    for name, body in lines.items():
+        if name == "fin-adb.txt":
+            body.sort(key=lambda line: (not line.startswith("@@"), len(line), line))
+        elif name == "fin-surge-ds.txt":
+            body.sort(key=lambda line: (len(line), line))
+        else:
+            def sort_key(line):
+                kind, _, value = (json.loads(line[4:]) if name == "fin.yaml" else line).partition(",")
+                is_ip = kind.startswith(("IP-", "IP6-", "SRC-IP")) or kind in {"GEOIP", "SRC-GEOIP"}
+                family = (0 if kind in {"GEOIP", "IP-ASN", "SRC-GEOIP", "SRC-IP-ASN"}
+                          else 2 if ":" in value else 1)
+                return is_ip, family if is_ip else 0, kind, len(line), line
+
+            body.sort(key=sort_key)
     out = {name: f"{'!' if name == 'fin-adb.txt' else '#'} {group} rules: {len(body)}\n"
            + ("payload:\n" if name == "fin.yaml" else "") + "".join(line + "\n" for line in body)
            for name, body in lines.items()}
