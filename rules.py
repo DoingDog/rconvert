@@ -250,8 +250,9 @@ def _without_comment(line: str) -> str:
 def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list[Rule], list[str]]:
     if purpose not in {"block", "direct", "proxy"}:
         raise ValueError(f"invalid purpose: {purpose}")
-    opening_tags = {}
-    for number, line in enumerate(text.splitlines(), 1):
+    lines = text.splitlines()
+    opening_tags, html_lines = {}, set()
+    for number, line in enumerate(lines, 1):
         if line.lstrip().startswith(('#', ';', '//', '!')):
             continue
         line = _without_comment(line)
@@ -260,21 +261,31 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         for tag in re.finditer(r"<\s*(/?)\s*([a-z][\w:-]*)\b[^>]*>", line, re.I):
             name = tag[2].lower()
             if tag[1] and name in opening_tags:
-                opening = opening_tags.pop(name)
+                opening = opening_tags[name].pop()
+                if not opening_tags[name]:
+                    del opening_tags[name]
                 if opening != number:
-                    return [], [f"line {opening}: HTML document"]
+                    if name == 'html':
+                        return [], [f"line {opening}: HTML document"]
+                    html_lines.update(range(opening, number + 1))
             elif not tag[1] and not tag[0].endswith('/>'):
                 if name != 'html' and 'html' in opening_tags:
-                    return [], [f"line {opening_tags['html']}: HTML document"]
-                opening_tags.setdefault(name, number)
+                    return [], [f"line {opening_tags['html'][0]}: HTML document"]
+                opening_tags.setdefault(name, []).append(number)
+    if html_lines and all(number in html_lines or not line.strip() or
+                          line.lstrip().startswith(('#', ';', '//', '!'))
+                          for number, line in enumerate(lines, 1)):
+        return [], [f"line {min(html_lines)}: HTML document"]
     rules, warnings = [], []
     in_payload = False
-    for number, source in enumerate(text.splitlines(), 1):
+    for number, source in enumerate(lines, 1):
         line = _without_comment(source).strip()
         if not line or line.startswith(('#', ';', '//')):
             continue
         if re.search(r"<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", line, re.I):
             warnings.append(f"line {number}: HTML markup")
+            continue
+        if number in html_lines:
             continue
         if line == 'payload:':
             in_payload = True

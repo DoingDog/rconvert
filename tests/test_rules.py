@@ -618,6 +618,25 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(commented, [Rule("DOMAIN", "ads.example.com")])
         self.assertEqual(messages, [])
 
+    def test_multiline_html_fragment_keeps_rules_on_both_sides(self):
+        parsed, messages = parse(
+            "DOMAIN,a.example\n<div>\n</div>\nDOMAIN,b.example\n", purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN", "a.example"), Rule("DOMAIN", "b.example")])
+        self.assertEqual(messages, ["line 2: HTML markup", "line 3: HTML markup"])
+
+    def test_nested_html_fragment_does_not_leak_rules_and_keeps_warning_lines(self):
+        parsed, messages = parse(
+            "DOMAIN,first.example\n<div>\nDOMAIN,hidden.example\n<div>\n"
+            "DOMAIN,also-hidden.example\n</div>\nDOMAIN,still-hidden.example\n"
+            "</div>\nnot a rule\nDOMAIN,last.example", purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN", "first.example"), Rule("DOMAIN", "last.example")])
+        self.assertEqual(messages, [
+            "line 2: HTML markup", "line 4: HTML markup", "line 6: HTML markup",
+            "line 8: HTML markup", "line 9: invalid rule",
+        ])
+
     def test_isolated_html_tag_is_skipped_without_discarding_valid_rules(self):
         parsed, messages = parse(
             "DOMAIN,first.example.com,REJECT\n<img/>\nDOMAIN,ads.example.com,REJECT",
