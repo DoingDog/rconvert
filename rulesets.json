@@ -7,11 +7,12 @@
       "https://ruleset.skk.moe/List/domainset/cdn.conf",
       "https://ruleset.skk.moe/List/non_ip/cdn.conf",
       "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Jsdelivr/Jsdelivr.list",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Limelight/Limelight.list",
+      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Limelight/Limelight.list"
+    ],
+    "whitelist": [
       "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
       "https://ruleset.skk.moe/Clash/ip/lan.txt"
-    ],
-    "whitelist": []
+    ]
   },
   {
     "name": "a3",
@@ -23,13 +24,13 @@
       "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
       "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
       "https://ruleset.skk.moe/List/domainset/reject.conf",
-      "https://ruleset.skk.moe/List/non_ip/reject.conf",
-      "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-      "https://ruleset.skk.moe/Clash/ip/lan.txt"
+      "https://ruleset.skk.moe/List/non_ip/reject.conf"
     ],
     "whitelist": [
       "static/main/Direct.list",
-      "static/main/NoReject.list"
+      "static/main/NoReject.list",
+      "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
+      "https://ruleset.skk.moe/Clash/ip/lan.txt"
     ]
   },
   {
@@ -40,13 +41,13 @@
       "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
       "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-surge.txt",
       "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
-      "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
-      "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-      "https://ruleset.skk.moe/Clash/ip/lan.txt"
+      "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list"
     ],
     "whitelist": [
       "static/main/Direct.list",
-      "static/main/NoReject.list"
+      "static/main/NoReject.list",
+      "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
+      "https://ruleset.skk.moe/Clash/ip/lan.txt"
     ]
   },
   {
@@ -77,11 +78,12 @@
       "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Disney.list",
       "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Spotify.list",
       "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/TikTok.list",
-      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/GlobalMedia.list",
+      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/GlobalMedia.list"
+    ],
+    "whitelist": [
       "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
       "https://ruleset.skk.moe/Clash/ip/lan.txt"
-    ],
-    "whitelist": []
+    ]
   },
   {
     "name": "tg",
@@ -90,14 +92,12 @@
     "sources": [
       "https://ruleset.skk.moe/List/non_ip/telegram.conf",
       "https://ruleset.skk.moe/List/ip/telegram.conf",
-      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Telegram.list",
-      "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-      "https://ruleset.skk.moe/Clash/ip/lan.txt"
+      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Telegram.list"
     ],
     "whitelist": [
+      "tg-sentinel.txt",
       "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-      "https://ruleset.skk.moe/Clash/ip/lan.txt",
-      "tg-sentinel.txt"
+      "https://ruleset.skk.moe/Clash/ip/lan.txt"
     ]
   },
   {
@@ -107,11 +107,12 @@
     "sources": [
       "https://ruleset.skk.moe/List/non_ip/my_proxy.conf",
       "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ProxyLite/ProxyLite.list",
-      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
+      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list"
+    ],
+    "whitelist": [
       "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
       "https://ruleset.skk.moe/Clash/ip/lan.txt"
-    ],
-    "whitelist": []
+    ]
   },
   {
     "name": "dirt",
@@ -136,10 +137,12 @@
       "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt",
       "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt",
       "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/China.list",
-      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list",
+      "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list"
+    ],
+    "whitelist": [
+      "static/main/NoDirect.list",
       "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
       "https://ruleset.skk.moe/Clash/ip/lan.txt"
-    ],
-    "whitelist": ["static/main/NoDirect.list"]
+    ]
   }
 ]

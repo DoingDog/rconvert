@@ -92,7 +92,7 @@ class SourcesTests(unittest.TestCase):
         groups = load_config(ROOT)
         self.assertEqual([group["name"] for group in groups],
                          ["cdn", "a3", "a4", "big-data", "tg", "proxy", "dirt"])
-        self.assertEqual([len(group["sources"]) for group in groups], [6, 8, 6, 26, 5, 5, 21])
+        self.assertEqual([len(group["sources"]) for group in groups], [4, 6, 4, 24, 3, 3, 19])
         self.assertEqual([group["purpose"] for group in groups],
                          ["proxy", "block", "block", "proxy", "proxy", "proxy", "direct"])
         self.assertEqual([group["no_resolve"] for group in groups],
@@ -105,12 +105,13 @@ class SourcesTests(unittest.TestCase):
                          config["dirt"]["sources"])
         for name, group in config.items():
             with self.subTest(group=name):
-                self.assertEqual(group["whitelist"],
-                                 ["static/main/Direct.list", "static/main/NoReject.list"]
-                                 if name in ("a3", "a4") else ["static/main/NoDirect.list"]
-                                 if name == "dirt" else ["https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-                                                         "https://ruleset.skk.moe/Clash/ip/lan.txt",
-                                                         "tg-sentinel.txt"] if name == "tg" else [])
+                original = (["static/main/Direct.list", "static/main/NoReject.list"]
+                            if name in ("a3", "a4") else ["static/main/NoDirect.list"]
+                            if name == "dirt" else ["tg-sentinel.txt"] if name == "tg" else [])
+                self.assertEqual(group["whitelist"], original + [
+                    "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
+                    "https://ruleset.skk.moe/Clash/ip/lan.txt",
+                ])
                 for source in group["sources"] + group["whitelist"]:
                     resolved = resolve_source(ROOT, source)
                     if isinstance(resolved, Path) and source != "cdn/fin.txt":
@@ -156,27 +157,23 @@ class SourcesTests(unittest.TestCase):
                 "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
                 "https://ruleset.skk.moe/List/domainset/reject.conf",
                 "https://ruleset.skk.moe/List/non_ip/reject.conf",
-                "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-                "https://ruleset.skk.moe/Clash/ip/lan.txt",
             ],
         )
 
     def test_a4_retains_original_a3_sources_and_block_policy(self):
         config = {group["name"]: group for group in load_config(ROOT)}
-        self.assertEqual(config["a4"]["sources"],
-                         config["a3"]["sources"][:4] + config["a3"]["sources"][-2:])
+        self.assertEqual(config["a4"]["sources"], config["a3"]["sources"][:4])
         self.assertEqual(config["a4"]["purpose"], "block")
         self.assertEqual(config["a4"]["no_resolve"], "add")
-        self.assertEqual(config["a4"]["whitelist"],
-                         ["static/main/Direct.list", "static/main/NoReject.list"])
+        self.assertEqual(config["a4"]["whitelist"], config["a3"]["whitelist"])
 
-    def test_every_group_appends_two_lan_sources(self):
+    def test_every_group_appends_two_lan_whitelists_without_routing_them(self):
+        lan = ["https://ruleset.skk.moe/Clash/non_ip/lan.txt",
+               "https://ruleset.skk.moe/Clash/ip/lan.txt"]
         for group in load_config(ROOT):
             with self.subTest(group=group["name"]):
-                self.assertEqual(group["sources"][-2:], [
-                    "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-                    "https://ruleset.skk.moe/Clash/ip/lan.txt",
-                ])
+                self.assertEqual(group["whitelist"][-2:], lan)
+                self.assertTrue(set(lan).isdisjoint(group["sources"]))
 
     def test_big_data_adds_game_download_and_six_rabbit_media_lists(self):
         sources = {group["name"]: group for group in load_config(ROOT)}["big-data"]["sources"]
@@ -211,14 +208,14 @@ class SourcesTests(unittest.TestCase):
             "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Telegram.list",
         ])
         self.assertEqual(group["whitelist"], [
+            "tg-sentinel.txt",
             "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
             "https://ruleset.skk.moe/Clash/ip/lan.txt",
-            "tg-sentinel.txt",
         ])
         self.assertEqual((ROOT / "tg-sentinel.txt").read_text(encoding="utf-8").splitlines(),
                          ["DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"])
 
-    def test_proxy_uses_only_targeted_proxy_sources_with_no_whitelist(self):
+    def test_proxy_uses_only_targeted_proxy_sources_with_lan_whitelists(self):
         group = {group["name"]: group for group in load_config(ROOT)}["proxy"]
         self.assertEqual(group["purpose"], "proxy")
         self.assertEqual(group["no_resolve"], "add")
@@ -227,7 +224,10 @@ class SourcesTests(unittest.TestCase):
             "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ProxyLite/ProxyLite.list",
             "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
         ])
-        self.assertEqual(group["whitelist"], [])
+        self.assertEqual(group["whitelist"], [
+            "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
+            "https://ruleset.skk.moe/Clash/ip/lan.txt",
+        ])
 
     def test_dirt_adds_rabbit_china_and_china_cidr(self):
         sources = {group["name"]: group for group in load_config(ROOT)}["dirt"]["sources"]
