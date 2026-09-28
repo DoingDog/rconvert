@@ -1,29 +1,5 @@
 [
   {
-    "name": "a2",
-    "purpose": "block",
-    "no_resolve": "add",
-    "sources": [
-      "https://adaway.org/hosts.txt",
-      "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext",
-      "https://raw.githubusercontent.com/GeQ1an/Rules/master/QuantumultX/Filter/AdBlock.list",
-      "https://ruleset.skk.moe/List/ip/reject.conf",
-      "https://ruleset.skk.moe/List/non_ip/my_reject.conf",
-      "https://ruleset.skk.moe/List/non_ip/reject.conf",
-      "https://ruleset.skk.moe/List/non_ip/sogouinput.conf",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AdvertisingLite/AdvertisingLite.list",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Hijacking/Hijacking.list",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Privacy/Privacy.list",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/ZhihuAds/ZhihuAds.list",
-      "https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt",
-      "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt",
-      "https://raw.githubusercontent.com/limbopro/Adblock4limbo/main/Adblock4limbo.list",
-      "https://raw.githubusercontent.com/scomper/surge-list/master/adblock.list",
-      "https://raw.githubusercontent.com/sjhgvr/oisd/main/abp_small.txt"
-    ],
-    "whitelist": []
-  },
-  {
     "name": "cdn",
     "purpose": "proxy",
     "no_resolve": "add",
@@ -49,54 +25,6 @@
       "static/main/Direct.list",
       "static/main/NoReject.list"
     ]
-  },
-  {
-    "name": "a1",
-    "purpose": "block",
-    "no_resolve": "add",
-    "sources": [
-      "a2/fin.txt",
-      "https://ruleset.skk.moe/List/domainset/reject.conf",
-      "https://ruleset.skk.moe/List/domainset/reject_extra.conf",
-      "https://ruleset.skk.moe/List/non_ip/reject.conf",
-      "https://ruleset.skk.moe/List/non_ip/reject-no-drop.conf",
-      "https://ruleset.skk.moe/List/non_ip/reject-drop.conf",
-      "https://ruleset.skk.moe/List/ip/reject.conf",
-      "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/rules/AdBlock.list",
-      "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/snippet/FanQieNovel.snippet",
-      "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/snippet/ad_uni.snippet",
-      "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/snippet/baiduApp.snippet",
-      "https://curbengh.github.io/pup-filter/pup-filter-hosts.txt",
-      "https://curbengh.github.io/urlhaus-filter/urlhaus-filter-hosts.txt",
-      "https://gitlab.com/quidsup/notrack-blocklists/-/raw/master/malware.hosts",
-      "https://paulgb.github.io/BarbBlock/blacklists/hosts-file.txt",
-      "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
-      "https://raw.githubusercontent.com/Cats-Team/dns-filter/main/abp.txt",
-      "https://raw.githubusercontent.com/DoingDog/FuckDOMAINSET/main/downnosuf-lys.txt",
-      "https://raw.githubusercontent.com/Moli-X/Resources/main/Filter/ADBlack.list",
-      "https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt",
-      "https://raw.githubusercontent.com/VeleSila/yhosts/master/hosts.txt",
-      "https://raw.githubusercontent.com/VirgilClyne/GetSomeFries/main/ruleset/HTTPDNS.Block.list",
-      "https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AdGuardSDNSFilter/AdGuardSDNSFilter.list",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/AdvertisingMiTV/AdvertisingMiTV.list",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/BlockHttpDNS/BlockHttpDNS.list",
-      "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/EasyPrivacy/EasyPrivacy.list",
-      "https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt",
-      "https://raw.githubusercontent.com/durablenapkin/block/master/luminati.txt",
-      "https://raw.githubusercontent.com/durablenapkin/scamblocklist/master/adguard.txt",
-      "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/light.txt",
-      "https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt",
-      "https://raw.githubusercontent.com/ilpl/ad-hosts/master/hosts",
-      "https://raw.githubusercontent.com/jdlingyu/ad-wars/master/sha_ad_hosts",
-      "https://raw.githubusercontent.com/jerryn70/GoodbyeAds/master/Extension/GoodbyeAds-Xiaomi-Extension.txt",
-      "https://raw.githubusercontent.com/neodevpro/neodevhost/master/ownblocklist",
-      "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-surge.txt",
-      "https://someonewhocares.org/hosts/hosts",
-      "https://github.com/jqyisbest/RuCu6/raw/refs/heads/main/Rules/PornAds.list",
-      "https://github.com/jqyisbest/RuCu6/raw/refs/heads/main/Rules/MyBlockAds.list"
-    ],
-    "whitelist": []
   },
   {
     "name": "big-data",
@@ -139,7 +67,6 @@
       "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/China/China.list",
       "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/AccelerateDirectSites.list",
       "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list",
-      "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/CN.list",
       "https://github.com/jqyisbest/RuCu6/raw/refs/heads/main/Rules/China.list",
       "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/rules/Mainland.list",
       "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/rules/CMedia.list",
@@ -147,6 +74,6 @@
       "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt",
       "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt"
     ],
-    "whitelist": []
+    "whitelist": ["static/main/NoDirect.list"]
   }
 ]

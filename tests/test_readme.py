@@ -16,13 +16,30 @@ class ReadmeTests(unittest.TestCase):
         self.assertIn('href="./README.md"', landing)
         self.assertNotIn("README.text", landing)
 
-    def test_cloudflare_links_cover_rule_groups_and_original_static_files(self):
+    def test_readme_lists_four_groups_and_24_outputs(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        paths = (
-            "a1/fin.txt", "a2/fin.txt", "a3/fin.txt", "cdn/fin.txt",
-            "big-data/fin.txt", "dirt/fin.txt", "a1/fin-adb.txt",
-            "static/main/Adb-unblock.list", "static/serv/sharing.list",
+        rows = (
+            line for line in readme.splitlines()
+            if line.startswith("| `") and "https://raw.githubusercontent.com/DoingDog/rconvert/main/" in line
         )
-        for path in paths:
+        self.assertEqual([line.split("`")[1] for line in rows], ["cdn", "a3", "big-data", "dirt"])
+        self.assertIn("共 24 个", readme)
+        for filename in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt"):
+            with self.subTest(filename=filename):
+                self.assertIn(f"| `{filename}` |", readme)
+
+    def test_readme_links_only_current_groups_and_static_files(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for group in ("cdn", "a3", "big-data", "dirt"):
+            with self.subTest(group=group):
+                self.assertIn(f"https://raw.githubusercontent.com/DoingDog/rconvert/main/{group}/fin.txt", readme)
+                self.assertIn(f"https://r.awsl.app/{group}/fin.txt", readme)
+        for path in ("static/main/Adb-unblock.list", "static/serv/sharing.list"):
             with self.subTest(path=path):
                 self.assertIn(f"https://r.awsl.app/{path}", readme)
+        self.assertNotIn("a1/", readme)
+        self.assertNotIn("a2/", readme)
+        self.assertIn("cdn/fin.txt", readme)
+        self.assertIn("static/main/Direct.list", readme)
+        self.assertIn("static/main/NoReject.list", readme)
+        self.assertIn("static/main/NoDirect.list", readme)

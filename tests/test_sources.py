@@ -19,7 +19,7 @@ class SourcesTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             groups = [
-                {"name": "a2", "purpose": "block", "no_resolve": "add",
+                {"name": "sample", "purpose": "block", "no_resolve": "add",
                  "sources": ["https://example.org/list", "static/main/Direct.list"], "whitelist": []},
                 {"name": "dirt", "purpose": "direct", "no_resolve": "strip",
                  "sources": ["static/serv/domestic.list"], "whitelist": []},
@@ -32,11 +32,11 @@ class SourcesTests(unittest.TestCase):
             self.assertEqual(resolve_source(root, "https://example.org/list"), "https://example.org/list")
 
     def test_rejects_invalid_json_group_structure(self):
-        valid = {"name": "a2", "purpose": "block", "no_resolve": "add",
+        valid = {"name": "sample", "purpose": "block", "no_resolve": "add",
                  "sources": ["https://example.org/list"], "whitelist": []}
         invalid = (
             {}, [], [valid, valid], [{**valid, "sources": []}], [{**valid, "name": "../elsewhere"}],
-            [{**valid, "name": "a2/../a1"}], [{**valid, "purpose": "unknown"}],
+            [{**valid, "name": "sample/../other"}], [{**valid, "purpose": "unknown"}],
             [{**valid, "no_resolve": "true"}], [{**valid, "sources": "https://example.org/list"}],
             [{**valid, "sources": [42]}], [{**valid, "whitelist": [None]}],
             [{key: value for key, value in valid.items() if key != "whitelist"}],
@@ -88,31 +88,47 @@ class SourcesTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         resolve_source(root, entry)
 
-    def test_migrates_six_groups_in_dependency_order_without_disabled_sources(self):
+    def test_retains_four_groups_in_dependency_order_without_stale_sources(self):
         groups = load_config(ROOT)
-        self.assertEqual([group["name"] for group in groups], ["a2", "cdn", "a3", "a1", "big-data", "dirt"])
-        self.assertEqual([len(group["sources"]) for group in groups], [16, 4, 4, 40, 17, 18])
-        self.assertEqual([group["purpose"] for group in groups],
-                         ["block", "proxy", "block", "block", "proxy", "direct"])
-        self.assertEqual([group["no_resolve"] for group in groups], ["add", "add", "add", "add", "add", "strip"])
+        self.assertEqual([group["name"] for group in groups], ["cdn", "a3", "big-data", "dirt"])
+        self.assertEqual([len(group["sources"]) for group in groups], [4, 4, 17, 17])
+        self.assertEqual([group["purpose"] for group in groups], ["proxy", "block", "proxy", "direct"])
+        self.assertEqual([group["no_resolve"] for group in groups], ["add", "add", "add", "strip"])
         config = {group["name"]: group for group in groups}
-        self.assertEqual(config["a1"]["sources"][0], "a2/fin.txt")
         self.assertEqual(config["big-data"]["sources"][:4],
                          ["cdn/fin.txt", "static/serv/cdn.list", "static/serv/emby.list",
                           "static/serv/sharing.list"])
+        self.assertNotIn("https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/CN.list",
+                         config["dirt"]["sources"])
         self.assertEqual(config["a3"]["whitelist"],
                          ["static/main/Direct.list", "static/main/NoReject.list"])
+        self.assertEqual(config["dirt"]["whitelist"], ["static/main/NoDirect.list"])
         for name, group in config.items():
             with self.subTest(group=name):
                 self.assertEqual(group["whitelist"],
-                                 ["static/main/Direct.list", "static/main/NoReject.list"] if name == "a3" else [])
+                                 ["static/main/Direct.list", "static/main/NoReject.list"] if name == "a3"
+                                 else ["static/main/NoDirect.list"] if name == "dirt" else [])
                 for source in group["sources"] + group["whitelist"]:
                     resolved = resolve_source(ROOT, source)
-                    if isinstance(resolved, Path) and source not in ("a2/fin.txt", "cdn/fin.txt"):
+                    if isinstance(resolved, Path) and source != "cdn/fin.txt":
                         self.assertTrue(resolved.is_file(), source)
                 for filename in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt",
                                  "fin-surge.txt", "fin-surge-ds.txt"):
                     self.assertTrue((ROOT / name / filename).is_file(), f"{name}/{filename}")
+        for name in ("a1", "a2"):
+            self.assertFalse((ROOT / name).exists(), name)
+
+    def test_dirt_whitelist_lists_only_requested_routes(self):
+        path = ROOT / "static/main/NoDirect.list"
+        self.assertTrue(path.is_file())
+        entries = path.read_text(encoding="utf-8").splitlines()
+        self.assertEqual(entries, [
+            "DOMAIN-KEYWORD,microsoft",
+            "DOMAIN-WILDCARD,windows-*.net",
+            "DOMAIN-SUFFIX,ms",
+            "DOMAIN-SUFFIX,loli.net",
+            "DOMAIN-SUFFIX,sm.ms",
+        ])
 
     def test_utf8_bom_does_not_change_first_source(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -132,33 +148,6 @@ class SourcesTests(unittest.TestCase):
                 "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
                 "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
             ],
-        )
-
-    def test_a1_replaces_confirmed_404_sources(self):
-        sources = {group["name"]: group for group in load_config(ROOT)}["a1"]["sources"]
-        self.assertIn("https://raw.githubusercontent.com/neodevpro/neodevhost/master/ownblocklist", sources)
-        for dead in (
-            "https://raw.githubusercontent.com/neodevpro/neodevhost/master/customblocklist",
-            "https://raw.githubusercontent.com/fmz200/wool_scripts/main/QuantumultX/filter/fenliu.list",
-            "https://raw.githubusercontent.com/ZenmoFeiShi/rule/main/Pinduoduo.list",
-        ):
-            with self.subTest(dead=dead):
-                self.assertNotIn(dead, sources)
-
-    def test_a1_drops_disabled_sources_and_case_duplicate(self):
-        sources = {group["name"]: group for group in load_config(ROOT)}["a1"]["sources"]
-        for dead in (
-            "https://whatshub.top/rule/AntiAD.list",
-            "https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser",
-            "https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt",
-        ):
-            with self.subTest(dead=dead):
-                self.assertNotIn(dead, sources)
-        self.assertNotIn(
-            "https://raw.githubusercontent.com/Moli-X/Resources/main/Filter/ADblack.list", sources
-        )
-        self.assertIn(
-            "https://raw.githubusercontent.com/Moli-X/Resources/main/Filter/ADBlack.list", sources
         )
 
     def test_big_data_drops_404_gmedia_but_keeps_global_media(self):

@@ -16,7 +16,7 @@ from generate import fetch_https, generate, publish
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GROUPS = ("a1", "a2", "a3", "cdn", "big-data", "dirt")
+GROUPS = ("cdn", "a3", "big-data", "dirt")
 NAMES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
 
 
@@ -24,12 +24,12 @@ def configure_groups(root, sources=None, whitelist=None):
     sources = sources or {}
     whitelist = whitelist or {}
     (root / "rulesets.json").write_text(json.dumps([
-        {"name": group, "purpose": "block" if group in {"a1", "a2", "a3"} else
+        {"name": group, "purpose": "block" if group == "a3" else
          "direct" if group == "dirt" else "proxy",
          "no_resolve": "strip" if group == "dirt" else "add",
          "sources": sources.get(group, [f"{group}/rules.txt"]),
          "whitelist": whitelist.get(group, [])}
-        for group in ("a2", "cdn", "a3", "a1", "big-data", "dirt")
+        for group in GROUPS
     ]), encoding="utf-8")
     for group in GROUPS:
         (root / group).mkdir(exist_ok=True)
@@ -195,7 +195,7 @@ class GenerateTests(unittest.TestCase):
     def test_second_replacement_failure_restores_all_old_files(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            first, second = root / "a2" / "fin.txt", root / "a3" / "fin.txt"
+            first, second = root / "cdn" / "fin.txt", root / "a3" / "fin.txt"
             for path in (first, second):
                 path.parent.mkdir()
                 path.write_bytes(b"old data\n")
@@ -297,6 +297,32 @@ class GenerateTests(unittest.TestCase):
             self.assertNotIn("\nremove.example.com\n", dns)
             self.assertNotIn("USER-AGENT", dns)
 
+    def test_dirt_whitelist_removes_requested_routes_and_keeps_unrelated_domain(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            whitelist = root / "static/main/NoDirect.list"
+            whitelist.parent.mkdir(parents=True)
+            whitelist.write_bytes((ROOT / "static/main/NoDirect.list").read_bytes())
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "dirt", "purpose": "direct", "no_resolve": "strip",
+                "sources": ["direct.list"], "whitelist": ["static/main/NoDirect.list"],
+            }]), encoding="utf-8")
+            (root / "direct.list").write_text(
+                "DOMAIN-KEYWORD,microsoft\nDOMAIN-WILDCARD,windows-*.net\n"
+                "DOMAIN-SUFFIX,ms\nDOMAIN-SUFFIX,sm.ms\nDOMAIN-SUFFIX,loli.net\n"
+                "DOMAIN,office.ms\nDOMAIN,cdn.loli.net\nDOMAIN,keep.example.org\n",
+                encoding="utf-8",
+            )
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(outputs[root / "dirt" / "fin.txt"].splitlines()[1:],
+                             ["DOMAIN,keep.example.org"])
+            for name in ("fin-qx.txt", "fin.yaml", "fin-surge.txt", "fin-surge-ds.txt"):
+                with self.subTest(name=name):
+                    self.assertNotIn("microsoft", outputs[root / "dirt" / name])
+                    self.assertNotIn("windows-*.net", outputs[root / "dirt" / name])
+                    self.assertNotIn("loli.net", outputs[root / "dirt" / name])
+                    self.assertNotIn("sm.ms", outputs[root / "dirt" / name])
+
     def test_html_whitelist_aborts_instead_of_silently_disabling_exclusions(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -361,42 +387,42 @@ class GenerateTests(unittest.TestCase):
             for group in GROUPS:
                 (root / group / "rules.txt").write_text(
                     "DOMAIN-SUFFIX,example.com\n@@||safe.example.com^\n"
-                    if group == "a2" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
+                    if group == "a3" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
-            self.assertIn("||example.com^", outputs[root / "a2" / "fin-adb.txt"])
-            self.assertIn("@@||safe.example.com^", outputs[root / "a2" / "fin-adb.txt"])
+            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a3" / "fin.txt"])
+            self.assertIn("||example.com^", outputs[root / "a3" / "fin-adb.txt"])
+            self.assertIn("@@||safe.example.com^", outputs[root / "a3" / "fin-adb.txt"])
 
     def test_whitelist_keeps_broad_route_and_adds_dns_exception(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            configure_groups(root, whitelist={"a2": ["allow.list"]})
+            configure_groups(root, whitelist={"a3": ["allow.list"]})
             (root / "allow.list").write_text("DOMAIN-SUFFIX,safe.example.com,DIRECT\n", encoding="utf-8")
             for group in GROUPS:
                 (root / group / "rules.txt").write_text(
                     "DOMAIN-SUFFIX,example.com\nDOMAIN,ads.example.com\n"
-                    if group == "a2" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
+                    if group == "a3" else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
-            self.assertIn("||example.com^", outputs[root / "a2" / "fin-adb.txt"])
-            self.assertIn("@@||safe.example.com^", outputs[root / "a2" / "fin-adb.txt"])
+            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a3" / "fin.txt"])
+            self.assertIn("||example.com^", outputs[root / "a3" / "fin-adb.txt"])
+            self.assertIn("@@||safe.example.com^", outputs[root / "a3" / "fin-adb.txt"])
 
     def test_exact_whitelist_keeps_broad_block_with_anchored_dns_exception(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            configure_groups(root, whitelist={"a2": ["allow.list"]})
+            configure_groups(root, whitelist={"a3": ["allow.list"]})
             (root / "allow.list").write_text("DOMAIN,safe.example.com,DIRECT\n", encoding="utf-8")
             for group in GROUPS:
                 (root / group / "rules.txt").write_text(
-                    "DOMAIN-SUFFIX,example.com\n" if group == "a2"
+                    "DOMAIN-SUFFIX,example.com\n" if group == "a3"
                     else "DOMAIN,baseline.example.org\n", encoding="utf-8",
                 )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a2" / "fin.txt"])
-            self.assertIn("||example.com^", outputs[root / "a2" / "fin-adb.txt"])
-            self.assertIn("@@|safe.example.com|", outputs[root / "a2" / "fin-adb.txt"])
+            self.assertIn("DOMAIN-SUFFIX,example.com", outputs[root / "a3" / "fin.txt"])
+            self.assertIn("||example.com^", outputs[root / "a3" / "fin-adb.txt"])
+            self.assertIn("@@|safe.example.com|", outputs[root / "a3" / "fin-adb.txt"])
 
     def test_empty_required_source_aborts_with_its_path(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -413,7 +439,7 @@ class GenerateTests(unittest.TestCase):
     def test_invalid_utf8_identifies_remote_source_and_does_not_publish(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            target = root / "a2" / "fin.txt"
+            target = root / "cdn" / "fin.txt"
             configure_groups(root, sources={"a3": ["https://example.org/broken.txt"]})
             for group in GROUPS:
                 if group != "a3":
@@ -467,64 +493,59 @@ class GenerateTests(unittest.TestCase):
                 generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertIn("a3 fin-qx.txt:PROCESS-NAME: 1", stderr.getvalue())
 
-    def test_dependent_groups_use_current_in_memory_cdn_and_a2_outputs(self):
+    def test_dependent_group_uses_current_in_memory_cdn_output(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            configure_groups(root, sources={"a1": ["a2/fin.txt"], "big-data": ["cdn/fin.txt"]})
+            configure_groups(root, sources={"big-data": ["cdn/fin.txt"]})
             for group in GROUPS:
-                if group not in {"a1", "big-data"}:
+                if group != "big-data":
                     (root / group / "rules.txt").write_text(
                         f"DOMAIN,from-{group}.example.org\n", encoding="utf-8",
                     )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertIn("DOMAIN,from-a2.example.org", outputs[root / "a1" / "fin.txt"])
             self.assertIn("DOMAIN,from-cdn.example.org", outputs[root / "big-data" / "fin.txt"])
-            self.assertFalse((root / "a2" / "fin.txt").exists())
             self.assertFalse((root / "cdn" / "fin.txt").exists())
 
     def test_forward_generated_dependency_rejects_stale_disk_file(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            (root / "a2").mkdir()
-            (root / "a2" / "fin.txt").write_text("DOMAIN,stale.example.org\n", encoding="utf-8")
+            (root / "cdn").mkdir()
+            (root / "cdn" / "fin.txt").write_text("DOMAIN,stale.example.org\n", encoding="utf-8")
             (root / "new.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
             (root / "rulesets.json").write_text(json.dumps([
-                {"name": "a1", "purpose": "block", "no_resolve": "keep",
-                 "sources": ["a2/fin.txt"], "whitelist": []},
-                {"name": "a2", "purpose": "block", "no_resolve": "keep",
+                {"name": "big-data", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["cdn/fin.txt"], "whitelist": []},
+                {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
                  "sources": ["new.list"], "whitelist": []},
             ]), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "not yet generated"):
                 generate(root, lambda _: self.fail("local input must not fetch"))
 
-    def test_changed_dependencies_change_the_same_round_outputs(self):
+    def test_changed_dependency_changes_the_same_round_output(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            configure_groups(root, sources={"a1": ["a2/fin.txt"], "big-data": ["cdn/fin.txt"]})
+            configure_groups(root, sources={"big-data": ["cdn/fin.txt"]})
             for group in GROUPS:
-                if group not in {"a1", "big-data"}:
+                if group != "big-data":
                     (root / group / "rules.txt").write_text(
                         f"DOMAIN,original-{group}.example.org\n", encoding="utf-8",
                     )
             first = generate(root, lambda _: self.fail("local input must not fetch"))
-            for group in ("a2", "cdn"):
-                (root / group / "rules.txt").write_text(
-                    f"DOMAIN,replaced-{group}.example.org\n", encoding="utf-8",
-                )
+            (root / "cdn" / "rules.txt").write_text(
+                "DOMAIN,replaced-cdn.example.org\n", encoding="utf-8",
+            )
             second = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertIn("DOMAIN,replaced-a2.example.org", second[root / "a1" / "fin.txt"])
             self.assertIn("DOMAIN,replaced-cdn.example.org", second[root / "big-data" / "fin.txt"])
-            self.assertNotEqual(first[root / "a1" / "fin.txt"], second[root / "a1" / "fin.txt"])
             self.assertNotEqual(first[root / "big-data" / "fin.txt"], second[root / "big-data" / "fin.txt"])
 
     def test_same_remote_url_is_fetched_once_for_rules_and_whitelist(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             shared = "https://example.org/shared.txt"
-            configure_groups(root, sources={"a2": [shared], "a3": [shared]},
+            configure_groups(root, sources={"cdn": [shared], "a3": [shared]},
                              whitelist={"a3": [shared]})
             for group in GROUPS:
-                if group not in {"a2", "a3"}:
+                if group not in {"cdn", "a3"}:
                     (root / group / "rules.txt").write_text("DOMAIN,baseline.example.org\n", encoding="utf-8")
             calls = []
 
@@ -574,5 +595,6 @@ class GenerateTests(unittest.TestCase):
                 for group in GROUPS
             }
             outputs = generate(root, contents.__getitem__)
+            self.assertEqual(len(outputs), 24)
             self.assertEqual(set(outputs), {root / group / name for group in GROUPS for name in NAMES})
             self.assertFalse(any(path.exists() for path in outputs))

@@ -67,13 +67,13 @@ class FormatTests(unittest.TestCase):
         self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
 
     def test_suffix_is_shared_by_domain_set_and_adblock(self):
-        out, skipped = render("a2", [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+        out, skipped = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")])
         self.assertIn("DOMAIN-SUFFIX,ads.example.com\n", out["fin.txt"])
         self.assertIn("HOST-SUFFIX,ads.example.com,LIST\n", out["fin-qx.txt"])
         self.assertIn('  - "DOMAIN-SUFFIX,ads.example.com"\n', out["fin.yaml"])
-        self.assertEqual(out["fin-surge-ds.txt"], "# a2 rules: 1\n.ads.example.com\n")
-        self.assertEqual(out["fin-surge.txt"], "# a2 rules: 0\n")
-        self.assertEqual(out["fin-adb.txt"], "! a2 rules: 1\n||ads.example.com^\n")
+        self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 1\n.ads.example.com\n")
+        self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
+        self.assertEqual(out["fin-adb.txt"], "! a3 rules: 1\n||ads.example.com^\n")
         self.assertNotIn("fin-adb.txt:DOMAIN-SUFFIX", skipped)
 
     def test_keyword_with_dot_is_literal_in_dns_regex(self):
@@ -395,7 +395,7 @@ class FormatTests(unittest.TestCase):
         custom, _ = render("custom", [Rule("DOMAIN", "ads.example.org")],
                            purpose="block", no_resolve="keep")
         self.assertIn("\nads.example.org\n", custom["fin-adb.txt"])
-        proxy, _ = render("a1", [Rule("DOMAIN", "ads.example.org")],
+        proxy, _ = render("a3", [Rule("DOMAIN", "ads.example.org")],
                           purpose="proxy", no_resolve="keep")
         self.assertNotIn("ads.example.org", proxy["fin-adb.txt"])
 
@@ -403,7 +403,7 @@ class FormatTests(unittest.TestCase):
         rule = Rule("IP-CIDR", "203.0.113.0/24", ("no-resolve",))
         added, _ = render("dirt", [rule], purpose="direct", no_resolve="add")
         self.assertIn("IP-CIDR,203.0.113.0/24,no-resolve\n", added["fin.txt"])
-        stripped, _ = render("a1", [rule], purpose="block", no_resolve="strip")
+        stripped, _ = render("a3", [rule], purpose="block", no_resolve="strip")
         self.assertIn("IP-CIDR,203.0.113.0/24\n", stripped["fin.txt"])
         self.assertNotIn("no-resolve", stripped["fin.txt"])
 

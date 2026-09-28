@@ -166,7 +166,7 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(parse("HOST-SUFFIX,cdn.example.com,REJECT", purpose="proxy")[0], [])
         self.assertEqual(parse("HOST-SUFFIX,cn.example.com,DIRECT", purpose="block")[0], [])
 
-    def test_curated_a1_filter_policies_remain_block_only(self):
+    def test_named_filter_policies_remain_block_only(self):
         for policy in ("AdGuardSDNSFilter", "AdvertisingMiTV", "BlockHttpDNS", "EasyPrivacy"):
             with self.subTest(policy=policy):
                 source = f"HOST-SUFFIX,ads.example.com,{policy}"
