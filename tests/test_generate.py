@@ -206,6 +206,14 @@ class GenerateTests(unittest.TestCase):
                 publish({outside: "DOMAIN,ads.example.org\n"})
         self.assertFalse(outside.exists())
 
+    def test_publish_rejects_static_paths_before_replacement(self):
+        target = ROOT / "static/main/Direct.list"
+        original = target.read_bytes()
+        with patch("os.replace", side_effect=AssertionError("static write attempted")):
+            with self.assertRaisesRegex(ValueError, "static"):
+                publish({target: "DOMAIN,evil.example\n"})
+        self.assertEqual(target.read_bytes(), original)
+
     def test_generate_rejects_root_outside_worktree_before_reading(self):
         with self.assertRaisesRegex(ValueError, "worktree"):
             generate(ROOT.parent, lambda _: self.fail("network must not be used"))

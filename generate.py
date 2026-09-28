@@ -57,6 +57,8 @@ def publish(outputs: dict[Path, str]) -> None:
     root = Path(__file__).resolve().parent
     if any(not path.resolve().is_relative_to(root) for path in outputs):
         raise ValueError("Output path escapes worktree")
+    if any(path.resolve().is_relative_to(root / "static") for path in outputs):
+        raise ValueError("Output path targets static")
     staging = root / ".tmp"
     staging.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(dir=staging) as directory:
