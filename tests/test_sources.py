@@ -14,9 +14,9 @@ class SourcesTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             groups = [
-                {"name": "a2", "purpose": "block", "no_resolve": True,
+                {"name": "a2", "purpose": "block", "no_resolve": "add",
                  "sources": ["https://example.org/list", "static/main/Direct.list"], "whitelist": []},
-                {"name": "dirt", "purpose": "direct", "no_resolve": False,
+                {"name": "dirt", "purpose": "direct", "no_resolve": "strip",
                  "sources": ["static/serv/domestic.list"], "whitelist": []},
             ]
             (root / "rulesets.json").write_text(json.dumps(groups), encoding="utf-8")
@@ -27,7 +27,7 @@ class SourcesTests(unittest.TestCase):
             self.assertEqual(resolve_source(root, "https://example.org/list"), "https://example.org/list")
 
     def test_rejects_invalid_json_group_structure(self):
-        valid = {"name": "a2", "purpose": "block", "no_resolve": True,
+        valid = {"name": "a2", "purpose": "block", "no_resolve": "add",
                  "sources": ["https://example.org/list"], "whitelist": []}
         invalid = (
             {}, [], [valid, valid], [{**valid, "sources": []}], [{**valid, "name": "../elsewhere"}],
@@ -44,8 +44,21 @@ class SourcesTests(unittest.TestCase):
                     with self.assertRaises(ValueError):
                         load_config(root)
 
+    def test_no_resolve_policy_is_add_strip_or_keep_not_boolean(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            group = {"name": "sample", "purpose": "direct", "no_resolve": "keep",
+                     "sources": ["https://example.org/rules"], "whitelist": []}
+            for policy in ("add", "strip", "keep"):
+                with self.subTest(policy=policy):
+                    (root / "rulesets.json").write_text(json.dumps([{**group, "no_resolve": policy}]), encoding="utf-8")
+                    self.assertEqual(load_config(root)[0]["no_resolve"], policy)
+            (root / "rulesets.json").write_text(json.dumps([{**group, "no_resolve": False}]), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "no_resolve|options"):
+                load_config(root)
+
     def test_rejects_invalid_sources_in_either_config_list(self):
-        valid = {"name": "a3", "purpose": "block", "no_resolve": True,
+        valid = {"name": "a3", "purpose": "block", "no_resolve": "add",
                  "sources": ["https://example.org/list"], "whitelist": []}
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -62,7 +75,8 @@ class SourcesTests(unittest.TestCase):
             root = Path(directory)
             for entry in ("http://example.org/list", "ftp://example.org/list", "https://",
                           "https://example.org:bad/list", "https://example.org\\@other.example/list",
-                          "https://exa mple.org/list", "", "../outside.txt", r"..\outside.txt",
+                          "https://exa mple.org/list", "\x00https://example.org/list",
+                          "https://example.org/li\x00st", "", "../outside.txt", r"..\outside.txt",
                           str(ROOT / "static/main/Direct.list")):
                 with self.subTest(entry=entry):
                     with self.assertRaises(ValueError):
@@ -74,7 +88,7 @@ class SourcesTests(unittest.TestCase):
         self.assertEqual([len(group["sources"]) for group in groups], [16, 4, 4, 40, 17, 18])
         self.assertEqual([group["purpose"] for group in groups],
                          ["block", "proxy", "block", "block", "proxy", "direct"])
-        self.assertEqual([group["no_resolve"] for group in groups], [True, True, True, True, True, False])
+        self.assertEqual([group["no_resolve"] for group in groups], ["add", "add", "add", "add", "add", "strip"])
         config = {group["name"]: group for group in groups}
         self.assertEqual(config["a1"]["sources"][0], "a2/fin.txt")
         self.assertEqual(config["big-data"]["sources"][:4],

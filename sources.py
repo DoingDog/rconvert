@@ -32,7 +32,7 @@ def load_sources(root: Path, group: str) -> list[str | Path]:
 
 
 def resolve_source(root: Path, entry: str) -> str | Path:
-    if not isinstance(entry, str) or not entry or entry != entry.strip():
+    if not isinstance(entry, str) or not entry or entry != entry.strip() or any(ord(char) < 32 or ord(char) == 127 for char in entry):
         raise ValueError(f"Invalid source: {entry}")
     try:
         url = urlsplit(entry)
@@ -66,7 +66,7 @@ def load_config(root: Path) -> list[dict]:
         if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", name) or name in names:
             raise ValueError(f"Invalid or duplicate ruleset group name: {name}")
         names.add(name)
-        if group["purpose"] not in ("block", "proxy", "direct") or type(group["no_resolve"]) is not bool:
+        if group["purpose"] not in ("block", "proxy", "direct") or group["no_resolve"] not in ("add", "strip", "keep"):
             raise ValueError(f"Invalid ruleset options: {name}")
         for key in ("sources", "whitelist"):
             entries = group[key]

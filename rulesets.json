@@ -2,7 +2,7 @@
   {
     "name": "a2",
     "purpose": "block",
-    "no_resolve": true,
+    "no_resolve": "add",
     "sources": [
       "https://adaway.org/hosts.txt",
       "https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=0&mimetype=plaintext",
@@ -26,7 +26,7 @@
   {
     "name": "cdn",
     "purpose": "proxy",
-    "no_resolve": true,
+    "no_resolve": "add",
     "sources": [
       "https://ruleset.skk.moe/List/domainset/cdn.conf",
       "https://ruleset.skk.moe/List/non_ip/cdn.conf",
@@ -38,7 +38,7 @@
   {
     "name": "a3",
     "purpose": "block",
-    "no_resolve": true,
+    "no_resolve": "add",
     "sources": [
       "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
       "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-surge.txt",
@@ -53,7 +53,7 @@
   {
     "name": "a1",
     "purpose": "block",
-    "no_resolve": true,
+    "no_resolve": "add",
     "sources": [
       "a2/fin.txt",
       "https://ruleset.skk.moe/List/domainset/reject.conf",
@@ -101,7 +101,7 @@
   {
     "name": "big-data",
     "purpose": "proxy",
-    "no_resolve": true,
+    "no_resolve": "add",
     "sources": [
       "cdn/fin.txt",
       "static/serv/cdn.list",
@@ -126,7 +126,7 @@
   {
     "name": "dirt",
     "purpose": "direct",
-    "no_resolve": false,
+    "no_resolve": "strip",
     "sources": [
       "static/serv/domestic.list",
       "https://static-file-global.353355.xyz/rules/cn-additional-list-clash-classical.yaml",
