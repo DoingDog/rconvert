@@ -1,14 +1,99 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
 
-from sources import load_sources
+from sources import load_config, load_sources, resolve_source
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class SourcesTests(unittest.TestCase):
+    def test_loads_ordered_json_groups_and_resolves_sources_from_root(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            groups = [
+                {"name": "a2", "purpose": "block", "no_resolve": True,
+                 "sources": ["https://example.org/list", "static/main/Direct.list"], "whitelist": []},
+                {"name": "dirt", "purpose": "direct", "no_resolve": False,
+                 "sources": ["static/serv/domestic.list"], "whitelist": []},
+            ]
+            (root / "rulesets.json").write_text(json.dumps(groups), encoding="utf-8")
+            self.assertEqual(load_config(root), groups)
+            self.assertEqual(resolve_source(root, "static/main/Direct.list"), root / "static/main/Direct.list")
+            self.assertEqual(resolve_source(root, "static\\main\\Direct.list"), root / "static/main/Direct.list")
+            self.assertEqual(resolve_source(root, "static/main/white list.txt"), root / "static/main/white list.txt")
+            self.assertEqual(resolve_source(root, "https://example.org/list"), "https://example.org/list")
+
+    def test_rejects_invalid_json_group_structure(self):
+        valid = {"name": "a2", "purpose": "block", "no_resolve": True,
+                 "sources": ["https://example.org/list"], "whitelist": []}
+        invalid = (
+            {}, [], [valid, valid], [{**valid, "sources": []}], [{**valid, "name": "../elsewhere"}],
+            [{**valid, "name": "a2/../a1"}], [{**valid, "purpose": "unknown"}],
+            [{**valid, "no_resolve": "true"}], [{**valid, "sources": "https://example.org/list"}],
+            [{**valid, "sources": [42]}], [{**valid, "whitelist": [None]}],
+            [{key: value for key, value in valid.items() if key != "whitelist"}],
+        )
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            for data in invalid:
+                with self.subTest(data=data):
+                    (root / "rulesets.json").write_text(json.dumps(data), encoding="utf-8")
+                    with self.assertRaises(ValueError):
+                        load_config(root)
+
+    def test_rejects_invalid_sources_in_either_config_list(self):
+        valid = {"name": "a3", "purpose": "block", "no_resolve": True,
+                 "sources": ["https://example.org/list"], "whitelist": []}
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            for key in ("sources", "whitelist"):
+                for entry in ("http://example.org/list", "https://", "https://example.org:bad/list",
+                              "../outside.txt", r"..\outside.txt", str(ROOT / "static/main/Direct.list")):
+                    with self.subTest(key=key, entry=entry):
+                        (root / "rulesets.json").write_text(json.dumps([{**valid, key: [entry]}]), encoding="utf-8")
+                        with self.assertRaises(ValueError):
+                            load_config(root)
+
+    def test_resolve_source_rejects_url_and_path_tricks(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            for entry in ("http://example.org/list", "ftp://example.org/list", "https://",
+                          "https://example.org:bad/list", "https://example.org\\@other.example/list",
+                          "https://exa mple.org/list", "", "../outside.txt", r"..\outside.txt",
+                          str(ROOT / "static/main/Direct.list")):
+                with self.subTest(entry=entry):
+                    with self.assertRaises(ValueError):
+                        resolve_source(root, entry)
+
+    def test_migrates_six_groups_in_dependency_order_without_disabled_sources(self):
+        groups = load_config(ROOT)
+        self.assertEqual([group["name"] for group in groups], ["a2", "cdn", "a3", "a1", "big-data", "dirt"])
+        self.assertEqual([len(group["sources"]) for group in groups], [16, 4, 4, 40, 17, 18])
+        self.assertEqual([group["purpose"] for group in groups],
+                         ["block", "proxy", "block", "block", "proxy", "direct"])
+        self.assertEqual([group["no_resolve"] for group in groups], [True, True, True, True, True, False])
+        config = {group["name"]: group for group in groups}
+        self.assertEqual(config["a1"]["sources"][0], "a2/fin.txt")
+        self.assertEqual(config["big-data"]["sources"][:4],
+                         ["cdn/fin.txt", "static/serv/cdn.list", "static/serv/emby.list",
+                          "static/serv/sharing.list"])
+        self.assertEqual(config["a3"]["whitelist"],
+                         ["static/main/Direct.list", "static/main/NoReject.list"])
+        for name, group in config.items():
+            with self.subTest(group=name):
+                self.assertEqual(group["whitelist"],
+                                 ["static/main/Direct.list", "static/main/NoReject.list"] if name == "a3" else [])
+                for source in group["sources"] + group["whitelist"]:
+                    resolved = resolve_source(ROOT, source)
+                    if isinstance(resolved, Path) and source not in ("a2/fin.txt", "cdn/fin.txt"):
+                        self.assertTrue(resolved.is_file(), source)
+                for filename in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt",
+                                 "fin-surge.txt", "fin-surge-ds.txt"):
+                    self.assertTrue((ROOT / name / filename).is_file(), f"{name}/{filename}")
+
     def test_loads_https_and_windows_relative_paths_ignoring_comments(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
