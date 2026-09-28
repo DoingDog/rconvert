@@ -94,10 +94,12 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     outputs: dict[Path, str] = {}
     cache: dict[str, bytes] = {}
     configs = load_config(root) if (root / "rulesets.json").exists() else None
-    groups = ((item["name"], [resolve_source(root, entry) for entry in item["sources"]], item["purpose"])
+    groups = ((item["name"], [resolve_source(root, entry) for entry in item["sources"]],
+               item["purpose"], item["no_resolve"])
               for item in configs) if configs is not None else (
-                  (group, load_sources(root, group), PURPOSES[group]) for group in GROUPS)
-    for group, sources, purpose in groups:
+                  (group, load_sources(root, group), PURPOSES[group], "keep" if group == "dirt" else "add")
+                  for group in GROUPS)
+    for group, sources, purpose, no_resolve in groups:
         rules = []
         for source in sources:
             if isinstance(source, Path):
@@ -120,10 +122,13 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             rules.extend(parsed)
         exclusions_file = root / group / "attach" / "del.ini"
         exclusions = exclusions_file.read_text(encoding="utf-8-sig").splitlines() if exclusions_file.exists() else []
-        if group != "dirt":
+        if no_resolve == "add":
             rules = [Rule(rule.kind, rule.value, rule.options + ("no-resolve",), rule.allow)
                      if not rule.allow and rule.kind in NO_RESOLVE_TYPES else rule for rule in rules]
-        rendered, skipped = render(group, normalize(rules, exclusions))
+        elif no_resolve == "strip":
+            rules = [Rule(rule.kind, rule.value, tuple(option for option in rule.options if option != "no-resolve"), rule.allow)
+                     for rule in rules]
+        rendered, skipped = render(group, normalize(rules, exclusions), no_resolve=no_resolve)
         for key, count in sorted(skipped.items()):
             print(f"{group} {key}: {count}", file=sys.stderr)
         if group in {"a1", "a2", "a3"}:

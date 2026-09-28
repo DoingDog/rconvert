@@ -106,12 +106,15 @@ def _dns_pattern(rule: Rule) -> str | None:
     return None
 
 
-def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = ()) -> tuple[dict[str, str], dict[str, int]]:
+def render(group: str, rules: Iterable[Rule], *, whitelist: Iterable[Rule] = (),
+           no_resolve: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow)):
         kind, value = rule.kind, rule.value
-        if group != "dirt" and not rule.allow and kind in NO_RESOLVE_TYPES:
+        if no_resolve == "strip":
+            rule = Rule(kind, value, tuple(option for option in rule.options if option != "no-resolve"), rule.allow)
+        elif (no_resolve == "add" or no_resolve is None and group != "dirt") and not rule.allow and kind in NO_RESOLVE_TYPES:
             rule = Rule(kind, value, rule.options + ("no-resolve",))
         if "\r" in value or "\n" in value:
             for name in FILES:

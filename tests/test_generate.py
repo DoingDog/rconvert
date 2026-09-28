@@ -231,6 +231,29 @@ class GenerateTests(unittest.TestCase):
             self.assertEqual(set(outputs), {root / "custom" / name for name in NAMES})
             self.assertIn("DOMAIN,ads.example.org\n", outputs[root / "custom" / "fin.txt"])
 
+    def test_no_resolve_policy_add_strip_and_keep_is_configured_per_group(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "tagged.list").write_text("IP-CIDR,192.0.2.0/24,no-resolve\n", encoding="utf-8")
+            (root / "untagged.list").write_text("IP-CIDR,198.51.100.0/24\n", encoding="utf-8")
+            groups = [
+                {"name": name, "purpose": "direct", "no_resolve": policy,
+                 "sources": [source], "whitelist": []}
+                for name, policy, source in (
+                    ("dirt", "strip", "tagged.list"),
+                    ("preserved", "keep", "tagged.list"),
+                    ("untagged", "keep", "untagged.list"),
+                    ("forced", "add", "untagged.list"),
+                )
+            ]
+            (root / "rulesets.json").write_text(json.dumps(groups), encoding="utf-8")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            for name in ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin.yaml"):
+                self.assertNotIn("no-resolve", outputs[root / "dirt" / name], name)
+                self.assertIn("no-resolve", outputs[root / "preserved" / name], name)
+                self.assertNotIn("no-resolve", outputs[root / "untagged" / name], name)
+                self.assertIn("no-resolve", outputs[root / "forced" / name], name)
+
     def test_cli_builds_fixture_with_local_sources_only(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
