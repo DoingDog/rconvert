@@ -8,7 +8,7 @@
 
 ## 数据流
 
-`rulesets.json` 按生成顺序列出组，每项包含 `name`、`purpose`、`no_resolve`、`sources`、`whitelist`。来源和白名单共用 HTTPS URL／仓库相对路径验证、下载缓存和文本读取。配置中的 `a1/fin.txt`、`cdn/fin.txt` 这类路径若来自前面的组，读取本轮内存输出，不依赖磁盘上一次生成结果；引用未完成的组要明确失败。组名及相对路径不得越出 worktree；拒绝非 HTTPS、无效 URL、格式不符的 JSON。配置只包含原 INI 中实际启用的来源。
+`rulesets.json` 按生成顺序列出组，每项包含 `name`、`purpose`、`no_resolve`、`sources`、`whitelist`。`no_resolve` 是可复用的 `add`／`strip`／`keep` 配置项：`dirt` 取 `strip`，要移除来源自带的全部 `no-resolve`；其余五组取 `add`，保持自动添加；`keep` 原样保留来源选项。来源和白名单共用 HTTPS URL／仓库相对路径验证、下载缓存和文本读取。配置中的 `a1/fin.txt`、`cdn/fin.txt` 这类路径若来自前面的组，读取本轮内存输出，不依赖磁盘上一次生成结果；引用未完成的组要明确失败。组名及相对路径不得越出 worktree；拒绝非 HTTPS、无效 URL、格式不符的 JSON。配置只包含原 INI 中实际启用的来源。
 
 每组依次解析原规则，保留已支持的 Surge／Quantumult X／Mihomo／AdGuard 来源语法；白名单解析时忽略 QX／Surge 策略字段。白名单仅纳入 DOMAIN、DOMAIN-SUFFIX、DOMAIN-KEYWORD、DOMAIN-WILDCARD，以及 IP-CIDR、IP-CIDR6、SRC-IP-CIDR、SRC-IP、IP-ASN、GEOIP 等 IP 类型；IP-ASN、GEOIP 仅作同类型精确比较，忽略 USER-AGENT、PROCESS 等类型。对源规则，仅当同方向同地址族的 IP 网段或域名匹配集合被某项白名单完全覆盖时才移除；仅有交集不得删较宽规则。无法安全证明覆盖的 wildcard／keyword 组合也保留。源规则自带的 `@@` 不再使较宽的路由规则消失；在 AdGuard DNS 输出中保留来源原有的例外。
 

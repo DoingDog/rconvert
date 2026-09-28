@@ -16,6 +16,7 @@
 - 旧 `del.ini` 内容全部废弃。六个 `rule-list.ini` 只迁移启用的来源，最终删除全部十份 INI。
 - 输出固定为六组各自的 `fin.txt`、`fin-qx.txt`、`fin.yaml`、`fin-adb.txt`、`fin-surge.txt`、`fin-surge-ds.txt`，共 36 个原路径。
 - AdGuard DNS 的精确 DOMAIN、后缀、keyword、可安全转换的 wildcard 不能扩大匹配；新白名单另输出对应的 `@@`，IP 不生成 DNS 例外。
+- `no_resolve` 是 `add`／`strip`／`keep` 三态配置；`dirt` 必须 strip 所有来源自带的 `no-resolve`，其他五组 add。
 - 只删被白名单完整覆盖的规则；源 `@@` 不删较宽路由规则；不支持的规则不参加目标格式的错误去重。
 - 所有 Python 测试和生成调用使用当前 worktree 的虚拟环境。每个新行为先验证 RED，再最小实现 GREEN，跑全套离线测试后提交。
 
@@ -33,11 +34,11 @@
 
 **Files:** `sources.py`、`tests/test_sources.py`、新增 `rulesets.json`。不要编辑 `generate.py` 或删除旧 INI，最后集成时再清理。
 
-**Interfaces:** `load_config(root: Path) -> list[dict]` 读取并验证按顺序排列的组；`resolve_source(root: Path, entry: str) -> str | Path` 解析一个 HTTPS URL 或仓库相对路径。数据包含 `name`、`purpose`、`no_resolve`、`sources`、`whitelist`。保持现有 `load_sources` 临时可用，供并行任务和旧测试使用。
+**Interfaces:** `load_config(root: Path) -> list[dict]` 读取并验证按顺序排列的组；`resolve_source(root: Path, entry: str) -> str | Path` 解析一个 HTTPS URL 或仓库相对路径。数据包含 `name`、`purpose`、三态 `no_resolve`（`add`／`strip`／`keep`）、`sources`、`whitelist`。保持现有 `load_sources` 临时可用，供并行任务和旧测试使用。
 
 - [ ] 先在 `tests/test_sources.py` 增加行为测试，例如在 `TemporaryDirectory(dir=ROOT)` 中写 `rulesets.json`，`load_config(root)[0]['name'] == 'a2'`、`resolve_source(root, 'static/main/Direct.list') == root / 'static/main/Direct.list'`；同时测试 HTTP、越界、非列表 JSON、重复组名、未知 purpose 被拒绝。运行 `.venv/Scripts/python.exe -B -m unittest tests.test_sources -v`，确认缺失接口导致 RED。
 - [ ] 用标准库 `json`/`pathlib`/`urllib.parse` 实现最小验证；来源仓库路径以根目录为准并在 `resolve()` 后检查 `is_relative_to(root)`。运行同一命令，确认 GREEN。
-- [ ] 将原六份 `attach/rule-list.ini` 中启用的条目按原顺序迁入 `rulesets.json`；a1 的本轮依赖为 `a2/fin.txt`，big-data 的依赖为 `cdn/fin.txt`，a3 的 `whitelist` 为 `static/main/Direct.list` 和 `static/main/NoReject.list`，其他组暂为空列表。测试这些关系、全部 36 个预期输出目录名和配置边界。
+- [ ] 将原六份 `attach/rule-list.ini` 中启用的条目按原顺序迁入 `rulesets.json`；a1 的本轮依赖为 `a2/fin.txt`，big-data 的依赖为 `cdn/fin.txt`，a3 的 `whitelist` 为 `static/main/Direct.list` 和 `static/main/NoReject.list`，其他组暂为空列表；`dirt.no_resolve` 为 `strip`，其他五组为 `add`。测试这些关系、三态校验、全部 36 个预期输出目录名和配置边界。
 - [ ] 在独立分支提交 Task 1 的文件，并返回 commit SHA、RED/GREEN 命令及结果。
 
 ### Task 2: 白名单解析及完整覆盖（与 Task 1、3 并行）
@@ -69,7 +70,7 @@
 **Interfaces:** 保留 `generate(root, fetch) -> dict[Path, str]`、`publish(outputs)`、命令 `generate.py --root <path>`；从 `load_config` 循环，经 `resolve_source` 读取规则与白名单，调用 `parse_whitelist`、`exclude_covered`、`normalize`、`render(..., whitelist=...)`。配置顺序不满足组依赖时抛异常，决不读旧磁盘产物。
 
 - [ ] 将 `tests/test_generate.py` 的临时 fixture 改为写根目录 `rulesets.json`，先新增 a3 两份本地白名单、URL 白名单缓存、宽后缀+精确白名单、后缀包含、上游 `@@`、错误 URL 原子发布及动态组用途测试；单个用例先 RED，再逐步集成 GREEN。
-- [ ] 在测试保护下移除 `normalize` 的 `exclusions` 参数与旧冲突删除／自动例外路径，移除硬编码组名、用途与 AdGuard 组集合；动态配置驱动 `no_resolve`。保持 36 个文件原路径，删除十份 INI，更新 README 配置与 DNS 用法。
+- [ ] 在测试保护下移除 `normalize` 的 `exclusions` 参数与旧冲突删除／自动例外路径，移除硬编码组名、用途与 AdGuard 组集合；动态配置驱动 `no_resolve`：新增 RED 测试证明 `dirt` 的来源 `IP-CIDR,...,no-resolve` 在 `fin.txt`、`fin-qx.txt`、`fin.yaml`、`fin-surge.txt` 均去掉该选项，五组 `add` 与新组 `keep` 分别保持添加／原样语义。保持 36 个文件原路径，删除十份 INI，更新 README 配置与 DNS 用法。
 - [ ] 应用用户两份 static 修改的原始 patch，先运行现有 CI static 检查确认 RED；仅改 CI 中两处快照哈希，使这两份改动后的树为唯一允许状态，GREEN；新增测试防止将新 hash 写回旧值。
 - [ ] 用当前 worktree 的 `.venv/Scripts/python.exe -B -m unittest discover -s tests -v` 跑完整套件；执行 `git diff --check`、确认 `static/` 差异仅有两处用户修改和全部 36 个目标路径仍存在。
 
