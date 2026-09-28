@@ -3,13 +3,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from sources import load_config, load_sources, resolve_source
+from sources import load_config, resolve_source
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class SourcesTests(unittest.TestCase):
+    def test_legacy_ini_loader_is_removed(self):
+        import sources
+
+        self.assertFalse(hasattr(sources, "load_sources"))
+
     def test_loads_ordered_json_groups_and_resolves_sources_from_root(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -109,73 +114,18 @@ class SourcesTests(unittest.TestCase):
                                  "fin-surge.txt", "fin-surge-ds.txt"):
                     self.assertTrue((ROOT / name / filename).is_file(), f"{name}/{filename}")
 
-    def test_loads_https_and_windows_relative_paths_ignoring_comments(self):
-        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
-            root = Path(directory)
-            config = root / "sample" / "attach" / "rule-list.ini"
-            config.parent.mkdir(parents=True)
-            config.write_text(
-                "# ignored\n\n  https://example.org/rules.txt  \n"
-                "..\\..\\static\\rules.txt\n",
-                encoding="utf-8",
-            )
-            self.assertEqual(
-                load_sources(root, "sample"),
-                ["https://example.org/rules.txt", root / "static" / "rules.txt"],
-            )
-
     def test_utf8_bom_does_not_change_first_source(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
-            config = root / "sample" / "attach" / "rule-list.ini"
-            config.parent.mkdir(parents=True)
-            config.write_text(chr(0xfeff) + "https://example.org/rules.txt\n", encoding="utf-8")
-            self.assertEqual(load_sources(root, "sample"), ["https://example.org/rules.txt"])
+            groups = [{"name": "sample", "purpose": "block", "no_resolve": "add",
+                       "sources": ["https://example.org/rules.txt"], "whitelist": []}]
+            (root / "rulesets.json").write_text(chr(0xfeff) + json.dumps(groups), encoding="utf-8")
+            self.assertEqual(load_config(root)[0]["sources"], ["https://example.org/rules.txt"])
 
-    def test_rejects_non_https_and_malformed_urls(self):
-        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
-            root = Path(directory)
-            config = root / "sample" / "attach" / "rule-list.ini"
-            config.parent.mkdir(parents=True)
-            for url in ("http://example.org/rules", "ftp://example.org/rules", "https://", "https://example.org:abc/rules"):
-                with self.subTest(url=url):
-                    config.write_text(url, encoding="utf-8")
-                    with self.assertRaises(ValueError):
-                        load_sources(root, "sample")
-
-    def test_rejects_local_paths_outside_root(self):
-        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
-            root = Path(directory)
-            config = root / "sample" / "attach" / "rule-list.ini"
-            config.parent.mkdir(parents=True)
-            for path in (r"..\..\..\secret.txt", "../../../secret.txt", str(root.parent / "secret.txt")):
-                with self.subTest(path=path):
-                    config.write_text(path, encoding="utf-8")
-                    with self.assertRaises(ValueError):
-                        load_sources(root, "sample")
-
-    def test_rejects_group_paths_outside_root(self):
-        with tempfile.TemporaryDirectory(dir=ROOT) as directory, tempfile.TemporaryDirectory(dir=ROOT) as other:
-            root = Path(directory)
-            config = Path(other) / "attach" / "rule-list.ini"
-            config.parent.mkdir()
-            config.write_text("https://example.org/rules.txt", encoding="utf-8")
-            with self.assertRaises(ValueError):
-                load_sources(root, "../" + Path(other).name)
-
-    def test_six_groups_load_and_a3_has_only_approved_sources(self):
-        groups = ("a1", "a2", "a3", "big-data", "cdn", "dirt")
-        for group in groups:
-            with self.subTest(group=group):
-                sources = load_sources(ROOT, group)
-                self.assertTrue(sources)
-                for source in sources:
-                    if isinstance(source, str):
-                        self.assertEqual(source.split(":", 1)[0].lower(), "https")
-                    else:
-                        self.assertTrue(source.is_relative_to(ROOT))
+    def test_a3_has_only_approved_sources(self):
+        config = {group["name"]: group for group in load_config(ROOT)}
         self.assertEqual(
-            load_sources(ROOT, "a3"),
+            config["a3"]["sources"],
             [
                 "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
                 "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-surge.txt",
@@ -185,7 +135,7 @@ class SourcesTests(unittest.TestCase):
         )
 
     def test_a1_replaces_confirmed_404_sources(self):
-        sources = load_sources(ROOT, "a1")
+        sources = {group["name"]: group for group in load_config(ROOT)}["a1"]["sources"]
         self.assertIn("https://raw.githubusercontent.com/neodevpro/neodevhost/master/ownblocklist", sources)
         for dead in (
             "https://raw.githubusercontent.com/neodevpro/neodevhost/master/customblocklist",
@@ -196,7 +146,7 @@ class SourcesTests(unittest.TestCase):
                 self.assertNotIn(dead, sources)
 
     def test_a1_drops_disabled_sources_and_case_duplicate(self):
-        sources = load_sources(ROOT, "a1")
+        sources = {group["name"]: group for group in load_config(ROOT)}["a1"]["sources"]
         for dead in (
             "https://whatshub.top/rule/AntiAD.list",
             "https://zerodot1.gitlab.io/CoinBlockerLists/hosts_browser",
@@ -212,7 +162,7 @@ class SourcesTests(unittest.TestCase):
         )
 
     def test_big_data_drops_404_gmedia_but_keeps_global_media(self):
-        sources = load_sources(ROOT, "big-data")
+        sources = {group["name"]: group for group in load_config(ROOT)}["big-data"]["sources"]
         self.assertNotIn(
             "https://raw.githubusercontent.com/GeQ1an/Rules/master/QuantumultX/Filter/GMedia.list",
             sources,
@@ -223,12 +173,12 @@ class SourcesTests(unittest.TestCase):
         )
 
     def test_dirt_adds_novel_sukka_ipv4_without_redundant_ipv6(self):
-        sources = load_sources(ROOT, "dirt")
+        sources = {group["name"]: group for group in load_config(ROOT)}["dirt"]["sources"]
         self.assertEqual(sources.count("https://ruleset.skk.moe/Clash/ip/china_ip.txt"), 1)
         self.assertNotIn("https://ruleset.skk.moe/Clash/ip/china_ip_ipv6.txt", sources)
 
     def test_dirt_drops_404_and_disabled_sources(self):
-        sources = load_sources(ROOT, "dirt")
+        sources = {group["name"]: group for group in load_config(ROOT)}["dirt"]["sources"]
         for dead in (
             "https://raw.githubusercontent.com/GeQ1an/Rules/master/QuantumultX/Filter/CMedia.list",
             "https://whatshub.top/rule/China.list",
@@ -238,7 +188,7 @@ class SourcesTests(unittest.TestCase):
                 self.assertNotIn(dead, sources)
 
     def test_dirt_adds_targeted_ipv4_ipv6_and_apple_without_redundant_lists(self):
-        sources = load_sources(ROOT, "dirt")
+        sources = {group["name"]: group for group in load_config(ROOT)}["dirt"]["sources"]
         for url in (
             "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt",
             "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt",
@@ -250,4 +200,4 @@ class SourcesTests(unittest.TestCase):
             with self.subTest(url=url):
                 self.assertEqual(sources.count(url), 1)
         self.assertNotIn("https://ruleset.skk.moe/List/domainset/domestic_cdn.conf", sources)
-        self.assertFalse(any(isinstance(source, str) and "china-list" in source for source in sources))
+        self.assertFalse(any("china-list" in source for source in sources))
