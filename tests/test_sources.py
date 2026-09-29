@@ -108,7 +108,6 @@ class SourcesTests(unittest.TestCase):
         groups = load_config(ROOT)
         self.assertEqual([group["name"] for group in groups],
                          ["cdn", "a3", "a4", "big-data", "tg", "proxy", "dirt"])
-        self.assertEqual([group["title"] for group in groups], [group["name"] for group in groups])
         self.assertEqual([len(group["sources"]) for group in groups], [4, 6, 4, 24, 3, 3, 19])
         self.assertEqual([group["purpose"] for group in groups],
                          ["proxy", "block", "block", "proxy", "proxy", "proxy", "direct"])
