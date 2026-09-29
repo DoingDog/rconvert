@@ -46,6 +46,14 @@ class ReadmeCountsTests(unittest.TestCase):
             previous = readme.read_bytes()
             update(root)
             self.assertEqual(readme.read_bytes(), previous)
+            adb = root / "sample" / "fin-adb.txt"
+            adb.write_text(
+                "[Adblock Plus 2.0]\n! Title: sample\n! Homepage: https://github.com/DoingDog/rconvert\n"
+                "! Expires: 1 day\n! License: Inherits upstream licenses\n"
+                "! Version: 202609290845\n! Total count: 3\n"
+                + bodies["fin-adb.txt"] + "||more.example^\n", encoding="utf-8")
+            update(root)
+            self.assertIn("| `fin-adb.txt` | 3 |", readme.read_text(encoding="utf-8"))
 
     def test_missing_output_does_not_change_readme(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:

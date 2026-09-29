@@ -49,7 +49,7 @@
 
 格式参考：[Surge 规则文档](https://manual.nssurge.com/rules/domain.html)、[Quantumult X 官方配置样例](https://github.com/crossutility/Quantumult-X/blob/master/sample.conf)、[Mihomo rule-providers 文档](https://wiki.metacubex.one/en/config/rule-providers/content/) 和 [AdGuard DNS 过滤语法](https://adguard-dns.io/kb/general/dns-filtering-syntax/)。
 
-[`rulesets.json`](rulesets.json) 按依赖顺序列出规则组。每组用 `name` 指定输出目录、`purpose` 指定 `block`／`proxy`／`direct`、`sources` 指定规则来源、`whitelist` 指定白名单来源、`no_resolve` 指定 `add`／`strip`／`keep`。来源与白名单均可使用 HTTPS URL 或仓库相对路径；本轮生成的 `cdn/fin.txt` 会直接供后续组读取。`tg` 和 `proxy` 与 `cdn`、`a3`、`a4`、`big-data` 一样使用 `add`，仅给可表达的目的 IP 规则添加 `no-resolve`；`dirt` 使用 `strip`。来源 IP 规则不被转换为目标 IP。
+[`rulesets.json`](rulesets.json) 按依赖顺序列出规则组。每组用 `name` 指定输出目录、可选的 `title` 指定 `fin-adb.txt` 文件头标题（省略时使用 `name`）、`purpose` 指定 `block`／`proxy`／`direct`、`sources` 指定规则来源、`whitelist` 指定白名单来源、`no_resolve` 指定 `add`／`strip`／`keep`。ADB 文件头按北京时间写入生成时间，`Total count` 是去重后的规则行数，包含 `@@` 例外。来源与白名单均可使用 HTTPS URL 或仓库相对路径；本轮生成的 `cdn/fin.txt` 会直接供后续组读取。`tg` 和 `proxy` 与 `cdn`、`a3`、`a4`、`big-data` 一样使用 `add`，仅给可表达的目的 IP 规则添加 `no-resolve`；`dirt` 使用 `strip`。来源 IP 规则不被转换为目标 IP。
 
 所有规则组均使用 Sukka 的 [非 IP LAN 白名单](https://ruleset.skk.moe/Clash/non_ip/lan.txt) 和 [IP LAN 白名单](https://ruleset.skk.moe/Clash/ip/lan.txt)；`a4` 与 `a3` 的白名单相同。`tg` 还使用仓库根目录的 [`tg-sentinel.txt`](tg-sentinel.txt)，即使远端 LAN 白名单不可用，也排除上游的非 Telegram 哨兵。
 

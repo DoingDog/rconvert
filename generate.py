@@ -224,7 +224,8 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             rules = [Rule(rule.kind, rule.value, tuple(option for option in rule.options if option != "no-resolve"), rule.allow)
                      for rule in rules]
         rendered, skipped = render(group, normalize(rules), purpose=purpose,
-                                   whitelist=whitelist, no_resolve=no_resolve)
+                                   whitelist=whitelist, no_resolve=no_resolve,
+                                   title=config.get("title", group))
         if not any(rendered[name].splitlines()[1:] for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt")) and len(rendered["fin.yaml"].splitlines()) <= 2:
             print(f"{group}: no routable rules; frozen", file=sys.stderr)
             freeze(group)

@@ -39,6 +39,10 @@ def load_config(root: Path) -> list[dict]:
         if not isinstance(name, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]*", name) or name in names:
             raise ValueError(f"Invalid or duplicate ruleset group name: {name}")
         names.add(name)
+        if "title" in group:
+            title = group["title"]
+            if not isinstance(title, str) or not title or title != title.strip() or len(title.splitlines()) != 1 or any(ord(char) < 32 or 127 <= ord(char) <= 159 for char in title):
+                raise ValueError(f"Invalid ruleset group title: {title}")
         if group["purpose"] not in ("block", "proxy", "direct") or group["no_resolve"] not in ("add", "strip", "keep"):
             raise ValueError(f"Invalid ruleset options: {name}")
         for key in ("sources", "whitelist"):

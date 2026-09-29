@@ -2,6 +2,7 @@ import contextlib
 import gzip
 import io
 import json
+from datetime import datetime, timezone
 from http.client import IncompleteRead
 import os
 import subprocess
@@ -299,13 +300,14 @@ class GenerateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             (root / "rulesets.json").write_text(json.dumps([{
-                "name": "custom", "purpose": "block", "no_resolve": "keep",
+                "name": "custom", "title": "Custom Ads", "purpose": "block", "no_resolve": "keep",
                 "sources": ["input.list"], "whitelist": [],
             }]), encoding="utf-8")
             (root / "input.list").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertEqual(set(outputs), {root / "custom" / name for name in NAMES})
             self.assertIn("DOMAIN,ads.example.org\n", outputs[root / "custom" / "fin.txt"])
+            self.assertIn("! Title: Custom Ads\n", outputs[root / "custom" / "fin-adb.txt"])
 
     def test_no_resolve_policy_add_strip_and_keep_is_configured_per_group(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -1121,7 +1123,8 @@ class GenerateTests(unittest.TestCase):
                 (root / group / "rules.txt").write_text(
                     "DOMAIN-SUFFIX,example.com\nIP-CIDR,203.0.113.0/24\n", encoding="utf-8",
                 )
-            with contextlib.redirect_stderr(io.StringIO()):
+            with contextlib.redirect_stderr(io.StringIO()), patch("formats.datetime") as clock:
+                clock.now.side_effect = lambda tz: datetime(2026, 9, 29, tzinfo=timezone.utc).astimezone(tz)
                 first = generate(root, lambda _: self.fail("local input must not fetch"))
                 second = generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertEqual(

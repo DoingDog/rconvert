@@ -36,7 +36,7 @@ class ReadmeTests(unittest.TestCase):
                         f"[{filename}]({host}/{name}/{filename})" for name in groups
                     ])
 
-    def test_rule_count_table_has_stable_anchor_and_matches_output_headers(self):
+    def test_rule_count_table_has_stable_anchor_and_matches_rule_lines(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("# rconvert\n\n<a name=\"rule-counts\"></a>\n\n## 规则数量", readme)
         self.assertIn("[规则数量](#rule-counts)", readme)
@@ -46,8 +46,20 @@ class ReadmeTests(unittest.TestCase):
         self.assertIn("| 格式 | " + " | ".join(f"`{name}`" for name in groups) + " |", table)
         for filename in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt"):
             with self.subTest(filename=filename):
-                counts = [int((ROOT / name / filename).read_text(encoding="utf-8").splitlines()[0].split("rules: ")[1])
-                          for name in groups if (ROOT / name / filename).is_file()]
+                counts = []
+                for name in groups:
+                    path = ROOT / name / filename
+                    if not path.is_file():
+                        continue
+                    lines = path.read_text(encoding="utf-8").splitlines()
+                    headers = ("payload:", "[Adblock Plus 2.0]") if filename == "fin-adb.txt" else ("payload:",)
+                    count = sum(line.strip() not in ("", *headers) and not line.lstrip().startswith(("#", "!"))
+                                for line in lines)
+                    header_count = (lines[6].split("Total count: ", 1)[1]
+                                    if filename == "fin-adb.txt" and lines[:1] == ["[Adblock Plus 2.0]"]
+                                    else lines[0].split("rules: ", 1)[1])
+                    self.assertEqual(int(header_count), count)
+                    counts.append(count)
                 row = next(line for line in table.splitlines() if line.startswith(f"| `{filename}` |"))
                 self.assertEqual([int(cell.strip()) for cell in row.strip("|").split("|")[1:]], counts)
 

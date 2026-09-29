@@ -1,6 +1,7 @@
 import ipaddress
 import json
 import re
+from datetime import datetime, timedelta, timezone
 from collections import Counter
 from collections.abc import Iterable
 
@@ -112,7 +113,7 @@ def _dns_pattern(rule: Rule) -> str | None:
 
 
 def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
-           whitelist: Iterable[Rule] = ()) -> tuple[dict[str, str], dict[str, int]]:
+           whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow)):
@@ -223,8 +224,16 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 return is_ip, family if is_ip else 0, kind, len(line), line
 
             body.sort(key=sort_key)
-    out = {name: f"{'!' if name == 'fin-adb.txt' else '#'} {group} rules: {len(body)}\n"
-           + ("payload:\n" if name == "fin.yaml" else "") + "".join(line + "\n" for line in body)
+    out = {name: (
+               "[Adblock Plus 2.0]\n"
+               f"! Title: {title if title is not None else group}\n"
+               "! Homepage: https://github.com/DoingDog/rconvert\n"
+               "! Expires: 1 day\n"
+               "! License: Inherits upstream licenses\n"
+               f"! Version: {datetime.now(timezone(timedelta(hours=8))):%Y%m%d%H%M}\n"
+               f"! Total count: {len(body)}\n"
+               if name == "fin-adb.txt" else f"# {group} rules: {len(body)}\n"
+           ) + ("payload:\n" if name == "fin.yaml" else "") + "".join(line + "\n" for line in body)
            for name, body in lines.items()}
     if purpose != "block":
         out["fin-adb.txt"] += "! No AdBlock rules for non-advertising group.\n"

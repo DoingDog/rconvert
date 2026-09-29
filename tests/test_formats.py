@@ -1,7 +1,9 @@
 import json
 import re
 import unittest
+from datetime import datetime, timezone
 from functools import partial
+from unittest.mock import patch
 
 from rules import Rule
 from formats import render as render_configured
@@ -36,17 +38,20 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(skipped["fin-qx.txt:DOMAIN-WILDCARD"], 1)
         self.assertEqual(skipped["fin.yaml:DOMAIN-WILDCARD"], 1)
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
-        self.assertEqual(out["fin-adb.txt"], "! a3 rules: 0\n")
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
 
     def test_six_files_are_ordered_and_count_actual_lines(self):
         high = Rule("DOMAIN-WILDCARD", "z-*.example.com")
         low = Rule("DOMAIN-WILDCARD", "a-*.example.com")
-        out, _ = render("a3", iter([high, low]))
+        with patch("formats.datetime") as clock:
+            clock.now.side_effect = lambda tz: datetime(2026, 9, 29, tzinfo=timezone.utc).astimezone(tz)
+            out, _ = render("a3", iter([high, low]))
+            reordered, _ = render("a3", iter([low, high]))
         self.assertEqual(set(out), {
             "fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt",
             "fin-surge.txt", "fin-surge-ds.txt",
         })
-        self.assertEqual(out, render("a3", iter([low, high]))[0])
+        self.assertEqual(out, reordered)
         self.assertEqual(out["fin.txt"],
                          "# a3 rules: 2\nDOMAIN-WILDCARD,a-*.example.com\nDOMAIN-WILDCARD,z-*.example.com\n")
         self.assertTrue(all(body.endswith("\n") and "\r" not in body for body in out.values()))
@@ -58,11 +63,12 @@ class FormatTests(unittest.TestCase):
             Rule("DOMAIN-KEYWORD", "ad"), Rule("DOMAIN-SUFFIX", "b.org"),
             Rule("DOMAIN", "a.org"),
         ])
+        adb = out.pop("fin-adb.txt")
+        self.assertEqual(adb.splitlines()[6:], ["! Total count: 6", "a.org", "z.org", "||b.org^", "||q.org^", "/^.*ad.*$/", "long.example.org"])
         self.assertEqual(out, {
             "fin.txt": "# a3 rules: 7\nDOMAIN,a.org\nDOMAIN,z.org\nDOMAIN,long.example.org\nDOMAIN-KEYWORD,ad\nDOMAIN-SUFFIX,b.org\nDOMAIN-SUFFIX,q.org\nPROTOCOL,UDP\n",
             "fin-qx.txt": "# a3 rules: 6\nHOST,a.org,LIST\nHOST,z.org,LIST\nHOST,long.example.org,LIST\nHOST-KEYWORD,ad,LIST\nHOST-SUFFIX,b.org,LIST\nHOST-SUFFIX,q.org,LIST\n",
             "fin.yaml": '# a3 rules: 7\npayload:\n  - "DOMAIN,a.org"\n  - "DOMAIN,z.org"\n  - "DOMAIN,long.example.org"\n  - "DOMAIN-KEYWORD,ad"\n  - "DOMAIN-SUFFIX,b.org"\n  - "DOMAIN-SUFFIX,q.org"\n  - "NETWORK,udp"\n',
-            "fin-adb.txt": "! a3 rules: 6\na.org\nz.org\n||b.org^\n||q.org^\n/^.*ad.*$/\nlong.example.org\n",
             "fin-surge.txt": "# a3 rules: 2\nDOMAIN-KEYWORD,ad\nPROTOCOL,UDP\n",
             "fin-surge-ds.txt": "# a3 rules: 5\na.org\nz.org\n.b.org\n.q.org\nlong.example.org\n",
         })
@@ -96,15 +102,20 @@ class FormatTests(unittest.TestCase):
         ])
 
     def test_adblock_exceptions_precede_shorter_blocks_and_duplicates_are_removed(self):
-        out, _ = render("a3", [
-            Rule("DOMAIN", "a.org"), Rule("DOMAIN", "b.org"),
-            Rule("DOMAIN-SUFFIX", "example.org"), Rule("DOMAIN", "b.org", allow=True),
-        ], whitelist=[
-            Rule("DOMAIN", "z.org"), Rule("DOMAIN", "a.org"),
-            Rule("DOMAIN", "a.org"), Rule("DOMAIN-SUFFIX", "example.org"),
-        ])
+        with patch("formats.datetime") as clock:
+            clock.now.side_effect = lambda tz: datetime(2026, 9, 28, 16, 45, tzinfo=timezone.utc).astimezone(tz)
+            out, _ = render("a3", [
+                Rule("DOMAIN", "a.org"), Rule("DOMAIN", "b.org"),
+                Rule("DOMAIN-SUFFIX", "example.org"), Rule("DOMAIN", "b.org", allow=True),
+            ], whitelist=[
+                Rule("DOMAIN", "z.org"), Rule("DOMAIN", "a.org"),
+                Rule("DOMAIN", "a.org"), Rule("DOMAIN-SUFFIX", "example.org"),
+            ])
         self.assertEqual(out["fin-adb.txt"],
-                         "! a3 rules: 7\n@@|a.org|\n@@|b.org|\n@@|z.org|\n@@||example.org^\na.org\nb.org\n||example.org^\n")
+                         "[Adblock Plus 2.0]\n! Title: a3\n! Homepage: https://github.com/DoingDog/rconvert\n"
+                         "! Expires: 1 day\n! License: Inherits upstream licenses\n"
+                         "! Version: 202609290045\n! Total count: 7\n"
+                         "@@|a.org|\n@@|b.org|\n@@|z.org|\n@@||example.org^\na.org\nb.org\n||example.org^\n")
 
     def test_newlines_in_rule_values_cannot_insert_extra_rules(self):
         out, skipped = render("a3", [Rule("DOMAIN-SUFFIX", "safe.example.com\r\nEVIL,host")])
@@ -118,7 +129,7 @@ class FormatTests(unittest.TestCase):
         self.assertIn('  - "DOMAIN,exact.example.com"\n', out["fin.yaml"])
         self.assertIn("\nexact.example.com\n", out["fin-surge-ds.txt"])
         self.assertNotIn("exact.example.com", out["fin-surge.txt"])
-        self.assertEqual(out["fin-adb.txt"], "! a3 rules: 1\nexact.example.com\n")
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "exact.example.com"])
         self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
 
     def test_suffix_is_shared_by_domain_set_and_adblock(self):
@@ -128,13 +139,13 @@ class FormatTests(unittest.TestCase):
         self.assertIn('  - "DOMAIN-SUFFIX,ads.example.com"\n', out["fin.yaml"])
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 1\n.ads.example.com\n")
         self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
-        self.assertEqual(out["fin-adb.txt"], "! a3 rules: 1\n||ads.example.com^\n")
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "||ads.example.com^"])
         self.assertNotIn("fin-adb.txt:DOMAIN-SUFFIX", skipped)
 
     def test_keyword_with_dot_is_literal_in_dns_regex(self):
         out, skipped = render("a3", [Rule("DOMAIN-KEYWORD", "ad.track")])
-        self.assertGreater(len(out["fin-adb.txt"].splitlines()), 1)
-        line = out["fin-adb.txt"].splitlines()[1]
+        self.assertGreater(len(out["fin-adb.txt"].splitlines()), 7)
+        line = out["fin-adb.txt"].splitlines()[7]
         self.assertTrue(line.startswith("/^") and line.endswith("$/"))
         expression = re.compile(line[1:-1])
         self.assertIsNotNone(expression.fullmatch("cdn.ad.track.example.org"))
@@ -143,8 +154,8 @@ class FormatTests(unittest.TestCase):
 
     def test_safe_wildcard_is_anchored_in_dns_regex(self):
         out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-*.example.org")])
-        self.assertGreater(len(out["fin-adb.txt"].splitlines()), 1)
-        line = out["fin-adb.txt"].splitlines()[1]
+        self.assertGreater(len(out["fin-adb.txt"].splitlines()), 7)
+        line = out["fin-adb.txt"].splitlines()[7]
         self.assertTrue(line.startswith("/^") and line.endswith("$/"))
         expression = re.compile(line[1:-1])
         self.assertIsNotNone(expression.fullmatch("api-v2.example.org"))
@@ -512,7 +523,7 @@ class FormatTests(unittest.TestCase):
             Rule("DOMAIN-WILDCARD", "api-*.example.org"),
             Rule("DOMAIN-WILDCARD", "api-[0-9].example.org"),
         ])
-        lines = out["fin-adb.txt"].splitlines()[1:]
+        lines = out["fin-adb.txt"].splitlines()[7:]
         self.assertEqual(len(lines), 2)
         expressions = [re.compile(line[3:-1]) for line in lines]
         self.assertTrue(all(line.startswith("@@/^") and line.endswith("$/") for line in lines))
@@ -545,20 +556,20 @@ class FormatTests(unittest.TestCase):
             Rule("IP-CIDR", "192.0.2.0/24"),
         ]
         out, _ = render("a3", [Rule("DOMAIN-SUFFIX", "example.org")], whitelist=whitelist)
-        self.assertEqual(out["fin-adb.txt"],
-                         "! a3 rules: 3\n@@||safe.org^\n@@|safe.example.org|\n||example.org^\n")
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 3", "@@||safe.org^", "@@|safe.example.org|", "||example.org^"])
         self.assertEqual(out["fin.txt"], "# a3 rules: 1\nDOMAIN-SUFFIX,example.org\n")
         proxy, _ = render("cdn", [], whitelist=whitelist, purpose="proxy")
-        self.assertEqual(proxy["fin-adb.txt"],
-                         "! cdn rules: 0\n! No AdBlock rules for non-advertising group.\n")
+        self.assertEqual(proxy["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 0", "! No AdBlock rules for non-advertising group."])
 
     def test_simple_allow_rule_is_only_emitted_as_adblock_exception(self):
         out, skipped = render("a3", [
             Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True),
             Rule("DOMAIN", "exact.example.com", allow=True),
         ])
-        self.assertEqual(out["fin-adb.txt"],
-                         "! a3 rules: 2\n@@|exact.example.com|\n@@||safe.example.com^\n")
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 2", "@@|exact.example.com|", "@@||safe.example.com^"])
         self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin.yaml"], "# a3 rules: 0\npayload:\n")
@@ -581,8 +592,9 @@ class FormatTests(unittest.TestCase):
         for group in ("cdn", "big-data", "dirt"):
             with self.subTest(group=group):
                 out, skipped = render(group, [Rule("DOMAIN-SUFFIX", "legitimate.example.com")], purpose="direct" if group == "dirt" else "proxy")
-                self.assertEqual(out["fin-adb.txt"],
-                                 f"! {group} rules: 0\n! No AdBlock rules for non-advertising group.\n")
+                self.assertEqual(out["fin-adb.txt"].splitlines()[1], f"! Title: {group}")
+                self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                                 ["! Total count: 0", "! No AdBlock rules for non-advertising group."])
                 self.assertIn("DOMAIN-SUFFIX,legitimate.example.com\n", out["fin.txt"])
                 self.assertEqual(skipped["fin-adb.txt:DOMAIN-SUFFIX"], 1)
 

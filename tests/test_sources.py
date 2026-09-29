@@ -31,6 +31,22 @@ class SourcesTests(unittest.TestCase):
             self.assertEqual(resolve_source(root, "static/main/white list.txt"), root / "static/main/white list.txt")
             self.assertEqual(resolve_source(root, "https://example.org/list"), "https://example.org/list")
 
+    def test_load_config_validates_optional_title(self):
+        group = {"name": "sample", "purpose": "block", "no_resolve": "add",
+                 "sources": ["https://example.org/list"], "whitelist": []}
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            titled = {**group, "title": "Sample Rules"}
+            (root / "rulesets.json").write_text(json.dumps([titled]), encoding="utf-8")
+            self.assertEqual(load_config(root), [titled])
+            for title in (None, 42, "", " ", " leading", "trailing ",
+                          "safe\n! injected", "safe\r! injected", "safe" + chr(0x2028) + "! injected",
+                          "safe\x00name", "safe\x7fname", "safe\u0085name"):
+                with self.subTest(title=title):
+                    (root / "rulesets.json").write_text(json.dumps([{**group, "title": title}]), encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, "title"):
+                        load_config(root)
+
     def test_rejects_invalid_json_group_structure(self):
         valid = {"name": "sample", "purpose": "block", "no_resolve": "add",
                  "sources": ["https://example.org/list"], "whitelist": []}
@@ -92,6 +108,7 @@ class SourcesTests(unittest.TestCase):
         groups = load_config(ROOT)
         self.assertEqual([group["name"] for group in groups],
                          ["cdn", "a3", "a4", "big-data", "tg", "proxy", "dirt"])
+        self.assertEqual([group["title"] for group in groups], [group["name"] for group in groups])
         self.assertEqual([len(group["sources"]) for group in groups], [4, 6, 4, 24, 3, 3, 19])
         self.assertEqual([group["purpose"] for group in groups],
                          ["proxy", "block", "block", "proxy", "proxy", "proxy", "direct"])

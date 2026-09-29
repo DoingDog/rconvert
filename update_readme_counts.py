@@ -20,9 +20,12 @@ def update(root: Path) -> None:
         counts = []
         for group in groups:
             text = (root / group / filename).read_text(encoding="utf-8")
+            lines = text.splitlines()
+            if filename == "fin-adb.txt" and lines[:1] == ["[Adblock Plus 2.0]"]:
+                lines = lines[1:]
             count = sum(bool(line.strip()) and line.strip() != "payload:"
                         and not line.lstrip().startswith(("#", "!"))
-                        for line in text.splitlines())
+                        for line in lines)
             counts.append(str(count))
         rows.append(f"| `{filename}` | " + " | ".join(counts) + " |")
     before, _, remainder = original.partition(START)

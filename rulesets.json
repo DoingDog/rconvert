@@ -1,6 +1,7 @@
 [
   {
     "name": "cdn",
+    "title": "cdn",
     "purpose": "proxy",
     "no_resolve": "add",
     "sources": [
@@ -16,6 +17,7 @@
   },
   {
     "name": "a3",
+    "title": "a3",
     "purpose": "block",
     "no_resolve": "add",
     "sources": [
@@ -35,6 +37,7 @@
   },
   {
     "name": "a4",
+    "title": "a4",
     "purpose": "block",
     "no_resolve": "add",
     "sources": [
@@ -52,6 +55,7 @@
   },
   {
     "name": "big-data",
+    "title": "big-data",
     "purpose": "proxy",
     "no_resolve": "add",
     "sources": [
@@ -87,6 +91,7 @@
   },
   {
     "name": "tg",
+    "title": "tg",
     "purpose": "proxy",
     "no_resolve": "add",
     "sources": [
@@ -102,6 +107,7 @@
   },
   {
     "name": "proxy",
+    "title": "proxy",
     "purpose": "proxy",
     "no_resolve": "add",
     "sources": [
@@ -116,6 +122,7 @@
   },
   {
     "name": "dirt",
+    "title": "dirt",
     "purpose": "direct",
     "no_resolve": "strip",
     "sources": [
