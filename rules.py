@@ -235,7 +235,9 @@ _REGEXP2_WORD_BOUNDARIES = (
 )
 
 
-def _delimiters(line: str, *, native_fields: bool = False):
+def _delimiters(line: str, *, native_fields: bool = False,
+                groups: dict[int, int] | None = None,
+                commas: dict[int, list[int]] | None = None):
     # 仅扫描调用者给出的范围；来源策略和注释由 _source_parts 消费。
     stack = []
     start, escaped, quote = 0, False, None
@@ -250,15 +252,22 @@ def _delimiters(line: str, *, native_fields: bool = False):
             elif char == ')':
                 if not stack:
                     raise ValueError("unbalanced delimiters")
-                stack.pop()
-            elif char == ',' and not stack:
-                yield ',', index
+                opened = stack.pop()
+                if groups is not None:
+                    groups[opened] = index
+            elif char == ',':
+                if commas is not None:
+                    commas.setdefault(stack[-1] if stack else -1, []).append(index)
+                if not stack:
+                    yield ',', index
             index += 1
             continue
         in_class = bool(stack and stack[-1][0] == '[')
         if regex_comment:
             if char == ')' and regex_depth and len(stack) == regex_depth:
-                stack.pop()
+                opened = stack.pop()
+                if groups is not None:
+                    groups[opened[1]] = index
                 regex_depth = None
                 regex_comment = extended = False
             index += 1
@@ -322,6 +331,8 @@ def _delimiters(line: str, *, native_fields: bool = False):
         elif char == ')':
             if stack and stack[-1][0] == '(':
                 opened = stack.pop()
+                if groups is not None:
+                    groups[opened[1]] = index
                 if len(opened) == 3:
                     extended = opened[2]
                 if regex_depth is not None and len(stack) < regex_depth:
@@ -978,105 +989,196 @@ def _valid_simple(kind: str, value: str) -> bool:
     return bool(re.fullmatch(r"[a-z0-9._-]+", value, re.I))
 
 
+def _logical_children(expression, kind, begin, start, stop, groups, commas):
+    if expression[start:start + 1] != '(' or expression[stop - 1:stop] != ')':
+        return None
+    wrapped = expression[start:start + 2] == '((' and expression[stop - 2:stop] == '))'
+    if commas is not None:
+        # 原生范围仍按字面括号计数；叶子的 regex 括号可以跨越字段包装。
+        bare = kind == "NOT" and not wrapped
+        if not bare and groups.get(start) != stop - 1:
+            return None
+        left, right = (start, stop) if bare else (start + 1, stop - 1)
+        positions = [left - 1, *(index for index in commas.get(begin if bare else start, [])
+                                if left <= index < right), right]
+        children = []
+        for opening, closing in zip(positions, positions[1:]):
+            opening += 1
+            while opening < closing and expression[opening] == ' ':
+                opening += 1
+            while closing > opening and expression[closing - 1] == ' ':
+                closing -= 1
+            children.append((opening, closing))
+    else:
+        if groups.get(start) != stop - 1:
+            return None
+        if kind == "NOT":
+            children = [(start + 1, stop - 1) if wrapped else (start, stop)]
+        else:
+            children, cursor = [], start + 1
+            while cursor < stop - 1:
+                while cursor < stop - 1 and expression[cursor].isspace():
+                    cursor += 1
+                closing = groups.get(cursor)
+                if closing is None or closing >= stop - 1:
+                    return None
+                children.append((cursor, closing + 1))
+                cursor = closing + 1
+                while cursor < stop - 1 and expression[cursor].isspace():
+                    cursor += 1
+                if cursor == stop - 1:
+                    break
+                if expression[cursor] != ',':
+                    return None
+                cursor += 1
+                if not expression[cursor:stop - 1].strip():
+                    return None
+    if len(children) != 1 if kind == "NOT" else len(children) < 2:
+        return None
+    return children, wrapped
+
+
 def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None = None,
                          native_fields: bool = False) -> str | None:
     if not expression.startswith('(') or not expression.endswith(')'):
         return None
-    try:
-        fields = _fields(expression[1:-1], native_fields=native_fields)
-    except ValueError:
-        return None
-    if len(fields) < 2:
-        return None
-    kind, value = fields[:2]
-    kind = kind.upper()
-    if not native_fields and kind in _REGEX and value.endswith(",no-resolve"):
-        return None
-    checked = value if native_fields else _field_value(value)
+    trim = ' ' if native_fields else None
     if native_fields:
-        options = {field for field in fields[2:] if field in {"src", "no-resolve"} and kind in _SOURCE_KINDS
-                   or field == "no-resolve" and kind == "SRC-IP"}
-    else:
-        options = {field.lower() for field in fields[2:] if field.lower() != "src"}
-        if "src" in fields[2:]:
-            options.add("src")
-    if options and (kind not in _SOURCE_KINDS and kind not in {*_SOURCE_KINDS.values(), "SRC-IP"}
-                    or options - ({"no-resolve", "src"} if kind in _SOURCE_KINDS else {"no-resolve"})):
-        return None
-    source_kind = kind if "src" in options else None
-    if source_kind:
-        kind = _SOURCE_KINDS[kind]
-    if "no-resolve" in options and kind.startswith("SRC-"):
-        options.remove("no-resolve")
-        if ignored_no_resolve is not None:
-            ignored_no_resolve.append(kind)
-    if kind in _LOGICAL:
-        value = _normalize_logic(kind, value, ignored_no_resolve, native_fields)
-        return f"({kind},{value})" if value is not None else None
-    if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
-        if not (_valid_domain(kind, checked) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
-            return None
-    elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
+        expression = '(' + ','.join(_native_parts(expression[1:-1])) + ')'
+    groups, commas = {}, {} if native_fields else None
+    if expression[1:].partition(',')[0].strip(trim).upper() in _LOGICAL:
         try:
-            network = ipaddress.ip_network(checked, strict=False)
-            if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
-                return None
-            value = str(network)
+            list(_delimiters(expression, native_fields=native_fields, groups=groups, commas=commas))
         except ValueError:
             return None
-    elif kind in _PORTS:
-        if not _valid_port(value):
+    pending, normalized = [(0, len(expression))], []
+    while pending:
+        frame = pending.pop()
+        if isinstance(frame, tuple) and len(frame) == 3:
+            kind, count, wrapped = frame
+            children = normalized[-count:]
+            del normalized[-count:]
+            value = children[0] if kind == "NOT" and not wrapped else f"({','.join(children)})"
+            normalized.append(f"({kind},{value})")
+            continue
+        begin, end = frame
+        if expression[begin:begin + 1] != '(' or expression[end - 1:end] != ')':
             return None
-        if '/' in value:
-            port_kind = "DST-PORT" if kind == "DEST-PORT" else kind
-            return f"(OR,({','.join(f'({port_kind},{part})' for part in value.split('/'))}))"
-        if value.startswith(('<', '>')):
-            value = _port_comparison(value)
-    elif kind in _SIMPLE:
-        if not _valid_simple(kind, checked):
+        head, separator, payload = expression[begin + 1:end - 1].partition(',')
+        kind = head.strip(trim).upper()
+        if groups and (not native_fields or kind in _LOGICAL) and groups.get(begin) != end - 1:
             return None
-    elif kind in _REGEX:
-        if not _valid_regex(kind, checked):
+        if kind in _LOGICAL and separator:
+            fields = [kind, payload.strip(trim)]
+        else:
+            try:
+                fields = _fields(expression[begin + 1:end - 1], native_fields=native_fields)
+            except ValueError:
+                return None
+        if len(fields) < 2:
             return None
-    elif kind in _PROCESS:
-        if not checked or not native_fields and any(char in checked for char in '<>\r\n'):
+        kind, value = fields[:2]
+        kind = kind.upper()
+        if not native_fields and kind in _REGEX and value.endswith(",no-resolve"):
             return None
-    elif not value or kind not in _KINDS:
-        return None
-    return f"({kind},{value}{',no-resolve' if 'no-resolve' in options else ''})"
+        checked = value if native_fields else _field_value(value)
+        if native_fields:
+            options = {field for field in fields[2:] if field in {"src", "no-resolve"} and kind in _SOURCE_KINDS
+                       or field == "no-resolve" and kind == "SRC-IP"}
+        else:
+            options = {field.lower() for field in fields[2:] if field.lower() != "src"}
+            if "src" in fields[2:]:
+                options.add("src")
+        if options and (kind not in _SOURCE_KINDS and kind not in {*_SOURCE_KINDS.values(), "SRC-IP"}
+                        or options - ({"no-resolve", "src"} if kind in _SOURCE_KINDS else {"no-resolve"})):
+            return None
+        source_kind = kind if "src" in options else None
+        if source_kind:
+            kind = _SOURCE_KINDS[kind]
+        if "no-resolve" in options and kind.startswith("SRC-"):
+            options.remove("no-resolve")
+            if ignored_no_resolve is not None:
+                ignored_no_resolve.append(kind)
+        if kind in _LOGICAL:
+            start = begin + len(head) + 2 + len(payload) - len(payload.lstrip(trim))
+            stop = start + len(value)
+            children = _logical_children(expression, kind, begin, start, stop, groups, commas)
+            if children is None:
+                return None
+            children, wrapped = children
+            # 子条件按原顺序验证，完成后再构建父条件，保留 NOT 包装。
+            pending.append((kind, len(children), wrapped))
+            pending.extend(reversed(children))
+            continue
+        if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
+            if not (_valid_domain(kind, checked) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
+                return None
+        elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
+            try:
+                network = ipaddress.ip_network(checked, strict=False)
+                if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
+                    return None
+                value = str(network)
+            except ValueError:
+                return None
+        elif kind in _PORTS:
+            if not _valid_port(value):
+                return None
+            if '/' in value:
+                port_kind = "DST-PORT" if kind == "DEST-PORT" else kind
+                normalized.append(f"(OR,({','.join(f'({port_kind},{part})' for part in value.split('/'))}))")
+                continue
+            if value.startswith(('<', '>')):
+                value = _port_comparison(value)
+        elif kind in _SIMPLE:
+            if not _valid_simple(kind, checked):
+                return None
+        elif kind in _REGEX:
+            if not _valid_regex(kind, checked):
+                return None
+        elif kind in _PROCESS:
+            if not checked or not native_fields and any(char in checked for char in '<>\r\n'):
+                return None
+        elif not value or kind not in _KINDS:
+            return None
+        normalized.append(f"({kind},{value}{',no-resolve' if 'no-resolve' in options else ''})")
+    return normalized[0]
 
 
 def _normalize_logic(kind: str, value: str, ignored_no_resolve: list[str] | None = None,
                      native_fields: bool = False) -> str | None:
     if not value.startswith('(') or not value.endswith(')'):
         return None
-    if kind == "NOT":
-        wrapped = value.startswith('((') and value.endswith('))')
-        child = _normalize_condition(value[1:-1] if wrapped else value, ignored_no_resolve, native_fields)
-        return f"({child})" if wrapped and child is not None else child
-    try:
-        children = _fields(value[1:-1], scope='children', native_fields=native_fields)
-    except ValueError:
-        return None
-    if len(children) < 2:
-        return None
-    normalized = [_normalize_condition(child, ignored_no_resolve, native_fields) for child in children]
-    if any(child is None for child in normalized):
-        return None
-    return f"({','.join(normalized)})"
+    normalized = _normalize_condition(f"({kind},{value})", ignored_no_resolve, native_fields)
+    return normalized[len(kind) + 2:-1] if normalized is not None else None
 
 
 def _has_process_name(kind: str, value: str, native_fields: bool = False) -> bool:
-    if kind == "PROCESS-NAME":
-        return True
     if kind not in _LOGICAL:
-        return False
-    if kind == "NOT":
-        child = value[1:-1] if value.startswith("((") else value
-        fields = _fields(child[1:-1], native_fields=native_fields)
-        return _has_process_name(fields[0], fields[1], native_fields)
-    return any(_has_process_name(*_fields(child[1:-1], native_fields=native_fields)[:2], native_fields)
-               for child in _fields(value[1:-1], scope='children', native_fields=native_fields))
+        return kind == "PROCESS-NAME"
+    expression = f"({kind},{value})"
+    groups, commas = {}, {} if native_fields else None
+    list(_delimiters(expression, native_fields=native_fields, groups=groups, commas=commas))
+    trim = ' ' if native_fields else None
+    pending = [(0, len(expression))]
+    while pending:
+        begin, end = pending.pop()
+        comma = expression.find(',', begin + 1, end - 1)
+        kind = expression[begin + 1:comma].strip(trim)
+        if native_fields:
+            kind = kind.upper()
+        if kind == "PROCESS-NAME":
+            return True
+        if kind not in _LOGICAL:
+            continue
+        payload = expression[comma + 1:end - 1]
+        start = comma + 1 + len(payload) - len(payload.lstrip(trim))
+        stop = comma + 1 + len(payload.rstrip(trim))
+        children = _logical_children(expression, kind, begin, start, stop, groups, commas)
+        if children is None:
+            raise ValueError("invalid logical expression")
+        pending.extend(reversed(children[0]))
+    return False
 
 
 _YAML_ESCAPES = dict(zip('0abtnvfre\t "\'\\N_LP',
@@ -1361,6 +1463,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         if kind not in _KINDS:
             warnings.append(f"line {number}: unknown type {kind}")
             continue
+        literal_process = yaml_rule and kind == "PROCESS-NAME"
         if source_kind:
             kind = _SOURCE_KINDS[source_kind]
         if kind == "SRC-IP" and '/' in value:
@@ -1417,6 +1520,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 continue
             warnings.extend(f"line {number}: unsupported no-resolve for {child_kind}"
                             for child_kind in ignored_no_resolve)
+            # 原生尾字段删除后可能改变字面括号范围，类型标志使用已验证的原始字段。
+            literal_process = yaml_rule and _has_process_name(kind, value, yaml_rule)
             value = normalized
         elif not (_valid_domain(kind, value) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
             warnings.append(f"line {number}: invalid domain {value}")
@@ -1429,7 +1534,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             warnings.append(f"line {number}: incompatible action {action}")
         else:
             rules.append(Rule(kind, value, options, allow=allow,
-                              literal_process=yaml_rule and _has_process_name(kind, value, yaml_rule),
+                              literal_process=literal_process,
                               native_fields=yaml_rule and kind in _LOGICAL))
     return rules, warnings
 

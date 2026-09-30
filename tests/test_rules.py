@@ -517,6 +517,231 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                     self.assertIn(expected, normalize(parsed))
 
 
+class DeepLogicalParserTests(unittest.TestCase):
+    def test_native_ignored_tail_parentheses_preserve_process_provenance(self):
+        for depth in (1, 600, 1000):
+            for kind in ('PROCESS-NAME', 'PROCESS-PATH', 'IN-NAME'):
+                with self.subTest(depth=depth, kind=kind):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, '({kind},Foo(,ignored))')
+clean = nest({depth}, '({kind},Foo()')
+expected = Rule('NOT', clean[5:-1], literal_process={kind == 'PROCESS-NAME'}, native_fields=True)
+source = 'payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com'
+assert parse(source, purpose='block') == ([expected, keep], [])
+assert normalize(parse(source, purpose='block')[0] * 2) == normalize([expected, keep])
+assert parse_whitelist(source) == [keep]
+''')
+
+    def test_native_ignored_tail_does_not_abort_local_generation(self):
+        self.assert_subprocess('''
+import contextlib
+import io
+import tempfile
+from pathlib import Path
+from generate import generate
+staging = Path.cwd() / '.tmp'
+staging.mkdir(exist_ok=True)
+with tempfile.TemporaryDirectory(dir=staging) as directory:
+    root = Path(directory)
+    (root / 'rulesets.json').write_text(json.dumps([{
+        'name': 'group', 'purpose': 'block', 'no_resolve': 'keep',
+        'sources': ['native.yaml'], 'whitelist': []
+    }]), encoding='utf-8')
+    (root / 'native.yaml').write_text('payload:\\n  - "NOT,((PROCESS-NAME,Foo(,ignored)))"\\n  - DOMAIN,keep.example.com', encoding='utf-8')
+    def unexpected_fetch(url):
+        raise AssertionError(url)
+    with contextlib.redirect_stderr(io.StringIO()) as messages:
+        outputs = generate(root, unexpected_fetch)
+    assert '  - "DOMAIN,keep.example.com"\\n' in outputs[root / 'group/fin.yaml']
+    assert ': line ' not in messages.getvalue(), messages.getvalue()
+''')
+
+    def assert_subprocess(self, code):
+        setup = '''
+import json
+import sys
+from rules import Rule, parse, normalize, parse_whitelist, _has_process_name, _normalize_condition
+limit = sys.getrecursionlimit()
+keep = Rule('DOMAIN', 'keep.example.com')
+def nest(depth, leaf, mixed=False, bare=False):
+    for index in range(depth):
+        kind = ('NOT', 'AND', 'OR')[index % 3] if mixed else 'NOT'
+        if kind == 'NOT':
+            leaf = '(NOT,' + (leaf if bare else '(' + leaf + ')') + ')'
+        else:
+            leaf = '(' + kind + ',(' + leaf + ',(NETWORK,tcp)))'
+    return leaf
+'''
+        try:
+            result = subprocess.run([sys.executable, '-B', '-c', setup + code +
+                                     '\nassert sys.getrecursionlimit() == limit\n'],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail('深层逻辑解析子进程超过四秒')
+        self.assertEqual(result.returncode, 0, result.stderr[-2000:])
+
+    def test_deep_long_regex_keeps_complete_matcher_within_timeout(self):
+        for depth in (600, 1000):
+            for native in (False, True):
+                with self.subTest(depth=depth, native=native):
+                    self.assert_subprocess(f'''
+matcher = '^(' + '|'.join(f'host{{index}}.example.com' for index in range(1024)) + ')$'
+condition = nest({depth}, '(PROCESS-NAME-REGEX,' + matcher + ')', mixed=True)
+kind, value = condition[1:-1].split(',', 1)
+expected = Rule(kind, value, native_fields={native})
+source = ('rules:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if {native} else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+parsed, messages = parse(source, purpose='block')
+assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
+assert matcher in parsed[0].value and len(matcher) == 20397
+assert not parsed[0].literal_process
+assert normalize(parsed + parsed) == normalize([expected, keep])
+''')
+
+    def test_deep_not_keeps_wrapper_matcher_and_following_rule(self):
+        for depth in (600, 1000):
+            for bare in (False, True):
+                with self.subTest(depth=depth, bare=bare):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, '(DOMAIN,example.com)', bare={bare})
+expected = Rule('NOT', condition[5:-1])
+parsed, messages = parse(condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT', purpose='block')
+assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
+assert normalize(parsed + parsed) == normalize([expected, keep])
+assert _normalize_condition(condition) == condition
+assert parse_whitelist(condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT') == [keep]
+''')
+
+    def test_deep_ip_options_keep_destination_source_and_warning_order(self):
+        leaf = ('(AND,((IP-CIDR,203.0.113.7/24,no-resolve,no-resolve),'
+                '(IP-CIDR,198.51.100.7/24),(IP-CIDR6,2001:db8::1/32,src,no-resolve),'
+                '(SRC-IP-CIDR,192.0.2.7/24,no-resolve)))')
+        clean = ('(AND,((IP-CIDR,203.0.113.0/24,no-resolve),'
+                 '(IP-CIDR,198.51.100.0/24),(SRC-IP-CIDR,2001:db8::/32),'
+                 '(SRC-IP-CIDR,192.0.2.0/24)))')
+        for depth in (600, 1000):
+            for native in (False, True):
+                with self.subTest(depth=depth, native=native):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, {leaf!r})
+expected = Rule('NOT', nest({depth}, {clean!r})[5:-1], native_fields={native})
+source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if {native} else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+parsed, messages = parse(source, purpose='block')
+number = 2 if {native} else 1
+assert parsed == [expected, keep], len(parsed)
+assert messages == [f'line {{number}}: unsupported no-resolve for SRC-IP-CIDR'] * (1 if {native} else 2), messages
+assert expected.options == () and expected.value.count('no-resolve') == 1
+assert normalize(parsed + parsed) == normalize([expected, keep])
+''')
+
+    def test_deep_invalid_leaves_and_wrappers_warn_and_keep_neighbor(self):
+        leaves = ('(IP-CIDR,203.0.113.0/33)', '(IP-CIDR6,203.0.113.0/24,src)',
+                  '(NOT,((DOMAIN,example.com),(DOMAIN,other.example.com)))',
+                  '(NOT,(((DOMAIN,example.com))))', '(AND,((DOMAIN,example.com)))',
+                  '(UNKNOWN,example.com)', '(DOMAIN,bad..example.com)',
+                  '(DOMAIN-REGEX,*ads)')
+        for depth in (600, 1000):
+            for leaf in leaves:
+                with self.subTest(depth=depth, leaf=leaf):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, {leaf!r})
+for native in (False, True):
+    source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if native else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+    parsed, messages = parse(source, purpose='block')
+    assert parsed == [keep], len(parsed)
+    number = 2 if native else 1
+    assert len(messages) == 1 and messages[0].startswith(f'line {{number}}:'), messages
+''')
+            for extra in (-1, 1):
+                with self.subTest(depth=depth, extra=extra):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, '(DOMAIN,example.com)')
+line = condition[1:-1] + ')' if {extra} == 1 else condition[1:-2]
+for native in (False, True):
+    source = ('rules:\\n  - ' + json.dumps(line) + '\\n  - DOMAIN,keep.example.com') if native else line + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+    parsed, messages = parse(source, purpose='block')
+    assert parsed == [keep], len(parsed)
+    number = 2 if native else 1
+    assert len(messages) == 1 and messages[0].startswith(f'line {{number}}:'), messages
+''')
+
+    def test_deep_native_ignored_params_keep_mixed_validation(self):
+        for depth in (600, 1000):
+            with self.subTest(depth=depth):
+                self.assert_subprocess(f'''
+condition = nest({depth}, '(DOMAIN,example.com,no-resolve)')
+expected = Rule('NOT', nest({depth}, '(DOMAIN,example.com)')[5:-1], native_fields=True)
+assert parse('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com', purpose='block') == ([expected, keep], [])
+parsed, messages = parse(condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT', purpose='block')
+assert parsed == [keep] and len(messages) == 1 and messages[0].startswith('line 1:'), messages
+''')
+
+    def test_deep_mixed_operators_preserve_quoted_regex_and_child_order(self):
+        leaves = ('(DOMAIN-REGEX,"^(a,b)[)]$")',
+                  r'''(PROCESS-NAME-REGEX,"^Game\\\\,Inc$")''',
+                  '(URL-REGEX,"(?x)^a # comment (")',
+                  r'(PROCESS-PATH-REGEX,^(?<name>a)\k<name>\z)',
+                  '(AND,((PROCESS-NAME,"Game,Inc"),(IP-CIDR,203.0.113.1/24,no-resolve,no-resolve)))')
+        for depth in (600, 1000):
+            for leaf in leaves:
+                with self.subTest(depth=depth, leaf=leaf):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, {leaf!r}, mixed=True)
+clean = {leaf!r}.replace('203.0.113.1/24,no-resolve,no-resolve', '203.0.113.0/24,no-resolve')
+expected_condition = nest({depth}, clean, mixed=True)
+kind, value = expected_condition[1:-1].split(',', 1)
+expected = Rule(kind, value)
+parsed, messages = parse(condition[1:-1] + ',REJECT # note,unclosed[\\nDOMAIN,keep.example.com,REJECT', purpose='block')
+assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
+assert normalize(parsed + parsed) == normalize([expected, keep])
+''')
+
+    def test_deep_native_process_flags_use_types_and_survive_normalize(self):
+        leaves = (('(PROCESS-NAME,Foo*Bar)', True),
+                  ('(PROCESS-NAME-REGEX,PROCESS-NAME)', False),
+                  ('(DOMAIN-REGEX,[(]PROCESS-NAME,Fake[)])', False),
+                  ('(AND,((PROCESS-PATH,PROCESS-NAME),(PROCESS-NAME,Foo*Bar)))', True))
+        for depth in (600, 1000):
+            for leaf, literal in leaves:
+                with self.subTest(depth=depth, leaf=leaf):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, {leaf!r}, mixed=True)
+kind, value = condition[1:-1].split(',', 1)
+expected = Rule(kind, value, literal_process={literal}, native_fields=True)
+parsed, messages = parse('rules:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com', purpose='block')
+assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
+assert _has_process_name(kind, value, True) == {literal}
+assert normalize(parsed + parsed) == normalize([expected, keep])
+''')
+
+    def test_deep_native_balanced_regex_class_parentheses_keep_field_scopes(self):
+        for depth in (600, 1000):
+            for leaf in ('(DOMAIN-REGEX,"^[)]$[a(]{1,2}")', '(DOMAIN-REGEX,^[)]$[a(]{1,2})'):
+                with self.subTest(depth=depth, leaf=leaf):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, {leaf!r})
+expected = Rule('NOT', condition[5:-1], native_fields=True)
+parsed, messages = parse('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com', purpose='block')
+assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
+assert normalize(parsed + parsed) == normalize([expected, keep])
+''')
+
+    def test_deep_native_and_mixed_quotes_keep_distinct_provenance(self):
+        for depth in (600, 1000):
+            for leaf in ('(DOMAIN-REGEX,"^ads$")', '(PROCESS-NAME,"Foo*Bar")'):
+                with self.subTest(depth=depth, leaf=leaf):
+                    self.assert_subprocess(f'''
+condition = nest({depth}, {leaf!r})
+kind, value = condition[1:-1].split(',', 1)
+native, native_messages = parse('payload:\\n  - ' + json.dumps(condition[1:-1]), purpose='block')
+mixed, mixed_messages = parse(condition[1:-1] + ',REJECT', purpose='block')
+assert native_messages == mixed_messages == []
+assert native == [Rule(kind, value, literal_process={'PROCESS-NAME' in leaf and 'REGEX' not in leaf}, native_fields=True)]
+assert mixed == [Rule(kind, value)]
+assert len(normalize(native + mixed + native + mixed)) == 2
+''')
+
+
 class RuleTests(unittest.TestCase):
     def test_domain_canonicalization_preserves_process_case(self):
         self.assertEqual(Rule("domain", "Ads.Example.COM."), Rule("DOMAIN", "ads.example.com"))
