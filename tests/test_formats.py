@@ -78,7 +78,7 @@ class FormatTests(unittest.TestCase):
     def test_go_portable_domain_regex_emits_literal_dns_block_and_allow(self):
         cases = (
             (r"^ads\.example\.com\z", r"/^ads\.example\.com\z/", r"@@/^ads\.example\.com\z/"),
-            (r"^api\d\.example\.com$", r"/^api\d\.example\.com$/", r"@@/^api\d\.example\.com$/"),
+            (r"^api\d\.example\.com$", r"/^api\p{Nd}\.example\.com$/", r"@@/^api\p{Nd}\.example\.com$/"),
             (r"^(?:ads|track)\.example\.com$", r"/^(?:ads|track)\.example\.com$/", r"@@/^(?:ads|track)\.example\.com$/"),
             (r"^(?<name>ads)\.example\.com$", r"/^(?<name>ads)\.example\.com$/", r"@@/^(?<name>ads)\.example\.com$/"),
         )
@@ -140,30 +140,164 @@ class FormatTests(unittest.TestCase):
 
     def test_go_valid_property_class_followed_by_literal_hyphen_emits_dns(self):
         value = r"^[\p{L}-a]+\.example\.com$"
-        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
-                                     Rule("DOMAIN-REGEX", value, allow=True)])
-        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                         ["! Total count: 2", r"@@/^[\p{L}-a]+\.example\.com$/",
-                          r"/^[\p{L}-a]+\.example\.com$/"])
-        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+        self._assert_domain_regex_dns(value, value)
 
-    def test_go_valid_posix_class_followed_by_literal_hyphen_emits_dns(self):
-        value = r"^[[:alpha:]-a]+\.example\.com$"
-        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
-                                     Rule("DOMAIN-REGEX", value, allow=True)])
-        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                         ["! Total count: 2", r"@@/^[[:alpha:]-a]+\.example\.com$/",
-                          r"/^[[:alpha:]-a]+\.example\.com$/"])
-        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+    def _assert_domain_regex_dns(self, value, dns_value):
+        from rules import parse
 
-    def test_posix_class_literal_braces_are_not_rewritten_as_quantifiers(self):
-        value = r"^[[:alpha:]{01}]+\.example\.com$"
-        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
-                                     Rule("DOMAIN-REGEX", value, allow=True)])
-        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                         ["! Total count: 2", r"@@/^[[:alpha:]{01}]+\.example\.com$/",
-                          r"/^[[:alpha:]{01}]+\.example\.com$/"])
-        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+        parsed, messages = parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block")
+        self.assertEqual(messages, [])
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value)])
+        out, skipped = render("a3", parsed + [Rule("DOMAIN-REGEX", value, allow=True)])
+        expected_dns = (["! Total count: 0"] if dns_value is None else
+                        ["! Total count: 2", f"@@/{dns_value}/", f"/{dns_value}/"])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], expected_dns)
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - ' +
+                         json.dumps(f"DOMAIN-REGEX,{value}", ensure_ascii=False) + "\n")
+        expected_skipped = {"fin.yaml:DOMAIN-REGEX": 1}
+        for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt", "fin-surge-ds.txt"):
+            self.assertEqual(out[name], "# a3 rules: 0\n")
+            expected_skipped[f"{name}:DOMAIN-REGEX"] = 2
+        if dns_value is None:
+            expected_skipped["fin-adb.txt:DOMAIN-REGEX"] = 2
+        self.assertEqual(skipped, expected_skipped)
+        for allow in (False, True):
+            single, single_skipped = render("a3", [Rule("DOMAIN-REGEX", value, allow=allow)])
+            expected_single = (["! Total count: 0"] if dns_value is None else
+                               ["! Total count: 1", ("@@" if allow else "") + f"/{dns_value}/"])
+            self.assertEqual(single["fin-adb.txt"].splitlines()[6:], expected_single)
+            self.assertEqual(single_skipped.get("fin-adb.txt:DOMAIN-REGEX", 0),
+                             1 if dns_value is None else 0)
+
+    def test_posix_looking_classes_stay_out_of_dns(self):
+        for value in (r"^[[:alpha:]-a]+\.example\.com$", r"^[[:alpha:]]+\.example\.com$"):
+            with self.subTest(value=value):
+                self._assert_domain_regex_dns(value, None)
+
+    def test_posix_class_literal_braces_are_preserved_in_yaml_and_skipped_in_dns(self):
+        self._assert_domain_regex_dns(r"^[[:alpha:]{01}]+\.example\.com$", None)
+
+    def test_regexp2_class_subtraction_stays_out_of_dns(self):
+        self._assert_domain_regex_dns(r"^[a-z-[aeiou]]+\.example\.com$", None)
+
+    def test_unicode_decimal_digit_atom_is_translated_for_dns(self):
+        self._assert_domain_regex_dns(r"^\d+\.example\.com$", r"^\p{Nd}+\.example\.com$")
+
+    def test_unicode_decimal_digit_class_combination_stays_out_of_dns(self):
+        self._assert_domain_regex_dns(r"^[a\d]+\.example\.com$", None)
+
+    def test_literal_backslash_digit_is_not_translated_for_dns(self):
+        value = r"^\\d\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_character_class_literal_braces_are_not_rewritten_as_quantifiers(self):
+        value = r"^[a{01}]+\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_absolute_anchors_are_preserved_for_dns(self):
+        value = r"\Aads\.example\.com\z"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_braced_hex_atom_is_preserved_for_dns(self):
+        value = r"^\x{61}ds\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_unproved_nonascii_hex_casefold_stays_out_of_dns(self):
+        self._assert_domain_regex_dns(r"^\x{130}\.example\.com$", None)
+
+    def test_nested_counted_repetition_respects_go_combined_limit(self):
+        self._assert_domain_regex_dns(r"^(?:\w{500}){3}\.example\.com$", None)
+        self._assert_domain_regex_dns(r"^(?:\w{500}){2}\.example\.com$",
+                                      r"^(?:[\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]{500}){2}\.example\.com$")
+        value = r"^(?:a{500}){0,1}\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+        value = r"^(?:(?:a{500}){0}){3}\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_zero_minimum_unbounded_repeat_preserves_inner_go_budget(self):
+        for atom in (r"\d{500}", "a{500}", "a{0500}"):
+            for repeat in ("{0,}", "{00,}"):
+                value = rf"^(?:(?:{atom}|b){repeat}){{3}}\.example\.com$"
+                with self.subTest(value=value):
+                    self._assert_domain_regex_dns(value, None)
+        for value in (r"^(?:(?:a{500}){0,}|b){3}\.example\.com$",
+                      r"^((a{500}|b){00,}){03}\.example\.com$",
+                      r"^(?:(?:(?:a{250}|b){0,}){2}){3}\.example\.com$"):
+            with self.subTest(value=value):
+                self._assert_domain_regex_dns(value, None)
+
+    def test_zero_minimum_repeat_keeps_valid_go_boundaries(self):
+        for repeat, normalized in (("{0,}", "{0,}"), ("{00,}", "{0,}"),
+                                   ("*", "*"), ("+", "+"), ("?", "?"),
+                                   ("{1,}", "{1,}"), ("{0001,}", "{1,}"),
+                                   ("{0,1}", "{0,1}"), ("{00,01}", "{0,1}")):
+            value = rf"^(?:(?:a{{500}}|b){repeat}){{2}}\.example\.com$"
+            dns_value = rf"^(?:(?:a{{500}}|b){normalized}){{2}}\.example\.com$"
+            with self.subTest(value=value):
+                self._assert_domain_regex_dns(value, dns_value)
+        for repeat, normalized in (("{0}", "{0}"), ("{0,0}", "{0,0}"),
+                                   ("{00}", "{0}"), ("{00,00}", "{0,0}")):
+            value = rf"^(?:(?:a{{500}}){repeat}|b){{3}}\.example\.com$"
+            dns_value = rf"^(?:(?:a{{500}}){normalized}|b){{3}}\.example\.com$"
+            with self.subTest(value=value):
+                self._assert_domain_regex_dns(value, dns_value)
+        value = r"^(?:(?:\d{0500}|b){00,}){02}\.example\.com$"
+        self._assert_domain_regex_dns(value, r"^(?:(?:\p{Nd}{500}|b){0,}){2}\.example\.com$")
+        value = r"^(?:(?:a{250}|b){0,2}){2}\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_unicode_nd_property_is_preserved_for_dns(self):
+        value = r"^\p{Nd}\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_unicode_nondigit_atom_is_translated_for_dns(self):
+        self._assert_domain_regex_dns(r"^ad\Dtrack\.example\.com$",
+                                      r"^ad\P{Nd}track\.example\.com$")
+
+    def test_unicode_word_atom_is_translated_for_dns(self):
+        self._assert_domain_regex_dns(r"^\w+\.example\.com$",
+                                      r"^[\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]+\.example\.com$")
+
+    def test_unicode_nonword_atom_is_translated_for_dns(self):
+        self._assert_domain_regex_dns(r"^ad\Wtrack\.example\.com$",
+                                      r"^ad[^\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]track\.example\.com$")
+
+    def test_unicode_space_atom_is_translated_for_dns(self):
+        self._assert_domain_regex_dns(r"^ads\s?\.example\.com$",
+                                      r"^ads[\x09-\x0D\x{85}\p{Z}]?\.example\.com$")
+
+    def test_unicode_nonspace_atom_is_translated_for_dns(self):
+        self._assert_domain_regex_dns(r"^\S+\.example\.com$",
+                                      r"^[^\x09-\x0D\x{85}\p{Z}]+\.example\.com$")
+
+    def test_unproved_unicode_class_combinations_stay_out_of_dns(self):
+        for atom in (r"\d", r"\D", r"\w", r"\W", r"\s", r"\S", r"\p{Nd}"):
+            for value in (rf"^[a{atom}]+\.example\.com$", rf"^[]{atom}]+\.example\.com$",
+                          rf"^[^]{atom}]+\.example\.com$"):
+                with self.subTest(value=value):
+                    self._assert_domain_regex_dns(value, None)
+
+    def test_unicode_boundary_and_ignorecase_lowercase_property_stay_out_of_dns(self):
+        for value in (r"^\bads\.example\.com$", r"^\p{Ll}\.example\.com$",
+                      r"^(?i:\p{Ll})\.example\.com$"):
+            with self.subTest(value=value):
+                self._assert_domain_regex_dns(value, None)
+
+    def test_literal_backslashes_before_unicode_atoms_are_preserved(self):
+        for atom in ("d", "D", "w", "W", "s", "S", "b", "p{Nd}", "x{61}", "A", "z"):
+            value = rf"^\\{atom}\.example\.com$"
+            with self.subTest(value=value):
+                self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(r"^\\\d\.example\.com$", r"^\\\p{Nd}\.example\.com$")
+        value = r"^[a\\d]+\.example\.com$"
+        self._assert_domain_regex_dns(value, value)
+
+    def test_unsupported_regex_constructs_keep_yaml_and_dns_skip_counts(self):
+        for value in (r"^ads/track\.example\.com$", r"^ads\/track\.example\.com$",
+                      r"^ads{01001}\.example\.com$", r"^(ads)\1\.example\.com$",
+                      r"^(?<name>ads)\k<name>\.example\.com$", r"^ads(?=track)\.example\.com$"):
+            with self.subTest(value=value):
+                self._assert_domain_regex_dns(value, None)
 
     def test_go_invalid_repetition_is_not_emitted_or_counted_in_dns(self):
         value = r"^ads{0,1001}\.example\.com$"
@@ -198,8 +332,9 @@ class FormatTests(unittest.TestCase):
                          {f"DOMAIN-REGEX,{value}" for value in values} |
                          {"PROCESS-NAME-REGEX,^[(?P]$"})
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                         ["! Total count: 1", r"/^\p{L}+\.example\.com$/"])
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], len(values) - 1)
+                         ["! Total count: 2", r"/^\p{L}+\.example\.com$/",
+                          r"/^\x{61}ds\.example\.com$/"])
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], len(values) - 2)
         self.assertEqual(skipped["fin-adb.txt:PROCESS-NAME-REGEX"], 1)
 
     def test_six_files_are_ordered_and_count_actual_lines(self):
