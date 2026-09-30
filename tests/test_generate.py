@@ -1,5 +1,6 @@
 import contextlib
 import gzip
+import hashlib
 import io
 import json
 from datetime import datetime, timezone
@@ -308,6 +309,170 @@ class GenerateTests(unittest.TestCase):
             self.assertEqual(set(outputs), {root / "custom" / name for name in NAMES})
             self.assertIn("DOMAIN,ads.example.org\n", outputs[root / "custom" / "fin.txt"])
             self.assertIn("! Title: Custom Ads\n", outputs[root / "custom" / "fin-adb.txt"])
+
+    def _assert_output_collision_rejected(self, root, first, second):
+        from formats import render
+        from rules import parse, parse_whitelist
+
+        previous = {path: path.read_bytes() for path in root.rglob("fin*") if path.is_file()}
+        hashes = {path: hashlib.sha256(data).hexdigest() for path, data in previous.items()}
+        resolved = first.resolve()
+        calls = []
+
+        def fetch(url):
+            calls.append(url)
+            if url == "https://example.org/missing.txt":
+                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+            return b"DOMAIN,current.example.org\n"
+
+        outputs, failure = {}, None
+        with contextlib.redirect_stderr(io.StringIO()), patch("rules.parse", wraps=parse) as parsed, \
+                patch("rules.parse_whitelist", wraps=parse_whitelist) as allowed, \
+                patch("formats.render", wraps=render) as rendered, \
+                patch("generate.publish", wraps=publish) as published:
+            try:
+                outputs = generate(root, fetch)
+                published(outputs)
+            except ValueError as exc:
+                failure = exc
+        with self.subTest(check="error"):
+            self.assertIsInstance(failure, ValueError)
+            self.assertIn("Output path collision", str(failure))
+            for path in (first, second, resolved):
+                self.assertIn(str(path), str(failure))
+        with self.subTest(check="fetch"):
+            self.assertEqual(calls, [])
+        with self.subTest(check="processing"):
+            parsed.assert_not_called()
+            allowed.assert_not_called()
+            rendered.assert_not_called()
+        with self.subTest(check="outputs"):
+            self.assertEqual(outputs, {})
+        with self.subTest(check="dependency"):
+            self.assertFalse(any(path.parent.name == "big-data" for path in outputs))
+        with self.subTest(check="publication"):
+            published.assert_not_called()
+        with self.subTest(check="old bytes"):
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+        with self.subTest(check="old hashes"):
+            self.assertEqual({path: hashlib.sha256(path.read_bytes()).hexdigest() for path in previous}, hashes)
+        with self.subTest(check="complete file set"):
+            self.assertEqual({path for path in root.rglob("fin*") if path.is_file()}, set(previous))
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows case-insensitive output paths")
+    def test_windows_case_collision_rejects_before_freezing_fetching_or_publishing(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            configs = [
+                {"name": group, "purpose": "proxy", "no_resolve": "keep",
+                 "sources": sources, "whitelist": ["allow.list"] if group == "healthy" else []}
+                for group, sources in (
+                    ("healthy", ["https://example.org/healthy.txt"]),
+                    ("cdn", ["https://example.org/missing.txt"]),
+                    ("CDN", ["current.list"]),
+                    ("big-data", ["CDN/fin.txt"]),
+                )
+            ]
+            (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+            (root / "current.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            (root / "allow.list").write_text("DOMAIN,safe.example.org,DIRECT\n", encoding="utf-8")
+            for group in ("healthy", "CDN", "big-data"):
+                (root / group).mkdir()
+                for name in NAMES:
+                    (root / group / name).write_bytes(f"DOMAIN,stale-{group}.example.org\n".encode())
+            for name in NAMES:
+                self.assertTrue((root / "cdn" / name).samefile(root / "CDN" / name))
+            self._assert_output_collision_rejected(root, root / "cdn" / NAMES[0], root / "CDN" / NAMES[0])
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows case-insensitive output paths")
+    def test_windows_case_collision_rejects_nonexistent_group_outputs(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": group, "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["current.list"], "whitelist": []}
+                for group in ("cdn", "CDN")
+            ]), encoding="utf-8")
+            (root / "current.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            self.assertFalse((root / "cdn").exists())
+            self.assertFalse((root / "CDN").exists())
+            self._assert_output_collision_rejected(root, root / "cdn" / NAMES[0], root / "CDN" / NAMES[0])
+            self.assertFalse((root / "cdn").exists())
+            self.assertFalse((root / "CDN").exists())
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows file symlinks")
+    def test_windows_file_alias_collision_checks_each_of_the_six_output_paths(self):
+        for filename in NAMES:
+            with self.subTest(filename=filename), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([
+                    {"name": group, "purpose": "proxy", "no_resolve": "keep",
+                     "sources": ["mirror/fin.txt"] if group == "big-data" else ["current.list"],
+                     "whitelist": []}
+                    for group in ("cdn", "mirror", "big-data")
+                ]), encoding="utf-8")
+                (root / "current.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+                for group in ("cdn", "mirror", "big-data"):
+                    (root / group).mkdir()
+                    for name in NAMES:
+                        (root / group / name).write_bytes(f"DOMAIN,stale-{group}.example.org\n".encode())
+                first, second = root / "cdn" / filename, root / "mirror" / filename
+                second.unlink()
+                try:
+                    second.symlink_to(first)
+                except OSError as exc:
+                    if exc.winerror != 1314:
+                        raise
+                    self.skipTest("Windows file symlinks require a privilege unavailable on this host")
+                self.assertTrue(second.is_symlink())
+                self.assertTrue(first.samefile(second))
+                self._assert_output_collision_rejected(root, first, second)
+                self.assertTrue(second.is_symlink())
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows directory junctions")
+    def test_windows_directory_junction_collision_rejects_shared_old_outputs(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": group, "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["current.list"], "whitelist": []}
+                for group in ("cdn", "mirror")
+            ]), encoding="utf-8")
+            (root / "current.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            (root / "cdn").mkdir()
+            for name in NAMES:
+                (root / "cdn" / name).write_bytes(b"DOMAIN,stale.example.org\n")
+            result = subprocess.run(
+                ["cmd", "/c", "mklink", "/J", str(root / "mirror"), str(root / "cdn")],
+                capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue((root / "mirror").is_junction())
+            for name in NAMES:
+                self.assertTrue((root / "cdn" / name).samefile(root / "mirror" / name))
+            self._assert_output_collision_rejected(root, root / "cdn" / NAMES[0], root / "mirror" / NAMES[0])
+            self.assertTrue((root / "mirror").is_junction())
+
+    @unittest.skipIf(os.name == "nt", "Case-distinct groups require a case-sensitive platform")
+    def test_case_distinct_groups_generate_separate_outputs_on_case_sensitive_platform(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "cdn").mkdir()
+            if (root / "CDN").exists():
+                self.skipTest("This filesystem does not support case-distinct directories")
+            (root / "CDN").mkdir()
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": group, "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["current.list"], "whitelist": []}
+                for group in ("cdn", "CDN")
+            ]), encoding="utf-8")
+            (root / "current.list").write_text("DOMAIN,current.example.org\n", encoding="utf-8")
+            with contextlib.redirect_stderr(io.StringIO()):
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), {root / group / name for group in ("cdn", "CDN") for name in NAMES})
+            publish(outputs)
+            self.assertTrue(all(path.is_file() for path in outputs))
+            self.assertFalse((root / "cdn" / NAMES[0]).samefile(root / "CDN" / NAMES[0]))
 
     def test_generate_keeps_literal_and_glob_process_sources_separate(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:

@@ -107,6 +107,15 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 
     configs = load_config(root)
+    paths = {}
+    for config in configs:
+        for name in FILES:
+            path = root / config["name"] / name
+            resolved = path.resolve()
+            if resolved in paths:
+                raise ValueError(f"Output path collision: {paths[resolved]} and {path}"
+                                 f" resolve to {resolved}")
+            paths[resolved] = path
     generated = {root / config["name"] / name for config in configs for name in FILES}
     outputs: dict[Path, str] = {}
     cache: dict[str, bytes | None] = {}
