@@ -36,6 +36,14 @@ QX_TYPES = {
 }
 SURGE_ALIASES = {"SRC-IP-CIDR": "SRC-IP", "DST-PORT": "DEST-PORT", "PROCESS-NAME-WILDCARD": "PROCESS-NAME", "PROCESS-PATH": "PROCESS-NAME", "PROCESS-PATH-WILDCARD": "PROCESS-NAME"}
 LOGICAL = {"AND", "OR", "NOT"}
+# regexp2 类外 Unicode 原子在 Go regexp 中的等价集合。
+_DNS_UNICODE_ATOMS = {
+    "d": r"\p{Nd}", "D": r"\P{Nd}",
+    "w": r"[\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]",
+    "W": r"[^\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]",
+    "s": r"[\x09-\x0D\x{85}\p{Z}]",
+    "S": r"[^\x09-\x0D\x{85}\p{Z}]",
+}
 
 
 def _surge_value(value: str, *, source_regex: bool = False) -> str:
@@ -183,32 +191,61 @@ def _dns_pattern(rule: Rule) -> str | None:
         replacements = []
         index = 0
         in_class = False
+        class_start = 0
+        # Go 对嵌套数值量词检查组合重复次数，上限为 1000。
+        repeat_groups = [[]]
         while index < len(rule.value):
             char = rule.value[index]
+            if not in_class:
+                if char == "(":
+                    repeat_groups.append([])
+                elif char == ")":
+                    if len(repeat_groups) == 1:
+                        return None
+                    repeat_count = max(repeat_groups.pop(), default=1)
+                    repeat_groups[-1].append(repeat_count)
+                elif char not in "*+?{":
+                    repeat_groups[-1].append(1)
             if char == "\\":
                 if rule.value.startswith(r"\p{L}", index):
                     translated.append(r"\w")
                     index += 5
                     continue
-                if index + 1 == len(rule.value) or rule.value[index + 1] not in r"\.*+?{}()[]|^$-dz":
+                if rule.value.startswith(r"\p{Nd}", index):
+                    if in_class:
+                        return None
+                    translated.append(r"\d")
+                    index += 6
+                    continue
+                if rule.value.startswith(r"\x{", index):
+                    atom = re.match(r"\\x\{([0-9a-fA-F]{1,6})\}", rule.value[index:])
+                    if atom is None:
+                        return None
+                    codepoint = int(atom[1], 16)
+                    if codepoint > 0x7f:
+                        return None
+                    translated.append(re.escape(chr(codepoint)))
+                    index += len(atom[0])
+                    continue
+                if index + 1 == len(rule.value):
                     return None
-                translated.append(r"\Z" if rule.value[index + 1] == "z" else rule.value[index:index + 2])
+                escape = rule.value[index + 1]
+                if escape in _DNS_UNICODE_ATOMS:
+                    if in_class:
+                        return None
+                    replacements.append((index, index + 2, _DNS_UNICODE_ATOMS[escape]))
+                elif escape not in r"\.*+?{}()[]|^$-Az" or in_class and escape in "Az":
+                    return None
+                translated.append(r"\Z" if escape == "z" else rule.value[index:index + 2])
                 index += 2
                 continue
             if char == "[" and in_class:
-                posix = re.match(r"\[:(\^?[a-z]+):\]", rule.value[index:])
-                if posix:
-                    if posix[1].removeprefix("^") not in {
-                        "alnum", "alpha", "ascii", "blank", "cntrl", "digit", "graph",
-                        "lower", "print", "punct", "space", "upper", "word", "xdigit",
-                    }:
-                        return None
-                    translated.append(r"\w")
-                    index += len(posix[0])
-                    continue
+                return None
             if char == "[" and not in_class:
                 in_class = True
-            elif char == "]":
+                class_start = index
+            elif char == "]" and in_class and index > class_start + 1 + (
+                    rule.value[class_start + 1:class_start + 2] == "^"):
                 in_class = False
             elif char == "(" and not in_class and rule.value.startswith("(?", index):
                 if rule.value.startswith("(?:", index):
@@ -226,11 +263,19 @@ def _dns_pattern(rule: Rule) -> str | None:
                 index += len(named[0])
                 continue
             elif char == "{" and not in_class:
-                bounds = re.match(r"\{(\d+)(?:,(\d*))?\}", rule.value[index:])
+                bounds = re.match(r"\{([0-9]+)(?:,([0-9]*))?\}", rule.value[index:])
                 if bounds:
                     counts = tuple(count.lstrip("0") or "0" if count else count for count in bounds.groups())
                     if any(len(count) > 4 or len(count) == 4 and count > "1000"
                            for count in counts if count) or rule.value[index + len(bounds[0]):].startswith("+"):
+                        return None
+                    if not repeat_groups[-1]:
+                        return None
+                    repeat_count = int(counts[1] or counts[0])
+                    if counts[1] == "":
+                        repeat_count = max(1, repeat_count)
+                    repeat_groups[-1][-1] *= repeat_count
+                    if repeat_groups[-1][-1] > 1000:
                         return None
                     normalized = "{" + counts[0] + ("," + counts[1] if counts[1] is not None else "") + "}"
                     if normalized != bounds[0]:
@@ -238,6 +283,7 @@ def _dns_pattern(rule: Rule) -> str | None:
                     translated.append(normalized)
                     index += len(bounds[0])
                     continue
+                repeat_groups[-1].append(1)
             if char == "-" and in_class and translated[-1:] == [r"\w"]:
                 translated.append(r"\-")
             else:
