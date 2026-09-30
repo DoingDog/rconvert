@@ -14,6 +14,54 @@ def _quote_matcher(value):
     return f"{quote}{value}{quote}"
 
 
+class DomainSetSuffixParserTests(unittest.TestCase):
+    def test_single_label_domain_set_suffix_uses_suffix_validation(self):
+        for purpose in ("direct", "block", "proxy"):
+            with self.subTest(purpose=purpose):
+                self.assertEqual(parse(".com", purpose=purpose),
+                                 ([Rule("DOMAIN-SUFFIX", "com")], []))
+
+    def test_other_legal_suffix_labels_reuse_existing_domain_boundaries(self):
+        for purpose in ("direct", "block", "proxy"):
+            for label in ("net", "local", "x", "1", "A-B", "XN--P1AI", "a" * 63, "COM."):
+                with self.subTest(purpose=purpose, label=label):
+                    self.assertEqual(parse("." + label, purpose=purpose),
+                                     ([Rule("DOMAIN-SUFFIX", label.removesuffix(".").lower())], []))
+
+    def test_exact_and_multilabel_domain_set_entries_keep_their_types(self):
+        for purpose in ("direct", "block", "proxy"):
+            with self.subTest(purpose=purpose):
+                self.assertEqual(parse("example.com\n.example.com\nExample.ORG.", purpose=purpose),
+                                 ([Rule("DOMAIN", "example.com"), Rule("DOMAIN-SUFFIX", "example.com"),
+                                   Rule("DOMAIN", "example.org")], []))
+                self.assertEqual(parse("DOMAIN,com\nDOMAIN-SUFFIX,com", purpose=purpose),
+                                 ([Rule("DOMAIN", "com"), Rule("DOMAIN-SUFFIX", "com")], []))
+
+    def test_invalid_bare_entries_warn_at_their_line_and_keep_legal_neighbors(self):
+        entries = ("com", "local", "x", "-com", "com-", "a_b", ".", "..com", ".a..com",
+                   ".-com", ".com-", ".a_b", ".*", ".a/b", ".192.0.2.1", ".2001:db8::1",
+                   "." + "a" * 64, "." + ".".join(["a" * 63] * 4), "garbage{")
+        for purpose in ("direct", "block", "proxy"):
+            for entry in entries + (".com,REJECT",):
+                with self.subTest(purpose=purpose, entry=entry):
+                    message = {".com,REJECT": "unknown type .COM", "-com": "invalid YAML payload"}.get(
+                        entry, "invalid rule")
+                    self.assertEqual(parse(f"# domains\nexample.com\n{entry}\n.example.org", purpose=purpose),
+                                     ([Rule("DOMAIN", "example.com"), Rule("DOMAIN-SUFFIX", "example.org")],
+                                      ["line 3: " + message]))
+
+    def test_suffix_whitelist_covers_only_its_domain_direction(self):
+        allowed = rules.parse_whitelist(".com")
+        self.assertEqual(allowed, [Rule("DOMAIN-SUFFIX", "com")])
+        broad = Rule("DOMAIN-SUFFIX", "com")
+        keep = [Rule("DOMAIN", "notcom"), Rule("DOMAIN", "example.org"),
+                Rule("DOMAIN-SUFFIX", "company"), Rule("DOMAIN-KEYWORD", "com")]
+        covered = [broad, Rule("DOMAIN", "ads.example.com"), Rule("DOMAIN-SUFFIX", "child.com"),
+                   Rule("DOMAIN-WILDCARD", "*.child.com")]
+        self.assertEqual(rules.exclude_covered(covered + keep, allowed), keep)
+        self.assertEqual(rules.exclude_covered([broad], [Rule("DOMAIN", "ads.example.com")]), [broad])
+
+
 class SurgeEscapedFieldParserTests(unittest.TestCase):
     def test_double_quote_escapes_decode_only_at_mixed_field_boundaries(self):
         import json

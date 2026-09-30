@@ -38,6 +38,202 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class DomainSetSuffixGenerateTests(unittest.TestCase):
+    three_domains = {
+        "fin.txt": ("DOMAIN,example.org", "DOMAIN-SUFFIX,com", "DOMAIN-SUFFIX,example.net"),
+        "fin-qx.txt": ("HOST,example.org,LIST", "HOST-SUFFIX,com,LIST", "HOST-SUFFIX,example.net,LIST"),
+        "fin.yaml": ("DOMAIN,example.org", "DOMAIN-SUFFIX,com", "DOMAIN-SUFFIX,example.net"),
+        "fin-adb.txt": ("example.org", "||com^", "||example.net^"),
+        "fin-surge.txt": (),
+        "fin-surge-ds.txt": (".com", "example.org", ".example.net"),
+    }
+
+    def _assert_group(self, outputs, root, group, purpose, bodies):
+        from rules import Rule, parse
+
+        self.assertEqual({path for path in outputs if path.parent.name == group},
+                         {root / group / name for name in NAMES})
+        for name in NAMES:
+            text = outputs[root / group / name]
+            lines = text.splitlines()
+            body = bodies[name]
+            count = len(body)
+            if name == "fin.yaml":
+                self.assertEqual(lines[1], "payload:")
+                actual = [json.loads(line[4:]) for line in lines[2:]]
+            elif name == "fin-adb.txt":
+                if purpose != "block":
+                    body, count = ("! No AdBlock rules for non-advertising group.",), 0
+                self.assertEqual(lines[6], f"! Total count: {count}")
+                actual = lines[7:]
+            else:
+                actual = lines[1:]
+            if name != "fin-adb.txt":
+                self.assertEqual(lines[0], f"# {group} rules: {count}")
+            self.assertEqual(set(actual), set(body), (group, name))
+            self.assertEqual(len(actual), len(body), (group, name))
+            if name in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-surge.txt", "fin-surge-ds.txt"):
+                parsed, messages = parse(text, purpose=purpose)
+                expected = {Rule(*line.split(",", 1)) for line in bodies["fin.txt"]}
+                self.assertEqual(set(parsed), set() if name == "fin-surge.txt" else expected)
+                self.assertEqual(messages, [])
+
+    def _seed_previous(self, root, groups):
+        previous = {}
+        for group in groups:
+            (root / group).mkdir()
+            for name in NAMES:
+                path = root / group / name
+                previous[path] = b"previous version\n"
+                path.write_bytes(previous[path])
+        return previous
+
+    def _publish_updated(self, outputs, previous):
+        self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+        publish(outputs)
+        for path, text in outputs.items():
+            self.assertEqual(path.read_bytes(), text.encode("utf-8"))
+            self.assertNotEqual(path.read_bytes(), previous[path])
+
+    def test_single_label_suffix_survives_same_round_and_disk_domain_set_dependencies(self):
+        from rules import Rule, parse
+
+        source = ".com\nexample.org\n.example.net\n"
+        expected = [Rule("DOMAIN-SUFFIX", "com"), Rule("DOMAIN", "example.org"),
+                    Rule("DOMAIN-SUFFIX", "example.net")]
+        for purpose in ("direct", "block", "proxy"):
+            for mode in ("keep", "add", "strip"):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    configs = [{"name": group, "purpose": purpose, "no_resolve": mode,
+                                "sources": entries, "whitelist": []}
+                               for group, entries in (("parent", ["domains.list"]),
+                                                      ("dependent", ["parent/fin-surge-ds.txt"]))]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "domains.list").write_text(source, encoding="utf-8")
+                    self.assertEqual(parse(source, purpose=purpose), (expected, []))
+                    previous = self._seed_previous(root, ("parent", "dependent"))
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), set(previous))
+                    for group in ("parent", "dependent"):
+                        self._assert_group(outputs, root, group, purpose, self.three_domains)
+                    skips = [] if purpose == "block" else [
+                        f"{group} fin-adb.txt:{kind}: {count}"
+                        for group in ("parent", "dependent")
+                        for kind, count in (("DOMAIN", 1), ("DOMAIN-SUFFIX", 2))]
+                    self.assertEqual(stderr.getvalue().splitlines(), skips)
+                    self._publish_updated(outputs, previous)
+                    published = {path: path.read_bytes() for path in outputs}
+                    disk_previous = self._seed_previous(root, ("disk",))
+                    (root / "rulesets.json").write_text(json.dumps([{
+                        "name": "disk", "purpose": purpose, "no_resolve": mode,
+                        "sources": ["parent/fin-surge-ds.txt"], "whitelist": [],
+                    }]), encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as disk_stderr:
+                        disk_outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(disk_outputs), set(disk_previous))
+                    self._assert_group(disk_outputs, root, "disk", purpose, self.three_domains)
+                    self.assertEqual(disk_stderr.getvalue().splitlines(), [] if purpose == "block" else [
+                        "disk fin-adb.txt:DOMAIN: 1", "disk fin-adb.txt:DOMAIN-SUFFIX: 2"])
+                    self._publish_updated(disk_outputs, disk_previous)
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+                    self.assertEqual({path for path in root.rglob("fin*") if path.is_file()},
+                                     set(published) | set(disk_outputs))
+
+    def test_invalid_domain_set_entries_warn_without_freezing_legal_neighbors(self):
+        for purpose in ("direct", "block", "proxy"):
+            with self.subTest(purpose=purpose), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                configs = [{"name": group, "purpose": purpose, "no_resolve": "keep",
+                            "sources": entries, "whitelist": []}
+                           for group, entries in (("parent", ["domains.list"]),
+                                                  ("dependent", ["parent/fin-surge-ds.txt"]))]
+                (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                source = root / "domains.list"
+                source.write_text(".com\ncom\n.-bad\nexample.org\n.com,REJECT\n..net\n.example.net\n",
+                                  encoding="utf-8")
+                previous = self._seed_previous(root, ("parent", "dependent"))
+                with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    outputs = generate(root, lambda url: self.fail(url))
+                self.assertEqual(set(outputs), set(previous))
+                for group in ("parent", "dependent"):
+                    self._assert_group(outputs, root, group, purpose, self.three_domains)
+                messages = [f"{source}: line {line}: {reason}" for line, reason in (
+                    (2, "invalid rule"), (3, "invalid rule"), (5, "unknown type .COM"), (6, "invalid rule"))]
+                if purpose != "block":
+                    messages += [f"{group} fin-adb.txt:{kind}: {count}"
+                                 for group in ("parent", "dependent")
+                                 for kind, count in (("DOMAIN", 1), ("DOMAIN-SUFFIX", 2))]
+                self.assertEqual(stderr.getvalue().splitlines(), messages)
+                self._publish_updated(outputs, previous)
+
+    def test_domain_set_whitelist_keeps_suffix_direction_and_updates_fully_covered_groups(self):
+        for purpose in ("direct", "block", "proxy"):
+            for coverage in ("suffix", "exact", "all"):
+                with self.subTest(purpose=purpose, coverage=coverage), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    exact = coverage == "exact"
+                    allow = "ads.example.com" if exact else ".com"
+                    routes = (".com\nads.example.com\n.child.com\n" if coverage == "all" else
+                              "DOMAIN-SUFFIX,com\nDOMAIN,ads.example.com\nDOMAIN-SUFFIX,child.com\n"
+                              "DOMAIN,notcom.org\nDOMAIN,example.org\n")
+                    bodies = {
+                        "fin.txt": () if coverage == "all" else
+                                   (("DOMAIN-SUFFIX,com",) if exact else ()) + ("DOMAIN,notcom.org", "DOMAIN,example.org"),
+                        "fin-qx.txt": () if coverage == "all" else
+                                      (("HOST-SUFFIX,com,LIST",) if exact else ()) + ("HOST,notcom.org,LIST", "HOST,example.org,LIST"),
+                        "fin.yaml": () if coverage == "all" else
+                                    (("DOMAIN-SUFFIX,com",) if exact else ()) + ("DOMAIN,notcom.org", "DOMAIN,example.org"),
+                        "fin-adb.txt": (("@@|ads.example.com|", "||com^", "notcom.org", "example.org") if exact else
+                                        ("@@||com^",) if coverage == "all" else ("@@||com^", "notcom.org", "example.org")),
+                        "fin-surge.txt": (),
+                        "fin-surge-ds.txt": () if coverage == "all" else
+                                            ((".com",) if exact else ()) + ("notcom.org", "example.org"),
+                    }
+                    configs = [
+                        {"name": "allow", "purpose": purpose, "no_resolve": "keep",
+                         "sources": ["allow.list"], "whitelist": []},
+                        {"name": "filtered", "purpose": purpose, "no_resolve": "keep",
+                         "sources": ["routes.list"], "whitelist": ["allow/fin-surge-ds.txt"]},
+                        {"name": "dependent", "purpose": purpose, "no_resolve": "keep",
+                         "sources": ["filtered/fin-surge-ds.txt"], "whitelist": []},
+                    ]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "allow.list").write_text(allow + "\n", encoding="utf-8")
+                    (root / "routes.list").write_text(routes, encoding="utf-8")
+                    previous = self._seed_previous(root, ("allow", "filtered", "dependent"))
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), set(previous))
+                    self.assertEqual(outputs[root / "allow" / "fin-surge-ds.txt"], f"# allow rules: 1\n{allow}\n")
+                    self._assert_group(outputs, root, "filtered", purpose, bodies)
+                    dependent = dict(bodies)
+                    dependent["fin-adb.txt"] = () if coverage == "all" else (
+                        (("||com^",) if exact else ()) + ("notcom.org", "example.org"))
+                    self._assert_group(outputs, root, "dependent", purpose, dependent)
+                    counts = (("allow", (("DOMAIN", 1),) if exact else (("DOMAIN-SUFFIX", 1),)),
+                              ("filtered", () if coverage == "all" else
+                               (("DOMAIN", 2), ("DOMAIN-SUFFIX", 1)) if exact else (("DOMAIN", 2),)),
+                              ("dependent", () if coverage == "all" else
+                               (("DOMAIN", 2), ("DOMAIN-SUFFIX", 1)) if exact else (("DOMAIN", 2),)))
+                    self.assertEqual(stderr.getvalue().splitlines(), [] if purpose == "block" else [
+                        f"{group} fin-adb.txt:{kind}: {count}" for group, entries in counts for kind, count in entries])
+                    self._publish_updated(outputs, previous)
+                    disk_previous = self._seed_previous(root, ("disk",))
+                    (root / "rulesets.json").write_text(json.dumps([{
+                        "name": "disk", "purpose": purpose, "no_resolve": "keep",
+                        "sources": ["routes.list"], "whitelist": ["allow/fin-surge-ds.txt"],
+                    }]), encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as disk_stderr:
+                        disk_outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(disk_outputs), set(disk_previous))
+                    self._assert_group(disk_outputs, root, "disk", purpose, bodies)
+                    self.assertEqual(disk_stderr.getvalue().splitlines(), [] if purpose == "block" else [
+                        f"disk fin-adb.txt:{kind}: {count}" for kind, count in counts[1][1]])
+                    self._publish_updated(disk_outputs, disk_previous)
+
+
 class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
     def test_encoded_fields_survive_generation_publish_and_disk_reimport(self):
         from rules import parse

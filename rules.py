@@ -1300,7 +1300,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         elif bare_network is not None:
             kind = "IP-CIDR6" if bare_network.version == 6 else "IP-CIDR"
             value, action = str(bare_network), ""
-        elif _valid_domain("DOMAIN", line.removeprefix('.')):
+        elif _valid_domain("DOMAIN-SUFFIX" if line.startswith('.') else "DOMAIN", line.removeprefix('.')):
             kind, value, action = ("DOMAIN-SUFFIX" if line.startswith('.') else "DOMAIN"), line.removeprefix('.'), ""
         else:
             if len(parts) < 2:
