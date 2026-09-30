@@ -1,4 +1,4 @@
-# big-data rules: 10494
+# big-data rules: 10498
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -286,6 +286,7 @@ HOST,data.peer.as,LIST
 HOST,david-dm.org,LIST
 HOST,deb.sury.org,LIST
 HOST,debian.a1.bg,LIST
+HOST,dl.heycue.io,LIST
 HOST,dl.pikpak.io,LIST
 HOST,docs.brew.sh,LIST
 HOST,e.linear.app,LIST
@@ -1768,6 +1769,7 @@ HOST,dl.vibeisland.app,LIST
 HOST,dlcdnets.asus.com,LIST
 HOST,download.cnet.com,LIST
 HOST,download.gimp.org,LIST
+HOST,download.manus.im,LIST
 HOST,download.xbox.com,LIST
 HOST,dz2cdn1.dzone.com,LIST
 HOST,e.calibermind.com,LIST
@@ -3802,6 +3804,7 @@ HOST,image-stgus.samsung.com,LIST
 HOST,imagecdn.clips4sale.com,LIST
 HOST,imagizer.imageshack.com,LIST
 HOST,img.api.tryprofound.com,LIST
+HOST,img.helpnetsecurity.com,LIST
 HOST,img0.socialshopwave.com,LIST
 HOST,img1.ak.crunchyroll.com,LIST
 HOST,img1.socialshopwave.com,LIST
@@ -4008,6 +4011,7 @@ HOST,images.flightradar24.com,LIST
 HOST,images.indianexpress.com,LIST
 HOST,images.purevpn-tools.com,LIST
 HOST,images.spectrumnews1.com,LIST
+HOST,img2.helpnetsecurity.com,LIST
 HOST,integrations.gitbook.com,LIST
 HOST,latency-test.lab.skk.moe,LIST
 HOST,linkstorage.linkfire.com,LIST

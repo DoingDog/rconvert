@@ -1,4 +1,4 @@
-# cdn rules: 4766
+# cdn rules: 4768
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -2766,6 +2766,7 @@ HOST,image-stgus.samsung.com,LIST
 HOST,imagecdn.clips4sale.com,LIST
 HOST,imagizer.imageshack.com,LIST
 HOST,img.api.tryprofound.com,LIST
+HOST,img.helpnetsecurity.com,LIST
 HOST,img0.socialshopwave.com,LIST
 HOST,img1.ak.crunchyroll.com,LIST
 HOST,img1.socialshopwave.com,LIST
@@ -2916,6 +2917,7 @@ HOST,images.flightradar24.com,LIST
 HOST,images.indianexpress.com,LIST
 HOST,images.purevpn-tools.com,LIST
 HOST,images.spectrumnews1.com,LIST
+HOST,img2.helpnetsecurity.com,LIST
 HOST,integrations.gitbook.com,LIST
 HOST,keyframe-cdn.abcnews.com,LIST
 HOST,latency-test.lab.skk.moe,LIST
