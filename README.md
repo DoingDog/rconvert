@@ -39,11 +39,15 @@
 | 文件 | 用法 |
 | --- | --- |
 | `fin.txt` | 完整、无策略的 Surge RULE-SET。调用方指定 `REJECT`、`DIRECT` 或代理策略。 |
-| `fin-qx.txt` | Quantumult X 远程过滤规则，使用 `LIST` 策略占位。订阅时设置有效的 `force-policy`（广告用 `REJECT`、国内直连用 `DIRECT`、分流用代理策略），或自行定义名为 `LIST` 的策略；否则不能直接依赖占位策略。 |
+| `fin-qx.txt` | Quantumult X 远程过滤规则，使用 `LIST` 策略占位。订阅时设置有效的 `force-policy`（广告用 `REJECT`、国内直连用 `DIRECT`、分流用代理策略），或自行定义名为 `LIST` 的策略；否则不能直接依赖占位策略。来源中的 `force-cellular`、`multi-interface`、`multi-interface-balance`、`via-interface=pdp_ip0` 不会写入远程文件；对应的域名 matcher 保留三字段，但接口选择不再生效，需接口参数时使用 `[filter_local]`。 |
 | `fin.yaml` | Mihomo `rule-providers` 的 `behavior: classical`、`format: yaml` 文件。引用时使用 `RULE-SET,<provider>,<policy>`；这不是已停止维护的旧 Clash 兼容承诺。 |
 | `fin-adb.txt` | `purpose` 为 `block` 的组输出 AdGuard DNS 域名拦截和适用的 `@@` 放行例外；其余组只有说明注释。不保证浏览器过滤器的精确等价性。 |
 | `fin-surge.txt` | Surge 非 DOMAIN-SET 规则，与 `fin-surge-ds.txt` 配合使用。 |
 | `fin-surge-ds.txt` | Surge DOMAIN-SET，精确域名与前导点后缀。使用这对文件时不要再重复加载完整的 `fin.txt`。 |
+
+[AdGuard Private DNS 的自定义列表额度](https://adguard-dns.io/kb/private-dns/setting-up-filtering/blocklists/)按套餐分别为 Personal 1,000、Team 5,000、Enterprise 100,000 条总规则，超额列表会自动停用。上表中 `a3`、`a4` 的 `fin-adb.txt` 各自超过 100,000 条，直接作为 Private DNS 自定义列表添加时会超额；生成文件保留全部可表达规则。
+
+Mihomo `payload:` 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。
 
 最终输出按规则类型连续分组，每种类型内按最终规则行的字符数升序排列，同长按完整文本的字典序排列。所有 IP 类规则放在末尾，顺序为无地址族、IPv4、IPv6；`fin-surge-ds.txt` 的规则体整体排序。`fin-adb.txt` 在文件头之后先列出全部 `@@` 放行例外，再列出普通规则，两区分别按字符数和字典序排列。
 
@@ -66,7 +70,7 @@ python3 -m venv .venv
 .venv/bin/python update_readme_counts.py
 ```
 
-Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源及白名单均在 `rulesets.json` 中配置，不再使用 INI。远端普通来源或白名单返回 404 时跳过该 URL 并继续；远端白名单整份为 HTML、坏编码或无法识别时跳过，混合内容保留可识别行。429、服务器错误、超时或传输不完整会停止本轮发布。本轮某组普通来源全部 404，或过滤后没有可路由规则时，冻结该组及依赖组原有六种产物，其他健康组继续更新；缺失旧产物则停止发布。本地白名单损坏也停止发布。日志包含来源行号与目标格式的跳过计数。GitHub Actions 的 PR job 只运行离线测试；向 `main` 推送后先测试再更新，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，仅暂存配置所列规则组的六种生成文件，不强推。
+Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源及白名单均在 `rulesets.json` 中配置，不再使用 INI。远端普通来源或白名单返回 404 时跳过该 URL 并继续；远端白名单整份为 HTML、坏编码或无法识别时跳过，混合内容保留可识别行。429、服务器错误、超时或传输不完整会停止本轮发布。本轮某组普通来源不可用且无可路由规则，或过滤后没有可路由规则而仍有无法路由的拦截规则时，冻结该组及依赖组原有六种产物，其他健康组继续更新；有效来源被白名单全部覆盖、仅含可发布的 AdGuard DNS `@@`，或仅依赖本轮生成的空规则文件时仍更新六种产物；缺失旧产物则停止发布。本地白名单损坏也停止发布。日志包含来源行号与目标格式的跳过计数。GitHub Actions 的 PR job 只运行离线测试；向 `main` 推送后先测试再更新，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，仅暂存配置所列规则组的六种生成文件，不强推。
 
 ## 上游与许可
 

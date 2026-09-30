@@ -159,6 +159,18 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
         except UnicodeError as exc:
             raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
 
+    def generated_body(source: Path, text: str) -> tuple[int, list[str]]:
+        adblock = source == source.with_name("fin-adb.txt")
+        header = 7 if adblock else 2 if source == source.with_name("fin.yaml") else 1
+        body = text.splitlines()[header:]
+        if adblock and body == ["! No AdBlock rules for non-advertising group."]:
+            return header + 1, []
+        return header, body
+
+    def body_warning(messages: list[str], header: int) -> str | None:
+        return next((message for message in messages
+                     if int(message.partition(":")[0].removeprefix("line ")) > header), None)
+
     local_whitelists = {}
     for config in configs:
         for entry in config["whitelist"]:
@@ -178,20 +190,33 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             freeze(group)
             continue
         rules = []
+        empty_generated = False
+        unusable_source = False
         for entry in config["sources"]:
             source = resolve_source(root, entry)
             text = read(source)
             if text is None:
+                unusable_source = True
                 continue
             parsed, source_warnings = parse(text, purpose=purpose)
             for warning in source_warnings[:5]:
                 print(f"{source}: {warning}", file=sys.stderr)
             if len(source_warnings) > 5:
                 print(f"{source}: {len(source_warnings)} skipped lines; first five shown", file=sys.stderr)
+            if isinstance(source, Path) and source in generated:
+                header, body = generated_body(source, text)
+                if warning := body_warning(source_warnings, header):
+                    raise ValueError(f"Unadaptable rule in {source}: {warning}")
             if not parsed:
                 if isinstance(source, Path):
-                    raise ValueError(f"No adaptable rules in {source}")
-                print(f"{source}: no adaptable rules; skipped", file=sys.stderr)
+                    if source not in generated:
+                        raise ValueError(f"No adaptable rules in {source}")
+                    if body:
+                        raise ValueError(f"No adaptable rules in {source}: line {header + 1}")
+                    empty_generated = True
+                else:
+                    unusable_source = True
+                    print(f"{source}: no adaptable rules; skipped", file=sys.stderr)
                 continue
             rules.extend(parsed)
         whitelist = []
@@ -203,8 +228,26 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             text = read(source)
             if text is None:
                 continue
+            generated_whitelist = isinstance(source, Path) and source in generated
+            if generated_whitelist:
+                header, body = generated_body(source, text)
+                if not body:
+                    continue
+                parsed_whitelist, messages = parse(text, purpose="block", ignore_policy=True)
+                if warning := body_warning(messages, header):
+                    raise ValueError(f"Invalid whitelist {source}: {warning}")
             try:
                 selected = parse_whitelist(text)
+                if generated_whitelist and len(selected) != len(parsed_whitelist):
+                    for number, line in enumerate(body, header + 1):
+                        snippet = ("payload:\n" if source == source.with_name("fin.yaml") else "") + line
+                        try:
+                            supported = parse_whitelist(snippet)
+                        except ValueError:
+                            supported = []
+                        if not supported:
+                            raise ValueError(f"line {number}: unsupported rule")
+                    raise ValueError(f"line {header + 1}: unsupported rule")
                 if not selected and isinstance(source, str):
                     print(f"{source}: no supported whitelist rules; skipped", file=sys.stderr)
                 whitelist.extend(selected)
@@ -212,21 +255,28 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 if isinstance(source, Path):
                     raise ValueError(f"Invalid whitelist {source}: {exc}") from exc
                 print(f"{source}: invalid whitelist ({exc}); skipped", file=sys.stderr)
-        if not rules:
+        if not rules and (not empty_generated or unusable_source):
             freeze(group)
             continue
         allowed = [rule for rule in rules if rule.allow]
         rules = exclude_covered(rules, whitelist + allowed)
         if no_resolve == "add":
-            rules = [Rule(rule.kind, rule.value, rule.options + ("no-resolve",), rule.allow)
+            rules = [Rule(rule.kind, rule.value, rule.options + ("no-resolve",),
+                          rule.allow, rule.literal_process)
                      if not rule.allow and rule.kind in NO_RESOLVE_TYPES else rule for rule in rules]
         elif no_resolve == "strip":
-            rules = [Rule(rule.kind, rule.value, tuple(option for option in rule.options if option != "no-resolve"), rule.allow)
+            rules = [Rule(rule.kind, rule.value,
+                          tuple(option for option in rule.options if option != "no-resolve"),
+                          rule.allow, rule.literal_process)
                      for rule in rules]
         rendered, skipped = render(group, normalize(rules), purpose=purpose,
                                    whitelist=whitelist, no_resolve=no_resolve,
                                    title=config.get("title", group))
-        if not any(rendered[name].splitlines()[1:] for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt")) and len(rendered["fin.yaml"].splitlines()) <= 2:
+        if (not any(rendered[name].splitlines()[1:] for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt"))
+                and len(rendered["fin.yaml"].splitlines()) <= 2
+                and (unusable_source or rules and not (
+                    purpose == "block" and not any(not rule.allow for rule in rules)
+                    and any(line.startswith("@@") for line in rendered["fin-adb.txt"].splitlines()[7:])))):
             print(f"{group}: no routable rules; frozen", file=sys.stderr)
             freeze(group)
             continue

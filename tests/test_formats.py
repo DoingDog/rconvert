@@ -30,15 +30,177 @@ class FormatTests(unittest.TestCase):
         self.assertIn('  - "DOMAIN-WILDCARD,api-*.example.org"\n', out["fin.yaml"])
         self.assertIn('  - "DOMAIN,api-v2.example.org"\n', out["fin.yaml"])
 
-    def test_surge_character_class_wildcard_is_not_reinterpreted_by_qx_or_mihomo(self):
+    def test_surge_character_class_wildcard_is_converted_for_mihomo_but_not_qx(self):
         out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-[0-9].example.com")])
         self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com\n", out["fin.txt"])
         self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
-        self.assertEqual(out["fin.yaml"], "# a3 rules: 0\npayload:\n")
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                         [r"DOMAIN-REGEX,^api\-[0-9]\.example\.com$"])
         self.assertEqual(skipped["fin-qx.txt:DOMAIN-WILDCARD"], 1)
-        self.assertEqual(skipped["fin.yaml:DOMAIN-WILDCARD"], 1)
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
+        self.assertNotIn("fin.yaml:DOMAIN-WILDCARD", skipped)
+        self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 1", r"/^api\-[0-9]\.example\.com$/"])
+
+    def test_character_class_wildcard_preserves_digit_only_scope_for_mihomo_and_dns(self):
+        source = Rule("DOMAIN-WILDCARD", "api-[0-9].example.com")
+        for allow in (False, True):
+            with self.subTest(allow=allow):
+                out, skipped = render("a3", [Rule(source.kind, source.value, allow=allow)])
+                if not allow:
+                    self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com\n", out["fin.txt"])
+                    self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com\n", out["fin-surge.txt"])
+                    self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                                     [r"DOMAIN-REGEX,^api\-[0-9]\.example\.com$"])
+                    self.assertNotIn("fin.yaml:DOMAIN-WILDCARD", skipped)
+                expected_dns = ("@@" if allow else "") + r"/^api\-[0-9]\.example\.com$/"
+                self.assertIn(expected_dns, out["fin-adb.txt"].splitlines()[7:])
+                dns_rule = out["fin-adb.txt"].splitlines()[7]
+                expression = re.compile(dns_rule.removeprefix("@@")[1:-1])
+                self.assertIsNotNone(expression.fullmatch("api-7.example.com"))
+                for domain in ("api-a.example.com", "api-7.exampleXcom", "api-7.example.com.evil"):
+                    self.assertIsNone(expression.fullmatch(domain))
+                self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
+
+    def test_portable_domain_regex_emits_dns_block_and_allow_only(self):
+        value = r"^api[0-9]\.example\.com$"
+        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                     Rule("DOMAIN-REGEX", value, allow=True)])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[7:],
+                         [f"@@/{value}/", f"/{value}/"])
+        self.assertEqual(json.loads(out["fin.yaml"].splitlines()[2][4:]),
+                         f"DOMAIN-REGEX,{value}")
+        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+        expression = re.compile(value)
+        self.assertIsNotNone(expression.fullmatch("api7.example.com"))
+        self.assertIsNone(expression.fullmatch("apia.example.com"))
+
+    def test_go_portable_domain_regex_emits_literal_dns_block_and_allow(self):
+        cases = (
+            (r"^ads\.example\.com\z", r"/^ads\.example\.com\z/", r"@@/^ads\.example\.com\z/"),
+            (r"^api\d\.example\.com$", r"/^api\d\.example\.com$/", r"@@/^api\d\.example\.com$/"),
+            (r"^(?:ads|track)\.example\.com$", r"/^(?:ads|track)\.example\.com$/", r"@@/^(?:ads|track)\.example\.com$/"),
+            (r"^(?<name>ads)\.example\.com$", r"/^(?<name>ads)\.example\.com$/", r"@@/^(?<name>ads)\.example\.com$/"),
+        )
+        for value, block, allow in cases:
+            with self.subTest(value=value):
+                out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                             Rule("DOMAIN-REGEX", value, allow=True)])
+                self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                                 ["! Total count: 2", allow, block])
+                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+
+    def test_adguard_portable_capture_flags_and_property_emit_block_and_allow(self):
+        cases = (
+            (r"^(?<n>ad)(?<n>s)\.example\.com$",
+             r"/^(?<n>ad)(?<n>s)\.example\.com$/",
+             r"@@/^(?<n>ad)(?<n>s)\.example\.com$/"),
+            (r"^(?i:ads)\.example\.com$",
+             r"/^(?i:ads)\.example\.com$/",
+             r"@@/^(?i:ads)\.example\.com$/"),
+            (r"^\p{L}+\.example\.com$",
+             r"/^\p{L}+\.example\.com$/",
+             r"@@/^\p{L}+\.example\.com$/"),
+        )
+        for value, block, allow in cases:
+            with self.subTest(value=value):
+                out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                             Rule("DOMAIN-REGEX", value, allow=True)])
+                self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                                 ["! Total count: 2", allow, block])
+                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+
+    def test_regexp2_zero_padded_repetition_keeps_its_count_in_dns(self):
+        cases = (
+            (r"^a{01}\.example\.com$", r"/^a{1}\.example\.com$/",
+             r"@@/^a{1}\.example\.com$/"),
+            (r"^a{00,01}\.example\.com$", r"/^a{0,1}\.example\.com$/",
+             r"@@/^a{0,1}\.example\.com$/"),
+            (r"^a{0001,}\.example\.com$", r"/^a{1,}\.example\.com$/",
+             r"@@/^a{1,}\.example\.com$/"),
+        )
+        for value, block, allow in cases:
+            with self.subTest(value=value):
+                out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                             Rule("DOMAIN-REGEX", value, allow=True)])
+                self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                                 ["! Total count: 2", allow, block])
+                self.assertIn(f"DOMAIN-REGEX,{value}",
+                              [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+
+    def test_go_invalid_property_range_stays_out_of_dns(self):
+        value = r"^[a-\p{L}]+\.example\.com$"
+        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                     Rule("DOMAIN-REGEX", value, allow=True)])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
+        self.assertIn(f"DOMAIN-REGEX,{value}",
+                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+
+    def test_go_valid_property_class_followed_by_literal_hyphen_emits_dns(self):
+        value = r"^[\p{L}-a]+\.example\.com$"
+        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                     Rule("DOMAIN-REGEX", value, allow=True)])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 2", r"@@/^[\p{L}-a]+\.example\.com$/",
+                          r"/^[\p{L}-a]+\.example\.com$/"])
+        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+
+    def test_go_valid_posix_class_followed_by_literal_hyphen_emits_dns(self):
+        value = r"^[[:alpha:]-a]+\.example\.com$"
+        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                     Rule("DOMAIN-REGEX", value, allow=True)])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 2", r"@@/^[[:alpha:]-a]+\.example\.com$/",
+                          r"/^[[:alpha:]-a]+\.example\.com$/"])
+        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+
+    def test_posix_class_literal_braces_are_not_rewritten_as_quantifiers(self):
+        value = r"^[[:alpha:]{01}]+\.example\.com$"
+        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                     Rule("DOMAIN-REGEX", value, allow=True)])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 2", r"@@/^[[:alpha:]{01}]+\.example\.com$/",
+                          r"/^[[:alpha:]{01}]+\.example\.com$/"])
+        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+
+    def test_go_invalid_repetition_is_not_emitted_or_counted_in_dns(self):
+        value = r"^ads{0,1001}\.example\.com$"
+        out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                     Rule("DOMAIN-REGEX", value, allow=True)])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
+        self.assertIn(f"DOMAIN-REGEX,{value}",
+                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+
+    def test_regexp2_only_domain_regex_stays_out_of_dns(self):
+        for value in (r"^(ads)\1\.example\.com$", r"^ads(?=track)\.example\.com$",
+                      r"^(?<name>ads)\k<name>\.example\.com$"):
+            with self.subTest(value=value):
+                out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
+                                             Rule("DOMAIN-REGEX", value, allow=True)])
+                self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
+                self.assertIn(f"DOMAIN-REGEX,{value}",
+                              [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
+
+    def test_client_accepted_regexp2_rules_keep_go_portable_property_in_dns(self):
+        from rules import parse
+
+        values = [r"^\p{L}+\.example\.com$", r"^\x{61}ds\.example\.com$",
+                  r"^\Gads\.example\.com$", r"^a+(?<=a+)ds\.example\.com$"]
+        source = "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values)
+        parsed, messages = parse(source + "\nPROCESS-NAME-REGEX,^[(?P]$,REJECT", purpose="block")
+        self.assertEqual(messages, [])
+        out, skipped = render("a3", parsed)
+        self.assertEqual({json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]},
+                         {f"DOMAIN-REGEX,{value}" for value in values} |
+                         {"PROCESS-NAME-REGEX,^[(?P]$"})
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 1", r"/^\p{L}+\.example\.com$/"])
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], len(values) - 1)
+        self.assertEqual(skipped["fin-adb.txt:PROCESS-NAME-REGEX"], 1)
 
     def test_six_files_are_ordered_and_count_actual_lines(self):
         high = Rule("DOMAIN-WILDCARD", "z-*.example.com")
@@ -178,6 +340,34 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(skipped["fin-surge-ds.txt:SRC-IP-CIDR"], 2)
         self.assertNotIn("2001:db8", out["fin-qx.txt"])
 
+    def test_source_ip_family_keeps_direction_per_target(self):
+        out, skipped = render("a3", [
+            Rule("SRC-IP-CIDR", "192.0.2.0/24"),
+            Rule("SRC-IP-SUFFIX", "8.8.8.8/24"),
+            Rule("SRC-GEOIP", "CN"), Rule("SRC-IP-ASN", "64512"),
+        ])
+        for name in ("fin.txt", "fin-surge.txt"):
+            self.assertIn("SRC-IP,192.0.2.0/24\n", out[name])
+            self.assertNotIn("IP-CIDR,192.0.2.0/24", out[name])
+        self.assertIn('  - "SRC-IP-CIDR,192.0.2.0/24"\n', out["fin.yaml"])
+        for entry in ("SRC-IP-SUFFIX,8.8.8.8/24", "SRC-GEOIP,CN", "SRC-IP-ASN,64512"):
+            self.assertIn(f'  - "{entry}"\n', out["fin.yaml"])
+            self.assertNotIn(entry, out["fin.txt"])
+            self.assertNotIn(entry, out["fin-surge.txt"])
+            self.assertNotIn(entry, out["fin-qx.txt"])
+        self.assertNotIn("192.0.2.0/24", out["fin-qx.txt"])
+        self.assertEqual(skipped["fin-qx.txt:SRC-IP-CIDR"], 1)
+        self.assertEqual(skipped["fin-qx.txt:SRC-IP-SUFFIX"], 1)
+
+    def test_ip_suffix_no_resolve_is_mihomo_only(self):
+        out, skipped = render("a3", [
+            Rule("IP-SUFFIX", "8.8.8.8/24", ("no-resolve", "NO-RESOLVE")),
+        ])
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "IP-SUFFIX,8.8.8.8/24,no-resolve"\n')
+        for name in ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin-surge-ds.txt"):
+            self.assertNotIn("8.8.8.8/24", out[name])
+            self.assertEqual(skipped[f"{name}:IP-SUFFIX"], 1)
+
     def test_destination_cidr_uses_native_ipv6_names(self):
         out, skipped = render("a3", [
             Rule("IP-CIDR", "192.0.2.0/24"),
@@ -235,6 +425,94 @@ class FormatTests(unittest.TestCase):
         self.assertIn('"NETWORK,udp"', out["fin.yaml"])
         self.assertIn("PROTOCOL,UDP\n", out["fin.txt"])
 
+    def test_process_name_regex_quantifier_comma_survives_mihomo_top_level_and_logic(self):
+        from rules import parse
+
+        for source, expected in (
+            ("PROCESS-NAME-REGEX,^Foo{1,2}Bar$,PROXY",
+             "PROCESS-NAME-REGEX,^Foo{1,2}Bar$"),
+            ("AND,((PROCESS-NAME-REGEX,^Foo{1,2}Bar$),(DOMAIN,a.example.com)),PROXY",
+             "AND,((PROCESS-NAME-REGEX,^Foo{1,2}Bar$),(DOMAIN,a.example.com))"),
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(messages, [])
+                self.assertEqual(len(parsed), 1)
+                out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+                self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - ' + json.dumps(expected) + '\n')
+                self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
+                self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
+                self.assertEqual(skipped, {
+                    f"{name}:{parsed[0].kind}": 1 for name in
+                    ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")
+                })
+
+    def test_surge_absolute_process_names_keep_exact_and_glob_path_scope_in_mihomo(self):
+        from rules import parse
+
+        for path, mihomo_kind in (("/usr/bin/ssh", "PROCESS-PATH"),
+                                  ("/usr/*/ssh", "PROCESS-PATH-WILDCARD")):
+            for source, surge_rule, mihomo_rule in (
+                (f"PROCESS-NAME,{path},PROXY", f"PROCESS-NAME,{path}",
+                 f"{mihomo_kind},{path}"),
+                (f"AND,((PROCESS-NAME,{path}),(DOMAIN,a.example.com)),PROXY",
+                 f"AND,((PROCESS-NAME,{path}),(DOMAIN,a.example.com))",
+                 f"AND,(({mihomo_kind},{path}),(DOMAIN,a.example.com))"),
+            ):
+                with self.subTest(source=source):
+                    parsed, messages = parse(source, purpose="proxy")
+                    self.assertEqual(messages, [])
+                    self.assertEqual(len(parsed), 1)
+                    out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+                    self.assertEqual(out["fin.txt"], f"# cdn rules: 1\n{surge_rule}\n")
+                    self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
+                    self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - ' + json.dumps(mihomo_rule) + '\n')
+                    self.assertEqual(skipped, {
+                        f"{name}:{parsed[0].kind}": 1 for name in
+                        ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")
+                    })
+
+    def test_mihomo_literal_process_name_absolute_path_remains_name(self):
+        from rules import parse
+
+        for source, expected in (
+            ('payload:\n  - "PROCESS-NAME,/usr/bin/ssh"', "PROCESS-NAME,/usr/bin/ssh"),
+            ('payload:\n  - "AND,((PROCESS-NAME,/usr/bin/ssh),(DOMAIN,a.example.com))"',
+             "AND,((PROCESS-NAME,/usr/bin/ssh),(DOMAIN,a.example.com))"),
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(messages, [])
+                out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+                self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - ' + json.dumps(expected) + '\n')
+                self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
+                self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
+                self.assertEqual(skipped, {
+                    f"{name}:{parsed[0].kind}": 1 for name in
+                    ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")
+                })
+
+    def test_mihomo_literal_process_path_metacharacters_do_not_become_surge_globs(self):
+        from rules import parse
+
+        for path in ("/Applications/Foo*Bar", "/Applications/Foo?Bar"):
+            for source, expected in (
+                (f'payload:\n  - "PROCESS-PATH,{path}"', f"PROCESS-PATH,{path}"),
+                (f'payload:\n  - "AND,((PROCESS-PATH,{path}),(DOMAIN,a.example.com))"',
+                 f"AND,((PROCESS-PATH,{path}),(DOMAIN,a.example.com))"),
+            ):
+                with self.subTest(source=source):
+                    parsed, messages = parse(source, purpose="proxy")
+                    self.assertEqual(messages, [])
+                    out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+                    self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - ' + json.dumps(expected) + '\n')
+                    self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
+                    self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
+                    self.assertEqual(skipped, {
+                        f"{name}:{parsed[0].kind}": 1 for name in
+                        ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")
+                    })
+
     def test_surge_process_name_glob_keeps_wildcard_semantics_in_mihomo(self):
         out, skipped = render("dirt", [
             Rule("PROCESS-NAME", "qbittorrent*"), Rule("PROCESS-NAME", "FooApp"),
@@ -251,6 +529,102 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin-qx.txt"], "# dirt rules: 0\n")
         self.assertEqual(skipped["fin-qx.txt:PROCESS-NAME"], 2)
 
+    def test_mihomo_literal_process_wildcard_is_not_widened_for_surge(self):
+        out, skipped = render_configured(
+            "cdn", [Rule("PROCESS-NAME", "Foo*Bar", literal_process=True)],
+            purpose="proxy", no_resolve="strip",
+        )
+        self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - "PROCESS-NAME,Foo*Bar"\n')
+        self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
+        self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
+        self.assertEqual(skipped["fin.txt:PROCESS-NAME"], 1)
+        self.assertEqual(skipped["fin-surge.txt:PROCESS-NAME"], 1)
+
+    def test_mixed_process_source_intents_render_both_mihomo_matchers(self):
+        from rules import normalize, parse
+
+        literal, _ = parse('payload:\n  - "PROCESS-NAME,Foo*Bar"\n', purpose="proxy")
+        glob, _ = parse("PROCESS-NAME,Foo*Bar,PROXY", purpose="proxy")
+        for ordered in (literal + glob, glob + literal):
+            with self.subTest(first_is_literal=ordered[0].literal_process):
+                out, skipped = render_configured(
+                    "cdn", normalize(ordered), purpose="proxy", no_resolve="keep",
+                )
+                self.assertEqual(out["fin.yaml"], '# cdn rules: 2\npayload:\n'
+                                 '  - "PROCESS-NAME,Foo*Bar"\n'
+                                 '  - "PROCESS-NAME-WILDCARD,Foo*Bar"\n')
+                self.assertEqual(out["fin.txt"], "# cdn rules: 1\nPROCESS-NAME,Foo*Bar\n")
+                self.assertEqual(skipped["fin.txt:PROCESS-NAME"], 1)
+
+    def test_mihomo_literal_process_child_is_not_widened_in_surge_logic(self):
+        from rules import parse
+
+        parsed, warnings = parse(
+            'payload:\n  - "AND,((OR,((PROCESS-NAME,Foo?Bar),(DOMAIN,a.example.com))),(DOMAIN,b.example.com))"\n',
+            purpose="proxy",
+        )
+        self.assertEqual(warnings, [])
+        out, skipped = render_configured("cdn", parsed, purpose="proxy", no_resolve="keep")
+        self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n'
+                         '  - "AND,((OR,((PROCESS-NAME,Foo?Bar),(DOMAIN,a.example.com))),(DOMAIN,b.example.com))"\n')
+        self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
+        self.assertEqual(skipped["fin.txt:AND"], 1)
+        self.assertEqual(skipped["fin-surge.txt:AND"], 1)
+
+    def test_qx_interface_options_emit_remote_matcher_and_report_omission(self):
+        from rules import parse
+
+        for option in ("force-cellular", "multi-interface", "via-interface=pdp_ip0"):
+            with self.subTest(option=option):
+                parsed, warnings = parse(
+                    f"HOST-SUFFIX,googleapis.com,PROXY,{option}", purpose="proxy",
+                )
+                self.assertEqual(warnings, [])
+                out, skipped = render_configured(
+                    "cdn", parsed, purpose="proxy", no_resolve="keep",
+                )
+                self.assertEqual(out["fin-qx.txt"],
+                                 "# cdn rules: 1\nHOST-SUFFIX,googleapis.com,LIST\n")
+                self.assertEqual(out["fin.txt"],
+                                 "# cdn rules: 1\nDOMAIN-SUFFIX,googleapis.com\n")
+                self.assertEqual(out["fin.yaml"],
+                                 '# cdn rules: 1\npayload:\n  - "DOMAIN-SUFFIX,googleapis.com"\n')
+                self.assertNotIn(option, "".join(out.values()))
+                self.assertEqual(skipped["fin-qx.txt:DOMAIN-SUFFIX:interface-option"], 1)
+
+    def test_mihomo_name_wildcard_with_absolute_path_stays_out_of_surge(self):
+        from rules import parse
+
+        parsed, warnings = parse('payload:\n  - "PROCESS-NAME-WILDCARD,/usr/*/ssh"', purpose="proxy")
+        self.assertEqual(warnings, [])
+        out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+        self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - "PROCESS-NAME-WILDCARD,/usr/*/ssh"\n')
+        self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
+        self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
+        self.assertEqual(skipped, {
+            "fin.txt:PROCESS-NAME-WILDCARD": 1, "fin-surge.txt:PROCESS-NAME-WILDCARD": 1,
+            "fin-qx.txt:PROCESS-NAME-WILDCARD": 1, "fin-adb.txt:PROCESS-NAME-WILDCARD": 1,
+            "fin-surge-ds.txt:PROCESS-NAME-WILDCARD": 1,
+        })
+
+    def test_mihomo_name_wildcard_with_absolute_path_stays_out_of_surge_logic(self):
+        from rules import parse
+
+        parsed, warnings = parse(
+            'payload:\n  - "AND,((PROCESS-NAME-WILDCARD,/usr/*/ssh),(DOMAIN,a.example.com))"',
+            purpose="proxy",
+        )
+        self.assertEqual(warnings, [])
+        out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+        self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n'
+                         '  - "AND,((PROCESS-NAME-WILDCARD,/usr/*/ssh),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
+        self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
+        self.assertEqual(skipped, {
+            "fin.txt:AND": 1, "fin-surge.txt:AND": 1, "fin-qx.txt:AND": 1,
+            "fin-adb.txt:AND": 1, "fin-surge-ds.txt:AND": 1,
+        })
+
     def test_process_name_wildcard_maps_to_surge_process_name(self):
         out, _ = render("a3", [Rule("PROCESS-NAME-WILDCARD", "*telegram*")])
         self.assertIn("PROCESS-NAME,*telegram*\n", out["fin.txt"])
@@ -262,6 +636,14 @@ class FormatTests(unittest.TestCase):
         out, _ = render("a3", [Rule("PROCESS-PATH", path)])
         self.assertIn(f"PROCESS-NAME,{path}\n", out["fin.txt"])
         self.assertIn(f'"PROCESS-PATH,{path}"', out["fin.yaml"])
+
+    def test_posix_process_path_wildcard_maps_to_surge_process_name(self):
+        out, skipped = render("a3", [Rule("PROCESS-PATH-WILDCARD", "/Applications/Foo*/bin")])
+        expected = "# a3 rules: 1\nPROCESS-NAME,/Applications/Foo*/bin\n"
+        self.assertEqual(out["fin.txt"], expected)
+        self.assertEqual(out["fin-surge.txt"], expected)
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "PROCESS-PATH-WILDCARD,/Applications/Foo*/bin"\n')
+        self.assertNotIn("fin.txt:PROCESS-PATH-WILDCARD", skipped)
 
     def test_mihomo_skips_process_names_with_unrepresentable_commas(self):
         out, skipped = render("dirt", [
@@ -352,7 +734,8 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin.yaml"].splitlines()[0], "# a3 rules: 15")
         self.assertEqual(
             {json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]},
-            {f"{kind},{value}" for kind, value in entries},
+            {f"{kind},{value}" + (",no-resolve" if kind == "IP-SUFFIX" else "")
+             for kind, value in entries},
         )
         for kind in ("RULE-SET", "SUB-RULE", "MATCH"):
             self.assertEqual(skipped[f"fin.yaml:{kind}"], 1)
@@ -381,10 +764,166 @@ class FormatTests(unittest.TestCase):
             self.assertEqual(skipped[f"fin-qx.txt:{kind}"], 1 if kind != "AND" else 2)
         self.assertIn("OR," + values["OR"] + "\n", out["fin.txt"])
         self.assertIn("NOT," + values["NOT"] + "\n", out["fin-surge.txt"])
-        self.assertNotIn("NETWORK,UDP", out["fin.txt"])
+        self.assertIn("AND,((DOMAIN,ads.example.com),(PROTOCOL,UDP))\n", out["fin.txt"])
         self.assertEqual(skipped["fin.yaml:AND"], 1)
-        self.assertEqual(skipped["fin.txt:AND"], 2)
+        self.assertEqual(skipped["fin.txt:AND"], 1)
         self.assertNotIn("RULE-SET", out["fin.yaml"])
+
+    def test_logical_network_alias_is_supported_in_both_surge_rulesets(self):
+        out, skipped = render("a3", [Rule("AND", "((NETWORK,udp),(DOMAIN,a.example.com))")])
+        expected = "# a3 rules: 1\nAND,((PROTOCOL,UDP),(DOMAIN,a.example.com))\n"
+        self.assertEqual(out["fin.txt"], expected)
+        self.assertEqual(out["fin-surge.txt"], expected)
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((NETWORK,udp),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
+        self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
+        self.assertEqual(skipped, {
+            "fin-qx.txt:AND": 1, "fin-adb.txt:AND": 1, "fin-surge-ds.txt:AND": 1,
+        })
+
+    def test_logical_destination_port_alias_is_supported_in_mihomo(self):
+        out, skipped = render("a3", [Rule("AND", "((DEST-PORT,443),(DOMAIN,a.example.com))")])
+        self.assertEqual(out["fin.txt"], "# a3 rules: 1\nAND,((DEST-PORT,443),(DOMAIN,a.example.com))\n")
+        self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((DST-PORT,443),(DOMAIN,a.example.com))"\n')
+        self.assertNotIn("fin.yaml:AND", skipped)
+
+    def test_logical_source_ip_and_protocol_aliases_keep_match_direction(self):
+        source = Rule("AND", "((SRC-IP,192.0.2.1),(PROTOCOL,UDP))")
+        out, skipped = render("a3", [source])
+        self.assertEqual(out["fin.txt"], "# a3 rules: 1\nAND,((SRC-IP,192.0.2.1),(PROTOCOL,UDP))\n")
+        self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((SRC-IP-CIDR,192.0.2.1/32),(NETWORK,udp))"\n')
+        self.assertNotIn("no-resolve", out["fin.yaml"])
+        self.assertNotIn("fin.yaml:AND", skipped)
+
+    def test_logical_source_ip_cidr_preserves_ipv4_and_ipv6_ranges_in_mihomo(self):
+        from rules import parse
+
+        parsed, messages = parse(
+            "AND,((SRC-IP,192.0.2.0/24),(DOMAIN,a.example.com)),REJECT\n"
+            "AND,((SRC-IP,2001:db8::/32),(DOMAIN,a.example.com)),REJECT",
+            purpose="block",
+        )
+        self.assertEqual(messages, [])
+        out, skipped = render("a3", parsed, no_resolve="add")
+        self.assertEqual(out["fin.yaml"].splitlines()[2:], [
+            '  - "AND,((SRC-IP-CIDR,192.0.2.0/24),(DOMAIN,a.example.com))"',
+            '  - "AND,((SRC-IP-CIDR,2001:db8::/32),(DOMAIN,a.example.com))"',
+        ])
+        self.assertEqual(out["fin.txt"], out["fin-surge.txt"])
+        self.assertIn("AND,((SRC-IP,192.0.2.0/24),(DOMAIN,a.example.com))\n", out["fin.txt"])
+        self.assertIn("AND,((SRC-IP,2001:db8::/32),(DOMAIN,a.example.com))\n", out["fin.txt"])
+        self.assertNotIn("no-resolve", out["fin.yaml"])
+        self.assertEqual(skipped["fin-qx.txt:AND"], 2)
+        self.assertNotIn("fin.yaml:AND", skipped)
+
+    def test_logical_quoted_process_comma_is_preserved_for_surge_only(self):
+        from rules import parse
+
+        parsed, messages = parse('AND,((PROCESS-NAME,"Foo,Bar"),(DOMAIN,a.example.com)),PROXY', purpose="proxy")
+        self.assertEqual(messages, [])
+        out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+        expected = "# cdn rules: 1\nAND,((PROCESS-NAME,'Foo,Bar'),(DOMAIN,a.example.com))\n"
+        self.assertEqual(out["fin.txt"], expected)
+        self.assertEqual(out["fin-surge.txt"], expected)
+        self.assertEqual(out["fin.yaml"], "# cdn rules: 0\npayload:\n")
+        self.assertEqual(out["fin-surge-ds.txt"], "# cdn rules: 0\n")
+        self.assertEqual(skipped["fin.yaml:AND"], 1)
+
+    def test_logical_quoted_url_regex_comma_is_preserved_for_surge_only(self):
+        from rules import parse
+
+        parsed, messages = parse(r'OR,((URL-REGEX,"^https://ads\.example/a,b$"),(DOMAIN,a.example.com)),PROXY', purpose="proxy")
+        self.assertEqual(messages, [])
+        out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+        expected = "# cdn rules: 1\nOR,((URL-REGEX,'^https://ads\\.example/a,b$'),(DOMAIN,a.example.com))\n"
+        self.assertEqual(out["fin.txt"], expected)
+        self.assertEqual(out["fin-surge.txt"], expected)
+        self.assertEqual(out["fin.yaml"], "# cdn rules: 0\npayload:\n")
+        self.assertEqual(skipped["fin.yaml:OR"], 1)
+
+    def test_mihomo_logical_regex_comma_retains_required_quotes(self):
+        from rules import parse
+
+        source = 'AND,((DOMAIN-REGEX,"^ads,[0-9]+[.]example$"),(DOMAIN,a.example.com)),REJECT'
+        parsed, messages = parse(source, purpose="block")
+        self.assertEqual(messages, [])
+        out, skipped = render("a3", parsed, no_resolve="keep")
+        self.assertEqual(out["fin.yaml"],
+                         '# a3 rules: 1\npayload:\n  - "AND,((DOMAIN-REGEX,\\"^ads,[0-9]+[.]example$\\"),(DOMAIN,a.example.com))"\n')
+        round_trip, warnings = parse(out["fin.yaml"], purpose="block")
+        self.assertEqual(warnings, [])
+        self.assertEqual(round_trip, parsed)
+        self.assertNotIn("fin.yaml:AND", skipped)
+
+    def test_logical_no_resolve_add_strip_keep_changes_only_destination_ip_leaves(self):
+        source = Rule("OR", "((IP-CIDR,192.0.2.0/24),(GEOIP,CN,no-resolve))")
+        for mode, first, second in (
+            ("add", "IP-CIDR,192.0.2.0/24,no-resolve", "GEOIP,CN,no-resolve"),
+            ("strip", "IP-CIDR,192.0.2.0/24", "GEOIP,CN"),
+            ("keep", "IP-CIDR,192.0.2.0/24", "GEOIP,CN,no-resolve"),
+        ):
+            with self.subTest(mode=mode):
+                out, skipped = render("a3", [source], no_resolve=mode)
+                expected = f"# a3 rules: 1\nOR,(({first}),({second}))\n"
+                self.assertEqual(out["fin.txt"], expected)
+                self.assertEqual(out["fin-surge.txt"], expected)
+                self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - ' +
+                                 json.dumps(f"OR,(({first}),({second}))") + "\n")
+                self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
+                self.assertNotIn("fin.txt:OR", skipped)
+                self.assertNotIn("fin.yaml:OR", skipped)
+
+    def test_nested_not_no_resolve_does_not_touch_source_ip_or_domain(self):
+        source = Rule("AND", "((OR,((SRC-IP-CIDR,192.0.2.0/24),(NOT,((IP-ASN,64500,no-resolve))))),(DOMAIN,a.example.com))")
+        out, skipped = render("a3", [source], no_resolve="strip")
+        expected = "AND,((OR,((SRC-IP,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(DOMAIN,a.example.com))"
+        self.assertEqual(out["fin.txt"], f"# a3 rules: 1\n{expected}\n")
+        self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((OR,((SRC-IP-CIDR,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(DOMAIN,a.example.com))"\n')
+        self.assertNotIn("no-resolve", out["fin.txt"])
+        self.assertNotIn("fin.txt:AND", skipped)
+
+    def test_logical_ip_suffix_no_resolve_is_mihomo_only(self):
+        source = Rule("NOT", "((IP-SUFFIX,8.8.8.8/24,no-resolve))")
+        for mode, suffix in (("add", ",no-resolve"), ("strip", ""), ("keep", ",no-resolve")):
+            with self.subTest(mode=mode):
+                out, skipped = render("a3", [source], no_resolve=mode)
+                self.assertEqual(out["fin.yaml"],
+                                 '# a3 rules: 1\npayload:\n  - "NOT,((IP-SUFFIX,8.8.8.8/24' + suffix + '))"\n')
+                self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
+                self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
+                self.assertEqual(skipped["fin.txt:NOT"], 1)
+                self.assertEqual(skipped["fin-surge.txt:NOT"], 1)
+                self.assertNotIn("fin.yaml:NOT", skipped)
+
+    def test_logical_duplicate_no_resolve_flags_emit_once(self):
+        source = Rule("AND", "((IP-CIDR,192.0.2.0/24,no-resolve,no-resolve),(DOMAIN,a.example.com))")
+        out, _ = render("a3", [source], no_resolve="add")
+        self.assertEqual(out["fin.txt"], "# a3 rules: 1\nAND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,a.example.com))\n")
+        self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,a.example.com))"\n')
+
+    def test_unsupported_source_ip_child_skips_whole_surge_rule(self):
+        source = Rule("AND", "((SRC-GEOIP,CN),(DOMAIN,a.example.com))")
+        out, skipped = render("a3", [source])
+        self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
+        self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((SRC-GEOIP,CN),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
+        self.assertEqual(skipped["fin.txt:AND"], 1)
+        self.assertEqual(skipped["fin-surge.txt:AND"], 1)
+
+    def test_nested_process_path_wildcard_maps_to_surge_process_name(self):
+        source = Rule("AND", "((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(DOMAIN,a.example.com))")
+        out, skipped = render("cdn", [source], purpose="proxy", no_resolve="keep")
+        expected = "# cdn rules: 1\nAND,((PROCESS-NAME,/Applications/Foo*/bin),(DOMAIN,a.example.com))\n"
+        self.assertEqual(out["fin.txt"], expected)
+        self.assertEqual(out["fin-surge.txt"], expected)
+        self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - "AND,((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(DOMAIN,a.example.com))"\n')
+        self.assertNotIn("fin.txt:AND", skipped)
 
     def test_surge_translates_nested_source_cidr_and_destination_port(self):
         value = "((SRC-IP-CIDR,2001:db8::/32),(DST-PORT,443))"
@@ -406,8 +945,8 @@ class FormatTests(unittest.TestCase):
     def test_surge_ipv6_cidr_inside_logic_uses_ipv6_matcher(self):
         value = "((IP-CIDR,2001:db8::/32),(DOMAIN,ads.example.com))"
         out, _ = render("a3", [Rule("OR", value)])
-        self.assertIn("OR,((IP-CIDR6,2001:db8::/32),(DOMAIN,ads.example.com))\n", out["fin.txt"])
-        self.assertIn('  - "OR,((IP-CIDR6,2001:db8::/32),(DOMAIN,ads.example.com))"\n', out["fin.yaml"])
+        self.assertIn("OR,((IP-CIDR6,2001:db8::/32,no-resolve),(DOMAIN,ads.example.com))\n", out["fin.txt"])
+        self.assertIn('  - "OR,((IP-CIDR6,2001:db8::/32,no-resolve),(DOMAIN,ads.example.com))"\n', out["fin.yaml"])
 
     def test_mihomo_ipv6_cidr_inside_nested_logic_uses_ipv6_matcher(self):
         from rules import parse
@@ -418,7 +957,7 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(len(parsed), 1)
 
         out, _ = render("a3", parsed)
-        expected = "AND,((OR,((IP-CIDR6,2001:db8::/32),(IP-CIDR,192.0.2.0/24))),(DOMAIN,ads.example.com))"
+        expected = "AND,((OR,((IP-CIDR6,2001:db8::/32,no-resolve),(IP-CIDR,192.0.2.0/24,no-resolve))),(DOMAIN,ads.example.com))"
         self.assertEqual(out["fin.yaml"], f'# a3 rules: 1\npayload:\n  - "{expected}"\n')
         self.assertEqual(out["fin.txt"], f"# a3 rules: 1\n{expected}\n")
         self.assertEqual(out["fin-surge.txt"], f"# a3 rules: 1\n{expected}\n")
@@ -480,12 +1019,13 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin.yaml"], "# a3 rules: 0\npayload:\n")
         self.assertEqual(skipped["fin.txt:AND"], 1)
 
-    def test_mihomo_does_not_accept_surge_only_wildcard_class_inside_logic(self):
+    def test_mihomo_converts_surge_only_wildcard_class_inside_logic(self):
         value = "((DOMAIN-WILDCARD,api-[0-9].example.com),(DOMAIN,ads.example.com))"
         out, skipped = render("a3", [Rule("AND", value)])
-        self.assertEqual(out["fin.yaml"], "# a3 rules: 0\npayload:\n")
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                         [r"AND,((DOMAIN-REGEX,^api\-[0-9]\.example\.com$),(DOMAIN,ads.example.com))"])
         self.assertIn("AND," + value + "\n", out["fin.txt"])
-        self.assertEqual(skipped["fin.yaml:AND"], 1)
+        self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_surge_ruleset_retains_other_documented_types(self):
         entries = [
@@ -524,15 +1064,19 @@ class FormatTests(unittest.TestCase):
             Rule("DOMAIN-WILDCARD", "api-[0-9].example.org"),
         ])
         lines = out["fin-adb.txt"].splitlines()[7:]
-        self.assertEqual(len(lines), 2)
+        self.assertEqual(len(lines), 3)
         expressions = [re.compile(line[3:-1]) for line in lines]
         self.assertTrue(all(line.startswith("@@/^") and line.endswith("$/") for line in lines))
         self.assertEqual([bool(expression.fullmatch("api-v2.example.org")) for expression in expressions],
-                         [False, True])
+                         [False, True, False])
+        self.assertEqual([bool(expression.fullmatch("api-7.example.org")) for expression in expressions],
+                         [False, True, True])
+        self.assertEqual([bool(expression.fullmatch("api-a.example.org")) for expression in expressions],
+                         [False, True, False])
         self.assertEqual([bool(expression.fullmatch("cdn.ad.track.example.org")) for expression in expressions],
-                         [True, False])
+                         [True, False, False])
         self.assertTrue(all(not expression.fullmatch("api-v2.example.org.evil") for expression in expressions))
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
+        self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
 
     def test_custom_block_purpose_emits_dns_and_proxy_group_name_does_not(self):
         custom, _ = render("custom", [Rule("DOMAIN", "ads.example.org")],

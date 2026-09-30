@@ -1,6 +1,9 @@
+import subprocess
+import sys
 import time
 import unittest
 import warnings
+from pathlib import Path
 
 import rules
 from rules import Rule, normalize, parse
@@ -96,6 +99,123 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "ads.example.com")])
         self.assertEqual(messages, [])
 
+    def test_process_name_hash_survives_yaml_and_generated_surge_reparse(self):
+        from formats import render
+
+        parsed, messages = parse('payload:\n  - "PROCESS-NAME,Game #1"\n', purpose="proxy")
+        self.assertEqual(parsed, [Rule("PROCESS-NAME", "Game #1", literal_process=True)])
+        self.assertEqual(messages, [])
+        text = render("a3", parsed, purpose="proxy", no_resolve="keep")[0]["fin.txt"]
+        self.assertEqual(text, "# a3 rules: 1\nPROCESS-NAME,Game #1\n")
+        reparsed, messages = parse(text, purpose="proxy")
+        self.assertEqual(reparsed, [Rule("PROCESS-NAME", "Game #1")])
+        self.assertEqual(messages, [])
+
+    def test_logical_process_name_hash_survives_reparse(self):
+        expression = "((PROCESS-NAME,Game #1),(DOMAIN,x.example.com))"
+        parsed, messages = parse(f"AND,{expression},PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("AND", expression)])
+        self.assertEqual(messages, [])
+
+    def test_process_values_keep_comment_markers_inside_matchers(self):
+        source = (
+            "PROCESS-PATH,/Applications/Game #1.app,PROXY\n"
+            "PROCESS-NAME-WILDCARD,*Game #1*,PROXY\n"
+            "PROCESS-PATH-WILDCARD,/Applications/* Game //1*,PROXY\n"
+            "PROCESS-NAME-REGEX,^Game ;1$,PROXY\n"
+            r"PROCESS-PATH-REGEX,^/Applications/Game #1\.app$,PROXY" "\n"
+            "PROCESS-NAME,Game ;1,PROXY\n"
+            "PROCESS-NAME,Game //1,PROXY"
+        )
+        parsed, messages = parse(source, purpose="proxy")
+        self.assertEqual(parsed, [
+            Rule("PROCESS-PATH", "/Applications/Game #1.app"),
+            Rule("PROCESS-NAME-WILDCARD", "*Game #1*"),
+            Rule("PROCESS-PATH-WILDCARD", "/Applications/* Game //1*"),
+            Rule("PROCESS-NAME-REGEX", "^Game ;1$"),
+            Rule("PROCESS-PATH-REGEX", r"^/Applications/Game #1\.app$"),
+            Rule("PROCESS-NAME", "Game ;1"), Rule("PROCESS-NAME", "Game //1"),
+        ])
+        self.assertEqual(messages, [])
+
+    def test_process_regex_comma_and_markers_distinguish_matcher_from_comment(self):
+        direct, messages = parse(
+            "PROCESS-NAME-REGEX,^Game,DIRECT ;1$,DIRECT\n"
+            "PROCESS-NAME-REGEX,^Game,DIRECT ;1$\n"
+            "PROCESS-NAME,Game ;1\nPROCESS-NAME,Game //1", purpose="direct",
+        )
+        self.assertEqual(direct, [
+            Rule("PROCESS-NAME-REGEX", "^Game,DIRECT ;1$"),
+            Rule("PROCESS-NAME-REGEX", "^Game,DIRECT ;1$"),
+            Rule("PROCESS-NAME", "Game ;1"), Rule("PROCESS-NAME", "Game //1"),
+        ])
+        self.assertEqual(messages, [])
+        source = (
+            "PROCESS-NAME-REGEX,^Game,Inc$ # note\n"
+            "PROCESS-NAME-REGEX,^Game,Inc #1$,PROXY # note\n"
+            r"PROCESS-NAME-REGEX,^Game,Inc\z # note" "\n"
+            "PROCESS-NAME,Game # literal\n"
+            "PROCESS-NAME,Game,PROXY # note\n"
+            "DOMAIN,x.example.com,PROXY # note"
+        )
+        parsed, messages = parse(source, purpose="proxy")
+        self.assertEqual(parsed, [
+            Rule("PROCESS-NAME-REGEX", "^Game,Inc$"),
+            Rule("PROCESS-NAME-REGEX", "^Game,Inc #1$"),
+            Rule("PROCESS-NAME-REGEX", r"^Game,Inc\z"),
+            Rule("PROCESS-NAME", "Game # literal"),
+            Rule("PROCESS-NAME", "Game"), Rule("DOMAIN", "x.example.com"),
+        ])
+        self.assertEqual(messages, [])
+
+    def test_domain_regex_tail_comment_cannot_supply_a_second_policy(self):
+        self.assertEqual(parse("DOMAIN-REGEX,^foo$,REJECT # note,REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", "^foo$")], []))
+
+    def test_process_regex_policy_token_and_semicolon_remain_in_matcher_with_tail_comment(self):
+        value = "^Game,DIRECT ;1$"
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT # note", purpose="direct"),
+                         ([Rule("PROCESS-NAME-REGEX", value)], []))
+
+    def test_process_regex_policy_token_and_hash_remain_in_matcher_with_tail_comment(self):
+        value = "^Game,DIRECT #1$"
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT # note", purpose="direct"),
+                         ([Rule("PROCESS-NAME-REGEX", value)], []))
+
+    def test_process_regex_policy_token_and_slashes_remain_in_matcher_with_tail_comment(self):
+        value = "^Game,DIRECT //1$"
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT # note", purpose="direct"),
+                         ([Rule("PROCESS-NAME-REGEX", value)], []))
+
+    def test_process_regex_literal_comma_and_comment_marker_remain_in_matcher(self):
+        parsed, messages = parse(
+            "PROCESS-NAME-REGEX,^Game,Inc #1$,PROXY\n"
+            r"PROCESS-PATH-REGEX,^/Applications/Game,Inc //1\.app$,PROXY" "\n"
+            "PROCESS-NAME-REGEX,^Game,Inc$,PROXY # note",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("PROCESS-NAME-REGEX", "^Game,Inc #1$"),
+            Rule("PROCESS-PATH-REGEX", r"^/Applications/Game,Inc //1\.app$"),
+            Rule("PROCESS-NAME-REGEX", "^Game,Inc$"),
+        ])
+        self.assertEqual(messages, [])
+
+    def test_process_markers_inside_logic_and_tail_comments_keep_their_positions(self):
+        expression = "((PROCESS-PATH,/Applications/Game #1.app),(PROCESS-NAME-WILDCARD,*Game //1*))"
+        parsed, messages = parse(
+            f"AND,{expression},PROXY # note\n"
+            "PROCESS-PATH,/Applications/Game #1.app,PROXY ; note\n"
+            'payload:\n  - "PROCESS-NAME,Game ;1" # note\n'
+            "// whole-line comment",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("AND", expression), Rule("PROCESS-PATH", "/Applications/Game #1.app"),
+            Rule("PROCESS-NAME", "Game ;1", literal_process=True),
+        ])
+        self.assertEqual(messages, [])
+
     def test_trailing_comment_does_not_change_rule_or_escaped_regex(self):
         parsed, messages = parse(
             r"DOMAIN,ads.example.com,REJECT # note" "\n"
@@ -121,6 +241,25 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertEqual(messages, [])
 
+    def test_process_regex_literal_comma_apostrophe_keeps_tail_comment(self):
+        self.assertEqual(parse("PROCESS-NAME-REGEX,^Game,'s$,DIRECT # note", purpose="direct"),
+                         ([Rule("PROCESS-NAME-REGEX", "^Game,'s$")], []))
+        self.assertEqual(parse("PROCESS-NAME-REGEX,'^Game,Inc$',DIRECT # note", purpose="direct"),
+                         ([Rule("PROCESS-NAME-REGEX", "^Game,Inc$")], []))
+
+    def test_process_regex_apostrophe_does_not_quote_trailing_comment(self):
+        value = "^Bob's$"
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT # note", purpose="direct"),
+                         ([Rule("PROCESS-NAME-REGEX", value)], []))
+
+    def test_yaml_plain_scalar_apostrophe_does_not_quote_trailing_comment(self):
+        self.assertEqual(parse("payload:\n  - PROCESS-NAME,Game's # note", purpose="proxy"),
+                         ([Rule("PROCESS-NAME", "Game's", literal_process=True)], []))
+
+    def test_quoted_hash_value_and_following_comment_stay_distinct(self):
+        self.assertEqual(parse('payload:\n  - "PROCESS-NAME,Game #1" # note', purpose="proxy"),
+                         ([Rule("PROCESS-NAME", "Game #1", literal_process=True)], []))
+
     def test_yaml_payload_comment_and_single_quote_escape(self):
         parsed, messages = parse(
             "payload: # exported\n"
@@ -143,6 +282,68 @@ class ParseTests(unittest.TestCase):
             Rule("DOMAIN-SUFFIX", "000607.com.cn"), Rule("IP-CIDR", "203.0.113.0/24"),
         ])
         self.assertEqual(warnings, [])
+
+    def test_unquoted_yaml_process_markers_are_literal_with_real_comments(self):
+        source = (
+            "# preceding comment\npayload: # exported\n"
+            "  # payload comment\n"
+            "  - PROCESS-NAME,Game ;1\n"
+            "  - PROCESS-NAME,Game //1\n"
+            "  - PROCESS-NAME,Game,PROXY # note\n"
+            "  - DOMAIN,x.example.com,PROXY # note\n"
+            "# trailing comment"
+        )
+        parsed, messages = parse(source, purpose="proxy")
+        self.assertEqual(parsed, [
+            Rule("PROCESS-NAME", "Game ;1", literal_process=True),
+            Rule("PROCESS-NAME", "Game //1", literal_process=True),
+            Rule("PROCESS-NAME", "Game", literal_process=True),
+            Rule("DOMAIN", "x.example.com"),
+        ])
+        self.assertEqual(messages, [])
+
+    def test_yaml_plain_scalar_keeps_semicolon_and_slashes_in_regex(self):
+        values = ["^foo ;bar$", "^foo //bar$"]
+        parsed, messages = parse(
+            "payload:\n" + "\n".join(f"  - DOMAIN-REGEX,{value}" for value in values),
+            purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_yaml_plain_scalar_hash_after_space_is_comment_even_inside_regex_class(self):
+        parsed, messages = parse(
+            "payload:\n  - DOMAIN-REGEX,^[a #]$\n"
+            "  - 'DOMAIN-REGEX,^[a #]$'\n"
+            '  - "DOMAIN-REGEX,^[a #]$"', purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", "^[a #]$")] * 2)
+        self.assertEqual(messages, ["line 2: unbalanced delimiters"])
+
+    def test_yaml_single_quote_backslash_is_literal_before_comment(self):
+        self.assertEqual(parse("payload:\n  - 'PROCESS-NAME,Game\\' # note", purpose="proxy"),
+                         ([Rule("PROCESS-NAME", "Game\\", literal_process=True)], []))
+
+    def test_yaml_double_quote_decodes_hex_escape_and_retains_json_escapes(self):
+        parsed, messages = parse(
+            'payload:\n  - "PROCESS-NAME,Game\\x73"\n'
+            '  - "PROCESS-NAME,Game\\\\x73"\n'
+            '  - "PROCESS-NAME,Game\\u0073"', purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("PROCESS-NAME", "Games", literal_process=True),
+                                  Rule("PROCESS-NAME", r"Game\x73", literal_process=True),
+                                  Rule("PROCESS-NAME", "Games", literal_process=True)])
+        self.assertEqual(messages, [])
+
+    def test_yaml_double_quote_rejects_invalid_and_incomplete_hex_escapes(self):
+        parsed, messages = parse(
+            'payload:\n  - "PROCESS-NAME,Game\\xG1"\n'
+            '  - "PROCESS-NAME,Game\\x7"\n'
+            '  - "PROCESS-NAME,Game\\x"\n'
+            '  - "PROCESS-NAME,Games"', purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("PROCESS-NAME", "Games", literal_process=True)])
+        self.assertEqual(messages, [f"line {number}: invalid YAML payload" for number in (2, 3, 4)])
 
     def test_yaml_payload_stops_at_next_top_level_key(self):
         rules, warnings = parse(
@@ -283,6 +484,73 @@ class ParseTests(unittest.TestCase):
         proxy, _ = parse("IP6-CIDR,2001:db8:1::/48,PROXY", purpose="proxy")
         self.assertEqual(proxy, [Rule("IP-CIDR6", "2001:db8:1::/48")])
 
+    def test_uppercase_src_policy_keeps_destination_address_in_six_outputs(self):
+        from formats import render
+
+        parsed, messages = parse("IP-CIDR,192.0.2.0/24,SRC", purpose="proxy")
+        self.assertEqual((parsed, messages), ([Rule("IP-CIDR", "192.0.2.0/24")], []))
+        output, skipped = render("group", parsed, purpose="proxy", no_resolve="strip")
+        for name in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-surge.txt"):
+            self.assertIn("IP-CIDR,192.0.2.0/24", output[name])
+            self.assertNotIn("SRC-IP", output[name])
+        self.assertEqual(skipped["fin-adb.txt:IP-CIDR"], 1)
+        self.assertEqual(skipped["fin-surge-ds.txt:IP-CIDR"], 1)
+
+    def test_uppercase_src_after_policy_is_not_a_source_option(self):
+        parsed, messages = parse("IP-CIDR,192.0.2.0/24,PROXY,SRC", purpose="proxy")
+        self.assertEqual(parsed, [Rule("IP-CIDR", "192.0.2.0/24")])
+        self.assertEqual(messages, ["line 1: unsupported src option SRC"])
+
+    def test_bare_lowercase_src_policy_or_option_is_ambiguous(self):
+        self.assertEqual(parse("IP-CIDR,192.0.2.0/24,src", purpose="proxy"),
+                         ([], ["line 1: ambiguous src policy or option"]))
+
+    def test_logical_uppercase_src_does_not_reverse_ip_direction(self):
+        expression = "((IP-CIDR,192.0.2.0/24,SRC),(DOMAIN,x.example.com))"
+        normalized = "((IP-CIDR,192.0.2.0/24),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                         ([Rule("AND", normalized)], []))
+
+    def test_mihomo_src_option_preserves_source_ip_matchers(self):
+        parsed, messages = parse(
+            "IP-CIDR,192.0.2.15/24,China,src\n"
+            "IP-CIDR,192.0.2.0/24,PROXY,src\n"
+            "IP-CIDR6,2001:db8::1/32,PROXY,src\n"
+            "IP-SUFFIX,8.8.8.8/24,PROXY,src\n"
+            "GEOIP,CN,PROXY,src\nIP-ASN,64512,PROXY,src",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("SRC-IP-CIDR", "192.0.2.0/24"),
+            Rule("SRC-IP-CIDR", "192.0.2.0/24"),
+            Rule("SRC-IP-CIDR", "2001:db8::/32"),
+            Rule("SRC-IP-SUFFIX", "8.8.8.8/24"),
+            Rule("SRC-GEOIP", "CN"), Rule("SRC-IP-ASN", "64512"),
+        ])
+        self.assertEqual(messages, [])
+
+    def test_source_ip_with_irrelevant_no_resolve_is_kept(self):
+        parsed, messages = parse(
+            "IP-SUFFIX,8.8.8.8/24,PROXY,src,no-resolve\n"
+            "GEOIP,CN,PROXY,src,no-resolve",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("SRC-IP-SUFFIX", "8.8.8.8/24"), Rule("SRC-GEOIP", "CN")])
+        self.assertEqual(messages, [
+            "line 1: unsupported no-resolve for SRC-IP-SUFFIX",
+            "line 2: unsupported no-resolve for SRC-GEOIP",
+        ])
+
+    def test_ip_cidr6_src_does_not_accept_ipv4(self):
+        parsed, messages = parse("IP-CIDR6,192.0.2.0/24,PROXY,src", purpose="proxy")
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, ["line 1: invalid CIDR 192.0.2.0/24"])
+
+    def test_mihomo_ip_suffix_keeps_no_resolve(self):
+        parsed, messages = parse("IP-SUFFIX,8.8.8.8/24,PROXY,no-resolve", purpose="proxy")
+        self.assertEqual(parsed, [Rule("IP-SUFFIX", "8.8.8.8/24", ("no-resolve",))])
+        self.assertEqual(messages, [])
+
     def test_source_ip_no_resolve_is_discarded_without_losing_source_match(self):
         from formats import render
 
@@ -395,6 +663,52 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [Rule("URL-REGEX", r"^https://ads\.example/")])
         self.assertEqual(warnings, [])
 
+    def test_yaml_process_name_is_literal_but_surge_process_name_is_glob(self):
+        literal, yaml_warnings = parse('payload:\n  - "PROCESS-NAME,Foo*Bar"\n', purpose="proxy")
+        glob, surge_warnings = parse("PROCESS-NAME,Foo*Bar,PROXY", purpose="proxy")
+        self.assertEqual(yaml_warnings, [])
+        self.assertEqual(surge_warnings, [])
+        self.assertEqual(literal, [Rule("PROCESS-NAME", "Foo*Bar", literal_process=True)])
+        self.assertEqual(glob, [Rule("PROCESS-NAME", "Foo*Bar")])
+        self.assertNotEqual(literal, glob)
+
+    def test_yaml_logical_process_child_is_literal(self):
+        rules, warnings = parse(
+            'payload:\n  - "AND,((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))"\n',
+            purpose="proxy",
+        )
+        self.assertEqual(warnings, [])
+        self.assertEqual(rules, [Rule(
+            "AND", "((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))", literal_process=True,
+        )])
+
+    def test_process_source_intent_survives_normalize(self):
+        literal, _ = parse('payload:\n  - "PROCESS-NAME,Foo*Bar"\n', purpose="proxy")
+        glob, _ = parse("PROCESS-NAME,Foo*Bar,PROXY", purpose="proxy")
+        self.assertEqual(normalize(literal + glob), [
+            Rule("PROCESS-NAME", "Foo*Bar"),
+            Rule("PROCESS-NAME", "Foo*Bar", literal_process=True),
+        ])
+        self.assertEqual(normalize(glob + literal), normalize(literal + glob))
+
+    def test_qx_interface_options_do_not_replace_the_policy(self):
+        for option in ("force-cellular", "multi-interface", "via-interface=pdp_ip0"):
+            with self.subTest(option=option):
+                rules, warnings = parse(
+                    f"HOST-SUFFIX,googleapis.com,PROXY,{option}", purpose="proxy",
+                )
+                self.assertEqual(warnings, [])
+                self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "googleapis.com", (option,))])
+
+    def test_qx_multi_interface_balance_keeps_matcher_and_option(self):
+        parsed, messages = parse(
+            "HOST-SUFFIX,googleapis.com,PROXY,multi-interface-balance", purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule(
+            "DOMAIN-SUFFIX", "googleapis.com", ("multi-interface-balance",)
+        )])
+        self.assertEqual(messages, [])
+
     def test_process_wildcard_types_survive_parsing(self):
         rules, warnings = parse(
             "PROCESS-NAME-WILDCARD,*telegram*,PROXY\n"
@@ -451,6 +765,17 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertEqual(len(messages), 4)
 
+    def test_mihomo_literal_closing_bracket_is_not_a_field_delimiter(self):
+        parsed, messages = parse(
+            'payload:\n  - "PROCESS-NAME,Foo]Bar"\n'
+            '  - "PROCESS-NAME-REGEX,^foo[]]bar$"\n', purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("PROCESS-NAME", "Foo]Bar", literal_process=True),
+            Rule("PROCESS-NAME-REGEX", "^foo[]]bar$"),
+        ])
+        self.assertEqual(messages, [])
+
     def test_mihomo_process_and_inbound_types_validate_values(self):
         parsed, messages = parse(
             "IN-USER,alice/bob,PROXY\nIN-NAME,home-socks,PROXY\n"
@@ -505,6 +830,580 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [Rule("DOMAIN-REGEX", r"^ad{2,3}\.example\.com$")])
         self.assertEqual(warnings, [])
 
+    def test_unquoted_process_regex_literal_brace_after_apostrophe_round_trips_yaml(self):
+        from formats import render
+
+        value = "^Game,'foo{bar'$"
+        parsed, messages = parse(f"PROCESS-NAME-REGEX,{value},DIRECT", purpose="direct")
+        self.assertEqual(parsed, [Rule("PROCESS-NAME-REGEX", value)])
+        self.assertEqual(messages, [])
+        yaml = render("a3", parsed, purpose="direct", no_resolve="keep")[0]["fin.yaml"]
+        self.assertIn('  - "PROCESS-NAME-REGEX,^Game,\'foo{bar\'$"\n', yaml)
+        self.assertEqual(parse(yaml, purpose="direct"), ([Rule("PROCESS-NAME-REGEX", value)], []))
+
+    def test_unquoted_regex_literal_brace_preceding_numeric_quantifier(self):
+        value = "^Game,'foo{bar{1,2}'$"
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT", purpose="direct"),
+                         ([Rule("PROCESS-NAME-REGEX", value)], []))
+
+    def test_regexp2_literal_brace_pair_holds_its_comma(self):
+        value = r"^a{b,c}\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},China", purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+        self.assertEqual(parse(r"DOMAIN-REGEX,^a{1,2}\.example\.com$,REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", r"^a{1,2}\.example\.com$")], []))
+
+    def test_regexp2_escaped_nested_and_hidden_braces_keep_commas_in_matcher(self):
+        values = [r"^a\{b,c\}$", "^a{b{c,d}e,f}$", "^a{b[}]c,d}$",
+                  "^a{b,(?#})c,d}$"]
+        for value in values:
+            with self.subTest(value=value):
+                self.assertEqual(parse(f"DOMAIN-REGEX,{value},China", purpose="proxy"),
+                                 ([Rule("DOMAIN-REGEX", value)], []))
+                expression = f"((DOMAIN-REGEX,{value}),(DOMAIN,x.example.com))"
+                self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                                 ([Rule("AND", expression)], []))
+
+    def test_regexp2_character_class_first_closing_bracket_protects_comma(self):
+        value = "^[]a,b]Game$"
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},China", purpose="proxy"),
+                         ([Rule("PROCESS-NAME-REGEX", value)], []))
+        expression = f"((PROCESS-NAME-REGEX,{value}),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                         ([Rule("AND", expression)], []))
+
+    def test_literal_process_delimiters_are_not_regex_groups(self):
+        for value in ("Game{", "Game(", "Game[", "Game}", "Game)"):
+            with self.subTest(value=value):
+                self.assertEqual(parse(f"PROCESS-NAME,{value},PROXY", purpose="proxy"),
+                                 ([Rule("PROCESS-NAME", value)], []))
+        for value in ("Game{", "Game[", "Game}"):
+            expression = f"((PROCESS-NAME,{value}),(DOMAIN,x.example.com))"
+            self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                             ([Rule("AND", expression)], []))
+
+    def test_unclosed_process_parenthesis_in_logic_is_not_silently_closed(self):
+        source = "AND,((PROCESS-NAME,Game(),(DOMAIN,x.example.com)),PROXY"
+        parsed, messages = parse(source, purpose="proxy")
+        self.assertEqual(parsed, [])
+        self.assertEqual(len(messages), 1)
+        self.assertTrue(messages[0].startswith("line 1:"), messages)
+
+    def test_extended_regex_line_comment_does_not_swallow_logical_siblings(self):
+        child = "(DOMAIN-REGEX,^(?x)a # [)"
+        for operator in ("AND", "OR"):
+            expression = f"({child},(DOMAIN,x.example.com))"
+            with self.subTest(operator=operator):
+                self.assertEqual(parse(f"{operator},{expression},PROXY", purpose="proxy"),
+                                 ([Rule(operator, expression)], []))
+        nested = f"((OR,({child},(DOMAIN,x.example.com))),(IP-CIDR,192.0.2.0/24,no-resolve))"
+        self.assertEqual(parse(f"AND,{nested},PROXY", purpose="proxy"),
+                         ([Rule("AND", nested)], []))
+
+    def test_scoped_extended_flag_and_comment_group_preserve_real_boundaries(self):
+        values = ["^(?x:a[ # ])b$", "^(?x:a)(?-x:b#c)$",
+                  "^(?x)a (?#note[) b$"]
+        for value in values:
+            expression = f"((DOMAIN-REGEX,{value}),(IP-CIDR,192.0.2.0/24,no-resolve))"
+            with self.subTest(value=value):
+                self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                                 ([Rule("AND", expression)], []))
+
+    def test_unbounded_unquoted_regex_comma_remains_ambiguous(self):
+        self.assertEqual(parse("DOMAIN-REGEX,^foo,China", purpose="proxy"),
+                         ([], ["line 1: ambiguous unquoted regex comma or policy"]))
+
+    def test_unpaired_regex_braces_do_not_stall_field_scanner(self):
+        code = ("from rules import parse\n"
+                "value = '^' + '{' * 20000 + '$'\n"
+                "parsed, warnings = parse('DOMAIN-REGEX,' + value + ',REJECT', purpose='block')\n"
+                "assert len(parsed) == 1 and parsed[0].value == value and warnings == []")
+        try:
+            result = subprocess.run(
+                [sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1],
+                capture_output=True, text=True, timeout=2,
+            )
+        except subprocess.TimeoutExpired:
+            self.fail("重复的未配对字面花括号使字段扫描超时")
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_regexp2_literal_brace_in_logical_child_is_not_a_group(self):
+        expression = "((PROCESS-NAME-REGEX,^Game{bar$),(DOMAIN,a.example.com))"
+        self.assertEqual(parse(f"AND,{expression},DIRECT", purpose="direct"),
+                         ([Rule("AND", expression)], []))
+
+    def test_logical_regex_braces_do_not_swallow_ip_no_resolve(self):
+        expression = (r"((DOMAIN-REGEX,^a{b,c}\.example\.com$),"
+                      "(IP-CIDR,192.0.2.0/24,no-resolve))")
+        self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                         ([Rule("AND", expression)], []))
+
+    def test_regexp2_conditional_control_and_balance_groups_survive_python_probe(self):
+        cases = [
+            ("DOMAIN-REGEX", r"^(?(?=a)a|b)ds[.]example[.]com$", "block", "REJECT"),
+            ("PROCESS-NAME-REGEX", r"^\e[a]$", "direct", "DIRECT"),
+            ("DOMAIN-REGEX", r"^\cA?ds", "block", "REJECT"),
+            ("DOMAIN-REGEX", r"^(a)\k<1>$", "block", "REJECT"),
+            ("DOMAIN-REGEX", r"^(?<grp>a)(?<-grp>b)$", "block", "REJECT"),
+        ]
+        for kind, value, purpose, action in cases:
+            with self.subTest(value=value):
+                self.assertEqual(parse(f"{kind},{value},{action}", purpose=purpose),
+                                 ([Rule(kind, value)], []))
+
+    def test_regexp2_nearby_invalid_conditional_escapes_and_groups_stay_rejected(self):
+        cases = [
+            ("DOMAIN-REGEX", r"^(?(?=a)a|bds[.]example[.]com$", "block", "REJECT"),
+            ("DOMAIN-REGEX", r"^(?(?=a)a|b|c)$", "block", "REJECT"),
+            ("PROCESS-NAME-REGEX", r"^\q[a]$", "direct", "DIRECT"),
+            ("DOMAIN-REGEX", r"^\c!?ds", "block", "REJECT"),
+            ("DOMAIN-REGEX", r"^(a)\k<2>$", "block", "REJECT"),
+            ("DOMAIN-REGEX", r"^(?<-grp>a)$", "block", "REJECT"),
+        ]
+        for kind, value, purpose, action in cases:
+            source = f"{kind},{value},{action}\nDOMAIN,x.example.com,{action}"
+            with self.subTest(value=value):
+                parsed, messages = parse(source, purpose=purpose)
+                self.assertEqual(parsed, [Rule("DOMAIN", "x.example.com")])
+                self.assertEqual(len(messages), 1)
+                self.assertTrue(messages[0].startswith("line 1:"), messages)
+
+    def test_oversized_numeric_backreference_warns_without_crashing(self):
+        code = ("from rules import Rule, parse\n"
+                "value = r'^(a)\\k<' + '9' * 5000 + '>$'\n"
+                "source = f'DOMAIN-REGEX,{value},REJECT\\nDOMAIN,x.example.com,REJECT'\n"
+                "parsed, messages = parse(source, purpose='block')\n"
+                "assert parsed == [Rule('DOMAIN', 'x.example.com')] and "
+                "len(messages) == 1 and messages[0].startswith('line 1:'), (parsed, messages)")
+        try:
+            result = subprocess.run(
+                [sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1],
+                capture_output=True, text=True, timeout=4,
+            )
+        except subprocess.TimeoutExpired:
+            self.fail("过长数值引用让解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1200:])
+
+    def test_mihomo_regexp2_named_group_end_anchor_and_backref_survive(self):
+        values = [r"^(?<name>ads)\.example\.com$", r"^ads\.example\.com\z",
+                  r"^(?<name>ads)\k<name>\.example\.com$", r"^(ads)\1\.example\.com$"]
+        parsed, messages = parse("\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values),
+                                 purpose="block")
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_process_regex_uses_the_same_validation(self):
+        value = r"^(?<name>ads)\k<name>\z"
+        parsed, messages = parse(f"PROCESS-NAME-REGEX,{value},PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("PROCESS-NAME-REGEX", value)])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_unicode_hex_anchor_and_variable_lookbehind_survive(self):
+        values = [r"^\p{L}+\.example\.com$", r"^\x{61}ds\.example\.com$",
+                  r"^\Gads\.example\.com$", r"^a+(?<=a+)ds\.example\.com$"]
+        parsed, messages = parse("\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values),
+                                 purpose="block")
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_unclosed_regexp2_hex_escape_terminates_and_reports_line(self):
+        source = (r"PROCESS-NAME-REGEX,\x{41,PROXY" "\n"
+                  "DOMAIN,x.example.com,PROXY")
+        expected = ([Rule("DOMAIN", "x.example.com")],
+                    [r"line 1: invalid PROCESS-NAME-REGEX \x{41"])
+        code = ("from rules import Rule, parse\n"
+                f"assert parse({source!r}, purpose='proxy') == {expected!r}")
+        try:
+            result = subprocess.run(
+                [sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1],
+                capture_output=True, text=True, timeout=2,
+            )
+        except subprocess.TimeoutExpired:
+            self.fail("未闭合 hex 转义使解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_deep_regexp2_balanced_groups_keep_following_rule(self):
+        code = ("from rules import Rule, parse\n"
+                "value = '^' + '(' * 495 + 'a' + ')' * 495 + '$'\n"
+                "source = f'DOMAIN-REGEX,{value},REJECT\\nDOMAIN,x.example.com,REJECT'\n"
+                "assert parse(source, purpose='block') == "
+                "([Rule('DOMAIN-REGEX', value), Rule('DOMAIN', 'x.example.com')], [])")
+        try:
+            result = subprocess.run(
+                [sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1],
+                capture_output=True, text=True, timeout=4,
+            )
+        except subprocess.TimeoutExpired:
+            self.fail("深层正则让解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1200:])
+
+    def test_deep_regexp2_extra_or_missing_closer_is_rejected_without_crash(self):
+        for extra in (1, -1):
+            code = ("from rules import Rule, parse\n"
+                    f"value = '^' + '(' * 495 + 'a' + ')' * (495 + {extra}) + '$'\n"
+                    "source = f'DOMAIN-REGEX,{value},REJECT\\nDOMAIN,x.example.com,REJECT'\n"
+                    "parsed, messages = parse(source, purpose='block')\n"
+                    "assert parsed == [Rule('DOMAIN', 'x.example.com')] and "
+                    "len(messages) == 1 and messages[0].startswith('line 1:'), (parsed, messages)")
+            with self.subTest(extra=extra):
+                try:
+                    result = subprocess.run(
+                        [sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1],
+                        capture_output=True, text=True, timeout=4,
+                    )
+                except subprocess.TimeoutExpired:
+                    self.fail("非法深层正则让解析子进程超时")
+                self.assertEqual(result.returncode, 0, result.stderr[-1200:])
+
+    def test_regexp2_huge_quantifier_is_rejected_without_losing_next_rule(self):
+        value = r"^a{999999999999999999999999}\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT\nDOMAIN,valid.example.com,REJECT",
+                               purpose="block"),
+                         ([Rule("DOMAIN", "valid.example.com")],
+                          [f"line 1: invalid DOMAIN-REGEX {value}"]))
+
+    def test_mihomo_hex_escape_rejects_reversed_character_range(self):
+        value = r"^[a-\x{21}]\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+                         ([], [f"line 1: invalid DOMAIN-REGEX {value}"]))
+
+    def test_mihomo_hex_escape_accepts_ascending_character_range(self):
+        value = r"^[\x{21}-A]\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+
+    def test_mihomo_process_regex_treats_python_group_text_in_class_as_literal(self):
+        value = r"^[(?P]$"
+        parsed, messages = parse(f"PROCESS-NAME-REGEX,{value},PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("PROCESS-NAME-REGEX", value)])
+        self.assertEqual(messages, [])
+
+    def test_python_only_unicode_name_and_regexp2_unsupported_quote_escape_are_rejected(self):
+        parsed, messages = parse(
+            r"DOMAIN-REGEX,^\N{LATIN SMALL LETTER A}ds\.example\.com$,REJECT" "\n"
+            r"DOMAIN-REGEX,^\Qads.example.com\E$,REJECT", purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(len(messages), 2)
+        self.assertTrue(all("invalid DOMAIN-REGEX" in message for message in messages))
+
+    def test_malformed_regexp2_group_and_python_only_named_group_are_rejected(self):
+        parsed, messages = parse(
+            "DOMAIN-REGEX,^(?<name>*ads),REJECT\n"
+            "DOMAIN-REGEX,^(?P<name>ads),REJECT\n"
+            "DOMAIN-REGEX,^(?<name>ads)(?P=name),REJECT\n"
+            "DOMAIN-REGEX,*ads,REJECT", purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(len(messages), 4)
+        self.assertTrue(all(f"line {number}:" in message for number, message in enumerate(messages, 1)))
+
+    def test_process_regex_doctype_text_does_not_reject_entire_source(self):
+        self.assertEqual(parse(
+            "PROCESS-NAME-REGEX,^<!doctype$,PROXY\nDOMAIN,x.example.com,PROXY",
+            purpose="proxy",
+        ), ([Rule("PROCESS-NAME-REGEX", "^<!doctype$"),
+             Rule("DOMAIN", "x.example.com")], []))
+
+    def test_html_login_document_is_not_mistaken_for_regexp2(self):
+        parsed, messages = parse("<html><body>login</body></html>", purpose="block")
+        self.assertEqual(parsed, [])
+        self.assertTrue(any("HTML document" in message for message in messages))
+
+    def test_mihomo_regexp2_properties_and_named_forms_survive(self):
+        values = [
+            r"^\p{N}+\.example\.com$", r"^\p{Nd}+\.example\.com$",
+            r"^\p{Han}+\.example\.com$", r"^(?'n'ads)\.example\.com$",
+            r"^(?<n>ad)(?<n>s)\.example\.com$", r"^(?n:ads)\.example\.com$",
+        ]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_unicode_property_names_and_group_syntax(self):
+        values = [
+            r"^\p{Lu}+\.example\.com$", r"^\p{Ll}+\.example\.com$",
+            r"^\p{Greek}+\.example\.com$", r"^\p{Hiragana}+\.example\.com$",
+            r"^\p{Other_Alphabetic}+\.example\.com$",
+            r"^(?i)ads\.example\.com$", r"^(?'n'ads)\k'n'\.example\.com$",
+        ]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_rejects_invalid_properties_and_possessive_quantifiers(self):
+        values = [r"^\p{Nonexistent}+\.example\.com$", r"^(?P<name>ads)$",
+                  r"^a++\.example\.com$", r"^a*+\.example\.com$",
+                  r"^a?+\.example\.com$", r"^a{2,3}+\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [f"line {number}: invalid DOMAIN-REGEX {value}"
+                                    for number, value in enumerate(values, 1)])
+        parsed, messages = parse("DOMAIN-REGEX,^ads" + chr(92), purpose="block")
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, ["line 1: invalid DOMAIN-REGEX ^ads" + chr(92)])
+        valid = [r"^a\+\.example\.com$", r"^[a+]\.example\.com$",
+                 r"^a[+]+\.example\.com$", r"^a+?\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in valid), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in valid])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_rejects_literal_to_class_character_ranges(self):
+        values = [r"^[a-\p{Lu}]\.example\.com$", r"^[a-\P{Lu}]\.example\.com$",
+                  r"^[\x{61}-\p{Lu}]\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [f"line {number}: invalid DOMAIN-REGEX {value}"
+                                    for number, value in enumerate(values, 1)])
+
+    def test_mihomo_regexp2_hyphen_position_and_class_range_endpoints(self):
+        invalid = [r"^[--\d]\.example\.com$", r"^[\p{Lu}--\p{Ll}]\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in invalid), purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [f"line {number}: invalid DOMAIN-REGEX {value}"
+                                    for number, value in enumerate(invalid, 1)])
+        values = [r"^[-\d]\.example\.com$", r"^[\--\p{Lu}]\.example\.com$",
+                  r"^[-\p{Lu}]\.example\.com$", r"^[a\-\p{Lu}]\.example\.com$",
+                  r"^[\p{Lu}-\p{Ll}]\.example\.com$", r"^[\p{Lu}--a]\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_escaped_hyphen_does_not_consume_pending_range(self):
+        invalid = [r"^[--\-\p{Lu}]\.example\.com$", r"^[\---\d]\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in invalid), purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [f"line {number}: invalid DOMAIN-REGEX {value}"
+                                    for number, value in enumerate(invalid, 1)])
+
+    def test_mihomo_escaped_hyphen_after_range_start_is_not_range_endpoint(self):
+        valid = [r"^[\p{Lu}a-\-]\.example\.com$", r"^[\da-\-]\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in valid), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in valid])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_keeps_class_to_class_and_literal_hyphens(self):
+        values = [r"^[\p{Lu}-a]\.example\.com$", r"^[-\p{Lu}]\.example\.com$",
+                  r"^[a\-\p{Lu}]\.example\.com$", r"^[\p{Lu}-\p{Ll}]\.example\.com$",
+                  r"^[\d-\p{Lu}]\.example\.com$", r"^[\p{Lu}-\d]\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_rejects_quantified_inline_flags(self):
+        values = [r"^(?i)+a\.example\.com$", r"^(?m)+a\.example\.com$",
+                  r"^(?s)+a\.example\.com$", r"^a(?i){2}\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [f"line {number}: invalid DOMAIN-REGEX {value}"
+                                    for number, value in enumerate(values, 1)])
+
+    def test_mihomo_regexp2_keeps_inline_and_scoped_flags_with_repeatable_atoms(self):
+        values = [r"^(?i)a+\.example\.com$", r"^(?i:a)+\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in values), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in values])
+        self.assertEqual(messages, [])
+
+    def test_mihomo_regexp2_extended_mode_and_disabled_inline_flags(self):
+        invalid = r"^(?x) +a\.example\.com$"
+        parsed, messages = parse(f"DOMAIN-REGEX,{invalid},REJECT", purpose="block")
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [f"line 1: invalid DOMAIN-REGEX {invalid}"])
+        valid = [r"^(?x) a+\.example\.com$", r"^(?i)A(?-i)b\.example\.com$"]
+        parsed, messages = parse(
+            "\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in valid), purpose="block",
+        )
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", value) for value in valid])
+        self.assertEqual(messages, [])
+        path = r"(?-i:\A/Applications/Widget[.]app/)"
+        parsed, messages = parse(f"PROCESS-PATH-REGEX,{path},PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("PROCESS-PATH-REGEX", path)])
+        self.assertEqual(messages, [])
+        expression = f"((PROCESS-PATH-REGEX,{path}),(DOMAIN,x.example.com))"
+        parsed, messages = parse(f"AND,{expression},PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("AND", expression)])
+        self.assertEqual(messages, [])
+        from formats import render
+
+        output, _ = render("a3", [Rule("DOMAIN-REGEX", valid[1])], purpose="block", no_resolve="keep")
+        reparsed, messages = parse(output["fin.yaml"], purpose="block")
+        self.assertEqual(reparsed, [Rule("DOMAIN-REGEX", valid[1])])
+        self.assertEqual(messages, [])
+        self.assertNotIn("DOMAIN-REGEX", output["fin-adb.txt"])
+
+    def test_scoped_extended_regex_complete_comment_group_survives(self):
+        value = r"^(?x:(?#note)a)\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+        self.assertFalse(rules._valid_regex("DOMAIN-REGEX", r"^(?x:(?#note"))
+
+    def test_regexp2_comment_closes_at_escaped_parenthesis(self):
+        for flag in ("x", "-x"):
+            invalid = rf"^(?{flag}:(?#note\)oops)a)\.example\.com$"
+            valid = rf"^(?{flag}:(?#note)a)\.example\.com$"
+            self.assertEqual(parse(f"DOMAIN-REGEX,{invalid},REJECT", purpose="block"),
+                             ([], [f"line 1: invalid DOMAIN-REGEX {invalid}"]))
+            self.assertEqual(parse(f"DOMAIN-REGEX,{valid},REJECT", purpose="block"),
+                             ([Rule("DOMAIN-REGEX", valid)], []))
+        class_value = r"^[(?#note\)oops]+\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{class_value},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", class_value)], []))
+        self.assertEqual(parse("DOMAIN-REGEX,^(?x:(?#note,REJECT", purpose="block"),
+                         ([], ["line 1: unbalanced delimiters"]))
+        line_comment = r"^(?x)a+ # ignored +"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{line_comment},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", line_comment)], []))
+
+    def test_regexp2_comment_group_ignores_open_bracket(self):
+        value = r"^(?x:(?#note[)a)\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+
+    def test_regexp2_comment_group_closes_at_first_parenthesis_even_after_backslash(self):
+        value = r"^(?x:(?#note\)oops)\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+
+    def test_extended_regex_disabling_x_keeps_literal_hash_and_policy(self):
+        value = r"^(?x)foo(?-x) #bar\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+
+    def test_extended_regex_scoped_disabled_x_keeps_space_as_quantifier_target(self):
+        value = r"^(?x)(?-x: +a)\.example\.com$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+
+    def test_extended_regex_unscoped_hash_comment_and_bare_quantifier(self):
+        self.assertTrue(rules._valid_regex("DOMAIN-REGEX", r"^(?x) a+ # ignored +"))
+        self.assertFalse(rules._valid_regex("DOMAIN-REGEX", r"^(?x) +a\.example\.com$"))
+        self.assertEqual(parse(r"DOMAIN-REGEX,^(?x) a+\.example\.com$,REJECT # note",
+                               purpose="block"),
+                         ([Rule("DOMAIN-REGEX", r"^(?x) a+\.example\.com$")], []))
+
+    def test_invalid_regexp2_in_logical_child_is_rejected(self):
+        expression = r"((DOMAIN-REGEX,^[a-\p{Lu}]\.example\.com$),(DOMAIN,x.example.com))"
+        parsed, messages = parse(f"AND,{expression},REJECT", purpose="block")
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [f"line 1: invalid logical expression {expression}"])
+
+    def test_mihomo_regexp2_rejects_python_only_ascii_mode(self):
+        parsed, messages = parse(r"DOMAIN-REGEX,^(?a:ads)\.example\.com$,REJECT", purpose="block")
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, [r"line 1: invalid DOMAIN-REGEX ^(?a:ads)\.example\.com$"])
+
+    def test_unquoted_regex_comma_with_clear_policy_keeps_complete_matcher(self):
+        for source, expected in (
+            ("DOMAIN-REGEX,^foo,bar$,PROXY", Rule("DOMAIN-REGEX", "^foo,bar$")),
+            ("DOMAIN-REGEX,^foo,bar,PROXY", Rule("DOMAIN-REGEX", "^foo,bar")),
+            ("PROCESS-NAME-REGEX,^foo,bar$,PROXY", Rule("PROCESS-NAME-REGEX", "^foo,bar$")),
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(parsed, [expected])
+                self.assertEqual(messages, [])
+
+    def test_unquoted_policy_free_regex_comma_keeps_complete_matcher(self):
+        parsed, messages = parse("DOMAIN-REGEX,^foo,bar$", purpose="proxy")
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", "^foo,bar$")])
+        self.assertEqual(messages, [])
+
+    def test_unquoted_regex_custom_policy_ambiguity_warns_instead_of_widening(self):
+        for source in ("DOMAIN-REGEX,^foo,China", "DOMAIN-REGEX,^foo,bar$,China",
+                       "PROCESS-NAME-REGEX,^Game,China", "PROCESS-NAME-REGEX,^Game,Inc$,China"):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(parsed, [])
+                self.assertEqual(len(messages), 1)
+                self.assertIn("ambiguous", messages[0])
+
+    def test_end_anchored_regex_before_custom_policy_is_unambiguous(self):
+        for source, matcher in (
+            ("DOMAIN-REGEX,^foo$,China", "^foo$"),
+            (r"DOMAIN-REGEX,^foo\z,China", r"^foo\z"),
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(parsed, [Rule("DOMAIN-REGEX", matcher)])
+                self.assertEqual(messages, [])
+
+    def test_mihomo_regex_with_explicit_proxy_policy_keeps_matcher(self):
+        for source, expected in (
+            ("DOMAIN-REGEX,^foo,PROXY", Rule("DOMAIN-REGEX", "^foo")),
+            ("PROCESS-PATH-REGEX,.*bin/wget,PROXY", Rule("PROCESS-PATH-REGEX", ".*bin/wget")),
+            ("PROCESS-NAME-REGEX,^foo,PROXY", Rule("PROCESS-NAME-REGEX", "^foo")),
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(parsed, [expected])
+                self.assertEqual(messages, [])
+
+    def test_interface_token_on_non_qx_regex_does_not_truncate_matcher(self):
+        for source in (
+            "DOMAIN-REGEX,^foo,multi-interface",
+            "PROCESS-NAME-REGEX,^foo,multi-interface",
+            "URL-REGEX,^https://foo,multi-interface",
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(parsed, [])
+                self.assertEqual(len(messages), 1)
+                self.assertIn("ambiguous", messages[0])
+
+    def test_end_anchored_non_qx_regex_interface_token_warns_instead_of_truncating(self):
+        for source in (
+            r"DOMAIN-REGEX,^a\.example\.com$|^b\.example\.com$,multi-interface",
+            "URL-REGEX,^https://foo$,multi-interface",
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual(parsed, [])
+                self.assertEqual(messages, ["line 1: ambiguous unquoted regex comma or policy"])
+
+    def test_quoted_regex_comma_keeps_complete_matcher(self):
+        parsed, messages = parse('DOMAIN-REGEX,"^foo,bar$",PROXY', purpose="proxy")
+        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", "^foo,bar$")])
+        self.assertEqual(messages, [])
+
+    def test_literal_angle_tag_in_regex_is_not_html_but_real_html_is_rejected(self):
+        regex, messages = parse("PROCESS-NAME-REGEX,^foo<bar>$,PROXY", purpose="proxy")
+        self.assertEqual(regex, [Rule("PROCESS-NAME-REGEX", "^foo<bar>$")])
+        self.assertEqual(messages, [])
+        document, messages = parse(
+            "\\k<html>\nDOMAIN,inside.example.com,REJECT\n</html>", purpose="block",
+        )
+        self.assertEqual(document, [])
+        self.assertEqual(messages, ["line 1: HTML document"])
+
+    def test_literal_html_tag_in_process_regex_is_not_a_document(self):
+        parsed, messages = parse("PROCESS-NAME-REGEX,^foo<html>$,PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("PROCESS-NAME-REGEX", "^foo<html>$")])
+        self.assertEqual(messages, [])
+
     def test_invalid_domain_regex_is_skipped_before_normalization(self):
         rules, messages = parse(
             "DOMAIN-REGEX,*ads,REJECT\nDOMAIN,valid.example.com,REJECT", purpose="block",
@@ -513,11 +1412,169 @@ class ParseTests(unittest.TestCase):
         self.assertTrue(any("line 1" in message and "invalid" in message for message in messages))
         self.assertEqual(normalize(rules), rules)
 
+    def test_logical_regex_child_rejects_no_resolve_after_end_anchor(self):
+        expression = "((DOMAIN-REGEX,^ads$,no-resolve),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{expression},REJECT", purpose="block"),
+                         ([], [f"line 1: invalid logical expression {expression}"]))
+
+    def test_logical_process_regex_literal_comma_is_preserved(self):
+        expression = "((PROCESS-NAME-REGEX,^Game,Inc$),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{expression},DIRECT", purpose="direct"),
+                         ([Rule("AND", expression)], []))
+
+    def test_logical_process_regex_literal_comma_with_invalid_class_is_rejected(self):
+        expression = "((PROCESS-NAME-REGEX,^[Game,Inc$),(DOMAIN,x.example.com))"
+        parsed, messages = parse(f"AND,{expression},DIRECT", purpose="direct")
+        self.assertEqual(parsed, [])
+        self.assertTrue(messages and any("invalid" in message or "unbalanced" in message
+                                         for message in messages))
+
     def test_logical_regex_character_class_parenthesis_survives_parse(self):
         expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
         rules, warnings = parse(f"AND,{expression},REJECT", purpose="block")
         self.assertEqual(rules, [Rule("AND", expression)])
         self.assertEqual(warnings, [])
+
+    def test_logical_process_markers_survive_quantifier_comma_and_comments(self):
+        expressions = [
+            "((PROCESS-NAME-REGEX,^Game{1,2} #1$),(DOMAIN,x.example.com))",
+            "((PROCESS-NAME,Game ;1),(DOMAIN,x.example.com))",
+            "((PROCESS-NAME,Game //1),(DOMAIN,x.example.com))",
+            "((PROCESS-NAME-REGEX,^Game{1,2} //1$),(DOMAIN,x.example.com))",
+        ]
+        parsed, messages = parse(
+            "\n".join(f"AND,{expression},PROXY # note" for expression in expressions),
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule("AND", expression) for expression in expressions])
+        self.assertEqual(messages, [])
+        yaml, messages = parse(
+            'payload:\n  - "AND,((PROCESS-NAME,Game ;1),(DOMAIN,x.example.com))"\n'
+            '  - "AND,((PROCESS-NAME,Game //1),(DOMAIN,x.example.com))"\n'
+            '  - "AND,((PROCESS-NAME-REGEX,^Game{1,2} #1$),(DOMAIN,x.example.com))"',
+            purpose="proxy",
+        )
+        self.assertEqual(yaml, [Rule("AND", value, literal_process=True) for value in expressions[1:3]]
+                         + [Rule("AND", expressions[0])])
+        self.assertEqual(messages, [])
+
+    def test_logical_port_comparison_keeps_both_children(self):
+        parsed, messages = parse(
+            "AND,((SRC-PORT,>=50000),(DOMAIN,a.example.com)),PROXY", purpose="proxy"
+        )
+        self.assertEqual(parsed, [Rule("AND", "((SRC-PORT,50000-65535),(DOMAIN,a.example.com))")])
+        self.assertEqual(messages, [])
+
+    def test_logical_multi_port_becomes_nested_or(self):
+        parsed, messages = parse(
+            "OR,((DST-PORT,80/443),(DOMAIN,a.example.com)),PROXY", purpose="proxy"
+        )
+        self.assertEqual(parsed, [Rule("OR", "((OR,((DST-PORT,80),(DST-PORT,443))),(DOMAIN,a.example.com))")])
+        self.assertEqual(messages, [])
+
+    def test_logical_nested_whitespace_and_quoted_process_comma(self):
+        parsed, messages = parse(
+            'AND,((OR,((DOMAIN ,a.example.com), (DOMAIN,b.example.com))), '
+            '(PROCESS-NAME,"Foo,Bar")),PROXY', purpose="proxy"
+        )
+        self.assertEqual(parsed, [Rule(
+            "AND", '((OR,((DOMAIN,a.example.com),(DOMAIN,b.example.com))),(PROCESS-NAME,"Foo,Bar"))'
+        )])
+        self.assertEqual(messages, [])
+
+    def test_logical_quoted_regex_validates_unquoted_value_and_preserves_quantifier_comma(self):
+        source = (r'AND,((DOMAIN-REGEX,"*ads"),(DOMAIN,x.example.com)),REJECT' '\n'
+                  r'AND,((DOMAIN-REGEX,"^a{2,3}\.example\.com$"),(DOMAIN,x.example.com)),REJECT')
+        parsed, messages = parse(source, purpose="block")
+        self.assertEqual(parsed, [Rule(
+            "AND", r'((DOMAIN-REGEX,"^a{2,3}\.example\.com$"),(DOMAIN,x.example.com))'
+        )])
+        self.assertEqual(messages, ['line 1: invalid logical expression ((DOMAIN-REGEX,"*ads"),(DOMAIN,x.example.com))'])
+
+    def test_logical_lowercase_child_types_are_canonicalized(self):
+        parsed, messages = parse(
+            "AND,((domain,x.example.com),(ip-cidr,203.0.113.7/24,no-resolve)),PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule(
+            "AND", "((DOMAIN,x.example.com),(IP-CIDR,203.0.113.0/24,no-resolve))"
+        )])
+        self.assertEqual(messages, [])
+
+    def test_logical_explicit_src_cidr_ignores_no_resolve_and_keeps_direction(self):
+        parsed, messages = parse(
+            "AND,((SRC-IP-CIDR,192.0.2.15/24,no-resolve),(IP-CIDR,203.0.113.7/24,no-resolve)),PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule(
+            "AND", "((SRC-IP-CIDR,192.0.2.0/24),(IP-CIDR,203.0.113.0/24,no-resolve))"
+        )])
+        self.assertEqual(messages, ["line 1: unsupported no-resolve for SRC-IP-CIDR"])
+
+    def test_logical_src_option_keeps_source_ip_direction(self):
+        parsed, messages = parse(
+            "AND,((IP-CIDR,192.0.2.15/24,src),(DOMAIN,x.example.com)),PROXY",
+            purpose="proxy",
+        )
+        self.assertEqual(parsed, [Rule(
+            "AND", "((SRC-IP-CIDR,192.0.2.0/24),(DOMAIN,x.example.com))"
+        )])
+        self.assertEqual(messages, [])
+
+    def test_logical_src_option_supports_each_mihomo_ip_matcher(self):
+        for source, expected in (
+            ("IP-CIDR6,2001:db8::1/32", "SRC-IP-CIDR,2001:db8::/32"),
+            ("IP-SUFFIX,8.8.8.8/24", "SRC-IP-SUFFIX,8.8.8.8/24"),
+            ("GEOIP,CN", "SRC-GEOIP,CN"),
+            ("IP-ASN,64512", "SRC-IP-ASN,64512"),
+        ):
+            with self.subTest(source=source):
+                parsed, messages = parse(
+                    f"AND,(({source},src),(DOMAIN,x.example.com)),PROXY", purpose="proxy",
+                )
+                self.assertEqual(parsed, [Rule(
+                    "AND", f"(({expected}),(DOMAIN,x.example.com))"
+                )])
+                self.assertEqual(messages, [])
+
+    def test_logical_src_with_irrelevant_no_resolve_keeps_source_matcher(self):
+        parsed, messages = parse(
+            "AND,((IP-CIDR,192.0.2.15/24,src,no-resolve),(DOMAIN,a.example.com)),PROXY\n"
+            "NOT,(IP-SUFFIX,8.8.8.8/24,no-resolve,src),PROXY", purpose="proxy",
+        )
+        self.assertEqual(parsed, [
+            Rule("AND", "((SRC-IP-CIDR,192.0.2.0/24),(DOMAIN,a.example.com))"),
+            Rule("NOT", "(SRC-IP-SUFFIX,8.8.8.8/24)"),
+        ])
+        self.assertEqual(messages, [
+            "line 1: unsupported no-resolve for SRC-IP-CIDR",
+            "line 2: unsupported no-resolve for SRC-IP-SUFFIX",
+        ])
+
+    def test_logical_destination_ip_options_are_deduplicated(self):
+        parsed, messages = parse(
+            "AND,((IP-CIDR,192.0.2.1/24,no-resolve,no-resolve),"
+            "(IP-SUFFIX,8.8.8.8/24,no-resolve,no-resolve)),PROXY", purpose="proxy"
+        )
+        self.assertEqual(parsed, [Rule(
+            "AND", "((IP-CIDR,192.0.2.0/24,no-resolve),(IP-SUFFIX,8.8.8.8/24,no-resolve))"
+        )])
+        self.assertEqual(messages, [])
+
+    def test_logical_unsupported_child_keeps_the_other_child(self):
+        expression = "((URL-REGEX,^https://example.com/ads$),(DOMAIN,a.example.com))"
+        parsed, messages = parse(f"AND,{expression},PROXY", purpose="proxy")
+        self.assertEqual(parsed, [Rule("AND", expression)])
+        self.assertEqual(messages, [])
+
+    def test_logical_invalid_port_and_html_still_warn(self):
+        parsed, messages = parse(
+            "AND,((SRC-PORT,65536),(DOMAIN,a.example.com)),PROXY\n"
+            "<html>error</html>", purpose="proxy"
+        )
+        self.assertEqual(parsed, [])
+        self.assertTrue(any("invalid logical" in message for message in messages))
+        self.assertTrue(any("HTML" in message for message in messages))
 
     def test_logical_child_rejects_invalid_regex(self):
         rules, messages = parse(
@@ -539,10 +1596,10 @@ class ParseTests(unittest.TestCase):
         from formats import render
 
         output, _ = render("group", parsed, purpose="block", no_resolve="strip")
-        self.assertIn(f"AND,{expression}\n", output["fin.txt"])
-        self.assertIn(f'"AND,{expression}"', output["fin.yaml"])
+        self.assertIn("AND,((IP-CIDR,192.0.2.0/24),(DOMAIN,ads.example.com))\n", output["fin.txt"])
+        self.assertIn('"AND,((IP-CIDR,192.0.2.0/24),(DOMAIN,ads.example.com))"', output["fin.yaml"])
 
-    def test_logical_child_skips_port_forms_not_safe_for_both_renderers(self):
+    def test_logical_child_normalizes_port_forms(self):
         parsed, messages = parse(
             "AND,((SRC-PORT,>=50000),(NETWORK,UDP)),PROXY\n"
             "OR,((DST-PORT,80/443),(DOMAIN,example.com)),PROXY\n"
@@ -550,9 +1607,11 @@ class ParseTests(unittest.TestCase):
             purpose="proxy",
         )
         self.assertEqual(parsed, [
-            Rule("AND", "((SRC-PORT,50000-65535),(NETWORK,UDP))")
+            Rule("AND", "((SRC-PORT,50000-65535),(NETWORK,UDP))"),
+            Rule("OR", "((OR,((DST-PORT,80),(DST-PORT,443))),(DOMAIN,example.com))"),
+            Rule("AND", "((SRC-PORT,50000-65535),(NETWORK,UDP))"),
         ])
-        self.assertEqual(len(messages), 2)
+        self.assertEqual(messages, [])
 
     def test_logical_child_rejects_invalid_port(self):
         rules, warnings = parse(
@@ -686,6 +1745,14 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(rules, [])
         self.assertTrue(any("HTML" in message and "1" in message for message in warnings))
 
+    def test_script_html_attribute_containing_regex_type_does_not_import_rules(self):
+        parsed, messages = parse(
+            '<script data-rule="DOMAIN-REGEX,foo">\n'
+            'DOMAIN,inside.example.com,REJECT\n</script>', purpose="block",
+        )
+        self.assertEqual(parsed, [])
+        self.assertEqual(messages, ["line 1: HTML document"])
+
     def test_script_html_wrapper_is_rejected_as_a_whole(self):
         rules, warnings = parse(
             "<script>\nDOMAIN,ads.example.com,REJECT\n</script>", purpose="block"
@@ -734,6 +1801,968 @@ class ParseTests(unittest.TestCase):
             Rule("IP-CIDR", "198.51.100.0/24", ("no-resolve",)),
         ])
         self.assertEqual(warnings, [])
+
+
+class FollowupParseTests(unittest.TestCase):
+    def assert_regex_preserved(self, value, kind="DOMAIN-REGEX", policy="China", logical_only=False,
+                               following_rule=False):
+        for logical in ((True,) if logical_only else (False, True)):
+            expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
+            source = f"AND,{expression},{policy}" if logical else f"{kind},{value},{policy}"
+            expected = [Rule("AND", expression) if logical else Rule(kind, value)]
+            if following_rule:
+                source += "\nDOMAIN,keep.example.com,China"
+                expected.append(Rule("DOMAIN", "keep.example.com"))
+            with self.subTest(value=value, logical=logical):
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual((parsed, messages), (expected, []))
+                self.assertEqual(set(normalize(parsed)), set(expected))
+
+    def assert_regex_rejected(self, value, kind="PROCESS-NAME-REGEX"):
+        for logical in (False, True):
+            expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
+            source = (f"AND,{expression},China" if logical else f"{kind},{value},China")
+            with self.subTest(value=value, logical=logical):
+                parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
+                self.assertEqual(parsed, [Rule("DOMAIN", "keep.example.com")])
+                self.assertEqual(len(messages), 1)
+                self.assertTrue(messages[0].startswith("line 1:"), messages)
+
+    def test_unanchored_known_policy_comments_keep_original_matcher(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for policy in ("PROXY", "LIST"):
+                for marker in ("#", ";", "//"):
+                    for body in ("note", "note $", r"note \z", "note [,China ( # ; //"):
+                        source = f"{kind},^foo,{policy} {marker} {body}\nDOMAIN,keep.example.com,China"
+                        with self.subTest(source=source):
+                            parsed, messages = parse(source, purpose="proxy")
+                            self.assertEqual((parsed, messages),
+                                             ([Rule(kind, "^foo"), Rule("DOMAIN", "keep.example.com")], []))
+                            self.assertEqual(set(normalize(parsed)), set(parsed))
+            for marker in ("#", ";", "//"):
+                self.assert_regex_preserved(f"^Game,DIRECT {marker}1$", kind=kind, policy="PROXY", following_rule=True)
+                parsed, messages = parse(f"{kind},^foo,China {marker} note\n"
+                                         "DOMAIN,keep.example.com,China", purpose="proxy")
+                self.assertEqual((parsed, messages), ([Rule("DOMAIN", "keep.example.com")],
+                                                     ["line 1: ambiguous unquoted regex comma or policy"]))
+
+    def test_literal_brace_local_anchors_keep_complete_field_and_rendered_logic(self):
+        from formats import render
+
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in ("^a{b$,c}$", r"^a\{b$,c\}$", r"^a{b\z,c}$",
+                          "^a{b${c,d},e}$", "^a{b$[}],c}$", "^a{b$,(?#})c,d}$", "^a{1,2}$"):
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+                expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
+                parsed, messages = parse(f"AND,{expression},China\nDOMAIN,keep.example.com,China", purpose="proxy")
+                output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
+                self.assertNotIn("fin.yaml:AND", skipped)
+                self.assertEqual(set(parse(output["fin.yaml"], purpose="proxy")[0]), set(normalize(parsed)))
+                self.assertEqual(messages, [])
+            for marker in ("#", ";", "//"):
+                value = f"^a{{b$,My Proxy {marker} note}}$|^foo$"
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+                self.assert_regex_preserved(value, kind=kind, policy="PROXY", following_rule=True)
+
+    def test_unpaired_literal_braces_keep_confirmed_policy_and_source_comments(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in ("^a{b$", r"^a\{b$", "^a{b{1,2}$"):
+                for marker in ("#", ";", "//"):
+                    for policy in ("PROXY", "China"):
+                        source = f"{kind},{value},{policy} {marker} note [,China ($\nDOMAIN,keep.example.com,China"
+                        with self.subTest(source=source):
+                            self.assertEqual(parse(source, purpose="proxy"),
+                                             ([Rule(kind, value), Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_invalid_complete_brace_matcher_is_never_shortened_before_validation(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for marker in ("#", ";", "//"):
+                self.assert_regex_rejected(f"^a{{b$,My Proxy {marker} [}}$", kind=kind)
+
+    def test_reserved_interface_policy_comments_keep_ambiguity(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for policy in sorted(rules._QX_INTERFACE_OPTIONS):
+                for marker in ("#", ";", "//"):
+                    for body in ("note", "note $", r"note \z", "note [,China ("):
+                        source = f"{kind},^foo$,{policy} {marker} {body}\nDOMAIN,keep.example.com,China"
+                        with self.subTest(source=source):
+                            self.assertEqual(parse(source, purpose="proxy"),
+                                             ([Rule("DOMAIN", "keep.example.com")],
+                                              ["line 1: ambiguous unquoted regex comma or policy"]))
+                self.assert_regex_preserved("^foo$", kind=kind, policy=policy + "-custom", following_rule=True)
+                self.assert_regex_preserved("^foo$", kind=kind, policy="custom-" + policy, following_rule=True)
+                self.assert_regex_preserved(f"^foo$,{policy}", kind=kind, logical_only=True, following_rule=True)
+
+    def test_source_comment_brace_cannot_close_an_unpaired_matcher(self):
+        source = "DOMAIN-REGEX,^a{b$,PROXY # note }\nDOMAIN,keep.example.com,China"
+        self.assertEqual(parse(source, purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", "^a{b$"), Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_source_regex_ranges_preserve_matcher_before_policy_and_comment(self):
+        import json
+        from formats import render
+
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for value in ("^a{b$", r"^a\{b$", "^a{b{1,2}$", "^(?x)a{b$"):
+                for quote in ("", "'", '"'):
+                    for policy in ("PROXY", "LIST", "China", "中文 (My) Proxy", "My } Proxy"):
+                        for marker in ("#", ";", "//"):
+                            for body in ("note }", "note } [", r"note } \z,tail$ ( [ # ; //", "note },tail$"):
+                                source = f"{kind},{quote}{value}{quote},{policy} {marker} {body}"
+                                with self.subTest(source=source):
+                                    parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
+                                    expected = [Rule(kind, value), Rule("DOMAIN", "keep.example.com")]
+                                    self.assertEqual((parsed, messages), (expected, []))
+                                    self.assertEqual(set(normalize(parsed)), set(expected))
+                                    output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
+                                    payload = [json.loads(line[4:]) for line in output["fin.yaml"].splitlines()
+                                               if line.startswith('  - "')]
+                                    self.assertEqual(set(payload), {f"{kind},{value}", "DOMAIN,keep.example.com"})
+                                    self.assertNotIn(f"fin.yaml:{kind}", skipped)
+
+    def test_policy_literal_brace_does_not_close_unpaired_regex(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for value in ("^a{b$", r"^a\{b$", "^a{b{1,2}$"):
+                for quote in ("", "'", '"'):
+                    for policy in ("My } Proxy", "中文 } (My) Proxy", "My } Proxy (", "My } Proxy ["):
+                        with self.subTest(kind=kind, value=value, quote=quote, policy=policy):
+                            expected = [Rule(kind, value), Rule("DOMAIN", "keep.example.com")]
+                            parsed, messages = parse(f"{kind},{quote}{value}{quote},{policy}\n"
+                                                     "DOMAIN,keep.example.com,China", purpose="proxy")
+                            self.assertEqual((parsed, messages), (expected, []))
+                            self.assertEqual(set(normalize(parsed)), set(expected))
+
+    def test_complete_paired_regex_ranges_keep_local_anchors_and_markers(self):
+        import json
+        from formats import render
+
+        values = ["^a{b$,c}$", r"^a\{b$,c\}$", r"^a{b\z,c}$", "^a{b${c,d},e}$",
+                  "^a{b$[}],c}$", "^a{b$,(?#})c,d}$", "^a{1,2}$"]
+        values += [f"^a{{b$,My Proxy {marker} note}}$|^foo$" for marker in ("#", ";", "//")]
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for value in values:
+                for quote in ("", "'", '"'):
+                    expression = f"(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))"
+                    for source, expected in ((f"{kind},{quote}{value}{quote},China", Rule(kind, value)),
+                                             (f"AND,{expression},China", Rule("AND", expression))):
+                        with self.subTest(source=source):
+                            parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
+                            self.assertEqual((parsed, messages), ([expected, Rule("DOMAIN", "keep.example.com")], []))
+                            self.assertEqual(set(normalize(parsed)), set(parsed))
+                            output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
+                            payload = [json.loads(line[4:]) for line in output["fin.yaml"].splitlines()
+                                       if line.startswith('  - "')]
+                            rendered = f"AND,{expression}" if expected.kind == "AND" else f"{kind},{value}"
+                            self.assertEqual(set(payload), {rendered, "DOMAIN,keep.example.com"})
+                            self.assertNotIn(f"fin.yaml:{expected.kind}", skipped)
+
+    def test_complete_invalid_paired_regex_is_rejected_at_public_entry(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for marker in ("#", ";", "//"):
+                value = f"^a{{b$,My Proxy {marker} [}}$"
+                for quote in ("", "'", '"'):
+                    expression = f"(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))"
+                    for source in (f"{kind},{quote}{value}{quote},China", f"AND,{expression},China"):
+                        with self.subTest(source=source):
+                            parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
+                            self.assertEqual(parsed, [Rule("DOMAIN", "keep.example.com")])
+                            warning = f"line 1: invalid {kind} {value}" if quote and not source.startswith("AND,") else "line 1: unbalanced delimiters"
+                            self.assertEqual(messages, [warning])
+
+    def test_reserved_regex_policy_comments_cannot_change_ambiguity(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for policy in sorted(rules._QX_INTERFACE_OPTIONS):
+                for marker in ("#", ";", "//"):
+                    source = f"{kind},^a{{b$,{policy} {marker} note }} [ ( $ \\z,tail$\nDOMAIN,keep.example.com,China"
+                    with self.subTest(source=source):
+                        self.assertEqual(parse(source, purpose="proxy"),
+                                         ([Rule("DOMAIN", "keep.example.com")],
+                                          ["line 1: ambiguous unquoted regex comma or policy"]))
+                self.assert_regex_preserved("^a{b$", kind=kind, policy=policy + "-custom", following_rule=True)
+
+    def test_policy_free_logical_regex_does_not_enter_source_policy_state(self):
+        import json
+        from formats import render
+
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for value in ("^a{b$,My } Proxy", "^a{b$,My } Proxy[ab]$", "^a{b$,PROXY # note }", "^a{b$,LIST ; note }$"):
+                expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
+                with self.subTest(kind=kind, value=value):
+                    parsed, messages = parse(f"AND,{expression},China # note }} [\nDOMAIN,keep.example.com,China", purpose="proxy")
+                    self.assertEqual((parsed, messages),
+                                     ([Rule("AND", expression), Rule("DOMAIN", "keep.example.com")], []))
+                    self.assertEqual(set(normalize(parsed)), set(parsed))
+                    output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
+                    payload = [json.loads(line[4:]) for line in output["fin.yaml"].splitlines() if line.startswith('  - "')]
+                    self.assertEqual(set(payload), {f"AND,{expression}", "DOMAIN,keep.example.com"})
+                    self.assertNotIn("fin.yaml:AND", skipped)
+
+    def test_confirmed_source_policy_regex_punctuation_is_literal(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for value in ("^foo$", "^a{b$"):
+                for policy in ("My } Pro*xy (", "My } Pro+xy [", r"My } Pro\xy (", "My } Pro|xy [", "My } Pro$xy ("):
+                    for marker in ("#", ";", "//"):
+                        source = f"{kind},{value},{policy} {marker} note }} [\nDOMAIN,keep.example.com,China"
+                        with self.subTest(source=source):
+                            self.assertEqual(parse(source, purpose="proxy"),
+                                             ([Rule(kind, value), Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_policy_free_source_regex_keeps_anchored_tail_comment(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for marker in ("#", ";", "//"):
+                source = f"{kind},^a{{b$ {marker} note ( [\nDOMAIN,keep.example.com,China"
+                self.assertEqual(parse(source, purpose="proxy"),
+                                 ([Rule(kind, "^a{b$"), Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_source_range_deep_capture_neighbors_have_hard_timeout(self):
+        for depth in (495, 510, 1000):
+            code = ("from rules import Rule, parse, normalize\n"
+                    f"depth = {depth}\n"
+                    "values = [('^' + '(' * depth + 'a' + ')' * depth + '$', True),\n"
+                    "          ('^' + '(' * depth + ')' * depth + '*$', True),\n"
+                    "          ('^' + '(' * depth + ')' * depth + r'*\\1$', True),\n"
+                    "          ('^' + '(' * depth + ')' * depth + '**$', False),\n"
+                    "          ('^' + '(' * depth + ')' * (depth - 1) + '$', False),\n"
+                    "          ('^' + '(' * depth + ')' * depth + r'\\k<' + str(depth + 1) + '>$', False)]\n"
+                    "for value, valid in values:\n"
+                    "    for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX'):\n"
+                    "        for quote in ('', chr(39), chr(34)):\n"
+                    "            expression = f'(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))'\n"
+                    "            for source, rule in ((f'{kind},{quote}{value}{quote},China', Rule(kind,value)),\n"
+                    "                                 (f'AND,{expression},China', Rule('AND',expression))):\n"
+                    "                parsed, messages = parse(source + ' # note } [\\nDOMAIN,keep.example.com,China', purpose='proxy')\n"
+                    "                expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]\n"
+                    "                assert parsed == expected and (messages == [] if valid else\n"
+                    "                    len(messages) == 1 and messages[0].startswith('line 1:')), (depth, kind, valid, len(value))\n"
+                    "                assert set(normalize(parsed)) == set(expected)\n")
+            with self.subTest(depth=depth):
+                try:
+                    result = subprocess.run([sys.executable, "-B", "-c", code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=4)
+                except subprocess.TimeoutExpired:
+                    self.fail("字段范围与深层普通捕获回归使解析子进程超时")
+                self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_legacy_nonword_name_text_falls_back_to_literal(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^\<a²>$", r"^\'a²'$"):
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+
+    def test_legacy_undefined_unicode_word_names_are_rejected(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^\<é>$", r"^\'é'$"):
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_go_word_names_share_declaration_reference_condition_and_balance_scanning(self):
+        for character in ("é", "É", "ǅ", "ʰ", "字", "́", "١", "‿", "‌", "‍", "\U00011f02", "\U0001171e"):
+            for name in (character, "a" + character):
+                for opening, closing, reference in (("(?<", ">", r"\k<"), ("(?'", "'", r"\k'")):
+                    capture = opening + name + closing + "a)"
+                    values = ("^" + capture + reference + name + closing + "$",
+                              "^" + capture + reference[0] + reference[2:] + name + closing + "$",
+                              "^" + capture + "(?(" + name + ")b|c)$",
+                              "^" + capture + opening + "-" + name + closing + "b)$",
+                              "^" + capture + opening + "out-" + name + closing + "b)" + reference + "out" + closing + "$")
+                    for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+                        for value in values:
+                            self.assert_regex_preserved(value, kind=kind, following_rule=True)
+                        self.assert_regex_rejected("^" + reference + name + closing + "$", kind=kind)
+
+    def test_nonword_categories_follow_each_syntax_completion_rule(self):
+        for character in ("²", "Ⅷ", "ा", "😀", "\U0002ebf0", "Ᲊ"):
+            for name in (character, "a" + character):
+                for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+                    for value in ("^\\<" + name + ">$", "^\\'" + name + "'$", "^(?(" + name + ")b|c)$"):
+                        self.assert_regex_preserved(value, kind=kind, following_rule=True)
+                    for value in ("^\\k<" + name + ">$", "^\\k'" + name + "'$",
+                                  "^(?<" + name + ">a)$", "^(?'" + name + "'a)$",
+                                  "^(?<a>a)(?<out-" + name + ">b)$"):
+                        self.assert_regex_rejected(value, kind=kind)
+
+    def test_ascii_decimal_slots_are_distinct_from_unicode_decimal_names(self):
+        valid = (r"^(?<١>a)\k<١>$", r"^(?<١>a)\k<1>$", r"^(?<٣>a)\k<٣>$",
+                 r"^(?<٠>a)\k<٠>$", r"^(?<١a>a)\k<١a>$", r"^(?<١1>a)\k<١1>$",
+                 r"^(?<a١>a)\k<a١>$", r"^(?<١>a)(?(١)b|c)$", r"^(?<١>a)(?<-١>b)$",
+                 r"^\<1١>$", r"^\'1a'$", r"^(?<1>a)\k<01>$",
+                 r"^(?<1>a)(?(01)b|c)$", r"^(?<1>a)(?<-01>b)$")
+        invalid = (r"^(?<٣>a)\k<3>$", r"^(?<1>a)\k<١>$", r"^(?<1١>a)$",
+                   r"^(?<1a>a)$", r"^\k<1١>$", r"^\k'1a'$", r"^(?<٣>a)(?(3)b|c)$",
+                   r"^(?<٣>a)(?<-3>b)$", r"^(?<0>a)$")
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in valid:
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+            for value in invalid:
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_legacy_incomplete_tokens_and_class_escapes_keep_literal_fallback(self):
+        valid = (r"^\<é$", r"^\'é$", r"^\<1$", r"^\'1$", r"^\<>$", r"^\''$",
+                 r"^\<-$", r"^\'-$", r"^\<a'$", r"^\'a>$", r"^[\<é>]$", r"^[\'é']$",
+                 r"^(?<a>a)\<a²>$", r"^(?<a>a)\'a²'$")
+        invalid = (r"^\k<é$", r"^\k'é$", r"^\k<1$", r"^\k'1$", r"^\k<>$", r"^\k''$",
+                   r"^\k<-$", r"^\k'-$", r"^[\k<é>]$", r"^\<2147483648$", r"^\'2147483648$")
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in valid:
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+            for value in invalid:
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_unicode_names_preserve_case_duplicates_forward_and_expression_conditions(self):
+        valid = (r"^(?<é>a)(?<é>b)\k<é>$", r"^\<é>(?<é>a)$", r"^(?(é)b|c)(?<é>a)$",
+                 r"^(?<é>a)(?(É)b|c)$", r"^(?<a>a)(?(a²)b|c)$", r"^(?<é>a)(?<b-é>b)\k<b>$",
+                 r"^(?<é>a)(?<-é>b)$", r"^(?<-é>a)(?<é>b)$", r"^(?i:(?<é>a))\k<é>$")
+        invalid = (r"^(?<é>a)\k<É>$", r"^(?<é>a)(?<-É>b)$", r"^(?<é>a)(?<b-a²>b)$",
+                   r"^(?<a>a)(?(a²)b|c)\k<2>$", r"^(?(é)b|c)\k<1>$", r"^(?(é)b|c|d)$")
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in valid:
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+            for value in invalid:
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_expression_condition_fallback_keeps_forbidden_comment_and_capture_heads_rejected(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^(?(?#note)a|b)$", r"^(?(?<é>a)b|c)$", "^(?(?'é'a)b|c)$"):
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_unknown_unicode_word_character_escapes_use_fixed_client_categories(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for character in ("é", "́", "١", "‿", "‌", "‍", "\U00011f02"):
+                for value in ("^\\" + character + "$", "^[\\" + character + "]$"):
+                    self.assert_regex_rejected(value, kind=kind)
+            for character in ("²", "Ⅷ", "ा", "\U0002ebf0", "Ᲊ"):
+                for value in ("^\\" + character + "$", "^[\\" + character + "]$"):
+                    self.assert_regex_preserved(value, kind=kind, following_rule=True)
+
+    def test_fixed_go_wordchar_ranges_have_exact_boundaries_and_size(self):
+        boundaries = rules._REGEXP2_WORD_BOUNDARIES
+        self.assertEqual(len(boundaries), 869 * 2)
+        self.assertTrue(all(left < right for left, right in zip(boundaries, boundaries[1:])))
+        self.assertEqual(sum(end - start for start, end in zip(boundaries[::2], boundaries[1::2])), 138781)
+        for start, end in zip(boundaries[::2], boundaries[1::2]):
+            for point, expected in ((start - 1, False), (start, True), (end - 1, True), (end, False)):
+                self.assertEqual(rules._regexp2_word_char(chr(point)), expected, hex(point))
+        for point in (0x11f02, 0x1171e, 0x200c, 0x200d, 0x323af):
+            self.assertTrue(rules._regexp2_word_char(chr(point)))
+        for point in (0xb2, 0x2167, 0x93e, 0x2ebf0, 0x2ee5d, 0x1c89, 0x10ffff):
+            self.assertFalse(rules._regexp2_word_char(chr(point)))
+
+    def test_long_unicode_names_and_all_numeric_reference_forms_have_hard_timeout(self):
+        code = r'''
+from rules import Rule, parse, normalize
+for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'")):
+    name = 'a' + chr(0x301) * 5000
+    value = '^(?<' + name + '>a)' + opening + name + closing + '$'
+    values = [(value, True)]
+    for digits, valid in (('0' * 5000 + '1', True), ('1' * 5000, False)):
+        values.append(('^(?<1>a)' + opening + digits + closing + '$', valid))
+        if not valid:
+            values.append(('^(?<1>a)' + opening + digits + '$', False))
+    for value, valid in values:
+        for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):
+            expression = f'(({kind},{value}),(DOMAIN,x.example.com))'
+            for source, rule in ((f'{kind},{value},China', Rule(kind,value)),
+                                 (f'AND,{expression},China', Rule('AND',expression))):
+                parsed, messages = parse(source + '\nDOMAIN,keep.example.com,China', purpose='proxy')
+                expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]
+                assert parsed == expected and (messages == [] if valid else
+                       len(messages) == 1 and messages[0].startswith('line 1:')), (kind, len(value), valid)
+                assert set(normalize(parsed)) == set(expected)
+'''
+        try:
+            result = subprocess.run([sys.executable, "-c", code], cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("超长名称或数值引用使解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def assert_same_name_source(self, kind, value, source_kind):
+        from formats import FILES, render
+
+        expected = Rule(source_kind, value)
+        for tail in ("src,src", "src,src,no-resolve", "src,no-resolve,src",
+                     "PROXY,src", "SRC,src"):
+            with self.subTest(tail=tail):
+                parsed, messages = parse(f"{kind},{value},{tail}", purpose="proxy")
+                self.assertEqual(parsed, [expected])
+                self.assertEqual(normalize(parsed), [expected])
+                self.assertEqual(messages, [f"line 1: unsupported no-resolve for {source_kind}"]
+                                 if "no-resolve" in tail else [])
+                for mode in ("add", "strip", "keep"):
+                    output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve=mode)
+                    emitted = {"fin.yaml"}
+                    if source_kind == "SRC-IP-CIDR":
+                        emitted.update(("fin.txt", "fin-surge.txt"))
+                    self.assertEqual(skipped, {f"{name}:{source_kind}": 1 for name in FILES if name not in emitted})
+                    for name in FILES:
+                        self.assertNotIn("no-resolve", output[name])
+                        self.assertIn(f"{'Total count' if name == 'fin-adb.txt' else 'rules'}: {int(name in emitted)}",
+                                      output[name])
+                    self.assertIn(f'  - "{source_kind},{value}"\n', output["fin.yaml"])
+                    if source_kind == "SRC-IP-CIDR":
+                        self.assertIn(f"SRC-IP,{value}\n", output["fin.txt"])
+                        self.assertIn(f"SRC-IP,{value}\n", output["fin-surge.txt"])
+
+    def test_same_name_src_cidr_policy_and_option(self):
+        self.assert_same_name_source("IP-CIDR", "192.0.2.0/24", "SRC-IP-CIDR")
+
+    def test_same_name_src_cidr6_policy_and_option(self):
+        self.assert_same_name_source("IP-CIDR6", "2001:db8::/32", "SRC-IP-CIDR")
+
+    def test_same_name_src_geoip_policy_and_option(self):
+        self.assert_same_name_source("GEOIP", "CN", "SRC-GEOIP")
+
+    def test_same_name_src_asn_policy_and_option(self):
+        self.assert_same_name_source("IP-ASN", "64512", "SRC-IP-ASN")
+
+    def test_same_name_src_suffix_policy_and_option(self):
+        self.assert_same_name_source("IP-SUFFIX", "8.8.8.8/24", "SRC-IP-SUFFIX")
+
+    def test_src_policy_without_explicit_source_option_keeps_ambiguity_and_options(self):
+        for tail in ("src", "src,no-resolve"):
+            self.assertEqual(parse(f"IP-CIDR,192.0.2.0/24,{tail}", purpose="proxy"),
+                             ([], ["line 1: ambiguous src policy or option"]))
+        for option in ("force-cellular", "multi-interface", "multi-interface-balance"):
+            self.assertEqual(parse(f"IP-CIDR,192.0.2.0/24,src,{option}", purpose="proxy"),
+                             ([Rule("IP-CIDR", "192.0.2.0/24", (option,))], []))
+        self.assertEqual(parse("IP-CIDR,192.0.2.0/24,src,PROXY", purpose="proxy"),
+                         ([], ["line 1: unexpected fields"]))
+
+    def test_explicit_source_option_keeps_policy_compatibility(self):
+        for policy, purpose in (("REJECT", "proxy"), ("DIRECT", "proxy"), ("China", "block")):
+            with self.subTest(policy=policy, purpose=purpose):
+                self.assertEqual(parse(f"IP-CIDR,192.0.2.0/24,{policy},src", purpose=purpose),
+                                 ([], [f"line 1: incompatible action {policy.upper()}"]))
+
+    def test_same_name_source_keeps_no_resolve_only_on_destination_leaf(self):
+        from formats import FILES, render
+
+        source, messages = parse("IP-CIDR,192.0.2.0/24,src,src", purpose="proxy")
+        self.assertEqual((source, messages), ([Rule("SRC-IP-CIDR", "192.0.2.0/24")], []))
+        expression = "((SRC-IP-CIDR,192.0.2.0/24),(IP-CIDR,198.51.100.0/24,no-resolve))"
+        parsed, messages = parse(f"AND,{expression},src", purpose="proxy")
+        self.assertEqual((parsed, messages), ([Rule("AND", expression)], []))
+        for mode in ("add", "strip", "keep"):
+            output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve=mode)
+            self.assertEqual(skipped, {f"{name}:AND": 1 for name in FILES
+                                       if name not in {"fin.txt", "fin.yaml", "fin-surge.txt"}})
+            for name in ("fin.txt", "fin.yaml", "fin-surge.txt"):
+                self.assertNotIn("SRC-IP,192.0.2.0/24,no-resolve", output[name])
+                self.assertNotIn("SRC-IP-CIDR,192.0.2.0/24,no-resolve", output[name])
+                target = "IP-CIDR,198.51.100.0/24" + (",no-resolve" if mode != "strip" else "")
+                self.assertIn(target + ")", output[name])
+                self.assertEqual(output[name].count("no-resolve"), int(mode != "strip"))
+
+    def test_initial_class_escape_consumes_first_item(self):
+        self.assert_regex_preserved(r"^[\d]+$")
+
+    def test_initial_negated_class_escape_consumes_first_item(self):
+        self.assert_regex_preserved(r"^[^\d]+$")
+
+    def test_initial_escaped_closing_bracket_consumes_first_item(self):
+        self.assert_regex_preserved(r"^[\]]$")
+
+    def test_second_class_caret_is_literal(self):
+        self.assert_regex_preserved("^[^^]$")
+
+    def test_first_literal_closing_bracket_does_not_end_class_before_backreference(self):
+        self.assert_regex_rejected(r"^[]\k<1>]$")
+
+    def test_first_literal_closing_bracket_with_comma_does_not_end_class_before_backreference(self):
+        self.assert_regex_rejected(r"^[]\k<1>,x]$")
+
+    def test_first_literal_closing_bracket_does_not_hide_invalid_property_range(self):
+        self.assert_regex_rejected(r"^[]a-\p{L}]$")
+
+    def test_class_comment_and_subtraction_boundaries_keep_valid_neighbors(self):
+        for value in (r"^[]a,b]$", r"^[^]a,b]$", r"^[\^]$",
+                      r"^[a-z-[aeiou]]{1,2}$", r"^(?#note[)a$"):
+            self.assert_regex_preserved(value)
+        for value in (r"^[\d$", r"^[^\d$", r"^[\]$", r"^[^^$",
+                      r"^[a-z-[aeiou]$", r"^(?#note[a$"):
+            self.assert_regex_rejected(value)
+
+    def test_nested_class_subtraction_keeps_boundary_and_rejects_trailing_item(self):
+        self.assert_regex_preserved(r"^[a-z-[d-f-[e]]]$")
+        self.assert_regex_preserved(r"^[-[a]]$")
+        self.assert_regex_rejected(r"^[a-z-[aeiou]b]$")
+
+    def test_first_literal_closing_bracket_keeps_hash_in_class(self):
+        self.assert_regex_preserved(r"^[] #]$")
+
+    def test_custom_policy_keeps_extended_regex_comment_in_logic(self):
+        self.assert_regex_preserved(r"^(?x)a # [", logical_only=True)
+        self.assert_regex_preserved(r"^(?x)a # [", policy="PROXY")
+        self.assertEqual(parse(r"DOMAIN-REGEX,^(?x)a # [,China", purpose="proxy"),
+                         ([], ["line 1: ambiguous unquoted regex comma or policy"]))
+
+    def test_custom_policy_keeps_literal_hash_after_disabling_extended_mode(self):
+        self.assert_regex_preserved(r"^(?x)a(?-x) # [b]$")
+
+    def test_custom_logical_policy_true_tail_comment_has_separate_boundary(self):
+        expression = "((DOMAIN-REGEX,^(?x)a # [),(DOMAIN,x.example.com))"
+        for comment in (" # note", " ; note (", " // note ["):
+            with self.subTest(comment=comment):
+                self.assertEqual(parse(f"AND,{expression},China{comment}", purpose="proxy"),
+                                 ([Rule("AND", expression)], []))
+        ordinary = "((DOMAIN-REGEX,^a$),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{ordinary},China # real comment", purpose="proxy"),
+                         ([Rule("AND", ordinary)], []))
+        self.assert_regex_rejected(r"^(?x)a(?-x) # [")
+
+    def test_invalid_literal_hash_after_disabling_extended_mode_is_not_trimmed(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^(?x)a(?-x) # [", r"^foo$ # ["):
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_class_hash_and_unbalanced_true_tail_comment_have_separate_boundaries(self):
+        value = r"^[] #]$"
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for logical in (False, True):
+                expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
+                source = f"AND,{expression},China" if logical else f"{kind},{value},China"
+                expected = Rule("AND", expression) if logical else Rule(kind, value)
+                for comment in (" # note (", " ; note [", " // note ("):
+                    with self.subTest(kind=kind, logical=logical, comment=comment):
+                        parsed, messages = parse(source + comment + "\nDOMAIN,keep.example.com,China",
+                                                 purpose="proxy")
+                        self.assertEqual((parsed, messages),
+                                         ([expected, Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_closed_class_literal_hash_and_extended_comment_neighbors_are_preserved(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^[a #]$", r"^(?x)a(?-x) # [b]$", r"^(?x:(?# [)a)$",
+                          r"^foo$ # [b]$", r"^(?x)a(?-x)$ # [b]$"):
+                self.assert_regex_preserved(value, kind=kind)
+        expression = "((PROCESS-NAME-REGEX,^(?x)a # [),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{expression},China # note (", purpose="proxy"),
+                         ([Rule("AND", expression)], []))
+
+    def test_regex_policy_tail_comment_does_not_use_comment_body_as_matcher(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in ("^foo$", r"^foo\z", r"^[] #]$"):
+                for logical in (False, True):
+                    expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
+                    source = f"AND,{expression},China" if logical else f"{kind},{value},China"
+                    expected = Rule("AND", expression) if logical else Rule(kind, value)
+                    for marker in ("#", ";", "//"):
+                        for body in ("note $", r"note \z", "note ($", "note [,China $"):
+                            with self.subTest(kind=kind, value=value, logical=logical,
+                                              marker=marker, body=body):
+                                self.assertEqual(parse(source + f" {marker} {body}\n"
+                                                       "DOMAIN,keep.example.com,China", purpose="proxy"),
+                                                 ([expected, Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_quoted_regex_policy_field_accepts_spaces_and_unicode_before_comment(self):
+        value = r"^[] #]$"
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for policy in ("My Proxy", "香港"):
+                for quote in ("'", '"'):
+                    expression = f"(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))"
+                    for source, expected in ((f"{kind},{quote}{value}{quote},{policy}", Rule(kind, value)),
+                                             (f"AND,{expression},{policy}", Rule("AND", expression))):
+                        for marker in ("#", ";", "//"):
+                            with self.subTest(source=source, marker=marker):
+                                self.assertEqual(parse(source + f" {marker} note (\n"
+                                                       "DOMAIN,keep.example.com,China", purpose="proxy"),
+                                                 ([expected, Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_confirmed_regex_and_logical_policy_fields_are_literal(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for quoted in (False, True):
+                matcher = "'^foo$'" if quoted else "^foo$"
+                expression = f"(({kind},{matcher}),(DOMAIN,x.example.com))"
+                for policy in ("My Proxy (", "香港 [", "My Proxy (香港)"):
+                    for source, expected in ((f"{kind},{matcher},{policy}", Rule(kind, "^foo$")),
+                                             (f"AND,{expression},{policy}", Rule("AND", expression))):
+                        for comment in ("", " # note ($", " ; note ,China", r" // note \z"):
+                            with self.subTest(source=source, comment=comment):
+                                self.assertEqual(parse(source + comment + "\nDOMAIN,keep.example.com,China",
+                                                       purpose="proxy"),
+                                                 ([expected, Rule("DOMAIN", "keep.example.com")], []))
+
+    def test_disabled_extended_hash_before_custom_policy_keeps_complete_invalid_matcher(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for policy in ("My Proxy", "香港"):
+                for value in (r"^(?x)a(?-x)$ # [", r"^foo$ # ["):
+                    for quote in ("", "'", '"'):
+                        expression = f"(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))"
+                        for source in (f"{kind},{quote}{value}{quote},{policy}",
+                                       f"AND,{expression},{policy}"):
+                            with self.subTest(source=source):
+                                parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China",
+                                                         purpose="proxy")
+                                self.assertEqual(parsed, [Rule("DOMAIN", "keep.example.com")])
+                                self.assertEqual(len(messages), 1)
+                                self.assertTrue(messages[0].startswith("line 1:"), messages)
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^(?x)a(?-x)$ # [b]$", r"^[] #]$"):
+                self.assert_regex_preserved(value, kind=kind)
+            self.assert_regex_preserved(r"^(?x)a # [", kind=kind, policy="PROXY")
+
+    def test_unicode_control_escape_expansion_warns_without_crashing(self):
+        self.assert_regex_rejected(r"^\cß[a]$", kind="DOMAIN-REGEX")
+
+    def test_unicode_control_escape_fold_is_rejected(self):
+        self.assert_regex_rejected(r"^\cſ[a]$", kind="DOMAIN-REGEX")
+
+    def test_ascii_control_escape_boundaries_are_preserved(self):
+        for value in (r"^\cA[a]$", r"^\ca[a]$", r"^\cZ[a]$", r"^\cz[a]$",
+                      r"^\c@[a]$", r"^\c[[a]$", r"^\c][a]$", r"^\c\[a]$",
+                      r"^\c^[a]$", r"^\c_[a]$"):
+            self.assert_regex_preserved(value)
+        for value in (r"^\cÉ[a]$", r"^\c![a]$", r"^\c`[a]$"):
+            self.assert_regex_rejected(value)
+
+    def test_conditional_negative_lookahead_is_preserved(self):
+        self.assert_regex_preserved(r"^(?(?!a)b|a)ds[.]example[.]com$")
+        self.assert_regex_rejected(r"^(?(?!a)b|a|c)$")
+
+    def test_conditional_positive_lookbehind_is_preserved(self):
+        self.assert_regex_preserved(r"^a(?(?<=a)b|c)ds[.]example[.]com$")
+        self.assert_regex_rejected(r"^a(?(?<=a)b|c|d)$")
+
+    def test_conditional_negative_lookbehind_is_preserved(self):
+        self.assert_regex_preserved(r"^a(?(?<!b)b|c)ds[.]example[.]com$")
+        self.assert_regex_rejected(r"^a(?(?<!b)b|c|d)$")
+
+    def test_named_balancing_output_capture_is_preserved(self):
+        self.assert_regex_preserved(r"^(?<grp>a)(?<out-grp>b)ds[.]example[.]com$")
+        self.assert_regex_preserved(r"^(?'grp'a)(?'out-grp'b)ds[.]example[.]com$")
+        self.assert_regex_preserved(r"^a(?<-grp>b)(?<grp>c)$")
+        self.assert_regex_preserved(r"^(?<grp-grp>a)$")
+        self.assert_regex_rejected(r"^(?<grp>a)(?<out-missing>b)$")
+        self.assert_regex_rejected(r"^(?<out-grp>b)$")
+
+    def test_numeric_backreference_with_leading_zeroes_is_preserved(self):
+        self.assert_regex_preserved(r"^(a)\k<001>ds[.]example[.]com$")
+        self.assert_regex_rejected(r"^(a)\k<002>$")
+
+    def test_numeric_backreference_above_two_digits_is_preserved(self):
+        self.assert_regex_preserved("^" + "(a)" * 100 + r"\k<100>$")
+        self.assert_regex_rejected("^" + "(a)" * 100 + r"\k<101>$")
+
+    def test_capture_reference_boundaries_include_zero_and_explicit_capture_mode(self):
+        self.assert_regex_preserved(r"^a\k<0>$")
+        self.assert_regex_preserved(r"^(\k<1>)$")
+        self.assert_regex_preserved(r"^(?n:(?<grp>a))\k<1>$")
+        self.assert_regex_rejected(r"^(?n:(a))\k<1>$")
+        self.assert_regex_rejected(r"^(?(?!a)b|a)\k<1>$")
+
+    def test_long_zero_padded_defined_reference_has_hard_timeout(self):
+        code = ("from rules import Rule, parse\n"
+                "value = r'^(a)\\k<' + '0' * 5000 + '1>$'\n"
+                "assert parse(f'DOMAIN-REGEX,{value},REJECT', purpose='block') == "
+                "([Rule('DOMAIN-REGEX', value)], [])")
+        try:
+            result = subprocess.run([sys.executable, "-c", code],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("带大量前导零的合法引用让解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_deep_backreference_keeps_captures_under_hard_timeout(self):
+        for reference in (r"\k<1>", r"\1"):
+            code = ("from rules import Rule, parse, normalize\n"
+                    f"value = '^' + '(' * 495 + 'a' + ')' * 495 + {reference!r} + 'ds[.]example[.]com$'\n"
+                    "source = f'DOMAIN-REGEX,{value},REJECT\\nDOMAIN,x.example.com,REJECT'\n"
+                    "parsed, messages = parse(source, purpose='block')\n"
+                    "assert parsed == [Rule('DOMAIN-REGEX', value), Rule('DOMAIN', 'x.example.com')] "
+                    "and messages == [], (parsed, messages)\n"
+                    "assert set(normalize(parsed)) == set(parsed)")
+            with self.subTest(reference=reference):
+                try:
+                    result = subprocess.run([sys.executable, "-c", code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=4)
+                except subprocess.TimeoutExpired:
+                    self.fail("深层引用让解析子进程超时")
+                self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_bare_numeric_reference_overflow_warns(self):
+        self.assert_regex_rejected(r"^\2147483648$")
+        self.assert_regex_rejected(r"^\2147483648$", kind="DOMAIN-REGEX")
+
+    def test_bare_numeric_octal_and_reference_boundaries_are_preserved(self):
+        for value in (r"^\10$", r"^\18$", r"^\118$", r"^\400$", r"^\777$",
+                      r"^\2147483647$", r"^\011$", r"^[\10]$", r"^(a)\1$",
+                      "^" + "(a)" * 10 + r"\k<010>$"):
+            self.assert_regex_preserved(value, kind="PROCESS-NAME-REGEX")
+        for value in (r"^\1$", r"^\8$", r"^\80$", r"^(a)\k<10>$"):
+            self.assert_regex_rejected(value)
+
+    def test_long_bare_numeric_reference_overflow_has_hard_timeout(self):
+        code = ("from rules import Rule, parse\n"
+                "for value in (r'^\\2147483648$', '^' + chr(92) + '1' * 5000 + '$'):\n"
+                "    for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
+                "        for source in (f'{kind},{value},REJECT', "
+                "f'AND,(({kind},{value}),(DOMAIN,x.example.com)),REJECT'):\n"
+                "            parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,REJECT', purpose='block')\n"
+                "            assert parsed == [Rule('DOMAIN', 'keep.example.com')] and "
+                "len(messages) == 1 and messages[0].startswith('line 1:'), (parsed, messages)\n"
+                "value = '^' + chr(92) + '0' + '1' * 5000 + '$'\n"
+                "assert parse(f'PROCESS-NAME-REGEX,{value},REJECT', purpose='block') == "
+                "([Rule('PROCESS-NAME-REGEX', value)], [])")
+        try:
+            result = subprocess.run([sys.executable, "-c", code],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("超长裸数字转义让解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_deep_two_digit_numeric_reference_has_hard_timeout(self):
+        for depth in (495, 510, 1000):
+            code = ("from rules import Rule, parse, normalize\n"
+                    f"value = '^' + '(' * {depth} + 'a' + ')' * {depth} + r'\\10$'\n"
+                    "for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
+                    "    expression = f'(({kind},{value}),(DOMAIN,x.example.com))'\n"
+                    "    for source, expected in ((f'{kind},{value},REJECT', Rule(kind,value)), "
+                    "(f'AND,{expression},REJECT', Rule('AND',expression))):\n"
+                    "        parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,REJECT', purpose='block')\n"
+                    "        assert parsed == [expected, Rule('DOMAIN', 'keep.example.com')] and messages == [], (parsed, messages)\n"
+                    "        assert set(normalize(parsed)) == set(parsed)")
+            with self.subTest(depth=depth):
+                try:
+                    result = subprocess.run([sys.executable, "-c", code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=4)
+                except subprocess.TimeoutExpired:
+                    self.fail("深层两位数字引用让解析子进程超时")
+                self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_explicit_numeric_capture_declarations_are_preserved(self):
+        for value in (r"^(?<1>a)\k<1>$", r"^(?<100>a)\k<100>$",
+                      r"^(?'100'a)\k<0100>$", r"^(?<100>a)\100$",
+                      r"^(?<2147483647>a)\k<2147483647>$"):
+            with self.subTest(value=value, policy="REJECT"):
+                self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},REJECT", purpose="block"),
+                                 ([Rule("PROCESS-NAME-REGEX", value)], []))
+            self.assert_regex_preserved(value, kind="PROCESS-NAME-REGEX")
+            self.assert_regex_preserved(value, kind="DOMAIN-REGEX")
+
+    def test_numeric_capture_slots_and_named_assignment_are_preserved(self):
+        for value in (r"^(?<1>a)(b)\1$", r"^(?<1>a)(?<grp>b)\k<2>$",
+                      r"^(?<100>a)(?<grp>b)\k<1>$", r"^(?<1>a)(?<out-001>b)\k<2>$",
+                      r"^(?<100>a)(?<100>b)\k<0100>$", r"^(a)(?<01>b)\k<001>$",
+                      r"^(?<1>a)(?<out-002>b)$"):
+            self.assert_regex_preserved(value, kind="PROCESS-NAME-REGEX")
+        for value in (r"^(?<100>a)\k<2>$", r"^(?<1>a)(b)\k<2>$",
+                      r"^(?<0>a)$", r"^(?<010>a)\k<10>$", r"^(?<1>a)(?<out-003>b)$",
+                      r"^(?<2147483648>a)$", r"^(?<1>a)\k<2147483648>$"):
+            self.assert_regex_rejected(value)
+
+    def test_long_numeric_declarations_and_references_have_hard_timeout(self):
+        code = ("from rules import Rule, parse\n"
+                "invalid = (r'^(?<' + '1' * 5000 + r'>a)$', "
+                "r'^(?<100>a)\\k<' + '1' * 5000 + '>$')\n"
+                "for value in invalid:\n"
+                "    parsed, messages = parse(f'PROCESS-NAME-REGEX,{value},REJECT\\nDOMAIN,keep.example.com,REJECT', purpose='block')\n"
+                "    assert parsed == [Rule('DOMAIN', 'keep.example.com')] and "
+                "len(messages) == 1 and messages[0].startswith('line 1:'), (parsed, messages)\n"
+                "value = r'^(?<100>a)\\k<' + '0' * 5000 + '100>$'\n"
+                "assert parse(f'PROCESS-NAME-REGEX,{value},REJECT', purpose='block') == "
+                "([Rule('PROCESS-NAME-REGEX', value)], [])")
+        try:
+            result = subprocess.run([sys.executable, "-c", code],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("超长数值声明或引用让解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_long_numeric_conditions_have_hard_timeout(self):
+        code = ("from rules import Rule, parse, normalize\n"
+                "for capture in (r'(?<1>a)', '(a)'):\n"
+                "    for digits, valid in (('0' * 5000 + '1', True), ('1' * 5000, False)):\n"
+                "        value = '^' + capture + '(?(' + digits + ')b|c)$'\n"
+                "        for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
+                "            expression = f'(({kind},{value}),(DOMAIN,x.example.com))'\n"
+                "            for source, rule in ((f'{kind},{value},China', Rule(kind,value)), "
+                "(f'AND,{expression},China', Rule('AND',expression))):\n"
+                "                parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,China', purpose='proxy')\n"
+                "                expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]\n"
+                "                assert parsed == expected and (messages == [] if valid else "
+                "len(messages) == 1 and messages[0].startswith('line 1:')), (capture, valid, kind, len(value))\n"
+                "                assert set(normalize(parsed)) == set(expected)")
+        try:
+            result = subprocess.run([sys.executable, "-c", code],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("超长数值条件使解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_numeric_conditions_validate_original_sparse_and_forward_slots(self):
+        valid = (r"^(?<100>a)(?(100)b|c)$", r"^(?<100>a)(?(0100)b|c)$",
+                 r"^(?(100)b|c)(?<100>a)$", r"^(?<grp>a)(?(1)b|c)$",
+                 r"^(?<2147483647>a)(?(2147483647)b|c)$", r"^(a)(?(0)b|c)$")
+        invalid = (r"^(?<100>a)(?(1)b|c)$", r"^(?<100>a)(?(01)b|c)$",
+                   r"^(?<100>a)(?(101)b|c)$", r"^(?<1>a)(?(2147483648)b|c)$",
+                   r"^(?<100>a)(?(100)b|c|d)$", r"^(?<100>a)(?(100x)b|c)$")
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in valid:
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+            for value in invalid:
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_conditional_headers_do_not_allocate_capture_slots(self):
+        valid = (r"^(?<1>a)(b)(?(1)c|d)\k<1>$", r"^(a)(?(1)b|c)\k<1>$",
+                 r"^(a)(?(1)(b)|c)\k<2>$", r"^(?(?=(a))a|b)\k<1>$",
+                 r"^(?<1>a)(?:b)(?=c)(?i:d)(?(1)e|f)\k<1>$",
+                 r"^(?<grp>a)(?<grp>b)(?(grp)c|d)\k<1>$")
+        invalid = (r"^(?<1>a)(b)(?(1)c|d)\k<2>$", r"^(a)(?(1)b|c)\k<2>$",
+                   r"^(?<1>a)(?:b)(?=c)(?i:d)(?(1)e|f)\k<2>$",
+                   r"^(?<grp>a)(?<grp>b)(?(grp)c|d)\k<2>$")
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in valid:
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+            for value in invalid:
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_named_conditional_forward_references_and_expression_conditions(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^(?(grp)a|b)(?<grp>c)$", r"^(?<grp>a)(?(grp)b|c)$",
+                          r"^(?(missing)a|b)$"):
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+            for value in (r"^(?(missing)a|b)\k<missing>$", r"^(?(missing)a|b)\k<1>$"):
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_legacy_capture_references_share_slot_and_numeric_validation(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
+            for value in (r"^(?<100>a)\<0100>$", r"^(?<100>a)\'0100'$",
+                          r"^(?<grp>a)\<grp>$", r"^(?<grp>a)\'grp'$",
+                          r"^\<100>(?<100>a)$", r"^\<0>$",
+                          r"^(?<2147483647>a)\<2147483647>$",
+                          r"^[\<100>]$", r"^[\'100']$", r"^[\<2147483648>]$",
+                          r"^\<100$"):
+                self.assert_regex_preserved(value, kind=kind, following_rule=True)
+            for value in (r"^(?<100>a)\<101>$", r"^(?<100>a)\<0101>$",
+                          r"^(?<100>a)\'101'$", r"^(?<100>a)\<2147483648>$",
+                          r"^\<100>$", r"^\<missing>$", r"^(a)\'missing'$",
+                          r"^\<2147483648$", r"^[\k<1>]$"):
+                self.assert_regex_rejected(value, kind=kind)
+
+    def test_long_legacy_capture_references_have_hard_timeout(self):
+        code = ("from rules import Rule, parse\n"
+                "for opening, closing in ((r'\\<', '>'), (chr(92) + chr(39), chr(39))):\n"
+                "    for digits, valid in (('0' * 5000 + '100', True), ('1' * 5000, False)):\n"
+                "        value = r'^(?<100>a)' + opening + digits + closing + '$'\n"
+                "        for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
+                "            expression = f'(({kind},{value}),(DOMAIN,x.example.com))'\n"
+                "            for source, rule in ((f'{kind},{value},China', Rule(kind,value)), "
+                "(f'AND,{expression},China', Rule('AND',expression))):\n"
+                "                parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,China', purpose='proxy')\n"
+                "                expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]\n"
+                "                assert parsed == expected and (messages == [] if valid else "
+                "len(messages) == 1 and messages[0].startswith('line 1:')), (valid, kind, len(value))\n"
+                "    value = '^[' + opening + '1' * 5000 + closing + ']$'\n"
+                "    assert parse(f'DOMAIN-REGEX,{value},China', purpose='proxy') == "
+                "([Rule('DOMAIN-REGEX',value)], [])")
+        try:
+            result = subprocess.run([sys.executable, "-c", code],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("超长旧式数值引用使解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_deep_group_atoms_and_initial_class_states_have_hard_timeout(self):
+        for middle, quantifier in (("", "*"), (r"[\]]", ""), ("[^^]", "")):
+            code = ("from rules import Rule, parse\n"
+                    f"value = '^' + '(' * 495 + {middle!r} + ')' * 495 + {quantifier!r} + r'\\k<1>$'\n"
+                    "assert parse(f'DOMAIN-REGEX,{value},REJECT', purpose='block') == "
+                    "([Rule('DOMAIN-REGEX', value)], []), value\n"
+                    "invalid = '^' + '(' * 495 + 'a**' + ')' * 495 + r'\\k<1>$'\n"
+                    "parsed, messages = parse(f'DOMAIN-REGEX,{invalid},REJECT\\nDOMAIN,x.example.com,REJECT', purpose='block')\n"
+                    "assert parsed == [Rule('DOMAIN', 'x.example.com')] and "
+                    "len(messages) == 1 and messages[0].startswith('line 1:'), (parsed, messages)")
+            with self.subTest(middle=middle, quantifier=quantifier):
+                try:
+                    result = subprocess.run([sys.executable, "-c", code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=4)
+                except subprocess.TimeoutExpired:
+                    self.fail("深层空组量词或字符类让解析子进程超时")
+                self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_deep_empty_group_quantifier_and_reference_have_hard_timeout(self):
+        for depth in (510, 1000):
+            code = ("from rules import Rule, parse, normalize\n"
+                    f"value = '^' + '(' * {depth} + ')' * {depth} + r'*\\k<1>$'\n"
+                    "for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
+                    "    expression = f'(({kind},{value}),(DOMAIN,x.example.com))'\n"
+                    "    for source, expected in ((f'{kind},{value},REJECT', Rule(kind,value)), "
+                    "(f'AND,{expression},REJECT', Rule('AND',expression))):\n"
+                    "        parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,REJECT', purpose='block')\n"
+                    "        assert parsed == [expected, Rule('DOMAIN', 'keep.example.com')] and messages == [], (parsed, messages)\n"
+                    "        assert set(normalize(parsed)) == set(parsed)")
+            with self.subTest(depth=depth):
+                try:
+                    result = subprocess.run([sys.executable, "-c", code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=4)
+                except subprocess.TimeoutExpired:
+                    self.fail("深层空组量词与引用让解析子进程超时")
+                self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_deep_empty_atoms_quantifiers_and_numeric_references_have_hard_timeout(self):
+        code = ("from rules import Rule, parse\n"
+                "for depth in (510, 1000):\n"
+                "    for quantifier, reference in (('', ''), ('', r'\\k<1>'), ('*', ''), "
+                "('+', r'\\1'), ('?', r'\\10'), ('{0,2}', r'\\k<010>'), ('*?', r'\\k<1>')):\n"
+                "        value = '^' + '(' * depth + ')' * depth + quantifier + reference + '$'\n"
+                "        parsed, messages = parse(f'PROCESS-NAME-REGEX,{value},REJECT\\nDOMAIN,keep.example.com,REJECT', purpose='block')\n"
+                "        assert parsed == [Rule('PROCESS-NAME-REGEX', value), Rule('DOMAIN', 'keep.example.com')] "
+                "and messages == [], (depth, quantifier, reference, parsed, messages)")
+        try:
+            result = subprocess.run([sys.executable, "-c", code],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("深层空原子与量词对照让解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_deep_invalid_empty_atom_neighbors_warn_under_hard_timeout(self):
+        code = ("from rules import Rule, parse\n"
+                "depth = 510\n"
+                "values = ('^' + '(' * depth + ')' * depth + r'**\\k<1>$', "
+                "'^' + '(' * depth + ')' * depth + r'{3,2}\\k<1>$', "
+                "'^' + '(' * depth + '*' + ')' * depth + '$', "
+                "'^' + '(' * depth + ')' * (depth-1) + r'*\\k<1>$', "
+                "'^' + '(' * depth + ')' * (depth+1) + r'*\\k<1>$', "
+                "'^' + '(' * depth + ')' * depth + r'*\\k<511>$')\n"
+                "for value in values:\n"
+                "    for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
+                "        expression = f'(({kind},{value}),(DOMAIN,x.example.com))'\n"
+                "        for source in (f'{kind},{value},REJECT', f'AND,{expression},REJECT'):\n"
+                "            parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,REJECT', purpose='block')\n"
+                "            assert parsed == [Rule('DOMAIN', 'keep.example.com')] and "
+                "len(messages) == 1 and messages[0].startswith('line 1:'), (parsed, messages)")
+        try:
+            result = subprocess.run([sys.executable, "-c", code],
+                                    cwd=Path(__file__).resolve().parents[1],
+                                    capture_output=True, text=True, timeout=4)
+        except subprocess.TimeoutExpired:
+            self.fail("非法深层空原子让解析子进程超时")
+        self.assertEqual(result.returncode, 0, result.stderr[-1600:])
+
+    def test_deep_invalid_backreferences_and_structure_warn_under_hard_timeout(self):
+        for closers, reference in ((495, r"\k<496>"), (496, r"\k<1>"), (494, r"\k<1>")):
+            code = ("from rules import Rule, parse\n"
+                    f"value = '^' + '(' * 495 + 'a' + ')' * {closers} + {reference!r} + '$'\n"
+                    "source = f'DOMAIN-REGEX,{value},REJECT\\nDOMAIN,x.example.com,REJECT'\n"
+                    "parsed, messages = parse(source, purpose='block')\n"
+                    "assert parsed == [Rule('DOMAIN', 'x.example.com')] and "
+                    "len(messages) == 1 and messages[0].startswith('line 1:'), (parsed, messages)")
+            with self.subTest(closers=closers, reference=reference):
+                try:
+                    result = subprocess.run([sys.executable, "-c", code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=4)
+                except subprocess.TimeoutExpired:
+                    self.fail("非法深层引用让解析子进程超时")
+                self.assertEqual(result.returncode, 0, result.stderr[-1600:])
 
 
 class WhitelistTests(unittest.TestCase):
@@ -908,6 +2937,30 @@ class WhitelistTests(unittest.TestCase):
         self.assertEqual(rules.exclude_covered(
             source, [Rule("IP-ASN", "64512"), Rule("GEOIP", "cn")]
         ), [source[1], *source[3:]])
+
+    def test_source_asn_geoip_and_ip_suffix_whitelist_only_cover_equal_source_values(self):
+        whitelist = rules.parse_whitelist(
+            "IP-ASN,64500,PROXY,src\nGEOIP,CN,PROXY,src\n"
+            "IP-SUFFIX,203.0.113.1/24,PROXY,src\n"
+        )
+        self.assertEqual(whitelist, [
+            Rule("SRC-IP-ASN", "64500"), Rule("SRC-GEOIP", "CN"),
+            Rule("SRC-IP-SUFFIX", "203.0.113.1/24"),
+        ])
+        blocked, messages = parse(
+            "IP-ASN,64500,REJECT,src\nGEOIP,CN,REJECT,src\n"
+            "IP-SUFFIX,203.0.113.1/24,REJECT,src\n"
+            "IP-ASN,64500,REJECT\nGEOIP,CN,REJECT\nIP-SUFFIX,203.0.113.1/24,REJECT\n"
+            "IP-ASN,64501,REJECT,src\nGEOIP,US,REJECT,src\n"
+            "IP-SUFFIX,203.0.113.2/24,REJECT,src\n",
+            purpose="block",
+        )
+        self.assertEqual(messages, [])
+        self.assertEqual(rules.exclude_covered(blocked, whitelist), blocked[3:])
+        self.assertEqual(rules.exclude_covered(
+            [Rule("IP-SUFFIX", "203.0.113.1/24")],
+            rules.parse_whitelist("IP-SUFFIX,203.0.113.1/24"),
+        ), [])
 
     def test_source_exception_is_kept_for_dns_output(self):
         source = [Rule("DOMAIN-SUFFIX", "safe.example.com", allow=True)]

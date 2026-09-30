@@ -5,12 +5,12 @@ from datetime import datetime, timedelta, timezone
 from collections import Counter
 from collections.abc import Iterable
 
-from rules import Rule
+from rules import Rule, _QX_INTERFACE_OPTIONS, _fields, _valid_domain
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
 DOMAIN_SET_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
-NO_RESOLVE_TYPES = {"IP-CIDR", "IP-CIDR6", "IP-ASN", "GEOIP"}
+NO_RESOLVE_TYPES = {"IP-CIDR", "IP-CIDR6", "IP-SUFFIX", "IP-ASN", "GEOIP"}
 SURGE_TYPES = {
     "DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
     "IP-CIDR", "IP-CIDR6", "GEOIP", "IP-ASN", "USER-AGENT", "URL-REGEX",
@@ -34,67 +34,130 @@ QX_TYPES = {
     "IP-CIDR": "IP-CIDR", "IP-CIDR6": "IP6-CIDR",
     "USER-AGENT": "USER-AGENT", "IP-ASN": "IP-ASN", "GEOIP": "GEOIP",
 }
-SURGE_ALIASES = {"SRC-IP-CIDR": "SRC-IP", "DST-PORT": "DEST-PORT", "PROCESS-NAME-WILDCARD": "PROCESS-NAME", "PROCESS-PATH": "PROCESS-NAME"}
+SURGE_ALIASES = {"SRC-IP-CIDR": "SRC-IP", "DST-PORT": "DEST-PORT", "PROCESS-NAME-WILDCARD": "PROCESS-NAME", "PROCESS-PATH": "PROCESS-NAME", "PROCESS-PATH-WILDCARD": "PROCESS-NAME"}
 LOGICAL = {"AND", "OR", "NOT"}
 
 
-def _logical_value(value: str, operator: str, supported: set[str]) -> str | None:
+def _surge_value(value: str) -> str | None:
+    if "," not in value:
+        return value
+    quote = next((mark for mark in ("'", '"') if mark not in value), None)
+    return f"{quote}{value}{quote}" if quote else None
+
+
+def _logical_value(value: str, operator: str, supported: set[str], no_resolve: str = "keep",
+                   literal_process: bool = False) -> str | None:
     if operator == "NOT" and value.startswith("(") and not value.startswith("(("):
         value = f"({value})"
     if not value.startswith("((") or not value.endswith("))"):
         return None
+    try:
+        children = _fields(value[1:-1])
+    except ValueError:
+        return None
+    if (len(children) != 1 if operator == "NOT" else len(children) < 2):
+        return None
     parts = []
-    index = 1
-    while index < len(value) - 1:
-        if value[index] != "(":
+    for child in children:
+        if not child.startswith("(") or not child.endswith(")"):
             return None
-        start = index + 1
-        index, depth, in_class, escaped = start, 1, False, False
-        while index < len(value) and depth:
-            char = value[index]
-            if escaped:
-                escaped = False
-            elif char == "\\":
-                escaped = True
-            elif char == "[":
-                in_class = True
-            elif char == "]" and in_class:
-                in_class = False
-            elif not in_class:
-                depth += (char == "(") - (char == ")")
-            index += 1
-        if depth or index >= len(value):
+        try:
+            fields = _fields(child[1:-1])
+        except ValueError:
             return None
-        kind, separator, payload = value[start:index - 1].partition(",")
-        if (not separator or not payload.strip() or kind not in supported or
-                kind.startswith("PROCESS-") and "," in payload):
+        if len(fields) < 2:
             return None
+        kind, payload, *options = fields
         if kind in LOGICAL:
-            payload = _logical_value(payload, kind, supported)
+            if options:
+                return None
+            payload = _logical_value(payload, kind, supported, no_resolve, literal_process)
             if payload is None:
                 return None
-        elif supported is MIHOMO_TYPES:
-            if kind == "DOMAIN-WILDCARD" and any(c in payload for c in "[]"):
+        else:
+            if options and (kind not in NO_RESOLVE_TYPES or
+                            any(option.lower() != "no-resolve" for option in options)):
                 return None
-            if kind == "PROCESS-NAME" and any(char in payload for char in "*?"):
-                kind = "PROCESS-NAME-WILDCARD"
-            if kind == "IP-CIDR" and ":" in payload:
-                kind = "IP-CIDR6"
-        if supported is SURGE_TYPES:
-            kind = SURGE_ALIASES.get(kind, kind)
-            if kind == "IP-CIDR" and ":" in payload:
-                kind = "IP-CIDR6"
+            quote = payload[0] if len(payload) >= 2 and payload[0] in "'\"" and payload[-1] == payload[0] else None
+            if quote:
+                payload = payload[1:-1]
+            if not payload.strip():
+                return None
+            if supported is SURGE_TYPES:
+                if (kind == "PROCESS-NAME" and literal_process and
+                        (payload.startswith("/") or any(char in payload for char in "*?")) or
+                        kind == "PROCESS-PATH" and any(char in payload for char in "*?") or
+                        kind == "PROCESS-NAME-WILDCARD" and payload.startswith("/")):
+                    return None
+                if kind == "NETWORK" and payload.upper() in {"TCP", "UDP"}:
+                    kind, payload = "PROTOCOL", payload.upper()
+                elif kind in {"PROCESS-PATH", "PROCESS-PATH-WILDCARD"} and not payload.startswith("/"):
+                    return None
+                kind = SURGE_ALIASES.get(kind, kind)
+                if kind == "IP-CIDR" and ":" in payload:
+                    kind = "IP-CIDR6"
+                payload = _surge_value(payload)
+                if payload is None:
+                    return None
+            else:
+                if kind == "DEST-PORT":
+                    kind = "DST-PORT"
+                elif kind == "SRC-IP":
+                    try:
+                        if "/" in payload:
+                            payload = str(ipaddress.ip_network(payload, strict=False))
+                        else:
+                            address = ipaddress.ip_address(payload)
+                            payload = f"{address}/{address.max_prefixlen}"
+                    except ValueError:
+                        return None
+                    kind = "SRC-IP-CIDR"
+                elif kind == "PROTOCOL" and payload.upper() in {"TCP", "UDP"}:
+                    kind, payload = "NETWORK", payload.lower()
+                elif kind == "PROCESS-NAME" and not literal_process:
+                    if payload.startswith("/"):
+                        kind = ("PROCESS-PATH-WILDCARD" if any(char in payload for char in "*?")
+                                else "PROCESS-PATH")
+                    elif any(char in payload for char in "*?"):
+                        kind = "PROCESS-NAME-WILDCARD"
+                if kind == "DOMAIN-WILDCARD" and any(char in payload for char in "[]"):
+                    payload = _wildcard_regex(payload)
+                    if payload is None:
+                        return None
+                    kind = "DOMAIN-REGEX"
+                if kind == "IP-CIDR" and ":" in payload:
+                    kind = "IP-CIDR6"
+                if kind.startswith("PROCESS-") and "," in payload and not kind.endswith("-REGEX"):
+                    return None
+            if kind not in supported:
+                return None
+            if supported is MIHOMO_TYPES and quote and "," in payload:
+                payload = f"{quote}{payload}{quote}"
+            if kind in NO_RESOLVE_TYPES and (
+                no_resolve == "add" or no_resolve == "keep" and options
+            ):
+                payload += ",no-resolve"
         parts.append(f"({kind},{payload})")
-        if value[index] == ")":
-            if index != len(value) - 1:
-                return None
-            break
-        if value[index] != ",":
-            return None
-        index += 1
-    if (len(parts) != 1 if operator == "NOT" else len(parts) < 2):
-        return None
     return "(" + ",".join(parts) + ")"
+
+
+def _wildcard_regex(value: str) -> str | None:
+    if not _valid_domain("DOMAIN-WILDCARD", value):
+        return None
+    parts = re.split(r"(\[[a-z0-9-]+\])", value)
+    if any("[" in part or "]" in part for part in parts[::2]):
+        return None
+    for part in parts[1::2]:
+        if "--" in part:
+            return None
+        try:
+            re.compile(part)
+        except re.error:
+            return None
+    return "^" + "".join(
+        part if index % 2 else re.escape(part).replace(r"\*", ".*").replace(r"\?", ".")
+        for index, part in enumerate(parts)
+    ) + "$"
 
 
 def _dns_pattern(rule: Rule) -> str | None:
@@ -106,9 +169,84 @@ def _dns_pattern(rule: Rule) -> str | None:
         return None
     if rule.kind == "DOMAIN-KEYWORD":
         return f"/^.*{re.escape(rule.value)}.*$/"
-    if rule.kind == "DOMAIN-WILDCARD" and not any(char in rule.value for char in "[]"):
-        pattern = re.escape(rule.value).replace(r"\*", ".*").replace(r"\?", ".")
-        return f"/^{pattern}$/"
+    if rule.kind == "DOMAIN-WILDCARD":
+        pattern = _wildcard_regex(rule.value)
+        return f"/{pattern}/" if pattern is not None else None
+    if rule.kind == "DOMAIN-REGEX":
+        if re.search(r"[*+?]\+", rule.value):
+            return None
+        translated = []
+        replacements = []
+        index = 0
+        in_class = False
+        while index < len(rule.value):
+            char = rule.value[index]
+            if char == "\\":
+                if rule.value.startswith(r"\p{L}", index):
+                    translated.append(r"\w")
+                    index += 5
+                    continue
+                if index + 1 == len(rule.value) or rule.value[index + 1] not in r"\.*+?{}()[]|^$-dz":
+                    return None
+                translated.append(r"\Z" if rule.value[index + 1] == "z" else rule.value[index:index + 2])
+                index += 2
+                continue
+            if char == "[" and in_class:
+                posix = re.match(r"\[:(\^?[a-z]+):\]", rule.value[index:])
+                if posix:
+                    if posix[1].removeprefix("^") not in {
+                        "alnum", "alpha", "ascii", "blank", "cntrl", "digit", "graph",
+                        "lower", "print", "punct", "space", "upper", "word", "xdigit",
+                    }:
+                        return None
+                    translated.append(r"\w")
+                    index += len(posix[0])
+                    continue
+            if char == "[" and not in_class:
+                in_class = True
+            elif char == "]":
+                in_class = False
+            elif char == "(" and not in_class and rule.value.startswith("(?", index):
+                if rule.value.startswith("(?:", index):
+                    translated.append("(?:")
+                    index += 3
+                    continue
+                if rule.value.startswith("(?i:", index) and rule.value.isascii():
+                    translated.append("(?i:")
+                    index += 4
+                    continue
+                named = re.match(r"\(\?<([A-Za-z_][A-Za-z0-9_]*)>", rule.value[index:])
+                if named is None:
+                    return None
+                translated.append("(")
+                index += len(named[0])
+                continue
+            elif char == "{" and not in_class:
+                bounds = re.match(r"\{(\d+)(?:,(\d*))?\}", rule.value[index:])
+                if bounds:
+                    counts = tuple(count.lstrip("0") or "0" if count else count for count in bounds.groups())
+                    if any(len(count) > 4 or len(count) == 4 and count > "1000"
+                           for count in counts if count) or rule.value[index + len(bounds[0]):].startswith("+"):
+                        return None
+                    normalized = "{" + counts[0] + ("," + counts[1] if counts[1] is not None else "") + "}"
+                    if normalized != bounds[0]:
+                        replacements.append((index, index + len(bounds[0]), normalized))
+                    translated.append(normalized)
+                    index += len(bounds[0])
+                    continue
+            if char == "-" and in_class and translated[-1:] == [r"\w"]:
+                translated.append(r"\-")
+            else:
+                translated.append(char)
+            index += 1
+        try:
+            re.compile("".join(translated))
+        except re.error:
+            return None
+        value = rule.value
+        for start, end, normalized in reversed(replacements):
+            value = value[:start] + normalized + value[end:]
+        return f"/{value}/"
     return None
 
 
@@ -116,12 +254,18 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
-    for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow)):
+    for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process)):
         kind, value = rule.kind, rule.value
+        interface_options = any(option in _QX_INTERFACE_OPTIONS for option in rule.options)
+        if interface_options:
+            rule = Rule(kind, value, tuple(option for option in rule.options
+                                           if option not in _QX_INTERFACE_OPTIONS),
+                        rule.allow, rule.literal_process)
         if no_resolve == "strip":
-            rule = Rule(kind, value, tuple(option for option in rule.options if option != "no-resolve"), rule.allow)
+            rule = Rule(kind, value, tuple(option for option in rule.options if option != "no-resolve"),
+                        rule.allow, rule.literal_process)
         elif no_resolve == "add" and not rule.allow and kind in NO_RESOLVE_TYPES:
-            rule = Rule(kind, value, rule.options + ("no-resolve",))
+            rule = Rule(kind, value, rule.options + ("no-resolve",), rule.allow, rule.literal_process)
         if "\r" in value or "\n" in value:
             for name in FILES:
                 skipped[f"{name}:{kind}"] += 1
@@ -137,24 +281,28 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     emitted.add("fin-adb.txt")
         elif rule.options:
             if rule.options == ("no-resolve",) and kind in NO_RESOLVE_TYPES:
-                surge_kind = "IP-CIDR6" if kind == "IP-CIDR" and ":" in value else kind
-                for name in ("fin.txt", "fin-surge.txt"):
-                    lines[name].append(f"{surge_kind},{value},no-resolve")
-                    emitted.add(name)
-                lines["fin.yaml"].append("  - " + json.dumps(text + ",no-resolve", ensure_ascii=False))
-                emitted.add("fin.yaml")
+                if kind in SURGE_TYPES:
+                    surge_kind = "IP-CIDR6" if kind == "IP-CIDR" and ":" in value else kind
+                    for name in ("fin.txt", "fin-surge.txt"):
+                        lines[name].append(f"{surge_kind},{value},no-resolve")
+                        emitted.add(name)
+                if kind in MIHOMO_TYPES:
+                    lines["fin.yaml"].append("  - " + json.dumps(text + ",no-resolve", ensure_ascii=False))
+                    emitted.add("fin.yaml")
                 if kind in QX_TYPES:
                     qx_kind = "IP6-CIDR" if kind == "IP-CIDR" and ":" in value else QX_TYPES[kind]
                     lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST,no-resolve")
                     emitted.add("fin-qx.txt")
         else:
-            surge_value = _logical_value(value, kind, SURGE_TYPES) if logical else value
-            if not logical and "," in value:
-                quote = next((mark for mark in ("'", '"') if mark not in value), None)
-                surge_value = f"{quote}{value}{quote}" if quote else None
-            if (kind in SURGE_TYPES or kind == "PROCESS-NAME-WILDCARD" or
-                    kind == "PROCESS-PATH" and value.startswith('/') or
-                    kind == "NETWORK" and value.upper() in {"TCP", "UDP"}) and surge_value is not None:
+            surge_value = (_logical_value(value, kind, SURGE_TYPES, no_resolve, rule.literal_process)
+                           if logical else _surge_value(value))
+            if ((kind in SURGE_TYPES or kind == "PROCESS-NAME-WILDCARD" or
+                    kind in {"PROCESS-PATH", "PROCESS-PATH-WILDCARD"} and value.startswith('/') or
+                    kind == "NETWORK" and value.upper() in {"TCP", "UDP"}) and surge_value is not None
+                    and not (kind == "PROCESS-NAME" and rule.literal_process
+                             and (value.startswith("/") or any(char in value for char in "*?"))
+                             or kind == "PROCESS-PATH" and any(char in value for char in "*?")
+                             or kind == "PROCESS-NAME-WILDCARD" and value.startswith("/"))):
                 surge_kind = SURGE_ALIASES.get(kind, kind)
                 if kind == "NETWORK":
                     surge_kind, surge_value = "PROTOCOL", value.upper()
@@ -175,18 +323,23 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST")
                 emitted.add("fin-qx.txt")
             mihomo_kind = "DST-PORT" if kind == "DEST-PORT" else kind
-            if kind == "PROCESS-NAME" and any(char in value for char in "*?"):
-                mihomo_kind = "PROCESS-NAME-WILDCARD"
-            mihomo_value = _logical_value(value, kind, MIHOMO_TYPES) if logical else value
+            if kind == "PROCESS-NAME" and not rule.literal_process:
+                if value.startswith("/"):
+                    mihomo_kind = ("PROCESS-PATH-WILDCARD" if any(char in value for char in "*?")
+                                   else "PROCESS-PATH")
+                elif any(char in value for char in "*?"):
+                    mihomo_kind = "PROCESS-NAME-WILDCARD"
+            mihomo_value = (_logical_value(value, kind, MIHOMO_TYPES, no_resolve, rule.literal_process)
+                            if logical else value)
+            if kind == "DOMAIN-WILDCARD" and any(char in value for char in "[]"):
+                mihomo_kind, mihomo_value = "DOMAIN-REGEX", _wildcard_regex(value)
             if kind == "SRC-IP":
                 address = ipaddress.ip_address(value)
                 mihomo_kind, mihomo_value = "SRC-IP-CIDR", f"{address}/{address.max_prefixlen}"
             if kind == "PROTOCOL" and value.upper() in {"TCP", "UDP"}:
                 mihomo_kind, mihomo_value = "NETWORK", value.lower()
-            if mihomo_kind in MIHOMO_TYPES and mihomo_value is not None and not (
-                kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]") or
-                kind.startswith("PROCESS-") and "," in value
-            ):
+            if (mihomo_kind in MIHOMO_TYPES and mihomo_value is not None and
+                    not (kind.startswith("PROCESS-") and "," in value and not kind.endswith("-REGEX"))):
                 lines["fin.yaml"].append("  - " + json.dumps(f"{mihomo_kind},{mihomo_value}", ensure_ascii=False))
                 emitted.add("fin.yaml")
             if purpose == "block":
@@ -197,6 +350,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
             if kind in DOMAIN_SET_TYPES:
                 lines["fin-surge-ds.txt"].append(("." if kind == "DOMAIN-SUFFIX" else "") + value)
                 emitted.add("fin-surge-ds.txt")
+        if interface_options and "fin-qx.txt" in emitted:
+            skipped[f"fin-qx.txt:{kind}:interface-option"] += 1
         for name in FILES:
             if name not in emitted and not (name == "fin-surge.txt" and kind in DOMAIN_SET_TYPES
                                             and not rule.allow and not rule.options):

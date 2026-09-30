@@ -309,6 +309,39 @@ class GenerateTests(unittest.TestCase):
             self.assertIn("DOMAIN,ads.example.org\n", outputs[root / "custom" / "fin.txt"])
             self.assertIn("! Title: Custom Ads\n", outputs[root / "custom" / "fin-adb.txt"])
 
+    def test_generate_keeps_literal_and_glob_process_sources_separate(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "proxy", "purpose": "proxy", "no_resolve": "strip",
+                "sources": ["literal.yaml", "surge.list"], "whitelist": [],
+            }]), encoding="utf-8")
+            (root / "literal.yaml").write_text(
+                'payload:\n  - "PROCESS-NAME,Foo*Bar"\n'
+                '  - "AND,((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))"\n',
+                encoding="utf-8",
+            )
+            (root / "surge.list").write_text(
+                "PROCESS-NAME,Foo*Bar,PROXY\n"
+                "HOST-SUFFIX,googleapis.com,PROXY,force-cellular\n", encoding="utf-8",
+            )
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                out = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(out[root / "proxy" / "fin.yaml"],
+                             '# proxy rules: 4\npayload:\n'
+                             '  - "AND,((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))"\n'
+                             '  - "DOMAIN-SUFFIX,googleapis.com"\n'
+                             '  - "PROCESS-NAME,Foo*Bar"\n'
+                             '  - "PROCESS-NAME-WILDCARD,Foo*Bar"\n')
+            self.assertEqual(out[root / "proxy" / "fin.txt"],
+                             '# proxy rules: 2\nDOMAIN-SUFFIX,googleapis.com\nPROCESS-NAME,Foo*Bar\n')
+            self.assertEqual(out[root / "proxy" / "fin-qx.txt"],
+                             '# proxy rules: 1\nHOST-SUFFIX,googleapis.com,LIST\n')
+            self.assertIn("proxy fin.txt:AND: 1", stderr.getvalue())
+            self.assertIn("proxy fin.txt:PROCESS-NAME: 1", stderr.getvalue())
+            self.assertIn("proxy fin-qx.txt:DOMAIN-SUFFIX:interface-option: 1", stderr.getvalue())
+
     def test_no_resolve_policy_add_strip_and_keep_is_configured_per_group(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -331,6 +364,111 @@ class GenerateTests(unittest.TestCase):
                 self.assertIn("no-resolve", outputs[root / "preserved" / name], name)
                 self.assertNotIn("no-resolve", outputs[root / "untagged" / name], name)
                 self.assertIn("no-resolve", outputs[root / "forced" / name], name)
+
+    def test_local_source_ip_direction_and_ip_suffix_are_target_specific(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "proxy", "purpose": "proxy", "no_resolve": "add",
+                "sources": ["source.list"], "whitelist": [],
+            }]), encoding="utf-8")
+            (root / "source.list").write_text(
+                "DOMAIN,baseline.example.org,PROXY\n"
+                "IP-CIDR,192.0.2.0/24,PROXY,src\n"
+                "IP-SUFFIX,8.8.8.8/24,PROXY,no-resolve\n", encoding="utf-8",
+            )
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            for name in ("fin.txt", "fin-surge.txt"):
+                self.assertIn("SRC-IP,192.0.2.0/24\n", outputs[root / "proxy" / name])
+                self.assertNotIn("IP-CIDR,192.0.2.0/24", outputs[root / "proxy" / name])
+                self.assertNotIn("8.8.8.8/24", outputs[root / "proxy" / name])
+            self.assertIn('  - "SRC-IP-CIDR,192.0.2.0/24"\n', outputs[root / "proxy" / "fin.yaml"])
+            self.assertIn('  - "IP-SUFFIX,8.8.8.8/24,no-resolve"\n', outputs[root / "proxy" / "fin.yaml"])
+            self.assertNotIn("192.0.2.0/24", outputs[root / "proxy" / "fin-qx.txt"])
+            self.assertNotIn("8.8.8.8/24", outputs[root / "proxy" / "fin-qx.txt"])
+            self.assertIn("proxy fin-qx.txt:SRC-IP-CIDR: 1", stderr.getvalue())
+            self.assertIn("proxy fin-surge.txt:IP-SUFFIX: 1", stderr.getvalue())
+
+    def test_local_sources_preserve_matchers_across_six_outputs(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "block", "no_resolve": "add",
+                 "sources": ["block.list", "literal.yaml"], "whitelist": ["allow.list"]},
+                {"name": "dirt", "purpose": "direct", "no_resolve": "strip",
+                 "sources": ["direct.list"], "whitelist": []},
+            ]), encoding="utf-8")
+            (root / "block.list").write_text(
+                "DOMAIN-SUFFIX,ads.example.org,REJECT\n"
+                "DOMAIN,safe.ads.example.org,REJECT\n"
+                "DOMAIN-WILDCARD,api-[0-9].example.org,REJECT\n"
+                "IP-CIDR,192.0.2.0/24,REJECT,src\n"
+                "AND,((IP-CIDR,198.51.100.0/24),(DOMAIN,track.example.net)),REJECT\n",
+                encoding="utf-8",
+            )
+            (root / "literal.yaml").write_text(
+                'payload:\n  - "PROCESS-NAME,Foo*Bar"\n', encoding="utf-8",
+            )
+            (root / "allow.list").write_text(
+                "DOMAIN,safe.ads.example.org,DIRECT\n", encoding="utf-8",
+            )
+            (root / "direct.list").write_text(
+                "OR,((IP-CIDR,203.0.113.0/24,no-resolve),(DOMAIN,direct.example.net)),DIRECT\n",
+                encoding="utf-8",
+            )
+            with contextlib.redirect_stderr(io.StringIO()) as warnings:
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), {root / group / name
+                                            for group in ("a3", "dirt") for name in NAMES})
+            publish(outputs)
+            self.assertTrue(all(path.is_file() for path in outputs))
+
+            block = {
+                "fin.txt": "# a3 rules: 4\n"
+                           "AND,((IP-CIDR,198.51.100.0/24,no-resolve),(DOMAIN,track.example.net))\n"
+                           "DOMAIN-SUFFIX,ads.example.org\n"
+                           "DOMAIN-WILDCARD,api-[0-9].example.org\n"
+                           "SRC-IP,192.0.2.0/24\n",
+                "fin-qx.txt": "# a3 rules: 1\nHOST-SUFFIX,ads.example.org,LIST\n",
+                "fin.yaml": '# a3 rules: 5\npayload:\n'
+                            '  - "AND,((IP-CIDR,198.51.100.0/24,no-resolve),(DOMAIN,track.example.net))"\n'
+                            '  - "DOMAIN-REGEX,^api\\\\-[0-9]\\\\.example\\\\.org$"\n'
+                            '  - "DOMAIN-SUFFIX,ads.example.org"\n'
+                            '  - "PROCESS-NAME,Foo*Bar"\n'
+                            '  - "SRC-IP-CIDR,192.0.2.0/24"\n',
+                "fin-surge.txt": "# a3 rules: 3\n"
+                                 "AND,((IP-CIDR,198.51.100.0/24,no-resolve),(DOMAIN,track.example.net))\n"
+                                 "DOMAIN-WILDCARD,api-[0-9].example.org\n"
+                                 "SRC-IP,192.0.2.0/24\n",
+                "fin-surge-ds.txt": "# a3 rules: 1\n.ads.example.org\n",
+            }
+            for name, expected in block.items():
+                with self.subTest(group="a3", name=name):
+                    self.assertEqual((root / "a3" / name).read_text(encoding="utf-8"), expected)
+            self.assertEqual((root / "a3" / "fin-adb.txt").read_text(encoding="utf-8").splitlines()[6:], [
+                "! Total count: 3", "@@|safe.ads.example.org|", "||ads.example.org^",
+                r"/^api\-[0-9]\.example\.org$/",
+            ])
+            self.assertIn("a3 fin-qx.txt:SRC-IP-CIDR: 1", warnings.getvalue())
+            self.assertIn("a3 fin-qx.txt:DOMAIN-WILDCARD: 1", warnings.getvalue())
+            self.assertIn("a3 fin-surge.txt:PROCESS-NAME: 1", warnings.getvalue())
+
+            direct = "OR,((IP-CIDR,203.0.113.0/24),(DOMAIN,direct.example.net))"
+            self.assertEqual((root / "dirt" / "fin.txt").read_text(encoding="utf-8"),
+                             f"# dirt rules: 1\n{direct}\n")
+            self.assertEqual((root / "dirt" / "fin-surge.txt").read_text(encoding="utf-8"),
+                             f"# dirt rules: 1\n{direct}\n")
+            self.assertEqual((root / "dirt" / "fin.yaml").read_text(encoding="utf-8"),
+                             f'# dirt rules: 1\npayload:\n  - "{direct}"\n')
+            for name in ("fin-qx.txt", "fin-surge-ds.txt"):
+                self.assertEqual((root / "dirt" / name).read_text(encoding="utf-8"),
+                                 "# dirt rules: 0\n")
+            self.assertEqual((root / "dirt" / "fin-adb.txt").read_text(encoding="utf-8").splitlines()[6:], [
+                "! Total count: 0", "! No AdBlock rules for non-advertising group.",
+            ])
+            self.assertTrue(all("no-resolve" not in outputs[root / "dirt" / name] for name in NAMES))
 
     def test_json_whitelist_removes_only_covered_rules_and_adds_dns_exceptions(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -458,7 +596,7 @@ class GenerateTests(unittest.TestCase):
                 {path for group in GROUPS for path in (root / group).glob("fin*")},
             )
 
-    def test_cli_retains_frozen_group_and_updates_healthy_group(self):
+    def test_cli_publishes_allow_only_group_and_updates_healthy_group(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             configure_groups(root)
@@ -474,7 +612,9 @@ class GenerateTests(unittest.TestCase):
                 cwd=ROOT, capture_output=True, text=True, check=False,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertTrue(all((root / "a3" / name).read_bytes() == b"previous version\n" for name in NAMES))
+            self.assertTrue(all((root / "a3" / name).read_bytes() != b"previous version\n" for name in NAMES))
+            self.assertEqual((root / "a3" / "fin-adb.txt").read_text(encoding="utf-8").splitlines()[6:],
+                             ["! Total count: 1", "@@||safe.example.org^"])
             self.assertIn("DOMAIN,current.example.org", (root / "cdn" / "fin.txt").read_text(encoding="utf-8"))
 
     def test_adblock_keeps_wide_block_with_narrow_allow_exception(self):
@@ -644,6 +784,152 @@ class GenerateTests(unittest.TestCase):
                 generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertIn("a3 fin-qx.txt:PROCESS-NAME: 1", stderr.getvalue())
 
+    def test_generated_process_name_hash_is_preserved_before_replacing_six_old_files(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["source.yaml"], "whitelist": []},
+                {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["a3/fin.txt"], "whitelist": []},
+            ]), encoding="utf-8")
+            (root / "source.yaml").write_text(
+                'payload:\n  - "PROCESS-NAME,Game #1"\n', encoding="utf-8",
+            )
+            previous = {}
+            for name in NAMES:
+                path = root / "cdn" / name
+                path.parent.mkdir(exist_ok=True)
+                previous[path] = b"previous version\n"
+                path.write_bytes(previous[path])
+            with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(outputs[root / "a3" / "fin.txt"],
+                             "# a3 rules: 1\nPROCESS-NAME,Game #1\n")
+            self.assertEqual(outputs[root / "cdn" / "fin.txt"],
+                             "# cdn rules: 1\nPROCESS-NAME,Game #1\n")
+            self.assertIn('"PROCESS-NAME,Game #1"', outputs[root / "cdn" / "fin.yaml"])
+            self.assertNotIn("a3/fin.txt: line 2", stderr.getvalue())
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+            publish(outputs)
+            self.assertEqual((root / "cdn" / "fin.txt").read_text(encoding="utf-8"),
+                             outputs[root / "cdn" / "fin.txt"])
+
+    def test_generated_process_comment_markers_survive_six_output_dependency(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["source.yaml"], "whitelist": []},
+                {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["a3/fin.txt"], "whitelist": []},
+            ]), encoding="utf-8")
+            (root / "source.yaml").write_text(
+                'payload:\n  - "PROCESS-NAME,Game ;1"\n'
+                '  - "PROCESS-NAME,Game //1"\n', encoding="utf-8",
+            )
+            with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), {root / group / name
+                                            for group in ("a3", "cdn") for name in NAMES})
+            for group in ("a3", "cdn"):
+                self.assertEqual(outputs[root / group / "fin.txt"],
+                                 f"# {group} rules: 2\nPROCESS-NAME,Game ;1\nPROCESS-NAME,Game //1\n")
+                self.assertIn('"PROCESS-NAME,Game //1"', outputs[root / group / "fin.yaml"])
+                self.assertIn('"PROCESS-NAME,Game ;1"', outputs[root / group / "fin.yaml"])
+            self.assertNotIn("a3/fin.txt: line", stderr.getvalue())
+            publish(outputs)
+            self.assertTrue(all(path.read_text(encoding="utf-8") == text
+                                for path, text in outputs.items()))
+
+    def test_process_regex_policy_token_is_not_truncated_in_six_output_dependency(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "direct", "no_resolve": "keep",
+                 "sources": ["source.list"], "whitelist": []},
+                {"name": "cdn", "purpose": "direct", "no_resolve": "keep",
+                 "sources": ["a3/fin.yaml"], "whitelist": []},
+            ]), encoding="utf-8")
+            values = [f"^Game,DIRECT {marker}1$" for marker in (";", "#", "//")]
+            values.append("^Game,'s$")
+            (root / "source.list").write_text(
+                "".join(f"PROCESS-NAME-REGEX,{value},DIRECT # note\n" for value in values),
+                encoding="utf-8",
+            )
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), {root / group / name
+                                            for group in ("a3", "cdn") for name in NAMES})
+            for group in ("a3", "cdn"):
+                text = outputs[root / group / "fin.yaml"]
+                self.assertEqual(sorted(json.loads(line.removeprefix("  - "))
+                                        for line in text.splitlines()[2:]),
+                                 sorted(f"PROCESS-NAME-REGEX,{value}" for value in values))
+            self.assertNotIn("source.list: line", stderr.getvalue())
+            self.assertNotIn("a3/fin.yaml: line", stderr.getvalue())
+
+    def test_domain_regex_comment_group_and_tail_survive_yaml_dependency(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["source.list"], "whitelist": []},
+                {"name": "cdn", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["a3/fin.yaml"], "whitelist": []},
+            ]), encoding="utf-8")
+            scoped = r"^(?x:(?#note)a)\.example\.com$"
+            (root / "source.list").write_text(
+                "DOMAIN-REGEX,^foo$,REJECT # note,REJECT\n"
+                f"DOMAIN-REGEX,{scoped},REJECT\n"
+                "AND,((DOMAIN-REGEX,^ads$,no-resolve),(DOMAIN,x.example.com)),REJECT\n",
+                encoding="utf-8",
+            )
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            expected = {"DOMAIN-REGEX,^foo$", f"DOMAIN-REGEX,{scoped}"}
+            for group in ("a3", "cdn"):
+                yaml = outputs[root / group / "fin.yaml"]
+                self.assertEqual({json.loads(line.removeprefix("  - "))
+                                  for line in yaml.splitlines()[2:]}, expected)
+            self.assertIn("source.list: line 3: invalid logical expression", stderr.getvalue())
+            self.assertNotIn("source.list: line 1:", stderr.getvalue())
+            self.assertNotIn("source.list: line 2:", stderr.getvalue())
+            self.assertNotIn("a3/fin.yaml: line", stderr.getvalue())
+
+    def test_unquoted_yaml_process_markers_survive_six_output_dependency(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["source.yaml"], "whitelist": []},
+                {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["a3/fin.txt"], "whitelist": []},
+            ]), encoding="utf-8")
+            (root / "source.yaml").write_text(
+                "# upstream\npayload:\n  - PROCESS-NAME,Game ;1\n"
+                "  - PROCESS-NAME,Game //1\n# end\n", encoding="utf-8",
+            )
+            stderr = io.StringIO()
+            with contextlib.redirect_stderr(stderr):
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), {root / group / name
+                                            for group in ("a3", "cdn") for name in NAMES})
+            for group in ("a3", "cdn"):
+                self.assertEqual(outputs[root / group / "fin.txt"],
+                                 f"# {group} rules: 2\nPROCESS-NAME,Game ;1\nPROCESS-NAME,Game //1\n")
+                self.assertIn('  - "PROCESS-NAME,Game ;1"\n', outputs[root / group / "fin.yaml"])
+                self.assertIn('  - "PROCESS-NAME,Game //1"\n', outputs[root / group / "fin.yaml"])
+                self.assertEqual(outputs[root / group / "fin-surge.txt"],
+                                 outputs[root / group / "fin.txt"])
+                for name in ("fin-qx.txt", "fin-surge-ds.txt"):
+                    self.assertEqual(outputs[root / group / name], f"# {group} rules: 0\n")
+                self.assertIn("! Total count: 0", outputs[root / group / "fin-adb.txt"])
+            self.assertNotIn("source.yaml: line", stderr.getvalue())
+            self.assertNotIn("a3/fin.txt: line", stderr.getvalue())
+
     def test_dependent_group_uses_current_in_memory_cdn_output(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -656,6 +942,196 @@ class GenerateTests(unittest.TestCase):
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertIn("DOMAIN,from-cdn.example.org", outputs[root / "big-data" / "fin.txt"])
             self.assertFalse((root / "cdn" / "fin.txt").exists())
+
+    def test_header_only_generated_dependency_replaces_stale_derived_routes(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["source.list"], "whitelist": ["allow.list"]},
+                {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["a3/fin.txt"], "whitelist": []},
+            ]), encoding="utf-8")
+            (root / "source.list").write_text("IP-CIDR,203.0.113.0/24,REJECT\n", encoding="utf-8")
+            (root / "allow.list").write_text("IP-CIDR,203.0.113.0/24,DIRECT\n", encoding="utf-8")
+            previous = {}
+            for group in ("a3", "cdn"):
+                for name in NAMES:
+                    path = root / group / name
+                    path.parent.mkdir(exist_ok=True)
+                    previous[path] = "DOMAIN,stale.example.org\n"
+                    path.write_text(previous[path], encoding="utf-8")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), set(previous))
+            self.assertEqual(outputs[root / "a3" / "fin.txt"], "# a3 rules: 0\n")
+            self.assertEqual(outputs[root / "cdn" / "fin.txt"], "# cdn rules: 0\n")
+            publish(outputs)
+            for path in previous:
+                self.assertEqual(path.read_text(encoding="utf-8"), outputs[path])
+                self.assertNotIn("stale.example.org", outputs[path])
+
+    def test_header_only_yaml_and_adblock_dependencies_remain_empty(self):
+        for filename in ("fin.yaml", "fin-adb.txt"):
+            with self.subTest(filename=filename), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([
+                    {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                     "sources": ["source.list"], "whitelist": ["allow.list"]},
+                    {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                     "sources": [f"a3/{filename}"], "whitelist": []},
+                ]), encoding="utf-8")
+                (root / "source.list").write_text("IP-CIDR,203.0.113.0/24,REJECT\n", encoding="utf-8")
+                (root / "allow.list").write_text("IP-CIDR,203.0.113.0/24,DIRECT\n", encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()):
+                    outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+                self.assertEqual(outputs[root / "cdn" / "fin.txt"], "# cdn rules: 0\n")
+                self.assertEqual({root / "cdn" / name for name in NAMES},
+                                 {path for path in outputs if path.parent.name == "cdn"})
+
+    def test_header_only_generated_whitelist_allows_downstream_publication(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["source.list"], "whitelist": ["allow.list"]},
+                {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["cdn.list"], "whitelist": ["a3/fin.txt"]},
+            ]), encoding="utf-8")
+            (root / "source.list").write_text("IP-CIDR,203.0.113.0/24,REJECT\n", encoding="utf-8")
+            (root / "allow.list").write_text("IP-CIDR,203.0.113.0/24,DIRECT\n", encoding="utf-8")
+            (root / "cdn.list").write_text("DOMAIN,keep.example.org\n", encoding="utf-8")
+            previous = {}
+            for name in NAMES:
+                path = root / "cdn" / name
+                path.parent.mkdir(exist_ok=True)
+                previous[path] = b"DOMAIN,stale.example.org\n"
+                path.write_bytes(previous[path])
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(outputs[root / "a3" / "fin.txt"], "# a3 rules: 0\n")
+            self.assertEqual(outputs[root / "cdn" / "fin.txt"],
+                             "# cdn rules: 1\nDOMAIN,keep.example.org\n")
+            publish(outputs)
+            self.assertTrue(all(path.read_bytes() != previous[path] for path in previous))
+
+    def test_nonempty_unadaptable_generated_whitelist_aborts_before_publish(self):
+        for source_rule, line in (
+            ("PROCESS-NAME,Game.exe,REJECT\n", 3),
+            ("DOMAIN,exclude.example.org,REJECT\nPROCESS-NAME,Game.exe,REJECT\n", 4),
+        ):
+            with self.subTest(line=line), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([
+                    {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                     "sources": ["source.list"], "whitelist": []},
+                    {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                     "sources": ["cdn.list"], "whitelist": ["a3/fin.yaml"]},
+                ]), encoding="utf-8")
+                (root / "source.list").write_text(source_rule, encoding="utf-8")
+                (root / "cdn.list").write_text("DOMAIN,exclude.example.org\n", encoding="utf-8")
+                previous = {}
+                for name in NAMES:
+                    path = root / "cdn" / name
+                    path.parent.mkdir(exist_ok=True)
+                    previous[path] = b"previous version\n"
+                    path.write_bytes(previous[path])
+                with contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaisesRegex(ValueError, rf"a3.*fin\.yaml.*line {line}"):
+                        publish(generate(root, lambda _: self.fail("local input must not fetch")))
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+    @unittest.skipUnless(os.name == "nt", "WindowsPath case-insensitive dependency")
+    def test_case_variant_header_only_generated_dependencies_stay_empty(self):
+        for filename in ("FIN.YAML", "FIN-ADB.TXT"):
+            with self.subTest(filename=filename), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([
+                    {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                     "sources": ["source.list"], "whitelist": ["allow.list"]},
+                    {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                     "sources": [f"a3/{filename}"], "whitelist": []},
+                ]), encoding="utf-8")
+                (root / "source.list").write_text("IP-CIDR,203.0.113.0/24,REJECT\n", encoding="utf-8")
+                (root / "allow.list").write_text("IP-CIDR,203.0.113.0/24,DIRECT\n", encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()):
+                    outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+                self.assertEqual(outputs[root / "cdn" / "fin.txt"], "# cdn rules: 0\n")
+                self.assertFalse((root / "a3" / filename).exists())
+
+    def test_mixed_generated_adblock_rules_abort_without_publishing_partial_result(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["source.list"], "whitelist": []},
+                {"name": "a4", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["a3/fin-adb.txt"], "whitelist": []},
+            ]), encoding="utf-8")
+            (root / "source.list").write_text(
+                "DOMAIN-SUFFIX,plain.example.org\n"
+                r"DOMAIN-REGEX,^ads[0-9]+\.example\.org$" "\n", encoding="utf-8",
+            )
+            previous = {}
+            for group in ("a3", "a4"):
+                for name in NAMES:
+                    path = root / group / name
+                    path.parent.mkdir(exist_ok=True)
+                    previous[path] = f"previous {group} {name}\n".encode()
+                    path.write_bytes(previous[path])
+            with contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaisesRegex(ValueError, r"a3.*fin-adb\.txt.*line 9"):
+                    publish(generate(root, lambda _: self.fail("local input must not fetch")))
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+    def test_unadaptable_generated_adblock_rules_cannot_clear_old_downstream_files(self):
+        for source_rule in ("DOMAIN-SUFFIX,ads.example.org\n",
+                            r"DOMAIN-REGEX,^ads[0-9]+\.example\.org$" + "\n"):
+            with self.subTest(source_rule=source_rule), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([
+                    {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                     "sources": ["source.list"], "whitelist": []},
+                    {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                     "sources": ["a3/fin-adb.txt"], "whitelist": []},
+                ]), encoding="utf-8")
+                (root / "source.list").write_text(source_rule, encoding="utf-8")
+                previous = {}
+                for name in NAMES:
+                    path = root / "cdn" / name
+                    path.parent.mkdir(exist_ok=True)
+                    previous[path] = b"previous version\n"
+                    path.write_bytes(previous[path])
+                with contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaisesRegex(ValueError, r"a3.*fin-adb\.txt"):
+                        publish(generate(root, lambda _: self.fail("local input must not fetch")))
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+    def test_missing_remote_source_with_empty_generated_dependency_freezes_downstream(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            missing = "https://example.org/missing.txt"
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "a3", "purpose": "block", "no_resolve": "keep",
+                 "sources": ["source.list"], "whitelist": ["allow.list"]},
+                {"name": "cdn", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["a3/fin.txt", missing], "whitelist": []},
+            ]), encoding="utf-8")
+            (root / "source.list").write_text("IP-CIDR,203.0.113.0/24,REJECT\n", encoding="utf-8")
+            (root / "allow.list").write_text("IP-CIDR,203.0.113.0/24,DIRECT\n", encoding="utf-8")
+            previous = {}
+            for name in NAMES:
+                path = root / "cdn" / name
+                path.parent.mkdir(exist_ok=True)
+                previous[path] = "DOMAIN,stale.example.org\n"
+                path.write_text(previous[path], encoding="utf-8")
+
+            def fetch(url):
+                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+            with contextlib.redirect_stderr(io.StringIO()):
+                outputs = generate(root, fetch)
+            self.assertEqual(set(outputs), {root / "a3" / name for name in NAMES})
+            publish(outputs)
+            self.assertEqual({path: path.read_text(encoding="utf-8") for path in previous}, previous)
 
     def test_forward_generated_dependency_rejects_stale_disk_file(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -965,7 +1441,115 @@ class GenerateTests(unittest.TestCase):
             self.assertIn(f"{url}: line 2", stderr.getvalue())
             self.assertIn("UTF-8", stderr.getvalue())
 
-    def test_only_dns_allow_without_routable_rules_freezes_old_group(self):
+    def test_whitelist_covering_every_block_replaces_stale_dns_and_six_files(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": ["block.list"], "whitelist": ["allow.list"],
+            }]), encoding="utf-8")
+            (root / "block.list").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            (root / "allow.list").write_text("DOMAIN,ads.example.org,DIRECT\n", encoding="utf-8")
+            previous = {}
+            for name in NAMES:
+                path = root / "a3" / name
+                path.parent.mkdir(exist_ok=True)
+                previous[path] = "||ads.example.org^\n" if name == "fin-adb.txt" else "previous version\n"
+                path.write_text(previous[path], encoding="utf-8")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), set(previous))
+            self.assertEqual(outputs[root / "a3" / "fin-adb.txt"].splitlines()[6:],
+                             ["! Total count: 1", "@@|ads.example.org|"])
+            publish(outputs)
+            for path in previous:
+                self.assertEqual(path.read_text(encoding="utf-8"), outputs[path])
+                self.assertNotEqual(outputs[path], previous[path])
+
+    def test_whitelist_covering_ip_source_replaces_old_six_files_without_dns_exception(self):
+        for group, purpose, action in (("a3", "block", "REJECT"),
+                                       ("cdn", "proxy", "PROXY"),
+                                       ("dirt", "direct", "DIRECT")):
+            with self.subTest(group=group), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([{
+                    "name": group, "purpose": purpose, "no_resolve": "keep",
+                    "sources": ["source.list"], "whitelist": ["allow.list"],
+                }]), encoding="utf-8")
+                (root / "source.list").write_text(
+                    f"IP-CIDR,203.0.113.0/24,{action}\n", encoding="utf-8",
+                )
+                (root / "allow.list").write_text(
+                    "IP-CIDR,203.0.113.0/24,DIRECT\n", encoding="utf-8",
+                )
+                previous = {}
+                for name in NAMES:
+                    path = root / group / name
+                    path.parent.mkdir(exist_ok=True)
+                    previous[path] = "IP-CIDR,203.0.113.0/24\n"
+                    path.write_text(previous[path], encoding="utf-8")
+                outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+                self.assertEqual(set(outputs), set(previous))
+                self.assertEqual(outputs[root / group / "fin.txt"], f"# {group} rules: 0\n")
+                self.assertEqual(outputs[root / group / "fin-adb.txt"].splitlines()[6:],
+                                 ["! Total count: 0"] if purpose == "block" else
+                                 ["! Total count: 0", "! No AdBlock rules for non-advertising group."])
+                publish(outputs)
+                for path in previous:
+                    self.assertEqual(path.read_text(encoding="utf-8"), outputs[path])
+                    self.assertNotEqual(outputs[path], previous[path])
+
+    def test_allow_only_source_replaces_stale_dns_and_six_files(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([{
+                "name": "a3", "purpose": "block", "no_resolve": "keep",
+                "sources": ["allow.list"], "whitelist": [],
+            }]), encoding="utf-8")
+            (root / "allow.list").write_text("@@||safe.example.org^\n", encoding="utf-8")
+            previous = {}
+            for name in NAMES:
+                path = root / "a3" / name
+                path.parent.mkdir(exist_ok=True)
+                previous[path] = "||safe.example.org^\n" if name == "fin-adb.txt" else "previous version\n"
+                path.write_text(previous[path], encoding="utf-8")
+            outputs = generate(root, lambda _: self.fail("local input must not fetch"))
+            self.assertEqual(set(outputs), set(previous))
+            self.assertEqual(outputs[root / "a3" / "fin-adb.txt"].splitlines()[6:],
+                             ["! Total count: 1", "@@||safe.example.org^"])
+            publish(outputs)
+            for path in previous:
+                self.assertEqual(path.read_text(encoding="utf-8"), outputs[path])
+                self.assertNotEqual(outputs[path], previous[path])
+
+    def test_unavailable_or_unadaptable_source_with_unrelated_whitelist_stays_frozen(self):
+        for source in ("missing", "unadaptable"):
+            with self.subTest(source=source), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                url = "https://example.org/missing.txt"
+                (root / "rulesets.json").write_text(json.dumps([{
+                    "name": "a3", "purpose": "block", "no_resolve": "keep",
+                    "sources": [url], "whitelist": ["allow.list"],
+                }]), encoding="utf-8")
+                (root / "allow.list").write_text("DOMAIN,unrelated.example.org,DIRECT\n", encoding="utf-8")
+                previous = {}
+                for name in NAMES:
+                    path = root / "a3" / name
+                    path.parent.mkdir(exist_ok=True)
+                    previous[path] = "previous version\n"
+                    path.write_text(previous[path], encoding="utf-8")
+
+                def fetch(_):
+                    if source == "missing":
+                        raise RuntimeError("source unavailable") from error.HTTPError(url, 404, "Not Found", {}, None)
+                    return b"UNKNOWN-TYPE,ads.example.org\n"
+
+                with contextlib.redirect_stderr(io.StringIO()):
+                    outputs = generate(root, fetch)
+                self.assertEqual(outputs, {})
+                publish(outputs)
+                self.assertEqual({path: path.read_text(encoding="utf-8") for path in previous}, previous)
+
+    def test_only_dns_allow_without_routable_rules_publishes_group(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             configure_groups(root)
@@ -977,8 +1561,10 @@ class GenerateTests(unittest.TestCase):
             for name in NAMES:
                 (root / "a3" / name).write_bytes(b"previous version\n")
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertFalse(any(path.parent.name == "a3" for path in outputs))
-            self.assertEqual(len(outputs), 18)
+            self.assertEqual({root / "a3" / name for name in NAMES}, {path for path in outputs if path.parent.name == "a3"})
+            self.assertEqual(len(outputs), 24)
+            self.assertEqual(outputs[root / "a3" / "fin-adb.txt"].splitlines()[6:],
+                             ["! Total count: 1", "@@||safe.example.org^"])
 
     def test_wholly_bad_utf8_remote_whitelist_is_skipped(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -994,7 +1580,7 @@ class GenerateTests(unittest.TestCase):
             self.assertIn(url, stderr.getvalue())
             self.assertIn("skipped", stderr.getvalue())
 
-    def test_whitelist_removing_all_routes_freezes_old_group(self):
+    def test_whitelist_removing_all_routes_publishes_dns_exceptions(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             configure_groups(root, whitelist={"a3": ["allow.list"]})
@@ -1004,7 +1590,9 @@ class GenerateTests(unittest.TestCase):
             for name in NAMES:
                 (root / "a3" / name).write_bytes(b"previous version\n")
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertEqual(set(outputs), {root / group / name for group in GROUPS if group != "a3" for name in NAMES})
+            self.assertEqual(set(outputs), {root / group / name for group in GROUPS for name in NAMES})
+            self.assertEqual(outputs[root / "a3" / "fin-adb.txt"].splitlines()[6:],
+                             ["! Total count: 1", "@@|ads.example.org|"])
 
     def test_remote_whitelist_unsupported_only_warns_and_skips(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
