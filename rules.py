@@ -1,5 +1,4 @@
 import ipaddress
-import json
 import re
 import warnings
 from bisect import bisect_right
@@ -15,6 +14,7 @@ class Rule:
     options: tuple[str, ...] = ()
     allow: bool = False
     literal_process: bool = False
+    native_fields: bool = False
 
     def __post_init__(self):
         kind = self.kind.upper()
@@ -235,102 +235,32 @@ _REGEXP2_WORD_BOUNDARIES = (
 )
 
 
-def _unquoted_regex(line: str) -> bool:
-    head = re.match(r"^\s*(?:-\s+)?([a-z-]+),\s*", line, re.I)
-    return (head is not None and head[1].upper() in _REGEX and
-            line[head.end():head.end() + 1] not in "'\"")
-
-
-def _regex_end_anchor(value: str) -> bool:
-    return (value.endswith("$") and not value.endswith(r"\$") or
-            value.endswith(r"\z") and not value.endswith(r"\\z"))
-
-
-def _regex_policy_field(parts: list[str]) -> bool:
-    if len(parts) < 3 or not parts[-1]:
-        return False
-    if parts[-1].upper() in _BLOCK_ACTIONS | {"DIRECT", "PROXY", "LIST"}:
-        return True
-    value = parts[1]
-    quoted = len(value) >= 2 and value[0] in "'\"" and value[-1] == value[0]
-    return (len(parts) == 3 and (quoted or _regex_end_anchor(value)) and
-            parts[-1].lower() not in _QX_INTERFACE_OPTIONS)
-
-
-def _regex_source_end(line: str) -> int:
-    # 从字段尾部确认来源策略；尾注释仅属于该候选策略，不能参与 matcher 配对。
-    first = line.index(',')
-    kind = line[:first].strip().upper()
-    for end in reversed([index for index in range(first + 1, len(line)) if line[index] == ',']):
-        tail = line[end + 1:]
-        marker = re.search(r"\s(?:[#;]|//)", tail)
-        policy = tail[:marker.start()].strip() if marker else tail.strip()
-        matcher = line[first + 1:end].strip()
-        if (not policy or ',' in policy or
-                re.search(r"[$^\\*+?|]", policy) and re.search(r"\s(?:[#;]|//)", matcher)):
-            continue
-        if _regex_end_anchor(policy):
-            continue
-        parts = [kind, matcher, policy]
-        if not (_regex_policy_field(parts) or
-                _regex_end_anchor(matcher) and policy.lower() in _QX_INTERFACE_OPTIONS):
-            continue
-        # 最后一个具有结尾锚点的完整字段仍是 matcher，保留其中的 literal marker。
-        continuation = tail.rpartition(',')[2].strip()
-        if marker and _regex_end_anchor(continuation) and re.search(r"\}(?:\$|\\z)", continuation):
-            continue
-        return end
-    marker = re.search(r"\s(?:[#;]|//)", line[first + 1:])
-    if marker:
-        end = first + 2 + marker.start()
-        if _regex_end_anchor(line[first + 1:end].strip()) and ',' not in line[end:]:
-            continuation = line[end:].strip()
-            if not (_regex_end_anchor(continuation) and re.search(r"\}(?:\$|\\z)", continuation)):
-                return end
-    return len(line)
-
-
-def _fields(line: str, *, comment_at: list[int] | None = None, source_rule: bool = False) -> list[str]:
-    commas, hidden, braces, stack = [], set(), [], []
+def _delimiters(line: str, *, native_fields: bool = False):
+    # 仅扫描调用者给出的范围；来源策略和注释由 _source_parts 消费。
+    stack = []
     start, escaped, quote = 0, False, None
     regex_depth = literal_depth = None
     class_first = class_hyphen = extended = regex_comment = False
-    unquoted_regex = _unquoted_regex(line)
-    regex_end = _regex_source_end(line) if source_rule and unquoted_regex else len(line)
     index = 0
     while index < len(line):
         char = line[index]
-        if index == regex_end and not stack and not quote:
-            regex_depth, literal_depth, extended, regex_comment = None, 0, False, False
-            braces.clear()
+        if native_fields:
+            if char == '(':
+                stack.append(index)
+            elif char == ')':
+                if not stack:
+                    raise ValueError("unbalanced delimiters")
+                stack.pop()
+            elif char == ',' and not stack:
+                yield ',', index
+            index += 1
+            continue
         in_class = bool(stack and stack[-1][0] == '[')
-        if (comment_at is not None and commas and not stack and not quote and not escaped
-                and not braces
-                and index and line[index - 1].isspace()
-                and (char in '#;' or line.startswith('//', index))):
-            positions = [-1, *(comma for comma in commas if comma not in hidden), index]
-            parts = [line[begin + 1:end].strip() for begin, end in zip(positions, positions[1:])]
-            matcher = ','.join(parts[1:-1])
-            quoted = len(matcher) >= 2 and matcher[0] in "'\"" and matcher[-1] == matcher[0]
-            marker_end = index + (2 if char == '/' else 1)
-            spaced_comment = marker_end == len(line) or line[marker_end].isspace()
-            policy = (len(parts) == 3 and parts[0].upper() in _LOGICAL and bool(parts[2]) or
-                      _regex_policy_field(parts) and (quoted or _regex_end_anchor(matcher) or spaced_comment) or
-                      len(parts) == 3 and parts[2].lower() in _QX_INTERFACE_OPTIONS)
-            matcher_only = _regex_end_anchor(','.join(parts[1:])) and ',' not in line[index:]
-            if policy or matcher_only:
-                comment_at.append(index)
-                line = line[:index].rstrip()
-                break
         if regex_comment:
             if char == ')' and regex_depth and len(stack) == regex_depth:
                 stack.pop()
                 regex_depth = None
                 regex_comment = extended = False
-                braces.clear()
-            elif char == ',' and regex_depth == 0:
-                commas.append(index)
-                start = index + 1
             index += 1
             continue
         if escaped:
@@ -339,17 +269,12 @@ def _fields(line: str, *, comment_at: list[int] | None = None, source_rule: bool
                 class_first = class_hyphen = False
             if regex_depth is not None and char == 'c':
                 index += 1
-            elif regex_depth is not None and not in_class and not quote:
-                if char == '{':
-                    braces.append([])
-                elif char == '}' and braces:
-                    hidden.update(braces.pop())
         elif char == '\\':
             escaped = True
         elif quote:
             if char == quote:
                 quote = None
-        elif char in "'\"" and not line[start:index].strip() and not (unquoted_regex and commas):
+        elif char in "'\"" and not line[start:index].strip() and regex_depth is None:
             quote = char
         elif in_class:
             subtraction = char == '[' and class_hyphen
@@ -371,12 +296,14 @@ def _fields(line: str, *, comment_at: list[int] | None = None, source_rule: bool
             index = end + 1
             continue
         elif regex_depth is not None and extended and char == '#':
+            if not stack and index and line[index - 1].isspace():
+                yield 'comment', index
             regex_comment = True
         elif regex_depth is not None and char == '{':
-            braces.append([])
-        elif regex_depth is not None and char == '}':
-            if braces:
-                hidden.update(braces.pop())
+            quantifier = re.match(r"\{[0-9]+(?:,[0-9]*)?\}", line[index:])
+            if quantifier:
+                index += len(quantifier[0])
+                continue
         elif regex_depth is not None and char == '[':
             stack.append(('[', index))
             class_first = True
@@ -400,7 +327,6 @@ def _fields(line: str, *, comment_at: list[int] | None = None, source_rule: bool
                 if regex_depth is not None and len(stack) < regex_depth:
                     regex_depth = None
                     extended = False
-                    braces.clear()
                 if literal_depth is not None and len(stack) < literal_depth:
                     literal_depth = None
             elif regex_depth is None and literal_depth is None:
@@ -410,24 +336,144 @@ def _fields(line: str, *, comment_at: list[int] | None = None, source_rule: bool
                 scope_start = stack[-1][1] + 1 if stack else start
                 kind = line[scope_start:index].strip().upper()
                 if kind in _REGEX:
-                    regex_depth = len(stack)
+                    # 明确字段引用始终由字段起始引号保护。
+                    following = line[index + 1:].lstrip()
+                    if not following.startswith(("'", '"')):
+                        regex_depth = len(stack)
                 elif kind in _KINDS and kind not in _LOGICAL:
                     literal_depth = len(stack)
             if not stack:
-                commas.append(index)
-                if braces:
-                    braces[-1].append(index)
-                # matcher 已结束，策略中的括号与字符类标记按字段字面内容处理。
-                if source_rule and regex_depth == 0 and not unquoted_regex and len(commas) >= 2:
-                    regex_depth, literal_depth, extended = None, 0, False
-                elif len(commas) == 2 and line[:commas[0]].strip().upper() in _LOGICAL:
-                    literal_depth = 0
-                start = index + 1
+                yield ',', index
+            start = index + 1
+        elif (not stack and index and line[index - 1].isspace()
+              and (char in '#;' or line.startswith('//', index))):
+            yield 'comment', index
         index += 1
     if stack or quote:
         raise ValueError("unbalanced delimiters")
-    positions = [-1, *(index for index in commas if index not in hidden), len(line)]
-    return [line[begin + 1:end].strip() for begin, end in zip(positions, positions[1:])]
+
+
+def _field_value(value: str) -> str:
+    if len(value) >= 2 and value[0] in "'\"" and value[-1] == value[0]:
+        if value[0] == '"':
+            # Surge 双引号字段只解码字面引号和反斜杠；regex 的其他 escape 保留。
+            return re.sub(r'\\(["\\])', r'\1', value[1:-1])
+        return value[1:-1]
+    return value
+
+
+def _native_parts(line: str) -> list[str]:
+    parts = [part.strip(' ') for part in line.split(',')]
+    parts[0] = parts[0].upper()
+    if parts[0] in (_REGEX - {'URL-REGEX'}) | _LOGICAL and len(parts) > 1:
+        return [parts[0], ','.join(parts[1:])]
+    return parts
+
+
+def _fields(line: str, *, scope: str = 'condition', native_fields: bool = False) -> list[str]:
+    if scope == 'condition':
+        if native_fields:
+            return _native_parts(line)
+        kind, separator, value = line.partition(',')
+        if separator and kind.strip().upper() in _REGEX:
+            return [kind.strip(), value.strip()]
+    elif scope != 'children':
+        raise ValueError(f"invalid field scope: {scope}")
+    positions = [-1, *(index for token, index in _delimiters(line, native_fields=native_fields)
+                      if token == ','), len(line)]
+    trim = ' ' if native_fields else None
+    return [line[begin + 1:end].strip(trim) for begin, end in zip(positions, positions[1:])]
+
+
+def _literal_fields(line: str) -> tuple[list[str], int]:
+    parts, start, quote, escaped = [], 0, None, False
+    for index, char in enumerate(line):
+        if escaped:
+            escaped = False
+        elif char == '\\':
+            escaped = True
+        elif quote:
+            if char == quote:
+                quote = None
+        elif char in "'\"" and not line[start:index].strip():
+            quote = char
+        elif index and line[index - 1].isspace() and (char in '#;' or line.startswith('//', index)):
+            return parts + [line[start:index].strip()], index
+        elif char == ',':
+            parts.append(line[start:index].strip())
+            start = index + 1
+    if quote:
+        raise ValueError("unbalanced delimiters")
+    return parts + [line[start:].strip()], len(line)
+
+
+def _source_parts(line: str) -> tuple[list[str], int]:
+    head, separator, value = line.partition(',')
+    kind = head.strip().upper()
+    if not separator:
+        _, end = _literal_fields(line)
+        return [line[:end].strip()], end
+    value_start = len(head) + 1
+    offset = value_start + len(value) - len(value.lstrip())
+    if kind in _REGEX and line[offset:offset + 1] not in ("'", '"'):
+        commas = False
+        try:
+            for token, index in _delimiters(line):
+                if index == len(head):
+                    continue
+                if token == 'comment':
+                    message = 'ambiguous unquoted regex comma or policy' if commas else 'ambiguous unquoted regex comment'
+                    raise ValueError(message)
+                commas = True
+                action = re.match(r"\s*([a-z0-9-]+)(?=,|\s+(?:[#;]|//)|$)", line[index + 1:], re.I)
+                if action and action[1].upper() in _BLOCK_ACTIONS | {'DIRECT', 'PROXY', 'LIST'}:
+                    tail, end = _literal_fields(line[index + 1:])
+                    return [head.strip(), line[value_start:index].strip(), *tail], index + 1 + end
+        except ValueError:
+            if commas:
+                raise ValueError('ambiguous unquoted regex comma or policy') from None
+            raise
+        if commas:
+            raise ValueError('ambiguous unquoted regex comma or policy')
+        return [head.strip(), value.strip()], len(line)
+    if kind in _REGEX:
+        quote = line[offset]
+        index, escaped = offset + 1, False
+        while index < len(line):
+            char = line[index]
+            if escaped:
+                escaped = False
+            elif char == '\\':
+                escaped = True
+            elif char == quote:
+                break
+            index += 1
+        else:
+            raise ValueError('unbalanced delimiters')
+        rest = line[index + 1:]
+        parts, end = _literal_fields(rest)
+        if parts[0]:
+            raise ValueError('unexpected fields')
+        return [head.strip(), line[offset:index + 1], *parts[1:]], index + 1 + end
+    # 逻辑字段的包装括号给出完整范围，之后的策略仅按字面字段读取。
+    if kind in _LOGICAL:
+        for token, index in _delimiters(line):
+            if token == ',' and index > len(head):
+                tail, end = _literal_fields(line[index + 1:])
+                return [head.strip(), line[value_start:index].strip(), *tail], index + 1 + end
+            if token == 'comment':
+                return [head.strip(), line[value_start:index].strip()], index
+        return [head.strip(), value.strip()], len(line)
+    # 普通进程字段中的 marker 是字面内容；确定尾字段或注释后停止范围扫描。
+    process = kind in {'PROCESS-NAME', 'PROCESS-PATH', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'}
+    for token, index in _delimiters(line):
+        if token == 'comment' and not process:
+            fields, _ = _literal_fields(line[:index])
+            return fields, index
+        if token == ',' and index > len(head):
+            tail, end = _literal_fields(line[index + 1:])
+            return [head.strip(), line[value_start:index].strip(), *tail], index + 1 + end
+    return [head.strip(), value.strip()], len(line)
 
 
 def _valid_domain(kind: str, value: str) -> bool:
@@ -932,26 +978,28 @@ def _valid_simple(kind: str, value: str) -> bool:
     return bool(re.fullmatch(r"[a-z0-9._-]+", value, re.I))
 
 
-def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None = None) -> str | None:
+def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None = None,
+                         native_fields: bool = False) -> str | None:
     if not expression.startswith('(') or not expression.endswith(')'):
         return None
     try:
-        fields = _fields(expression[1:-1])
+        fields = _fields(expression[1:-1], native_fields=native_fields)
     except ValueError:
         return None
     if len(fields) < 2:
         return None
     kind, value = fields[:2]
     kind = kind.upper()
-    if kind in _REGEX and len(fields) > 2 and fields[-1].lower() == "no-resolve":
+    if not native_fields and kind in _REGEX and value.endswith(",no-resolve"):
         return None
-    if kind in _REGEX and not (len(value) >= 2 and value[0] in "'\"" and value[-1] == value[0]):
-        value = ','.join(fields[1:])
-        fields = [kind, value]
-    checked = value[1:-1] if len(value) >= 2 and value[0] in "'\"" and value[-1] == value[0] else value
-    options = {field.lower() for field in fields[2:] if field.lower() != "src"}
-    if "src" in fields[2:]:
-        options.add("src")
+    checked = value if native_fields else _field_value(value)
+    if native_fields:
+        options = {field for field in fields[2:] if field in {"src", "no-resolve"} and kind in _SOURCE_KINDS
+                   or field == "no-resolve" and kind == "SRC-IP"}
+    else:
+        options = {field.lower() for field in fields[2:] if field.lower() != "src"}
+        if "src" in fields[2:]:
+            options.add("src")
     if options and (kind not in _SOURCE_KINDS and kind not in {*_SOURCE_KINDS.values(), "SRC-IP"}
                     or options - ({"no-resolve", "src"} if kind in _SOURCE_KINDS else {"no-resolve"})):
         return None
@@ -963,7 +1011,7 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
         if ignored_no_resolve is not None:
             ignored_no_resolve.append(kind)
     if kind in _LOGICAL:
-        value = _normalize_logic(kind, value, ignored_no_resolve)
+        value = _normalize_logic(kind, value, ignored_no_resolve, native_fields)
         return f"({kind},{value})" if value is not None else None
     if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
         if not (_valid_domain(kind, checked) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
@@ -991,108 +1039,146 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
         if not _valid_regex(kind, checked):
             return None
     elif kind in _PROCESS:
-        if not checked or any(char in checked for char in '<>\r\n'):
+        if not checked or not native_fields and any(char in checked for char in '<>\r\n'):
             return None
     elif not value or kind not in _KINDS:
         return None
     return f"({kind},{value}{',no-resolve' if 'no-resolve' in options else ''})"
 
 
-def _normalize_logic(kind: str, value: str, ignored_no_resolve: list[str] | None = None) -> str | None:
+def _normalize_logic(kind: str, value: str, ignored_no_resolve: list[str] | None = None,
+                     native_fields: bool = False) -> str | None:
     if not value.startswith('(') or not value.endswith(')'):
         return None
     if kind == "NOT":
         wrapped = value.startswith('((') and value.endswith('))')
-        child = _normalize_condition(value[1:-1] if wrapped else value, ignored_no_resolve)
+        child = _normalize_condition(value[1:-1] if wrapped else value, ignored_no_resolve, native_fields)
         return f"({child})" if wrapped and child is not None else child
     try:
-        children = _fields(value[1:-1])
+        children = _fields(value[1:-1], scope='children', native_fields=native_fields)
     except ValueError:
         return None
     if len(children) < 2:
         return None
-    normalized = [_normalize_condition(child, ignored_no_resolve) for child in children]
+    normalized = [_normalize_condition(child, ignored_no_resolve, native_fields) for child in children]
     if any(child is None for child in normalized):
         return None
     return f"({','.join(normalized)})"
 
 
-def _has_process_name(kind: str, value: str) -> bool:
+def _has_process_name(kind: str, value: str, native_fields: bool = False) -> bool:
     if kind == "PROCESS-NAME":
         return True
     if kind not in _LOGICAL:
         return False
     if kind == "NOT":
         child = value[1:-1] if value.startswith("((") else value
-        fields = _fields(child[1:-1])
-        return _has_process_name(fields[0], fields[1])
-    return any(_has_process_name(*_fields(child[1:-1])[:2])
-               for child in _fields(value[1:-1]))
+        fields = _fields(child[1:-1], native_fields=native_fields)
+        return _has_process_name(fields[0], fields[1], native_fields)
+    return any(_has_process_name(*_fields(child[1:-1], native_fields=native_fields)[:2], native_fields)
+               for child in _fields(value[1:-1], scope='children', native_fields=native_fields))
+
+
+_YAML_ESCAPES = dict(zip('0abtnvfre\t "\'\\N_LP',
+                         '\0\a\b\t\n\v\f\r\x1b\t "\'\\\x85\xa0  '))
+
+
+def _yaml_quoted(scalar: str) -> tuple[str, int]:
+    quote, decoded, index = scalar[0], [], 1
+    while index < len(scalar):
+        char = scalar[index]
+        if char == quote:
+            if quote == "'" and scalar.startswith("''", index):
+                decoded.append("'")
+                index += 2
+                continue
+            return ''.join(decoded), index + 1
+        if quote == '"' and char == '\\':
+            index += 1
+            if index == len(scalar):
+                break
+            escape = scalar[index]
+            if escape in _YAML_ESCAPES:
+                char = _YAML_ESCAPES[escape]
+            elif escape in 'xuU':
+                width = {'x': 2, 'u': 4, 'U': 8}[escape]
+                digits = scalar[index + 1:index + 1 + width]
+                if len(digits) != width or any(digit not in '0123456789abcdefABCDEF' for digit in digits):
+                    raise ValueError('invalid YAML payload')
+                codepoint = int(digits, 16)
+                if codepoint > 0x10FFFF or 0xD800 <= codepoint <= 0xDFFF:
+                    raise ValueError('invalid YAML payload')
+                char = chr(codepoint)
+                index += width
+            else:
+                raise ValueError('invalid YAML payload')
+        decoded.append(char)
+        index += 1
+    raise ValueError('invalid YAML payload')
+
+
+def _check_yaml_source(source: str) -> None:
+    # go-yaml 的原始字符范围仅用于解码前，escape 解码结果可以包含控制字符。
+    for char in source:
+        point = ord(char)
+        if not (point in {9, 10, 13, 0x85} or 0x20 <= point <= 0x7E
+                or 0xA0 <= point <= 0xD7FF or 0xE000 <= point <= 0xFFFD
+                or 0x10000 <= point <= 0x10FFFF):
+            raise ValueError('invalid YAML payload')
+
+
+def _yaml_scalar(scalar: str) -> str:
+    _check_yaml_source(scalar)
+    scalar = scalar.strip(' \t')
+    if not scalar or scalar[0] in '&*!|>[{?%@`' or scalar.startswith(('-', ':')):
+        raise ValueError('invalid YAML payload')
+    if scalar[0] in "'\"":
+        value, end = _yaml_quoted(scalar)
+        tail = scalar[end:].lstrip(' \t')
+        if tail and not tail.startswith('#'):
+            raise ValueError('invalid YAML payload')
+        return value
+    for index, char in enumerate(scalar):
+        if char == '#' and (index == 0 or scalar[index - 1] in ' \t'):
+            scalar = scalar[:index]
+            break
+        if char == ':' and (index + 1 == len(scalar) or scalar[index + 1] in ' \t'):
+            raise ValueError('invalid YAML payload')
+    return scalar.rstrip(' \t')
+
+
+def _provider_header(line: str) -> str | None:
+    line = line.lstrip(' ')
+    if not line:
+        return None
+    if line[0] in "'\"":
+        key, end = _yaml_quoted(line)
+        rest = line[end:].lstrip(' \t')
+        if not rest.startswith(':'):
+            return None
+    else:
+        key, separator, rest = line.partition(':')
+        if not separator:
+            return None
+        key = key.rstrip(' \t')
+        rest = ':' + rest
+    if key not in {'payload', 'rules'}:
+        return None
+    _check_yaml_source(line)
+    if len(rest) > 1 and rest[1] not in ' \t':
+        raise ValueError('invalid YAML payload')
+    tail = rest[1:].lstrip(' \t')
+    if tail and not tail.startswith('#'):
+        raise ValueError('invalid YAML payload')
+    return key
 
 
 def _without_comment(line: str) -> str:
-    yaml_item = re.match(r"^\s*-\s+(.*)$", line)
-    if yaml_item:
-        scalar = yaml_item[1]
-        if scalar.startswith(("'", '"')):
-            quote = scalar[0]
-            index = yaml_item.start(1) + 1
-            while index < len(line):
-                if quote == '"' and line[index] == '\\':
-                    index += 2
-                    continue
-                if line[index] == quote:
-                    if quote == "'" and line.startswith("''", index):
-                        index += 2
-                        continue
-                    return line[:index + 1] if re.match(r"\s+#", line[index + 1:]) else line
-                index += 1
-            return line
-        for index in range(yaml_item.start(1), len(line)):
-            if line[index] == '#' and line[index - 1].isspace():
-                return line[:index].rstrip()
+    try:
+        _, end = _source_parts(line)
+    except ValueError:
         return line
-    head = re.match(r'^\s*([a-z-]+),', line, re.I)
-    kind = head[1].upper() if head else ''
-    if kind in _LOGICAL | _REGEX:
-        comment_at = []
-        try:
-            _fields(line, comment_at=comment_at, source_rule=True)
-        except ValueError:
-            return line
-        if comment_at:
-            return line[:comment_at[0]].rstrip()
-        return line
-    quote, escaped, in_class = None, False, False
-    for index, char in enumerate(line):
-        if escaped:
-            escaped = False
-        elif char == '\\':
-            escaped = True
-        elif quote:
-            if char == quote:
-                quote = None
-        elif char in "'\"" and (not line[:index].strip() or line[:index].rstrip().endswith(',')):
-            quote = char
-        else:
-            if char == '[':
-                in_class = True
-            elif char == ']':
-                in_class = False
-            elif (not in_class and index and line[index - 1].isspace()
-                  and (char in '#;' or line.startswith('//', index))):
-                prefix = line[:index].rstrip()
-                actions = _BLOCK_ACTIONS | {"DIRECT", "PROXY", "LIST"}
-                trailing = line[index:].rpartition(',')[2].strip()
-                trailing_field = re.fullmatch(r'([a-z0-9_-]+)(?:\s+(?:[#;]|//).*)?', trailing, re.I)
-                later_action = (',' in line[index:] and trailing_field is not None
-                                and trailing_field[1].upper() in actions)
-                if prefix.rpartition(',')[2].strip().upper() in actions and not later_action:
-                    return prefix
-                if kind in {"PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"}:
-                    continue
-                return prefix
-    return line
+    return line[:end].rstrip()
 
 
 def _has_regex_field(line: str) -> bool:
@@ -1108,12 +1194,43 @@ def _has_regex_field(line: str) -> bool:
 def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list[Rule], list[str]]:
     if purpose not in {"block", "direct", "proxy"}:
         raise ValueError(f"invalid purpose: {purpose}")
-    lines = text.splitlines()
-    opening_tags, html_lines = {}, set()
-    for number, line in enumerate(lines, 1):
-        if line.lstrip().startswith(('#', ';', '//', '!')):
+    lines = text.removeprefix('\ufeff').split('\n')
+    records = []
+    in_payload = False
+    for source in lines:
+        source = source.removesuffix('\r')
+        line = source.strip(' \t')
+        if not line or line.startswith(('#', ';', '//')):
+            records.append((None, False, None, None))
             continue
-        line = _without_comment(line)
+        try:
+            if any(char in source for char in '\0\r\v\f\x85\u2028\u2029'):
+                raise ValueError('unsupported physical line separator')
+            header = _provider_header(source) if not source.startswith('\t') else None
+            if header:
+                in_payload = True
+                records.append((None, False, None, None))
+                continue
+            yaml_rule = in_payload and source.lstrip(' \t').startswith('-')
+            if line.startswith('-'):
+                item = re.fullmatch(r" *- +([^ \t].*)", source)
+                if not yaml_rule or item is None:
+                    raise ValueError('invalid YAML payload')
+                line = _yaml_scalar(item[1])
+                parts = _native_parts(line)
+            elif in_payload and source.startswith((' ', '\t')):
+                raise ValueError('invalid YAML payload')
+            else:
+                in_payload = False
+                parts, end = _source_parts(line)
+                line = line[:end].rstrip()
+            records.append((line, yaml_rule, parts, None))
+        except ValueError as exc:
+            records.append((line, False, None, str(exc)))
+    opening_tags, html_lines = {}, set()
+    for number, (line, _, _, _) in enumerate(records, 1):
+        if line is None or line.lstrip().startswith(('#', ';', '//', '!')):
+            continue
         if _has_regex_field(line):
             continue
         if re.match(r"^\s*<\s*!doctype\b", line, re.I):
@@ -1137,11 +1254,11 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                           for number, line in enumerate(lines, 1)):
         return [], [f"line {min(html_lines)}: HTML document"]
     rules, warnings = [], []
-    in_payload = False
-    for number, source in enumerate(lines, 1):
-        line = _without_comment(source).strip()
-        yaml_rule = False
-        if not line or line.startswith(('#', ';', '//')):
+    for number, (line, yaml_rule, parts, error) in enumerate(records, 1):
+        if error is not None:
+            warnings.append(f"line {number}: {error}")
+            continue
+        if line is None:
             continue
         if not _has_regex_field(line) and re.search(
             r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", line, re.I
@@ -1150,35 +1267,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             continue
         if number in html_lines:
             continue
-        if line == 'payload:':
-            in_payload = True
-            continue
-        if in_payload and not source[0].isspace() and re.match(r"[\w-]+:", line):
-            in_payload = False
-            continue
         if re.fullmatch(r"\[[\w -]+\]", line):
             continue
-        if line.startswith('- '):
-            if not in_payload:
-                warnings.append(f"line {number}: invalid YAML payload")
-                continue
-            if line.startswith('- "'):
-                try:
-                    encoded = re.sub(
-                        r"(?<!\\)((?:\\\\)*)\\x([0-9a-fA-F]{2})",
-                        lambda match: match[1] + r"\u00" + match[2], line[2:],
-                    )
-                    line = json.loads(encoded)
-                except ValueError:
-                    warnings.append(f"line {number}: invalid YAML payload")
-                    continue
-            else:
-                match = re.fullmatch(r"- (?:'((?:[^']|'')*)'|([^'\"#\s].*))", line)
-                if not match:
-                    warnings.append(f"line {number}: invalid YAML payload")
-                    continue
-                line = match[1].replace("''", "'") if match[1] is not None else match[2]
-            yaml_rule = True
         if line.startswith(('||', '@@||')) and '$' in line:
             warnings.append(f"line {number}: conditional ABP rule")
             continue
@@ -1213,73 +1303,61 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         elif _valid_domain("DOMAIN", line.removeprefix('.')):
             kind, value, action = ("DOMAIN-SUFFIX" if line.startswith('.') else "DOMAIN"), line.removeprefix('.'), ""
         else:
-            try:
-                parts = _fields(line, source_rule=True)
-            except ValueError:
-                warnings.append(f"line {number}: unbalanced delimiters")
-                continue
             if len(parts) < 2:
                 warnings.append(f"line {number}: invalid rule")
                 continue
             kind, value = parts[:2]
-            if len(value) >= 2 and value[0] in "'\"" and value[-1] == value[0]:
-                value = value[1:-1]
+            if not yaml_rule:
+                value = _field_value(value)
             kind = {
                 "HOST": "DOMAIN", "HOST-SUFFIX": "DOMAIN-SUFFIX",
                 "HOST-WILDCARD": "DOMAIN-WILDCARD", "HOST-KEYWORD": "DOMAIN-KEYWORD",
                 "IP6-CIDR": "IP-CIDR6",
             }.get(kind.upper(), kind.upper())
-            if kind in _REGEX and len(parts) > 2 and not (
-                len(parts[1]) >= 2 and parts[1][0] in "'\"" and parts[1][-1] == parts[1][0]
-            ):
-                end = len(parts)
-                while end > 2 and parts[end - 1].lower() == "no-resolve":
-                    end -= 1
-                explicit_action = end > 2 and parts[end - 1].upper() in _BLOCK_ACTIONS | {"DIRECT", "PROXY", "LIST"}
-                if _regex_policy_field(parts[:end]):
-                    end -= 1
-                if end > 2:
-                    if not explicit_action and not re.search(r"[$^\\\[\]{}()*+?|]", parts[end - 1]):
-                        warnings.append(f"line {number}: ambiguous unquoted regex comma or policy")
-                        continue
-                    value = ','.join(parts[1:end])
-                    parts = [parts[0], value, *parts[end:]]
-            if kind in _SOURCE_KINDS and len(parts) > 3:
-                for field in parts[3:]:
-                    if field.lower() == 'src' and field != 'src':
-                        warnings.append(f"line {number}: unsupported src option {field}")
-                parts = [*parts[:3], *(field for field in parts[3:]
-                                       if field.lower() != 'src' or field == 'src')]
-            if kind in _SOURCE_KINDS:
-                if "src" in parts[3:]:
+            if yaml_rule:
+                params = parts[2:]
+                if kind in _SOURCE_KINDS and 'src' in params:
                     source_kind = kind
-                    parts = [*parts[:3], *(field for field in parts[3:] if field != "src")]
-                elif parts[2:3] == ["src"] and all(field in {"src", "no-resolve"} for field in parts[2:]):
-                    warnings.append(f"line {number}: ambiguous src policy or option")
+                options = tuple(field for field in params if field == 'no-resolve'
+                                and kind in {*_SOURCE_KINDS, 'SRC-IP'})
+                action = ''
+            else:
+                if kind in _SOURCE_KINDS and len(parts) > 3:
+                    for field in parts[3:]:
+                        if field.lower() == 'src' and field != 'src':
+                            warnings.append(f"line {number}: unsupported src option {field}")
+                    parts = [*parts[:3], *(field for field in parts[3:]
+                                           if field.lower() != 'src' or field == 'src')]
+                if kind in _SOURCE_KINDS:
+                    if "src" in parts[3:]:
+                        source_kind = kind
+                        parts = [*parts[:3], *(field for field in parts[3:] if field != "src")]
+                    elif parts[2:3] == ["src"] and all(field in {"src", "no-resolve"} for field in parts[2:]):
+                        warnings.append(f"line {number}: ambiguous src policy or option")
+                        continue
+                if kind in _PORTS and len(parts) > 3:
+                    end = 2
+                    while end < len(parts) - 1 and _valid_port(parts[end]):
+                        end += 1
+                    if end > 2:
+                        value = '/'.join(parts[1:end])
+                        parts = [parts[0], value, *parts[end:]]
+                if any(field.lower() == "extended-matching" for field in parts[2:]):
+                    warnings.append(f"line {number}: unsupported ruleset option extended-matching")
                     continue
-            if kind in _PORTS and len(parts) > 3:
-                end = 2
-                while end < len(parts) - 1 and _valid_port(parts[end]):
-                    end += 1
-                if end > 2:
-                    value = '/'.join(parts[1:end])
-                    parts = [parts[0], value, *parts[end:]]
-            if any(field.lower() == "extended-matching" for field in parts[2:]):
-                warnings.append(f"line {number}: unsupported ruleset option extended-matching")
-                continue
-            recognized_options = {"no-resolve"} | (
-                _QX_INTERFACE_OPTIONS if kind in _QX_INTERFACE_KINDS and not source_kind else set()
-            )
-            options = tuple(field.lower() for field in parts[2:]
-                            if field.lower() in recognized_options)
-            actions = [field.upper() for field in parts[2:]
-                       if field.lower() not in recognized_options]
-            if len(actions) > 1:
-                warnings.append(f"line {number}: unexpected fields")
-                continue
-            action = actions[0] if actions else ""
-            if action == "LIST":
-                action = ""
+                recognized_options = {"no-resolve"} | (
+                    _QX_INTERFACE_OPTIONS if kind in _QX_INTERFACE_KINDS and not source_kind else set()
+                )
+                options = tuple(field.lower() for field in parts[2:]
+                                if field.lower() in recognized_options)
+                actions = [field.upper() for field in parts[2:]
+                           if field.lower() not in recognized_options]
+                if len(actions) > 1:
+                    warnings.append(f"line {number}: unexpected fields")
+                    continue
+                action = actions[0] if actions else ""
+                if action == "LIST":
+                    action = ""
         if kind not in _KINDS:
             warnings.append(f"line {number}: unknown type {kind}")
             continue
@@ -1323,9 +1401,9 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 warnings.append(f"line {number}: invalid {kind} {value}")
                 continue
         elif kind in _PROCESS:
-            if not value or any(char in value for char in '\r\n') or (
+            if not value or not yaml_rule and (any(char in value for char in '\r\n') or (
                 kind not in _REGEX and any(char in value for char in '<>')
-            ):
+            )):
                 warnings.append(f"line {number}: invalid value {value}")
                 continue
             if kind in _REGEX and not _valid_regex(kind, value):
@@ -1333,7 +1411,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 continue
         elif kind in _LOGICAL:
             ignored_no_resolve = []
-            normalized = _normalize_logic(kind, value, ignored_no_resolve)
+            normalized = _normalize_logic(kind, value, ignored_no_resolve, yaml_rule)
             if normalized is None:
                 warnings.append(f"line {number}: invalid logical expression {value}")
                 continue
@@ -1351,7 +1429,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             warnings.append(f"line {number}: incompatible action {action}")
         else:
             rules.append(Rule(kind, value, options, allow=allow,
-                              literal_process=yaml_rule and _has_process_name(kind, value)))
+                              literal_process=yaml_rule and _has_process_name(kind, value, yaml_rule),
+                              native_fields=yaml_rule and kind in _LOGICAL))
     return rules, warnings
 
 
@@ -1360,7 +1439,8 @@ def parse_whitelist(text: str) -> list[Rule]:
     supported = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
                  "IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-ASN", "GEOIP",
                  "SRC-IP-ASN", "SRC-GEOIP", "IP-SUFFIX", "SRC-IP-SUFFIX"}
-    whitelist = [Rule(rule.kind, rule.value) for rule in parsed if rule.kind in supported]
+    whitelist = [Rule(rule.kind, rule.value, literal_process=rule.literal_process,
+                      native_fields=rule.native_fields) for rule in parsed if rule.kind in supported]
     if not parsed and not messages:
         raise ValueError("no rules")
     if not whitelist and messages:
@@ -1474,10 +1554,10 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
         if rule.kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
             network = ipaddress.ip_network(rule.value, strict=False)
             kind = "IP-CIDR6" if rule.kind == "IP-CIDR" and network.version == 6 else rule.kind
-            networks.setdefault((kind, network.version, rule.options, rule.allow, rule.literal_process), []).append(network)
+            networks.setdefault((kind, network.version, rule.options, rule.allow, rule.literal_process, rule.native_fields), []).append(network)
         else:
             others.append(rule)
-    for (kind, _, options, allow, literal_process), group in networks.items():
-        others.extend(Rule(kind, str(network), options, allow, literal_process)
+    for (kind, _, options, allow, literal_process, native_fields), group in networks.items():
+        others.extend(Rule(kind, str(network), options, allow, literal_process, native_fields)
                       for network in ipaddress.collapse_addresses(group))
-    return sorted(others, key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow, rule.literal_process))
+    return sorted(others, key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow, rule.literal_process, rule.native_fields))

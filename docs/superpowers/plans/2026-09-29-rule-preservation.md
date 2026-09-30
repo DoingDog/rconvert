@@ -19,7 +19,9 @@
 - Quantumult X remote fourth-field interface parameters are unverified. Preserve the three-field matcher and record loss of the interface option; do not claim that remote interface selection remains effective.
 - Preserve Mihomo YAML `PROCESS-NAME` literals containing `*`/`?` and Surge-source process globs as distinct rule intents.
 - All modifications are test-first. Use `C:/Users/user/.local/bin/python.exe` for local tests; the default LibreOffice Python causes two CLI tests to fail with `WinError 5`.
-- 用户于 2026-09-30 要求每个独立任务完成并通过审查后单独提交，可以并行的任务使用不同 worktree 并行。现有累计改动保存为共享的本地基线 checkpoint，用于创建任务分支，该 checkpoint 不表示问题已经全部修复。全部任务和最终审查通过后再推送 main；不暂存原有未跟踪 `.claude/`。
+- 每个 Git 编码子任务使用独立 worktree 的动态 workflow，连续完成编码、测试、规格与质量审查、必要修复及复审，达到完成条件后单独提交；互相独立的任务并行执行，主会话只核对已完成任务的修改范围并合并。选择 Claude 模型时使用当前可用的 `[1m]` 长上下文型号。
+- 全面扫描按六种产物及共享解析、白名单、规范化、生成依赖、逻辑表达式和 `no_resolve` 分支并行覆盖，记录覆盖情况并补查遗漏。最终 a3 两类各 100 条核查作为产物检查，不能代替全面分析。
+- 现有累计改动保存在共享本地基线 checkpoint，该提交不表示问题已全部修复。全部任务整合、完整测试及最终审查通过后再正常推送 main；原有未跟踪 `.claude/` 不暂存，`static/` 不修改，不强推。
 
 ## Review Focus
 

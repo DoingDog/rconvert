@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from collections import Counter
 from collections.abc import Iterable
 
-from rules import Rule, _QX_INTERFACE_OPTIONS, _fields, _valid_domain
+from rules import Rule, _QX_INTERFACE_OPTIONS, _field_value, _fields, _valid_domain
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -38,21 +38,25 @@ SURGE_ALIASES = {"SRC-IP-CIDR": "SRC-IP", "DST-PORT": "DEST-PORT", "PROCESS-NAME
 LOGICAL = {"AND", "OR", "NOT"}
 
 
-def _surge_value(value: str) -> str | None:
-    if "," not in value:
+def _surge_value(value: str, *, source_regex: bool = False) -> str:
+    trailing_escape = (len(value) - len(value.rstrip("\\"))) % 2
+    if ("," not in value and not value.startswith(("'", '"')) and not trailing_escape and
+            not (source_regex and re.search(r"\s(?:[#;]|//)", value))):
         return value
-    quote = next((mark for mark in ("'", '"') if mark not in value), None)
-    return f"{quote}{value}{quote}" if quote else None
+    if "'" not in value and not trailing_escape:
+        return f"'{value}'"
+    escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+    return f'"{escaped}"'
 
 
 def _logical_value(value: str, operator: str, supported: set[str], no_resolve: str = "keep",
-                   literal_process: bool = False) -> str | None:
+                   literal_process: bool = False, native_fields: bool = False) -> str | None:
     if operator == "NOT" and value.startswith("(") and not value.startswith("(("):
         value = f"({value})"
     if not value.startswith("((") or not value.endswith("))"):
         return None
     try:
-        children = _fields(value[1:-1])
+        children = _fields(value[1:-1], scope='children', native_fields=native_fields)
     except ValueError:
         return None
     if (len(children) != 1 if operator == "NOT" else len(children) < 2):
@@ -62,7 +66,7 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
         if not child.startswith("(") or not child.endswith(")"):
             return None
         try:
-            fields = _fields(child[1:-1])
+            fields = _fields(child[1:-1], native_fields=native_fields)
         except ValueError:
             return None
         if len(fields) < 2:
@@ -71,16 +75,16 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
         if kind in LOGICAL:
             if options:
                 return None
-            payload = _logical_value(payload, kind, supported, no_resolve, literal_process)
+            payload = _logical_value(payload, kind, supported, no_resolve, literal_process, native_fields)
             if payload is None:
                 return None
         else:
             if options and (kind not in NO_RESOLVE_TYPES or
                             any(option.lower() != "no-resolve" for option in options)):
                 return None
-            quote = payload[0] if len(payload) >= 2 and payload[0] in "'\"" and payload[-1] == payload[0] else None
+            quote = payload[0] if not native_fields and len(payload) >= 2 and payload[0] in "'\"" and payload[-1] == payload[0] else None
             if quote:
-                payload = payload[1:-1]
+                payload = _field_value(payload)
             if not payload.strip():
                 return None
             if supported is SURGE_TYPES:
@@ -131,7 +135,7 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
                     return None
             if kind not in supported:
                 return None
-            if supported is MIHOMO_TYPES and quote and "," in payload:
+            if supported is MIHOMO_TYPES and quote and "," in payload and not kind.endswith("-REGEX"):
                 payload = f"{quote}{payload}{quote}"
             if kind in NO_RESOLVE_TYPES and (
                 no_resolve == "add" or no_resolve == "keep" and options
@@ -254,18 +258,18 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
-    for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process)):
+    for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process, item.native_fields)):
         kind, value = rule.kind, rule.value
         interface_options = any(option in _QX_INTERFACE_OPTIONS for option in rule.options)
         if interface_options:
             rule = Rule(kind, value, tuple(option for option in rule.options
                                            if option not in _QX_INTERFACE_OPTIONS),
-                        rule.allow, rule.literal_process)
+                        rule.allow, rule.literal_process, rule.native_fields)
         if no_resolve == "strip":
             rule = Rule(kind, value, tuple(option for option in rule.options if option != "no-resolve"),
-                        rule.allow, rule.literal_process)
+                        rule.allow, rule.literal_process, rule.native_fields)
         elif no_resolve == "add" and not rule.allow and kind in NO_RESOLVE_TYPES:
-            rule = Rule(kind, value, rule.options + ("no-resolve",), rule.allow, rule.literal_process)
+            rule = Rule(kind, value, rule.options + ("no-resolve",), rule.allow, rule.literal_process, rule.native_fields)
         if "\r" in value or "\n" in value:
             for name in FILES:
                 skipped[f"{name}:{kind}"] += 1
@@ -294,8 +298,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST,no-resolve")
                     emitted.add("fin-qx.txt")
         else:
-            surge_value = (_logical_value(value, kind, SURGE_TYPES, no_resolve, rule.literal_process)
-                           if logical else _surge_value(value))
+            surge_value = (_logical_value(value, kind, SURGE_TYPES, no_resolve, rule.literal_process, rule.native_fields)
+                           if logical else _surge_value(value, source_regex=kind == "URL-REGEX"))
             if ((kind in SURGE_TYPES or kind == "PROCESS-NAME-WILDCARD" or
                     kind in {"PROCESS-PATH", "PROCESS-PATH-WILDCARD"} and value.startswith('/') or
                     kind == "NETWORK" and value.upper() in {"TCP", "UDP"}) and surge_value is not None
@@ -329,7 +333,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                                    else "PROCESS-PATH")
                 elif any(char in value for char in "*?"):
                     mihomo_kind = "PROCESS-NAME-WILDCARD"
-            mihomo_value = (_logical_value(value, kind, MIHOMO_TYPES, no_resolve, rule.literal_process)
+            mihomo_value = (_logical_value(value, kind, MIHOMO_TYPES, no_resolve, rule.literal_process, rule.native_fields)
                             if logical else value)
             if kind == "DOMAIN-WILDCARD" and any(char in value for char in "[]"):
                 mihomo_kind, mihomo_value = "DOMAIN-REGEX", _wildcard_regex(value)

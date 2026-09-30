@@ -9,6 +9,514 @@ import rules
 from rules import Rule, normalize, parse
 
 
+def _quote_matcher(value):
+    quote = next(mark for mark in ('"', "'") if mark not in value)
+    return f"{quote}{value}{quote}"
+
+
+class SurgeEscapedFieldParserTests(unittest.TestCase):
+    def test_double_quote_escapes_decode_only_at_mixed_field_boundaries(self):
+        import json
+        from formats import render
+
+        cases = ((r'"Game\\"', "Game\\"),
+                 (r'''"\"Game'Inc\""''', '"Game\'Inc"'),
+                 (r'''"'Game\\\\"''', "'Game\\\\"),
+                 (r'"^Game\\\\,Inc$"', r'^Game\\,Inc$'),
+                 (r'"^Game\w,Inc$"', r'^Game\w,Inc$'))
+        for field, matcher in cases:
+            kind = "PROCESS-NAME-REGEX" if matcher.startswith("^") else "PROCESS-NAME"
+            for marker in ("#", ";", "//"):
+                with self.subTest(field=field, marker=marker):
+                    self.assertEqual(parse(f"{kind},{field},PROXY {marker} comment,'unclosed", purpose="proxy"),
+                                     ([Rule(kind, matcher)], []))
+                    for operator in ("AND", "OR", "NOT"):
+                        expression = (f"(({kind},{field}))" if operator == "NOT" else
+                                      f"(({kind},{field}),(DOMAIN,x.example.com))")
+                        parsed, messages = parse(f"{operator},{expression},PROXY", purpose="proxy")
+                        self.assertEqual(messages, [])
+                        out, _ = render("group", parsed, purpose="proxy", no_resolve="keep")
+                        expected = expression.replace(f"{kind},{field}", f"{kind},{matcher}")
+                        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                                         [f"{operator},{expected}"])
+            if kind == "PROCESS-NAME":
+                native = "payload:\n  - " + json.dumps(f"{kind},{field}")
+                self.assertEqual(parse(native, purpose="proxy"), ([Rule(kind, field, literal_process=True)], []))
+
+    def test_encoded_invalid_regex_still_rejects_the_complete_matcher(self):
+        keep = Rule("DOMAIN", "keep.example.com")
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX", "URL-REGEX"):
+            field = r'"^Game\\"'
+            with self.subTest(kind=kind):
+                parsed, messages = parse(f"{kind},{field},PROXY\nDOMAIN,keep.example.com,PROXY", purpose="proxy")
+                self.assertEqual(parsed, [keep])
+                self.assertEqual(messages, [f"line 1: invalid {kind} ^Game\\"])
+                expression = f"(({kind},{field}),(DOMAIN,x.example.com))"
+                parsed, messages = parse(f"AND,{expression},PROXY\nDOMAIN,keep.example.com,PROXY", purpose="proxy")
+                self.assertEqual(parsed, [keep])
+                self.assertEqual(messages, [f"line 1: invalid logical expression {expression}"])
+
+
+class SourceBoundaryFix8Tests(unittest.TestCase):
+    keep = Rule("DOMAIN", "keep.example.com")
+
+    def test_bare_source_ambiguity_and_two_explicit_intents(self):
+        values = ("^a{b$,My Proxy # note}c$|^foo$",
+                  "^a{b$,My Proxy # [}c$|^foo$",
+                  "^foo$,My Proxy [ # note }$", "^foo$,My } (Proxy$",
+                  "^foo$,China", "^foo,bar$")
+        for value in values:
+            with self.subTest(value=value):
+                self.assertEqual(parse("DOMAIN-REGEX," + value + "\nDOMAIN,keep.example.com,China",
+                                       purpose="proxy"),
+                                 ([self.keep], ["line 1: ambiguous unquoted regex comma or policy"]))
+        full = "^a{b$,My Proxy # note}c$|^foo$"
+        self.assertEqual(parse(f"DOMAIN-REGEX,'{full}'\nDOMAIN,keep.example.com,China", purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", full), self.keep], []))
+        self.assertEqual(parse("DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$", purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", "^a{b$")], []))
+
+    def test_quoted_policy_punctuation_and_comment_body_are_literal(self):
+        for policy in ("My Proxy [", "My } (Proxy$", r"My } Proxy\z", "My Proxy ("):
+            for marker in ("#", ";", "//"):
+                for body in ("note", "}c$|^foo$", r"[$\z,(,PROXY", "note,REJECT"):
+                    with self.subTest(policy=policy, marker=marker, body=body):
+                        self.assertEqual(parse(f"DOMAIN-REGEX,'^foo$',{policy} {marker} {body}", purpose="proxy"),
+                                         ([Rule("DOMAIN-REGEX", "^foo$")], []))
+        self.assertEqual(parse("DOMAIN-REGEX,^foo,PROXY # note,REJECT ($ [", purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", "^foo")], []))
+
+    def test_complete_invalid_and_class_comment_matchers_in_explicit_scopes(self):
+        invalid = "^a{b$,My Proxy # [}c$|^foo$"
+        for source in (f"DOMAIN-REGEX,'{invalid}'", f"payload:\n  - 'DOMAIN-REGEX,{invalid}'",
+                       f"AND,((DOMAIN-REGEX,{invalid}),(DOMAIN,x.example.com)),PROXY"):
+            with self.subTest(source=source):
+                parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
+                self.assertEqual(parsed, [self.keep])
+                self.assertEqual(len(messages), 1)
+                self.assertTrue(messages[0].startswith("line "))
+        for value in ("^a{b$,[ # note ]c}x$|^foo$", "^a{b$,(?# # note)c}x$|^foo$"):
+            self.assertEqual(parse(f"DOMAIN-REGEX,'{value}'", purpose="proxy"),
+                             ([Rule("DOMAIN-REGEX", value)], []))
+            expression = f"((DOMAIN-REGEX,{value}),(DOMAIN,x.example.com))"
+            self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                             ([Rule("AND", expression)], []))
+
+    def test_provider_headers_and_native_field_consumption(self):
+        for header in ("payload:", "payload :", "payload\t:", '"payload":', "'payload':",
+                       "rules:", "rules :", "rules\t:", '"rules":', "'rules':", '"pay\\u006coad":'):
+            with self.subTest(header=header):
+                source = header + '\n  -  \'PROCESS-NAME,"Game,Inc",PROXY\'\n' + \
+                         '  - "PROCESS-NAME,Game\\\\,Inc"\n' + \
+                         "  - DOMAIN-REGEX,^Game , REJECT$\n  - PROCESS-NAME-REGEX,^Game,no-resolve\n" + \
+                         "  - IP-CIDR,192.0.2.0/24,src,no-resolve,arbitrary\n" + \
+                         "  - IP-CIDR,198.51.100.0/24,SRC,no-resolve\n"
+                self.assertEqual(parse(source, purpose="proxy"), ([
+                    Rule("PROCESS-NAME", '"Game', literal_process=True),
+                    Rule("PROCESS-NAME", "Game\\", literal_process=True),
+                    Rule("DOMAIN-REGEX", "^Game,REJECT$"),
+                    Rule("PROCESS-NAME-REGEX", "^Game,no-resolve"),
+                    Rule("SRC-IP-CIDR", "192.0.2.0/24"),
+                    Rule("IP-CIDR", "198.51.100.0/24", ("no-resolve",)),
+                ], ["line 6: unsupported no-resolve for SRC-IP-CIDR"]))
+
+    def test_provider_inner_quotes_and_logic_provenance(self):
+        source = "payload:\n  - 'PROCESS-NAME,''Game'',PROXY'\n" + \
+                 '  - "PROCESS-NAME,\\"Other\\",PROXY"\n' + \
+                 "  - 'DOMAIN-REGEX,\"^ads$\"'\n" + \
+                 "  - 'AND,((DOMAIN-REGEX,\"*ads\"),(DOMAIN,x.example.com))'"
+        expression = '((DOMAIN-REGEX,"*ads"),(DOMAIN,x.example.com))'
+        self.assertEqual(parse(source, purpose="proxy"), ([
+            Rule("PROCESS-NAME", "'Game'", literal_process=True),
+            Rule("PROCESS-NAME", '"Other"', literal_process=True),
+            Rule("DOMAIN-REGEX", '"^ads$"'), Rule("AND", expression, native_fields=True),
+        ], []))
+        self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy")[0], [])
+        text = '((DOMAIN-REGEX,"^ads$"),(DOMAIN,x.example.com))'
+        native = parse("payload:\n  - 'AND," + text + "'", purpose="proxy")[0][0]
+        mixed = parse("AND," + text + ",PROXY", purpose="proxy")[0][0]
+        self.assertEqual(native.value, mixed.value)
+        self.assertNotEqual(native, mixed)
+        self.assertEqual(len(normalize([native, mixed])), 2)
+
+    def test_yaml_fixed_scalar_escape_set_and_decoded_controls(self):
+        escapes = {r"\0": "\0", r"\a": "\a", r"\b": "\b", r"\t": "\t", "\\\t": "\t",
+                   r"\n": "\n", r"\v": "\v", r"\f": "\f", r"\r": "\r", r"\e": "\x1b",
+                   "\\ ": " ", r'\"': '"', r"\'": "'", r"\\": "\\", r"\N": "\x85",
+                   r"\_": "\xa0", r"\L": " ", r"\P": " ", r"\x73": "s",
+                   chr(92) + "u0073": "s", r"\U00000073": "s", r"\U0001F600": "\U0001f600"}
+        for escaped, decoded in escapes.items():
+            with self.subTest(escaped=escaped):
+                self.assertEqual(parse(f'payload:\n  - "PROCESS-NAME,A{escaped}B"', purpose="proxy"),
+                                 ([Rule("PROCESS-NAME", "A" + decoded + "B", literal_process=True)], []))
+        self.assertEqual(parse('payload:\n  - "DOMAIN-REGEX,^ads\\t"', purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", "^ads\t")], []))
+        for escape in (r"\/", r"\c", r"\q", r"\1", r"\x", r"\x7", r"\xGG", r"\u073",
+                       r"\uZZZZ", r"\U0000073", r"\uD800", r"\uDC00", chr(92) + "uD800" + chr(92) + "uDC00",
+                       r"\U0000D800", r"\U00110000"):
+            with self.subTest(escape=escape):
+                self.assertEqual(parse(f'payload:\n  - "PROCESS-NAME,A{escape},B"\n  - DOMAIN,keep.example.com',
+                                       purpose="proxy"), ([self.keep], ["line 2: invalid YAML payload"]))
+
+    def test_yaml_ascii_whitespace_plain_comments_and_unsupported_subset(self):
+        for value in ("Game\xa0#Inc", "Game#Inc", "Game ;Inc", "Game //Inc"):
+            self.assertEqual(parse(f"payload:\n  - PROCESS-NAME,{value}", purpose="proxy"),
+                             ([Rule("PROCESS-NAME", value, literal_process=True)], []))
+        for ending in (' #note', '\t#note', '#note'):
+            self.assertEqual(parse('payload:\n  - "PROCESS-NAME,Game"' + ending, purpose="proxy"),
+                             ([Rule("PROCESS-NAME", "Game", literal_process=True)], []))
+        for item in ('-\tDOMAIN,x.example.com', '- \t DOMAIN,x.example.com', '-\xa0DOMAIN,x.example.com',
+                     '\t- DOMAIN,x.example.com', '- "PROCESS-NAME,Game"\xa0#note',
+                     '- "PROCESS-NAME,Game" extra', '- PROCESS-NAME,Game: Inc',
+                     '- &rule DOMAIN,x.example.com', '- *rule', '- !!str DOMAIN,x.example.com',
+                     '- [DOMAIN,x.example.com]', '- |', '- >', '- "PROCESS-NAME,Game',
+                     "- 'PROCESS-NAME,Game"):
+            with self.subTest(item=item):
+                self.assertEqual(parse("payload:\n  " + item + "\n  - DOMAIN,keep.example.com", purpose="proxy"),
+                                 ([self.keep], ["line 2: invalid YAML payload"]))
+        self.assertEqual(parse("payload:\n  - 'PROCESS-NAME,Game: Inc'", purpose="proxy"),
+                         ([Rule("PROCESS-NAME", "Game: Inc", literal_process=True)], []))
+
+    def test_bom_document_html_and_regex_literal_doctype(self):
+        self.assertEqual(parse("﻿<!doctype html>\nDOMAIN,keep.example.com,PROXY", purpose="proxy"),
+                         ([], ["line 1: HTML document"]))
+        self.assertEqual(parse("﻿PROCESS-NAME-REGEX,^<!doctype$,PROXY\nDOMAIN,keep.example.com,China",
+                               purpose="proxy"), ([Rule("PROCESS-NAME-REGEX", "^<!doctype$"), self.keep], []))
+
+
+class SourceScannerContinuationTests(unittest.TestCase):
+    def test_extended_comment_cannot_create_source_policy(self):
+        for suffix in (",PROXY", ",REJECT", ",LIST", ",China", ",PROXY # [ ($"):
+            source = "DOMAIN-REGEX,^(?x)a # ignored" + suffix
+            self.assertEqual(parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy"),
+                             ([Rule("DOMAIN", "keep.example.com")],
+                              ["line 1: ambiguous unquoted regex comment"]))
+        value = "^(?x)a # ignored,PROXY"
+        self.assertEqual(parse(f"DOMAIN-REGEX,'{value}',PROXY", purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+        expression = f"((DOMAIN-REGEX,{value}),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                         ([Rule("AND", expression)], []))
+
+    def test_extended_hash_without_source_comment_separator_preserves_complete_matcher(self):
+        for value in ("^(?x)a#ignored", "^(?x)a#ignored,PROXY", "^(?x)a#ignored,REJECT [ ($"):
+            with self.subTest(value=value):
+                self.assertEqual(parse("DOMAIN-REGEX," + value, purpose="proxy"),
+                                 ([Rule("DOMAIN-REGEX", value)], []))
+
+    def test_known_action_stops_before_fake_policy_and_regex_syntax_in_comment(self):
+        for action, purpose in (("PROXY", "proxy"), ("LIST", "proxy"), ("DIRECT", "direct"), ("REJECT", "block")):
+            for marker in ("#", ";", "//"):
+                for body in ("note,REJECT", "note,PROXY ($ [", r"note $ \z,LIST", "note }c$|^foo$"):
+                    self.assertEqual(parse(f"DOMAIN-REGEX,^a{{b$,{action} {marker} {body}", purpose=purpose),
+                                     ([Rule("DOMAIN-REGEX", "^a{b$")], []))
+
+    def test_both_quote_characters_are_preserved_in_native_and_mixed_scopes(self):
+        value = "^[\"']Game$"
+        expression = f"((DOMAIN-REGEX,{value}),(NETWORK,tcp))"
+        self.assertEqual(parse(f"DOMAIN-REGEX,{value},PROXY", purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", value)], []))
+        self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                         ([Rule("AND", expression)], []))
+        document = "payload:\n  - 'AND," + expression.replace("'", "''") + "'"
+        self.assertEqual(parse(document, purpose="proxy"),
+                         ([Rule("AND", expression, native_fields=True)], []))
+
+
+class ScalarContinuationTests(unittest.TestCase):
+    keep = Rule("DOMAIN", "keep.example.com")
+
+    def test_fixed_width_hex_and_scalar_boundaries_preserve_every_character(self):
+        for escape, decoded in ((r"\x00", "\0"), (r"\xFF", "\xff"), (r"\x73z", "sz"),
+                                (r"\u0000", "\0"), (r"\uD7FF", "\ud7ff"), (r"\uE000", "\ue000"),
+                                (r"\uFFFF", "\uffff"), (r"\U00000000", "\0"),
+                                (r"\U0010FFFF", "\U0010ffff")):
+            with self.subTest(escape=escape):
+                self.assertEqual(parse(f'payload:\n  - "PROCESS-NAME,A{escape}B"', purpose="proxy"),
+                                 ([Rule("PROCESS-NAME", "A" + decoded + "B", literal_process=True)], []))
+        for scalar, value in (("'PROCESS-NAME,Game\\'", "Game\\"),
+                              ("'PROCESS-NAME,Game\\n'", r"Game\n"),
+                              ("'PROCESS-NAME,Game''Inc'", "Game'Inc"),
+                              ('"PROCESS-NAME,A\tB"', "A\tB"),
+                              ("PROCESS-NAME,Game\\u0073", r"Game\u0073")):
+            with self.subTest(scalar=scalar):
+                self.assertEqual(parse("rules:\n  - " + scalar, purpose="proxy"),
+                                 ([Rule("PROCESS-NAME", value, literal_process=True)], []))
+
+    def test_decoded_controls_survive_regex_and_logic_normalization(self):
+        for escape, control in ((r"\t", "\t"), (r"\r", "\r"), (r"\n", "\n"), (r"\0", "\0"),
+                                (r"\N", "\x85"), (r"\L", "\u2028"), (r"\P", "\u2029")):
+            for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+                with self.subTest(escape=escape, kind=kind):
+                    value = "^A" + control + "B$"
+                    source = f'payload:\n  - "{kind},^A{escape}B$"'
+                    self.assertEqual(parse(source, purpose="proxy"), ([Rule(kind, value)], []))
+                    expression = f"(({kind},{value}),(PROCESS-NAME,A{control}B))"
+                    source = f'payload:\n  - "AND,(({kind},^A{escape}B$),(PROCESS-NAME,A{escape}B))"'
+                    expected = Rule("AND", expression, literal_process=True, native_fields=True)
+                    parsed, messages = parse(source, purpose="proxy")
+                    self.assertEqual((parsed, messages), ([expected], []))
+                    self.assertEqual(normalize(parsed), [expected])
+
+    def test_malformed_scalar_branches_warn_and_keep_following_native_neighbor(self):
+        invalid = (r'"PROCESS-NAME,A\x1"', r'"PROCESS-NAME,A\xＦF"', r'"PROCESS-NAME,A\uFFF"',
+                   r'"PROCESS-NAME,A\uDFFF"', r'"PROCESS-NAME,A\U0000DC00"',
+                   r'"PROCESS-NAME,A\UFFFFFFFF"', r'"PROCESS-NAME,A\U00110000"',
+                   r'"PROCESS-NAME,A\uD800\uDC00"', r'"PROCESS-NAME,A\/B"',
+                   r'"PROCESS-NAME,A\"', '"PROCESS-NAME,A\\', '"PROCESS-NAME,A',
+                   "'PROCESS-NAME,A", "'PROCESS-NAME,A' extra", "'PROCESS-NAME,A'\xa0#note",
+                   "'PROCESS-NAME,A\\'Inc'", "PROCESS-NAME,A: B", "PROCESS-NAME,A:\tB",
+                   "&rule DOMAIN,x.example.com", "*rule", "!!str DOMAIN,x.example.com",
+                   "[DOMAIN,x.example.com]", "{rule: DOMAIN,x.example.com}", "|", ">")
+        for scalar in invalid:
+            with self.subTest(scalar=scalar):
+                self.assertEqual(parse("rules:\n  - " + scalar + "\n  - DOMAIN,keep.example.com", purpose="proxy"),
+                                 ([self.keep], ["line 2: invalid YAML payload"]))
+
+    def test_headers_dash_styles_and_content_whitespace_have_separate_boundaries(self):
+        for header in ("payload:", "payload :", "payload\t:", '"payload" : #note',
+                       "'rules'\t:", '"ru\\u006ces":', '"pay\\x6coad":'):
+            for dash in ("- ", "-  ", "  -   "):
+                with self.subTest(header=header, dash=dash):
+                    self.assertEqual(parse(header + "\n" + dash + "DOMAIN,keep.example.com", purpose="proxy"),
+                                     ([self.keep], []))
+        for header in ("payload\xa0:", "\xa0payload:", '"payload\\_":', "' payload':", '"payload" extra:',
+                       "payload: []", "rules: &rules", '"pay\\qload":'):
+            with self.subTest(header=header):
+                parsed, messages = parse(header + "\n  - DOMAIN,x.example.com\nDOMAIN,keep.example.com,China", purpose="proxy")
+                self.assertEqual(parsed, [self.keep])
+                self.assertTrue(messages)
+                self.assertTrue(all(message.startswith("line ") for message in messages))
+        for value in ("Game\xa0#Inc", "Game#Inc", "Game ;Inc", "Game //Inc", "Game:\xa0Inc"):
+            self.assertEqual(parse("payload:\n  - PROCESS-NAME," + value, purpose="proxy"),
+                             ([Rule("PROCESS-NAME", value, literal_process=True)], []))
+        for separator in (" ", "\t"):
+            self.assertEqual(parse("payload:\n  - PROCESS-NAME,Game" + separator + "# note", purpose="proxy"),
+                             ([Rule("PROCESS-NAME", "Game", literal_process=True)], []))
+        for control in ("\r", "\v", "\f", "\x85", "\u2028", "\u2029", "\0"):
+            self.assertEqual(parse("payload:\n  - PROCESS-NAME,A" + control + "B\n  - DOMAIN,keep.example.com", purpose="proxy"),
+                             ([self.keep], ["line 2: unsupported physical line separator"]))
+
+    def test_provider_header_requires_separation_before_comment(self):
+        for header in ("payload:#note", "rules:#note", '"payload":#note', "'rules':#note"):
+            with self.subTest(header=header):
+                source = header + "\n  - DOMAIN,probe.example\npayload:\n  - DOMAIN,keep.example.com"
+                self.assertEqual(parse(source, purpose="proxy"),
+                                 ([self.keep], ["line 1: invalid YAML payload", "line 2: invalid YAML payload"]))
+        for header in ("payload: #note", "rules:\t#note", '"payload": #note', "'rules':\t#note"):
+            self.assertEqual(parse(header + "\n  - DOMAIN,keep.example.com", purpose="proxy"), ([self.keep], []))
+
+    def test_native_params_and_same_name_regex_suffixes_remain_source_specific(self):
+        for header in ("payload:", "rules:"):
+            for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+                for suffix in ("PROXY", "LIST", "DIRECT", "REJECT", "no-resolve"):
+                    with self.subTest(header=header, kind=kind, suffix=suffix):
+                        self.assertEqual(parse(header + f"\n  - {kind},^Game,{suffix}", purpose="proxy"),
+                                         ([Rule(kind, f"^Game,{suffix}")], []))
+            expression = '((PROCESS-NAME,"Game),(PROCESS-PATH,Game\\),(IP-CIDR,198.51.100.0/24,no-resolve))'
+            source = header + '\n  - \'AND,((PROCESS-NAME,"Game,Inc"),(PROCESS-PATH,Game\\,Inc),(IP-CIDR,198.51.100.0/24,SRC,no-resolve,arbitrary))\''
+            self.assertEqual(parse(source, purpose="proxy"),
+                             ([Rule("AND", expression, literal_process=True, native_fields=True)], []))
+        self.assertEqual(parse("rules:\n  - DOMAIN,keep.example.com,PROXY\n  - IP-CIDR,198.51.100.0/24,no-resolve", purpose="proxy"),
+                         ([self.keep, Rule("IP-CIDR", "198.51.100.0/24", ("no-resolve",))], []))
+        self.assertEqual(rules.parse_whitelist("rules:\n  - DOMAIN,keep.example.com,PROXY"), [self.keep])
+
+    def test_bare_custom_policy_and_marker_matrix_keeps_legal_neighbor(self):
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX", "URL-REGEX"):
+            for value in ("^foo$", "^a{b$", r"^foo\z", "^(?x)a{b$"):
+                for policy in ("China", "My Proxy [", "My } (Proxy$", r"My } Proxy\z"):
+                    for marker in ("#", ";", "//"):
+                        with self.subTest(kind=kind, value=value, policy=policy, marker=marker):
+                            source = f"{kind},{value},{policy} {marker} note }} [ ($,PROXY"
+                            self.assertEqual(parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy"),
+                                             ([self.keep], ["line 1: ambiguous unquoted regex comma or policy"]))
+                            explicit = f"{kind},{_quote_matcher(value)},{policy} {marker} note }} [ ($,PROXY"
+                            expected = ([self.keep], [f"line 1: invalid URL-REGEX {value}"]) if (
+                                kind == "URL-REGEX" and value in (r"^foo\z", "^(?x)a{b$")
+                            ) else ([Rule(kind, value), self.keep], [])
+                            self.assertEqual(parse(explicit + "\nDOMAIN,keep.example.com,China", purpose="proxy"), expected)
+
+
+class SourceAdapterParserFix1Tests(unittest.TestCase):
+    keep = Rule("DOMAIN", "keep.example.com")
+
+    def test_mixed_quoted_regex_leaves_keep_complete_matcher_scope(self):
+        for operator in ("AND", "OR", "NOT"):
+            for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX", "URL-REGEX"):
+                extended = "(?x)^a # comment (" if kind == "URL-REGEX" else "^(?x)a # comment ("
+                for value in ("^[a(]$", "^[)]$", extended, "^(?# (()a$", "^(a,b)$"):
+                    for quote in ("'", '"', ""):
+                        with self.subTest(operator=operator, kind=kind, value=value, quote=quote):
+                            child = f"({kind},{quote}{value}{quote})"
+                            expression = f"({child})" if operator == "NOT" else f"({child},(DOMAIN,x.example.com))"
+                            expected = Rule(operator, expression)
+                            parsed, messages = parse(f"{operator},{expression},PROXY\nDOMAIN,keep.example.com,PROXY",
+                                                     purpose="proxy")
+                            self.assertEqual((parsed, messages), ([expected, self.keep], []))
+                            self.assertIn(expected, normalize(parsed))
+
+    def test_quoted_invalid_regex_leaves_validate_the_complete_matcher(self):
+        for operator in ("AND", "OR", "NOT"):
+            for quote in ("'", '"'):
+                for value in ("^[a(]$[", "^[)]$[", "^(?# (()a$[", "*ads"):
+                    with self.subTest(operator=operator, quote=quote, value=value):
+                        child = f"(DOMAIN-REGEX,{quote}{value}{quote})"
+                        expression = f"({child})" if operator == "NOT" else f"({child},(DOMAIN,x.example.com))"
+                        source = f"{operator},{expression},PROXY\nDOMAIN,keep.example.com,PROXY"
+                        self.assertEqual(parse(source, purpose="proxy"),
+                                         ([self.keep], [f"line 1: invalid logical expression {expression}"]))
+
+    def test_ordinary_tail_comments_are_isolated_before_field_scanning(self):
+        for kind, value in (("DOMAIN", "foo.example"), ("PROCESS-NAME", "Game #1"),
+                            ("IP-CIDR", "192.0.2.0/24"), ("HOST", "foo.example")):
+            expected = Rule("DOMAIN" if kind == "HOST" else kind, value)
+            for action, purpose in (("PROXY", "proxy"), ("LIST", "proxy"), ("DIRECT", "direct"),
+                                    ("REJECT", "block"), ("My Proxy [", "proxy")):
+                for marker in ("#", ";", "//"):
+                    for body in ("note,'oops", 'note,"oops', "note,(,[,REJECT", r"note,PROXY $ \z } [ ("):
+                        with self.subTest(kind=kind, action=action, marker=marker, body=body):
+                            line = f"{kind},{value},{action} {marker} {body}"
+                            source = line + f"\nDOMAIN,keep.example.com,{action}"
+                            self.assertEqual(parse(source, purpose=purpose), ([expected, self.keep], []))
+                            self.assertEqual(rules._without_comment(line), f"{kind},{value},{action}")
+
+    def test_ordinary_policy_free_comments_and_quoted_literal_markers_keep_their_scopes(self):
+        for marker in ("#", ";", "//"):
+            for body in ("note,'oops", 'note,"oops', "note,[,(,PROXY"):
+                for line, expected in ((f"DOMAIN,foo.example {marker} {body}", Rule("DOMAIN", "foo.example")),
+                                       (f"IP-CIDR,192.0.2.0/24 {marker} {body}", Rule("IP-CIDR", "192.0.2.0/24"))):
+                    with self.subTest(line=line):
+                        self.assertEqual(parse(line + "\nDOMAIN,keep.example.com,PROXY", purpose="proxy"),
+                                         ([expected, self.keep], []))
+            for quote in ("'", '"'):
+                value = f"^Game {marker}1$"
+                source = f"DOMAIN-REGEX,{quote}{value}{quote},PROXY {marker} note,'oops"
+                self.assertEqual(parse(source + "\nDOMAIN,keep.example.com,PROXY", purpose="proxy"),
+                                 ([Rule("DOMAIN-REGEX", value), self.keep], []))
+        self.assertEqual(parse("DOMAIN-REGEX,^Game #1$,My Proxy\nDOMAIN,keep.example.com,PROXY", purpose="proxy"),
+                         ([self.keep], ["line 1: ambiguous unquoted regex comment"]))
+
+    def test_native_fixed_source_constructors_ignore_params_at_top_level_and_in_logic(self):
+        for header in ("payload:", "rules:"):
+            for kind, value in (("SRC-IP-CIDR", "127.0.0.0/8"), ("SRC-IP-SUFFIX", "127.0.0.1/8"),
+                                ("SRC-IP-ASN", "64512"), ("SRC-GEOIP", "cn")):
+                for params in ("", ",src", ",SRC", ",no-resolve", ",arbitrary", ",src,no-resolve,arbitrary"):
+                    with self.subTest(header=header, kind=kind, params=params):
+                        self.assertEqual(parse(f"{header}\n  - {kind},{value}{params}\n  - DOMAIN,keep.example.com",
+                                               purpose="proxy"), ([Rule(kind, value), self.keep], []))
+                    for operator in ("AND", "OR", "NOT"):
+                        with self.subTest(header=header, kind=kind, params=params, operator=operator):
+                            leaf = f"({kind},{value}{params})"
+                            clean = f"({kind},{value})"
+                            expression = f"({leaf})" if operator == "NOT" else f"({leaf},(NETWORK,tcp))"
+                            normalized = f"({clean})" if operator == "NOT" else f"({clean},(NETWORK,tcp))"
+                            source = f"{header}\n  - '{operator},{expression}'\n  - DOMAIN,keep.example.com"
+                            expected = Rule(operator, normalized, native_fields=True)
+                            parsed, messages = parse(source, purpose="proxy")
+                            self.assertEqual((parsed, messages), ([expected, self.keep], []))
+                            self.assertIn(expected, normalize(parsed))
+
+    def test_native_destination_params_keep_case_sensitive_direction(self):
+        for kind, source_kind, value in (("IP-CIDR", "SRC-IP-CIDR", "127.0.0.0/8"),
+                                         ("IP-CIDR6", "SRC-IP-CIDR", "2001:db8::/32"),
+                                         ("IP-SUFFIX", "SRC-IP-SUFFIX", "127.0.0.1/8"),
+                                         ("IP-ASN", "SRC-IP-ASN", "64512"), ("GEOIP", "SRC-GEOIP", "cn")):
+            for params, sourced, no_resolve in (("", False, False), (",src", True, False),
+                                                (",SRC", False, False), (",no-resolve", False, True),
+                                                (",arbitrary", False, False), (",src,no-resolve", True, False)):
+                expected_kind = source_kind if sourced else kind
+                options = ("no-resolve",) if no_resolve else ()
+                warning = [f"line 2: unsupported no-resolve for {source_kind}"] if params == ",src,no-resolve" else []
+                with self.subTest(kind=kind, params=params):
+                    self.assertEqual(parse(f"payload:\n  - {kind},{value}{params}\n  - DOMAIN,keep.example.com",
+                                           purpose="proxy"), ([Rule(expected_kind, value, options), self.keep], warning))
+                for operator in ("AND", "OR", "NOT"):
+                    with self.subTest(kind=kind, params=params, operator=operator):
+                        leaf = f"({kind},{value}{params})"
+                        clean = f"({expected_kind},{value}{',no-resolve' if no_resolve else ''})"
+                        expression = f"({leaf})" if operator == "NOT" else f"({leaf},(NETWORK,tcp))"
+                        normalized = f"({clean})" if operator == "NOT" else f"({clean},(NETWORK,tcp))"
+                        expected = Rule(operator, normalized, native_fields=True)
+                        self.assertEqual(parse(f"payload:\n  - '{operator},{expression}'\n  - DOMAIN,keep.example.com",
+                                               purpose="proxy"), ([expected, self.keep], warning))
+
+    def test_native_fixed_source_params_do_not_relax_mixed_or_payload_validation(self):
+        for params in ("src", "arbitrary"):
+            expression = f"((SRC-IP-CIDR,127.0.0.0/8,{params}),(NETWORK,tcp))"
+            self.assertEqual(parse(f"AND,{expression},PROXY\nDOMAIN,keep.example.com,PROXY", purpose="proxy"),
+                             ([self.keep], [f"line 1: invalid logical expression {expression}"]))
+        expression = "((SRC-IP-CIDR,127.0.0.0/8,no-resolve),(NETWORK,tcp))"
+        self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
+                         ([Rule("AND", "((SRC-IP-CIDR,127.0.0.0/8),(NETWORK,tcp))")],
+                          ["line 1: unsupported no-resolve for SRC-IP-CIDR"]))
+        expression = "((SRC-IP-CIDR,not-an-ip,src),(NETWORK,tcp))"
+        self.assertEqual(parse(f"payload:\n  - 'AND,{expression}'\n  - DOMAIN,keep.example.com", purpose="proxy"),
+                         ([self.keep], [f"line 2: invalid logical expression {expression}"]))
+
+    def test_yaml_raw_character_ranges_reject_invalid_quoted_plain_and_header_sources(self):
+        points = [point for point in range(0x20) if point not in (9, 10)] + list(range(0x7F, 0xA0))
+        points += [0xD800, 0xDFFF, 0xFFFE, 0xFFFF, 0x2028, 0x2029]
+        physical = {0, 11, 12, 13, 0x85, 0x2028, 0x2029}
+        for point in points:
+            control = chr(point)
+            message = "unsupported physical line separator" if point in physical else "invalid YAML payload"
+            for scalar in (f'"PROCESS-NAME,A{control}B"', f"'PROCESS-NAME,A{control}B'",
+                           f"PROCESS-NAME,A{control}B", f'"PROCESS-NAME,Game" # noteA{control}B'):
+                with self.subTest(point=hex(point), scalar=scalar):
+                    self.assertEqual(parse(f"payload:\n  - {scalar}\n  - DOMAIN,keep.example.com", purpose="proxy"),
+                                     ([self.keep], [f"line 2: {message}"]))
+            for header in ("payload:", '"payload":', "'rules':"):
+                with self.subTest(point=hex(point), header=header):
+                    source = f"{header} # A{control}B\npayload:\n  - DOMAIN,keep.example.com"
+                    self.assertEqual(parse(source, purpose="proxy"), ([self.keep], [f"line 1: {message}"]))
+
+    def test_yaml_raw_printable_unicode_boundaries_and_tab_remain_literal(self):
+        for point in (9, 0x20, 0x7E, 0xA0, 0xD7FF, 0xE000, 0xFDD0, 0xFFFD, 0x10000, 0x1F600, 0x10FFFF):
+            value = "A" + chr(point) + "B"
+            for scalar in (f'"PROCESS-NAME,{value}"', f"'PROCESS-NAME,{value}'", f"PROCESS-NAME,{value}"):
+                with self.subTest(point=hex(point), scalar=scalar):
+                    self.assertEqual(parse(f"payload:\n  - {scalar}\n  - DOMAIN,keep.example.com", purpose="proxy"),
+                                     ([Rule("PROCESS-NAME", value, literal_process=True), self.keep], []))
+            for header in ("payload:", '"payload":', "'rules':"):
+                with self.subTest(point=hex(point), header=header):
+                    self.assertEqual(parse(f"{header} # {value}\n  - DOMAIN,keep.example.com", purpose="proxy"),
+                                     ([self.keep], []))
+        self.assertEqual(parse('payload:\n  - "PROCESS-NAME,A\nB"\nDOMAIN,keep.example.com,PROXY', purpose="proxy"),
+                         ([self.keep], ["line 2: invalid YAML payload", "line 3: invalid rule"]))
+        self.assertEqual(parse("PROCESS-NAME,A\aB,PROXY", purpose="proxy"), ([Rule("PROCESS-NAME", "A\aB")], []))
+
+    def test_yaml_escapes_can_decode_characters_disallowed_in_raw_source(self):
+        escapes = [(rf"\x{point:02x}", chr(point)) for point in (*range(0x20), *range(0x7F, 0xA0))]
+        escapes += [(r"\a", "\a"), (r"\e", "\x1b"), (r"\x01", "\x01"), (r"\x1f", "\x1f"),
+                    (chr(92) + "uFFFE", chr(0xFFFE)), (chr(92) + "uFFFF", chr(0xFFFF))]
+        for escape, control in escapes:
+            with self.subTest(escape=escape):
+                expected = Rule("PROCESS-NAME", "A" + control + "B", literal_process=True)
+                self.assertEqual(parse(f'payload:\n  - "PROCESS-NAME,A{escape}B"\n  - DOMAIN,keep.example.com',
+                                       purpose="proxy"), ([expected, self.keep], []))
+        for escape, control in ((r"\a", "\a"), (r"\e", "\x1b"), (r"\x01", "\x01"), (r"\x1f", "\x1f")):
+            with self.subTest(escape=escape):
+                expression = f"((DOMAIN-REGEX,^A{control}B$),(PROCESS-NAME,A{control}B))"
+                source = f'payload:\n  - "AND,((DOMAIN-REGEX,^A{escape}B$),(PROCESS-NAME,A{escape}B))"'
+                expected = Rule("AND", expression, literal_process=True, native_fields=True)
+                parsed, messages = parse(source, purpose="proxy")
+                self.assertEqual((parsed, messages), ([expected], []))
+                self.assertEqual(normalize(parsed), [expected])
+
+    def test_native_regex_leaf_quotes_keep_their_literal_meaning(self):
+        for operator in ("AND", "OR", "NOT"):
+            for value in ('"*ads"', '"^[()]$"', "'^[()]$'"):
+                with self.subTest(operator=operator, value=value):
+                    child = f"(DOMAIN-REGEX,{value})"
+                    expression = f"({child})" if operator == "NOT" else f"({child},(DOMAIN,x.example.com))"
+                    scalar = f"{operator},{expression}".replace("'", "''")
+                    source = f"payload:\n  - '{scalar}'\n  - DOMAIN,keep.example.com"
+                    expected = Rule(operator, expression, native_fields=True)
+                    parsed, messages = parse(source, purpose="proxy")
+                    self.assertEqual((parsed, messages), ([expected, self.keep], []))
+                    self.assertIn(expected, normalize(parsed))
+
+
 class RuleTests(unittest.TestCase):
     def test_domain_canonicalization_preserves_process_case(self):
         self.assertEqual(Rule("domain", "Ads.Example.COM."), Rule("DOMAIN", "ads.example.com"))
@@ -122,8 +630,8 @@ class ParseTests(unittest.TestCase):
             "PROCESS-PATH,/Applications/Game #1.app,PROXY\n"
             "PROCESS-NAME-WILDCARD,*Game #1*,PROXY\n"
             "PROCESS-PATH-WILDCARD,/Applications/* Game //1*,PROXY\n"
-            "PROCESS-NAME-REGEX,^Game ;1$,PROXY\n"
-            r"PROCESS-PATH-REGEX,^/Applications/Game #1\.app$,PROXY" "\n"
+            "PROCESS-NAME-REGEX,'^Game ;1$',PROXY\n"
+            r"PROCESS-PATH-REGEX,'^/Applications/Game #1\.app$',PROXY" "\n"
             "PROCESS-NAME,Game ;1,PROXY\n"
             "PROCESS-NAME,Game //1,PROXY"
         )
@@ -140,8 +648,8 @@ class ParseTests(unittest.TestCase):
 
     def test_process_regex_comma_and_markers_distinguish_matcher_from_comment(self):
         direct, messages = parse(
-            "PROCESS-NAME-REGEX,^Game,DIRECT ;1$,DIRECT\n"
-            "PROCESS-NAME-REGEX,^Game,DIRECT ;1$\n"
+            "PROCESS-NAME-REGEX,'^Game,DIRECT ;1$',DIRECT\n"
+            "PROCESS-NAME-REGEX,'^Game,DIRECT ;1$'\n"
             "PROCESS-NAME,Game ;1\nPROCESS-NAME,Game //1", purpose="direct",
         )
         self.assertEqual(direct, [
@@ -151,9 +659,9 @@ class ParseTests(unittest.TestCase):
         ])
         self.assertEqual(messages, [])
         source = (
-            "PROCESS-NAME-REGEX,^Game,Inc$ # note\n"
-            "PROCESS-NAME-REGEX,^Game,Inc #1$,PROXY # note\n"
-            r"PROCESS-NAME-REGEX,^Game,Inc\z # note" "\n"
+            "PROCESS-NAME-REGEX,'^Game,Inc$' # note\n"
+            "PROCESS-NAME-REGEX,'^Game,Inc #1$',PROXY # note\n"
+            r"PROCESS-NAME-REGEX,'^Game,Inc\z' # note" "\n"
             "PROCESS-NAME,Game # literal\n"
             "PROCESS-NAME,Game,PROXY # note\n"
             "DOMAIN,x.example.com,PROXY # note"
@@ -174,23 +682,23 @@ class ParseTests(unittest.TestCase):
 
     def test_process_regex_policy_token_and_semicolon_remain_in_matcher_with_tail_comment(self):
         value = "^Game,DIRECT ;1$"
-        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT # note", purpose="direct"),
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{_quote_matcher(value)},DIRECT # note", purpose="direct"),
                          ([Rule("PROCESS-NAME-REGEX", value)], []))
 
     def test_process_regex_policy_token_and_hash_remain_in_matcher_with_tail_comment(self):
         value = "^Game,DIRECT #1$"
-        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT # note", purpose="direct"),
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{_quote_matcher(value)},DIRECT # note", purpose="direct"),
                          ([Rule("PROCESS-NAME-REGEX", value)], []))
 
     def test_process_regex_policy_token_and_slashes_remain_in_matcher_with_tail_comment(self):
         value = "^Game,DIRECT //1$"
-        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},DIRECT # note", purpose="direct"),
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{_quote_matcher(value)},DIRECT # note", purpose="direct"),
                          ([Rule("PROCESS-NAME-REGEX", value)], []))
 
     def test_process_regex_literal_comma_and_comment_marker_remain_in_matcher(self):
         parsed, messages = parse(
-            "PROCESS-NAME-REGEX,^Game,Inc #1$,PROXY\n"
-            r"PROCESS-PATH-REGEX,^/Applications/Game,Inc //1\.app$,PROXY" "\n"
+            "PROCESS-NAME-REGEX,'^Game,Inc #1$',PROXY\n"
+            r"PROCESS-PATH-REGEX,'^/Applications/Game,Inc //1\.app$',PROXY" "\n"
             "PROCESS-NAME-REGEX,^Game,Inc$,PROXY # note",
             purpose="proxy",
         )
@@ -318,7 +826,7 @@ class ParseTests(unittest.TestCase):
             '  - "DOMAIN-REGEX,^[a #]$"', purpose="block",
         )
         self.assertEqual(parsed, [Rule("DOMAIN-REGEX", "^[a #]$")] * 2)
-        self.assertEqual(messages, ["line 2: unbalanced delimiters"])
+        self.assertEqual(messages, ["line 2: invalid DOMAIN-REGEX ^[a"])
 
     def test_yaml_single_quote_backslash_is_literal_before_comment(self):
         self.assertEqual(parse("payload:\n  - 'PROCESS-NAME,Game\\' # note", purpose="proxy"),
@@ -679,7 +1187,7 @@ class ParseTests(unittest.TestCase):
         )
         self.assertEqual(warnings, [])
         self.assertEqual(rules, [Rule(
-            "AND", "((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))", literal_process=True,
+            "AND", "((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))", literal_process=True, native_fields=True,
         )])
 
     def test_process_source_intent_survives_normalize(self):
@@ -848,7 +1356,7 @@ class ParseTests(unittest.TestCase):
 
     def test_regexp2_literal_brace_pair_holds_its_comma(self):
         value = r"^a{b,c}\.example\.com$"
-        self.assertEqual(parse(f"DOMAIN-REGEX,{value},China", purpose="proxy"),
+        self.assertEqual(parse(f"DOMAIN-REGEX,{_quote_matcher(value)},China", purpose="proxy"),
                          ([Rule("DOMAIN-REGEX", value)], []))
         self.assertEqual(parse(r"DOMAIN-REGEX,^a{1,2}\.example\.com$,REJECT", purpose="block"),
                          ([Rule("DOMAIN-REGEX", r"^a{1,2}\.example\.com$")], []))
@@ -858,7 +1366,7 @@ class ParseTests(unittest.TestCase):
                   "^a{b,(?#})c,d}$"]
         for value in values:
             with self.subTest(value=value):
-                self.assertEqual(parse(f"DOMAIN-REGEX,{value},China", purpose="proxy"),
+                self.assertEqual(parse(f"DOMAIN-REGEX,{_quote_matcher(value)},China", purpose="proxy"),
                                  ([Rule("DOMAIN-REGEX", value)], []))
                 expression = f"((DOMAIN-REGEX,{value}),(DOMAIN,x.example.com))"
                 self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
@@ -866,7 +1374,7 @@ class ParseTests(unittest.TestCase):
 
     def test_regexp2_character_class_first_closing_bracket_protects_comma(self):
         value = "^[]a,b]Game$"
-        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{value},China", purpose="proxy"),
+        self.assertEqual(parse(f"PROCESS-NAME-REGEX,{_quote_matcher(value)},China", purpose="proxy"),
                          ([Rule("PROCESS-NAME-REGEX", value)], []))
         expression = f"((PROCESS-NAME-REGEX,{value}),(DOMAIN,x.example.com))"
         self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy"),
@@ -1275,7 +1783,7 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(parse("DOMAIN-REGEX,^(?x:(?#note,REJECT", purpose="block"),
                          ([], ["line 1: unbalanced delimiters"]))
         line_comment = r"^(?x)a+ # ignored +"
-        self.assertEqual(parse(f"DOMAIN-REGEX,{line_comment},REJECT", purpose="block"),
+        self.assertEqual(parse(f"DOMAIN-REGEX,{_quote_matcher(line_comment)},REJECT", purpose="block"),
                          ([Rule("DOMAIN-REGEX", line_comment)], []))
 
     def test_regexp2_comment_group_ignores_open_bracket(self):
@@ -1290,7 +1798,7 @@ class ParseTests(unittest.TestCase):
 
     def test_extended_regex_disabling_x_keeps_literal_hash_and_policy(self):
         value = r"^(?x)foo(?-x) #bar\.example\.com$"
-        self.assertEqual(parse(f"DOMAIN-REGEX,{value},REJECT", purpose="block"),
+        self.assertEqual(parse(f"DOMAIN-REGEX,{_quote_matcher(value)},REJECT", purpose="block"),
                          ([Rule("DOMAIN-REGEX", value)], []))
 
     def test_extended_regex_scoped_disabled_x_keeps_space_as_quantifier_target(self):
@@ -1329,8 +1837,9 @@ class ParseTests(unittest.TestCase):
 
     def test_unquoted_policy_free_regex_comma_keeps_complete_matcher(self):
         parsed, messages = parse("DOMAIN-REGEX,^foo,bar$", purpose="proxy")
-        self.assertEqual(parsed, [Rule("DOMAIN-REGEX", "^foo,bar$")])
-        self.assertEqual(messages, [])
+        self.assertEqual((parsed, messages), ([], ["line 1: ambiguous unquoted regex comma or policy"]))
+        self.assertEqual(parse('DOMAIN-REGEX,"^foo,bar$"', purpose="proxy"),
+                         ([Rule("DOMAIN-REGEX", "^foo,bar$")], []))
 
     def test_unquoted_regex_custom_policy_ambiguity_warns_instead_of_widening(self):
         for source in ("DOMAIN-REGEX,^foo,China", "DOMAIN-REGEX,^foo,bar$,China",
@@ -1348,8 +1857,9 @@ class ParseTests(unittest.TestCase):
         ):
             with self.subTest(source=source):
                 parsed, messages = parse(source, purpose="proxy")
-                self.assertEqual(parsed, [Rule("DOMAIN-REGEX", matcher)])
-                self.assertEqual(messages, [])
+                self.assertEqual((parsed, messages), ([], ["line 1: ambiguous unquoted regex comma or policy"]))
+                self.assertEqual(parse(f"DOMAIN-REGEX,{_quote_matcher(matcher)},China", purpose="proxy"),
+                                 ([Rule("DOMAIN-REGEX", matcher)], []))
 
     def test_mihomo_regex_with_explicit_proxy_policy_keeps_matcher(self):
         for source, expected in (
@@ -1454,8 +1964,8 @@ class ParseTests(unittest.TestCase):
             '  - "AND,((PROCESS-NAME-REGEX,^Game{1,2} #1$),(DOMAIN,x.example.com))"',
             purpose="proxy",
         )
-        self.assertEqual(yaml, [Rule("AND", value, literal_process=True) for value in expressions[1:3]]
-                         + [Rule("AND", expressions[0])])
+        self.assertEqual(yaml, [Rule("AND", value, literal_process=True, native_fields=True) for value in expressions[1:3]]
+                         + [Rule("AND", expressions[0], native_fields=True)])
         self.assertEqual(messages, [])
 
     def test_logical_port_comparison_keeps_both_children(self):
@@ -1808,7 +2318,7 @@ class FollowupParseTests(unittest.TestCase):
                                following_rule=False):
         for logical in ((True,) if logical_only else (False, True)):
             expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
-            source = f"AND,{expression},{policy}" if logical else f"{kind},{value},{policy}"
+            source = f"AND,{expression},{policy}" if logical else f"{kind},{_quote_matcher(value)},{policy}"
             expected = [Rule("AND", expression) if logical else Rule(kind, value)]
             if following_rule:
                 source += "\nDOMAIN,keep.example.com,China"
@@ -1821,7 +2331,7 @@ class FollowupParseTests(unittest.TestCase):
     def assert_regex_rejected(self, value, kind="PROCESS-NAME-REGEX"):
         for logical in (False, True):
             expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
-            source = (f"AND,{expression},China" if logical else f"{kind},{value},China")
+            source = (f"AND,{expression},China" if logical else f"{kind},{_quote_matcher(value)},China")
             with self.subTest(value=value, logical=logical):
                 parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
                 self.assertEqual(parsed, [Rule("DOMAIN", "keep.example.com")])
@@ -1857,7 +2367,7 @@ class FollowupParseTests(unittest.TestCase):
                 parsed, messages = parse(f"AND,{expression},China\nDOMAIN,keep.example.com,China", purpose="proxy")
                 output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
                 self.assertNotIn("fin.yaml:AND", skipped)
-                self.assertEqual(set(parse(output["fin.yaml"], purpose="proxy")[0]), set(normalize(parsed)))
+                self.assertEqual(set(parse(output["fin.yaml"], purpose="proxy")[0]), {Rule("AND", expression, native_fields=True), Rule("DOMAIN", "keep.example.com")})
                 self.assertEqual(messages, [])
             for marker in ("#", ";", "//"):
                 value = f"^a{{b$,My Proxy {marker} note}}$|^foo$"
@@ -1869,7 +2379,7 @@ class FollowupParseTests(unittest.TestCase):
             for value in ("^a{b$", r"^a\{b$", "^a{b{1,2}$"):
                 for marker in ("#", ";", "//"):
                     for policy in ("PROXY", "China"):
-                        source = f"{kind},{value},{policy} {marker} note [,China ($\nDOMAIN,keep.example.com,China"
+                        source = f"{kind},{_quote_matcher(value)},{policy} {marker} note [,China ($\nDOMAIN,keep.example.com,China"
                         with self.subTest(source=source):
                             self.assertEqual(parse(source, purpose="proxy"),
                                              ([Rule(kind, value), Rule("DOMAIN", "keep.example.com")], []))
@@ -1904,7 +2414,7 @@ class FollowupParseTests(unittest.TestCase):
 
         for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
             for value in ("^a{b$", r"^a\{b$", "^a{b{1,2}$", "^(?x)a{b$"):
-                for quote in ("", "'", '"'):
+                for quote in ("'", '"'):
                     for policy in ("PROXY", "LIST", "China", "中文 (My) Proxy", "My } Proxy"):
                         for marker in ("#", ";", "//"):
                             for body in ("note }", "note } [", r"note } \z,tail$ ( [ # ; //", "note },tail$"):
@@ -1923,7 +2433,7 @@ class FollowupParseTests(unittest.TestCase):
     def test_policy_literal_brace_does_not_close_unpaired_regex(self):
         for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
             for value in ("^a{b$", r"^a\{b$", "^a{b{1,2}$"):
-                for quote in ("", "'", '"'):
+                for quote in ("'", '"'):
                     for policy in ("My } Proxy", "中文 } (My) Proxy", "My } Proxy (", "My } Proxy ["):
                         with self.subTest(kind=kind, value=value, quote=quote, policy=policy):
                             expected = [Rule(kind, value), Rule("DOMAIN", "keep.example.com")]
@@ -1943,7 +2453,7 @@ class FollowupParseTests(unittest.TestCase):
             for value in values:
                 for quote in ("", "'", '"'):
                     expression = f"(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))"
-                    for source, expected in ((f"{kind},{quote}{value}{quote},China", Rule(kind, value)),
+                    for source, expected in ((f"{kind},{_quote_matcher(value)},China", Rule(kind, value)),
                                              (f"AND,{expression},China", Rule("AND", expression))):
                         with self.subTest(source=source):
                             parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
@@ -1952,7 +2462,7 @@ class FollowupParseTests(unittest.TestCase):
                             output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
                             payload = [json.loads(line[4:]) for line in output["fin.yaml"].splitlines()
                                        if line.startswith('  - "')]
-                            rendered = f"AND,{expression}" if expected.kind == "AND" else f"{kind},{value}"
+                            rendered = f"AND,(({kind},{value}),(DOMAIN,x.example.com))" if expected.kind == "AND" else f"{kind},{value}"
                             self.assertEqual(set(payload), {rendered, "DOMAIN,keep.example.com"})
                             self.assertNotIn(f"fin.yaml:{expected.kind}", skipped)
 
@@ -1962,11 +2472,11 @@ class FollowupParseTests(unittest.TestCase):
                 value = f"^a{{b$,My Proxy {marker} [}}$"
                 for quote in ("", "'", '"'):
                     expression = f"(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))"
-                    for source in (f"{kind},{quote}{value}{quote},China", f"AND,{expression},China"):
+                    for source in (f"{kind},{_quote_matcher(value)},China", f"AND,{expression},China"):
                         with self.subTest(source=source):
                             parsed, messages = parse(source + "\nDOMAIN,keep.example.com,China", purpose="proxy")
                             self.assertEqual(parsed, [Rule("DOMAIN", "keep.example.com")])
-                            warning = f"line 1: invalid {kind} {value}" if quote and not source.startswith("AND,") else "line 1: unbalanced delimiters"
+                            warning = f"line 1: invalid {kind} {value}" if not source.startswith("AND,") else (f"line 1: invalid logical expression {expression}" if quote else "line 1: unbalanced delimiters")
                             self.assertEqual(messages, [warning])
 
     def test_reserved_regex_policy_comments_cannot_change_ambiguity(self):
@@ -2002,7 +2512,7 @@ class FollowupParseTests(unittest.TestCase):
             for value in ("^foo$", "^a{b$"):
                 for policy in ("My } Pro*xy (", "My } Pro+xy [", r"My } Pro\xy (", "My } Pro|xy [", "My } Pro$xy ("):
                     for marker in ("#", ";", "//"):
-                        source = f"{kind},{value},{policy} {marker} note }} [\nDOMAIN,keep.example.com,China"
+                        source = f"{kind},{_quote_matcher(value)},{policy} {marker} note }} [\nDOMAIN,keep.example.com,China"
                         with self.subTest(source=source):
                             self.assertEqual(parse(source, purpose="proxy"),
                                              ([Rule(kind, value), Rule("DOMAIN", "keep.example.com")], []))
@@ -2010,7 +2520,7 @@ class FollowupParseTests(unittest.TestCase):
     def test_policy_free_source_regex_keeps_anchored_tail_comment(self):
         for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
             for marker in ("#", ";", "//"):
-                source = f"{kind},^a{{b$ {marker} note ( [\nDOMAIN,keep.example.com,China"
+                source = f"{kind},'^a{{b$' {marker} note ( [\nDOMAIN,keep.example.com,China"
                 self.assertEqual(parse(source, purpose="proxy"),
                                  ([Rule(kind, "^a{b$"), Rule("DOMAIN", "keep.example.com")], []))
 
@@ -2028,7 +2538,7 @@ class FollowupParseTests(unittest.TestCase):
                     "    for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX'):\n"
                     "        for quote in ('', chr(39), chr(34)):\n"
                     "            expression = f'(({kind},{quote}{value}{quote}),(DOMAIN,x.example.com))'\n"
-                    "            for source, rule in ((f'{kind},{quote}{value}{quote},China', Rule(kind,value)),\n"
+                    "            for source, rule in ((f'{kind},{chr(34)}{value}{chr(34)},China', Rule(kind,value)),\n"
                     "                                 (f'AND,{expression},China', Rule('AND',expression))):\n"
                     "                parsed, messages = parse(source + ' # note } [\\nDOMAIN,keep.example.com,China', purpose='proxy')\n"
                     "                expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]\n"
@@ -2160,7 +2670,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
     for value, valid in values:
         for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):
             expression = f'(({kind},{value}),(DOMAIN,x.example.com))'
-            for source, rule in ((f'{kind},{value},China', Rule(kind,value)),
+            for source, rule in ((f'{kind},{chr(34)}{value}{chr(34)},China', Rule(kind,value)),
                                  (f'AND,{expression},China', Rule('AND',expression))):
                 parsed, messages = parse(source + '\nDOMAIN,keep.example.com,China', purpose='proxy')
                 expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]
@@ -2293,7 +2803,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
         self.assert_regex_preserved(r"^(?x)a # [", logical_only=True)
         self.assert_regex_preserved(r"^(?x)a # [", policy="PROXY")
         self.assertEqual(parse(r"DOMAIN-REGEX,^(?x)a # [,China", purpose="proxy"),
-                         ([], ["line 1: ambiguous unquoted regex comma or policy"]))
+                         ([], ["line 1: ambiguous unquoted regex comment"]))
 
     def test_custom_policy_keeps_literal_hash_after_disabling_extended_mode(self):
         self.assert_regex_preserved(r"^(?x)a(?-x) # [b]$")
@@ -2319,7 +2829,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
         for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
             for logical in (False, True):
                 expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
-                source = f"AND,{expression},China" if logical else f"{kind},{value},China"
+                source = f"AND,{expression},China" if logical else f"{kind},{_quote_matcher(value)},China"
                 expected = Rule("AND", expression) if logical else Rule(kind, value)
                 for comment in (" # note (", " ; note [", " // note ("):
                     with self.subTest(kind=kind, logical=logical, comment=comment):
@@ -2342,7 +2852,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
             for value in ("^foo$", r"^foo\z", r"^[] #]$"):
                 for logical in (False, True):
                     expression = f"(({kind},{value}),(DOMAIN,x.example.com))"
-                    source = f"AND,{expression},China" if logical else f"{kind},{value},China"
+                    source = f"AND,{expression},China" if logical else f"{kind},{_quote_matcher(value)},China"
                     expected = Rule("AND", expression) if logical else Rule(kind, value)
                     for marker in ("#", ";", "//"):
                         for body in ("note $", r"note \z", "note ($", "note [,China $"):
@@ -2369,7 +2879,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
     def test_confirmed_regex_and_logical_policy_fields_are_literal(self):
         for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX"):
             for quoted in (False, True):
-                matcher = "'^foo$'" if quoted else "^foo$"
+                matcher = "'^foo$'" if quoted else '"^foo$"'
                 expression = f"(({kind},{matcher}),(DOMAIN,x.example.com))"
                 for policy in ("My Proxy (", "香港 [", "My Proxy (香港)"):
                     for source, expected in ((f"{kind},{matcher},{policy}", Rule(kind, "^foo$")),
@@ -2578,7 +3088,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
                 "        value = '^' + capture + '(?(' + digits + ')b|c)$'\n"
                 "        for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
                 "            expression = f'(({kind},{value}),(DOMAIN,x.example.com))'\n"
-                "            for source, rule in ((f'{kind},{value},China', Rule(kind,value)), "
+                "            for source, rule in ((f'{kind},{chr(34)}{value}{chr(34)},China', Rule(kind,value)), "
                 "(f'AND,{expression},China', Rule('AND',expression))):\n"
                 "                parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,China', purpose='proxy')\n"
                 "                expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]\n"
@@ -2650,14 +3160,14 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
                 "        value = r'^(?<100>a)' + opening + digits + closing + '$'\n"
                 "        for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX'):\n"
                 "            expression = f'(({kind},{value}),(DOMAIN,x.example.com))'\n"
-                "            for source, rule in ((f'{kind},{value},China', Rule(kind,value)), "
+                "            for source, rule in ((f'{kind},{chr(34)}{value}{chr(34)},China', Rule(kind,value)), "
                 "(f'AND,{expression},China', Rule('AND',expression))):\n"
                 "                parsed, messages = parse(source + '\\nDOMAIN,keep.example.com,China', purpose='proxy')\n"
                 "                expected = ([rule] if valid else []) + [Rule('DOMAIN','keep.example.com')]\n"
                 "                assert parsed == expected and (messages == [] if valid else "
                 "len(messages) == 1 and messages[0].startswith('line 1:')), (valid, kind, len(value))\n"
                 "    value = '^[' + opening + '1' * 5000 + closing + ']$'\n"
-                "    assert parse(f'DOMAIN-REGEX,{value},China', purpose='proxy') == "
+                "    assert parse(f'DOMAIN-REGEX,{chr(34)}{value}{chr(34)},China', purpose='proxy') == "
                 "([Rule('DOMAIN-REGEX',value)], [])")
         try:
             result = subprocess.run([sys.executable, "-c", code],

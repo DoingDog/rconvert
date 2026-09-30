@@ -37,6 +37,263 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
+    def test_encoded_fields_survive_generation_publish_and_disk_reimport(self):
+        from rules import parse
+
+        values = ("Game\\", "Game\\\\", "Game\\\\\\", "'Game\\\\", '"Game\'Inc"', "'Game\"Inc'", '"Game\\', "'Game\\")
+        expressions = []
+        for leaf in ("PROCESS-NAME", "PROCESS-PATH"):
+            for value in values:
+                payload = "/Applications/" + value if leaf == "PROCESS-PATH" else value
+                expressions.extend((operator, f"(({leaf},{payload}),(IP-CIDR,192.0.2.0/24,no-resolve),"
+                                    "(SRC-IP-CIDR,198.51.100.0/24))") for operator in ("AND", "OR"))
+                expressions.append(("NOT", f"((NOT,(({leaf},{payload}))))"))
+        native_lines = [f"{kind},{value}" for kind, value in expressions]
+        document = "payload:\n" + "".join("  - " + json.dumps(line) + "\n" for line in native_lines)
+        document += "  - DOMAIN-KEYWORD,keep\n"
+        original, messages = parse(document, purpose="proxy")
+        self.assertEqual(messages, [])
+        self.assertEqual(len(original), len(expressions) + 1)
+        for mode in ("keep", "add", "strip"):
+            expected = {line.replace(",no-resolve", "") if mode == "strip" else line for line in native_lines}
+            expected.add("DOMAIN-KEYWORD,keep")
+            for dependency in ("fin.txt", "fin-surge.txt", "fin.yaml"):
+                with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    configs = [{"name": "source", "purpose": "proxy", "no_resolve": mode,
+                                "sources": ["native.yaml"], "whitelist": []},
+                               {"name": "dependent", "purpose": "proxy", "no_resolve": mode,
+                                "sources": [f"source/{dependency}"], "whitelist": []}]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "native.yaml").write_text(document, encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), {root / group / name
+                                                   for group in ("source", "dependent") for name in NAMES})
+                    publish(outputs)
+                    for group in ("source", "dependent"):
+                        yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
+                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, expected)
+                        parsed, warnings = parse(yaml, purpose="proxy")
+                        self.assertEqual(warnings, [])
+                        self.assertTrue(all(rule.native_fields for rule in parsed if rule.kind in {"AND", "OR", "NOT"}))
+                        for name in ("fin.txt", "fin-surge.txt"):
+                            text = (root / group / name).read_text(encoding="utf-8")
+                            self.assertEqual(text.splitlines()[0], f"# {group} rules: {len(expected)}")
+                            self.assertFalse(any(f"{group} {name}:{kind}:" in stderr.getvalue()
+                                                 for kind in ("AND", "OR", "NOT")))
+                        for name in NAMES:
+                            self.assertEqual((root / group / name).read_bytes(), outputs[root / group / name].encode("utf-8"))
+                    self.assertNotIn(": line ", stderr.getvalue())
+                    (root / "rulesets.json").write_text(json.dumps([
+                        {"name": "disk", "purpose": "proxy", "no_resolve": mode,
+                         "sources": [f"source/{dependency}"], "whitelist": []},
+                    ]), encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as disk_stderr:
+                        disk_outputs = generate(root, lambda url: self.fail(url))
+                    publish(disk_outputs)
+                    self.assertEqual(set(disk_outputs), {root / "disk" / name for name in NAMES})
+                    self.assertEqual({json.loads(line[4:]) for line in
+                                      (root / "disk" / "fin.yaml").read_text(encoding="utf-8").splitlines()[2:]}, expected)
+                    self.assertNotIn(": line ", disk_stderr.getvalue())
+
+
+class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
+    def test_native_literal_quotes_survive_surge_and_yaml_dependencies_for_all_modes(self):
+        from rules import Rule, parse
+
+        expressions = (
+            ('AND', '((PROCESS-NAME,"Game"),(DOMAIN,x.example.com))'),
+            ('OR', "((PROCESS-NAME,'Game'),(IP-CIDR,198.51.100.0/24,no-resolve),"
+                   "(SRC-IP-CIDR,192.0.2.0/24))"),
+            ('NOT', r'((PROCESS-NAME,"Game\Inc"))'),
+            ('AND', '((OR,((PROCESS-NAME,"Game"),(DOMAIN,other.example.com))),'
+                    '(NOT,((IP-CIDR,203.0.113.0/24))))'),
+        )
+        for mode, suffix, added in (("keep", ",no-resolve", ""),
+                                    ("add", ",no-resolve", ",no-resolve"), ("strip", "", "")):
+            expected = (
+                expressions[0],
+                ('OR', "((PROCESS-NAME,'Game'),(IP-CIDR,198.51.100.0/24" + suffix + "),"
+                       "(SRC-IP-CIDR,192.0.2.0/24))"),
+                expressions[2],
+                ('AND', '((OR,((PROCESS-NAME,"Game"),(DOMAIN,other.example.com))),'
+                        '(NOT,((IP-CIDR,203.0.113.0/24' + added + '))))'),
+            )
+            for dependency in ("fin.txt", "fin-surge.txt", "fin.yaml"):
+                with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    (root / "rulesets.json").write_text(json.dumps([
+                        {"name": "source", "purpose": "proxy", "no_resolve": mode,
+                         "sources": ["native.yaml"], "whitelist": []},
+                        {"name": "dependent", "purpose": "proxy", "no_resolve": mode,
+                         "sources": [f"source/{dependency}"], "whitelist": []},
+                    ]), encoding="utf-8")
+                    native = "payload:\n  - 'AND,((PROCESS-NAME,\"Game\"),(DOMAIN,x.example.com))'\n"
+                    native += "".join(
+                        "  - " + json.dumps(f"{kind},{value}") + "\n" for kind, value in expressions[1:]
+                    ) + '  - "DOMAIN-KEYWORD,keep"\n'
+                    (root / "native.yaml").write_text(native, encoding="utf-8")
+                    self.assertEqual(parse(native, purpose="proxy"), (
+                        [Rule(kind, value, literal_process=True, native_fields=True) for kind, value in expressions]
+                        + [Rule("DOMAIN-KEYWORD", "keep")], [],
+                    ))
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), {root / group / name
+                                                   for group in ("source", "dependent") for name in NAMES})
+                    publish(outputs)
+                    self.assertTrue(all(path.is_file() and path.read_text(encoding="utf-8") == text
+                                        for path, text in outputs.items()))
+                    for group, values in (("dependent", expected), ("source", expected)):
+                        yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
+                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]},
+                                         {f"{kind},{value}" for kind, value in values}
+                                         | {"DOMAIN-KEYWORD,keep"})
+                        parsed, messages = parse(yaml, purpose="proxy")
+                        self.assertEqual(messages, [])
+                        self.assertEqual(set(parsed), {
+                            Rule(kind, value, literal_process=True, native_fields=True) for kind, value in values
+                        } | {Rule("DOMAIN-KEYWORD", "keep")})
+                        for name in ("fin.txt", "fin-surge.txt"):
+                            surge = (root / group / name).read_text(encoding="utf-8")
+                            self.assertIn('AND,((PROCESS-NAME,\'"Game"\'),(DOMAIN,x.example.com))\n', surge)
+                            self.assertNotIn(f"{group} {name}:AND:", stderr.getvalue())
+                            self.assertNotIn(f"{group} {name}:OR:", stderr.getvalue())
+                            self.assertNotIn(f"{group} {name}:NOT:", stderr.getvalue())
+                        for kind, count in (("AND", 2), ("OR", 1), ("NOT", 1)):
+                            for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                                self.assertIn(f"{group} {name}:{kind}: {count}\n", stderr.getvalue())
+                    self.assertNotIn(": line ", stderr.getvalue())
+                    self.assertNotIn("no routable rules", stderr.getvalue())
+                    (root / "rulesets.json").write_text(json.dumps([
+                        {"name": "disk", "purpose": "proxy", "no_resolve": mode,
+                         "sources": [f"source/{dependency}"], "whitelist": []},
+                    ]), encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as disk_stderr:
+                        disk_outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(disk_outputs), {root / "disk" / name for name in NAMES})
+                    publish(disk_outputs)
+                    self.assertTrue(all(path.is_file() and path.read_text(encoding="utf-8") == text
+                                        for path, text in disk_outputs.items()))
+                    self.assertEqual((root / "disk" / "fin.yaml").read_text(encoding="utf-8").splitlines()[2:],
+                                     (root / "dependent" / "fin.yaml").read_text(encoding="utf-8").splitlines()[2:])
+                    self.assertNotIn(": line ", disk_stderr.getvalue())
+                    self.assertNotIn("no routable rules", disk_stderr.getvalue())
+
+    def test_unrepresentable_native_quotes_skip_surge_logic_without_losing_yaml_dependency(self):
+        from rules import Rule, parse
+
+        invalid = []
+        # 用原生字面 * 验证整个逻辑规则的目标 skip，不把可转义的引号判为不可表达。
+        for value in ('"Game\'Inc*"', '"Game*\\'):
+            invalid.extend((kind, f"((PROCESS-NAME,{value}),(DOMAIN,x.example.com))")
+                           for kind in ("AND", "OR"))
+            invalid.append(("NOT", f"((PROCESS-NAME,{value}))"))
+        invalid.append(("AND", '((OR,((PROCESS-NAME,"Game*\\),(DOMAIN,x.example.com))),'
+                               '(DOMAIN,other.example.com))'))
+        safe = "OR,((DOMAIN,a.example.com),(DOMAIN,b.example.com))"
+        for mode in ("keep", "add", "strip"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                configs = [{"name": "source", "purpose": "proxy", "no_resolve": mode,
+                            "sources": ["native.yaml"], "whitelist": []}] + [
+                    {"name": group, "purpose": "proxy", "no_resolve": mode,
+                     "sources": [f"source/{name}"], "whitelist": []}
+                    for group, name in (("txt", "fin.txt"), ("surge", "fin-surge.txt"), ("yaml", "fin.yaml"))
+                ]
+                (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                document = "payload:\n" + "".join(
+                    "  - " + json.dumps(f"{kind},{value}") + "\n" for kind, value in invalid
+                ) + "  - " + json.dumps(safe) + '\n  - "DOMAIN-KEYWORD,keep"\n'
+                (root / "native.yaml").write_text(document, encoding="utf-8")
+                original = [Rule(kind, value, literal_process=True, native_fields=True)
+                            for kind, value in invalid]
+                self.assertEqual(parse(document, purpose="proxy"), (
+                    original + [Rule("OR", safe[3:], native_fields=True), Rule("DOMAIN-KEYWORD", "keep")], [],
+                ))
+                with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    outputs = generate(root, lambda url: self.fail(url))
+                self.assertEqual(set(outputs), {root / group / name
+                                               for group in ("source", "txt", "surge", "yaml") for name in NAMES})
+                publish(outputs)
+                self.assertTrue(all(path.is_file() and path.read_text(encoding="utf-8") == text
+                                    for path, text in outputs.items()))
+                for group in ("source", "txt", "surge", "yaml"):
+                    for name in ("fin.txt", "fin-surge.txt"):
+                        self.assertEqual((root / group / name).read_text(encoding="utf-8"),
+                                         f"# {group} rules: 2\nDOMAIN-KEYWORD,keep\n{safe}\n")
+                        for kind, count in (("AND", 3), ("OR", 2), ("NOT", 2)):
+                            diagnostic = f"{group} {name}:{kind}:"
+                            if group in ("source", "yaml"):
+                                self.assertIn(f"{diagnostic} {count}\n", stderr.getvalue())
+                            else:
+                                self.assertNotIn(diagnostic, stderr.getvalue())
+                    yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
+                    expected = {safe, "DOMAIN-KEYWORD,keep"}
+                    if group in ("source", "yaml"):
+                        expected |= {f"{kind},{value}" for kind, value in invalid}
+                    self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, expected)
+                    parsed, messages = parse(yaml, purpose="proxy")
+                    self.assertEqual(messages, [])
+                    self.assertEqual(set(parsed), {
+                        Rule("OR", safe[3:], native_fields=True), Rule("DOMAIN-KEYWORD", "keep"),
+                    } | (set(original) if group in ("source", "yaml") else set()))
+                self.assertNotIn(": line ", stderr.getvalue())
+                self.assertNotIn("no routable rules", stderr.getvalue())
+
+
+class NativeFieldFix8GenerateTests(unittest.TestCase):
+    def test_generated_yaml_dependency_keeps_native_logic_provenance_for_all_modes(self):
+        from rules import parse
+
+        for mode in ("keep", "add", "strip"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([
+                    {"name": "source", "purpose": "proxy", "no_resolve": "keep",
+                     "sources": ["native.yaml"], "whitelist": []},
+                    {"name": "dependent", "purpose": "proxy", "no_resolve": mode,
+                     "sources": ["source/fin.yaml"], "whitelist": []},
+                ]), encoding="utf-8")
+                expression = '((DOMAIN-REGEX,"*ads"),(PROCESS-NAME-REGEX,^Game,Inc$))'
+                (root / "native.yaml").write_text("rules:\n  - 'AND," + expression + "'\n", encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    outputs = generate(root, lambda url: self.fail(url))
+                for group in ("source", "dependent"):
+                    text = outputs[root / group / "fin.yaml"]
+                    self.assertEqual([json.loads(line[4:]) for line in text.splitlines()[2:]], ["AND," + expression])
+                    parsed, messages = parse(text, purpose="proxy")
+                    self.assertEqual(messages, [])
+                    self.assertTrue(parsed[0].native_fields)
+                    self.assertEqual({path.name for path in outputs if path.parent.name == group}, set(NAMES))
+                self.assertNotIn("invalid", stderr.getvalue())
+
+
+class SourceFieldContinuationGenerateTests(unittest.TestCase):
+    def test_quoted_url_regex_markers_survive_surge_generated_dependency(self):
+        from rules import Rule, parse
+
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            (root / "rulesets.json").write_text(json.dumps([
+                {"name": "source", "purpose": "proxy", "no_resolve": "keep",
+                 "sources": ["source.list"], "whitelist": []},
+                {"name": "dependent", "purpose": "proxy", "no_resolve": "strip",
+                 "sources": ["source/fin.txt"], "whitelist": []},
+            ]), encoding="utf-8")
+            values = ["^foo #bar$", "^foo ;bar$", "^foo //bar$"]
+            (root / "source.list").write_text("".join(f"URL-REGEX,'{value}',PROXY\n" for value in values), encoding="utf-8")
+            with contextlib.redirect_stderr(io.StringIO()):
+                outputs = generate(root, lambda url: self.fail(url))
+            for group in ("source", "dependent"):
+                self.assertEqual({path.name for path in outputs if path.parent.name == group}, set(NAMES))
+                parsed, messages = parse(outputs[root / group / "fin.txt"], purpose="proxy")
+                self.assertEqual(set(parsed), {Rule("URL-REGEX", value) for value in values})
+                self.assertEqual(messages, [])
+
+
 class GenerateTests(unittest.TestCase):
     def test_http_source_is_rejected_before_network(self):
         with self.assertRaisesRegex(ValueError, "HTTPS"):
@@ -854,7 +1111,7 @@ class GenerateTests(unittest.TestCase):
             values = [f"^Game,DIRECT {marker}1$" for marker in (";", "#", "//")]
             values.append("^Game,'s$")
             (root / "source.list").write_text(
-                "".join(f"PROCESS-NAME-REGEX,{value},DIRECT # note\n" for value in values),
+                "".join(f'PROCESS-NAME-REGEX,"{value}",DIRECT # note\n' for value in values),
                 encoding="utf-8",
             )
             stderr = io.StringIO()

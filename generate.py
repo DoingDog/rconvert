@@ -262,12 +262,12 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
         rules = exclude_covered(rules, whitelist + allowed)
         if no_resolve == "add":
             rules = [Rule(rule.kind, rule.value, rule.options + ("no-resolve",),
-                          rule.allow, rule.literal_process)
+                          rule.allow, rule.literal_process, rule.native_fields)
                      if not rule.allow and rule.kind in NO_RESOLVE_TYPES else rule for rule in rules]
         elif no_resolve == "strip":
             rules = [Rule(rule.kind, rule.value,
                           tuple(option for option in rule.options if option != "no-resolve"),
-                          rule.allow, rule.literal_process)
+                          rule.allow, rule.literal_process, rule.native_fields)
                      for rule in rules]
         rendered, skipped = render(group, normalize(rules), purpose=purpose,
                                    whitelist=whitelist, no_resolve=no_resolve,
