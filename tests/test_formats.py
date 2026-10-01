@@ -12,6 +12,153 @@ from formats import render as render_configured
 render = partial(render_configured, purpose="block", no_resolve="add")
 
 
+class DomainProvenanceFormatTests(unittest.TestCase):
+    def outputs(self, source, **kwargs):
+        from rules import normalize, parse
+
+        parsed, messages = parse(source, purpose="block")
+        self.assertEqual(messages, [])
+        return render_configured("group", normalize(parsed), purpose="block",
+                                 no_resolve=kwargs.pop("no_resolve", "keep"), **kwargs)
+
+    def assert_counts(self, out):
+        from formats import FILES
+
+        self.assertEqual(set(out), set(FILES))
+        for name, text in out.items():
+            lines = text.splitlines()
+            header = 7 if name == "fin-adb.txt" else 2 if name == "fin.yaml" else 1
+            count_line = lines[6] if name == "fin-adb.txt" else lines[0]
+            self.assertEqual(count_line, f"! Total count: {len(lines[header:])}" if name == "fin-adb.txt"
+                             else f"# group rules: {len(lines[header:])}", name)
+
+    def test_native_brackets_stay_literal_and_surge_class_matches_only_digits(self):
+        value = "api-[0-9].example.com"
+        native, skipped = self.outputs("payload:\n  - DOMAIN-WILDCARD," + value)
+        self.assertEqual([json.loads(line[4:]) for line in native["fin.yaml"].splitlines()[2:]],
+                         ["DOMAIN-WILDCARD," + value])
+        self.assertEqual(skipped, {f"{name}:DOMAIN-WILDCARD": 1 for name in
+                                  ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")})
+        self.assert_counts(native)
+        surge, skipped = self.outputs("DOMAIN-WILDCARD," + value + ",REJECT")
+        matcher = json.loads(surge["fin.yaml"].splitlines()[2][4:])
+        self.assertTrue(matcher.startswith("DOMAIN-REGEX,"))
+        expression = re.compile(matcher.split(",", 1)[1], re.I)
+        for host in ("api-7.example.com", "API-7.EXAMPLE.COM", "api-7.example.com."):
+            self.assertIsNotNone(expression.fullmatch(host), host)
+        for host in ("api-a.example.com", value, "api-7.example.com.evil", "api-7.exampleXcom"):
+            self.assertIsNone(expression.fullmatch(host), host)
+        self.assertEqual(skipped, {"fin-qx.txt:DOMAIN-WILDCARD": 1,
+                                   "fin-surge-ds.txt:DOMAIN-WILDCARD": 1})
+        self.assert_counts(surge)
+
+    def test_surge_keyword_and_wildcard_preserve_case_with_native_target_skips(self):
+        for kind, value, positive, negative in (
+            ("DOMAIN-KEYWORD", "ads", "CDN.ADS.EXAMPLE.COM", "CDN.EXAMPLE.COM"),
+            ("DOMAIN-WILDCARD", "api-*.example.com", "API-7.EXAMPLE.COM", "OTHER-7.EXAMPLE.COM"),
+        ):
+            for mode in ("keep", "add", "strip"):
+                with self.subTest(kind=kind, mode=mode):
+                    out, skipped = self.outputs(f"{kind},{value},REJECT", no_resolve=mode)
+                    converted = json.loads(out["fin.yaml"].splitlines()[2][4:])
+                    self.assertTrue(converted.startswith("DOMAIN-REGEX,"))
+                    regex = re.compile(converted.split(",", 1)[1], re.I)
+                    self.assertIsNotNone(regex.search(positive))
+                    self.assertIsNotNone(regex.search(positive.lower()))
+                    self.assertIsNone(regex.search(negative))
+                    for name in ("fin.txt", "fin-surge.txt"):
+                        self.assertIn(f"{kind},{value}\n", out[name])
+                    self.assertIn(f"HOST-{kind.removeprefix('DOMAIN-')},{value},LIST\n", out["fin-qx.txt"])
+                    self.assertEqual(skipped, {f"fin-surge-ds.txt:{kind}": 1})
+                    self.assert_counts(out)
+                    native, native_skipped = self.outputs(f"payload:\n  - {kind},{value}", no_resolve=mode)
+                    self.assertEqual([json.loads(line[4:]) for line in native["fin.yaml"].splitlines()[2:]],
+                                     [f"{kind},{value}"])
+                    self.assertEqual(native_skipped, {f"{name}:{kind}": 1 for name in
+                                                      ("fin.txt", "fin-surge.txt", "fin-surge-ds.txt")})
+                    self.assert_counts(native)
+
+    def test_dns_native_literal_class_skips_block_allow_and_whitelist(self):
+        from rules import parse, parse_whitelist
+
+        source = "payload:\n  - DOMAIN-WILDCARD,api-[0-9].example.com"
+        native, _ = parse(source, purpose="block")
+        for allowed in (False, True):
+            with self.subTest(allowed=allowed):
+                from dataclasses import replace
+                out, skipped = render_configured("group", [replace(native[0], allow=allowed)],
+                                                 purpose="block", no_resolve="keep")
+                self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
+                self.assert_counts(out)
+        out, skipped = self.outputs("DOMAIN,keep.example.org,REJECT", whitelist=parse_whitelist(source))
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "keep.example.org"])
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
+        for source in ("DOMAIN-WILDCARD,api-[0-9].example.com,REJECT",
+                       "payload:\n  - DOMAIN-WILDCARD,api-*.example.com",
+                       "payload:\n  - DOMAIN-KEYWORD,ads"):
+            out, skipped = self.outputs(source)
+            expression = re.compile(out["fin-adb.txt"].splitlines()[7][1:-1])
+            self.assertIsNotNone(expression.search("API-7.EXAMPLE.COM".lower()) if "ads" not in source
+                                 else expression.search("CDN.ADS.EXAMPLE.COM".lower()))
+            self.assertIsNone(expression.search("outside.example.org"))
+            self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
+
+    def test_logical_domain_provenance_skips_whole_target_with_flags_intact(self):
+        for operator in ("AND", "OR", "NOT"):
+            for leaf in ("DOMAIN-KEYWORD,ads", "DOMAIN-WILDCARD,api-*.example.com",
+                         "DOMAIN-WILDCARD,api-[0-9].example.com"):
+                expression = (f"(({leaf}))" if operator == "NOT" else
+                              f"(({leaf}),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))")
+                for mode in ("keep", "add", "strip"):
+                    with self.subTest(operator=operator, leaf=leaf, mode=mode):
+                        native, native_skipped = self.outputs("payload:\n  - " + json.dumps(operator + "," + expression),
+                                                               no_resolve=mode)
+                        expected = expression.replace(",no-resolve", "") if mode == "strip" else expression
+                        self.assertEqual([json.loads(line[4:]) for line in native["fin.yaml"].splitlines()[2:]],
+                                         [operator + "," + expected])
+                        self.assertEqual(native_skipped, {f"{name}:{operator}": 1 for name in
+                                                          ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")})
+                        self.assert_counts(native)
+                        surge, skipped = self.outputs(operator + "," + expression + ",REJECT", no_resolve=mode)
+                        converted = json.loads(surge["fin.yaml"].splitlines()[2][4:])
+                        self.assertIn("(DOMAIN-REGEX,", converted)
+                        self.assertNotIn("(SRC-IP-CIDR,198.51.100.0/24,no-resolve)", converted)
+                        self.assertEqual(",no-resolve" in converted, mode != "strip" and operator != "NOT")
+                        self.assertNotIn(f"fin.yaml:{operator}", skipped)
+                        self.assert_counts(surge)
+
+    def test_regex_whitelist_uses_existing_dns_portability_and_skip_counts(self):
+        whitelist = [Rule("DOMAIN-REGEX", "ad"),
+                     Rule("DOMAIN-REGEX", r"^api\-.*\.example\.com\.?$"),
+                     Rule("DOMAIN-REGEX", r"^api\-[0-9]\.example\.com\.?$"),
+                     Rule("DOMAIN-REGEX", r"^(?=ads)ads\.example\.com$"),
+                     Rule("DOMAIN-REGEX", r"^a{1001}$")]
+        for mode in ("keep", "add", "strip"):
+            with self.subTest(mode=mode):
+                out, skipped = render_configured("group", [Rule("DOMAIN", "keep.example.org")],
+                                                 purpose="block", no_resolve=mode, whitelist=whitelist)
+                self.assertEqual(set(out["fin-adb.txt"].splitlines()[7:]),
+                                 {"keep.example.org", "@@/ad/", r"@@/^api\-.*\.example\.com\.?$/",
+                                  r"@@/^api\-[0-9]\.example\.com\.?$/"})
+                self.assertEqual(skipped, {"fin-adb.txt:DOMAIN-REGEX": 2})
+                self.assert_counts(out)
+                for name in ("fin.txt", "fin-surge.txt", "fin.yaml", "fin-qx.txt", "fin-surge-ds.txt"):
+                    self.assertNotIn("DOMAIN-REGEX", out[name], name)
+        out, skipped = render_configured("group", [], purpose="proxy", no_resolve="keep",
+                                         whitelist=whitelist)
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                         ["! Total count: 0", "! No AdBlock rules for non-advertising group."])
+        self.assertEqual(skipped, {})
+
+    def test_en1_remote_rule_omits_only_interface_and_counts_it(self):
+        out, skipped = self.outputs("HOST-SUFFIX,example.com,REJECT,via-interface=en1")
+        self.assertEqual(out["fin-qx.txt"], "# group rules: 1\nHOST-SUFFIX,example.com,LIST\n")
+        self.assertEqual(skipped, {"fin-qx.txt:DOMAIN-SUFFIX:interface-option": 1})
+        self.assertNotIn("via-interface", "".join(out.values()))
+        self.assert_counts(out)
+
+
 class SurgeEscapedFieldFormatTests(unittest.TestCase):
     def test_shared_fields_encode_literal_quotes_and_backslashes_exactly(self):
         from rules import parse
@@ -174,7 +321,7 @@ class LiteralQuoteFieldFormatTests(unittest.TestCase):
                         self.assertEqual(out[name], "# group rules: 1\nDOMAIN-KEYWORD,keep\n")
                         self.assertEqual(skipped[f"{name}:{kind}"], 1)
                     self.assertEqual({json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]},
-                                     {f"{kind},{matcher}", "DOMAIN-KEYWORD,keep"})
+                                     {f"{kind},{matcher}", "DOMAIN-REGEX,keep"})
                     self.assertNotIn(f"fin.yaml:{kind}", skipped)
         for value in ('"Game\\\\', '"Game\\\\\\\\'):
             with self.subTest(even_backslashes=value):
@@ -246,7 +393,8 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-*.example.com")])
         self.assertIn("DOMAIN-WILDCARD,api-*.example.com", out["fin.txt"])
         self.assertIn("HOST-WILDCARD,api-*.example.com,LIST", out["fin-qx.txt"])
-        self.assertIn("DOMAIN-WILDCARD,api-*.example.com", out["fin.yaml"])
+        self.assertIn(r"DOMAIN-REGEX,^api\-.*\.example\.com\.?$",
+                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
         self.assertNotIn("api-*.example.com", out["fin-surge-ds.txt"])
 
     def test_wildcard_does_not_remove_exact_domain_from_surge_domain_set(self):
@@ -256,7 +404,8 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 1\napi-v2.example.org\n")
         self.assertIn("HOST-WILDCARD,api-*.example.org,LIST\n", out["fin-qx.txt"])
         self.assertIn("HOST,api-v2.example.org,LIST\n", out["fin-qx.txt"])
-        self.assertIn('  - "DOMAIN-WILDCARD,api-*.example.org"\n', out["fin.yaml"])
+        self.assertIn(r"DOMAIN-REGEX,^api\-.*\.example\.org\.?$",
+                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
         self.assertIn('  - "DOMAIN,api-v2.example.org"\n', out["fin.yaml"])
 
     def test_surge_character_class_wildcard_is_converted_for_mihomo_but_not_qx(self):
@@ -264,7 +413,7 @@ class FormatTests(unittest.TestCase):
         self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com\n", out["fin.txt"])
         self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                         [r"DOMAIN-REGEX,^api\-[0-9]\.example\.com$"])
+                         [r"DOMAIN-REGEX,^api\-[0-9]\.example\.com\.?$"])
         self.assertEqual(skipped["fin-qx.txt:DOMAIN-WILDCARD"], 1)
         self.assertNotIn("fin.yaml:DOMAIN-WILDCARD", skipped)
         self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
@@ -280,7 +429,7 @@ class FormatTests(unittest.TestCase):
                     self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com\n", out["fin.txt"])
                     self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com\n", out["fin-surge.txt"])
                     self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                                     [r"DOMAIN-REGEX,^api\-[0-9]\.example\.com$"])
+                                     [r"DOMAIN-REGEX,^api\-[0-9]\.example\.com\.?$"])
                     self.assertNotIn("fin.yaml:DOMAIN-WILDCARD", skipped)
                 expected_dns = ("@@" if allow else "") + r"/^api\-[0-9]\.example\.com$/"
                 self.assertIn(expected_dns, out["fin-adb.txt"].splitlines()[7:])
@@ -594,7 +743,7 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out, {
             "fin.txt": "# a3 rules: 7\nDOMAIN,a.org\nDOMAIN,z.org\nDOMAIN,long.example.org\nDOMAIN-KEYWORD,ad\nDOMAIN-SUFFIX,b.org\nDOMAIN-SUFFIX,q.org\nPROTOCOL,UDP\n",
             "fin-qx.txt": "# a3 rules: 6\nHOST,a.org,LIST\nHOST,z.org,LIST\nHOST,long.example.org,LIST\nHOST-KEYWORD,ad,LIST\nHOST-SUFFIX,b.org,LIST\nHOST-SUFFIX,q.org,LIST\n",
-            "fin.yaml": '# a3 rules: 7\npayload:\n  - "DOMAIN,a.org"\n  - "DOMAIN,z.org"\n  - "DOMAIN,long.example.org"\n  - "DOMAIN-KEYWORD,ad"\n  - "DOMAIN-SUFFIX,b.org"\n  - "DOMAIN-SUFFIX,q.org"\n  - "NETWORK,udp"\n',
+            "fin.yaml": '# a3 rules: 7\npayload:\n  - "DOMAIN,a.org"\n  - "DOMAIN,z.org"\n  - "DOMAIN,long.example.org"\n  - "DOMAIN-REGEX,ad"\n  - "DOMAIN-SUFFIX,b.org"\n  - "DOMAIN-SUFFIX,q.org"\n  - "NETWORK,udp"\n',
             "fin-surge.txt": "# a3 rules: 2\nDOMAIN-KEYWORD,ad\nPROTOCOL,UDP\n",
             "fin-surge-ds.txt": "# a3 rules: 5\na.org\nz.org\n.b.org\n.q.org\nlong.example.org\n",
         })
@@ -1047,7 +1196,7 @@ class FormatTests(unittest.TestCase):
             self.assertIn("DOMAIN-KEYWORD,ads\n", out[name])
         for entry in ("IP-ASN,13335,LIST,no-resolve", "GEOIP,CN,LIST,no-resolve", "HOST-KEYWORD,ads,LIST"):
             self.assertIn(entry + "\n", out["fin-qx.txt"])
-        for entry in ("IP-ASN,13335,no-resolve", "GEOIP,CN,no-resolve", "DOMAIN-KEYWORD,ads"):
+        for entry in ("IP-ASN,13335,no-resolve", "GEOIP,CN,no-resolve", "DOMAIN-REGEX,ads"):
             self.assertIn('  - "' + entry + '"\n', out["fin.yaml"])
         self.assertIn("/^.*ads.*$/\n", out["fin-adb.txt"])
         self.assertNotIn("fin-adb.txt:DOMAIN-KEYWORD", skipped)
@@ -1387,7 +1536,7 @@ class FormatTests(unittest.TestCase):
         value = "((DOMAIN-WILDCARD,api-[0-9].example.com),(DOMAIN,ads.example.com))"
         out, skipped = render("a3", [Rule("AND", value)])
         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                         [r"AND,((DOMAIN-REGEX,^api\-[0-9]\.example\.com$),(DOMAIN,ads.example.com))"])
+                         [r"AND,((DOMAIN-REGEX,^api\-[0-9]\.example\.com\.?$),(DOMAIN,ads.example.com))"])
         self.assertIn("AND," + value + "\n", out["fin.txt"])
         self.assertNotIn("fin.yaml:AND", skipped)
 

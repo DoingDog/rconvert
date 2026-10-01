@@ -38,6 +38,213 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class DomainProvenanceGenerateTests(unittest.TestCase):
+    def test_converted_yaml_whitelist_preserves_six_outputs_on_same_round_and_disk(self):
+        from rules import Rule, parse_whitelist
+
+        cases = (("DOMAIN-KEYWORD,ad", "ad"),
+                 ("DOMAIN-WILDCARD,api-*.example.com", r"^api\-.*\.example\.com\.?$"),
+                 ("DOMAIN-WILDCARD,api-[0-9].example.com", r"^api\-[0-9]\.example\.com\.?$"))
+        for matcher, regex in cases:
+            for mode in ("keep", "add", "strip"):
+                for disk_only in (False, True):
+                    with self.subTest(matcher=matcher, mode=mode, disk=disk_only), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+                        root = Path(directory)
+                        configs = [{"name": "allow", "purpose": "block", "no_resolve": mode,
+                                    "sources": ["allow.list"], "whitelist": []},
+                                   {"name": "filtered", "purpose": "block", "no_resolve": mode,
+                                    "sources": ["block.list"], "whitelist": ["allow/fin.yaml"]}]
+                        (root / "allow.list").write_text(matcher + ",REJECT\nDOMAIN,safe.example.org,REJECT", encoding="utf-8")
+                        (root / "block.list").write_text(
+                            "DOMAIN,ads.example.com,REJECT\nDOMAIN,api-7.example.com,REJECT\n"
+                            "DOMAIN,keep.example.net,REJECT\nDOMAIN,safe.example.org,REJECT\n"
+                            "IP-CIDR,192.0.2.0/24,REJECT,no-resolve", encoding="utf-8")
+                        (root / "rulesets.json").write_text(json.dumps(configs[:1] if disk_only else configs), encoding="utf-8")
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            outputs = generate(root, lambda url: self.fail(url))
+                        expected_skips = (["allow fin-qx.txt:DOMAIN-WILDCARD: 1"] if "[0-9]" in matcher else [])
+                        expected_skips.append(f"allow fin-surge-ds.txt:{matcher.split(',', 1)[0]}: 1")
+                        if not disk_only:
+                            expected_skips += ["filtered fin-adb.txt:IP-CIDR: 1", "filtered fin-surge-ds.txt:IP-CIDR: 1"]
+                        self.assertEqual(stderr.getvalue().splitlines(), expected_skips)
+                        allow_text = outputs[root / "allow/fin.yaml"]
+                        self.assertEqual(set(parse_whitelist(allow_text)),
+                                         {Rule("DOMAIN", "safe.example.org"), Rule("DOMAIN-REGEX", regex)})
+                        if disk_only:
+                            publish(outputs)
+                            (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                            with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                                outputs = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
+                        flag = "" if mode == "strip" else ",no-resolve"
+                        domains = {"DOMAIN,ads.example.com", "DOMAIN,api-7.example.com", "DOMAIN,keep.example.net"}
+                        ip = "IP-CIDR,192.0.2.0/24" + flag
+                        expected = {"fin.txt": domains | {ip}, "fin.yaml": domains | {ip},
+                                    "fin-qx.txt": {"HOST,ads.example.com,LIST", "HOST,api-7.example.com,LIST",
+                                                   "HOST,keep.example.net,LIST", "IP-CIDR,192.0.2.0/24,LIST" + flag},
+                                    "fin-surge.txt": {ip},
+                                    "fin-surge-ds.txt": {"ads.example.com", "api-7.example.com", "keep.example.net"},
+                                    "fin-adb.txt": {"ads.example.com", "api-7.example.com", "keep.example.net",
+                                                    "@@|safe.example.org|", "@@/" + regex + "/"}}
+                        self.assertEqual(set(outputs), {root / group / name for group in
+                                         (("filtered",) if disk_only else ("allow", "filtered")) for name in NAMES})
+                        for name, expected_body in expected.items():
+                            lines = outputs[root / "filtered" / name].splitlines()
+                            header = 7 if name == "fin-adb.txt" else 2 if name == "fin.yaml" else 1
+                            body = {json.loads(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
+                            self.assertEqual(body, expected_body, name)
+                            self.assertEqual(lines[6] if name == "fin-adb.txt" else lines[0],
+                                             f"! Total count: {len(expected_body)}" if name == "fin-adb.txt"
+                                             else f"# filtered rules: {len(expected_body)}", name)
+                        publish(outputs)
+                        self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in outputs.items()))
+                        previous = {root / group / name: (root / group / name).read_bytes()
+                                    for group in ("allow", "filtered") for name in NAMES}
+                        (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
+                        self.assertEqual(set(disk), {root / "filtered" / name for name in NAMES})
+                        for name in NAMES:
+                            start = 6 if name == "fin-adb.txt" else 0
+                            self.assertEqual(disk[root / "filtered" / name].splitlines()[start:],
+                                             outputs[root / "filtered" / name].splitlines()[start:])
+                        self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                        self.assertEqual((root / "allow/fin.yaml").read_text(encoding="utf-8"), allow_text)
+                        publish(disk)
+                        self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in disk.items()))
+
+    def test_domain_sources_follow_actual_generated_file_on_same_round_and_disk(self):
+        from rules import Rule, parse
+
+        source = ("DOMAIN-KEYWORD,ads,REJECT\nDOMAIN-WILDCARD,api-*.example.com,REJECT\n"
+                  "DOMAIN-WILDCARD,api-[0-9].example.com,REJECT\nDOMAIN,keep.example.org,REJECT\n"
+                  "IP-CIDR,192.0.2.0/24,REJECT,no-resolve\n")
+        native = ("payload:\n  - DOMAIN-KEYWORD,ads\n  - DOMAIN-WILDCARD,api-*.example.com\n"
+                  "  - DOMAIN-WILDCARD,api-[0-9].example.com\n")
+        for mode in ("keep", "add", "strip"):
+            for dependency in ("fin.txt", "fin-surge.txt", "fin.yaml", "fin-qx.txt", "fin-surge-ds.txt"):
+                with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+                    root = Path(directory)
+                    configs = [{"name": "parent", "purpose": "block", "no_resolve": mode,
+                                "sources": ["surge.list", "native.yaml", "qx.list"], "whitelist": []},
+                               {"name": "dependent", "purpose": "block", "no_resolve": mode,
+                                "sources": [f"parent/{dependency}"], "whitelist": []}]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "surge.list").write_text(source, encoding="utf-8")
+                    (root / "native.yaml").write_text(native, encoding="utf-8")
+                    (root / "qx.list").write_text("HOST-KEYWORD,ads,REJECT\n", encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), {root / group / name for group in ("parent", "dependent") for name in NAMES})
+                    parent_yaml = {json.loads(line[4:]) for line in outputs[root / "parent/fin.yaml"].splitlines()[2:]}
+                    self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com", parent_yaml)
+                    self.assertIn("DOMAIN-KEYWORD,ads", parent_yaml)
+                    self.assertTrue(any(line.startswith("DOMAIN-REGEX,") and "ads" in line for line in parent_yaml))
+                    self.assertEqual(stderr.getvalue().count("parent fin.txt:DOMAIN-WILDCARD: 2\n"), 1)
+                    self.assertIn("parent fin.txt:DOMAIN-KEYWORD: 1\n", stderr.getvalue())
+                    self.assertIn("parent fin-adb.txt:DOMAIN-WILDCARD: 1\n", stderr.getvalue())
+                    self.assertNotIn(": line ", stderr.getvalue())
+                    text = outputs[root / "parent" / dependency]
+                    parsed, messages = parse(text, purpose="block")
+                    self.assertEqual(messages, [])
+                    flag = "" if mode == "strip" else ",no-resolve"
+                    ip = "IP-CIDR,192.0.2.0/24" + flag
+                    wildcard = "DOMAIN-WILDCARD,api-*.example.com"
+                    digit = "DOMAIN-WILDCARD,api-[0-9].example.com"
+                    regexes = {"DOMAIN-REGEX,ads", r"DOMAIN-REGEX,^api\-.*\.example\.com\.?$",
+                               r"DOMAIN-REGEX,^api\-[0-9]\.example\.com\.?$"}
+                    exact = {"DOMAIN,keep.example.org"} if dependency != "fin-surge.txt" else set()
+                    regular = {"DOMAIN-KEYWORD,ads", wildcard}
+                    expected_rules = ({ip} | regular | {digit} | exact if dependency in ("fin.txt", "fin-surge.txt")
+                                      else {ip} | regular | {digit} | regexes | exact if dependency == "fin.yaml"
+                                      else {ip} | regular | exact if dependency == "fin-qx.txt" else exact)
+                    expected_parsed = set()
+                    for line in expected_rules:
+                        kind, value = line.split(",", 1)
+                        options = ("no-resolve",) if kind == "IP-CIDR" and flag else ()
+                        value = value.removesuffix(",no-resolve")
+                        domain_source = ("mihomo" if dependency == "fin.yaml" and kind in
+                                         {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"} else "qx" if
+                                         dependency == "fin-qx.txt" and kind.startswith("DOMAIN") else "surge")
+                        expected_parsed.add(Rule(kind, value, options, domain_source=domain_source))
+                    self.assertEqual(set(parsed), expected_parsed)
+                    surge_body = expected_rules if dependency != "fin.yaml" else {ip} | exact
+                    yaml_body = ({ip} | exact | regexes if dependency in ("fin.txt", "fin-surge.txt")
+                                 else expected_rules)
+                    qx_body = {"HOST,keep.example.org,LIST"} if exact else set()
+                    if dependency != "fin-surge-ds.txt":
+                        qx_body |= {"HOST-KEYWORD,ads,LIST", "HOST-WILDCARD,api-*.example.com,LIST",
+                                    "IP-CIDR,192.0.2.0/24,LIST" + flag}
+                    dns_body = {"keep.example.org"} if exact else set()
+                    if dependency != "fin-surge-ds.txt":
+                        dns_body |= {r"/^.*ads.*$/", r"/^api\-.*\.example\.com$/"}
+                    if dependency in ("fin.txt", "fin-surge.txt", "fin.yaml"):
+                        dns_body.add(r"/^api\-[0-9]\.example\.com$/" if dependency != "fin.yaml"
+                                     else r"/^api\-[0-9]\.example\.com\.?$/")
+                    if dependency == "fin.yaml":
+                        dns_body |= {"/ads/", r"/^api\-.*\.example\.com\.?$/"}
+                    bodies = {"fin.txt": surge_body, "fin-surge.txt": surge_body - exact,
+                              "fin.yaml": yaml_body, "fin-qx.txt": qx_body, "fin-adb.txt": dns_body,
+                              "fin-surge-ds.txt": {"keep.example.org"} if exact else set()}
+                    for name, expected_body in bodies.items():
+                        lines = outputs[root / "dependent" / name].splitlines()
+                        header = 7 if name == "fin-adb.txt" else 2 if name == "fin.yaml" else 1
+                        actual_body = {json.loads(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
+                        self.assertEqual(actual_body, expected_body, name)
+                        self.assertEqual(lines[6] if name == "fin-adb.txt" else lines[0],
+                                         f"! Total count: {len(expected_body)}" if name == "fin-adb.txt"
+                                         else f"# dependent rules: {len(expected_body)}", name)
+                    publish(outputs)
+                    published = {path: path.read_bytes() for path in outputs}
+                    (root / "rulesets.json").write_text(json.dumps([{
+                        "name": "dependent", "purpose": "block", "no_resolve": mode,
+                        "sources": [f"parent/{dependency}"], "whitelist": [],
+                    }]), encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as disk_stderr:
+                        disk = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(disk), {root / "dependent" / name for name in NAMES})
+                    self.assertNotIn(": line ", disk_stderr.getvalue())
+                    for name in NAMES:
+                        self.assertEqual(disk[root / "dependent" / name].splitlines()[6 if name == "fin-adb.txt" else 0:],
+                                         outputs[root / "dependent" / name].splitlines()[6 if name == "fin-adb.txt" else 0:])
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+                    publish(disk)
+                    self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in disk.items()))
+
+    def test_native_whitelist_does_not_erase_surge_or_unknown_qx_sources(self):
+        for mode in ("keep", "add", "strip"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+                root = Path(directory)
+                (root / "rulesets.json").write_text(json.dumps([
+                    {"name": "allow", "purpose": "block", "no_resolve": "keep",
+                     "sources": ["allow.yaml"], "whitelist": []},
+                    {"name": "filtered", "purpose": "block", "no_resolve": mode,
+                     "sources": ["surge.list", "qx.list", "native.yaml"], "whitelist": ["allow/fin.yaml"]},
+                ]), encoding="utf-8")
+                (root / "allow.yaml").write_text("payload:\n  - DOMAIN-KEYWORD,ad", encoding="utf-8")
+                (root / "surge.list").write_text("DOMAIN-KEYWORD,ads,REJECT\nDOMAIN,keep.example.org,REJECT", encoding="utf-8")
+                (root / "qx.list").write_text("HOST-KEYWORD,ads,REJECT", encoding="utf-8")
+                (root / "native.yaml").write_text("payload:\n  - DOMAIN-KEYWORD,ads", encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()):
+                    outputs = generate(root, lambda url: self.fail(url))
+                self.assertIn("DOMAIN-KEYWORD,ads\n", outputs[root / "filtered/fin.txt"])
+                self.assertIn("HOST-KEYWORD,ads,LIST\n", outputs[root / "filtered/fin-qx.txt"])
+                yaml = [json.loads(line[4:]) for line in outputs[root / "filtered/fin.yaml"].splitlines()[2:]]
+                self.assertIn("DOMAIN-KEYWORD,ads", yaml)
+                self.assertTrue(any(line.startswith("DOMAIN-REGEX,") and "ads" in line for line in yaml))
+                publish(outputs)
+                (root / "rulesets.json").write_text(json.dumps([{
+                    "name": "filtered", "purpose": "block", "no_resolve": mode,
+                    "sources": ["surge.list", "qx.list", "native.yaml"], "whitelist": ["allow/fin.yaml"],
+                }]), encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()):
+                    disk = generate(root, lambda url: self.fail(url))
+                for name in NAMES:
+                    self.assertEqual(disk[root / "filtered" / name].splitlines()[6 if name == "fin-adb.txt" else 0:],
+                                     outputs[root / "filtered" / name].splitlines()[6 if name == "fin-adb.txt" else 0:])
+
+
 class DomainSetSuffixGenerateTests(unittest.TestCase):
     three_domains = {
         "fin.txt": ("DOMAIN,example.org", "DOMAIN-SUFFIX,com", "DOMAIN-SUFFIX,example.net"),
@@ -74,7 +281,7 @@ class DomainSetSuffixGenerateTests(unittest.TestCase):
             self.assertEqual(len(actual), len(body), (group, name))
             if name in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-surge.txt", "fin-surge-ds.txt"):
                 parsed, messages = parse(text, purpose=purpose)
-                expected = {Rule(*line.split(",", 1)) for line in bodies["fin.txt"]}
+                expected = {Rule(*line.split(",", 1), domain_source="qx" if name == "fin-qx.txt" else "surge") for line in bodies["fin.txt"]}
                 self.assertEqual(set(parsed), set() if name == "fin-surge.txt" else expected)
                 self.assertEqual(messages, [])
 
@@ -248,13 +455,13 @@ class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
                 expressions.append(("NOT", f"((NOT,(({leaf},{payload}))))"))
         native_lines = [f"{kind},{value}" for kind, value in expressions]
         document = "payload:\n" + "".join("  - " + json.dumps(line) + "\n" for line in native_lines)
-        document += "  - DOMAIN-KEYWORD,keep\n"
+        document += "  - DOMAIN-KEYWORD,keep\n  - NETWORK,tcp\n"
         original, messages = parse(document, purpose="proxy")
         self.assertEqual(messages, [])
-        self.assertEqual(len(original), len(expressions) + 1)
+        self.assertEqual(len(original), len(expressions) + 2)
         for mode in ("keep", "add", "strip"):
             expected = {line.replace(",no-resolve", "") if mode == "strip" else line for line in native_lines}
-            expected.add("DOMAIN-KEYWORD,keep")
+            expected.add("NETWORK,tcp")
             for dependency in ("fin.txt", "fin-surge.txt", "fin.yaml"):
                 with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT) as directory:
                     root = Path(directory)
@@ -271,13 +478,15 @@ class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
                     publish(outputs)
                     for group in ("source", "dependent"):
                         yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
-                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, expected)
+                        neighbors = {"DOMAIN-KEYWORD,keep"} if group == "source" or dependency == "fin.yaml" else set()
+                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, expected | neighbors)
                         parsed, warnings = parse(yaml, purpose="proxy")
                         self.assertEqual(warnings, [])
                         self.assertTrue(all(rule.native_fields for rule in parsed if rule.kind in {"AND", "OR", "NOT"}))
                         for name in ("fin.txt", "fin-surge.txt"):
                             text = (root / group / name).read_text(encoding="utf-8")
                             self.assertEqual(text.splitlines()[0], f"# {group} rules: {len(expected)}")
+                            self.assertNotIn("DOMAIN-KEYWORD,keep", text)
                             self.assertFalse(any(f"{group} {name}:{kind}:" in stderr.getvalue()
                                                  for kind in ("AND", "OR", "NOT")))
                         for name in NAMES:
@@ -292,7 +501,8 @@ class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
                     publish(disk_outputs)
                     self.assertEqual(set(disk_outputs), {root / "disk" / name for name in NAMES})
                     self.assertEqual({json.loads(line[4:]) for line in
-                                      (root / "disk" / "fin.yaml").read_text(encoding="utf-8").splitlines()[2:]}, expected)
+                                      (root / "disk" / "fin.yaml").read_text(encoding="utf-8").splitlines()[2:]},
+                                     expected | ({"DOMAIN-KEYWORD,keep"} if dependency == "fin.yaml" else set()))
                     self.assertNotIn(": line ", disk_stderr.getvalue())
 
 
@@ -330,11 +540,11 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                     native = "payload:\n  - 'AND,((PROCESS-NAME,\"Game\"),(DOMAIN,x.example.com))'\n"
                     native += "".join(
                         "  - " + json.dumps(f"{kind},{value}") + "\n" for kind, value in expressions[1:]
-                    ) + '  - "DOMAIN-KEYWORD,keep"\n'
+                    ) + '  - "DOMAIN-KEYWORD,keep"\n  - "NETWORK,tcp"\n'
                     (root / "native.yaml").write_text(native, encoding="utf-8")
                     self.assertEqual(parse(native, purpose="proxy"), (
                         [Rule(kind, value, literal_process=True, native_fields=True) for kind, value in expressions]
-                        + [Rule("DOMAIN-KEYWORD", "keep")], [],
+                        + [Rule("DOMAIN-KEYWORD", "keep", domain_source="mihomo"), Rule("NETWORK", "tcp")], [],
                     ))
                     with contextlib.redirect_stderr(io.StringIO()) as stderr:
                         outputs = generate(root, lambda url: self.fail(url))
@@ -344,18 +554,21 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                     self.assertTrue(all(path.is_file() and path.read_text(encoding="utf-8") == text
                                         for path, text in outputs.items()))
                     for group, values in (("dependent", expected), ("source", expected)):
+                        neighbors = {"DOMAIN-KEYWORD,keep"} if group == "source" or dependency == "fin.yaml" else set()
                         yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
                         self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]},
                                          {f"{kind},{value}" for kind, value in values}
-                                         | {"DOMAIN-KEYWORD,keep"})
+                                         | {"NETWORK,tcp"} | neighbors)
                         parsed, messages = parse(yaml, purpose="proxy")
                         self.assertEqual(messages, [])
                         self.assertEqual(set(parsed), {
                             Rule(kind, value, literal_process=True, native_fields=True) for kind, value in values
-                        } | {Rule("DOMAIN-KEYWORD", "keep")})
+                        } | {Rule("NETWORK", "tcp")} |
+                            ({Rule("DOMAIN-KEYWORD", "keep", domain_source="mihomo")} if neighbors else set()))
                         for name in ("fin.txt", "fin-surge.txt"):
                             surge = (root / group / name).read_text(encoding="utf-8")
                             self.assertIn('AND,((PROCESS-NAME,\'"Game"\'),(DOMAIN,x.example.com))\n', surge)
+                            self.assertNotIn("DOMAIN-KEYWORD,keep", surge)
                             self.assertNotIn(f"{group} {name}:AND:", stderr.getvalue())
                             self.assertNotIn(f"{group} {name}:OR:", stderr.getvalue())
                             self.assertNotIn(f"{group} {name}:NOT:", stderr.getvalue())
@@ -403,12 +616,13 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                 (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
                 document = "payload:\n" + "".join(
                     "  - " + json.dumps(f"{kind},{value}") + "\n" for kind, value in invalid
-                ) + "  - " + json.dumps(safe) + '\n  - "DOMAIN-KEYWORD,keep"\n'
+                ) + "  - " + json.dumps(safe) + '\n  - "DOMAIN-KEYWORD,keep"\n  - "NETWORK,tcp"\n'
                 (root / "native.yaml").write_text(document, encoding="utf-8")
                 original = [Rule(kind, value, literal_process=True, native_fields=True)
                             for kind, value in invalid]
                 self.assertEqual(parse(document, purpose="proxy"), (
-                    original + [Rule("OR", safe[3:], native_fields=True), Rule("DOMAIN-KEYWORD", "keep")], [],
+                    original + [Rule("OR", safe[3:], native_fields=True),
+                                Rule("DOMAIN-KEYWORD", "keep", domain_source="mihomo"), Rule("NETWORK", "tcp")], [],
                 ))
                 with contextlib.redirect_stderr(io.StringIO()) as stderr:
                     outputs = generate(root, lambda url: self.fail(url))
@@ -420,7 +634,7 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                 for group in ("source", "txt", "surge", "yaml"):
                     for name in ("fin.txt", "fin-surge.txt"):
                         self.assertEqual((root / group / name).read_text(encoding="utf-8"),
-                                         f"# {group} rules: 2\nDOMAIN-KEYWORD,keep\n{safe}\n")
+                                         f"# {group} rules: 2\n{safe}\nPROTOCOL,TCP\n")
                         for kind, count in (("AND", 3), ("OR", 2), ("NOT", 2)):
                             diagnostic = f"{group} {name}:{kind}:"
                             if group in ("source", "yaml"):
@@ -428,15 +642,16 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                             else:
                                 self.assertNotIn(diagnostic, stderr.getvalue())
                     yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
-                    expected = {safe, "DOMAIN-KEYWORD,keep"}
+                    expected = {safe, "NETWORK,tcp"}
                     if group in ("source", "yaml"):
-                        expected |= {f"{kind},{value}" for kind, value in invalid}
+                        expected |= {f"{kind},{value}" for kind, value in invalid} | {"DOMAIN-KEYWORD,keep"}
                     self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, expected)
                     parsed, messages = parse(yaml, purpose="proxy")
                     self.assertEqual(messages, [])
                     self.assertEqual(set(parsed), {
-                        Rule("OR", safe[3:], native_fields=True), Rule("DOMAIN-KEYWORD", "keep"),
-                    } | (set(original) if group in ("source", "yaml") else set()))
+                        Rule("OR", safe[3:], native_fields=True), Rule("NETWORK", "tcp"),
+                    } | (set(original) | {Rule("DOMAIN-KEYWORD", "keep", domain_source="mihomo")}
+                         if group in ("source", "yaml") else set()))
                 self.assertNotIn(": line ", stderr.getvalue())
                 self.assertNotIn("no routable rules", stderr.getvalue())
 
@@ -1052,7 +1267,7 @@ class GenerateTests(unittest.TestCase):
                 "fin-qx.txt": "# a3 rules: 1\nHOST-SUFFIX,ads.example.org,LIST\n",
                 "fin.yaml": '# a3 rules: 5\npayload:\n'
                             '  - "AND,((IP-CIDR,198.51.100.0/24,no-resolve),(DOMAIN,track.example.net))"\n'
-                            '  - "DOMAIN-REGEX,^api\\\\-[0-9]\\\\.example\\\\.org$"\n'
+                            '  - "DOMAIN-REGEX,^api\\\\-[0-9]\\\\.example\\\\.org\\\\.?$"\n'
                             '  - "DOMAIN-SUFFIX,ads.example.org"\n'
                             '  - "PROCESS-NAME,Foo*Bar"\n'
                             '  - "SRC-IP-CIDR,192.0.2.0/24"\n',

@@ -15,6 +15,7 @@ class Rule:
     allow: bool = False
     literal_process: bool = False
     native_fields: bool = False
+    domain_source: str = "surge"
 
     def __post_init__(self):
         kind = self.kind.upper()
@@ -39,7 +40,8 @@ _SIMPLE = {"IP-ASN", "SRC-IP-ASN", "GEOIP", "SRC-GEOIP", "GEOSITE",
            "HOSTNAME-TYPE", "SUBNET", "CELLULAR-RADIO", "CELLULAR-CARRIER",
            "DOMAIN-KEYWORD"}
 _LOGICAL = {"AND", "OR", "NOT"}
-_QX_INTERFACE_OPTIONS = {"force-cellular", "multi-interface", "multi-interface-balance", "via-interface=pdp_ip0"}
+_QX_INTERFACE_OPTIONS = {"force-cellular", "multi-interface", "multi-interface-balance",
+                         "via-interface=pdp_ip0", "via-interface=en1"}
 _QX_INTERFACE_KINDS = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
                        "IP-CIDR", "IP-CIDR6", "USER-AGENT", "IP-ASN", "GEOIP"}
 _BLOCK_ACTIONS = {"REJECT", "REJECT-DROP", "REJECT-NO-DROP", "REJECT-TINYGIF",
@@ -1153,22 +1155,21 @@ def _normalize_logic(kind: str, value: str, ignored_no_resolve: list[str] | None
     return normalized[len(kind) + 2:-1] if normalized is not None else None
 
 
-def _has_process_name(kind: str, value: str, native_fields: bool = False) -> bool:
+def _condition_kinds(kind: str, value: str, native_fields: bool = False) -> set[str]:
     if kind not in _LOGICAL:
-        return kind == "PROCESS-NAME"
+        return {kind}
     expression = f"({kind},{value})"
     groups, commas = {}, {} if native_fields else None
     list(_delimiters(expression, native_fields=native_fields, groups=groups, commas=commas))
     trim = ' ' if native_fields else None
-    pending = [(0, len(expression))]
+    pending, kinds = [(0, len(expression))], set()
     while pending:
         begin, end = pending.pop()
         comma = expression.find(',', begin + 1, end - 1)
         kind = expression[begin + 1:comma].strip(trim)
         if native_fields:
             kind = kind.upper()
-        if kind == "PROCESS-NAME":
-            return True
+        kinds.add(kind)
         if kind not in _LOGICAL:
             continue
         payload = expression[comma + 1:end - 1]
@@ -1178,7 +1179,11 @@ def _has_process_name(kind: str, value: str, native_fields: bool = False) -> boo
         if children is None:
             raise ValueError("invalid logical expression")
         pending.extend(reversed(children[0]))
-    return False
+    return kinds
+
+
+def _has_process_name(kind: str, value: str, native_fields: bool = False) -> bool:
+    return "PROCESS-NAME" in _condition_kinds(kind, value, native_fields)
 
 
 _YAML_ESCAPES = dict(zip('0abtnvfre\t "\'\\N_LP',
@@ -1390,6 +1395,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         allow = line.startswith('@@')
         options = ()
         source_kind = ""
+        domain_source = "surge"
         abp = re.fullmatch(r"(?:@@)?\|\|([^|^/$]+)\^", line)
         bare_network = None
         if '/' in line and ',' not in line:
@@ -1411,6 +1417,10 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             kind, value = parts[:2]
             if not yaml_rule:
                 value = _field_value(value)
+            if kind.upper() in {"HOST", "HOST-SUFFIX", "HOST-KEYWORD", "HOST-WILDCARD"}:
+                domain_source = "qx"
+            elif yaml_rule and kind.upper() in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
+                domain_source = "mihomo"
             kind = {
                 "HOST": "DOMAIN", "HOST-SUFFIX": "DOMAIN-SUFFIX",
                 "HOST-WILDCARD": "DOMAIN-WILDCARD", "HOST-KEYWORD": "DOMAIN-KEYWORD",
@@ -1521,7 +1531,11 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             warnings.extend(f"line {number}: unsupported no-resolve for {child_kind}"
                             for child_kind in ignored_no_resolve)
             # 原生尾字段删除后可能改变字面括号范围，类型标志使用已验证的原始字段。
-            literal_process = yaml_rule and _has_process_name(kind, value, yaml_rule)
+            if yaml_rule:
+                kinds = _condition_kinds(kind, value, yaml_rule)
+                literal_process = "PROCESS-NAME" in kinds
+                if kinds & {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
+                    domain_source = "mihomo"
             value = normalized
         elif not (_valid_domain(kind, value) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
             warnings.append(f"line {number}: invalid domain {value}")
@@ -1535,17 +1549,19 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         else:
             rules.append(Rule(kind, value, options, allow=allow,
                               literal_process=literal_process,
-                              native_fields=yaml_rule and kind in _LOGICAL))
+                              native_fields=yaml_rule and kind in _LOGICAL,
+                              domain_source=domain_source))
     return rules, warnings
 
 
 def parse_whitelist(text: str) -> list[Rule]:
     parsed, messages = parse(text, purpose="block", ignore_policy=True)
-    supported = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
+    supported = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-REGEX",
                  "IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-ASN", "GEOIP",
                  "SRC-IP-ASN", "SRC-GEOIP", "IP-SUFFIX", "SRC-IP-SUFFIX"}
     whitelist = [Rule(rule.kind, rule.value, literal_process=rule.literal_process,
-                      native_fields=rule.native_fields) for rule in parsed if rule.kind in supported]
+                      native_fields=rule.native_fields, domain_source=rule.domain_source)
+                 for rule in parsed if rule.kind in supported]
     if not parsed and not messages:
         raise ValueError("no rules")
     if not whitelist and messages:
@@ -1556,9 +1572,12 @@ def parse_whitelist(text: str) -> list[Rule]:
 
 
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
-    exact, suffixes, keywords, wildcards, typed = set(), set(), set(), set(), set()
+    domain_groups, typed = {}, set()
+    empty = (set(), set(), set(), set())
     networks = {"src": set(), "dst": set()}
     for entry in whitelist:
+        exact, suffixes, keywords, wildcards = domain_groups.setdefault(
+            entry.domain_source, (set(), set(), set(), set()))
         if entry.kind == "DOMAIN":
             exact.add(entry.value)
         elif entry.kind == "DOMAIN-SUFFIX":
@@ -1572,17 +1591,20 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
             networks[direction].add(ipaddress.ip_network(entry.value, strict=False))
         elif entry.kind in {"IP-ASN", "GEOIP", "IP-SUFFIX", "SRC-IP-ASN", "SRC-GEOIP", "SRC-IP-SUFFIX"}:
             typed.add((entry.kind, entry.value.upper()))
-    plain_wildcards = [pattern for pattern in wildcards if '[' not in pattern]
+    plain_wildcards = {source: [pattern for pattern in group[3] if '[' not in pattern]
+                       for source, group in domain_groups.items()}
     kept = []
     for rule in rules:
         if rule.allow:
             kept.append(rule)
             continue
         kind, value = rule.kind, rule.value
+        exact, suffixes, keywords, wildcards = domain_groups.get(rule.domain_source, empty)
         if kind == "DOMAIN" or (kind == "DOMAIN-WILDCARD" and not any(c in value for c in "*?[]")):
             covered = (value in exact or _has_parent(value, suffixes) or
                        any(keyword in value for keyword in keywords) or
-                       any(fnmatchcase(value, pattern) for pattern in plain_wildcards))
+                       any(fnmatchcase(value, pattern)
+                           for pattern in plain_wildcards.get(rule.domain_source, ())))
         elif kind == "DOMAIN-SUFFIX":
             covered = _has_parent(value, suffixes) or any(keyword in value for keyword in keywords)
         elif kind == "DOMAIN-KEYWORD":
@@ -1625,11 +1647,11 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
     suffixes = {}
     for rule in unique:
         if rule.kind == "DOMAIN-SUFFIX":
-            suffixes.setdefault((rule.allow, rule.options), set()).add(rule.value)
+            suffixes.setdefault((rule.allow, rule.options, rule.domain_source), set()).add(rule.value)
     keywords = {}
     for rule in unique:
         if rule.kind == "DOMAIN-KEYWORD":
-            keywords.setdefault((rule.allow, rule.options), set()).add(rule.value)
+            keywords.setdefault((rule.allow, rule.options, rule.domain_source), set()).add(rule.value)
     kept = []
     for rule in unique:
         if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
@@ -1638,7 +1660,7 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 last_wildcard = max(candidate.rfind(char) for char in '*?]')
                 tail = candidate[last_wildcard + 1:]
                 candidate = tail.partition('.')[2]
-            group = suffixes.get((rule.allow, rule.options), set())
+            group = suffixes.get((rule.allow, rule.options, rule.domain_source), set())
             while candidate:
                 if candidate in group and (rule.kind != "DOMAIN-SUFFIX" or candidate != rule.value):
                     break
@@ -1646,7 +1668,7 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
             if candidate:
                 continue
         if rule.kind == "DOMAIN-KEYWORD":
-            group = keywords[(rule.allow, rule.options)]
+            group = keywords[(rule.allow, rule.options, rule.domain_source)]
             if any(rule.value[start:end] in group
                    for start in range(len(rule.value))
                    for end in range(start + 1, len(rule.value) + 1)
@@ -1659,10 +1681,10 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
         if rule.kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
             network = ipaddress.ip_network(rule.value, strict=False)
             kind = "IP-CIDR6" if rule.kind == "IP-CIDR" and network.version == 6 else rule.kind
-            networks.setdefault((kind, network.version, rule.options, rule.allow, rule.literal_process, rule.native_fields), []).append(network)
+            networks.setdefault((kind, network.version, rule.options, rule.allow, rule.literal_process, rule.native_fields, rule.domain_source), []).append(network)
         else:
             others.append(rule)
-    for (kind, _, options, allow, literal_process, native_fields), group in networks.items():
-        others.extend(Rule(kind, str(network), options, allow, literal_process, native_fields)
+    for (kind, _, options, allow, literal_process, native_fields, domain_source), group in networks.items():
+        others.extend(Rule(kind, str(network), options, allow, literal_process, native_fields, domain_source)
                       for network in ipaddress.collapse_addresses(group))
-    return sorted(others, key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow, rule.literal_process, rule.native_fields))
+    return sorted(others, key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow, rule.literal_process, rule.native_fields, rule.domain_source))

@@ -57,8 +57,25 @@ def _surge_value(value: str, *, source_regex: bool = False) -> str:
     return f'"{escaped}"'
 
 
+def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tuple[str, str | None]:
+    if kind not in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
+        return kind, value
+    if supported is SURGE_TYPES:
+        if source == "mihomo" and (re.search(r"[a-z]", value, re.I) or
+                                    kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")):
+            return kind, None
+    elif supported is MIHOMO_TYPES and source == "surge":
+        if kind == "DOMAIN-KEYWORD":
+            # Surge 忽略 hostname 末尾根点；keyword 的末尾点必须位于 hostname 内部。
+            return "DOMAIN-REGEX", re.escape(value.lower()) + (r"(?=.)" if value.endswith(".") else "")
+        pattern = _wildcard_regex(value.lower().removesuffix("."))
+        return "DOMAIN-REGEX", pattern[:-1] + r"\.?$" if pattern is not None else None
+    return kind, value
+
+
 def _logical_value(value: str, operator: str, supported: set[str], no_resolve: str = "keep",
-                   literal_process: bool = False, native_fields: bool = False) -> str | None:
+                   literal_process: bool = False, native_fields: bool = False,
+                   domain_source: str = "surge") -> str | None:
     if operator == "NOT" and value.startswith("(") and not value.startswith("(("):
         value = f"({value})"
     if not value.startswith("((") or not value.endswith("))"):
@@ -83,7 +100,8 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
         if kind in LOGICAL:
             if options:
                 return None
-            payload = _logical_value(payload, kind, supported, no_resolve, literal_process, native_fields)
+            payload = _logical_value(payload, kind, supported, no_resolve, literal_process,
+                                     native_fields, domain_source)
             if payload is None:
                 return None
         else:
@@ -94,6 +112,9 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
             if quote:
                 payload = _field_value(payload)
             if not payload.strip():
+                return None
+            kind, payload = _domain_value(kind, payload, domain_source, supported)
+            if payload is None:
                 return None
             if supported is SURGE_TYPES:
                 if (kind == "PROCESS-NAME" and literal_process and
@@ -132,11 +153,6 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
                                 else "PROCESS-PATH")
                     elif any(char in payload for char in "*?"):
                         kind = "PROCESS-NAME-WILDCARD"
-                if kind == "DOMAIN-WILDCARD" and any(char in payload for char in "[]"):
-                    payload = _wildcard_regex(payload)
-                    if payload is None:
-                        return None
-                    kind = "DOMAIN-REGEX"
                 if kind == "IP-CIDR" and ":" in payload:
                     kind = "IP-CIDR6"
                 if kind.startswith("PROCESS-") and "," in payload and not kind.endswith("-REGEX"):
@@ -182,6 +198,8 @@ def _dns_pattern(rule: Rule) -> str | None:
     if rule.kind == "DOMAIN-KEYWORD":
         return f"/^.*{re.escape(rule.value)}.*$/"
     if rule.kind == "DOMAIN-WILDCARD":
+        if rule.domain_source != "surge" and any(char in rule.value for char in "[]"):
+            return None
         pattern = _wildcard_regex(rule.value)
         return f"/{pattern}/" if pattern is not None else None
     if rule.kind == "DOMAIN-REGEX":
@@ -304,18 +322,18 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
-    for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process, item.native_fields)):
+    for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process, item.native_fields, item.domain_source)):
         kind, value = rule.kind, rule.value
         interface_options = any(option in _QX_INTERFACE_OPTIONS for option in rule.options)
         if interface_options:
             rule = Rule(kind, value, tuple(option for option in rule.options
                                            if option not in _QX_INTERFACE_OPTIONS),
-                        rule.allow, rule.literal_process, rule.native_fields)
+                        rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
         if no_resolve == "strip":
             rule = Rule(kind, value, tuple(option for option in rule.options if option != "no-resolve"),
-                        rule.allow, rule.literal_process, rule.native_fields)
+                        rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
         elif no_resolve == "add" and not rule.allow and kind in NO_RESOLVE_TYPES:
-            rule = Rule(kind, value, rule.options + ("no-resolve",), rule.allow, rule.literal_process, rule.native_fields)
+            rule = Rule(kind, value, rule.options + ("no-resolve",), rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
         if "\r" in value or "\n" in value:
             for name in FILES:
                 skipped[f"{name}:{kind}"] += 1
@@ -344,8 +362,11 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST,no-resolve")
                     emitted.add("fin-qx.txt")
         else:
-            surge_value = (_logical_value(value, kind, SURGE_TYPES, no_resolve, rule.literal_process, rule.native_fields)
-                           if logical else _surge_value(value, source_regex=kind == "URL-REGEX"))
+            _, surge_payload = _domain_value(kind, value, rule.domain_source, SURGE_TYPES)
+            surge_value = (_logical_value(value, kind, SURGE_TYPES, no_resolve, rule.literal_process,
+                                          rule.native_fields, rule.domain_source) if logical else
+                           _surge_value(surge_payload, source_regex=kind == "URL-REGEX")
+                           if surge_payload is not None else None)
             if ((kind in SURGE_TYPES or kind == "PROCESS-NAME-WILDCARD" or
                     kind in {"PROCESS-PATH", "PROCESS-PATH-WILDCARD"} and value.startswith('/') or
                     kind == "NETWORK" and value.upper() in {"TCP", "UDP"}) and surge_value is not None
@@ -372,17 +393,18 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     qx_kind = "IP6-CIDR"
                 lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST")
                 emitted.add("fin-qx.txt")
-            mihomo_kind = "DST-PORT" if kind == "DEST-PORT" else kind
+            mihomo_kind, mihomo_value = _domain_value(kind, value, rule.domain_source, MIHOMO_TYPES)
+            if kind == "DEST-PORT":
+                mihomo_kind = "DST-PORT"
             if kind == "PROCESS-NAME" and not rule.literal_process:
                 if value.startswith("/"):
                     mihomo_kind = ("PROCESS-PATH-WILDCARD" if any(char in value for char in "*?")
                                    else "PROCESS-PATH")
                 elif any(char in value for char in "*?"):
                     mihomo_kind = "PROCESS-NAME-WILDCARD"
-            mihomo_value = (_logical_value(value, kind, MIHOMO_TYPES, no_resolve, rule.literal_process, rule.native_fields)
-                            if logical else value)
-            if kind == "DOMAIN-WILDCARD" and any(char in value for char in "[]"):
-                mihomo_kind, mihomo_value = "DOMAIN-REGEX", _wildcard_regex(value)
+            if logical:
+                mihomo_value = _logical_value(value, kind, MIHOMO_TYPES, no_resolve, rule.literal_process,
+                                              rule.native_fields, rule.domain_source)
             if kind == "SRC-IP":
                 address = ipaddress.ip_address(value)
                 mihomo_kind, mihomo_value = "SRC-IP-CIDR", f"{address}/{address.max_prefixlen}"
@@ -408,7 +430,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 skipped[f"{name}:{kind}"] += 1
     if purpose == "block":
         for rule in sorted(whitelist, key=lambda item: (item.kind, item.value)):
-            if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
+            if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-REGEX"}:
                 pattern = _dns_pattern(rule) if not any(c in rule.value for c in "\r\n") else None
                 if pattern is None:
                     skipped[f"fin-adb.txt:{rule.kind}"] += 1

@@ -14,6 +14,78 @@ def _quote_matcher(value):
     return f"{quote}{value}{quote}"
 
 
+class DomainProvenanceRuleTests(unittest.TestCase):
+    def test_regex_whitelist_keeps_valid_matchers_without_guessing_coverage(self):
+        regexes = ("ad", r"^api\-.*\.example\.com\.?$", r"^api\-[0-9]\.example\.com\.?$",
+                   r"^(?=ads)ads\.example\.com$")
+        expected = [Rule("DOMAIN-REGEX", value) for value in regexes]
+        for source in ("\n".join(f"DOMAIN-REGEX,{value},REJECT" for value in regexes),
+                       "payload:\n" + "\n".join("  - DOMAIN-REGEX," + value for value in regexes)):
+            with self.subTest(source=source):
+                self.assertEqual(rules.parse_whitelist(source), expected)
+                blocked = [Rule("DOMAIN", "ads.example.com"), Rule("DOMAIN", "api-7.example.com")]
+                self.assertEqual(rules.exclude_covered(blocked, expected), blocked)
+        with self.assertRaisesRegex(ValueError, "invalid DOMAIN-REGEX"):
+            rules.parse_whitelist("payload:\n  - DOMAIN-REGEX,*ads")
+
+    def test_surge_native_and_unknown_qx_matchers_remain_distinct(self):
+        for kind, value, qx in (("DOMAIN-KEYWORD", "ads", "HOST-KEYWORD"),
+                                ("DOMAIN-WILDCARD", "api-*.example.com", "HOST-WILDCARD"),
+                                ("DOMAIN-WILDCARD", "api-[0-9].example.com", "HOST-WILDCARD")):
+            with self.subTest(kind=kind, value=value):
+                surge, messages = parse(f"{kind},{value},REJECT", purpose="block")
+                native, native_messages = parse(f"payload:\n  - {kind},{value}", purpose="block")
+                unknown, qx_messages = parse(f"{qx},{value},REJECT", purpose="block")
+                self.assertEqual(messages + native_messages + qx_messages, [])
+                self.assertNotEqual(surge, native)
+                self.assertNotEqual(unknown, surge)
+                self.assertNotEqual(unknown, native)
+                self.assertEqual(len(normalize(surge + native + unknown + surge)), 3)
+                self.assertFalse(any(rule.native_fields or rule.literal_process
+                                     for rule in surge + native + unknown))
+
+    def test_whitelist_coverage_keeps_case_direction_and_unknown_qx(self):
+        surge, _ = parse("DOMAIN-KEYWORD,ads,REJECT", purpose="block")
+        native, _ = parse("payload:\n  - DOMAIN-KEYWORD,ads", purpose="block")
+        qx, _ = parse("HOST-KEYWORD,ads,REJECT", purpose="block")
+        native_allow = rules.parse_whitelist("payload:\n  - DOMAIN-KEYWORD,ad")
+        surge_allow = rules.parse_whitelist("DOMAIN-KEYWORD,ad,DIRECT")
+        qx_allow = rules.parse_whitelist("HOST-KEYWORD,ad,DIRECT")
+        self.assertEqual(rules.exclude_covered(surge, native_allow), surge)
+        self.assertEqual(rules.exclude_covered(native, native_allow), [])
+        self.assertEqual(rules.exclude_covered(surge, surge_allow), [])
+        self.assertEqual(rules.exclude_covered(qx, surge_allow + native_allow), qx)
+        self.assertEqual(rules.exclude_covered(surge + native, qx_allow), surge + native)
+        self.assertEqual(rules.exclude_covered(qx, qx_allow), [])
+        self.assertEqual(len(normalize(surge + native_allow)), 2)
+        for source in ("payload:\n  - DOMAIN-WILDCARD,api-[0-9].example.com",
+                       "HOST-WILDCARD,api-[0-9].example.com,REJECT"):
+            matcher, _ = parse(source, purpose="block")
+            self.assertEqual(rules.exclude_covered(surge + matcher,
+                             rules.parse_whitelist("DOMAIN-WILDCARD,api-[0-9].example.com")),
+                             surge + matcher)
+
+    def test_unknown_qx_exact_and_suffix_do_not_prove_cross_source_coverage(self):
+        for kind, qx in (("DOMAIN", "HOST"), ("DOMAIN-SUFFIX", "HOST-SUFFIX")):
+            with self.subTest(kind=kind):
+                known, _ = parse(f"{kind},example.com,REJECT", purpose="block")
+                unknown, _ = parse(f"{qx},example.com,REJECT", purpose="block")
+                self.assertNotEqual(known, unknown)
+                self.assertEqual(len(normalize(known + unknown)), 2)
+                self.assertEqual(rules.exclude_covered(known, rules.parse_whitelist(
+                    f"{qx},example.com,DIRECT")), known)
+
+    def test_en1_is_known_without_accepting_unknown_interfaces(self):
+        self.assertEqual(parse("HOST-SUFFIX,example.com,PROXY,via-interface=en1", purpose="proxy")[1], [])
+        parsed, _ = parse("HOST-SUFFIX,example.com,PROXY,via-interface=en1", purpose="proxy")
+        self.assertEqual(len(parsed), 1)
+        self.assertEqual(parsed[0].options, ("via-interface=en1",))
+        for option in ("via-interface=en0", "via-interface=unknown", "unknown-option"):
+            with self.subTest(option=option):
+                self.assertEqual(parse(f"HOST-SUFFIX,example.com,PROXY,{option}", purpose="proxy"),
+                                 ([], ["line 1: unexpected fields"]))
+
+
 class DomainSetSuffixParserTests(unittest.TestCase):
     def test_single_label_domain_set_suffix_uses_suffix_validation(self):
         for purpose in ("direct", "block", "proxy"):
@@ -417,7 +489,8 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
     def test_ordinary_tail_comments_are_isolated_before_field_scanning(self):
         for kind, value in (("DOMAIN", "foo.example"), ("PROCESS-NAME", "Game #1"),
                             ("IP-CIDR", "192.0.2.0/24"), ("HOST", "foo.example")):
-            expected = Rule("DOMAIN" if kind == "HOST" else kind, value)
+            expected = Rule("DOMAIN" if kind == "HOST" else kind, value,
+                            domain_source="qx" if kind == "HOST" else "surge")
             for action, purpose in (("PROXY", "proxy"), ("LIST", "proxy"), ("DIRECT", "direct"),
                                     ("REJECT", "block"), ("My Proxy [", "proxy")):
                 for marker in ("#", ";", "//"):
@@ -566,6 +639,29 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
 
 
 class DeepLogicalParserTests(unittest.TestCase):
+    def test_deep_domain_types_share_traversal_and_ignore_matcher_text(self):
+        leaves = (('(DOMAIN-KEYWORD,Ads)', True),
+                  ('(DOMAIN-WILDCARD,api-[0-9].example.com)', True),
+                  ('(DOMAIN-WILDCARD,api-*.example.com)', True),
+                  ('(DOMAIN-REGEX,[(]DOMAIN-WILDCARD,Fake[)])', False),
+                  ('(PROCESS-NAME-REGEX,DOMAIN-KEYWORD)', False))
+        for depth in (600, 1000):
+            for native in (False, True):
+                for leaf, has_domain in leaves:
+                    with self.subTest(depth=depth, native=native, leaf=leaf):
+                        self.assert_subprocess(f'''
+condition = nest({depth}, {leaf!r}, mixed=True)
+kind, value = condition[1:-1].split(',', 1)
+expected = Rule(kind, value, native_fields={native},
+                domain_source={'mihomo' if native and has_domain else 'surge'!r})
+source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if {native} else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+parsed, messages = parse(source, purpose='block')
+assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
+assert normalize(parsed * 2) == normalize([expected, keep])
+assert parse_whitelist(source) == [keep]
+assert not expected.literal_process
+''')
+
     def test_native_ignored_tail_parentheses_preserve_process_provenance(self):
         for depth in (1, 600, 1000):
             for kind in ('PROCESS-NAME', 'PROCESS-PATH', 'IN-NAME'):
@@ -812,7 +908,7 @@ class ParseTests(unittest.TestCase):
             "body{",
             purpose="block",
         )
-        self.assertIn(Rule("DOMAIN-SUFFIX", "example.com"), rules)
+        self.assertIn(Rule("DOMAIN-SUFFIX", "example.com", domain_source="qx"), rules)
         self.assertIn(Rule("DOMAIN-WILDCARD", "api-*.example.com"), rules)
         self.assertIn(Rule("DOMAIN", "ads.test"), rules)
         self.assertEqual(len(rules), 3)
@@ -1148,40 +1244,40 @@ class ParseTests(unittest.TestCase):
             with self.subTest(purpose=purpose):
                 rules, warnings = parse(source, purpose=purpose)
                 self.assertEqual(rules, [
-                    Rule("DOMAIN", expected), Rule("DOMAIN", "unassigned.example.com")
+                    Rule("DOMAIN", expected, domain_source="qx" if purpose == "block" else "surge"), Rule("DOMAIN", "unassigned.example.com")
                 ])
                 self.assertEqual(len(warnings), 2)
 
     def test_adblock_named_policy_is_only_accepted_in_block_group(self):
         source = "HOST-SUFFIX,ads.example.com,ADBLOCK"
-        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com", domain_source="qx")])
         self.assertEqual(parse(source, purpose="direct")[0], [])
 
     def test_advertisinglite_named_policy_is_only_accepted_in_block_group(self):
         source = "HOST-SUFFIX,ads.example.com,AdvertisingLite"
-        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com", domain_source="qx")])
         self.assertEqual(parse(source, purpose="direct")[0], [])
 
     def test_hijacking_named_policy_is_only_accepted_in_block_group(self):
         source = "HOST-SUFFIX,hijack.example.com,Hijacking"
-        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "hijack.example.com")])
+        self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "hijack.example.com", domain_source="qx")])
         self.assertEqual(parse(source, purpose="direct")[0], [])
 
     def test_curated_privacy_and_zhihu_ads_policies_are_block_only(self):
         for policy in ("Privacy", "ZhihuAds"):
             with self.subTest(policy=policy):
                 source = f"HOST-SUFFIX,ads.example.com,{policy}"
-                self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+                self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com", domain_source="qx")])
                 self.assertEqual(parse(source, purpose="direct")[0], [])
 
     def test_named_routing_policies_are_accepted_without_reclassifying_reject(self):
         self.assertEqual(
             parse("HOST-SUFFIX,cdn.example.com,JSDELIVR", purpose="proxy")[0],
-            [Rule("DOMAIN-SUFFIX", "cdn.example.com")],
+            [Rule("DOMAIN-SUFFIX", "cdn.example.com", domain_source="qx")],
         )
         self.assertEqual(
             parse("HOST-SUFFIX,cn.example.com,China", purpose="direct")[0],
-            [Rule("DOMAIN-SUFFIX", "cn.example.com")],
+            [Rule("DOMAIN-SUFFIX", "cn.example.com", domain_source="qx")],
         )
         self.assertEqual(parse("HOST-SUFFIX,cdn.example.com,REJECT", purpose="proxy")[0], [])
         self.assertEqual(parse("HOST-SUFFIX,cn.example.com,DIRECT", purpose="block")[0], [])
@@ -1190,7 +1286,7 @@ class ParseTests(unittest.TestCase):
         for policy in ("AdGuardSDNSFilter", "AdvertisingMiTV", "BlockHttpDNS", "EasyPrivacy"):
             with self.subTest(policy=policy):
                 source = f"HOST-SUFFIX,ads.example.com,{policy}"
-                self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com")])
+                self.assertEqual(parse(source, purpose="block")[0], [Rule("DOMAIN-SUFFIX", "ads.example.com", domain_source="qx")])
                 self.assertEqual(parse(source, purpose="proxy")[0], [])
 
     def test_ruleset_wide_option_is_not_mistaken_for_a_routing_policy(self):
@@ -1220,7 +1316,7 @@ class ParseTests(unittest.TestCase):
 
     def test_qx_host_keyword_retains_keyword_type(self):
         rules, warnings = parse("HOST-KEYWORD,TrackAds,REJECT", purpose="block")
-        self.assertEqual(rules, [Rule("DOMAIN-KEYWORD", "trackads")])
+        self.assertEqual(rules, [Rule("DOMAIN-KEYWORD", "trackads", domain_source="qx")])
         self.assertEqual(warnings, [])
 
     def test_explicit_single_label_hosts_and_tld_suffixes_are_kept(self):
@@ -1479,14 +1575,14 @@ class ParseTests(unittest.TestCase):
                     f"HOST-SUFFIX,googleapis.com,PROXY,{option}", purpose="proxy",
                 )
                 self.assertEqual(warnings, [])
-                self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "googleapis.com", (option,))])
+                self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "googleapis.com", (option,), domain_source="qx")])
 
     def test_qx_multi_interface_balance_keeps_matcher_and_option(self):
         parsed, messages = parse(
             "HOST-SUFFIX,googleapis.com,PROXY,multi-interface-balance", purpose="proxy",
         )
         self.assertEqual(parsed, [Rule(
-            "DOMAIN-SUFFIX", "googleapis.com", ("multi-interface-balance",)
+            "DOMAIN-SUFFIX", "googleapis.com", ("multi-interface-balance",), domain_source="qx"
         )])
         self.assertEqual(messages, [])
 
@@ -3551,7 +3647,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
 class WhitelistTests(unittest.TestCase):
     def test_qx_policy_is_ignored_when_parsing_whitelist(self):
         self.assertEqual(rules.parse_whitelist("host-suffix,a.com,DIRECT"), [
-            Rule("DOMAIN-SUFFIX", "a.com")
+            Rule("DOMAIN-SUFFIX", "a.com", domain_source="qx")
         ])
 
     def test_surge_reject_policy_is_ignored_when_parsing_whitelist(self):
