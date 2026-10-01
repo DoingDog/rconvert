@@ -12,6 +12,460 @@ from formats import render as render_configured
 render = partial(render_configured, purpose="block", no_resolve="add")
 
 
+def expected_process(value):
+    kind = "PROCESS-PATH-REGEX" if value.startswith("/") else "PROCESS-NAME-REGEX"
+    escaped = "".join("\\x{" + format(ord(char), "X") + "}" for char in value)
+    end = "" if value.startswith("/") and value.endswith("/") else "\\z"
+    return kind + ",(?-i:\\A" + escaped + end + ")"
+
+
+class ProcessRendererCompletionTests(unittest.TestCase):
+    def outputs(self, source, mode="keep"):
+        from rules import normalize, parse
+
+        parsed, messages = parse(source, purpose="proxy")
+        self.assertEqual(messages, [])
+        return render_configured("group", normalize(parsed), purpose="proxy", no_resolve=mode)
+
+    def yaml_body(self, out):
+        return [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]]
+
+    def test_surge_literal_name_and_app_prefix_use_strict_case_sensitive_regex(self):
+        cases = (("Foo", r"PROCESS-NAME-REGEX,(?-i:\A\x{46}\x{6F}\x{6F}\z)"),
+                 ("/1", r"PROCESS-PATH-REGEX,(?-i:\A\x{2F}\x{31}\z)"),
+                 ("/1/", r"PROCESS-PATH-REGEX,(?-i:\A\x{2F}\x{31}\x{2F})"))
+        for value, expected in cases:
+            for logical in (False, True):
+                with self.subTest(value=value, logical=logical):
+                    source = (f"AND,((PROCESS-NAME,{value}),(DOMAIN,x.example.com)),PROXY"
+                              if logical else f"PROCESS-NAME,{value},PROXY")
+                    out, skipped = self.outputs(source)
+                    self.assertEqual(self.yaml_body(out), [f"AND,(({expected}),(DOMAIN,x.example.com))"
+                                                          if logical else expected])
+                    kind = "AND" if logical else "PROCESS-NAME"
+                    self.assertEqual(skipped, {f"{name}:{kind}": 1 for name in
+                                              ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")})
+                    for name in ("fin.txt", "fin-surge.txt"):
+                        self.assertIn(f"PROCESS-NAME,{value}", out[name])
+
+    def test_native_casefold_and_trailing_slash_do_not_change_surge_scope(self):
+        for kind, value in (("PROCESS-NAME", "FooApp"), ("PROCESS-NAME", "S"),
+                            ("PROCESS-NAME", "I"), ("PROCESS-PATH", "/123/"),
+                            ("PROCESS-PATH", "/usr/bin/ssh"),
+                            ("PROCESS-NAME-WILDCARD", "*telegram*"),
+                            ("PROCESS-PATH-WILDCARD", "/usr/*/ssh")):
+            for logical in (False, True):
+                matcher = f"AND,(({kind},{value}),(DOMAIN,x.example.com))" if logical else f"{kind},{value}"
+                with self.subTest(matcher=matcher):
+                    out, skipped = self.outputs("payload:\n  - " + json.dumps(matcher))
+                    self.assertEqual(self.yaml_body(out), [matcher])
+                    for name in ("fin.txt", "fin-surge.txt"):
+                        self.assertEqual(out[name], "# group rules: 0\n")
+                        self.assertEqual(skipped[f"{name}:{'AND' if logical else kind}"], 1)
+        for kind, value in (("PROCESS-NAME", "123-_."), ("PROCESS-PATH", "/123/456"),
+                            ("PROCESS-NAME-WILDCARD", "123")):
+            out, skipped = self.outputs("payload:\n  - " + json.dumps(f"{kind},{value}"))
+            for name in ("fin.txt", "fin-surge.txt"):
+                self.assertEqual(out[name], f"# group rules: 1\nPROCESS-NAME,{value}\n")
+                self.assertNotIn(f"{name}:{kind}", skipped)
+
+    def test_surge_glob_keeps_source_and_counts_only_unproved_targets(self):
+        for value in ("Foo*", "/usr/*/ssh", "?", "*", "123?", "[ab]*"):
+            for logical in (False, True):
+                source = f"AND,((PROCESS-NAME,{value}),(DOMAIN,x.example.com)),PROXY" if logical else f"PROCESS-NAME,{value},PROXY"
+                with self.subTest(source=source):
+                    out, skipped = self.outputs(source)
+                    self.assertEqual(self.yaml_body(out), [])
+                    self.assertEqual(skipped[f"fin.yaml:{'AND' if logical else 'PROCESS-NAME'}"], 1)
+                    self.assertIn(f"PROCESS-NAME,{value}", out["fin.txt"])
+                    self.assertEqual(out["fin.txt"], out["fin-surge.txt"])
+
+    def test_logical_quoted_quantifier_and_literal_comma_regex_are_unquoted_for_mihomo(self):
+        cases = (("DOMAIN-REGEX", '"^f{1,2}oo[.]example[.]org$"', "^f{1,2}oo[.]example[.]org$"),
+                 ("PROCESS-NAME-REGEX", '"^Game,Inc$"', "^Game,Inc$"),
+                 ("PROCESS-NAME-REGEX", "^Game,Inc$", "^Game,Inc$"),
+                 ("PROCESS-PATH-REGEX", '"^/Game,Inc$"', "^/Game,Inc$"))
+        for kind, field, value in cases:
+            with self.subTest(kind=kind, field=field):
+                out, skipped = self.outputs(f"AND,(({kind},{field}),(DOMAIN,x.example.com)),PROXY")
+                self.assertEqual(self.yaml_body(out), [f"AND,(({kind},{value}),(DOMAIN,x.example.com))"])
+                self.assertNotIn("fin.yaml:AND", skipped)
+
+    def test_comment_markers_are_quoted_for_each_shared_surge_value(self):
+        from rules import parse
+
+        for marker in ("#", ";", "//"):
+            for kind, value in (("PROCESS-NAME", f"Game {marker}1"),
+                                ("USER-AGENT", f"Client {marker}1"),
+                                ("URL-REGEX", f"^https://media.example.org/item {marker}1$")):
+                for logical in (False, True):
+                    field = f"'{value}'"
+                    source = f"AND,(({kind},{field}),(DOMAIN,x.example.com)),PROXY" if logical else f"{kind},{field},PROXY"
+                    with self.subTest(source=source):
+                        out, _ = self.outputs(source)
+                        for name in ("fin.txt", "fin-surge.txt"):
+                            self.assertIn(f"{kind},{field}", out[name])
+                            parsed, messages = parse(out[name], purpose="proxy")
+                            self.assertEqual(messages, [])
+                            again, _ = render_configured("group", parsed, purpose="proxy", no_resolve="keep")
+                            self.assertEqual(again[name], out[name])
+
+    def test_decoded_controls_use_safe_yaml_without_surrogate_pairs(self):
+        from rules import parse
+
+        for char in ("\0", "\r", "\n", "\x85", "\u2028", "\u2029", "\x7f", "\x9f", "\ufffe", "\uffff", "🙂"):
+            for kind in ("PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-NAME-REGEX", "DOMAIN-REGEX"):
+                value = "A" + char + "B"
+                for logical in (False, True):
+                    matcher = f"AND,(({kind},{value}),(DOMAIN,x.example.com))" if logical else f"{kind},{value}"
+                    with self.subTest(char=repr(char), kind=kind, logical=logical):
+                        out, skipped = self.outputs("payload:\n  - " + json.dumps(matcher, ensure_ascii=False).replace(char, f"\\u{ord(char):04x}") if ord(char) <= 0xffff else "payload:\n  - " + json.dumps(matcher, ensure_ascii=False))
+                        self.assertEqual(self.yaml_body(out), [matcher])
+                        reparsed, messages = parse(out["fin.yaml"], purpose="proxy")
+                        self.assertEqual(messages, [])
+                        repeated, _ = render_configured("group", reparsed, purpose="proxy", no_resolve="keep")
+                        self.assertEqual(self.yaml_body(repeated), [matcher])
+                        if char != "🙂":
+                            for name in ("fin.txt", "fin-surge.txt", "fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                                self.assertEqual(skipped.get(f"{name}:{'AND' if logical else kind}"), 1)
+                                self.assertFalse(any(line and not line.startswith(("#", "!", "[Adblock"))
+                                                     for line in out[name].splitlines()), name)
+                            self.assertEqual(len(out["fin.yaml"].splitlines()), 3)
+                            self.assertNotIn(char, out["fin.yaml"].splitlines()[2])
+                        else:
+                            self.assertIn("🙂", out["fin.yaml"])
+                            self.assertNotIn("\\ud83d", out["fin.yaml"].lower())
+                        self.assertNotIn(f"fin.yaml:{'AND' if logical else kind}", skipped)
+
+    def test_native_ignored_tail_keeps_complete_rendered_logical_rule(self):
+        from rules import parse
+
+        for kind in ("PROCESS-NAME", "PROCESS-PATH", "IN-NAME"):
+            for operator, expression in (("NOT", f"(({kind},Foo(,ignored)))"),
+                                         ("AND", f"(({kind},Foo(,ignored)),(NETWORK,tcp))"),
+                                         ("OR", f"(({kind},Foo(,ignored)),(NETWORK,tcp))")):
+                source = "payload:\n  - " + json.dumps(operator + "," + expression)
+                with self.subTest(source=source):
+                    out, skipped = self.outputs(source)
+                    self.assertEqual(self.yaml_body(out), [operator + "," + expression])
+                    parsed, messages = parse(out["fin.yaml"], purpose="proxy")
+                    self.assertEqual(messages, [])
+                    self.assertEqual(len(parsed), 1)
+                    self.assertNotIn(f"fin.yaml:{operator}", skipped)
+
+    def test_deep_complete_render_and_no_resolve_have_bounded_subprocess_time(self):
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        code = r'''
+import json, sys, time
+from rules import parse, normalize
+from formats import render
+limit = sys.getrecursionlimit()
+for depth in (600, 1000):
+    for long in (False, True):
+        matcher = '^(' + '|'.join(f'host{index}.example.com' for index in range(1024)) + ')$'
+        if long:
+            assert len(matcher) == 20397
+        for flagged in (False, True):
+            leaf = '(AND,((IP-CIDR,203.0.113.0/24' + (',no-resolve' if flagged else '') + '),(SRC-IP-CIDR,127.0.0.0/8)' + (',(PROCESS-NAME-REGEX,' + matcher + ')' if long else ',(DOMAIN,x.example.com)') + '))'
+            for native in (False, True):
+                expression = '(NOT,(' * depth + leaf + '))' * depth
+                source = 'payload:\n  - ' + json.dumps(expression[1:-1]) if native else expression[1:-1] + ',PROXY'
+                parsed, warnings = parse(source, purpose='proxy')
+                assert not warnings and len(parsed) == 1, warnings
+                for mode in ('add', 'keep', 'strip'):
+                    start = time.perf_counter()
+                    out, skipped = render('group', normalize(parsed), purpose='proxy', no_resolve=mode)
+                    flag = mode == 'add' or mode == 'keep' and flagged
+                    expected = expression[1:-1].replace(',no-resolve', '')
+                    if flag:
+                        expected = expected.replace('IP-CIDR,203.0.113.0/24)', 'IP-CIDR,203.0.113.0/24,no-resolve)')
+                    actual = json.loads(out['fin.yaml'].splitlines()[2][4:])
+                    assert actual == expected and actual.count('no-resolve') == int(flag)
+                    for target in ('fin.txt', 'fin-surge.txt'):
+                        assert out[target] == '# group rules: 0\n' and skipped[target + ':NOT'] == 1
+                    if long:
+                        assert matcher in actual
+                    assert sys.getrecursionlimit() == limit
+print('complete')
+'''
+        result = subprocess.run([sys.executable, "-B", "-c", code], cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stderr[-2000:])
+        self.assertEqual(result.stdout.strip(), "complete")
+
+
+class ProcessRendererReviewFixTests(unittest.TestCase):
+    outputs = ProcessRendererCompletionTests.outputs
+    yaml_body = ProcessRendererCompletionTests.yaml_body
+
+    def test_logical_parentheses_and_trailing_backslashes_roundtrip_shared_fields(self):
+        from rules import parse
+
+        for kind in ("PROCESS-NAME", "USER-AGENT", "DEVICE-NAME"):
+            for value in ("Game(1)\\", "Game(1)\\\\", "Game(1)\\\\\\", 'Game(\'1")\\'):
+                field = '"' + value.replace("\\", "\\\\").replace('"', '\\"') + '"'
+                for operator in ("AND", "OR", "NOT"):
+                    expression = f"(({kind},{field}))" if operator == "NOT" else f"(({kind},{field}),(DOMAIN,x.example.com))"
+                    source = f"{operator},{expression},PROXY"
+                    with self.subTest(source=source):
+                        out, skipped = self.outputs(source)
+                        for name in ("fin.txt", "fin-surge.txt"):
+                            reparsed, messages = parse(out[name], purpose="proxy")
+                            self.assertEqual(messages, [])
+                            self.assertEqual(len(reparsed), 1)
+                            self.assertNotIn(f"{name}:{operator}", skipped)
+                            repeated, _ = render_configured("group", reparsed, purpose="proxy", no_resolve="keep")
+                            self.assertEqual(repeated[name], out[name])
+                            if kind == "PROCESS-NAME":
+                                self.assertEqual(self.yaml_body(repeated), self.yaml_body(out))
+
+    def test_native_in_user_ignored_tail_preserves_whole_logic(self):
+        from rules import normalize, parse
+
+        for operator in ("NOT", "AND", "OR"):
+            expression = "((IN-USER,Foo(,ignored)))" if operator == "NOT" else "((IN-USER,Foo(,ignored)),(NETWORK,tcp))"
+            matcher = operator + "," + expression
+            source = "payload:\n  - " + json.dumps(matcher) + "\n  - DOMAIN,keep.example.com\n"
+            with self.subTest(operator=operator):
+                out, skipped = self.outputs(source)
+                self.assertEqual(set(self.yaml_body(out)), {matcher, "DOMAIN,keep.example.com"})
+                self.assertNotIn(f"fin.yaml:{operator}", skipped)
+                parsed, messages = parse(out["fin.yaml"], purpose="proxy")
+                self.assertEqual(messages, [])
+                self.assertEqual(normalize(parsed), self.outputs_rules(source))
+
+    def outputs_rules(self, source):
+        from rules import normalize, parse
+
+        parsed, messages = parse(source, purpose="proxy")
+        self.assertEqual(messages, [])
+        return normalize(parsed)
+
+    def test_logical_regex_literal_parentheses_are_encoded_without_changing_groups(self):
+        cases = ((r"^Game[(]Inc$", r"^Game[\x{28}]Inc$"),
+                 (r"^foo[.)]example[.]org$", r"^foo[.\x{29}]example[.]org$"),
+                 (r"^foo\(bar$", r"^foo\x{28}bar$"),
+                 (r"^[a)b]\.example$", r"^[a\x{29}b]\.example$"),
+                 (r"^foo\)bar$", r"^foo\x{29}bar$"),
+                 (r"^(?<n>foo)[()]\k<n>$", r"^(?<n>foo)[\x{28}\x{29}]\k<n>$"),
+                 (r"^[(-)]$", r"^[\x{28}-\x{29}]$"),
+                 (r"^[]()]$", r"^[]\x{28}\x{29}]$"))
+        for kind in ("PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX", "DOMAIN-REGEX"):
+            for pattern, expected in cases:
+                for quoted in (False, True):
+                    field = '"' + pattern.replace("\\", "\\\\") + '"' if quoted else pattern
+                    source = f"AND,(({kind},{field}),(NETWORK,tcp)),PROXY"
+                    with self.subTest(source=source):
+                        out, skipped = self.outputs(source)
+                        self.assertEqual(self.yaml_body(out), [f"AND,(({kind},{expected}),(NETWORK,tcp))"])
+                        self.assertNotIn("fin.yaml:AND", skipped)
+                        self.assertEqual(len(self.outputs_rules(out["fin.yaml"])), 1)
+        for pattern, expected in ((r"(?#left()^foo$", r"(?#left\x{28})^foo$"),
+                                  (r"(?x)^foo$#left(right)", r"(?x)^foo$#left\x{28}right\x{29}"),
+                                  (r"'foo[(]", r"'foo[\x{28}]"),
+                                  (r"^[()-[)]]$", r"^[\x{28}\x{29}-[\x{29}]]$")):
+            for kind in ("PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX", "DOMAIN-REGEX"):
+                with self.subTest(kind=kind, pattern=pattern):
+                    out, skipped = self.outputs(f'AND,(({kind},"{pattern}"),(NETWORK,tcp)),PROXY')
+                    self.assertEqual(self.yaml_body(out), [f"AND,(({kind},{expected}),(NETWORK,tcp))"])
+                    self.assertNotIn("fin.yaml:AND", skipped)
+                    self.assertEqual(len(self.outputs_rules(out["fin.yaml"])), 1)
+        for pattern in (r"^(foo|bar)$", r"(?-i:\Afoo\z)", r"(?#note)^foo$"):
+            out, _ = self.outputs(f'AND,((DOMAIN-REGEX,"{pattern}"),(NETWORK,tcp)),PROXY')
+            self.assertEqual(self.yaml_body(out), [f"AND,((DOMAIN-REGEX,{pattern}),(NETWORK,tcp))"])
+
+    def test_case_invariant_unicode_native_literals_keep_surge_range(self):
+        for scalar in ("中", "🙂", "₀", "؜", "\U000e0001"):
+            for kind in ("PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"):
+                value = "123" + scalar if "NAME" in kind else "/123/" + scalar
+                for logical in (False, True):
+                    matcher = f"AND,(({kind},{value}),(NETWORK,tcp))" if logical else f"{kind},{value}"
+                    with self.subTest(matcher=matcher):
+                        out, skipped = self.outputs("payload:\n  - " + json.dumps(matcher, ensure_ascii=False))
+                        expected = f"AND,((PROCESS-NAME,{value}),(PROTOCOL,TCP))" if logical else f"PROCESS-NAME,{value}"
+                        for name in ("fin.txt", "fin-surge.txt"):
+                            self.assertEqual(out[name], "# group rules: 1\n" + expected + "\n")
+                            self.assertNotIn(f"{name}:{'AND' if logical else kind}", skipped)
+                        self.assertEqual(self.yaml_body(out), [matcher])
+        for scalar in ("Σ", "ς", "ſ", "K", "Ⅳ", "\u0345", "\U00010400"):
+            out, skipped = self.outputs("payload:\n  - " + json.dumps("PROCESS-NAME,123" + scalar, ensure_ascii=False))
+            self.assertEqual(out["fin.txt"], "# group rules: 0\n")
+            self.assertEqual(skipped["fin.txt:PROCESS-NAME"], 1)
+
+    def test_native_simplefold_singleton_i_keeps_exact_literal_scope(self):
+        for scalar in ("İ", "ı"):
+            for kind in ("PROCESS-NAME", "PROCESS-PATH"):
+                value = "123" + scalar if kind == "PROCESS-NAME" else "/123/" + scalar
+                out, skipped = self.outputs("payload:\n  - " + json.dumps(kind + "," + value, ensure_ascii=False))
+                self.assertEqual(out["fin.txt"], "# group rules: 1\nPROCESS-NAME," + value + "\n")
+                self.assertNotIn("fin.txt:" + kind, skipped)
+        out, skipped = self.outputs('payload:\n  - "PROCESS-NAME-WILDCARD,123İ"')
+        self.assertEqual(out["fin.txt"], "# group rules: 0\n")
+        self.assertEqual(skipped["fin.txt:PROCESS-NAME-WILDCARD"], 1)
+
+    def test_allow_and_whitelist_share_line_unsafe_skip_counts(self):
+        from rules import parse, parse_whitelist
+
+        for char in ("\0", "\r", "\n", "\x85", "\u2028", "\u2029", "\x7f", "\x9f", "\ufffe", "\uffff"):
+            value = "^A" + char + "B$"
+            source = "payload:\n  - " + json.dumps("DOMAIN-REGEX," + value)
+            parsed, messages = parse(source, purpose="block")
+            self.assertEqual(messages, [])
+            for allow in (False, True):
+                with self.subTest(char=repr(char), allow=allow):
+                    selected = [Rule("DOMAIN-REGEX", value, allow=True)] if allow else []
+                    out, skipped = render_configured("group", [Rule("DOMAIN", "keep.example.com"), *selected],
+                                                     purpose="block", no_resolve="keep",
+                                                     whitelist=() if allow else parse_whitelist(source))
+                    self.assertEqual(out["fin-adb.txt"].splitlines()[7:], ["keep.example.com"])
+                    self.assertEqual(out["fin-adb.txt"].splitlines()[6], "! Total count: 1")
+                    self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 1)
+
+    def test_surge_logical_depth_limit_is_target_local(self):
+        for native in (False, True):
+            for depth in (1, 10, 11, 12, 600, 1000):
+                matcher = ("(NOT,(" * depth + "(DOMAIN,deep.example.com)" + "))" * depth)[1:-1]
+                source = ("payload:\n  - " + json.dumps(matcher) + "\n  - DOMAIN,keep.example.com" if native else
+                          matcher + ",PROXY\nDOMAIN,keep.example.com,PROXY")
+                with self.subTest(native=native, depth=depth):
+                    out, skipped = self.outputs(source)
+                    self.assertEqual(set(self.yaml_body(out)), {matcher, "DOMAIN,keep.example.com"})
+                    allowed = depth <= 10
+                    self.assertEqual(set(out["fin.txt"].splitlines()[1:]), {"DOMAIN,keep.example.com"} | ({matcher} if allowed else set()))
+                    self.assertEqual(out["fin-surge.txt"], f"# group rules: {int(allowed)}\n" + (matcher + "\n" if allowed else ""))
+                    for name in ("fin.txt", "fin-surge.txt"):
+                        self.assertEqual(skipped.get(f"{name}:NOT", 0), int(not allowed))
+
+
+class ProcessRendererRound2FixTests(unittest.TestCase):
+    outputs = ProcessRendererCompletionTests.outputs
+    yaml_body = ProcessRendererCompletionTests.yaml_body
+
+    def test_shared_surge_fields_preserve_boundary_whitespace(self):
+        from rules import parse
+
+        for char in ("\t", "\xa0", " ", " ", "　"):
+            for position in ("leading", "trailing", "middle"):
+                for kind in ("PROCESS-NAME", "USER-AGENT", "DEVICE-NAME", "URL-REGEX"):
+                    value = char + "123" if position == "leading" else "123" + char if position == "trailing" else "12" + char + "3"
+                    for operator in ("", "AND", "OR", "NOT"):
+                        leaf = f"{kind},'{value}'"
+                        source = leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(PROTOCOL,TCP))"
+                        for mode in ("add", "keep", "strip"):
+                            with self.subTest(kind=kind, char=repr(char), position=position, operator=operator, mode=mode):
+                                out, skipped = self.outputs(source + ",PROXY", mode)
+                                field = f"'{value}'" if position != "middle" else value
+                                expected_leaf = f"{kind},{field}"
+                                expected = expected_leaf if not operator else f"NOT,(({expected_leaf}))" if operator == "NOT" else f"{operator},(({expected_leaf}),(PROTOCOL,TCP))"
+                                for name in ("fin.txt", "fin-surge.txt"):
+                                    self.assertEqual(out[name], "# group rules: 1\n" + expected + "\n")
+                                    self.assertNotIn(f"{name}:{operator or kind}", skipped)
+                                    parsed, messages = parse(out[name], purpose="proxy")
+                                    self.assertEqual(messages, [])
+                                    repeated, _ = render_configured("group", parsed, purpose="proxy", no_resolve=mode)
+                                    self.assertEqual(repeated[name], out[name])
+
+    def test_native_process_boundary_whitespace_does_not_become_bundle_prefix(self):
+        from rules import parse
+
+        for kind in ("PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"):
+            for char in ("\t", "\xa0", " ", " ", "　"):
+                for position in ("leading", "trailing", "middle"):
+                    base = "123" if "NAME" in kind else "/123/456"
+                    value = char + base if position == "leading" else base + char if position == "trailing" else base[:2] + char + base[2:]
+                    for operator in ("", "AND", "OR", "NOT"):
+                        leaf = f"{kind},{value}"
+                        matcher = leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))"
+                        for mode in ("add", "keep", "strip"):
+                            with self.subTest(matcher=matcher, mode=mode):
+                                out, skipped = self.outputs("payload:\n  - " + json.dumps(matcher, ensure_ascii=False), mode)
+                                self.assertEqual(self.yaml_body(out), [matcher])
+                                for name in ("fin.txt", "fin-surge.txt"):
+                                    if "PATH" in kind and position == "leading":
+                                        self.assertEqual(out[name], "# group rules: 0\n")
+                                        self.assertEqual(skipped[f"{name}:{operator or kind}"], 1)
+                                        continue
+                                    parsed, messages = parse(out[name], purpose="proxy")
+                                    self.assertEqual(messages, [])
+                                    self.assertEqual(len(parsed), 1)
+                                    again, _ = render_configured("group", parsed, purpose="proxy", no_resolve=mode)
+                                    self.assertEqual(again[name], out[name])
+                                    expected = expected_process(value)
+                                    strict = expected if not operator else f"NOT,(({expected}))" if operator == "NOT" else f"{operator},(({expected}),(NETWORK,tcp))"
+                                    self.assertEqual(self.yaml_body(again), [strict])
+        for operator in ("", "AND", "OR", "NOT"):
+            leaf = "PROCESS-PATH,/123/\xa0"
+            matcher = leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))"
+            out, _ = self.outputs("payload:\n  - " + json.dumps(matcher))
+            parsed, messages = parse(out["fin.txt"], purpose="proxy")
+            self.assertEqual(messages, [])
+            again, _ = render_configured("group", parsed, purpose="proxy", no_resolve="keep")
+            self.assertIn(r"\x{A0}\z", self.yaml_body(again)[0])
+
+    def test_ordinary_regex_comma_spaces_preserve_lexical_meaning(self):
+        cases = ((r"^f{1, 2}oo[.]example[.]org$", r"^f{1\x{2C} 2}oo[.]example[.]org$"),
+                 (r"^[a, b][.]example$", r"^[a\x{2C} b][.]example$"),
+                 (r"^a ,b$", r"^a \x{2C}b$"),
+                 (r"(?x)^f{1, 2}oo$", r"(?x)^f{1\x{2C} 2}oo$"),
+                 (r"(?x)^a , b$", r"(?x)^a \x{2C} b$"),
+                 (r"(?x)^[a, b]$", r"(?x)^[a\x{2C} b]$"),
+                 (r"(?x)^a\ ,b$", r"(?x)^a\ \x{2C}b$"),
+                 (r"^a\, b$", r"^a\x{2C} b$"),
+                 (r"^[ ,-a]$", r"^[ \x{2C}-a]$"),
+                 (r"^[] ,]$", r"^[] \x{2C}]$"),
+                 (r"^(?<n>a ,b)\k<n>$", r"^(?<n>a \x{2C}b)\k<n>$"),
+                 (r"(?#a , b)^foo$", r"(?#a \x{2C} b)^foo$"),
+                 (r"(?x)^foo$#a , b", r"(?x)^foo$#a \x{2C} b"),
+                 (r"^a{1,2} ,b$", r"^a{1,2} \x{2C}b$"),
+                 (r"(?x:^(?-x:a , b))$", r"(?x:^(?-x:a \x{2C} b))$"),
+                 (r"^a, ", r"^a\x{2C} (?:)"),
+                 (r" ,a$", r"(?:) \x{2C}a$"),
+                 (r"(?x)^a, ", r"(?x)^a\x{2C} (?:)"),
+                 (r"(?x)^a$#a, ", r"(?x)^a$#a\x{2C} (?:)"))
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for pattern, encoded in cases:
+                field = '"' + pattern.replace("\\", "\\\\") + '"'
+                for operator in ("", "AND", "OR", "NOT"):
+                    leaf = f"{kind},{field}"
+                    source = leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))"
+                    for mode in ("add", "keep", "strip"):
+                        with self.subTest(kind=kind, pattern=pattern, operator=operator, mode=mode):
+                            out, skipped = self.outputs(source + ",PROXY", mode)
+                            expected = f"{kind},{encoded}"
+                            expected = expected if not operator else f"NOT,(({expected}))" if operator == "NOT" else f"{operator},(({expected}),(NETWORK,tcp))"
+                            self.assertEqual(self.yaml_body(out), [expected])
+                            self.assertNotIn(f"fin.yaml:{operator or kind}", skipped)
+                            repeated, _ = self.outputs(out["fin.yaml"], mode)
+                            self.assertEqual(self.yaml_body(repeated), [expected])
+                            consumed = ",".join(part.strip(" ") for part in expected.split(","))
+                            self.assertEqual(consumed, expected)
+                            native = f"{kind}," + ",".join(part.strip(" ") for part in pattern.split(","))
+                            native = native if not operator else f"NOT,(({native}))" if operator == "NOT" else f"{operator},(({native}),(NETWORK,tcp))"
+                            native_out, _ = self.outputs("payload:\n  - " + json.dumps(native), mode)
+                            self.assertEqual(self.yaml_body(native_out), [native])
+
+    def test_dotless_native_wildcard_keeps_tolower_singleton_scope(self):
+        for scalar in ("ı", "İ", "I", "i", "ſ", "Σ"):
+            for kind in ("PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"):
+                value = ("123" if "NAME" in kind else "/123/") + scalar
+                for operator in ("", "AND", "OR", "NOT"):
+                    leaf = f"{kind},{value}"
+                    matcher = leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))"
+                    for mode in ("add", "keep", "strip"):
+                        with self.subTest(matcher=matcher, mode=mode):
+                            out, skipped = self.outputs("payload:\n  - " + json.dumps(matcher, ensure_ascii=False), mode)
+                            self.assertEqual(self.yaml_body(out), [matcher])
+                            allowed = scalar == "ı" or scalar == "İ" and not kind.endswith("-WILDCARD")
+                            leaf = f"PROCESS-NAME,{value}"
+                            expected = leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(PROTOCOL,TCP))"
+                            for name in ("fin.txt", "fin-surge.txt"):
+                                self.assertEqual(out[name], "# group rules: 1\n" + expected + "\n" if allowed else "# group rules: 0\n")
+                                self.assertEqual(skipped.get(f"{name}:{operator or kind}", 0), int(not allowed))
+
+
 class DomainProvenanceFormatTests(unittest.TestCase):
     def outputs(self, source, **kwargs):
         from rules import normalize, parse
@@ -205,9 +659,16 @@ class SurgeEscapedFieldFormatTests(unittest.TestCase):
                                 self.assertEqual(len(source), 1)
                                 out, skipped = render_configured("group", source, purpose="proxy", no_resolve=mode)
                                 expected = expression.replace(",no-resolve", "") if mode == "strip" else expression
+                                if leaf == "PROCESS-NAME" and not source[0].literal_process:
+                                    expected = expected.replace(f"{leaf},{field}", expected_process(payload)).replace(
+                                        f"{leaf},{payload}", expected_process(payload))
                                 yaml = [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]]
                                 self.assertEqual(yaml, [f"{operator},{expected}"])
                                 for name in ("fin.txt", "fin-surge.txt"):
+                                    if source[0].literal_process or leaf == "PROCESS-PATH":
+                                        self.assertEqual(out[name], "# group rules: 0\n")
+                                        self.assertEqual(skipped[f"{name}:{operator}"], 1)
+                                        continue
                                     self.assertIn(f"(PROCESS-NAME,", out[name])
                                     self.assertNotIn(f"{name}:{operator}", skipped)
                                     reparsed, warnings = parse(out[name], purpose="proxy")
@@ -244,9 +705,9 @@ class LiteralQuoteFieldFormatTests(unittest.TestCase):
                         self.assertEqual(out[name], f"# group rules: 1\n{kind},{field}\n")
                         self.assertEqual(parse(out[name], purpose="proxy"), ([source], []))
                         self.assertNotIn(f"{name}:{kind}", skipped)
-                    if kind == "PROCESS-NAME" and "," not in value:
+                    if kind == "PROCESS-NAME":
                         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                                         [f"{kind},{value}"])
+                                         [expected_process(value)])
 
     def test_mixed_logic_quote_roles_and_regexp2_matchers_remain_exact(self):
         from rules import parse
@@ -278,6 +739,9 @@ class LiteralQuoteFieldFormatTests(unittest.TestCase):
                     rendered, _ = render_configured("next", reparsed, purpose="proxy", no_resolve="keep")
                     self.assertEqual(rendered[name], f"# next rules: 1\n{surge}\n")
                     self.assertNotIn(f"{name}:{parsed[0].kind}", skipped)
+                if yaml is not None:
+                    value = "Game" if source == cases[0][0] else '"Game"' if source == cases[1][0] else "'Game'"
+                    yaml = f"{parsed[0].kind},(({expected_process(value)}),(DOMAIN,x.example.com))"
                 self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
                                  [yaml] if yaml is not None else [])
                 self.assertEqual(skipped.get(f"fin.yaml:{parsed[0].kind}", 0), int(yaml is None))
@@ -967,10 +1431,10 @@ class FormatTests(unittest.TestCase):
                                   ("/usr/*/ssh", "PROCESS-PATH-WILDCARD")):
             for source, surge_rule, mihomo_rule in (
                 (f"PROCESS-NAME,{path},PROXY", f"PROCESS-NAME,{path}",
-                 f"{mihomo_kind},{path}"),
+                 expected_process(path) if "*" not in path else None),
                 (f"AND,((PROCESS-NAME,{path}),(DOMAIN,a.example.com)),PROXY",
                  f"AND,((PROCESS-NAME,{path}),(DOMAIN,a.example.com))",
-                 f"AND,(({mihomo_kind},{path}),(DOMAIN,a.example.com))"),
+                 f"AND,(({expected_process(path)}),(DOMAIN,a.example.com))" if "*" not in path else None),
             ):
                 with self.subTest(source=source):
                     parsed, messages = parse(source, purpose="proxy")
@@ -979,10 +1443,11 @@ class FormatTests(unittest.TestCase):
                     out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
                     self.assertEqual(out["fin.txt"], f"# cdn rules: 1\n{surge_rule}\n")
                     self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
-                    self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - ' + json.dumps(mihomo_rule) + '\n')
+                    self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                                     [mihomo_rule] if mihomo_rule else [])
                     self.assertEqual(skipped, {
                         f"{name}:{parsed[0].kind}": 1 for name in
-                        ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")
+                        ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt") + (("fin.yaml",) if mihomo_rule is None else ())
                     })
 
     def test_mihomo_literal_process_name_absolute_path_remains_name(self):
@@ -1036,9 +1501,9 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin-surge.txt"].splitlines()[1:], [
             "PROCESS-NAME,FooApp", "PROCESS-NAME,qbittorrent*",
         ])
-        self.assertEqual(out["fin.yaml"].splitlines()[2:], [
-            '  - "PROCESS-NAME,FooApp"', '  - "PROCESS-NAME-WILDCARD,qbittorrent*"',
-        ])
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                         [expected_process("FooApp")])
+        self.assertEqual(skipped["fin.yaml:PROCESS-NAME"], 1)
         self.assertEqual(out["fin-qx.txt"], "# dirt rules: 0\n")
         self.assertEqual(skipped["fin-qx.txt:PROCESS-NAME"], 2)
 
@@ -1063,9 +1528,9 @@ class FormatTests(unittest.TestCase):
                 out, skipped = render_configured(
                     "cdn", normalize(ordered), purpose="proxy", no_resolve="keep",
                 )
-                self.assertEqual(out["fin.yaml"], '# cdn rules: 2\npayload:\n'
-                                 '  - "PROCESS-NAME,Foo*Bar"\n'
-                                 '  - "PROCESS-NAME-WILDCARD,Foo*Bar"\n')
+                self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n'
+                                 '  - "PROCESS-NAME,Foo*Bar"\n')
+                self.assertEqual(skipped["fin.yaml:PROCESS-NAME"], 1)
                 self.assertEqual(out["fin.txt"], "# cdn rules: 1\nPROCESS-NAME,Foo*Bar\n")
                 self.assertEqual(skipped["fin.txt:PROCESS-NAME"], 1)
 
@@ -1139,38 +1604,42 @@ class FormatTests(unittest.TestCase):
         })
 
     def test_process_name_wildcard_maps_to_surge_process_name(self):
-        out, _ = render("a3", [Rule("PROCESS-NAME-WILDCARD", "*telegram*")])
-        self.assertIn("PROCESS-NAME,*telegram*\n", out["fin.txt"])
-        self.assertIn("PROCESS-NAME,*telegram*\n", out["fin-surge.txt"])
+        out, skipped = render("a3", [Rule("PROCESS-NAME-WILDCARD", "*telegram*")])
+        self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
+        self.assertEqual(skipped["fin.txt:PROCESS-NAME-WILDCARD"], 1)
+        self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
+        self.assertEqual(skipped["fin-surge.txt:PROCESS-NAME-WILDCARD"], 1)
         self.assertIn('"PROCESS-NAME-WILDCARD,*telegram*"', out["fin.yaml"])
 
     def test_posix_process_path_maps_to_surge_process_name(self):
         path = "/Applications/Foo.app/Contents/MacOS/Foo"
-        out, _ = render("a3", [Rule("PROCESS-PATH", path)])
-        self.assertIn(f"PROCESS-NAME,{path}\n", out["fin.txt"])
+        out, skipped = render("a3", [Rule("PROCESS-PATH", path)])
+        self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
+        self.assertEqual(skipped["fin.txt:PROCESS-PATH"], 1)
         self.assertIn(f'"PROCESS-PATH,{path}"', out["fin.yaml"])
 
     def test_posix_process_path_wildcard_maps_to_surge_process_name(self):
         out, skipped = render("a3", [Rule("PROCESS-PATH-WILDCARD", "/Applications/Foo*/bin")])
-        expected = "# a3 rules: 1\nPROCESS-NAME,/Applications/Foo*/bin\n"
+        expected = "# a3 rules: 0\n"
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
         self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "PROCESS-PATH-WILDCARD,/Applications/Foo*/bin"\n')
-        self.assertNotIn("fin.txt:PROCESS-PATH-WILDCARD", skipped)
+        self.assertEqual(skipped["fin.txt:PROCESS-PATH-WILDCARD"], 1)
 
     def test_mihomo_skips_process_names_with_unrepresentable_commas(self):
         out, skipped = render("dirt", [
             Rule("PROCESS-NAME", "Foo,Bar"), Rule("PROCESS-PATH", "/Applications/Foo,Bar"),
         ], purpose="direct", no_resolve="strip")
         self.assertEqual(out["fin.txt"].splitlines()[1:], [
-            "PROCESS-NAME,'Foo,Bar'", "PROCESS-NAME,'/Applications/Foo,Bar'",
+            "PROCESS-NAME,'Foo,Bar'",
         ])
         self.assertEqual(out["fin-surge.txt"].splitlines()[1:], [
-            "PROCESS-NAME,'Foo,Bar'", "PROCESS-NAME,'/Applications/Foo,Bar'",
+            "PROCESS-NAME,'Foo,Bar'",
         ])
-        self.assertEqual(out["fin.yaml"], "# dirt rules: 0\npayload:\n")
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                         [expected_process("Foo,Bar")])
         self.assertEqual(out["fin-qx.txt"], "# dirt rules: 0\n")
-        self.assertEqual(skipped["fin.yaml:PROCESS-NAME"], 1)
+        self.assertNotIn("fin.yaml:PROCESS-NAME", skipped)
         self.assertEqual(skipped["fin.yaml:PROCESS-PATH"], 1)
 
     def test_process_and_user_agent_only_go_to_confirmed_clients(self):
@@ -1178,7 +1647,8 @@ class FormatTests(unittest.TestCase):
         for name in ("fin.txt", "fin-surge.txt"):
             self.assertIn("PROCESS-NAME,FooApp\n", out[name])
             self.assertIn("USER-AGENT,*bot*\n", out[name])
-        self.assertIn('  - "PROCESS-NAME,FooApp"\n', out["fin.yaml"])
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                         [expected_process("FooApp")])
         self.assertNotIn("USER-AGENT", out["fin.yaml"])
         self.assertIn("USER-AGENT,*bot*,LIST\n", out["fin-qx.txt"])
         self.assertNotIn("PROCESS-NAME", out["fin-qx.txt"])
@@ -1223,7 +1693,7 @@ class FormatTests(unittest.TestCase):
 
     def test_all_mihomo_values_use_json_quoted_yaml_strings(self):
         value = 'Foo"bar\\baz'
-        out, _ = render("a3", [Rule("PROCESS-NAME", value)])
+        out, _ = render("a3", [Rule("PROCESS-NAME", value, literal_process=True)])
         self.assertIn('\\"', out["fin.yaml"].splitlines()[2])
         self.assertEqual(json.loads(out["fin.yaml"].splitlines()[2][4:]),
                          'PROCESS-NAME,Foo"bar\\baz')
@@ -1341,9 +1811,10 @@ class FormatTests(unittest.TestCase):
         expected = "# cdn rules: 1\nAND,((PROCESS-NAME,'Foo,Bar'),(DOMAIN,a.example.com))\n"
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
-        self.assertEqual(out["fin.yaml"], "# cdn rules: 0\npayload:\n")
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                         [f"AND,(({expected_process('Foo,Bar')}),(DOMAIN,a.example.com))"])
         self.assertEqual(out["fin-surge-ds.txt"], "# cdn rules: 0\n")
-        self.assertEqual(skipped["fin.yaml:AND"], 1)
+        self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_logical_quoted_url_regex_comma_is_preserved_for_surge_only(self):
         from rules import parse
@@ -1432,11 +1903,11 @@ class FormatTests(unittest.TestCase):
     def test_nested_process_path_wildcard_maps_to_surge_process_name(self):
         source = Rule("AND", "((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(DOMAIN,a.example.com))")
         out, skipped = render("cdn", [source], purpose="proxy", no_resolve="keep")
-        expected = "# cdn rules: 1\nAND,((PROCESS-NAME,/Applications/Foo*/bin),(DOMAIN,a.example.com))\n"
+        expected = "# cdn rules: 0\n"
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
         self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - "AND,((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(DOMAIN,a.example.com))"\n')
-        self.assertNotIn("fin.txt:AND", skipped)
+        self.assertEqual(skipped["fin.txt:AND"], 1)
 
     def test_surge_translates_nested_source_cidr_and_destination_port(self):
         value = "((SRC-IP-CIDR,2001:db8::/32),(DST-PORT,443))"
@@ -1452,7 +1923,8 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("dirt", [Rule("AND", value)], purpose="direct", no_resolve="strip")
         self.assertEqual(out["fin.txt"], f"# dirt rules: 1\nAND,{value}\n")
         self.assertEqual(out["fin-surge.txt"], f"# dirt rules: 1\nAND,{value}\n")
-        self.assertEqual(out["fin.yaml"], '# dirt rules: 1\npayload:\n  - "AND,((PROCESS-NAME-WILDCARD,qbittorrent*),(DOMAIN,ads.example.org))"\n')
+        self.assertEqual(out["fin.yaml"], '# dirt rules: 0\npayload:\n')
+        self.assertEqual(skipped["fin.yaml:AND"], 1)
         self.assertEqual(skipped["fin-qx.txt:AND"], 1)
 
     def test_surge_ipv6_cidr_inside_logic_uses_ipv6_matcher(self):
@@ -1477,11 +1949,12 @@ class FormatTests(unittest.TestCase):
 
     def test_logical_regex_character_class_parenthesis_is_not_structural(self):
         expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
-        out, _ = render("a3", [Rule("AND", expression)])
-        self.assertIn(
-            f"AND,{expression}",
-            [json.loads(line.removeprefix("  - ")) for line in out["fin.yaml"].splitlines()[2:]],
-        )
+        out, skipped = render("a3", [Rule("AND", expression)])
+        expected = r"AND,((DOMAIN-REGEX,^[a\x{29}b]\.example$),(DOMAIN,ads.example))"
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]], [expected])
+        from rules import parse
+        self.assertEqual(parse(out["fin.yaml"], purpose="block")[1], [])
+        self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_process_name_with_comma_skips_incompatible_logical_rule_as_a_whole(self):
         safe = "((DOMAIN,a.org),(DOMAIN,b.org))"

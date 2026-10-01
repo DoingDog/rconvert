@@ -138,6 +138,7 @@ class SurgeEscapedFieldParserTests(unittest.TestCase):
     def test_double_quote_escapes_decode_only_at_mixed_field_boundaries(self):
         import json
         from formats import render
+        from tests.test_formats import expected_process
 
         cases = ((r'"Game\\"', "Game\\"),
                  (r'''"\"Game'Inc\""''', '"Game\'Inc"'),
@@ -156,7 +157,8 @@ class SurgeEscapedFieldParserTests(unittest.TestCase):
                         parsed, messages = parse(f"{operator},{expression},PROXY", purpose="proxy")
                         self.assertEqual(messages, [])
                         out, _ = render("group", parsed, purpose="proxy", no_resolve="keep")
-                        expected = expression.replace(f"{kind},{field}", f"{kind},{matcher}")
+                        expected = expression.replace(f"{kind},{field}",
+                                                      expected_process(matcher) if kind == "PROCESS-NAME" else f"{kind},{matcher}")
                         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
                                          [f"{operator},{expected}"])
             if kind == "PROCESS-NAME":
@@ -638,6 +640,37 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                     self.assertIn(expected, normalize(parsed))
 
 
+class NativeLogicalRendererStructureTests(unittest.TestCase):
+    def test_in_user_structural_tail_survives_parse_normalize_and_reparse(self):
+        import json
+
+        for depth in (1, 600, 1000):
+            matcher = ('(NOT,(' * depth + '(IN-USER,Foo(,ignored))' + '))' * depth)[1:-1]
+            source = 'payload:\n  - ' + json.dumps(matcher) + '\n  - DOMAIN,keep.example.com\n'
+            expected = [Rule('NOT', matcher[4:], native_fields=True), Rule('DOMAIN', 'keep.example.com')]
+            with self.subTest(depth=depth):
+                parsed, messages = parse(source, purpose='proxy')
+                self.assertEqual(messages, [])
+                self.assertEqual(parsed, expected)
+                self.assertEqual(set(normalize(parsed)), set(expected))
+                self.assertEqual(parse(source, purpose='proxy'), (expected, []))
+
+    def test_normalization_preserves_original_ignored_process_fields(self):
+        import json
+
+        for kind in ("PROCESS-NAME", "PROCESS-PATH", "IN-NAME"):
+            for params in (",ignored", "(,ignored)"):
+                expression = f"(({kind},Foo{params}))"
+                with self.subTest(kind=kind, params=params):
+                    parsed, messages = parse("payload:\n  - " + json.dumps("NOT," + expression), purpose="proxy")
+                    expected = Rule("NOT", expression if '(' in params else f"(({kind},Foo))",
+                                    literal_process=kind == "PROCESS-NAME", native_fields=True)
+                    self.assertEqual((parsed, messages), ([expected], []))
+                    self.assertEqual(normalize(parsed), [expected])
+                    self.assertEqual(parse("payload:\n  - " + json.dumps("NOT," + parsed[0].value), purpose="proxy"),
+                                     ([expected], []))
+
+
 class DeepLogicalParserTests(unittest.TestCase):
     def test_deep_domain_types_share_traversal_and_ignore_matcher_text(self):
         leaves = (('(DOMAIN-KEYWORD,Ads)', True),
@@ -668,7 +701,7 @@ assert not expected.literal_process
                 with self.subTest(depth=depth, kind=kind):
                     self.assert_subprocess(f'''
 condition = nest({depth}, '({kind},Foo(,ignored))')
-clean = nest({depth}, '({kind},Foo()')
+clean = condition
 expected = Rule('NOT', clean[5:-1], literal_process={kind == 'PROCESS-NAME'}, native_fields=True)
 source = 'payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com'
 assert parse(source, purpose='block') == ([expected, keep], [])
@@ -982,8 +1015,12 @@ class ParseTests(unittest.TestCase):
         parsed, messages = parse('payload:\n  - "PROCESS-NAME,Game #1"\n', purpose="proxy")
         self.assertEqual(parsed, [Rule("PROCESS-NAME", "Game #1", literal_process=True)])
         self.assertEqual(messages, [])
+        native, skipped = render("a3", parsed, purpose="proxy", no_resolve="keep")
+        self.assertEqual(native["fin.txt"], "# a3 rules: 0\n")
+        self.assertEqual(skipped["fin.txt:PROCESS-NAME"], 1)
+        parsed = [Rule("PROCESS-NAME", "Game #1")]
         text = render("a3", parsed, purpose="proxy", no_resolve="keep")[0]["fin.txt"]
-        self.assertEqual(text, "# a3 rules: 1\nPROCESS-NAME,Game #1\n")
+        self.assertEqual(text, "# a3 rules: 1\nPROCESS-NAME,'Game #1'\n")
         reparsed, messages = parse(text, purpose="proxy")
         self.assertEqual(reparsed, [Rule("PROCESS-NAME", "Game #1")])
         self.assertEqual(messages, [])

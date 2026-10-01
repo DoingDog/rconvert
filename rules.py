@@ -239,7 +239,9 @@ _REGEXP2_WORD_BOUNDARIES = (
 
 def _delimiters(line: str, *, native_fields: bool = False,
                 groups: dict[int, int] | None = None,
-                commas: dict[int, list[int]] | None = None):
+                commas: dict[int, list[int]] | None = None,
+                regex_edits: list[tuple[int, int, str]] | None = None,
+                regex_commas: list[tuple[int, int, str]] | None = None):
     # 仅扫描调用者给出的范围；来源策略和注释由 _source_parts 消费。
     stack = []
     start, escaped, quote = 0, False, None
@@ -265,7 +267,17 @@ def _delimiters(line: str, *, native_fields: bool = False,
             index += 1
             continue
         in_class = bool(stack and stack[-1][0] == '[')
+        if (regex_commas is not None and regex_depth is not None and char == ',' and
+                (line[index - 1:index] == ' ' or line[index + 1:index + 2] == ' ')):
+            regex_commas.append((index - int(escaped), index + 1, r'\x{2C}'))
         if regex_comment:
+            if (regex_edits is not None or regex_commas is not None) and index < len(line) - 1:
+                if char == '\n':
+                    regex_comment = False
+                elif regex_edits is not None and char in '()':
+                    regex_edits.append((index, index + 1, r'\x{' + f'{ord(char):X}' + '}'))
+                index += 1
+                continue
             if char == ')' and regex_depth and len(stack) == regex_depth:
                 opened = stack.pop()
                 if groups is not None:
@@ -276,6 +288,8 @@ def _delimiters(line: str, *, native_fields: bool = False,
             continue
         if escaped:
             escaped = False
+            if regex_edits is not None and regex_depth is not None and char in '()':
+                regex_edits.append((index - 1, index + 1, r'\x{' + f'{ord(char):X}' + '}'))
             if in_class:
                 class_first = class_hyphen = False
             if regex_depth is not None and char == 'c':
@@ -288,6 +302,8 @@ def _delimiters(line: str, *, native_fields: bool = False,
         elif char in "'\"" and not line[start:index].strip() and regex_depth is None:
             quote = char
         elif in_class:
+            if regex_edits is not None and char in '()':
+                regex_edits.append((index, index + 1, r'\x{' + f'{ord(char):X}' + '}'))
             subtraction = char == '[' and class_hyphen
             class_hyphen = char == '-' and not class_first
             if subtraction:
@@ -304,6 +320,12 @@ def _delimiters(line: str, *, native_fields: bool = False,
             end = line.find(')', index + 3)
             if end < 0:
                 raise ValueError("unbalanced delimiters")
+            if regex_edits is not None:
+                regex_edits.extend((point, point + 1, r'\x{28}') for point in range(index + 3, end)
+                                   if line[point] == '(')
+            if regex_commas is not None:
+                regex_commas.extend((point, point + 1, r'\x{2C}') for point in range(index + 3, end)
+                                    if line[point] == ',' and (line[point - 1] == ' ' or line[point + 1] == ' '))
             index = end + 1
             continue
         elif regex_depth is not None and extended and char == '#':
@@ -1143,7 +1165,10 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
                 return None
         elif not value or kind not in _KINDS:
             return None
-        normalized.append(f"({kind},{value}{',no-resolve' if 'no-resolve' in options else ''})")
+        # 原生普通 matcher 的尾字段可参与括号范围，保留原字段才能再次消费完整条件。
+        tail = (',' + ','.join(fields[2:]) if native_fields and kind not in _REGEX
+                and len(fields) > 2 and any(char in value for char in '()') else '')
+        normalized.append(f"({kind},{value}{tail}{',no-resolve' if 'no-resolve' in options else ''})")
     return normalized[0]
 
 

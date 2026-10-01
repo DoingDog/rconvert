@@ -5,7 +5,8 @@ from datetime import datetime, timedelta, timezone
 from collections import Counter
 from collections.abc import Iterable
 
-from rules import Rule, _QX_INTERFACE_OPTIONS, _field_value, _fields, _valid_domain
+from rules import (Rule, _REGEX, _QX_INTERFACE_OPTIONS, _delimiters,
+                   _field_value, _fields, _logical_children, _valid_domain)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -46,10 +47,11 @@ _DNS_UNICODE_ATOMS = {
 }
 
 
-def _surge_value(value: str, *, source_regex: bool = False) -> str:
+def _surge_value(value: str, *, source_regex: bool = False, quote_parentheses: bool = False) -> str:
     trailing_escape = (len(value) - len(value.rstrip("\\"))) % 2
-    if ("," not in value and not value.startswith(("'", '"')) and not trailing_escape and
-            not (source_regex and re.search(r"\s(?:[#;]|//)", value))):
+    if (value == value.strip() and "," not in value and not value.startswith(("'", '"')) and not trailing_escape and
+            not re.search(r"\s(?:[#;]|//)", value) and
+            not (quote_parentheses and any(char in value for char in '()'))):
         return value
     if "'" not in value and not trailing_escape:
         return f"'{value}'"
@@ -73,100 +75,182 @@ def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tu
     return kind, value
 
 
+# 固定 Go Unicode 15.0.0 的 CaseRanges 与 caseOrbit 非自身映射（含 U+00DF）。
+# 区间外 scalar 的 SimpleFold 与 ToLower 均保持自身，不依赖 Python UCD。
+_PROCESS_CASE_VARIANTS = re.compile(
+    r"["
+    r"A-Za-zµÀ-ÖØ-öø-ķĹ-ň"
+    r"Ŋ-ƌƎ-ƚƜ-ƩƬ-ƹƼ-ƽƿǄ-ǯ"
+    r"Ǳ-ȠȢ-ȳȺ-ɔɖ-ɗəɛ-ɜɠ-ɡɣ"
+    r"ɥ-ɦɨ-ɬɯɱ-ɲɵɽʀʂ-ʃʇ-ʌ"
+    r"ʒʝ-ʞͅͰ-ͳͶ-ͷͻ-ͽͿΆΈ-Ί"
+    r"ΌΎ-ΏΑ-ΡΣ-ία-ϑϕ-ϵϷ-ϻ"
+    r"Ͻ-ҁҊ-ԯԱ-Ֆա-ֆႠ-ჅჇჍა-ჺ"
+    r"ჽ-ჿᎠ-Ᏽᏸ-ᏽᲀ-ᲈᲐ-ᲺᲽ-Ჿᵹᵽ"
+    r"ᶎḀ-ẕẛẞẠ-ἕἘ-Ἕἠ-ὅὈ-Ὅὑ"
+    r"ὓὕὗὙὛὝὟ-ώᾀ-ᾱᾳᾸ-ᾼι"
+    r"ῃῈ-ῌῐ-ῑῘ-Ίῠ-ῡῥῨ-Ῥῳ"
+    r"Ὸ-ῼΩK-ÅℲⅎⅠ-ⅿↃ-ↄⒶ-ⓩ"
+    r"Ⰰ-ⱰⱲ-ⱳⱵ-ⱶⱾ-ⳣⳫ-ⳮⳲ-ⳳ"
+    r"ⴀ-ⴥⴧⴭꙀ-ꙭꚀ-ꚛꜢ-ꜯꜲ-ꝯꝹ-ꞇ"
+    r"Ꞌ-ꞍꞐ-ꞔꞖ-ꞮꞰ-ꟊꟐ-ꟑꟖ-ꟙ"
+    r"Ꟶ-ꟶꭓꭰ-ꮿＡ-Ｚａ-ｚ\U00010400-\U0001044f"
+    r"\U000104b0-\U000104d3\U000104d8-\U000104fb\U00010570-\U0001057a\U0001057c-\U0001058a"
+    r"\U0001058c-\U00010592\U00010594-\U00010595\U00010597-\U000105a1\U000105a3-\U000105b1"
+    r"\U000105b3-\U000105b9\U000105bb-\U000105bc\U00010c80-\U00010cb2\U00010cc0-\U00010cf2"
+    r"\U000118a0-\U000118df\U00016e40-\U00016e7f\U0001e900-\U0001e943"
+    r"]"
+)
+
+
+def _process_value(kind: str, value: str, supported: set[str], literal_process: bool) -> tuple[str, str | None]:
+    process_types = {"PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"}
+    if kind not in process_types:
+        return kind, value
+    surge_source = kind == "PROCESS-NAME" and not literal_process
+    wildcard = any(char in value for char in "*?")
+    if supported is SURGE_TYPES:
+        # ToLower 的 U+0131 与 SimpleFold 的两个 I-dot 字符分别保持自身。
+        case_value = value.translate({0x131: None} if kind.endswith('-WILDCARD') else {0x130: None, 0x131: None})
+        if not surge_source and (wildcard or _PROCESS_CASE_VARIANTS.search(case_value)
+                                 or kind.startswith("PROCESS-PATH") and (not value.startswith("/") or value.endswith("/"))
+                                 or kind.startswith("PROCESS-NAME") and value.startswith("/")):
+            return kind, None
+        return "PROCESS-NAME", value
+    if surge_source:
+        # Surge glob 的字符范围尚未核实；literal exact/prefix 使用 regexp2 严格锚点。
+        if wildcard:
+            return kind, None
+        kind = "PROCESS-PATH-REGEX" if value.startswith("/") else "PROCESS-NAME-REGEX"
+        literal = "".join(r"\x{" + f"{ord(char):X}" + "}" for char in value)
+        end = "" if value.startswith("/") and value.endswith("/") else r"\z"
+        return kind, r"(?-i:\A" + literal + end + ")"
+    return kind, value
+
+
+def _yaml_value(value: str) -> str:
+    # 保持 JSON 可解码，转义 YAML 的分行/C1/非字符边界，并保留完整 non-BMP scalar。
+    return re.sub(r"[\x7f-\x9f\u2028\u2029\ufffe\uffff]",
+                  lambda match: f"\\u{ord(match[0]):04x}", json.dumps(value, ensure_ascii=False))
+
+
+_LINE_UNSAFE = re.compile(r"[\x00-\x08\x0a-\x1f\x7f-\x9f\u2028\u2029\ufffe\uffff]")
+
+
+def _logical_regex_value(value: str, *, logical: bool = True) -> str | None:
+    # 复用 lexer 编码会被字段 trim 的字面逗号；逻辑内同时保护字面括号。
+    prefix = '(DOMAIN-REGEX,(?:)'
+    expression, edits = prefix + value + ')', []
+    try:
+        list(_delimiters(expression, regex_edits=edits if logical else None, regex_commas=edits))
+    except ValueError:
+        return None
+    parts, cursor = [], len(prefix)
+    for start, stop, replacement in sorted(edits):
+        parts.extend((expression[cursor:start], replacement))
+        cursor = stop
+    parts.append(expression[cursor:-1])
+    # 空 group 保护字段边缘的 ASCII space，不改变 extended mode 的空格语义。
+    return ('(?:)' if value.startswith(' ') else '') + ''.join(parts) + ('(?:)' if value.endswith(' ') else '')
+
+
 def _logical_value(value: str, operator: str, supported: set[str], no_resolve: str = "keep",
                    literal_process: bool = False, native_fields: bool = False,
                    domain_source: str = "surge") -> str | None:
-    if operator == "NOT" and value.startswith("(") and not value.startswith("(("):
-        value = f"({value})"
-    if not value.startswith("((") or not value.endswith("))"):
-        return None
+    expression = f"({operator},{value})"
+    groups, commas = {}, {} if native_fields else None
     try:
-        children = _fields(value[1:-1], scope='children', native_fields=native_fields)
+        list(_delimiters(expression, native_fields=native_fields, groups=groups, commas=commas))
     except ValueError:
         return None
-    if (len(children) != 1 if operator == "NOT" else len(children) < 2):
-        return None
-    parts = []
-    for child in children:
-        if not child.startswith("(") or not child.endswith(")"):
+    pending, edits = [(0, len(expression), 0)], []
+    trim = ' ' if native_fields else None
+    while pending:
+        begin, end, depth = pending.pop()
+        if expression[begin:begin + 1] != '(' or expression[end - 1:end] != ')':
             return None
+        comma = expression.find(',', begin + 1, end - 1)
+        if comma < 0:
+            return None
+        kind = expression[begin + 1:comma].strip(trim).upper()
+        if kind in LOGICAL:
+            if supported is SURGE_TYPES and depth >= 10:
+                return None
+            start, stop = comma + 1, end - 1
+            while start < stop and (expression[start] == ' ' if native_fields else expression[start].isspace()):
+                start += 1
+            while stop > start and (expression[stop - 1] == ' ' if native_fields else expression[stop - 1].isspace()):
+                stop -= 1
+            children = _logical_children(expression, kind, begin, start, stop, groups, commas)
+            if children is None or kind not in supported:
+                return None
+            ranges, wrapped = children
+            if kind == 'NOT' and not wrapped:
+                edits.extend(((start, start, '('), (stop, stop, ')')))
+            pending.extend((begin, end, depth + 1) for begin, end in reversed(ranges))
+            continue
         try:
-            fields = _fields(child[1:-1], native_fields=native_fields)
+            fields = _fields(expression[begin + 1:end - 1], native_fields=native_fields)
         except ValueError:
             return None
         if len(fields) < 2:
             return None
         kind, payload, *options = fields
-        if kind in LOGICAL:
-            if options:
+        kind = kind.upper()
+        if not native_fields and options and (kind not in NO_RESOLVE_TYPES or
+                                              any(option.lower() != 'no-resolve' for option in options)):
+            return None
+        if not native_fields:
+            payload = _field_value(payload)
+        if not payload.strip(trim):
+            return None
+        kind, payload = _domain_value(kind, payload, domain_source, supported)
+        if payload is None:
+            return None
+        kind, payload = _process_value(kind, payload, supported, literal_process)
+        if payload is None:
+            return None
+        if supported is SURGE_TYPES:
+            if _LINE_UNSAFE.search(payload):
                 return None
-            payload = _logical_value(payload, kind, supported, no_resolve, literal_process,
-                                     native_fields, domain_source)
-            if payload is None:
-                return None
+            if kind == 'NETWORK' and payload.upper() in {'TCP', 'UDP'}:
+                kind, payload = 'PROTOCOL', payload.upper()
+            kind = SURGE_ALIASES.get(kind, kind)
+            # 条件内的字面括号需要字段引用，防止参与逻辑包装。
+            payload = _surge_value(payload, quote_parentheses=True)
         else:
-            if options and (kind not in NO_RESOLVE_TYPES or
-                            any(option.lower() != "no-resolve" for option in options)):
-                return None
-            quote = payload[0] if not native_fields and len(payload) >= 2 and payload[0] in "'\"" and payload[-1] == payload[0] else None
-            if quote:
-                payload = _field_value(payload)
-            if not payload.strip():
-                return None
-            kind, payload = _domain_value(kind, payload, domain_source, supported)
-            if payload is None:
-                return None
-            if supported is SURGE_TYPES:
-                if (kind == "PROCESS-NAME" and literal_process and
-                        (payload.startswith("/") or any(char in payload for char in "*?")) or
-                        kind == "PROCESS-PATH" and any(char in payload for char in "*?") or
-                        kind == "PROCESS-NAME-WILDCARD" and payload.startswith("/")):
+            if kind == 'DEST-PORT':
+                kind = 'DST-PORT'
+            elif kind == 'SRC-IP':
+                try:
+                    network = ipaddress.ip_network(payload, strict=False)
+                except ValueError:
                     return None
-                if kind == "NETWORK" and payload.upper() in {"TCP", "UDP"}:
-                    kind, payload = "PROTOCOL", payload.upper()
-                elif kind in {"PROCESS-PATH", "PROCESS-PATH-WILDCARD"} and not payload.startswith("/"):
-                    return None
-                kind = SURGE_ALIASES.get(kind, kind)
-                if kind == "IP-CIDR" and ":" in payload:
-                    kind = "IP-CIDR6"
-                payload = _surge_value(payload)
+                kind, payload = 'SRC-IP-CIDR', str(network)
+            elif kind == 'PROTOCOL' and payload.upper() in {'TCP', 'UDP'}:
+                kind, payload = 'NETWORK', payload.lower()
+            if kind in _REGEX and not native_fields:
+                payload = _logical_regex_value(payload)
                 if payload is None:
                     return None
-            else:
-                if kind == "DEST-PORT":
-                    kind = "DST-PORT"
-                elif kind == "SRC-IP":
-                    try:
-                        if "/" in payload:
-                            payload = str(ipaddress.ip_network(payload, strict=False))
-                        else:
-                            address = ipaddress.ip_address(payload)
-                            payload = f"{address}/{address.max_prefixlen}"
-                    except ValueError:
-                        return None
-                    kind = "SRC-IP-CIDR"
-                elif kind == "PROTOCOL" and payload.upper() in {"TCP", "UDP"}:
-                    kind, payload = "NETWORK", payload.lower()
-                elif kind == "PROCESS-NAME" and not literal_process:
-                    if payload.startswith("/"):
-                        kind = ("PROCESS-PATH-WILDCARD" if any(char in payload for char in "*?")
-                                else "PROCESS-PATH")
-                    elif any(char in payload for char in "*?"):
-                        kind = "PROCESS-NAME-WILDCARD"
-                if kind == "IP-CIDR" and ":" in payload:
-                    kind = "IP-CIDR6"
-                if kind.startswith("PROCESS-") and "," in payload and not kind.endswith("-REGEX"):
-                    return None
-            if kind not in supported:
+            if kind.startswith('PROCESS-') and ',' in payload and not kind.endswith('-REGEX'):
                 return None
-            if supported is MIHOMO_TYPES and quote and "," in payload and not kind.endswith("-REGEX"):
-                payload = f"{quote}{payload}{quote}"
-            if kind in NO_RESOLVE_TYPES and (
-                no_resolve == "add" or no_resolve == "keep" and options
-            ):
-                payload += ",no-resolve"
-        parts.append(f"({kind},{payload})")
-    return "(" + ",".join(parts) + ")"
+            if native_fields and kind not in _REGEX and options and any(char in payload for char in '()'):
+                payload += ',' + ','.join(options)
+        if kind == 'IP-CIDR' and ':' in payload:
+            kind = 'IP-CIDR6'
+        if kind not in supported:
+            return None
+        if kind in NO_RESOLVE_TYPES and (no_resolve == 'add' or no_resolve == 'keep' and
+                                        any(option.lower() == 'no-resolve' for option in options)):
+            payload += ',no-resolve'
+        edits.append((begin, end, f'({kind},{payload})'))
+    parts, cursor = [], 0
+    for start, stop, text in sorted(edits):
+        parts.extend((expression[cursor:start], text))
+        cursor = stop
+    parts.append(expression[cursor:])
+    return ''.join(parts)[len(operator) + 2:-1]
 
 
 def _wildcard_regex(value: str) -> str | None:
@@ -334,15 +418,12 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                         rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
         elif no_resolve == "add" and not rule.allow and kind in NO_RESOLVE_TYPES:
             rule = Rule(kind, value, rule.options + ("no-resolve",), rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
-        if "\r" in value or "\n" in value:
-            for name in FILES:
-                skipped[f"{name}:{kind}"] += 1
-            continue
+        line_safe = _LINE_UNSAFE.search(value) is None
         emitted = set()
         text = f"{kind},{value}"
         logical = kind in LOGICAL
         if rule.allow:
-            if not rule.options and purpose == "block":
+            if not rule.options and purpose == "block" and line_safe:
                 dns_pattern = _dns_pattern(rule)
                 if dns_pattern is not None:
                     lines["fin-adb.txt"].append("@@" + (f"|{value}|" if kind == "DOMAIN" else dns_pattern))
@@ -355,28 +436,25 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                         lines[name].append(f"{surge_kind},{value},no-resolve")
                         emitted.add(name)
                 if kind in MIHOMO_TYPES:
-                    lines["fin.yaml"].append("  - " + json.dumps(text + ",no-resolve", ensure_ascii=False))
+                    lines["fin.yaml"].append("  - " + _yaml_value(text + ",no-resolve"))
                     emitted.add("fin.yaml")
                 if kind in QX_TYPES:
                     qx_kind = "IP6-CIDR" if kind == "IP-CIDR" and ":" in value else QX_TYPES[kind]
                     lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST,no-resolve")
                     emitted.add("fin-qx.txt")
         else:
-            _, surge_payload = _domain_value(kind, value, rule.domain_source, SURGE_TYPES)
+            surge_kind, surge_payload = _domain_value(kind, value, rule.domain_source, SURGE_TYPES)
+            if surge_payload is not None:
+                surge_kind, surge_payload = _process_value(surge_kind, surge_payload, SURGE_TYPES,
+                                                          rule.literal_process)
+            if kind == "NETWORK" and value.upper() in {"TCP", "UDP"}:
+                surge_kind, surge_payload = "PROTOCOL", value.upper()
+            surge_kind = SURGE_ALIASES.get(surge_kind, surge_kind)
             surge_value = (_logical_value(value, kind, SURGE_TYPES, no_resolve, rule.literal_process,
                                           rule.native_fields, rule.domain_source) if logical else
                            _surge_value(surge_payload, source_regex=kind == "URL-REGEX")
                            if surge_payload is not None else None)
-            if ((kind in SURGE_TYPES or kind == "PROCESS-NAME-WILDCARD" or
-                    kind in {"PROCESS-PATH", "PROCESS-PATH-WILDCARD"} and value.startswith('/') or
-                    kind == "NETWORK" and value.upper() in {"TCP", "UDP"}) and surge_value is not None
-                    and not (kind == "PROCESS-NAME" and rule.literal_process
-                             and (value.startswith("/") or any(char in value for char in "*?"))
-                             or kind == "PROCESS-PATH" and any(char in value for char in "*?")
-                             or kind == "PROCESS-NAME-WILDCARD" and value.startswith("/"))):
-                surge_kind = SURGE_ALIASES.get(kind, kind)
-                if kind == "NETWORK":
-                    surge_kind, surge_value = "PROTOCOL", value.upper()
+            if surge_kind in SURGE_TYPES and surge_value is not None and line_safe:
                 if kind == "IP-CIDR" and ":" in value:
                     surge_kind = "IP-CIDR6"
                 surge_line = f"{surge_kind},{surge_value}"
@@ -385,7 +463,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 if kind not in DOMAIN_SET_TYPES:
                     lines["fin-surge.txt"].append(surge_line)
                     emitted.add("fin-surge.txt")
-            if kind in QX_TYPES and "," not in value and not (
+            if line_safe and kind in QX_TYPES and "," not in value and not (
                 kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")
             ):
                 qx_kind = QX_TYPES[kind]
@@ -396,30 +474,29 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
             mihomo_kind, mihomo_value = _domain_value(kind, value, rule.domain_source, MIHOMO_TYPES)
             if kind == "DEST-PORT":
                 mihomo_kind = "DST-PORT"
-            if kind == "PROCESS-NAME" and not rule.literal_process:
-                if value.startswith("/"):
-                    mihomo_kind = ("PROCESS-PATH-WILDCARD" if any(char in value for char in "*?")
-                                   else "PROCESS-PATH")
-                elif any(char in value for char in "*?"):
-                    mihomo_kind = "PROCESS-NAME-WILDCARD"
+            if mihomo_value is not None:
+                mihomo_kind, mihomo_value = _process_value(mihomo_kind, mihomo_value, MIHOMO_TYPES,
+                                                          rule.literal_process)
             if logical:
                 mihomo_value = _logical_value(value, kind, MIHOMO_TYPES, no_resolve, rule.literal_process,
                                               rule.native_fields, rule.domain_source)
+            elif mihomo_kind in _REGEX and mihomo_value is not None and not rule.native_fields:
+                mihomo_value = _logical_regex_value(mihomo_value, logical=False)
             if kind == "SRC-IP":
                 address = ipaddress.ip_address(value)
                 mihomo_kind, mihomo_value = "SRC-IP-CIDR", f"{address}/{address.max_prefixlen}"
             if kind == "PROTOCOL" and value.upper() in {"TCP", "UDP"}:
                 mihomo_kind, mihomo_value = "NETWORK", value.lower()
             if (mihomo_kind in MIHOMO_TYPES and mihomo_value is not None and
-                    not (kind.startswith("PROCESS-") and "," in value and not kind.endswith("-REGEX"))):
-                lines["fin.yaml"].append("  - " + json.dumps(f"{mihomo_kind},{mihomo_value}", ensure_ascii=False))
+                    not (mihomo_kind.startswith("PROCESS-") and "," in mihomo_value and not mihomo_kind.endswith("-REGEX"))):
+                lines["fin.yaml"].append("  - " + _yaml_value(f"{mihomo_kind},{mihomo_value}"))
                 emitted.add("fin.yaml")
-            if purpose == "block":
+            if purpose == "block" and line_safe:
                 dns_pattern = _dns_pattern(rule)
                 if dns_pattern is not None:
                     lines["fin-adb.txt"].append(dns_pattern)
                     emitted.add("fin-adb.txt")
-            if kind in DOMAIN_SET_TYPES:
+            if kind in DOMAIN_SET_TYPES and line_safe:
                 lines["fin-surge-ds.txt"].append(("." if kind == "DOMAIN-SUFFIX" else "") + value)
                 emitted.add("fin-surge-ds.txt")
         if interface_options and "fin-qx.txt" in emitted:
@@ -431,7 +508,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
     if purpose == "block":
         for rule in sorted(whitelist, key=lambda item: (item.kind, item.value)):
             if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-REGEX"}:
-                pattern = _dns_pattern(rule) if not any(c in rule.value for c in "\r\n") else None
+                pattern = _dns_pattern(rule) if _LINE_UNSAFE.search(rule.value) is None else None
                 if pattern is None:
                     skipped[f"fin-adb.txt:{rule.kind}"] += 1
                 else:

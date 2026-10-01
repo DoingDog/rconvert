@@ -38,6 +38,396 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class ProcessRendererDependencyGenerateTests(unittest.TestCase):
+    def assert_products(self, outputs, root, group, expected):
+        from rules import parse
+
+        for name in NAMES:
+            text = outputs[root / group / name]
+            lines = text.splitlines()
+            header = 7 if name == "fin-adb.txt" else 2 if name == "fin.yaml" else 1
+            body = {json.loads(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
+            self.assertEqual(body, expected[name], (group, name))
+            self.assertEqual(lines[6] if name == "fin-adb.txt" else lines[0],
+                             f"! Total count: {len(body)}" if name == "fin-adb.txt" else
+                             f"# {group} rules: {len(body)}")
+            self.assertEqual(parse("\n".join(lines[header:]) if name == "fin-adb.txt" else text,
+                                   purpose="block")[1], [], (group, name))
+
+    def dependency_matrix(self, source, mode, parent, dependent, expected_skips, whitelist_source=None):
+        for dependency in NAMES:
+            with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+                root = Path(directory)
+                configs = [{"name": "source", "purpose": "block", "no_resolve": mode,
+                            "sources": ["input.list"], "whitelist": []},
+                           {"name": "dependent", "purpose": "block", "no_resolve": mode,
+                            "sources": [f"source/{dependency}"], "whitelist": []}]
+                if whitelist_source is not None:
+                    configs[0]["whitelist"] = ["whitelist.yaml"]
+                    (root / "whitelist.yaml").write_text(whitelist_source, encoding="utf-8")
+                (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                (root / "input.list").write_text(source, encoding="utf-8")
+                previous = {}
+                for group in ("source", "dependent"):
+                    (root / group).mkdir()
+                    for name in NAMES:
+                        path = root / group / name
+                        path.write_bytes(b"old complete product\n")
+                        previous[path] = path.read_bytes()
+                with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    outputs = generate(root, lambda url: self.fail(url))
+                self.assertEqual(set(outputs), set(previous))
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                self.assertEqual([line for line in stderr.getvalue().splitlines() if line.startswith("source ")],
+                                 [f"source {key}: {count}" for key, count in sorted(expected_skips.items())])
+                if dependency != "fin-adb.txt":
+                    self.assertNotIn(": line ", stderr.getvalue())
+                self.assertNotIn("frozen", stderr.getvalue())
+                self.assert_products(outputs, root, "source", parent)
+                self.assert_products(outputs, root, "dependent", dependent[dependency])
+                publish(outputs)
+                self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in outputs.items()))
+                published = {path: path.read_bytes() for path in outputs}
+                (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()) as disk_stderr:
+                    disk = generate(root, lambda url: self.fail(url))
+                self.assertEqual(set(disk), {root / "dependent" / name for name in NAMES})
+                if dependency != "fin-adb.txt":
+                    self.assertNotIn(": line ", disk_stderr.getvalue())
+                self.assert_products(disk, root, "dependent", dependent[dependency])
+                self.assertEqual({path: path.read_bytes() for path in published}, published)
+                publish(disk)
+                self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in disk.items()))
+
+    def basic_products(self, flag, *, domain=True, ip=True, source_ip=True):
+        dest = "IP-CIDR,203.0.113.0/24" + flag
+        plain = ({"DOMAIN,keep.example.com"} if domain else set()) | ({dest} if ip else set())
+        surge = plain | ({"SRC-IP,127.0.0.0/8"} if source_ip else set())
+        return {"fin.txt": surge, "fin-surge.txt": surge - {"DOMAIN,keep.example.com"},
+                "fin.yaml": plain | ({"SRC-IP-CIDR,127.0.0.0/8"} if source_ip else set()),
+                "fin-qx.txt": ({"HOST,keep.example.com,LIST"} if domain else set()) |
+                              ({"IP-CIDR,203.0.113.0/24,LIST" + flag} if ip else set()),
+                "fin-adb.txt": {"keep.example.com"} if domain else set(),
+                "fin-surge-ds.txt": {"keep.example.com"} if domain else set()}
+
+    def test_surge_process_and_quoted_regex_preserve_six_generated_dependencies(self):
+        from tests.test_formats import expected_process
+
+        values = ("FooApp", "/Applications/Widget.app/", "Game #1", "Game ;1", "Game //1")
+        source = "\n".join(f"PROCESS-NAME,'{value}',REJECT" for value in (*values, "Foo*"))
+        source += ('\nAND,((DOMAIN-REGEX,"^f{1,2}oo[.]example[.]org$"),(NETWORK,tcp)),REJECT'
+                   '\nAND,((PROCESS-NAME-REGEX,"^Game,Inc$"),(NETWORK,tcp)),REJECT'
+                   '\nAND,((IP-CIDR,203.0.113.0/24,no-resolve),(SRC-IP-CIDR,127.0.0.0/8)),REJECT'
+                   '\nDOMAIN,keep.example.com,REJECT\nIP-CIDR,203.0.113.0/24,REJECT,no-resolve'
+                   '\nSRC-IP-CIDR,127.0.0.0/8,REJECT\n')
+        names = {"PROCESS-NAME," + (f"'{value}'" if " " in value else value) for value in (*values, "Foo*")}
+        regexes = {'AND,((DOMAIN-REGEX,^f{1,2}oo[.]example[.]org$),(NETWORK,tcp))',
+                   'AND,((PROCESS-NAME-REGEX,^Game,Inc$),(NETWORK,tcp))'}
+        for mode in ("add", "keep", "strip"):
+            flag = "" if mode == "strip" else ",no-resolve"
+            logic = f"AND,((IP-CIDR,203.0.113.0/24{flag}),(SRC-IP-CIDR,127.0.0.0/8))"
+            parent = self.basic_products(flag)
+            for name in ("fin.txt", "fin-surge.txt"):
+                parent[name] |= names | {logic.replace("SRC-IP-CIDR,", "SRC-IP,")}
+            parent["fin.yaml"] |= {expected_process(value) for value in values} | regexes | {logic}
+            dependent = {}
+            for name in NAMES:
+                full = name in ("fin.txt", "fin-surge.txt", "fin.yaml")
+                body = self.basic_products(flag, domain=name != "fin-surge.txt",
+                                           ip=full or name == "fin-qx.txt", source_ip=full)
+                if name in ("fin.txt", "fin-surge.txt"):
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target] |= names | {logic.replace("SRC-IP-CIDR,", "SRC-IP,")}
+                    body["fin.yaml"] |= {expected_process(value) for value in values} | {logic}
+                elif name == "fin.yaml":
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target] |= {logic.replace("SRC-IP-CIDR,", "SRC-IP,")}
+                    body["fin.yaml"] |= {expected_process(value) for value in values} | regexes | {logic}
+                dependent[name] = body
+            skips = {"fin.txt:AND": 2, "fin-surge.txt:AND": 2, "fin.yaml:PROCESS-NAME": 1}
+            for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                skips.update({f"{name}:AND": 3, f"{name}:PROCESS-NAME": 6, f"{name}:SRC-IP-CIDR": 1})
+                if name != "fin-qx.txt":
+                    skips[f"{name}:IP-CIDR"] = 1
+            self.dependency_matrix(source, mode, parent, dependent, skips)
+
+    def test_native_controls_and_ignored_tails_preserve_six_generated_dependencies(self):
+        controls = ("\0", "\r", "\n", "\x85", " ", " ", "\x7f", "\x9f", "￾", "￿", "\U0001f642")
+        values = {f"{kind},A{char}B" for kind in ("PROCESS-NAME", "PROCESS-PATH",
+                  "PROCESS-NAME-WILDCARD", "PROCESS-NAME-REGEX") for char in controls}
+        values |= {f"AND,(({kind},A{char}B),(NETWORK,tcp))" for kind in ("PROCESS-NAME", "PROCESS-PATH",
+                   "PROCESS-NAME-WILDCARD", "PROCESS-NAME-REGEX", "DOMAIN-REGEX") for char in controls}
+        values |= {f"{operator},(({kind},Foo(,ignored))" + (")" if operator == "NOT" else ",(NETWORK,tcp))")
+                   for operator in ("NOT", "AND", "OR") for kind in ("PROCESS-NAME", "PROCESS-PATH", "IN-NAME")}
+        source = "payload:\n" + "".join("  - " + json.dumps(value, ensure_ascii=False).translate(
+                 {ord(char): "\\u" + format(ord(char), "04x") for char in controls if ord(char) <= 0xffff}) + "\n"
+                 for value in sorted(values))
+        source += ("  - DOMAIN,keep.example.com\n  - IP-CIDR,203.0.113.0/24,no-resolve\n"
+                   "  - SRC-IP-CIDR,127.0.0.0/8\n")
+        for mode in ("add", "keep", "strip"):
+            flag = "" if mode == "strip" else ",no-resolve"
+            parent = self.basic_products(flag)
+            parent["fin.yaml"] |= values
+            dependent = {name: self.basic_products(flag, domain=name != "fin-surge.txt",
+                         ip=name in ("fin.txt", "fin-surge.txt", "fin.yaml", "fin-qx.txt"),
+                         source_ip=name in ("fin.txt", "fin-surge.txt", "fin.yaml")) for name in NAMES}
+            dependent["fin.yaml"]["fin.yaml"] |= values
+            skips = {f"{name}:{kind}": count for name in NAMES if name != "fin.yaml"
+                     for kind, count in (("AND", 58), ("OR", 3), ("NOT", 3), ("PROCESS-NAME", 11),
+                                         ("PROCESS-PATH", 11), ("PROCESS-NAME-WILDCARD", 11), ("PROCESS-NAME-REGEX", 11))}
+            for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                skips[f"{name}:SRC-IP-CIDR"] = 1
+                if name != "fin-qx.txt":
+                    skips[f"{name}:IP-CIDR"] = 1
+            self.dependency_matrix(source, mode, parent, dependent, skips)
+
+    def test_native_deep_and_long_matchers_preserve_generated_dependencies(self):
+        tails = set()
+        for depth, kind, inner in ((1, "PROCESS-NAME", None), (600, "PROCESS-NAME", None),
+                                   (1000, "PROCESS-NAME", None), (601, "PROCESS-PATH", None),
+                                   (1001, "IN-NAME", None), (600, "PROCESS-NAME", "AND"),
+                                   (1000, "PROCESS-NAME", "OR")):
+            leaf = f"({kind},Foo(,ignored))"
+            if inner:
+                leaf = f"({inner},({leaf},(NETWORK,tcp)))"
+            tails.add(("(NOT,(" * depth + leaf + "))" * depth)[1:-1])
+        matcher = "^(" + "|".join(f"host{index}.example.com" for index in range(1024)) + ")$"
+        self.assertEqual(len(matcher), 20397)
+        cases = []
+        for depth in (600, 1000):
+            for long in (False, True):
+                for flagged in (False, True):
+                    leaf = ("(AND,((IP-CIDR,203.0.113.0/24" + (",no-resolve" if flagged else "") +
+                            "),(SRC-IP-CIDR,127.0.0.0/8)," +
+                            (f"(PROCESS-NAME-REGEX,{matcher})" if long else "(DOMAIN,x.example.com)") + "))")
+                    cases.append((("(NOT,(" * depth + leaf + "))" * depth)[1:-1], long, flagged))
+        source = "payload:\n" + "".join("  - " + json.dumps(value) + "\n"
+                 for value in sorted(tails | {value for value, _, _ in cases}))
+        source += "  - DOMAIN,keep.example.com\n  - DST-PORT,443\n"
+        for mode in ("add", "keep", "strip"):
+            parent = self.basic_products("", ip=False, source_ip=False)
+            yaml_rules = set(tails) | {"DST-PORT,443"}
+            for value, long, flagged in cases:
+                expected = value.replace(",no-resolve", "")
+                if mode == "add" or mode == "keep" and flagged:
+                    expected = expected.replace("IP-CIDR,203.0.113.0/24)", "IP-CIDR,203.0.113.0/24,no-resolve)")
+                yaml_rules.add(expected)
+                self.assertEqual(expected.count("no-resolve"), int(mode == "add" or mode == "keep" and flagged))
+            parent["fin.yaml"] |= yaml_rules
+            for name in ("fin.txt", "fin-surge.txt"):
+                parent[name].add("DEST-PORT,443")
+            dependent = {}
+            for name in NAMES:
+                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False)
+                if name in ("fin.txt", "fin-surge.txt", "fin.yaml"):
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target].add("DEST-PORT,443")
+                    body["fin.yaml"] |= yaml_rules if name == "fin.yaml" else {"DST-PORT,443"}
+                dependent[name] = body
+            skips = {f"{name}:NOT": 15 for name in NAMES if name != "fin.yaml"}
+            skips.update({f"{name}:DST-PORT": 1 for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")})
+            self.dependency_matrix(source, mode, parent, dependent, skips)
+
+
+class ProcessReviewDependencyGenerateTests(unittest.TestCase):
+    assert_products = ProcessRendererDependencyGenerateTests.assert_products
+    dependency_matrix = ProcessRendererDependencyGenerateTests.dependency_matrix
+    basic_products = ProcessRendererDependencyGenerateTests.basic_products
+
+    def test_parenthesis_backslash_and_regex_complete_dependencies(self):
+        field = r'"Game(1)\\"'
+        surge_fields = set()
+        process_fields = set()
+        source = []
+        strict = r"PROCESS-NAME-REGEX,(?-i:\A\x{47}\x{61}\x{6D}\x{65}\x{28}\x{31}\x{29}\x{5C}\z)"
+        for kind in ("PROCESS-NAME", "USER-AGENT", "DEVICE-NAME"):
+            for operator in ("AND", "OR", "NOT"):
+                expression = f"(({kind},{field}))" if operator == "NOT" else f"(({kind},{field}),(DOMAIN,x.example.com))"
+                surge_fields.add(operator + "," + expression)
+                source.append(operator + "," + expression + ",REJECT")
+                if kind == "PROCESS-NAME":
+                    process_fields.add(f"NOT,(({strict}))" if operator == "NOT" else
+                                       f"{operator},(({strict}),(DOMAIN,x.example.com))")
+        regexes = {f"AND,(({kind},^foo[.\\x{{29}}]bar$),(NETWORK,tcp))" for kind in
+                   ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX")}
+        source.extend(f'AND,(({kind},"^foo[.)]bar$"),(NETWORK,tcp)),REJECT' for kind in
+                      ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"))
+        source.extend(("DOMAIN,keep.example.com,REJECT", "DST-PORT,443,REJECT"))
+        for mode in ("add", "keep", "strip"):
+            parent = self.basic_products("", ip=False, source_ip=False)
+            for target in ("fin.txt", "fin-surge.txt"):
+                parent[target] |= surge_fields | {"DEST-PORT,443"}
+            parent["fin.yaml"] |= process_fields | regexes | {"DST-PORT,443"}
+            dependent = {}
+            for name in NAMES:
+                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False)
+                if name in ("fin.txt", "fin-surge.txt", "fin.yaml"):
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target] |= {"DEST-PORT,443"} | (surge_fields if name != "fin.yaml" else set())
+                    body["fin.yaml"] |= {"DST-PORT,443"} | process_fields | (regexes if name == "fin.yaml" else set())
+                dependent[name] = body
+            skips = {f"{name}:AND": 3 for name in ("fin.txt", "fin-surge.txt")}
+            skips.update({f"fin.yaml:{kind}": 2 for kind in ("AND", "OR", "NOT")})
+            for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                skips.update({f"{name}:{kind}": count for kind, count in (("AND", 6), ("OR", 3), ("NOT", 3), ("DST-PORT", 1))})
+            self.dependency_matrix("\n".join(source), mode, parent, dependent, skips)
+
+    def test_native_user_tail_and_unicode_complete_dependencies(self):
+        users = {"NOT,((IN-USER,Foo(,ignored)))", "AND,((IN-USER,Foo(,ignored)),(NETWORK,tcp))",
+                 "OR,((IN-USER,Foo(,ignored)),(NETWORK,tcp))"}
+        processes = {"PROCESS-NAME,123🙂", "PROCESS-NAME-WILDCARD,123🙂",
+                     "PROCESS-PATH,/123/🙂", "PROCESS-PATH-WILDCARD,/123/🙂"}
+        source = "payload:\n" + "".join("  - " + json.dumps(value, ensure_ascii=False) + "\n" for value in sorted(users | processes))
+        source += "  - DOMAIN,keep.example.com\n  - DST-PORT,443\n"
+        surge_processes = {"PROCESS-NAME,123🙂", "PROCESS-NAME,/123/🙂"}
+        strict_processes = {
+            r"PROCESS-NAME-REGEX,(?-i:\A\x{31}\x{32}\x{33}\x{1F642}\z)",
+            r"PROCESS-PATH-REGEX,(?-i:\A\x{2F}\x{31}\x{32}\x{33}\x{2F}\x{1F642}\z)"}
+        for mode in ("add", "keep", "strip"):
+            parent = self.basic_products("", ip=False, source_ip=False)
+            for target in ("fin.txt", "fin-surge.txt"):
+                parent[target] |= surge_processes | {"DEST-PORT,443"}
+            parent["fin.yaml"] |= users | processes | {"DST-PORT,443"}
+            dependent = {}
+            for name in NAMES:
+                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False)
+                if name in ("fin.txt", "fin-surge.txt", "fin.yaml"):
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target] |= {"DEST-PORT,443"} | surge_processes
+                    body["fin.yaml"] |= {"DST-PORT,443"} | (users | processes if name == "fin.yaml" else strict_processes)
+                dependent[name] = body
+            skips = {f"{name}:{kind}": 1 for name in NAMES if name != "fin.yaml" for kind in ("AND", "OR", "NOT")}
+            for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                skips.update({f"{name}:{kind}": 1 for kind in ("DST-PORT", "PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD")})
+            self.dependency_matrix(source, mode, parent, dependent, skips)
+
+    def test_unsafe_yaml_whitelist_preserves_all_dependencies_without_split_lines(self):
+        whitelist = "payload:\n" + "".join("  - " + json.dumps("DOMAIN-REGEX,^A" + char + "B$") + "\n"
+                     for char in ("\0", "\r", "\n", "\x85", "\u2028", "\u2029", "\x7f", "\x9f", "\ufffe", "\uffff"))
+        source = "DOMAIN,keep.example.com,REJECT\nDST-PORT,443,REJECT\n"
+        for mode in ("add", "keep", "strip"):
+            parent = self.basic_products("", ip=False, source_ip=False)
+            for target in ("fin.txt", "fin-surge.txt"):
+                parent[target].add("DEST-PORT,443")
+            parent["fin.yaml"].add("DST-PORT,443")
+            dependent = {}
+            for name in NAMES:
+                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False)
+                if name in ("fin.txt", "fin-surge.txt", "fin.yaml"):
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target].add("DEST-PORT,443")
+                    body["fin.yaml"].add("DST-PORT,443")
+                dependent[name] = body
+            skips = {f"{name}:DST-PORT": 1 for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt")}
+            skips["fin-adb.txt:DOMAIN-REGEX"] = 10
+            self.dependency_matrix(source, mode, parent, dependent, skips, whitelist_source=whitelist)
+
+
+class ProcessRendererRound2DependencyGenerateTests(unittest.TestCase):
+    assert_products = ProcessRendererDependencyGenerateTests.assert_products
+    dependency_matrix = ProcessRendererDependencyGenerateTests.dependency_matrix
+    basic_products = ProcessRendererDependencyGenerateTests.basic_products
+
+    def process_dependencies(self, selected, omitted=()):
+        from collections import Counter
+        from tests.test_formats import expected_process
+
+        values, surge, strict = set(), set(), set()
+        counts, surge_skips = Counter(), Counter()
+        for kind, value, operator in selected:
+            leaf = f"{kind},{value}"
+            matcher = leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))"
+            values.add(matcher)
+            counts[operator or kind] += 1
+            if (kind, value, operator) in omitted:
+                surge_skips[operator or kind] += 1
+                continue
+            field = f"'{value}'" if value != value.strip() else value
+            leaf = f"PROCESS-NAME,{field}"
+            surge.add(leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(PROTOCOL,TCP))")
+            leaf = expected_process(value)
+            strict.add(leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))")
+        source = "payload:\n" + "".join("  - " + json.dumps(value, ensure_ascii=False) + "\n" for value in sorted(values))
+        source += "  - DOMAIN,keep.example.com\n  - DST-PORT,443\n  - IP-CIDR,203.0.113.0/24,no-resolve\n  - SRC-IP-CIDR,127.0.0.0/8\n"
+        for mode in ("add", "keep", "strip"):
+            flag = "" if mode == "strip" else ",no-resolve"
+            parent = self.basic_products(flag)
+            for name in ("fin.txt", "fin-surge.txt"):
+                parent[name] |= surge | {"DEST-PORT,443"}
+            parent["fin.yaml"] |= values | {"DST-PORT,443"}
+            dependent = {}
+            for name in NAMES:
+                full = name in ("fin.txt", "fin-surge.txt", "fin.yaml")
+                body = self.basic_products(flag, domain=name != "fin-surge.txt", ip=full or name == "fin-qx.txt", source_ip=full)
+                if full:
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target] |= surge | {"DEST-PORT,443"}
+                    body["fin.yaml"] |= {"DST-PORT,443"} | (values if name == "fin.yaml" else strict)
+                dependent[name] = body
+            skips = {f"{name}:{kind}": count for name in ("fin.txt", "fin-surge.txt") for kind, count in surge_skips.items()}
+            for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                skips.update({f"{name}:{kind}": count for kind, count in counts.items()})
+                skips.update({f"{name}:DST-PORT": 1, f"{name}:SRC-IP-CIDR": 1})
+                if name != "fin-qx.txt":
+                    skips[f"{name}:IP-CIDR"] = 1
+            self.dependency_matrix(source, mode, parent, dependent, skips)
+
+    def test_native_boundary_whitespace_preserves_generated_dependency_scope(self):
+        selected = []
+        for kind in ("PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"):
+            for char in ("\t", "\xa0", " ", " ", "　"):
+                values = ("123" + char, char + "123", "12" + char + "3") if "NAME" in kind else ("/123/" + char, "/12" + char + "/3")
+                selected.extend((kind, value, operator) for value in values for operator in ("", "AND", "OR", "NOT"))
+        self.process_dependencies(selected)
+
+    def test_dotless_wildcard_preserves_generated_dependency_scope(self):
+        selected = [(kind, ("123" if "NAME" in kind else "/123/") + scalar, operator)
+                    for kind in ("PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD")
+                    for scalar in ("ı", "İ") for operator in ("", "AND", "OR", "NOT")]
+        omitted = [item for item in selected if item[0].endswith("-WILDCARD") and item[1].endswith("İ")]
+        self.process_dependencies(selected, omitted)
+
+    def test_regex_comma_spaces_preserve_generated_dependency_scope(self):
+        from collections import Counter
+
+        patterns = ((r"^f{1, 2}oo[.]example[.]org$", r"^f{1\x{2C} 2}oo[.]example[.]org$"),
+                    (r"^[a, b][.]example$", r"^[a\x{2C} b][.]example$"),
+                    (r"^a ,b$", r"^a \x{2C}b$"),
+                    (r"(?x)^f{1, 2}oo$", r"(?x)^f{1\x{2C} 2}oo$"))
+        source, regexes, counts = [], set(), Counter()
+        for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX"):
+            for pattern, expected in (*patterns, (r"^(?<n>a ,b)\k<n>$", r"^(?<n>a \x{2C}b)\k<n>$")):
+                for operator in (("",) if "?<n>" in pattern else ("AND", "OR", "NOT")):
+                    field = '"' + pattern.replace("\\", "\\\\") + '"'
+                    leaf = f"{kind},{field}"
+                    source.append((leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))") + ",REJECT")
+                    leaf = f"{kind},{expected}"
+                    regexes.add(leaf if not operator else f"NOT,(({leaf}))" if operator == "NOT" else f"{operator},(({leaf}),(NETWORK,tcp))")
+                    counts[operator or kind] += 1
+        source.extend(("DOMAIN,keep.example.com,REJECT", "DST-PORT,443,REJECT", "IP-CIDR,203.0.113.0/24,REJECT,no-resolve", "SRC-IP-CIDR,127.0.0.0/8,REJECT"))
+        for mode in ("add", "keep", "strip"):
+            flag = "" if mode == "strip" else ",no-resolve"
+            parent = self.basic_products(flag)
+            for target in ("fin.txt", "fin-surge.txt"):
+                parent[target].add("DEST-PORT,443")
+            parent["fin.yaml"] |= regexes | {"DST-PORT,443"}
+            dependent = {}
+            for name in NAMES:
+                full = name in ("fin.txt", "fin-surge.txt", "fin.yaml")
+                body = self.basic_products(flag, domain=name != "fin-surge.txt", ip=full or name == "fin-qx.txt", source_ip=full)
+                if full:
+                    for target in ("fin.txt", "fin-surge.txt"):
+                        body[target].add("DEST-PORT,443")
+                    body["fin.yaml"] |= {"DST-PORT,443"} | (regexes if name == "fin.yaml" else set())
+                dependent[name] = body
+            skips = {f"{name}:{kind}": count for name in NAMES if name != "fin.yaml" for kind, count in counts.items()}
+            for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
+                skips.update({f"{name}:DST-PORT": 1, f"{name}:SRC-IP-CIDR": 1})
+                if name != "fin-qx.txt":
+                    skips[f"{name}:IP-CIDR"] = 1
+            self.dependency_matrix("\n".join(source), mode, parent, dependent, skips)
+
+
 class DomainProvenanceGenerateTests(unittest.TestCase):
     def test_converted_yaml_whitelist_preserves_six_outputs_on_same_round_and_disk(self):
         from rules import Rule, parse_whitelist
@@ -479,16 +869,18 @@ class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
                     for group in ("source", "dependent"):
                         yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
                         neighbors = {"DOMAIN-KEYWORD,keep"} if group == "source" or dependency == "fin.yaml" else set()
-                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, expected | neighbors)
+                        visible = expected if group == "source" or dependency == "fin.yaml" else {"NETWORK,tcp"}
+                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, visible | neighbors)
                         parsed, warnings = parse(yaml, purpose="proxy")
                         self.assertEqual(warnings, [])
                         self.assertTrue(all(rule.native_fields for rule in parsed if rule.kind in {"AND", "OR", "NOT"}))
                         for name in ("fin.txt", "fin-surge.txt"):
                             text = (root / group / name).read_text(encoding="utf-8")
-                            self.assertEqual(text.splitlines()[0], f"# {group} rules: {len(expected)}")
+                            self.assertEqual(text.splitlines()[0], f"# {group} rules: 1")
                             self.assertNotIn("DOMAIN-KEYWORD,keep", text)
-                            self.assertFalse(any(f"{group} {name}:{kind}:" in stderr.getvalue()
-                                                 for kind in ("AND", "OR", "NOT")))
+                            if group == "source" or dependency == "fin.yaml":
+                                for kind in ("AND", "OR", "NOT"):
+                                    self.assertIn(f"{group} {name}:{kind}:", stderr.getvalue())
                         for name in NAMES:
                             self.assertEqual((root / group / name).read_bytes(), outputs[root / group / name].encode("utf-8"))
                     self.assertNotIn(": line ", stderr.getvalue())
@@ -502,7 +894,7 @@ class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
                     self.assertEqual(set(disk_outputs), {root / "disk" / name for name in NAMES})
                     self.assertEqual({json.loads(line[4:]) for line in
                                       (root / "disk" / "fin.yaml").read_text(encoding="utf-8").splitlines()[2:]},
-                                     expected | ({"DOMAIN-KEYWORD,keep"} if dependency == "fin.yaml" else set()))
+                                     (expected | {"DOMAIN-KEYWORD,keep"}) if dependency == "fin.yaml" else {"NETWORK,tcp"})
                     self.assertNotIn(": line ", disk_stderr.getvalue())
 
 
@@ -555,6 +947,7 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                                         for path, text in outputs.items()))
                     for group, values in (("dependent", expected), ("source", expected)):
                         neighbors = {"DOMAIN-KEYWORD,keep"} if group == "source" or dependency == "fin.yaml" else set()
+                        values = values if group == "source" or dependency == "fin.yaml" else ()
                         yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
                         self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]},
                                          {f"{kind},{value}" for kind, value in values}
@@ -567,12 +960,12 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                             ({Rule("DOMAIN-KEYWORD", "keep", domain_source="mihomo")} if neighbors else set()))
                         for name in ("fin.txt", "fin-surge.txt"):
                             surge = (root / group / name).read_text(encoding="utf-8")
-                            self.assertIn('AND,((PROCESS-NAME,\'"Game"\'),(DOMAIN,x.example.com))\n', surge)
+                            self.assertEqual(surge, f"# {group} rules: 1\nPROTOCOL,TCP\n")
                             self.assertNotIn("DOMAIN-KEYWORD,keep", surge)
-                            self.assertNotIn(f"{group} {name}:AND:", stderr.getvalue())
-                            self.assertNotIn(f"{group} {name}:OR:", stderr.getvalue())
-                            self.assertNotIn(f"{group} {name}:NOT:", stderr.getvalue())
-                        for kind, count in (("AND", 2), ("OR", 1), ("NOT", 1)):
+                            if values:
+                                for kind in ("AND", "OR", "NOT"):
+                                    self.assertIn(f"{group} {name}:{kind}:", stderr.getvalue())
+                        for kind, count in ((("AND", 2), ("OR", 1), ("NOT", 1)) if values else ()):
                             for name in ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt"):
                                 self.assertIn(f"{group} {name}:{kind}: {count}\n", stderr.getvalue())
                     self.assertNotIn(": line ", stderr.getvalue())
@@ -1162,17 +1555,17 @@ class GenerateTests(unittest.TestCase):
             with contextlib.redirect_stderr(stderr):
                 out = generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertEqual(out[root / "proxy" / "fin.yaml"],
-                             '# proxy rules: 4\npayload:\n'
+                             '# proxy rules: 3\npayload:\n'
                              '  - "AND,((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))"\n'
                              '  - "DOMAIN-SUFFIX,googleapis.com"\n'
-                             '  - "PROCESS-NAME,Foo*Bar"\n'
-                             '  - "PROCESS-NAME-WILDCARD,Foo*Bar"\n')
+                             '  - "PROCESS-NAME,Foo*Bar"\n')
             self.assertEqual(out[root / "proxy" / "fin.txt"],
                              '# proxy rules: 2\nDOMAIN-SUFFIX,googleapis.com\nPROCESS-NAME,Foo*Bar\n')
             self.assertEqual(out[root / "proxy" / "fin-qx.txt"],
                              '# proxy rules: 1\nHOST-SUFFIX,googleapis.com,LIST\n')
             self.assertIn("proxy fin.txt:AND: 1", stderr.getvalue())
             self.assertIn("proxy fin.txt:PROCESS-NAME: 1", stderr.getvalue())
+            self.assertIn("proxy fin.yaml:PROCESS-NAME: 1", stderr.getvalue())
             self.assertIn("proxy fin-qx.txt:DOMAIN-SUFFIX:interface-option: 1", stderr.getvalue())
 
     def test_no_resolve_policy_add_strip_and_keep_is_configured_per_group(self):
@@ -1638,10 +2031,11 @@ class GenerateTests(unittest.TestCase):
             with contextlib.redirect_stderr(io.StringIO()) as stderr:
                 outputs = generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertEqual(outputs[root / "a3" / "fin.txt"],
-                             "# a3 rules: 1\nPROCESS-NAME,Game #1\n")
+                             "# a3 rules: 0\n")
             self.assertEqual(outputs[root / "cdn" / "fin.txt"],
-                             "# cdn rules: 1\nPROCESS-NAME,Game #1\n")
-            self.assertIn('"PROCESS-NAME,Game #1"', outputs[root / "cdn" / "fin.yaml"])
+                             "# cdn rules: 0\n")
+            self.assertEqual(outputs[root / "cdn" / "fin.yaml"], "# cdn rules: 0\npayload:\n")
+            self.assertIn('"PROCESS-NAME,Game #1"', outputs[root / "a3" / "fin.yaml"])
             self.assertNotIn("a3/fin.txt: line 2", stderr.getvalue())
             self.assertEqual({path: path.read_bytes() for path in previous}, previous)
             publish(outputs)
@@ -1667,9 +2061,9 @@ class GenerateTests(unittest.TestCase):
                                             for group in ("a3", "cdn") for name in NAMES})
             for group in ("a3", "cdn"):
                 self.assertEqual(outputs[root / group / "fin.txt"],
-                                 f"# {group} rules: 2\nPROCESS-NAME,Game ;1\nPROCESS-NAME,Game //1\n")
-                self.assertIn('"PROCESS-NAME,Game //1"', outputs[root / group / "fin.yaml"])
-                self.assertIn('"PROCESS-NAME,Game ;1"', outputs[root / group / "fin.yaml"])
+                                 f"# {group} rules: 0\n")
+                self.assertEqual('"PROCESS-NAME,Game //1"' in outputs[root / group / "fin.yaml"], group == "a3")
+                self.assertEqual('"PROCESS-NAME,Game ;1"' in outputs[root / group / "fin.yaml"], group == "a3")
             self.assertNotIn("a3/fin.txt: line", stderr.getvalue())
             publish(outputs)
             self.assertTrue(all(path.read_text(encoding="utf-8") == text
@@ -1752,9 +2146,9 @@ class GenerateTests(unittest.TestCase):
                                             for group in ("a3", "cdn") for name in NAMES})
             for group in ("a3", "cdn"):
                 self.assertEqual(outputs[root / group / "fin.txt"],
-                                 f"# {group} rules: 2\nPROCESS-NAME,Game ;1\nPROCESS-NAME,Game //1\n")
-                self.assertIn('  - "PROCESS-NAME,Game ;1"\n', outputs[root / group / "fin.yaml"])
-                self.assertIn('  - "PROCESS-NAME,Game //1"\n', outputs[root / group / "fin.yaml"])
+                                 f"# {group} rules: 0\n")
+                self.assertEqual('"PROCESS-NAME,Game ;1"' in outputs[root / group / "fin.yaml"], group == "a3")
+                self.assertEqual('"PROCESS-NAME,Game //1"' in outputs[root / group / "fin.yaml"], group == "a3")
                 self.assertEqual(outputs[root / group / "fin-surge.txt"],
                                  outputs[root / group / "fin.txt"])
                 for name in ("fin-qx.txt", "fin-surge-ds.txt"):
