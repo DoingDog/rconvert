@@ -1,4 +1,4 @@
-# big-data rules: 10498
+# big-data rules: 10500
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -3730,6 +3730,7 @@ HOST,assets.clickfunnels.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
 HOST,assets.mcp.corespeed.io,LIST
 HOST,assets.science.nasa.gov,LIST
+HOST,assets.singaporeair.com,LIST
 HOST,assets.streamlinehq.com,LIST
 HOST,assets1.lottiefiles.com,LIST
 HOST,assets2.lottiefiles.com,LIST
@@ -5175,6 +5176,7 @@ HOST-SUFFIX,epimg.net,LIST
 HOST-SUFFIX,erocdn.co,LIST
 HOST-SUFFIX,eth.sucks,LIST
 HOST-SUFFIX,f-cdn.com,LIST
+HOST-SUFFIX,fal.media,LIST
 HOST-SUFFIX,fbcdn.com,LIST
 HOST-SUFFIX,fbcdn.net,LIST
 HOST-SUFFIX,fbsbx.com,LIST

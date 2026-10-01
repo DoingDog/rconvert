@@ -1,4 +1,4 @@
-# big-data rules: 10439
+# big-data rules: 10441
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -3731,6 +3731,7 @@ payload:
   - "DOMAIN,assets.lemonsqueezy.com"
   - "DOMAIN,assets.mcp.corespeed.io"
   - "DOMAIN,assets.science.nasa.gov"
+  - "DOMAIN,assets.singaporeair.com"
   - "DOMAIN,assets.streamlinehq.com"
   - "DOMAIN,assets1.lottiefiles.com"
   - "DOMAIN,assets2.lottiefiles.com"
@@ -5176,6 +5177,7 @@ payload:
   - "DOMAIN-SUFFIX,erocdn.co"
   - "DOMAIN-SUFFIX,eth.sucks"
   - "DOMAIN-SUFFIX,f-cdn.com"
+  - "DOMAIN-SUFFIX,fal.media"
   - "DOMAIN-SUFFIX,fbcdn.com"
   - "DOMAIN-SUFFIX,fbcdn.net"
   - "DOMAIN-SUFFIX,fbsbx.com"
