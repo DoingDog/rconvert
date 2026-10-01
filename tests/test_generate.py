@@ -1077,6 +1077,77 @@ class NativeFieldFix8GenerateTests(unittest.TestCase):
 
 
 class SourceFieldContinuationGenerateTests(unittest.TestCase):
+    _seed_previous = DomainSetSuffixGenerateTests._seed_previous
+    _publish_updated = DomainSetSuffixGenerateTests._publish_updated
+
+    def test_literal_user_agent_and_url_regex_survive_six_products_and_disk_dependency(self):
+        from rules import Rule, parse
+
+        source = ('USER-AGENT,"Client #1",LIST\n'
+                  'USER-AGENT,"Client ;1",LIST\n'
+                  'USER-AGENT,"Client //1",LIST\n'
+                  'URL-REGEX,"^https://media.example.org/item #1$",PROXY\n')
+        expected_rules = [Rule("USER-AGENT", value) for value in
+                          ("Client #1", "Client ;1", "Client //1")]
+        expected_rules.append(Rule("URL-REGEX", "^https://media.example.org/item #1$"))
+        self.assertEqual(parse(source, purpose="proxy"), (expected_rules, []))
+        surge = ("URL-REGEX,'^https://media.example.org/item #1$'\n"
+                 "USER-AGENT,'Client #1'\nUSER-AGENT,'Client ;1'\nUSER-AGENT,'Client //1'\n")
+        bodies = {"fin.txt": surge, "fin-surge.txt": surge,
+                  "fin-qx.txt": "USER-AGENT,Client #1,LIST\nUSER-AGENT,Client ;1,LIST\nUSER-AGENT,Client //1,LIST\n",
+                  "fin.yaml": "payload:\n", "fin-surge-ds.txt": ""}
+        skips = {"fin-adb.txt:URL-REGEX": 1, "fin-adb.txt:USER-AGENT": 3,
+                 "fin-qx.txt:URL-REGEX": 1, "fin-surge-ds.txt:URL-REGEX": 1,
+                 "fin-surge-ds.txt:USER-AGENT": 3, "fin.yaml:URL-REGEX": 1,
+                 "fin.yaml:USER-AGENT": 3}
+        (ROOT / ".tmp").mkdir(exist_ok=True)
+        for mode in ("keep", "add", "strip"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+                root = Path(directory)
+                configs = [{"name": group, "purpose": "proxy", "no_resolve": mode,
+                            "sources": entries, "whitelist": []}
+                           for group, entries in (("cdn", ["input.list"]), ("big-data", ["cdn/fin.txt"]))]
+                (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                (root / "input.list").write_text(source, encoding="utf-8")
+                previous = self._seed_previous(root, ("cdn", "big-data"))
+                for disk_only in (False, True):
+                    with self.subTest(disk_only=disk_only):
+                        groups = ("big-data",) if disk_only else ("cdn", "big-data")
+                        if disk_only:
+                            (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                            previous = {root / "big-data" / name: b"stale disk consumer\n" for name in NAMES}
+                            for path, content in previous.items():
+                                path.write_bytes(content)
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(set(outputs), set(previous))
+                        self.assertEqual(stderr.getvalue().splitlines(), [
+                            f"{group} {key}: {count}" for group in groups for key, count in sorted(skips.items())])
+                        for group in groups:
+                            for name, body in bodies.items():
+                                count = 4 if name in ("fin.txt", "fin-surge.txt") else 3 if name == "fin-qx.txt" else 0
+                                self.assertEqual(outputs[root / group / name], f"# {group} rules: {count}\n" + body)
+                            for name in ("fin.txt", "fin-surge.txt"):
+                                parsed, messages = parse(outputs[root / group / name], purpose="proxy")
+                                self.assertEqual(messages, [])
+                                self.assertEqual(set(parsed), set(expected_rules))
+                                self.assertEqual(len(parsed), 4)
+                            for name in ("fin.yaml", "fin-surge-ds.txt"):
+                                self.assertEqual(parse(outputs[root / group / name], purpose="proxy"), ([], []))
+                            adb = outputs[root / group / "fin-adb.txt"].splitlines()
+                            self.assertEqual(adb[:5], ["[Adblock Plus 2.0]", f"! Title: {group}",
+                                             "! Homepage: https://github.com/DoingDog/rconvert", "! Expires: 1 day",
+                                             "! License: Inherits upstream licenses"])
+                            self.assertRegex(adb[5], r"^! Version: [0-9]{12}$")
+                            self.assertEqual(adb[6:], ["! Total count: 0", "! No AdBlock rules for non-advertising group."])
+                        self._publish_updated(outputs, previous)
+                        if disk_only:
+                            self.assertEqual({path: path.read_bytes() for path in published_source}, published_source)
+                        else:
+                            published_source = {root / "cdn" / name: (root / "cdn" / name).read_bytes() for name in NAMES}
+                self.assertEqual({path for path in root.rglob("fin*") if path.is_file()},
+                                 {root / group / name for group in ("cdn", "big-data") for name in NAMES})
+
     def test_quoted_url_regex_markers_survive_surge_generated_dependency(self):
         from rules import Rule, parse
 
