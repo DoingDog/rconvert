@@ -56,7 +56,7 @@ class ProcessRendererDependencyGenerateTests(unittest.TestCase):
 
     def dependency_matrix(self, source, mode, parent, dependent, expected_skips, whitelist_source=None):
         for dependency in NAMES:
-            with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+            with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT) as directory:
                 root = Path(directory)
                 configs = [{"name": "source", "purpose": "block", "no_resolve": mode,
                             "sources": ["input.list"], "whitelist": []},
@@ -438,7 +438,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
         for matcher, regex in cases:
             for mode in ("keep", "add", "strip"):
                 for disk_only in (False, True):
-                    with self.subTest(matcher=matcher, mode=mode, disk=disk_only), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+                    with self.subTest(matcher=matcher, mode=mode, disk=disk_only), tempfile.TemporaryDirectory(dir=ROOT) as directory:
                         root = Path(directory)
                         configs = [{"name": "allow", "purpose": "block", "no_resolve": mode,
                                     "sources": ["allow.list"], "whitelist": []},
@@ -514,7 +514,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                   "  - DOMAIN-WILDCARD,api-[0-9].example.com\n")
         for mode in ("keep", "add", "strip"):
             for dependency in ("fin.txt", "fin-surge.txt", "fin.yaml", "fin-qx.txt", "fin-surge-ds.txt"):
-                with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+                with self.subTest(mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT) as directory:
                     root = Path(directory)
                     configs = [{"name": "parent", "purpose": "block", "no_resolve": mode,
                                 "sources": ["surge.list", "native.yaml", "qx.list"], "whitelist": []},
@@ -604,7 +604,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
 
     def test_native_whitelist_does_not_erase_surge_or_unknown_qx_sources(self):
         for mode in ("keep", "add", "strip"):
-            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
                 root = Path(directory)
                 (root / "rulesets.json").write_text(json.dumps([
                     {"name": "allow", "purpose": "block", "no_resolve": "keep",
@@ -1100,9 +1100,8 @@ class SourceFieldContinuationGenerateTests(unittest.TestCase):
                  "fin-qx.txt:URL-REGEX": 1, "fin-surge-ds.txt:URL-REGEX": 1,
                  "fin-surge-ds.txt:USER-AGENT": 3, "fin.yaml:URL-REGEX": 1,
                  "fin.yaml:USER-AGENT": 3}
-        (ROOT / ".tmp").mkdir(exist_ok=True)
         for mode in ("keep", "add", "strip"):
-            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT / ".tmp") as directory:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
                 root = Path(directory)
                 configs = [{"name": group, "purpose": "proxy", "no_resolve": mode,
                             "sources": entries, "whitelist": []}
