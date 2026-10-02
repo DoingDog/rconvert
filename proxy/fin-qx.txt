@@ -1,4 +1,4 @@
-# proxy rules: 7019
+# proxy rules: 7021
 HOST,ip.cn,LIST
 HOST,tv.apple.com,LIST
 HOST,api.waqi.info,LIST
@@ -411,6 +411,7 @@ HOST-SUFFIX,mog.com,LIST
 HOST-SUFFIX,mohu.ml,LIST
 HOST-SUFFIX,moon.fm,LIST
 HOST-SUFFIX,msn.com,LIST
+HOST-SUFFIX,muse.ai,LIST
 HOST-SUFFIX,muzu.tv,LIST
 HOST-SUFFIX,myjs.tw,LIST
 HOST-SUFFIX,naol.ca,LIST
@@ -3564,6 +3565,7 @@ HOST-SUFFIX,funkyimg.com,LIST
 HOST-SUFFIX,furinkan.com,LIST
 HOST-SUFFIX,furrybar.com,LIST
 HOST-SUFFIX,futuesop.com,LIST
+HOST-SUFFIX,fuyin116.com,LIST
 HOST-SUFFIX,g6hentai.com,LIST
 HOST-SUFFIX,gabocorp.com,LIST
 HOST-SUFFIX,gaeproxy.com,LIST

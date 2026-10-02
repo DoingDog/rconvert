@@ -1,4 +1,4 @@
-# proxy rules: 7019
+# proxy rules: 7021
 DOMAIN,ip.cn
 DOMAIN,tv.apple.com
 DOMAIN,api.waqi.info
@@ -411,6 +411,7 @@ DOMAIN-SUFFIX,mog.com
 DOMAIN-SUFFIX,mohu.ml
 DOMAIN-SUFFIX,moon.fm
 DOMAIN-SUFFIX,msn.com
+DOMAIN-SUFFIX,muse.ai
 DOMAIN-SUFFIX,muzu.tv
 DOMAIN-SUFFIX,myjs.tw
 DOMAIN-SUFFIX,naol.ca
@@ -3564,6 +3565,7 @@ DOMAIN-SUFFIX,funkyimg.com
 DOMAIN-SUFFIX,furinkan.com
 DOMAIN-SUFFIX,furrybar.com
 DOMAIN-SUFFIX,futuesop.com
+DOMAIN-SUFFIX,fuyin116.com
 DOMAIN-SUFFIX,g6hentai.com
 DOMAIN-SUFFIX,gabocorp.com
 DOMAIN-SUFFIX,gaeproxy.com

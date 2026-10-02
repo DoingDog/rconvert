@@ -1,4 +1,4 @@
-# proxy rules: 7011
+# proxy rules: 7013
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,tv.apple.com"
@@ -412,6 +412,7 @@ payload:
   - "DOMAIN-SUFFIX,mohu.ml"
   - "DOMAIN-SUFFIX,moon.fm"
   - "DOMAIN-SUFFIX,msn.com"
+  - "DOMAIN-SUFFIX,muse.ai"
   - "DOMAIN-SUFFIX,muzu.tv"
   - "DOMAIN-SUFFIX,myjs.tw"
   - "DOMAIN-SUFFIX,naol.ca"
@@ -3565,6 +3566,7 @@ payload:
   - "DOMAIN-SUFFIX,furinkan.com"
   - "DOMAIN-SUFFIX,furrybar.com"
   - "DOMAIN-SUFFIX,futuesop.com"
+  - "DOMAIN-SUFFIX,fuyin116.com"
   - "DOMAIN-SUFFIX,g6hentai.com"
   - "DOMAIN-SUFFIX,gabocorp.com"
   - "DOMAIN-SUFFIX,gaeproxy.com"
