@@ -14,6 +14,67 @@ def _quote_matcher(value):
     return f"{quote}{value}{quote}"
 
 
+DNS_EXACT_LABELS = tuple("""
+1 123 a-b adblock adguardsdnsfilter advertisinglite advertisingmitv and blockhttpdns
+cellular-carrier cellular-radio com dest-port device-name direct domain domain-keyword
+domain-regex domain-suffix domain-wildcard dscp dst-port easyprivacy geoip geosite
+hijacking host host-keyword host-suffix host-wildcard hostname-type in-name in-port
+in-type in-user ip-asn ip-cidr ip-cidr6 ip-suffix ip6-cidr list local localhost
+mac-address network not or privacy process-name process-name-regex process-name-wildcard
+process-path process-path-regex process-path-wildcard protocol proxy reject reject-200
+reject-array reject-dict reject-drop reject-img reject-no-drop reject-tinygif rematch-name
+src-geoip src-ip src-ip-asn src-ip-cidr src-ip-suffix src-port subnet uid url-regex
+user-agent x xn--p1ai zhihuads
+""".split()) + ("a" * 63,)
+DNS_EXACT_DOMAINS = DNS_EXACT_LABELS + ("keep.example.org", "x.example.org", "123.example.org",
+                                      "ip-cidr6.example.org", "reject-200.example.org", "xn--p1ai.example.org")
+
+
+class DnsExactHostsRuleTests(unittest.TestCase):
+    def test_explicit_hosts_preserve_single_label_aliases_and_exact_fields(self):
+        self.assertEqual(len(DNS_EXACT_LABELS), 79)
+        expected = [Rule("DOMAIN", value) for value in DNS_EXACT_DOMAINS]
+        for address in ("0.0.0.0", "127.0.0.1", "::", "::1"):
+            source = address + "\t" + " ".join(value.upper() + "." for value in DNS_EXACT_DOMAINS) + " # comment\n"
+            with self.subTest(address=address):
+                self.assertEqual(parse(source, purpose="block"), (expected, []))
+                self.assertEqual(rules.parse_whitelist(source), expected)
+                self.assertEqual(normalize(expected + expected), sorted(expected, key=lambda rule: rule.value))
+                for purpose in ("direct", "proxy"):
+                    self.assertEqual(parse(source, purpose=purpose), ([], ["line 1: hosts entry is block-only"]))
+
+    def test_hosts_validation_keeps_legal_neighbors_and_rejects_invalid_aliases(self):
+        invalid = ("-x", "x-", "a_b", ".x", "a..x", "*", "a/x", "192.0.2.1", "2001:db8::1",
+                   "a" * 64, ".".join(["a" * 63] * 4))
+        for value in invalid:
+            with self.subTest(value=value):
+                source = f"0.0.0.0 X. {value} keep.example.org # ignored.invalid\n"
+                self.assertEqual(parse(source, purpose="block"),
+                                 ([Rule("DOMAIN", "x"), Rule("DOMAIN", "keep.example.org")],
+                                  [f"line 1: invalid hosts domain {value}"]))
+        self.assertEqual(parse("1.2.3.4 x\n0.0.0.0 x # ignored.example.org", purpose="block"),
+                         ([Rule("DOMAIN", "x")], ["line 1: invalid rule"]))
+
+    def test_exact_source_boundaries_and_provenance_remain_explicit(self):
+        for purpose in ("block", "direct", "proxy"):
+            for prefix, source_name in (("DOMAIN", "surge"), ("HOST", "qx")):
+                source = "\n".join(f"{prefix},{value.upper()}.,{purpose.upper() if purpose != 'block' else 'REJECT'}"
+                                   for value in DNS_EXACT_DOMAINS)
+                with self.subTest(purpose=purpose, prefix=prefix):
+                    self.assertEqual(parse(source, purpose=purpose),
+                                     ([Rule("DOMAIN", value, domain_source=source_name) for value in DNS_EXACT_DOMAINS], []))
+            for header in ("payload:", "rules:"):
+                source = header + "\n" + "".join(f"  - DOMAIN,{value.upper()}.\n" for value in DNS_EXACT_DOMAINS)
+                self.assertEqual(parse(source, purpose=purpose),
+                                 ([Rule("DOMAIN", value) for value in DNS_EXACT_DOMAINS], []))
+            for source in ("x", "123", "ip-cidr6", "reject-200", "|x|", "@@|x|", "/^x$/", "@@/^x$/",
+                           "payload:\n  - x", "rules:\n  - x"):
+                with self.subTest(purpose=purpose, source=source):
+                    self.assertEqual(parse(source, purpose=purpose),
+                                     ([], [f"line {2 if source.startswith(('payload:', 'rules:')) else 1}: invalid rule"]))
+            self.assertEqual(parse("keep.example.org", purpose=purpose), ([Rule("DOMAIN", "keep.example.org")], []))
+
+
 class DomainProvenanceRuleTests(unittest.TestCase):
     def test_regex_whitelist_keeps_valid_matchers_without_guessing_coverage(self):
         regexes = ("ad", r"^api\-.*\.example\.com\.?$", r"^api\-[0-9]\.example\.com\.?$",

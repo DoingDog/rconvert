@@ -1412,7 +1412,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             for domain in host_parts[1:]:
                 if domain.startswith('#'):
                     break
-                if _valid_domain("DOMAIN", domain):
+                if _valid_domain("DOMAIN-SUFFIX", domain):
                     rules.append(Rule("DOMAIN", domain))
                 else:
                     warnings.append(f"line {number}: invalid hosts domain {domain}")

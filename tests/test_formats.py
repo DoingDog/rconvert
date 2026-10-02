@@ -19,6 +19,63 @@ def expected_process(value):
     return kind + ",(?-i:\\A" + escaped + end + ")"
 
 
+class DnsExactHostsFormatTests(unittest.TestCase):
+    def test_all_exact_values_preserve_six_texts_purposes_and_modes(self):
+        from tests.test_rules import DNS_EXACT_DOMAINS
+
+        for purpose in ("block", "direct", "proxy"):
+            for mode in ("keep", "add", "strip"):
+                with self.subTest(purpose=purpose, mode=mode):
+                    source = [Rule("DOMAIN", value) for value in DNS_EXACT_DOMAINS]
+                    out, skipped = render_configured("exact", source, purpose=purpose, no_resolve=mode)
+                    count = len(DNS_EXACT_DOMAINS)
+                    ordered = sorted(DNS_EXACT_DOMAINS, key=lambda value: (len(value), value))
+                    header = f"# exact rules: {count}\n"
+                    self.assertEqual(out["fin.txt"], header + "".join(f"DOMAIN,{value}\n" for value in ordered))
+                    self.assertEqual(out["fin-qx.txt"], header + "".join(f"HOST,{value},LIST\n" for value in ordered))
+                    self.assertEqual(out["fin.yaml"], header + "payload:\n" + "".join(f'  - "DOMAIN,{value}"\n' for value in ordered))
+                    self.assertEqual(out["fin-surge-ds.txt"], header + "".join(value + "\n" for value in ordered))
+                    self.assertEqual(out["fin-surge.txt"], "# exact rules: 0\n")
+                    dns = out["fin-adb.txt"].splitlines()
+                    self.assertEqual(dns[:5], ["[Adblock Plus 2.0]", "! Title: exact",
+                                              "! Homepage: https://github.com/DoingDog/rconvert",
+                                              "! Expires: 1 day", "! License: Inherits upstream licenses"])
+                    self.assertRegex(dns[5], r"^! Version: [0-9]{12}$")
+                    self.assertEqual(dns[6:], ([f"! Total count: {count}"] + [f"0.0.0.0 {value}" for value in ordered])
+                                     if purpose == "block" else ["! Total count: 0", "! No AdBlock rules for non-advertising group."])
+                    self.assertEqual(skipped, {} if purpose == "block" else {"fin-adb.txt:DOMAIN": count})
+                    self.assertEqual(source, [Rule("DOMAIN", value) for value in DNS_EXACT_DOMAINS])
+
+    def test_exact_allow_and_whitelist_stay_anchored_with_other_dns_kinds(self):
+        from tests.test_rules import DNS_EXACT_DOMAINS
+
+        for value in DNS_EXACT_DOMAINS:
+            for mode in ("keep", "add", "strip"):
+                for allow in (False, True):
+                    with self.subTest(value=value, mode=mode, allow=allow):
+                        selected = [Rule("DOMAIN", value), Rule("DOMAIN-SUFFIX", "broad.example.org"),
+                                    Rule("DOMAIN-KEYWORD", "track"), Rule("DOMAIN-WILDCARD", "api-*.example.org"),
+                                    Rule("DOMAIN-REGEX", "^ads[.]example[.]org$")]
+                        whitelist = []
+                        if allow:
+                            selected.append(Rule("DOMAIN", value, allow=True))
+                        else:
+                            whitelist.append(Rule("DOMAIN", value))
+                        out, skipped = render_configured("exact", selected, purpose="block", no_resolve=mode,
+                                                         whitelist=whitelist)
+                        expected = [f"@@|{value}|", f"0.0.0.0 {value}", "||broad.example.org^", "/^.*track.*$/",
+                                    r"/^api\-.*\.example\.org$/", "/^ads[.]example[.]org$/"]
+                        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
+                                         ["! Total count: 6"] + sorted(expected, key=lambda line: (not line.startswith("@@"), len(line), line)))
+                        self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
+                        self.assertEqual(skipped.get("fin-surge-ds.txt:DOMAIN-REGEX"), 1)
+                        if allow:
+                            for name in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-surge.txt", "fin-surge-ds.txt"):
+                                self.assertEqual(skipped[name + ":DOMAIN"], 1)
+                        for text in out.values():
+                            self.assertTrue(text.endswith("\n"))
+
+
 class ProcessRendererCompletionTests(unittest.TestCase):
     def outputs(self, source, mode="keep"):
         from rules import normalize, parse
@@ -320,7 +377,7 @@ class ProcessRendererReviewFixTests(unittest.TestCase):
                     out, skipped = render_configured("group", [Rule("DOMAIN", "keep.example.com"), *selected],
                                                      purpose="block", no_resolve="keep",
                                                      whitelist=() if allow else parse_whitelist(source))
-                    self.assertEqual(out["fin-adb.txt"].splitlines()[7:], ["keep.example.com"])
+                    self.assertEqual(out["fin-adb.txt"].splitlines()[7:], ["0.0.0.0 keep.example.com"])
                     self.assertEqual(out["fin-adb.txt"].splitlines()[6], "! Total count: 1")
                     self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 1)
 
@@ -546,7 +603,7 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                 self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
                 self.assert_counts(out)
         out, skipped = self.outputs("DOMAIN,keep.example.org,REJECT", whitelist=parse_whitelist(source))
-        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "keep.example.org"])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "0.0.0.0 keep.example.org"])
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-WILDCARD"], 1)
         for source in ("DOMAIN-WILDCARD,api-[0-9].example.com,REJECT",
                        "payload:\n  - DOMAIN-WILDCARD,api-*.example.com",
@@ -593,7 +650,7 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                 out, skipped = render_configured("group", [Rule("DOMAIN", "keep.example.org")],
                                                  purpose="block", no_resolve=mode, whitelist=whitelist)
                 self.assertEqual(set(out["fin-adb.txt"].splitlines()[7:]),
-                                 {"keep.example.org", "@@/ad/", r"@@/^api\-.*\.example\.com\.?$/",
+                                 {"0.0.0.0 keep.example.org", "@@/ad/", r"@@/^api\-.*\.example\.com\.?$/",
                                   r"@@/^api\-[0-9]\.example\.com\.?$/"})
                 self.assertEqual(skipped, {"fin-adb.txt:DOMAIN-REGEX": 2})
                 self.assert_counts(out)
@@ -1203,7 +1260,7 @@ class FormatTests(unittest.TestCase):
             Rule("DOMAIN", "a.org"),
         ])
         adb = out.pop("fin-adb.txt")
-        self.assertEqual(adb.splitlines()[6:], ["! Total count: 6", "a.org", "z.org", "||b.org^", "||q.org^", "/^.*ad.*$/", "long.example.org"])
+        self.assertEqual(adb.splitlines()[6:], ["! Total count: 6", "||b.org^", "||q.org^", "/^.*ad.*$/", "0.0.0.0 a.org", "0.0.0.0 z.org", "0.0.0.0 long.example.org"])
         self.assertEqual(out, {
             "fin.txt": "# a3 rules: 7\nDOMAIN,a.org\nDOMAIN,z.org\nDOMAIN,long.example.org\nDOMAIN-KEYWORD,ad\nDOMAIN-SUFFIX,b.org\nDOMAIN-SUFFIX,q.org\nPROTOCOL,UDP\n",
             "fin-qx.txt": "# a3 rules: 6\nHOST,a.org,LIST\nHOST,z.org,LIST\nHOST,long.example.org,LIST\nHOST-KEYWORD,ad,LIST\nHOST-SUFFIX,b.org,LIST\nHOST-SUFFIX,q.org,LIST\n",
@@ -1254,7 +1311,7 @@ class FormatTests(unittest.TestCase):
                          "[Adblock Plus 2.0]\n! Title: a3\n! Homepage: https://github.com/DoingDog/rconvert\n"
                          "! Expires: 1 day\n! License: Inherits upstream licenses\n"
                          "! Version: 202609290045\n! Total count: 7\n"
-                         "@@|a.org|\n@@|b.org|\n@@|z.org|\n@@||example.org^\na.org\nb.org\n||example.org^\n")
+                         "@@|a.org|\n@@|b.org|\n@@|z.org|\n@@||example.org^\n0.0.0.0 a.org\n0.0.0.0 b.org\n||example.org^\n")
 
     def test_newlines_in_rule_values_cannot_insert_extra_rules(self):
         out, skipped = render("a3", [Rule("DOMAIN-SUFFIX", "safe.example.com\r\nEVIL,host")])
@@ -1268,7 +1325,7 @@ class FormatTests(unittest.TestCase):
         self.assertIn('  - "DOMAIN,exact.example.com"\n', out["fin.yaml"])
         self.assertIn("\nexact.example.com\n", out["fin-surge-ds.txt"])
         self.assertNotIn("exact.example.com", out["fin-surge.txt"])
-        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "exact.example.com"])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "0.0.0.0 exact.example.com"])
         self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
 
     def test_suffix_is_shared_by_domain_set_and_adblock(self):
@@ -2067,7 +2124,7 @@ class FormatTests(unittest.TestCase):
     def test_custom_block_purpose_emits_dns_and_proxy_group_name_does_not(self):
         custom, _ = render("custom", [Rule("DOMAIN", "ads.example.org")],
                            purpose="block", no_resolve="keep")
-        self.assertIn("\nads.example.org\n", custom["fin-adb.txt"])
+        self.assertIn("\n0.0.0.0 ads.example.org\n", custom["fin-adb.txt"])
         proxy, _ = render("a3", [Rule("DOMAIN", "ads.example.org")],
                           purpose="proxy", no_resolve="keep")
         self.assertNotIn("ads.example.org", proxy["fin-adb.txt"])

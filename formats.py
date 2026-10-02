@@ -274,7 +274,7 @@ def _wildcard_regex(value: str) -> str | None:
 
 def _dns_pattern(rule: Rule) -> str | None:
     if rule.kind == "DOMAIN":
-        return rule.value
+        return f"0.0.0.0 {rule.value}"
     if rule.kind == "DOMAIN-SUFFIX":
         return f"||{rule.value}^"
     if "/" in rule.value:
