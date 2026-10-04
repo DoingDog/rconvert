@@ -1,4 +1,4 @@
-# proxy rules: 7021
+# proxy rules: 7024
 HOST,ip.cn,LIST
 HOST,tv.apple.com,LIST
 HOST,api.waqi.info,LIST
@@ -4073,6 +4073,7 @@ HOST-SUFFIX,waigaobu.com,LIST
 HOST-SUFFIX,waikeung.org,LIST
 HOST-SUFFIX,wailaike.net,LIST
 HOST-SUFFIX,waiwaier.com,LIST
+HOST-SUFFIX,wallhaven.cc,LIST
 HOST-SUFFIX,wallmama.com,LIST
 HOST-SUFFIX,wallsttv.com,LIST
 HOST-SUFFIX,wapedia.mobi,LIST
@@ -5760,6 +5761,7 @@ HOST-SUFFIX,weiquanwang.org,LIST
 HOST-SUFFIX,whatblocked.com,LIST
 HOST-SUFFIX,whatbrowser.org,LIST
 HOST-SUFFIX,wikilivres.info,LIST
+HOST-SUFFIX,wikispecies.org,LIST
 HOST-SUFFIX,wikiversity.org,LIST
 HOST-SUFFIX,williamhill.com,LIST
 HOST-SUFFIX,wufafangwen.com,LIST
@@ -6339,6 +6341,7 @@ HOST-SUFFIX,wechatlawsuit.com,LIST
 HOST-SUFFIX,westernwolves.com,LIST
 HOST-SUFFIX,wetpussygames.com,LIST
 HOST-SUFFIX,whereiswerner.com,LIST
+HOST-SUFFIX,wikifunctions.org,LIST
 HOST-SUFFIX,wikiunblocked.org,LIST
 HOST-SUFFIX,workerdemo.org.hk,LIST
 HOST-SUFFIX,workersthebig.net,LIST

@@ -1,4 +1,4 @@
-# proxy rules: 7013
+# proxy rules: 7016
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,tv.apple.com"
@@ -4074,6 +4074,7 @@ payload:
   - "DOMAIN-SUFFIX,waikeung.org"
   - "DOMAIN-SUFFIX,wailaike.net"
   - "DOMAIN-SUFFIX,waiwaier.com"
+  - "DOMAIN-SUFFIX,wallhaven.cc"
   - "DOMAIN-SUFFIX,wallmama.com"
   - "DOMAIN-SUFFIX,wallsttv.com"
   - "DOMAIN-SUFFIX,wapedia.mobi"
@@ -5761,6 +5762,7 @@ payload:
   - "DOMAIN-SUFFIX,whatblocked.com"
   - "DOMAIN-SUFFIX,whatbrowser.org"
   - "DOMAIN-SUFFIX,wikilivres.info"
+  - "DOMAIN-SUFFIX,wikispecies.org"
   - "DOMAIN-SUFFIX,wikiversity.org"
   - "DOMAIN-SUFFIX,williamhill.com"
   - "DOMAIN-SUFFIX,wufafangwen.com"
@@ -6340,6 +6342,7 @@ payload:
   - "DOMAIN-SUFFIX,westernwolves.com"
   - "DOMAIN-SUFFIX,wetpussygames.com"
   - "DOMAIN-SUFFIX,whereiswerner.com"
+  - "DOMAIN-SUFFIX,wikifunctions.org"
   - "DOMAIN-SUFFIX,wikiunblocked.org"
   - "DOMAIN-SUFFIX,workerdemo.org.hk"
   - "DOMAIN-SUFFIX,workersthebig.net"
