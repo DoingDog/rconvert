@@ -1616,8 +1616,13 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
             networks[direction].add(ipaddress.ip_network(entry.value, strict=False))
         elif entry.kind in {"IP-ASN", "GEOIP", "IP-SUFFIX", "SRC-IP-ASN", "SRC-GEOIP", "SRC-IP-SUFFIX"}:
             typed.add((entry.kind, entry.value.upper()))
-    plain_wildcards = {source: [pattern for pattern in group[3] if '[' not in pattern]
-                       for source, group in domain_groups.items()}
+    # native wildcard 按 UTF-8 byte 匹配，方括号是字面内容。
+    wildcard_patterns = {
+        source: [''.join('[[]' if char == '[' else '[]]' if char == ']' else char
+                         for char in pattern).encode('utf-8') if source == "mihomo" else pattern
+                 for pattern in group[3] if source == "mihomo" or '[' not in pattern]
+        for source, group in domain_groups.items()
+    }
     kept = []
     for rule in rules:
         if rule.allow:
@@ -1625,11 +1630,13 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
             continue
         kind, value = rule.kind, rule.value
         exact, suffixes, keywords, wildcards = domain_groups.get(rule.domain_source, empty)
-        if kind == "DOMAIN" or (kind == "DOMAIN-WILDCARD" and not any(c in value for c in "*?[]")):
+        wildcard_chars = "*?" if rule.domain_source == "mihomo" else "*?[]"
+        if kind == "DOMAIN" or (kind == "DOMAIN-WILDCARD" and not any(c in value for c in wildcard_chars)):
+            match_value = value.encode('utf-8') if rule.domain_source == "mihomo" else value
             covered = (value in exact or _has_parent(value, suffixes) or
                        any(keyword in value for keyword in keywords) or
-                       any(fnmatchcase(value, pattern)
-                           for pattern in plain_wildcards.get(rule.domain_source, ())))
+                       any(fnmatchcase(match_value, pattern)
+                           for pattern in wildcard_patterns.get(rule.domain_source, ())))
         elif kind == "DOMAIN-SUFFIX":
             covered = _has_parent(value, suffixes) or any(keyword in value for keyword in keywords)
         elif kind == "DOMAIN-KEYWORD":
@@ -1639,7 +1646,8 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
             covered = (value in wildcards or
                        tail.startswith('.') and _has_parent(tail[1:], suffixes) or
                        any(keyword in segment for keyword in keywords
-                           for segment in re.split(r"\*|\?|\[[a-z0-9-]+\]", value)))
+                           for segment in re.split(r"\*|\?" if rule.domain_source == "mihomo"
+                                                   else r"\*|\?|\[[a-z0-9-]+\]", value)))
         elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
             direction = "src" if kind.startswith("SRC-") else "dst"
             covered = False
