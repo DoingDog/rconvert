@@ -107,7 +107,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                             f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
                             '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
                             ('! Total count: 1\n/^.*中文.*$/\n' if white else
-                             '! Total count: 2\n@@/^.*中文.*$/\nkeep.example.com\n') if purpose == 'block' else
+                             '! Total count: 2\n@@/^.*中文.*$/\n0.0.0.0 keep.example.com\n') if purpose == 'block' else
                             f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
                             '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n'
                             '! Total count: 0\n! No AdBlock rules for non-advertising group.\n')
@@ -176,7 +176,7 @@ def expected(group):
               ''.join(line + '\\n' for line in body) for name, body in bodies.items()}
     output['fin-adb.txt'] = (f'[Adblock Plus 2.0]\\n! Title: {group}\\n! Homepage: https://github.com/DoingDog/rconvert\\n'
                             '! Expires: 1 day\\n! License: Inherits upstream licenses\\n! Version: 202610061200\\n' +
-                            ('! Total count: 2\\n/^.*中文.*$/\\nkeep.example.com\\n' if PURPOSE == 'block' else
+                            ('! Total count: 2\\n/^.*中文.*$/\\n0.0.0.0 keep.example.com\\n' if PURPOSE == 'block' else
                              '! Total count: 0\\n! No AdBlock rules for non-advertising group.\\n'))
     return output
 skips = {name + ':NOT': 1 for name in names if name != 'fin.yaml'}
@@ -297,7 +297,7 @@ class ConstructorGenerateTests(unittest.TestCase):
                         "fin-surge-ds.txt": "# consumer rules: 1\nkeep.example.com\n",
                         "fin-adb.txt": ("[Adblock Plus 2.0]\n! Title: consumer\n! Homepage: https://github.com/DoingDog/rconvert\n"
                                         "! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n" +
-                                        ("! Total count: 1\nkeep.example.com\n" if purpose == "block" else
+                                        ("! Total count: 1\n0.0.0.0 keep.example.com\n" if purpose == "block" else
                                          "! Total count: 0\n! No AdBlock rules for non-advertising group.\n")),
                     }
                     for disk_only in (False, True):
@@ -430,7 +430,7 @@ def expected(group):
                     ''.join(line + '\\n' for line in body) for name, body in bodies.items()}
     result['fin-adb.txt'] = ('[Adblock Plus 2.0]\\n! Title: ' + group + '\\n! Homepage: https://github.com/DoingDog/rconvert\\n'
                             '! Expires: 1 day\\n! License: Inherits upstream licenses\\n! Version: 202610061200\\n' +
-                            ('! Total count: 1\\n' + ('neighbor.example.com\\n' if parent else '@@|neighbor.example.com|\\n')
+                            ('! Total count: 1\\n' + ('0.0.0.0 neighbor.example.com\\n' if parent else '@@|neighbor.example.com|\\n')
                              if PURPOSE == 'block' else '! Total count: 0\\n! No AdBlock rules for non-advertising group.\\n'))
     return result
 def skip_lines(group):
@@ -492,6 +492,156 @@ assert sys.getrecursionlimit() == limit
                         result = subprocess.run([sys.executable, "-B", "-c", settings + code], cwd=ROOT,
                                                 capture_output=True, text=True, timeout=8)
                         self.assertEqual(result.returncode, 0, result.stderr[-3000:])
+
+
+class DnsExactHostsGenerateTests(unittest.TestCase):
+    def assert_exact_products(self, outputs, root, group, purpose, bodies):
+        self.assertEqual({path for path in outputs if path.parent.name == group}, {root / group / name for name in NAMES})
+        for name in NAMES:
+            lines = outputs[root / group / name].splitlines()
+            expected = bodies[name]
+            if name == "fin-adb.txt":
+                self.assertEqual(lines[:5], ["[Adblock Plus 2.0]", f"! Title: {group}",
+                                            "! Homepage: https://github.com/DoingDog/rconvert",
+                                            "! Expires: 1 day", "! License: Inherits upstream licenses"])
+                self.assertRegex(lines[5], r"^! Version: [0-9]{12}$")
+                self.assertEqual(lines[6], f"! Total count: {len(expected) if purpose == 'block' else 0}")
+                actual = lines[7:]
+                if purpose != "block":
+                    expected = {"! No AdBlock rules for non-advertising group."}
+            else:
+                self.assertEqual(lines[0], f"# {group} rules: {len(expected)}")
+                if name == "fin.yaml":
+                    self.assertEqual(lines[1], "payload:")
+                actual = [json.loads(line[4:]) for line in lines[2:]] if name == "fin.yaml" else lines[1:]
+            self.assertEqual(set(actual), expected, (group, name))
+            self.assertEqual(len(actual), len(expected), (group, name))
+
+    def test_exact_generated_dns_and_disk_dependencies_cover_all_purposes_and_modes(self):
+        from rules import Rule, parse
+        from tests.test_rules import DNS_EXACT_DOMAINS
+
+        bodies = {"fin.txt": {f"DOMAIN,{value}" for value in DNS_EXACT_DOMAINS},
+                  "fin-qx.txt": {f"HOST,{value},LIST" for value in DNS_EXACT_DOMAINS},
+                  "fin.yaml": {f"DOMAIN,{value}" for value in DNS_EXACT_DOMAINS},
+                  "fin-adb.txt": {f"0.0.0.0 {value}" for value in DNS_EXACT_DOMAINS},
+                  "fin-surge.txt": set(), "fin-surge-ds.txt": set(DNS_EXACT_DOMAINS)}
+        for purpose in ("block", "direct", "proxy"):
+            for mode in ("keep", "add", "strip"):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    action = "REJECT" if purpose == "block" else purpose.upper()
+                    source = root / "input.list"
+                    source.write_text("".join(f"DOMAIN,{value.upper()}.,{action}\n" for value in DNS_EXACT_DOMAINS), encoding="utf-8")
+                    self.assertEqual(parse(source.read_text(encoding="utf-8"), purpose=purpose),
+                                     ([Rule("DOMAIN", value) for value in DNS_EXACT_DOMAINS], []))
+                    dependency = "fin-adb.txt" if purpose == "block" else "fin.txt"
+                    configs = [{"name": "parent", "purpose": purpose, "no_resolve": mode,
+                                "sources": ["input.list"], "whitelist": []},
+                               {"name": "dependent", "purpose": purpose, "no_resolve": mode,
+                                "sources": [f"parent/{dependency}"], "whitelist": []}]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    previous = {}
+                    for group in ("parent", "dependent", "disk"):
+                        (root / group).mkdir()
+                        for name in NAMES:
+                            path = root / group / name
+                            previous[path] = f"old {group} {name}\n".encode()
+                            path.write_bytes(previous[path])
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), {root / group / name for group in ("parent", "dependent") for name in NAMES})
+                    for group in ("parent", "dependent"):
+                        self.assert_exact_products(outputs, root, group, purpose, bodies)
+                    header_warnings = [f"{root / 'parent/fin-adb.txt'}: line {line}: invalid rule" for line in range(1, 6)]
+                    header_warnings.append(f"{root / 'parent/fin-adb.txt'}: 7 skipped lines; first five shown")
+                    expected_stderr = header_warnings if purpose == "block" else [
+                        f"{group} fin-adb.txt:DOMAIN: {len(DNS_EXACT_DOMAINS)}" for group in ("parent", "dependent")]
+                    self.assertEqual(stderr.getvalue().splitlines(), expected_stderr)
+                    self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                    publish(outputs)
+                    self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in outputs.items()))
+                    published = {path: path.read_bytes() for path in outputs}
+                    source.unlink()
+                    (root / "rulesets.json").write_text(json.dumps([{"name": "disk", "purpose": purpose,
+                        "no_resolve": mode, "sources": [f"parent/{dependency}"], "whitelist": []}]), encoding="utf-8")
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                        disk = generate(root, lambda url: self.fail(url))
+                    self.assert_exact_products(disk, root, "disk", purpose, bodies)
+                    self.assertEqual(stderr.getvalue().splitlines(), header_warnings if purpose == "block" else [
+                        f"disk fin-adb.txt:DOMAIN: {len(DNS_EXACT_DOMAINS)}"])
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+                    self.assertEqual({path: path.read_bytes() for path in previous if path.parent.name == "disk"},
+                                     {path: data for path, data in previous.items() if path.parent.name == "disk"})
+                    publish(disk)
+                    self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in disk.items()))
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_exact_generated_hosts_whitelist_preserves_suffix_and_ip_flags_on_disk(self):
+        import warnings
+        from tests.test_rules import DNS_EXACT_DOMAINS
+
+        for purpose in ("block", "direct", "proxy"):
+            for mode in ("keep", "add", "strip"):
+                for hosts in (False, True):
+                    with self.subTest(purpose=purpose, mode=mode, hosts=hosts), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                        root = Path(directory)
+                        allow = "".join((f"0.0.0.0 {value.upper()}.\n" if hosts else f"DOMAIN,{value.upper()}.,REJECT\n")
+                                        for value in DNS_EXACT_DOMAINS)
+                        (root / "allow.list").write_text(allow, encoding="utf-8")
+                        action = "REJECT" if purpose == "block" else purpose.upper()
+                        routes = "".join(f"DOMAIN,{value},{action}\n" for value in DNS_EXACT_DOMAINS)
+                        routes += (f"DOMAIN-SUFFIX,localhost,{action}\nDOMAIN-SUFFIX,com,{action}\n"
+                                   f"DOMAIN,retained.example.net,{action}\nIP-CIDR,192.0.2.0/24,{action},no-resolve\n"
+                                   f"IP-CIDR,198.51.100.0/24,{action}\nSRC-IP-CIDR,127.0.0.0/8,{action}\n"
+                                   f"AND,((DOMAIN,logic.example.net),(IP-CIDR,203.0.113.0/24,no-resolve)),{action}\n")
+                        (root / "routes.list").write_text(routes, encoding="utf-8")
+                        configs = [{"name": "allow", "purpose": "block", "no_resolve": mode,
+                                    "sources": ["allow.list"], "whitelist": []},
+                                   {"name": "filtered", "purpose": purpose, "no_resolve": mode,
+                                    "sources": ["routes.list"], "whitelist": ["allow/fin-adb.txt"]}]
+                        (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                        previous = {}
+                        for group in ("allow", "filtered"):
+                            (root / group).mkdir()
+                            for name in NAMES:
+                                path = root / group / name
+                                previous[path] = f"old {group} {name}\n".encode()
+                                path.write_bytes(previous[path])
+                        flag = "" if mode == "strip" else ",no-resolve"
+                        unflagged = ",no-resolve" if mode == "add" else ""
+                        domains = {"DOMAIN,retained.example.net", "DOMAIN-SUFFIX,localhost", "DOMAIN-SUFFIX,com"}
+                        ips = {"IP-CIDR,192.0.2.0/24" + flag, "IP-CIDR,198.51.100.0/24" + unflagged}
+                        logic = f"AND,((DOMAIN,logic.example.net),(IP-CIDR,203.0.113.0/24{flag}))"
+                        bodies = {"fin.txt": domains | ips | {"SRC-IP,127.0.0.0/8", logic},
+                                  "fin.yaml": domains | ips | {"SRC-IP-CIDR,127.0.0.0/8", logic},
+                                  "fin-surge.txt": ips | {"SRC-IP,127.0.0.0/8", logic},
+                                  "fin-qx.txt": {"HOST,retained.example.net,LIST", "HOST-SUFFIX,localhost,LIST", "HOST-SUFFIX,com,LIST",
+                                                 "IP-CIDR,192.0.2.0/24,LIST" + flag, "IP-CIDR,198.51.100.0/24,LIST" + unflagged},
+                                  "fin-surge-ds.txt": {"retained.example.net", ".localhost", ".com"},
+                                  "fin-adb.txt": {f"@@|{value}|" for value in DNS_EXACT_DOMAINS} |
+                                                 {"||localhost^", "||com^", "0.0.0.0 retained.example.net"}}
+                        skips = {"fin-adb.txt:AND": 1, "fin-adb.txt:IP-CIDR": 2, "fin-adb.txt:SRC-IP-CIDR": 1,
+                                 "fin-qx.txt:AND": 1, "fin-qx.txt:SRC-IP-CIDR": 1, "fin-surge-ds.txt:AND": 1,
+                                 "fin-surge-ds.txt:IP-CIDR": 2, "fin-surge-ds.txt:SRC-IP-CIDR": 1}
+                        if purpose != "block":
+                            skips.update({"fin-adb.txt:DOMAIN": 1, "fin-adb.txt:DOMAIN-SUFFIX": 2})
+                        expected_stderr = [f"filtered {key}: {count}" for key, count in sorted(skips.items())]
+                        for disk_only in (False, True):
+                            if disk_only:
+                                (root / "allow.list").unlink()
+                                (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                            with warnings.catch_warnings(record=True) as caught, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                                warnings.simplefilter("always")
+                                outputs = generate(root, lambda url: self.fail(url))
+                            self.assertEqual([str(warning.message) for warning in caught], [f"line {line}: invalid rule" for line in range(1, 8)])
+                            self.assertEqual(stderr.getvalue().splitlines(), expected_stderr)
+                            self.assert_exact_products(outputs, root, "filtered", purpose, bodies)
+                            self.assertEqual(set(outputs), {root / group / name for group in (("filtered",) if disk_only else ("allow", "filtered")) for name in NAMES})
+                            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                            publish(outputs)
+                            self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in outputs.items()))
+                            previous = {path: path.read_bytes() for path in previous}
 
 
 class ProcessRendererDependencyGenerateTests(unittest.TestCase):
@@ -563,7 +713,7 @@ class ProcessRendererDependencyGenerateTests(unittest.TestCase):
                 "fin.yaml": plain | ({"SRC-IP-CIDR,127.0.0.0/8"} if source_ip else set()),
                 "fin-qx.txt": ({"HOST,keep.example.com,LIST"} if domain else set()) |
                               ({"IP-CIDR,203.0.113.0/24,LIST" + flag} if ip else set()),
-                "fin-adb.txt": {"keep.example.com"} if domain else set(),
+                "fin-adb.txt": {"0.0.0.0 keep.example.com"} if domain else set(),
                 "fin-surge-ds.txt": {"keep.example.com"} if domain else set()}
 
     def test_surge_process_and_quoted_regex_preserve_six_generated_dependencies(self):
@@ -930,7 +1080,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                                                    "HOST,keep.example.net,LIST", "IP-CIDR,192.0.2.0/24,LIST" + flag},
                                     "fin-surge.txt": {ip},
                                     "fin-surge-ds.txt": {"ads.example.com", "api-7.example.com", "keep.example.net"},
-                                    "fin-adb.txt": {"ads.example.com", "api-7.example.com", "keep.example.net",
+                                    "fin-adb.txt": {"0.0.0.0 ads.example.com", "0.0.0.0 api-7.example.com", "0.0.0.0 keep.example.net",
                                                     "@@|safe.example.org|", "@@/" + regex + "/"}}
                         self.assertEqual(set(outputs), {root / group / name for group in
                                          (("filtered",) if disk_only else ("allow", "filtered")) for name in NAMES})
@@ -1022,7 +1172,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                     if dependency != "fin-surge-ds.txt":
                         qx_body |= {"HOST-KEYWORD,ads,LIST", "HOST-WILDCARD,api-*.example.com,LIST",
                                     "IP-CIDR,192.0.2.0/24,LIST" + flag}
-                    dns_body = {"keep.example.org"} if exact else set()
+                    dns_body = {"0.0.0.0 keep.example.org"} if exact else set()
                     if dependency != "fin-surge-ds.txt":
                         dns_body |= {r"/^.*ads.*$/", r"/^api\-.*\.example\.com$/"}
                     if dependency in ("fin.txt", "fin-surge.txt", "fin.yaml"):
@@ -1096,7 +1246,7 @@ class DomainSetSuffixGenerateTests(unittest.TestCase):
         "fin.txt": ("DOMAIN,example.org", "DOMAIN-SUFFIX,com", "DOMAIN-SUFFIX,example.net"),
         "fin-qx.txt": ("HOST,example.org,LIST", "HOST-SUFFIX,com,LIST", "HOST-SUFFIX,example.net,LIST"),
         "fin.yaml": ("DOMAIN,example.org", "DOMAIN-SUFFIX,com", "DOMAIN-SUFFIX,example.net"),
-        "fin-adb.txt": ("example.org", "||com^", "||example.net^"),
+        "fin-adb.txt": ("0.0.0.0 example.org", "||com^", "||example.net^"),
         "fin-surge.txt": (),
         "fin-surge-ds.txt": (".com", "example.org", ".example.net"),
     }
@@ -1238,8 +1388,8 @@ class DomainSetSuffixGenerateTests(unittest.TestCase):
                                       (("HOST-SUFFIX,com,LIST",) if exact else ()) + ("HOST,notcom.org,LIST", "HOST,example.org,LIST"),
                         "fin.yaml": () if coverage == "all" else
                                     (("DOMAIN-SUFFIX,com",) if exact else ()) + ("DOMAIN,notcom.org", "DOMAIN,example.org"),
-                        "fin-adb.txt": (("@@|ads.example.com|", "||com^", "notcom.org", "example.org") if exact else
-                                        ("@@||com^",) if coverage == "all" else ("@@||com^", "notcom.org", "example.org")),
+                        "fin-adb.txt": (("@@|ads.example.com|", "||com^", "0.0.0.0 notcom.org", "0.0.0.0 example.org") if exact else
+                                        ("@@||com^",) if coverage == "all" else ("@@||com^", "0.0.0.0 notcom.org", "0.0.0.0 example.org")),
                         "fin-surge.txt": (),
                         "fin-surge-ds.txt": () if coverage == "all" else
                                             ((".com",) if exact else ()) + ("notcom.org", "example.org"),
@@ -1263,7 +1413,7 @@ class DomainSetSuffixGenerateTests(unittest.TestCase):
                     self._assert_group(outputs, root, "filtered", purpose, bodies)
                     dependent = dict(bodies)
                     dependent["fin-adb.txt"] = () if coverage == "all" else (
-                        (("||com^",) if exact else ()) + ("notcom.org", "example.org"))
+                        (("||com^",) if exact else ()) + ("0.0.0.0 notcom.org", "0.0.0.0 example.org"))
                     self._assert_group(outputs, root, "dependent", purpose, dependent)
                     counts = (("allow", (("DOMAIN", 1),) if exact else (("DOMAIN-SUFFIX", 1),)),
                               ("filtered", () if coverage == "all" else
