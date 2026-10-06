@@ -4066,6 +4066,118 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
                 self.assertEqual(result.returncode, 0, result.stderr[-1600:])
 
 
+class NativeWildcardWhitelistTests(unittest.TestCase):
+    def test_question_marks_consume_utf8_bytes(self):
+        for character, width in (("a", 1), ("ı", 2), ("ſ", 2), ("é", 2),
+                                 ("中", 3), ("𐐨", 4)):
+            for count in range(1, 5):
+                pattern = "api-" + "?" * count + ".example.org"
+                whitelist = rules.parse_whitelist("payload:\n  - DOMAIN-WILDCARD," + pattern)
+                self.assertEqual(whitelist, [Rule("DOMAIN-WILDCARD", pattern, domain_source="mihomo")])
+                for kind in ("DOMAIN", "DOMAIN-WILDCARD"):
+                    blocked = Rule(kind, "api-" + character + ".example.org", domain_source="mihomo")
+                    with self.subTest(character=character, count=count, kind=kind):
+                        self.assertEqual(rules.exclude_covered([blocked], whitelist),
+                                         [] if count == width else [blocked])
+
+    def test_stars_questions_and_unicode_literals_keep_match_boundaries(self):
+        cases = (
+            ("api-*.example.org", ("api-.example.org", "api-ı.example.org", "api-a.b.example.org"),
+             ("child.api-a.example.org", "api-a.example.org.evil", "api-a.example.net")),
+            ("api-?*.example.org", ("api-a.example.org", "api-中.example.org"), ("api-.example.org",)),
+            ("api-*?.example.org", ("api-ı.example.org", "api-𐐨.example.org"), ("api-.example.org",)),
+            ("api-??*.example.org", ("api-ſ.example.org", "api-中.example.org"), ("api-a.example.org",)),
+            ("api-*??.example.org", ("api-ı.example.org", "api-𐐨.example.org"), ("api-a.example.org",)),
+            ("api-?*?.example.org", ("api-ı.example.org", "api-ab.example.org"), ("api-a.example.org",)),
+            ("api-*?*?**.example.org", ("api-ı.example.org", "api-中.example.org"),
+             ("api-a.example.org", "api-.example.org")),
+            ("api-**a**b*.example.org", ("api-ab.example.org", "api-ıa中b𐐨.example.org"),
+             ("api-ba.example.org",)),
+            ("api-ı?.example.org", ("api-ıa.example.org",), ("api-ı.example.org", "api-ıſ.example.org")),
+            ("api-*ſ*.example.org", ("api-ſ.example.org", "api-aſb.example.org"), ("api-s.example.org",)),
+        )
+        for pattern, covered, kept in cases:
+            whitelist = rules.parse_whitelist("rules:\n  - DOMAIN-WILDCARD," + pattern)
+            original = [Rule("DOMAIN", host, domain_source="mihomo") for host in covered + kept]
+            with self.subTest(pattern=pattern):
+                self.assertEqual(rules.exclude_covered(original, whitelist), original[len(covered):])
+
+    def test_native_brackets_are_literal_in_wildcards_and_fixed_text(self):
+        cases = (
+            ("api-[0-9].example.org", "api-[0-9].example.org", True),
+            ("api-[0-9].example.org", "api-7.example.org", False),
+            ("api-[0-9].example.org", "api-[7].example.org", False),
+            ("api-[ab][0-9].example.org", "api-[ab][0-9].example.org", True),
+            ("api-[ab][0-9].example.org", "api-a7.example.org", False),
+            ("api-*[ab]??.example.org", "api-x[ab]ı.example.org", True),
+            ("api-*[ab]??.example.org", "api-xaı.example.org", False),
+            ("api-[ſı].example.org", "api-[ſı].example.org", True),
+            ("api-[ſı].example.org", "api-ſ.example.org", False),
+            ("api-?????.example.org", "api-[0-9].example.org", True),
+            ("api-????.example.org", "api-[0-9].example.org", False),
+        )
+        for pattern, host, covered in cases:
+            whitelist = rules.parse_whitelist("payload:\n  - DOMAIN-WILDCARD," + pattern)
+            for kind in ("DOMAIN", "DOMAIN-WILDCARD"):
+                blocked = Rule(kind, host, domain_source="mihomo")
+                with self.subTest(pattern=pattern, host=host, kind=kind):
+                    self.assertEqual(rules.exclude_covered([blocked], whitelist), [] if covered else [blocked])
+        for source in ("surge", "qx", "mihomo"):
+            blocked = Rule("DOMAIN-WILDCARD", "api-[0-9]*.example.org", domain_source=source)
+            keyword = Rule("DOMAIN-KEYWORD", "0-9", domain_source=source)
+            with self.subTest(source=source):
+                self.assertEqual(rules.exclude_covered([blocked], [keyword]),
+                                 [] if source == "mihomo" else [blocked])
+
+    def test_coverage_preserves_source_flags_and_allow_rules(self):
+        for source in ("surge", "qx", "mihomo"):
+            for count in (1, 2):
+                pattern = "api-" + "?" * count + ".example.org"
+                prefix = "payload:\n  - DOMAIN-WILDCARD," if source == "mihomo" else (
+                    "HOST-WILDCARD," if source == "qx" else "DOMAIN-WILDCARD,")
+                whitelist = rules.parse_whitelist(prefix + pattern)
+                original = [Rule("DOMAIN", "api-ı.example.org", options, allow, literal, native, provenance)
+                            for provenance in ("surge", "qx", "mihomo")
+                            for options in ((), ("no-resolve",)) for allow in (False, True)
+                            for literal in (False, True) for native in (False, True)]
+                matching_count = 2 if source == "mihomo" else 1
+                expected = [rule for rule in original if rule.allow or rule.domain_source != source
+                            or count != matching_count]
+                with self.subTest(source=source, count=count):
+                    self.assertEqual(rules.exclude_covered(iter(original), iter(whitelist)), expected)
+                    self.assertEqual(set(normalize(original + original)), set(original))
+        for source in ("surge", "qx"):
+            original = [Rule("DOMAIN", "api-7.example.org", domain_source=source),
+                        Rule("DOMAIN-WILDCARD", "api-[0-9].example.org", domain_source=source)]
+            wildcard = Rule("DOMAIN-WILDCARD", "api-[0-9].example.org", domain_source=source)
+            self.assertEqual(rules.exclude_covered(original, [wildcard]), original[:1])
+        processes = [Rule(kind, "App[0-9]ı?*", literal_process=literal, native_fields=native)
+                     for kind in ("PROCESS-NAME", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD")
+                     for literal in (False, True) for native in (False, True)]
+        self.assertEqual(rules.exclude_covered(processes, whitelist), processes)
+        self.assertEqual(set(normalize(processes)), set(processes))
+
+    def test_normalize_keeps_wildcard_predicates_and_source_groups(self):
+        for source in ("surge", "qx", "mihomo"):
+            for pattern in ("api-?.example.org", "api-??.example.org", "api-[0-9].example.org"):
+                wildcard = Rule("DOMAIN-WILDCARD", pattern, domain_source=source)
+                exact = Rule("DOMAIN", "api-ı.example.org", domain_source=source)
+                suffix = Rule("DOMAIN-SUFFIX", "example.org", domain_source=source)
+                child = Rule("DOMAIN", "child.example.org", domain_source=source)
+                neighbor = Rule("DOMAIN", "notexample.org", domain_source=source)
+                append = Rule("DOMAIN", "example.org.evil", domain_source=source)
+                other_source = "surge" if source == "mihomo" else "mihomo"
+                foreign = Rule("DOMAIN-SUFFIX", "example.org", domain_source=other_source)
+                with self.subTest(source=source, pattern=pattern):
+                    self.assertEqual(normalize([wildcard, exact]), [exact, wildcard])
+                    self.assertEqual(set(normalize([wildcard, exact, foreign])), {wildcard, exact, foreign})
+                    self.assertEqual(set(normalize([wildcard, exact, suffix, child, neighbor, append])),
+                                     {suffix, neighbor, append})
+                    self.assertEqual(rules.exclude_covered([wildcard, exact, child, neighbor, append], [suffix]),
+                                     [neighbor, append])
+                    self.assertEqual(rules.exclude_covered([suffix], [wildcard, exact]), [suffix])
+
+
 class WhitelistTests(unittest.TestCase):
     def test_qx_policy_is_ignored_when_parsing_whitelist(self):
         self.assertEqual(rules.parse_whitelist("host-suffix,a.com,DIRECT"), [
