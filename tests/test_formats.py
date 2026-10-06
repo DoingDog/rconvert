@@ -19,6 +19,95 @@ def expected_process(value):
     return kind + ",(?-i:\\A" + escaped + end + ")"
 
 
+NATIVE_KEYWORD_SOURCE = '''payload:
+  - DOMAIN-KEYWORD,中文
+  - AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))
+  - OR,((DOMAIN-KEYWORD,中文),(NETWORK,udp))
+  - NOT,((DOMAIN-KEYWORD,中文))
+  - DOMAIN,keep.example.com
+  - IP-CIDR,203.0.113.0/24,no-resolve
+  - SRC-IP-CIDR,198.51.100.0/24
+'''
+
+
+def native_keyword_expected(group, purpose, mode):
+    flag = ',no-resolve' if mode != 'strip' else ''
+    conjunction = ('AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24' + flag +
+                   '),(SRC-IP-CIDR,198.51.100.0/24))')
+    negative = 'NOT,((DOMAIN-KEYWORD,中文))'
+    alternative = 'OR,((DOMAIN-KEYWORD,中文),(NETWORK,udp))'
+    ip = 'IP-CIDR,203.0.113.0/24' + flag
+    surge_conjunction = conjunction.replace('SRC-IP-CIDR,', 'SRC-IP,')
+    surge = [surge_conjunction, 'DOMAIN,keep.example.com', 'DOMAIN-KEYWORD,中文', negative,
+             'OR,((DOMAIN-KEYWORD,中文),(PROTOCOL,UDP))', ip, 'SRC-IP,198.51.100.0/24']
+    bodies = {'fin.txt': surge,
+              'fin-qx.txt': ['HOST,keep.example.com,LIST', 'HOST-KEYWORD,中文,LIST',
+                            'IP-CIDR,203.0.113.0/24,LIST' + flag],
+              'fin.yaml': ['  - "' + line + '"' for line in
+                           [conjunction, 'DOMAIN,keep.example.com', 'DOMAIN-KEYWORD,中文', negative,
+                            alternative, ip, 'SRC-IP-CIDR,198.51.100.0/24']],
+              'fin-surge.txt': [surge[0], *surge[2:]], 'fin-surge-ds.txt': ['keep.example.com']}
+    expected = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
+                ''.join(line + '\n' for line in body) for name, body in bodies.items()}
+    expected['fin-adb.txt'] = (
+        f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
+        '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
+        ('! Total count: 2\n/^.*中文.*$/\nkeep.example.com\n' if purpose == 'block' else
+         '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
+    return expected
+
+
+def native_keyword_skips(purpose):
+    skipped = {f'{name}:{kind}': 1 for name in ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')
+               for kind in ('AND', 'NOT', 'OR', 'SRC-IP-CIDR')}
+    skipped.update({'fin-adb.txt:IP-CIDR': 1, 'fin-surge-ds.txt:IP-CIDR': 1,
+                    'fin-surge-ds.txt:DOMAIN-KEYWORD': 1})
+    if purpose != 'block':
+        skipped.update({'fin-adb.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN-KEYWORD': 1})
+    return skipped
+
+
+class NativeKeywordFormatTests(unittest.TestCase):
+    def test_r22_nine_modes_preserve_ordered_six_texts_and_leaf_flags(self):
+        from rules import normalize, parse
+
+        for purpose in ('block', 'direct', 'proxy'):
+            parsed, messages = parse(NATIVE_KEYWORD_SOURCE, purpose=purpose)
+            self.assertEqual(messages, [])
+            for mode in ('add', 'keep', 'strip'):
+                with self.subTest(purpose=purpose, mode=mode), patch('formats.datetime') as clock:
+                    clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                    outputs, skipped = render_configured('keyword', normalize(parsed), purpose=purpose, no_resolve=mode)
+                self.assertEqual(outputs, native_keyword_expected('keyword', purpose, mode))
+                self.assertEqual(skipped, native_keyword_skips(purpose))
+                self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose)[1], [])
+
+    def test_r22_dns_allow_and_whitelist_keep_full_text(self):
+        from rules import parse_whitelist
+
+        keyword = Rule('DOMAIN-KEYWORD', '中文', allow=True, domain_source='mihomo')
+        white = parse_whitelist('payload:\n  - DOMAIN-KEYWORD,中文')
+        self.assertEqual(white, [Rule('DOMAIN-KEYWORD', '中文', domain_source='mihomo')])
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'keep', 'strip'):
+                with self.subTest(purpose=purpose, mode=mode), patch('formats.datetime') as clock:
+                    clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                    allowed, skipped = render_configured('keyword', [keyword], purpose=purpose, no_resolve=mode)
+                    whitelisted, white_skips = render_configured('keyword', [], purpose=purpose, no_resolve=mode, whitelist=white)
+                expected = {name: '# keyword rules: 0\n' + ('payload:\n' if name == 'fin.yaml' else '')
+                            for name in ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt', 'fin-surge-ds.txt')}
+                expected['fin-adb.txt'] = (
+                    '[Adblock Plus 2.0]\n! Title: keyword\n! Homepage: https://github.com/DoingDog/rconvert\n'
+                    '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
+                    ('! Total count: 1\n@@/^.*中文.*$/\n' if purpose == 'block' else
+                     '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
+                self.assertEqual(allowed, expected)
+                self.assertEqual(whitelisted, expected)
+                self.assertEqual(skipped, {name + ':DOMAIN-KEYWORD': 1 for name in expected
+                                          if name != 'fin-adb.txt' or purpose != 'block'})
+                self.assertEqual(white_skips, {})
+
+
 CONSTRUCTOR_SOURCE = '''payload:
   - DSCP,0-63
   - GEOSITE,geolocation-!cn

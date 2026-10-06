@@ -38,6 +38,196 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class NativeKeywordGenerateTests(unittest.TestCase):
+    def test_r22_same_round_twelve_products_publish_and_disk_only_reimport(self):
+        from tests.test_formats import NATIVE_KEYWORD_SOURCE, native_keyword_expected, native_keyword_skips
+
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'keep', 'strip'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['input.yaml'], 'whitelist': []},
+                               {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['parent/fin.yaml'], 'whitelist': []}]
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    (root / 'input.yaml').write_text(NATIVE_KEYWORD_SOURCE, encoding='utf-8')
+                    old = {}
+                    for group in ('parent', 'child'):
+                        (root / group).mkdir()
+                        for name in NAMES:
+                            path = root / group / name
+                            old[path] = f'old {group} {name}\n'.encode()
+                            path.write_bytes(old[path])
+                    for disk_only in (False, True):
+                        before = {path: path.read_bytes() for path in old}
+                        groups = ('child',) if disk_only else ('parent', 'child')
+                        if disk_only:
+                            (root / 'input.yaml').unlink()
+                            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                            self.assertFalse((root / 'input.yaml').exists())
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr, patch('formats.datetime') as clock:
+                            clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        expected = {root / group / name: text for group in groups
+                                    for name, text in native_keyword_expected(group, purpose, mode).items()}
+                        self.assertEqual(outputs, expected)
+                        self.assertEqual(stderr.getvalue().splitlines(), [f'{group} {key}: {count}'
+                                         for group in groups for key, count in sorted(native_keyword_skips(purpose).items())])
+                        self.assertEqual({path: path.read_bytes() for path in old}, before)
+                        publish(outputs)
+                        self.assertEqual({path: path.read_bytes() for path in expected},
+                                         {path: text.encode('utf-8') for path, text in expected.items()})
+                        if disk_only:
+                            self.assertEqual({path: path.read_bytes() for path in before if path.parent.name == 'parent'},
+                                             {path: data for path, data in before.items() if path.parent.name == 'parent'})
+
+    def test_r22_generated_whitelist_and_invalid_input_protect_old_bytes(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'keep', 'strip'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['white.yaml'], 'whitelist': []},
+                               {'name': 'consumer', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['source.yaml'], 'whitelist': ['white/fin.yaml']}]
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    (root / 'white.yaml').write_text('payload:\n  - DOMAIN-KEYWORD,中文\n', encoding='utf-8')
+                    (root / 'source.yaml').write_text('payload:\n  - DOMAIN-KEYWORD,中文\n  - DOMAIN-KEYWORD,中文广告\n  - DOMAIN,keep.example.com\n', encoding='utf-8')
+                    def expected(group):
+                        white = group == 'white'
+                        bodies = {'fin.txt': ['DOMAIN-KEYWORD,中文'] if white else ['DOMAIN,keep.example.com'],
+                                  'fin-qx.txt': ['HOST-KEYWORD,中文,LIST'] if white else ['HOST,keep.example.com,LIST'],
+                                  'fin.yaml': ['  - "DOMAIN-KEYWORD,中文"'] if white else ['  - "DOMAIN,keep.example.com"'],
+                                  'fin-surge.txt': ['DOMAIN-KEYWORD,中文'] if white else [],
+                                  'fin-surge-ds.txt': [] if white else ['keep.example.com']}
+                        output = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
+                                  ''.join(line + '\n' for line in body) for name, body in bodies.items()}
+                        output['fin-adb.txt'] = (
+                            f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
+                            '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
+                            ('! Total count: 1\n/^.*中文.*$/\n' if white else
+                             '! Total count: 2\n@@/^.*中文.*$/\nkeep.example.com\n') if purpose == 'block' else
+                            f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
+                            '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n'
+                            '! Total count: 0\n! No AdBlock rules for non-advertising group.\n')
+                        return output
+                    for disk_only in (False, True):
+                        if disk_only:
+                            (root / 'white.yaml').unlink()
+                            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr, patch('formats.datetime') as clock:
+                            clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        groups = ('consumer',) if disk_only else ('white', 'consumer')
+                        self.assertEqual(outputs, {root / group / name: text for group in groups
+                                                   for name, text in expected(group).items()})
+                        messages = ([] if disk_only else ['white fin-adb.txt:DOMAIN-KEYWORD: 1'] if purpose != 'block' else [])
+                        if not disk_only:
+                            messages += ['white fin-surge-ds.txt:DOMAIN-KEYWORD: 1']
+                        if purpose != 'block':
+                            messages += ['consumer fin-adb.txt:DOMAIN: 1']
+                        self.assertEqual(stderr.getvalue().splitlines(), messages)
+                        publish(outputs)
+                        self.assertEqual({path: path.read_bytes() for path in outputs},
+                                         {path: text.encode('utf-8') for path, text in outputs.items()})
+                    old = {root / group / name: (root / group / name).read_bytes()
+                           for group in ('white', 'consumer') for name in NAMES}
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    (root / 'white.yaml').write_text('payload:\n  - DOMAIN-KEYWORD,\n', encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr, self.assertRaisesRegex(ValueError, 'No adaptable rules'):
+                        publish(generate(root, lambda url: self.fail(url)))
+                    self.assertEqual(stderr.getvalue().splitlines(), [f"{root / 'white.yaml'}: line 2: invalid DOMAIN-KEYWORD "])
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+
+    def test_r22_600_and_1000_layers_keep_keyword_and_twelve_published_texts(self):
+        code = '''
+import contextlib
+import io
+import json
+import sys
+import tempfile
+from dataclasses import fields
+from datetime import datetime, timezone
+from pathlib import Path
+from unittest.mock import patch
+from generate import generate, publish
+from rules import Rule, normalize, parse, parse_whitelist
+limit = sys.getrecursionlimit()
+names = ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
+assert [field.name for field in fields(Rule)] == ['kind', 'value', 'options', 'allow', 'literal_process', 'native_fields', 'domain_source']
+leaf = '(AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24)))'
+matcher = ('(NOT,(' * DEPTH + leaf + '))' * DEPTH)[1:-1]
+source = 'payload:\\n  - DOMAIN-KEYWORD,中文\\n  - ' + json.dumps(matcher) + '\\n  - DOMAIN,keep.example.com\\n'
+keyword = Rule('DOMAIN-KEYWORD', '中文', domain_source='mihomo')
+logical = Rule('NOT', matcher[4:], native_fields=True, domain_source='mihomo')
+neighbor = Rule('DOMAIN', 'keep.example.com')
+assert parse(source, purpose=PURPOSE) == ([keyword, logical, neighbor], [])
+assert normalize([keyword, logical, neighbor] * 2) == [neighbor, keyword, logical]
+assert parse_whitelist(source) == [keyword, neighbor]
+emitted = matcher.replace(',no-resolve', '') if MODE == 'strip' else matcher
+def expected(group):
+    bodies = {'fin.txt': ['DOMAIN,keep.example.com', 'DOMAIN-KEYWORD,中文'],
+              'fin-qx.txt': ['HOST,keep.example.com,LIST', 'HOST-KEYWORD,中文,LIST'],
+              'fin.yaml': ['  - "DOMAIN,keep.example.com"', '  - "DOMAIN-KEYWORD,中文"',
+                           '  - ' + json.dumps(emitted, ensure_ascii=False)],
+              'fin-surge.txt': ['DOMAIN-KEYWORD,中文'], 'fin-surge-ds.txt': ['keep.example.com']}
+    output = {name: f'# {group} rules: {len(body)}\\n' + ('payload:\\n' if name == 'fin.yaml' else '') +
+              ''.join(line + '\\n' for line in body) for name, body in bodies.items()}
+    output['fin-adb.txt'] = (f'[Adblock Plus 2.0]\\n! Title: {group}\\n! Homepage: https://github.com/DoingDog/rconvert\\n'
+                            '! Expires: 1 day\\n! License: Inherits upstream licenses\\n! Version: 202610061200\\n' +
+                            ('! Total count: 2\\n/^.*中文.*$/\\nkeep.example.com\\n' if PURPOSE == 'block' else
+                             '! Total count: 0\\n! No AdBlock rules for non-advertising group.\\n'))
+    return output
+skips = {name + ':NOT': 1 for name in names if name != 'fin.yaml'}
+skips['fin-surge-ds.txt:DOMAIN-KEYWORD'] = 1
+if PURPOSE != 'block':
+    skips.update({'fin-adb.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN-KEYWORD': 1})
+with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
+    root = Path(directory)
+    configs = [{'name': 'parent', 'purpose': PURPOSE, 'no_resolve': MODE, 'sources': ['input.yaml'], 'whitelist': []},
+               {'name': 'child', 'purpose': PURPOSE, 'no_resolve': MODE, 'sources': ['parent/fin.yaml'], 'whitelist': []}]
+    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+    (root / 'input.yaml').write_text(source, encoding='utf-8')
+    old = {}
+    for group in ('parent', 'child'):
+        (root / group).mkdir()
+        for name in names:
+            path = root / group / name
+            old[path] = f'old {group} {name}\\n'.encode()
+            path.write_bytes(old[path])
+    for disk_only in (False, True):
+        groups = ('child',) if disk_only else ('parent', 'child')
+        before = {path: path.read_bytes() for path in old}
+        if disk_only:
+            (root / 'input.yaml').unlink()
+            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+        with contextlib.redirect_stderr(io.StringIO()) as stderr, patch('formats.datetime') as clock:
+            clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+            outputs = generate(root, lambda url: (_ for _ in ()).throw(AssertionError(url)))
+        assert outputs == {root / group / name: text for group in groups for name, text in expected(group).items()}
+        assert stderr.getvalue().splitlines() == [f'{group} {key}: {count}' for group in groups for key, count in sorted(skips.items())]
+        assert {path: path.read_bytes() for path in old} == before
+        publish(outputs)
+        assert {path: path.read_bytes() for path in outputs} == {path: text.encode('utf-8') for path, text in outputs.items()}
+        if disk_only:
+            assert not (root / 'input.yaml').exists()
+            assert {path: path.read_bytes() for path in old if path.parent.name == 'parent'} == {path: data for path, data in before.items() if path.parent.name == 'parent'}
+        wanted = [neighbor, keyword, Rule('NOT', emitted[4:], native_fields=True, domain_source='mihomo')]
+        for group in ('parent', 'child'):
+            assert parse((root / group / 'fin.yaml').read_text(encoding='utf-8'), purpose=PURPOSE) == (wanted, [])
+assert sys.getrecursionlimit() == limit
+'''
+        for depth in (600, 1000):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'keep', 'strip'):
+                    with self.subTest(depth=depth, purpose=purpose, mode=mode):
+                        settings = f'DEPTH = {depth}\nPURPOSE = {purpose!r}\nMODE = {mode!r}\n'
+                        result = subprocess.run([sys.executable, '-B', '-c', settings + code], cwd=ROOT,
+                                                capture_output=True, text=True, timeout=8)
+                        self.assertEqual(result.returncode, 0, result.stderr[-3000:])
+
+
 class ConstructorGenerateTests(unittest.TestCase):
     def test_constructor_same_round_source_and_disk_only_reimport(self):
         from tests.test_formats import CONSTRUCTOR_SOURCE, constructor_expected, constructor_skips

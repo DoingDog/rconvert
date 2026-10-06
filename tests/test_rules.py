@@ -14,6 +14,78 @@ def _quote_matcher(value):
     return f"{quote}{value}{quote}"
 
 
+class NativeKeywordRuleTests(unittest.TestCase):
+    def test_r22_native_scalars_keep_constructor_characters_and_seven_fields(self):
+        import json
+        from dataclasses import fields
+
+        self.assertEqual([field.name for field in fields(Rule)],
+                         ['kind', 'value', 'options', 'allow', 'literal_process', 'native_fields', 'domain_source'])
+        for value in ('中文', '日本語', '한글', '\U00020000', '*广告?', '广告[0-9]',
+                      'foo bar', 'a/b', '<Ads>', '(中文)', '广告#;x//', '广告\t字', '广告\0\n字'):
+            expected = Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')
+            scalars = (json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False),)
+            if value == '中文':
+                scalars += ('"DOMAIN-KEYWORD,\\u4e2d\\u6587"',)
+            if value == '\U00020000':
+                scalars += ('"DOMAIN-KEYWORD,\\U00020000"',)
+            if not any(char in value for char in '\t\0\n'):
+                scalars += ('DOMAIN-KEYWORD,' + value, "'DOMAIN-KEYWORD," + value + "'")
+            for header in ('payload', 'rules'):
+                for scalar in scalars:
+                    for purpose in ('block', 'direct', 'proxy'):
+                        with self.subTest(value=value, header=header, scalar=scalar, purpose=purpose):
+                            self.assertEqual(parse(header + ':\n  - ' + scalar, purpose=purpose), ([expected], []))
+                            self.assertEqual(normalize([expected, expected]), [expected])
+        self.assertEqual(parse('payload:\n  - DOMAIN-KEYWORD,中文,ignored', purpose='block'),
+                         ([Rule('DOMAIN-KEYWORD', '中文', domain_source='mihomo')], []))
+
+    def test_r22_logical_caller_preserves_native_keyword_context(self):
+        import json
+
+        for value in ('中文', '日本語', '*广告?', '<Ads>', '广告\t字'):
+            for operator in ('AND', 'OR', 'NOT'):
+                expression = (f'((DOMAIN-KEYWORD,{value}))' if operator == 'NOT' else
+                              f'((DOMAIN-KEYWORD,{value}),(NETWORK,tcp))')
+                expected = Rule(operator, expression, native_fields=True, domain_source='mihomo')
+                for purpose in ('block', 'direct', 'proxy'):
+                    with self.subTest(value=value, operator=operator, purpose=purpose):
+                        self.assertEqual(parse('payload:\n  - ' + json.dumps(operator + ',' + expression),
+                                               purpose=purpose), ([expected], []))
+
+    def test_r22_whitelist_keeps_provenance_and_keyword_coverage(self):
+        source = 'payload:\n  - DOMAIN-KEYWORD,中文\n  - DOMAIN-KEYWORD,中文广告\n  - DOMAIN,keep.example.com'
+        parsed, messages = parse(source, purpose='block')
+        self.assertEqual(messages, [])
+        keyword = Rule('DOMAIN-KEYWORD', '中文', domain_source='mihomo')
+        longer = Rule('DOMAIN-KEYWORD', '中文广告', domain_source='mihomo')
+        neighbor = Rule('DOMAIN', 'keep.example.com')
+        self.assertEqual(parsed, [keyword, longer, neighbor])
+        self.assertEqual(rules.parse_whitelist(source), parsed)
+        self.assertEqual(normalize(parsed * 2), [neighbor, keyword])
+        self.assertEqual(rules.exclude_covered(parsed, rules.parse_whitelist('payload:\n  - DOMAIN-KEYWORD,中文')),
+                         [neighbor])
+        self.assertEqual(rules.exclude_covered(parsed, [Rule('DOMAIN-KEYWORD', '中文')]), parsed)
+        self.assertEqual(rules.exclude_covered(parsed, [Rule('DOMAIN-KEYWORD', '中文', domain_source='qx')]), parsed)
+
+    def test_r22_invalid_native_keywords_keep_warnings_and_later_rules(self):
+        for value in ('', ' ', '  '):
+            with self.subTest(value=value):
+                self.assertEqual(parse('payload:\n  - DOMAIN-KEYWORD,' + value + '\n  - DOMAIN,keep.example.com',
+                                       purpose='block'),
+                                 ([Rule('DOMAIN', 'keep.example.com')], ['line 2: invalid DOMAIN-KEYWORD ']))
+                self.assertEqual(parse('payload:\n  - NOT,((DOMAIN-KEYWORD,' + value + '))', purpose='block'),
+                                 ([], ['line 2: invalid logical expression ((DOMAIN-KEYWORD,' + value.strip(' ') + '))']))
+        self.assertEqual(parse('DOMAIN-KEYWORD,中文\nDOMAIN,keep.example.com', purpose='block'),
+                         ([Rule('DOMAIN', 'keep.example.com')], ['line 1: invalid DOMAIN-KEYWORD 中文']))
+        self.assertEqual(parse('DOMAIN-KEYWORD,ads', purpose='block'), ([Rule('DOMAIN-KEYWORD', 'ads')], []))
+        for document in ('<!doctype html>\nDOMAIN-KEYWORD,hidden',
+                         '﻿<html>\nDOMAIN-KEYWORD,hidden\n</html>'):
+            self.assertEqual(parse(document, purpose='block'), ([], ['line 1: HTML document']))
+        self.assertEqual(parse('DOMAIN,a.example<div>\nDOMAIN,keep.example.com', purpose='block'),
+                         ([Rule('DOMAIN', 'keep.example.com')], ['line 1: HTML markup']))
+
+
 class ConstructorValidationTests(unittest.TestCase):
     def check_matcher(self, kind, value, *, valid=True, native=True, expected_kind=None,
                       expected_value=None):

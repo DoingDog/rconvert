@@ -1055,6 +1055,8 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
             'REDIR', 'TPROXY', 'TROJAN', 'TUNNEL', 'TUN', 'TUIC', 'HYSTERIA2', 'ANYTLS', 'MIERU',
             'SUDOKU', 'TRUSTTUNNEL', 'SHADOWQUIC', 'INNER',
         } for part in value.split('/'))
+    if kind == "DOMAIN-KEYWORD" and native_fields:
+        return bool(value)
     return bool(re.fullmatch(r"[a-z0-9._-]+", value, re.I))
 
 
@@ -1369,7 +1371,7 @@ def _has_literal_field(line: str, native_fields: bool = False) -> bool:
     if head is None:
         return False
     kind = head[1].upper()
-    literal = _REGEX | ({'IN-USER', 'IN-NAME', 'REMATCH-NAME', 'PROCESS-NAME', 'PROCESS-PATH',
+    literal = _REGEX | ({'DOMAIN-KEYWORD', 'IN-USER', 'IN-NAME', 'REMATCH-NAME', 'PROCESS-NAME', 'PROCESS-PATH',
                          'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'} if native_fields else set())
     return kind in literal or kind in _LOGICAL and bool(re.search(
         r"\(\s*(?:" + '|'.join(sorted(literal)) + '),', line, re.I
