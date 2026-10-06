@@ -14,6 +14,253 @@ def _quote_matcher(value):
     return f"{quote}{value}{quote}"
 
 
+class ConstructorValidationTests(unittest.TestCase):
+    def check_matcher(self, kind, value, *, valid=True, native=True, expected_kind=None,
+                      expected_value=None):
+        import json
+
+        expected_kind = expected_kind or kind
+        expected_value = value if expected_value is None else expected_value
+        for purpose in ("block", "direct", "proxy"):
+            for operator in (None, "AND", "OR", "NOT"):
+                expression = (f"(({kind},{value}))" if operator == "NOT" else
+                              f"(({kind},{value}),(NETWORK,tcp))")
+                expected_expression = (f"(({expected_kind},{expected_value}))" if operator == "NOT" else
+                                       f"(({expected_kind},{expected_value}),(NETWORK,tcp))")
+                matcher = f"{operator},{expression}" if operator else f"{kind},{value}"
+                expected = Rule(operator, expected_expression, literal_process=kind == "PROCESS-NAME" and native,
+                                native_fields=native) if operator else Rule(
+                                    expected_kind, expected_value, literal_process=kind == "PROCESS-NAME" and native)
+                sources = [matcher]
+                if native:
+                    sources = [f"{header}:\n  - {scalar}" for header in ("payload", "rules")
+                               for scalar in (matcher, "'" + matcher + "'", json.dumps(matcher, ensure_ascii=False))]
+                for source in sources:
+                    line = 2 if native else 1
+                    with self.subTest(source=source, purpose=purpose):
+                        neighbor = "\nDOMAIN,neighbor.example.com"
+                        parsed, messages = parse(source + neighbor, purpose=purpose)
+                        self.assertEqual(parsed, ([expected] if valid else []) + [Rule("DOMAIN", "neighbor.example.com")])
+                        reason = (f"invalid logical expression {expression}" if operator else
+                                  f"invalid value {value}" if kind in {"IN-NAME", "REMATCH-NAME"} else
+                                  f"invalid port {value}" if kind in {"DST-PORT", "SRC-PORT", "IN-PORT"} else
+                                  f"invalid CIDR {value}" if kind == "IP-CIDR6" else f"invalid {kind} {value}")
+                        self.assertEqual(messages, [] if valid else [f"line {line}: {reason}"])
+
+    def test_r06_in_user_segment_whitespace_and_literal_values(self):
+        for value in ("alice / bob", "alice bob/Alice Smith", "A\tB", "<Alice>"):
+            self.check_matcher("IN-USER", value)
+        for value in ("alice//bob", "alice/ /bob", "/alice", "alice/"):
+            self.check_matcher("IN-USER", value, valid=False)
+        import json
+
+        for value, valid in (("\t", False), ("\u0085", False), (" ", False), ("\x1c", True), ("​", True)):
+            source = "payload:\n  - " + json.dumps("IN-USER," + value)
+            self.assertEqual(parse(source, purpose="proxy"),
+                             ([Rule("IN-USER", value)], []) if valid else ([], [f"line 2: invalid IN-USER {value}"]))
+
+    def test_r07_surge_asn_prefix_and_unknown_keep_source_context(self):
+        for value, expected in (("AS13335", "13335"), ("AS4294967295", "4294967295"),
+                                ("UNKNOWN", "UNKNOWN"), ("unknown", "unknown")):
+            self.check_matcher("IP-ASN", value, native=False, expected_value=expected)
+        for value in ("ASabc", "NaN", "-1", "AS4294967296", "4294967296"):
+            self.check_matcher("IP-ASN", value, native=False, valid=False)
+        for value in ("AS13335", "UNKNOWN"):
+            self.check_matcher("IP-ASN", value, valid=False)
+
+    def test_r08_geoip_lan_and_surge_unknown_keep_direction(self):
+        for kind in ("GEOIP", "SRC-GEOIP"):
+            for value in ("LAN", "lan", "LaN", "CN", "cn"):
+                self.check_matcher(kind, value)
+        self.check_matcher("GEOIP", "UNKNOWN", native=False)
+        self.check_matcher("SRC-GEOIP", "UNKNOWN", native=False, valid=False)
+        self.check_matcher("GEOIP", "UNKNOWN", valid=False)
+        self.assertEqual(parse("GEOIP,LAN,src", purpose="proxy"),
+                         ([], ["line 1: ambiguous src policy or option"]))
+        self.assertEqual(parse("payload:\n  - GEOIP,LAN,src,no-resolve", purpose="proxy"),
+                         ([Rule("SRC-GEOIP", "LAN")], ["line 2: unsupported no-resolve for SRC-GEOIP"]))
+        self.assertEqual(parse("payload:\n  - SRC-GEOIP,LAN,no-resolve", purpose="proxy"),
+                         ([Rule("SRC-GEOIP", "LAN")], []))
+
+    def test_r14_zero_lower_bound_ports_cover_all_callers(self):
+        for kind in ("DST-PORT", "SRC-PORT", "IN-PORT"):
+            for value in ("0-65535", "0-80", "0000-80"):
+                self.check_matcher(kind, value)
+            for value in ("65536", "0-65536", "80-0"):
+                self.check_matcher(kind, value, valid=False)
+            for source in (f"{kind},0-80/443,PROXY", f"{kind},0-80,443,PROXY"):
+                self.assertEqual(parse(source, purpose="proxy"),
+                                 ([Rule("OR", f"(({kind},0-80),({kind},443))")], []))
+            self.assertEqual(parse(f"payload:\n  - {kind},0-80/443", purpose="proxy"),
+                             ([Rule("OR", f"(({kind},0-80),({kind},443))", native_fields=True)], []))
+
+    def test_r15_uid_dscp_ranges_and_real_unsigned_conversion(self):
+        for kind in ("UID", "DSCP"):
+            for value in ("0-63", "0/1/2", "1-4/8", "8-1", "0//1", "/0/"):
+                self.check_matcher(kind, value)
+            self.check_matcher(kind, "/".join(["0"] * 28))
+            for value in ("-1", "bad", "1-2-3", "18446744073709551616", "/".join(["0"] * 29)):
+                self.check_matcher(kind, value, valid=False)
+        for value in ("256", "256-319", "18446744073709551360"):
+            self.check_matcher("DSCP", value)
+        for value in ("64", "1-64/8", "18446744073709551615"):
+            self.check_matcher("DSCP", value, valid=False)
+        self.check_matcher("UID", "4294967296-4294967298")
+        self.check_matcher("UID", "18446744073709551615")
+
+    def test_r15_empty_uid_and_comma_range_constructor_boundaries(self):
+        for value in ("", "*", "/", "//"):
+            self.check_matcher("UID", value, valid=False)
+            self.check_matcher("DSCP", value, valid=bool(value))
+        for value in ("", " ", "  "):
+            with self.subTest(value=value):
+                self.assertFalse(rules._valid_simple("DSCP", value))
+        for value in ("\t", "\u0085", " "):
+            self.assertTrue(rules._valid_simple("DSCP", value))
+        for kind in ("UID", "DSCP"):
+            self.check_matcher(kind, "/ /", native=False)
+            with self.subTest(kind=kind):
+                self.assertTrue(rules._valid_simple(kind, "0,1,8-1"))
+                self.assertTrue(rules._valid_simple(kind, ",".join(["0"] * 28)))
+                self.assertFalse(rules._valid_simple(kind, ",".join(["0"] * 29)))
+                self.assertEqual(parse(f"{kind},'0,1',PROXY", purpose="proxy"),
+                                 ([Rule(kind, "0,1")], []))
+                self.assertEqual(parse(f"payload:\n  - {kind},0,1", purpose="proxy"),
+                                 ([Rule(kind, "0")], []))
+        for value in ("+1", "[ ]", "1-", "1\t-2", "18446744073709551616"):
+            self.check_matcher("DSCP", value, valid=False)
+
+    def test_r16_in_type_full_enum_alias_whitespace_and_invalid_values(self):
+        names = ("HTTP", "HTTPS", "SOCKS4", "SOCKS5", "SHADOWSOCKS", "SNELL", "VMESS", "VLESS",
+                 "REDIR", "TPROXY", "TROJAN", "TUNNEL", "TUN", "TUIC", "HYSTERIA2", "ANYTLS",
+                 "MIERU", "SUDOKU", "TRUSTTUNNEL", "SHADOWQUIC", "INNER", "SOCKS")
+        for name in names:
+            self.check_matcher("IN-TYPE", name)
+        self.check_matcher("IN-TYPE", "HTTP / SOCKS")
+        self.check_matcher("IN-TYPE", "http/ socks")
+        for value in ("BOGUS", "HTTP-TEST", "MIXED", "HTTP_TEST", "HTTP/MIXED", "HTTP//SOCKS", "HTTP/ /SOCKS"):
+            self.check_matcher("IN-TYPE", value, valid=False)
+
+    def test_r17_name_lists_reject_empty_segments_and_keep_literal_tail(self):
+        for kind in ("IN-NAME", "REMATCH-NAME"):
+            for value in ("A/B", "A/ B"):
+                self.check_matcher(kind, value)
+            for value in ("/", "A/", "/A", "A//B", "A/ /B", "Foo(/"):
+                self.check_matcher(kind, value, valid=False)
+            self.assertEqual(parse(f"payload:\n  - {kind},Foo(", purpose="proxy"),
+                             ([Rule(kind, "Foo(")], []))
+            expression = f"(({kind},Foo(,ignored)))"
+            self.assertEqual(parse(f"payload:\n  - NOT,{expression}", purpose="proxy"),
+                             ([Rule("NOT", expression, native_fields=True)], []))
+
+    def test_r18_ip_suffix_rejects_dotted_masks_and_preserves_host_bits(self):
+        for kind in ("IP-SUFFIX", "SRC-IP-SUFFIX"):
+            for value in ("192.0.2.7/24", "192.0.2.7/0", "192.0.2.7/32", "2001:db8::7/64"):
+                self.check_matcher(kind, value)
+            for value in ("192.0.2.7/255.255.255.0", "192.0.2.7/0.0.0.255", "192.0.2.7/33",
+                          "192.0.2.7", "bad/24", "fe80::1%eth0/64"):
+                self.check_matcher(kind, value, valid=False)
+
+    def test_r19_native_literal_html_fields_and_document_guards(self):
+        for kind in ("IN-USER", "IN-NAME", "REMATCH-NAME", "PROCESS-NAME", "PROCESS-PATH",
+                     "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"):
+            value = "/tmp/<Foo>" if "PATH" in kind else "<Foo>"
+            self.check_matcher(kind, value)
+        for text in ("<!doctype html>\nDOMAIN,hidden.example", "﻿<!doctype html>\nDOMAIN,hidden.example",
+                     "<html>\nDOMAIN,hidden.example\n</html>", "<main>\nDOMAIN,hidden.example\n</main>"):
+            self.assertEqual(parse(text, purpose="proxy"), ([], ["line 1: HTML document"]))
+        self.assertEqual(parse("DOMAIN,a.example\n<div>\nDOMAIN,hidden.example\n</div>\nDOMAIN,b.example", purpose="proxy"),
+                         ([Rule("DOMAIN", "a.example"), Rule("DOMAIN", "b.example")],
+                          ["line 2: HTML markup", "line 4: HTML markup"]))
+
+    def test_r20_native_ipv4_cidr6_alias_and_ordinary_family_boundary(self):
+        self.check_matcher("IP-CIDR6", "127.0.0.1/8", expected_kind="IP-CIDR", expected_value="127.0.0.0/8")
+        self.check_matcher("IP-CIDR6", "127.0.0.1/8", native=False, valid=False)
+        self.check_matcher("IP-CIDR6", "127.0.0.1/33", valid=False)
+        self.assertEqual(parse("payload:\n  - IP-CIDR6,127.0.0.1/8,src", purpose="proxy"),
+                         ([Rule("SRC-IP-CIDR", "127.0.0.0/8")], []))
+        self.assertEqual(parse("IP-CIDR6,127.0.0.1/8,PROXY,src", purpose="proxy"),
+                         ([], ["line 1: invalid CIDR 127.0.0.1/8"]))
+
+    def test_r21_geosite_confirmed_database_name(self):
+        self.check_matcher("GEOSITE", "geolocation-!cn")
+        self.check_matcher("GEOSITE", "geolocation-!cn", native=False)
+        self.check_matcher("GEOSITE", "bad name", valid=False)
+
+    def test_r23_native_asn_zero_keeps_literal_identity(self):
+        for kind in ("IP-ASN", "SRC-IP-ASN"):
+            for value in ("0", "00", "1", "4294967295"):
+                self.check_matcher(kind, value)
+            for value in ("-1", "NaN", "4294967296"):
+                self.check_matcher(kind, value, valid=False)
+        self.assertEqual(parse("payload:\n  - IP-ASN,0,src", purpose="proxy"),
+                         ([Rule("SRC-IP-ASN", "0")], []))
+        self.assertEqual(normalize([Rule("IP-ASN", "0"), Rule("IP-ASN", "00")]),
+                         [Rule("IP-ASN", "0"), Rule("IP-ASN", "00")])
+
+    def test_constructor_600_and_1000_layers_keep_values_options_and_public_fields(self):
+        code = '''
+import json
+import sys
+from dataclasses import fields
+from formats import render
+from rules import Rule, parse, normalize, parse_whitelist
+limit = sys.getrecursionlimit()
+assert [field.name for field in fields(Rule)] == ['kind', 'value', 'options', 'allow', 'literal_process', 'native_fields', 'domain_source']
+def nest(value):
+    for _ in range(DEPTH):
+        value = '(NOT,(' + value + '))'
+    return value
+for leaf, canonical, literal in (
+    ('(IN-USER,alice bob / <Alice>)', '(IN-USER,alice bob / <Alice>)', False),
+    ('(IN-NAME,Foo(,ignored))', '(IN-NAME,Foo(,ignored))', False),
+    ('(REMATCH-NAME,Foo(,ignored))', '(REMATCH-NAME,Foo(,ignored))', False),
+    ('(PROCESS-NAME,<Foo>)', '(PROCESS-NAME,<Foo>)', True),
+    ('(IN-TYPE,HTTP / SOCKS)', '(IN-TYPE,HTTP / SOCKS)', False),
+    ('(DSCP,256-319/0//1)', '(DSCP,256-319/0//1)', False),
+    ('(UID,4294967296-4294967298)', '(UID,4294967296-4294967298)', False),
+    ('(DST-PORT,0-65535)', '(DST-PORT,0-65535)', False),
+    ('(GEOSITE,geolocation-!cn)', '(GEOSITE,geolocation-!cn)', False),
+    ('(GEOIP,LAN,no-resolve)', '(GEOIP,LAN,no-resolve)', False),
+    ('(IP-ASN,00,no-resolve)', '(IP-ASN,00,no-resolve)', False),
+    ('(IP-SUFFIX,192.0.2.7/24,no-resolve)', '(IP-SUFFIX,192.0.2.7/24,no-resolve)', False),
+    ('(IP-CIDR6,127.0.0.1/8,no-resolve)', '(IP-CIDR,127.0.0.0/8,no-resolve)', False),
+    ('(IP-CIDR6,127.0.0.1/8,src,no-resolve)', '(SRC-IP-CIDR,127.0.0.0/8)', False),
+):
+    matcher, expected = nest(leaf)[1:-1], nest(canonical)[1:-1]
+    kind, value = expected.split(',', 1)
+    for purpose in ('block', 'direct', 'proxy'):
+        source = 'payload:\\n  - ' + json.dumps(matcher) + '\\n  - DOMAIN,keep.example.com'
+        parsed, warnings = parse(source, purpose=purpose)
+        assert parsed == [Rule(kind, value, literal_process=literal, native_fields=True), Rule('DOMAIN', 'keep.example.com')], leaf
+        assert warnings == (['line 2: unsupported no-resolve for SRC-IP-CIDR'] if ',src,' in leaf else []), warnings
+        assert normalize(parsed * 2) == normalize(parsed), leaf
+        assert parse_whitelist(source) == [Rule('DOMAIN', 'keep.example.com')], leaf
+        for mode in ('keep', 'add', 'strip'):
+            emitted = canonical
+            if mode == 'add' and emitted.startswith(('(GEOIP,', '(IP-ASN,', '(IP-CIDR,', '(IP-SUFFIX,')):
+                emitted = emitted.replace(',no-resolve', '')[:-1] + ',no-resolve)'
+            if mode == 'strip':
+                emitted = emitted.replace(',no-resolve', '')
+            expected_mihomo = '# deep rules: 2\\npayload:\\n  - "DOMAIN,keep.example.com"\\n  - ' + json.dumps(nest(emitted)[1:-1]) + '\\n'
+            rendered, skips = render('deep', parsed, purpose=purpose, no_resolve=mode)
+            assert rendered['fin.yaml'] == expected_mihomo, (leaf, mode)
+            assert parse(rendered['fin.yaml'], purpose=purpose)[0] == [Rule('DOMAIN', 'keep.example.com'), Rule(kind, nest(emitted)[5:-1], literal_process=literal, native_fields=True)], (leaf, mode)
+for leaf in ('(IN-NAME,A//B)', '(REMATCH-NAME,/A)', '(IP-SUFFIX,192.0.2.7/255.255.255.0)', '(IN-TYPE,MIXED)'):
+    matcher = nest(leaf)[1:-1]
+    parsed, warnings = parse('payload:\\n  - ' + json.dumps(matcher) + '\\n  - DOMAIN,keep.example.com', purpose='proxy')
+    assert parsed == [Rule('DOMAIN', 'keep.example.com')], leaf
+    assert warnings == ['line 2: invalid logical expression ' + matcher.split(',', 1)[1]], warnings
+assert sys.getrecursionlimit() == limit
+'''
+        for depth in (600, 1000):
+            with self.subTest(depth=depth):
+                result = subprocess.run([sys.executable, "-B", "-c", f"DEPTH = {depth}\n" + code],
+                                        cwd=Path(__file__).resolve().parents[1], capture_output=True,
+                                        text=True, timeout=8)
+                self.assertEqual(result.returncode, 0, result.stderr[-3000:])
+
+
 class DomainProvenanceRuleTests(unittest.TestCase):
     def test_regex_whitelist_keeps_valid_matchers_without_guessing_coverage(self):
         regexes = ("ad", r"^api\-.*\.example\.com\.?$", r"^api\-[0-9]\.example\.com\.?$",
@@ -825,9 +1072,14 @@ condition = nest({depth}, {leaf!r})
 for native in (False, True):
     source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if native else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
     parsed, messages = parse(source, purpose='block')
-    assert parsed == [keep], len(parsed)
-    number = 2 if native else 1
-    assert len(messages) == 1 and messages[0].startswith(f'line {{number}}:'), messages
+    if native and {leaf!r} == '(IP-CIDR6,203.0.113.0/24,src)':
+        expected = nest({depth}, '(SRC-IP-CIDR,203.0.113.0/24)')
+        assert parsed == [Rule('NOT', expected[5:-1], native_fields=True), keep]
+        assert messages == []
+    else:
+        assert parsed == [keep], len(parsed)
+        number = 2 if native else 1
+        assert len(messages) == 1 and messages[0].startswith(f'line {{number}}:'), messages
 ''')
             for extra in (-1, 1):
                 with self.subTest(depth=depth, extra=extra):

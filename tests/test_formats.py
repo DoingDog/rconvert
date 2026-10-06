@@ -19,6 +19,175 @@ def expected_process(value):
     return kind + ",(?-i:\\A" + escaped + end + ")"
 
 
+CONSTRUCTOR_SOURCE = '''payload:
+  - DSCP,0-63
+  - GEOSITE,geolocation-!cn
+  - GEOIP,LAN,no-resolve
+  - IN-NAME,<Foo>/A
+  - IN-PORT,0-65535
+  - IN-TYPE,HTTP / SOCKS
+  - IN-USER,alice bob / <Alice>
+  - IP-ASN,0,no-resolve
+  - IP-CIDR6,127.0.0.1/8
+  - IP-SUFFIX,192.0.2.7/24,no-resolve
+  - PROCESS-NAME,<Foo>
+  - PROCESS-PATH,/tmp/<Foo>
+  - PROCESS-NAME-WILDCARD,*<Foo>*
+  - PROCESS-PATH-WILDCARD,/tmp/*<Foo>*
+  - REMATCH-NAME,<Foo>/B
+  - SRC-GEOIP,LAN
+  - SRC-IP-ASN,0
+  - SRC-IP-SUFFIX,192.0.2.7/24
+  - SRC-PORT,0-80
+  - UID,1000-1002/2000
+  - AND,((IN-TYPE,HTTP / SOCKS),(DSCP,0-63))
+  - NOT,((IP-CIDR6,127.0.0.1/8))
+DOMAIN,neighbor.example.com
+IP-ASN,AS13335
+IP-ASN,UNKNOWN,no-resolve
+GEOIP,UNKNOWN
+'''
+
+
+def constructor_expected(group, purpose, mode):
+    flag = ",no-resolve" if mode == "add" else ""
+    kept = ",no-resolve" if mode != "strip" else ""
+    geo = (["GEOIP,UNKNOWN", "GEOIP,LAN,no-resolve"] if mode == "keep" else
+           ["GEOIP,LAN" + kept, "GEOIP,UNKNOWN" + flag])
+    asn = (["IP-ASN,13335", "IP-ASN,0,no-resolve", "IP-ASN,UNKNOWN,no-resolve"] if mode == "keep" else
+           ["IP-ASN,0" + kept, "IP-ASN,13335" + flag, "IP-ASN,UNKNOWN" + kept])
+    cidr = "IP-CIDR,127.0.0.0/8" + flag
+    negative = "NOT,((" + cidr + "))"
+    surge = ["DOMAIN,neighbor.example.com", "IN-PORT,0-65535", negative, "SRC-PORT,0-80", *geo, *asn, cidr]
+    qx = ["HOST,neighbor.example.com,LIST", *[line.replace(",no-resolve", "") + ",LIST" +
+          (",no-resolve" if line.endswith(",no-resolve") else "") for line in geo + asn + [cidr]]]
+    yaml = ["AND,((IN-TYPE,HTTP / SOCKS),(DSCP,0-63))", "DOMAIN,neighbor.example.com", "DSCP,0-63",
+            "GEOSITE,geolocation-!cn", "IN-NAME,<Foo>/A", "IN-PORT,0-65535", "IN-TYPE,HTTP / SOCKS",
+            "IN-USER,alice bob / <Alice>", negative, "PROCESS-NAME,<Foo>", "PROCESS-NAME-WILDCARD,*<Foo>*",
+            "PROCESS-PATH,/tmp/<Foo>", "PROCESS-PATH-WILDCARD,/tmp/*<Foo>*", "REMATCH-NAME,<Foo>/B",
+            "SRC-PORT,0-80", "UID,1000-1002/2000", "GEOIP,LAN" + kept,
+            *(["IP-ASN,13335", "IP-ASN,0,no-resolve"] if mode == "keep" else
+              ["IP-ASN,0" + kept, "IP-ASN,13335" + flag]),
+            "SRC-GEOIP,LAN", "SRC-IP-ASN,0", cidr, "IP-SUFFIX,192.0.2.7/24" + kept,
+            "SRC-IP-SUFFIX,192.0.2.7/24"]
+    bodies = {"fin.txt": surge, "fin-qx.txt": qx, "fin.yaml": ["  - " + json.dumps(line) for line in yaml],
+              "fin-surge.txt": surge[1:], "fin-surge-ds.txt": ["neighbor.example.com"]}
+    expected = {name: f"# {group} rules: {len(body)}\n" + ("payload:\n" if name == "fin.yaml" else "") +
+                "".join(line + "\n" for line in body) for name, body in bodies.items()}
+    expected["fin-adb.txt"] = (
+        f"[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n"
+        "! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n" +
+        ("! Total count: 1\nneighbor.example.com\n" if purpose == "block" else
+         "! Total count: 0\n! No AdBlock rules for non-advertising group.\n"))
+    return expected
+
+
+def constructor_skips(purpose):
+    kinds = {"AND": 1, "DOMAIN": 1, "DSCP": 1, "GEOSITE": 1, "GEOIP": 2, "IN-NAME": 1,
+             "IN-PORT": 1, "IN-TYPE": 1, "IN-USER": 1, "IP-ASN": 3, "IP-CIDR": 1, "IP-SUFFIX": 1,
+             "NOT": 1, "PROCESS-NAME": 1, "PROCESS-NAME-WILDCARD": 1, "PROCESS-PATH": 1,
+             "PROCESS-PATH-WILDCARD": 1, "REMATCH-NAME": 1, "SRC-GEOIP": 1, "SRC-IP-ASN": 1,
+             "SRC-IP-SUFFIX": 1, "SRC-PORT": 1, "UID": 1}
+    represented = {
+        "fin.txt": {"DOMAIN", "GEOIP", "IN-PORT", "IP-ASN", "IP-CIDR", "NOT", "SRC-PORT"},
+        "fin-surge.txt": {"DOMAIN", "GEOIP", "IN-PORT", "IP-ASN", "IP-CIDR", "NOT", "SRC-PORT"},
+        "fin-qx.txt": {"DOMAIN", "GEOIP", "IP-ASN", "IP-CIDR"},
+        "fin-adb.txt": {"DOMAIN"} if purpose == "block" else set(), "fin-surge-ds.txt": {"DOMAIN"},
+    }
+    skips = {f"{name}:{kind}": count for name, included in represented.items()
+             for kind, count in kinds.items() if kind not in included}
+    skips.update({"fin.yaml:GEOIP": 1, "fin.yaml:IP-ASN": 1})
+    return skips
+
+
+class ConstructorRendererTests(unittest.TestCase):
+    def test_constructor_nine_modes_have_independent_ordered_six_texts(self):
+        from rules import normalize, parse
+
+        for purpose in ("block", "direct", "proxy"):
+            parsed, messages = parse(CONSTRUCTOR_SOURCE, purpose=purpose)
+            self.assertEqual(messages, [])
+            for mode in ("add", "keep", "strip"):
+                with self.subTest(purpose=purpose, mode=mode), patch("formats.datetime") as clock:
+                    clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                    outputs, skipped = render_configured("constructors", normalize(parsed), purpose=purpose, no_resolve=mode)
+                self.assertEqual(outputs, constructor_expected("constructors", purpose, mode))
+                self.assertEqual(skipped, constructor_skips(purpose))
+                self.assertEqual({name: text.encode("utf-8") for name, text in outputs.items()},
+                                 {name: text.encode("utf-8") for name, text in constructor_expected("constructors", purpose, mode).items()})
+
+    def test_surge_unknown_mihomo_skip_covers_options_and_whole_logic(self):
+        for kind in ("GEOIP", "IP-ASN"):
+            for options in ((), ("no-resolve",)):
+                for operator in (None, "AND", "OR", "NOT"):
+                    expression = f"(({kind},unknown))" if operator == "NOT" else f"(({kind},unknown),(NETWORK,tcp))"
+                    rule = Rule(operator, expression) if operator else Rule(kind, "unknown", options)
+                    for mode in ("keep", "add", "strip"):
+                        output, skips = render_configured("unknown", [rule], purpose="proxy", no_resolve=mode)
+                        self.assertEqual(output["fin.yaml"], "# unknown rules: 0\npayload:\n")
+                        self.assertEqual(skips[f"fin.yaml:{operator or kind}"], 1)
+                        self.assertIn("unknown", output["fin.txt"])
+
+    def test_unsigned_range_payloads_keep_mihomo_predicates(self):
+        from rules import parse
+
+        for source, matcher in (
+            ("payload:\n  - DSCP,*", "DSCP,*"),
+            ("payload:\n  - AND,((DSCP,/),(NETWORK,tcp))", "AND,((DSCP,/),(NETWORK,tcp))"),
+            ("payload:\n  - NOT,((DSCP,//))", "NOT,((DSCP,//))"),
+            ("payload:\n  - " + json.dumps("AND,((DSCP,\t),(NETWORK,tcp))"), "AND,((DSCP,\t),(NETWORK,tcp))"),
+            ("AND,((DSCP,'\t'),(NETWORK,tcp)),PROXY", "AND,((DSCP,\t),(NETWORK,tcp))"),
+            ("DSCP,'0,1',PROXY", "DSCP,0/1"),
+            ("AND,((DSCP,'0,1'),(NETWORK,tcp)),PROXY", "AND,((DSCP,0/1),(NETWORK,tcp))"),
+            ("UID,'1000,2000',PROXY", "UID,1000/2000"),
+        ):
+            for purpose in ("block", "direct", "proxy"):
+                parsed, messages = parse(source, purpose=purpose, ignore_policy=True)
+                self.assertEqual(messages, [])
+                for mode in ("add", "keep", "strip"):
+                    with self.subTest(source=source, purpose=purpose, mode=mode):
+                        outputs, _ = render_configured("ranges", parsed, purpose=purpose, no_resolve=mode)
+                        expected = '# ranges rules: 1\npayload:\n  - ' + json.dumps(matcher) + '\n'
+                        self.assertEqual(outputs["fin.yaml"], expected)
+                        self.assertEqual(parse(expected, purpose=purpose)[1], [])
+        outputs, _ = render_configured("ranges", [Rule("DSCP", "0,1")], purpose="proxy", no_resolve="keep")
+        self.assertEqual(outputs["fin.yaml"], '# ranges rules: 1\npayload:\n  - "DSCP,0/1"\n')
+        for native in (False, True):
+            for kind, value in (("AND", "((DSCP,),(NETWORK,tcp))"), ("NOT", "((DSCP,))")):
+                with self.subTest(kind=kind, native=native):
+                    outputs, skipped = render_configured("ranges", [Rule(kind, value, native_fields=native)],
+                                                         purpose="proxy", no_resolve="keep")
+                    self.assertEqual(outputs["fin.yaml"], '# ranges rules: 0\npayload:\n')
+                    self.assertEqual(skipped["fin.yaml:" + kind], 1)
+
+    def test_new_constructor_fields_allow_whitelist_normalize_and_rebuild(self):
+        from dataclasses import fields
+        from rules import exclude_covered, normalize, parse, parse_whitelist
+
+        self.assertEqual([field.name for field in fields(Rule)],
+                         ["kind", "value", "options", "allow", "literal_process", "native_fields", "domain_source"])
+        source = "payload:\n  - IP-CIDR6,127.0.0.1/8\n  - IP-ASN,0\n  - IP-ASN,00\n  - SRC-IP-ASN,0"
+        parsed, warnings = parse(source, purpose="proxy")
+        self.assertEqual(warnings, [])
+        allowed = parse_whitelist("payload:\n  - IP-CIDR6,127.0.0.0/8\n  - IP-ASN,0")
+        self.assertEqual(exclude_covered(parsed, allowed), [Rule("IP-ASN", "00"), Rule("SRC-IP-ASN", "0")])
+        self.assertEqual(exclude_covered([Rule("IP-ASN", "13335")], parse_whitelist("IP-ASN,AS13335")), [])
+        self.assertEqual(exclude_covered(parse("IP-ASN,AS13335", purpose="proxy")[0], [Rule("IP-ASN", "13335")]), [])
+        native, warnings = parse("payload:\n  - IN-TYPE,HTTP / SOCKS\n  - IN-NAME,A/ B\n  - IN-USER,alice bob\n  - GEOSITE,geolocation-!cn", purpose="proxy")
+        self.assertEqual(warnings, [])
+        self.assertEqual(parse_whitelist("payload:\n  - IN-TYPE,HTTP\n  - IN-USER,alice\n  - GEOSITE,youtube"), [])
+        for original in native:
+            allowed_rule = Rule(original.kind, original.value, allow=True)
+            outputs, skipped = render_configured("constructors", [allowed_rule], purpose="block", no_resolve="add")
+            self.assertEqual(skipped, {f"{name}:{original.kind}": 1 for name in outputs})
+        for mode in ("add", "strip", "keep"):
+            output, _ = render_configured("constructors", normalize(parsed), purpose="proxy", no_resolve=mode)
+            reparsed, messages = parse(output["fin.yaml"], purpose="proxy")
+            self.assertEqual(messages, [])
+            self.assertTrue(all(not rule.native_fields and rule.domain_source == "surge" for rule in reparsed))
+            self.assertEqual([rule.value for rule in reparsed if rule.kind == "IP-ASN"], ["0", "00"])
+
+
 class ProcessRendererCompletionTests(unittest.TestCase):
     def outputs(self, source, mode="keep"):
         from rules import normalize, parse

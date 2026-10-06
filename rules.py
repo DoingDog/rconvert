@@ -944,22 +944,62 @@ def _valid_port(value: str) -> bool:
     if value.startswith(('<', '>')):
         return _port_comparison(value) is not None
     ports = value.split('-')
-    numbers = [port.lstrip('0') for port in ports]
+    numbers = [port.lstrip('0') or '0' for port in ports]
     return (1 <= len(ports) <= 2 and
             all(port.isascii() and port.isdecimal() and 0 < len(number) <= 5
                 and int(number) <= 65535 for port, number in zip(ports, numbers)) and
             (len(ports) == 1 or int(numbers[0]) <= int(numbers[1])))
 
 
-def _valid_simple(kind: str, value: str) -> bool:
+# Go strings.TrimSpace 使用 Unicode White_Space，不包含 Python strip 的 U+001C..U+001F。
+_GO_WHITESPACE = '\t\n\v\f\r \x85\xa0                　'
+
+
+def _valid_name_list(value: str) -> bool:
+    return all(part.strip(_GO_WHITESPACE) for part in value.split('/'))
+
+
+def _valid_unsigned_ranges(value: str, bits: int, maximum: int, *, allow_empty: bool = True) -> bool:
+    value = value.strip(_GO_WHITESPACE)
+    if value in {'', '*'}:
+        return allow_empty
+    parts = value.replace(',', '/').split('/')
+    if len(parts) > 28:
+        return False
+    for part in parts:
+        if not part:
+            continue
+        part = part.strip(_GO_WHITESPACE)
+        endpoints = part.split('-') if part else ['0']
+        if len(endpoints) > 2:
+            return False
+        for endpoint in endpoints:
+            endpoint = endpoint.strip('[ ]')
+            number = endpoint.lstrip('0') or '0'
+            if (not endpoint.isascii() or not endpoint.isdecimal() or len(number) > 20
+                    or int(number) > 18446744073709551615
+                    or int(number) % (1 << bits) > maximum):
+                return False
+    return allow_empty or any(parts)
+
+
+def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
     if kind in {"IP-ASN", "SRC-IP-ASN"}:
-        number = value.lstrip('0')
-        return (value.isascii() and value.isdecimal() and 0 < len(number) <= 10
+        if kind == 'IP-ASN' and not native_fields:
+            if value.upper() == 'UNKNOWN':
+                return True
+            if value.startswith('AS'):
+                value = value[2:]
+        number = value.lstrip('0') or '0'
+        return (value.isascii() and value.isdecimal() and len(number) <= 10
                 and int(number) <= 4294967295)
     if kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+        address, separator, prefix = value.rpartition('/')
+        if not separator or not re.fullmatch(r'[0-9]+', prefix) or '%' in address:
+            return False
         try:
             ipaddress.ip_interface(value)
-            return '/' in value
+            return True
         except ValueError:
             return False
     if kind == "SRC-IP":
@@ -970,15 +1010,16 @@ def _valid_simple(kind: str, value: str) -> bool:
         except ValueError:
             return False
     if kind in {"GEOIP", "SRC-GEOIP"}:
-        return bool(re.fullmatch(r"[a-z]{2}", value, re.I))
+        return (value.upper() == 'LAN' or kind == 'GEOIP' and not native_fields and value.upper() == 'UNKNOWN'
+                or bool(re.fullmatch(r"[a-z]{2}", value, re.I)))
     if kind == "GEOSITE":
-        return bool(re.fullmatch(r"[a-z0-9_-]+(?:@[a-z0-9_-]+)?", value, re.I))
+        return bool(re.fullmatch(r"[a-z0-9_!-]+(?:@[a-z0-9_-]+)?", value, re.I))
     if kind in {"UID", "DSCP"}:
-        number = value.lstrip('0')
-        return (value.isascii() and value.isdecimal() and len(number) <= 10
-                and int(number or '0') <= (63 if kind == "DSCP" else 4294967295))
+        return bool(value.strip(' ')) and _valid_unsigned_ranges(
+            value, 8 if kind == 'DSCP' else 32,
+            63 if kind == 'DSCP' else 4294967295, allow_empty=kind == 'DSCP')
     if kind == "IN-USER":
-        return all(re.fullmatch(r"[^/\s,<>]+", user) for user in value.split('/'))
+        return _valid_name_list(value)
     if kind == "MAC-ADDRESS":
         return bool(re.fullmatch(r"(?:[0-9a-f]{2}:){5}[0-9a-f]{2}", value, re.I))
     if kind == "HOSTNAME-TYPE":
@@ -1009,7 +1050,11 @@ def _valid_simple(kind: str, value: str) -> bool:
         return value in {"HTTP", "HTTPS", "TCP", "UDP", "QUIC", "STUN", "MTProto",
                          "DOH", "DOH3", "DOQ", "DOT", "DNS"}
     if kind == "IN-TYPE":
-        return bool(re.fullmatch(r"[\w-]+(?:/[\w-]+)*", value, re.ASCII))
+        return all(part.strip(_GO_WHITESPACE).upper() in {
+            'HTTP', 'HTTPS', 'SOCKS', 'SOCKS4', 'SOCKS5', 'SHADOWSOCKS', 'SNELL', 'VMESS', 'VLESS',
+            'REDIR', 'TPROXY', 'TROJAN', 'TUNNEL', 'TUN', 'TUIC', 'HYSTERIA2', 'ANYTLS', 'MIERU',
+            'SUDOKU', 'TRUSTTUNNEL', 'SHADOWQUIC', 'INNER',
+        } for part in value.split('/'))
     return bool(re.fullmatch(r"[a-z0-9._-]+", value, re.I))
 
 
@@ -1141,7 +1186,10 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             try:
                 network = ipaddress.ip_network(checked, strict=False)
                 if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
-                    return None
+                    if not native_fields:
+                        return None
+                    if kind == 'IP-CIDR6':
+                        kind = 'IP-CIDR'
                 value = str(network)
             except ValueError:
                 return None
@@ -1155,13 +1203,16 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             if value.startswith(('<', '>')):
                 value = _port_comparison(value)
         elif kind in _SIMPLE:
-            if not _valid_simple(kind, checked):
+            if not _valid_simple(kind, checked, native_fields):
                 return None
+            if kind == 'IP-ASN' and not native_fields and checked.startswith('AS'):
+                value = str(int(checked[2:].lstrip('0') or '0'))
         elif kind in _REGEX:
             if not _valid_regex(kind, checked):
                 return None
         elif kind in _PROCESS:
-            if not checked or not native_fields and any(char in checked for char in '<>\r\n'):
+            if (not checked or kind in {'IN-NAME', 'REMATCH-NAME'} and not _valid_name_list(checked)
+                    or not native_fields and any(char in checked for char in '<>\r\n')):
                 return None
         elif not value or kind not in _KINDS:
             return None
@@ -1313,13 +1364,15 @@ def _without_comment(line: str) -> str:
     return line[:end].rstrip()
 
 
-def _has_regex_field(line: str) -> bool:
+def _has_literal_field(line: str, native_fields: bool = False) -> bool:
     head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+),''', line, re.I)
     if head is None:
         return False
     kind = head[1].upper()
-    return kind in _REGEX or kind in _LOGICAL and bool(re.search(
-        r"\(\s*(?:DOMAIN-REGEX|URL-REGEX|PROCESS-(?:NAME|PATH)-REGEX),", line, re.I
+    literal = _REGEX | ({'IN-USER', 'IN-NAME', 'REMATCH-NAME', 'PROCESS-NAME', 'PROCESS-PATH',
+                         'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'} if native_fields else set())
+    return kind in literal or kind in _LOGICAL and bool(re.search(
+        r"\(\s*(?:" + '|'.join(sorted(literal)) + '),', line, re.I
     ))
 
 
@@ -1360,10 +1413,10 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         except ValueError as exc:
             records.append((line, False, None, str(exc)))
     opening_tags, html_lines = {}, set()
-    for number, (line, _, _, _) in enumerate(records, 1):
+    for number, (line, yaml_rule, _, _) in enumerate(records, 1):
         if line is None or line.lstrip().startswith(('#', ';', '//', '!')):
             continue
-        if _has_regex_field(line):
+        if _has_literal_field(line, yaml_rule):
             continue
         if re.match(r"^\s*<\s*!doctype\b", line, re.I):
             return [], [f"line {number}: HTML document"]
@@ -1392,7 +1445,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             continue
         if line is None:
             continue
-        if not _has_regex_field(line) and re.search(
+        if not _has_literal_field(line, yaml_rule) and re.search(
             r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", line, re.I
         ):
             warnings.append(f"line {number}: HTML markup")
@@ -1513,7 +1566,10 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
             try:
                 network = ipaddress.ip_network(value, strict=False)
                 if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
-                    raise ValueError("wrong address family")
+                    if not yaml_rule:
+                        raise ValueError("wrong address family")
+                    if kind == 'IP-CIDR6':
+                        kind = 'IP-CIDR'
                 value = str(network)
             except ValueError:
                 warnings.append(f"line {number}: invalid CIDR {value}")
@@ -1535,13 +1591,16 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 warnings.append(f"line {number}: invalid IP address {value}")
                 continue
         elif kind in _SIMPLE:
-            if not _valid_simple(kind, value):
+            if not _valid_simple(kind, value, yaml_rule):
                 warnings.append(f"line {number}: invalid {kind} {value}")
                 continue
+            if kind == 'IP-ASN' and not yaml_rule and value.startswith('AS'):
+                value = str(int(value[2:].lstrip('0') or '0'))
         elif kind in _PROCESS:
-            if not value or not yaml_rule and (any(char in value for char in '\r\n') or (
-                kind not in _REGEX and any(char in value for char in '<>')
-            )):
+            if (not value or kind in {'IN-NAME', 'REMATCH-NAME'} and not _valid_name_list(value)
+                    or not yaml_rule and (any(char in value for char in '\r\n') or (
+                        kind not in _REGEX and any(char in value for char in '<>')
+                    ))):
                 warnings.append(f"line {number}: invalid value {value}")
                 continue
             if kind in _REGEX and not _valid_regex(kind, value):

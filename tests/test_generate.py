@@ -38,6 +38,272 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class ConstructorGenerateTests(unittest.TestCase):
+    def test_constructor_same_round_source_and_disk_only_reimport(self):
+        from tests.test_formats import CONSTRUCTOR_SOURCE, constructor_expected, constructor_skips
+
+        for purpose in ("block", "direct", "proxy"):
+            for mode in ("add", "keep", "strip"):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    configs = [{"name": "parent", "purpose": purpose, "no_resolve": mode,
+                                "sources": ["input.list"], "whitelist": []},
+                               {"name": "child", "purpose": purpose, "no_resolve": mode,
+                                "sources": ["parent/fin.yaml", "special.list"], "whitelist": []}]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "input.list").write_text(CONSTRUCTOR_SOURCE, encoding="utf-8")
+                    (root / "special.list").write_text("IP-ASN,UNKNOWN,no-resolve\nGEOIP,UNKNOWN\n", encoding="utf-8")
+                    old = {}
+                    for group in ("parent", "child"):
+                        (root / group).mkdir()
+                        for name in NAMES:
+                            path = root / group / name
+                            old[path] = f"old {group} {name}\n".encode()
+                            path.write_bytes(old[path])
+                    for disk_only in (False, True):
+                        groups = ("child",) if disk_only else ("parent", "child")
+                        if disk_only:
+                            parent_bytes = {root / "parent" / name: (root / "parent" / name).read_bytes() for name in NAMES}
+                            (root / "input.list").unlink()
+                            (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr, patch("formats.datetime") as clock:
+                            clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        expected = {root / group / name: text for group in groups
+                                    for name, text in constructor_expected(group, purpose, mode).items()}
+                        self.assertEqual(outputs, expected)
+                        self.assertEqual(stderr.getvalue().splitlines(), [f"{group} {key}: {count}"
+                                         for group in groups for key, count in sorted(constructor_skips(purpose).items())])
+                        if not disk_only:
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        publish(outputs)
+                        self.assertEqual({path: path.read_bytes() for path in expected},
+                                         {path: text.encode("utf-8") for path, text in expected.items()})
+                        if disk_only:
+                            self.assertEqual({path: path.read_bytes() for path in parent_bytes}, parent_bytes)
+                    self.assertEqual({path for path in root.rglob("fin*") if path.is_file()}, set(old))
+
+    def test_constructor_generated_whitelist_and_disk_keep_direction_and_literal_asn(self):
+        source = ("IP-ASN,AS13335\npayload:\n  - IP-CIDR6,127.0.0.1/8\n  - GEOIP,LAN\n"
+                  "  - IP-ASN,0\n  - IP-SUFFIX,192.0.2.7/24\n  - SRC-IP-ASN,0\n"
+                  "  - SRC-GEOIP,LAN\n  - SRC-IP-SUFFIX,192.0.2.7/24\n")
+        for purpose in ("block", "direct", "proxy"):
+            for mode in ("add", "keep", "strip"):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    configs = [{"name": "white", "purpose": purpose, "no_resolve": mode,
+                                "sources": ["white.list"], "whitelist": []},
+                               {"name": "consumer", "purpose": purpose, "no_resolve": mode,
+                                "sources": ["source.list"], "whitelist": ["white/fin.yaml"]}]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "white.list").write_text(source, encoding="utf-8")
+                    (root / "source.list").write_text(source + "DOMAIN,keep.example.com\nIP-ASN,00\n", encoding="utf-8")
+                    flag = ",no-resolve" if mode == "add" else ""
+                    expected = {
+                        "fin.txt": "# consumer rules: 2\nDOMAIN,keep.example.com\nIP-ASN,00" + flag + "\n",
+                        "fin-qx.txt": "# consumer rules: 2\nHOST,keep.example.com,LIST\nIP-ASN,00,LIST" + flag + "\n",
+                        "fin.yaml": '# consumer rules: 2\npayload:\n  - "DOMAIN,keep.example.com"\n  - "IP-ASN,00' + flag + '"\n',
+                        "fin-surge.txt": "# consumer rules: 1\nIP-ASN,00" + flag + "\n",
+                        "fin-surge-ds.txt": "# consumer rules: 1\nkeep.example.com\n",
+                        "fin-adb.txt": ("[Adblock Plus 2.0]\n! Title: consumer\n! Homepage: https://github.com/DoingDog/rconvert\n"
+                                        "! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n" +
+                                        ("! Total count: 1\nkeep.example.com\n" if purpose == "block" else
+                                         "! Total count: 0\n! No AdBlock rules for non-advertising group.\n")),
+                    }
+                    for disk_only in (False, True):
+                        if disk_only:
+                            (root / "white.list").unlink()
+                            (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr, patch("formats.datetime") as clock:
+                            clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual({path.name: text for path, text in outputs.items() if path.parent.name == "consumer"}, expected)
+                        self.assertEqual([line for line in stderr.getvalue().splitlines() if line.startswith("consumer ")],
+                                         ["consumer fin-adb.txt:IP-ASN: 1", "consumer fin-surge-ds.txt:IP-ASN: 1"] if purpose == "block" else
+                                         ["consumer fin-adb.txt:DOMAIN: 1", "consumer fin-adb.txt:IP-ASN: 1", "consumer fin-surge-ds.txt:IP-ASN: 1"])
+                        publish(outputs)
+                        self.assertEqual({name: (root / "consumer" / name).read_bytes() for name in NAMES},
+                                         {name: text.encode("utf-8") for name, text in expected.items()})
+
+    def test_invalid_constructor_source_warns_and_generated_whitelist_aborts_before_publish(self):
+        for matcher, reason in (("IN-NAME,A//B", "invalid value A//B"),
+                                ("REMATCH-NAME,/A", "invalid value /A"),
+                                ("IP-SUFFIX,192.0.2.7/255.255.255.0", "invalid IP-SUFFIX 192.0.2.7/255.255.255.0"),
+                                ("IN-TYPE,MIXED", "invalid IN-TYPE MIXED")):
+            with self.subTest(matcher=matcher), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                root = Path(directory)
+                config = [{"name": "parent", "purpose": "proxy", "no_resolve": "keep",
+                           "sources": ["input.list"], "whitelist": []}]
+                (root / "rulesets.json").write_text(json.dumps(config), encoding="utf-8")
+                (root / "input.list").write_text("payload:\n  - " + matcher + "\n  - DOMAIN,keep.example.com", encoding="utf-8")
+                with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    outputs = generate(root, lambda url: self.fail(url))
+                self.assertEqual(stderr.getvalue().splitlines(), [f"{root / 'input.list'}: line 2: {reason}", "parent fin-adb.txt:DOMAIN: 1"])
+                self.assertEqual(outputs[root / "parent" / "fin.yaml"], '# parent rules: 1\npayload:\n  - "DOMAIN,keep.example.com"\n')
+                (root / "input.list").write_text("payload:\n  - IN-USER,alice bob", encoding="utf-8")
+                config.append({"name": "consumer", "purpose": "proxy", "no_resolve": "keep",
+                               "sources": ["good.list"], "whitelist": ["parent/fin.yaml"]})
+                (root / "rulesets.json").write_text(json.dumps(config), encoding="utf-8")
+                (root / "good.list").write_text("DOMAIN,keep.example.com", encoding="utf-8")
+                old = {}
+                for group in ("parent", "consumer"):
+                    (root / group).mkdir()
+                    for name in NAMES:
+                        path = root / group / name
+                        old[path] = b"old complete product\n"
+                        path.write_bytes(old[path])
+                with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(ValueError, r"parent.*fin.yaml.*line 3"):
+                    publish(generate(root, lambda url: self.fail(url)))
+                self.assertEqual({path: path.read_bytes() for path in old}, old)
+
+    def test_constructor_deep_twelve_products_publish_and_disk_only_reimport(self):
+        code = '''
+import contextlib
+import io
+import json
+import sys
+import tempfile
+from dataclasses import fields
+from datetime import datetime, timezone
+from pathlib import Path
+from unittest.mock import patch
+from generate import generate, publish
+from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
+limit = sys.getrecursionlimit()
+names = ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
+assert [field.name for field in fields(Rule)] == ['kind', 'value', 'options', 'allow', 'literal_process', 'native_fields', 'domain_source']
+def nest(leaf):
+    return '(NOT,(' * DEPTH + leaf + '))' * DEPTH
+native = [
+    ('(IN-USER,alice bob / <Alice>)', '(IN-USER,alice bob / <Alice>)', False, None),
+    ('(IN-NAME,Foo(,ignored))', '(IN-NAME,Foo(,ignored))', False, None),
+    ('(REMATCH-NAME,Foo(,ignored))', '(REMATCH-NAME,Foo(,ignored))', False, None),
+    ('(PROCESS-NAME,<Foo>)', '(PROCESS-NAME,<Foo>)', True, None),
+    ('(PROCESS-PATH,/tmp/<Foo>)', '(PROCESS-PATH,/tmp/<Foo>)', False, None),
+    ('(PROCESS-NAME-WILDCARD,*<Foo>*)', '(PROCESS-NAME-WILDCARD,*<Foo>*)', False, None),
+    ('(PROCESS-PATH-WILDCARD,/tmp/*<Foo>*)', '(PROCESS-PATH-WILDCARD,/tmp/*<Foo>*)', False, None),
+    ('(IN-TYPE,HTTP / SOCKS)', '(IN-TYPE,HTTP / SOCKS)', False, None),
+    ('(DSCP,256-319/0//1)', '(DSCP,256-319/0//1)', False, None),
+    ('(UID,4294967296-4294967298)', '(UID,4294967296-4294967298)', False, None),
+    ('(DST-PORT,0-65535)', '(DST-PORT,0-65535)', False, None),
+    ('(SRC-PORT,0-80)', '(SRC-PORT,0-80)', False, None),
+    ('(IN-PORT,0-65535)', '(IN-PORT,0-65535)', False, None),
+    ('(GEOSITE,geolocation-!cn)', '(GEOSITE,geolocation-!cn)', False, None),
+    ('(GEOIP,LAN,no-resolve)', '(GEOIP,LAN,no-resolve)', False, None),
+    ('(IP-ASN,00,no-resolve)', '(IP-ASN,00,no-resolve)', False, None),
+    ('(IP-SUFFIX,192.0.2.7/24,no-resolve)', '(IP-SUFFIX,192.0.2.7/24,no-resolve)', False, None),
+    ('(IP-CIDR6,127.0.0.1/8,no-resolve)', '(IP-CIDR,127.0.0.0/8,no-resolve)', False, None),
+    ('(IP-CIDR6,127.0.0.1/8)', '(IP-CIDR,127.0.0.0/8)', False, None),
+    ('(IP-ASN,0)', '(IP-ASN,0)', False, None),
+    ('(GEOIP,LAN,src,no-resolve)', '(SRC-GEOIP,LAN)', False, 'SRC-GEOIP'),
+    ('(IP-ASN,0,src,no-resolve)', '(SRC-IP-ASN,0)', False, 'SRC-IP-ASN'),
+    ('(IP-SUFFIX,192.0.2.7/24,src,no-resolve)', '(SRC-IP-SUFFIX,192.0.2.7/24)', False, 'SRC-IP-SUFFIX'),
+    ('(IP-CIDR6,127.0.0.1/8,src,no-resolve)', '(SRC-IP-CIDR,127.0.0.0/8)', False, 'SRC-IP-CIDR'),
+]
+ordinary = [('(IP-ASN,AS13335,no-resolve)', '(IP-ASN,13335,no-resolve)'),
+            ('(IP-ASN,UNKNOWN)', '(IP-ASN,UNKNOWN)'), ('(GEOIP,UNKNOWN)', '(GEOIP,UNKNOWN)')]
+source = ''.join(nest(leaf)[1:-1] + '\\n' for leaf, _ in ordinary)
+source += 'payload:\\n' + ''.join('  - ' + json.dumps(nest(leaf)[1:-1]) + '\\n' for leaf, _, _, _ in native)
+source += '  - DOMAIN,neighbor.example.com\\n'
+expected_rules = [Rule('NOT', nest(canonical)[5:-1]) for _, canonical in ordinary]
+expected_rules += [Rule('NOT', nest(canonical)[5:-1], literal_process=literal, native_fields=True)
+                   for _, canonical, literal, _ in native]
+expected_rules += [Rule('DOMAIN', 'neighbor.example.com')]
+parsed, warnings = parse(source, purpose=PURPOSE)
+assert parsed == expected_rules, (DEPTH, PURPOSE, MODE)
+expected_warnings = [f'line {index + 5}: unsupported no-resolve for {warning}'
+                     for index, (_, _, _, warning) in enumerate(native) if warning]
+assert warnings == expected_warnings, warnings
+assert parse_whitelist(source) == [Rule('DOMAIN', 'neighbor.example.com')]
+assert exclude_covered(parsed, parse_whitelist(source)) == expected_rules[:-1]
+ordered = sorted(expected_rules, key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow,
+                 rule.literal_process, rule.native_fields, rule.domain_source))
+assert normalize(parsed * 2) == ordered
+assert [Rule(rule.kind, rule.value, rule.options, rule.allow, rule.literal_process,
+             rule.native_fields, rule.domain_source) for rule in parsed] == parsed
+canonical_leaves = [ordinary[0][1]] + [canonical for _, canonical, _, _ in native]
+def emitted(leaf):
+    if MODE == 'strip':
+        return leaf.replace(',no-resolve', '')
+    if MODE == 'add' and leaf.startswith(('(GEOIP,', '(IP-ASN,', '(IP-CIDR,', '(IP-SUFFIX,')):
+        return leaf.replace(',no-resolve', '')[:-1] + ',no-resolve)'
+    return leaf
+yaml_matchers = sorted({nest(emitted(leaf))[1:-1] for leaf in canonical_leaves}, key=lambda value: (len(value), value))
+def expected(group):
+    parent = group == 'parent'
+    bodies = {'fin.txt': ['DOMAIN,neighbor.example.com'] if parent else [],
+              'fin-qx.txt': ['HOST,neighbor.example.com,LIST'] if parent else [],
+              'fin.yaml': (['  - "DOMAIN,neighbor.example.com"'] if parent else []) +
+                          ['  - ' + json.dumps(matcher) for matcher in yaml_matchers],
+              'fin-surge.txt': [], 'fin-surge-ds.txt': ['neighbor.example.com'] if parent else []}
+    result = {name: f'# {group} rules: {len(body)}\\n' + ('payload:\\n' if name == 'fin.yaml' else '') +
+                    ''.join(line + '\\n' for line in body) for name, body in bodies.items()}
+    result['fin-adb.txt'] = ('[Adblock Plus 2.0]\\n! Title: ' + group + '\\n! Homepage: https://github.com/DoingDog/rconvert\\n'
+                            '! Expires: 1 day\\n! License: Inherits upstream licenses\\n! Version: 202610061200\\n' +
+                            ('! Total count: 1\\n' + ('neighbor.example.com\\n' if parent else '@@|neighbor.example.com|\\n')
+                             if PURPOSE == 'block' else '! Total count: 0\\n! No AdBlock rules for non-advertising group.\\n'))
+    return result
+def skip_lines(group):
+    count = len(native) + len(ordinary) if group == 'parent' else len(yaml_matchers)
+    skipped = {name + ':NOT': count for name in names if name != 'fin.yaml'}
+    if group == 'parent':
+        skipped['fin.yaml:NOT'] = 2
+        if PURPOSE != 'block':
+            skipped['fin-adb.txt:DOMAIN'] = 1
+    return [f'{group} {key}: {value}' for key, value in sorted(skipped.items())]
+with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
+    root = Path(directory)
+    configs = [{'name': 'parent', 'purpose': PURPOSE, 'no_resolve': MODE, 'sources': ['input.list'], 'whitelist': []},
+               {'name': 'child', 'purpose': PURPOSE, 'no_resolve': MODE, 'sources': ['parent/fin.yaml'],
+                'whitelist': ['parent/fin-surge-ds.txt']}]
+    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+    (root / 'input.list').write_text(source, encoding='utf-8')
+    old = {}
+    for group in ('parent', 'child'):
+        (root / group).mkdir()
+        for name in names:
+            path = root / group / name
+            old[path] = f'old {group} {name}\\n'.encode()
+            path.write_bytes(old[path])
+    for disk_only in (False, True):
+        groups = ('child',) if disk_only else ('parent', 'child')
+        before = {path: path.read_bytes() for path in old}
+        if disk_only:
+            (root / 'input.list').unlink()
+            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+            assert not (root / 'input.list').exists()
+        with contextlib.redirect_stderr(io.StringIO()) as stderr, patch('formats.datetime') as clock:
+            clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+            outputs = generate(root, lambda url: (_ for _ in ()).throw(AssertionError(url)))
+        expected_outputs = {root / group / name: text for group in groups for name, text in expected(group).items()}
+        assert outputs == expected_outputs, (DEPTH, PURPOSE, MODE, disk_only)
+        messages = ([] if disk_only else [str(root / 'input.list') + ': ' + warning for warning in expected_warnings])
+        messages += [line for group in groups for line in skip_lines(group)]
+        assert stderr.getvalue().splitlines() == messages, stderr.getvalue()
+        assert {path: path.read_bytes() for path in old} == before
+        publish(outputs)
+        assert {path: path.read_bytes() for path in expected_outputs} == {path: text.encode('utf-8') for path, text in expected_outputs.items()}
+        parent_before = {path: data for path, data in before.items() if path.parent.name == 'parent'}
+        if disk_only:
+            assert {path: path.read_bytes() for path in parent_before} == parent_before
+        reparsed, messages = parse((root / 'parent' / 'fin.yaml').read_text(encoding='utf-8'), purpose=PURPOSE)
+        wanted = [Rule('DOMAIN', 'neighbor.example.com')] + [Rule('NOT', matcher[4:], literal_process='(PROCESS-NAME,' in matcher,
+                  native_fields=True) for matcher in yaml_matchers]
+        assert reparsed == wanted and messages == [], (messages, DEPTH, PURPOSE, MODE)
+        assert parse((root / 'child' / 'fin.yaml').read_text(encoding='utf-8'), purpose=PURPOSE) == (wanted[1:], [])
+    assert {path for path in root.rglob('fin*') if path.is_file()} == set(old)
+assert sys.getrecursionlimit() == limit
+'''
+        for depth in (600, 1000):
+            for purpose in ("block", "direct", "proxy"):
+                for mode in ("add", "keep", "strip"):
+                    with self.subTest(depth=depth, purpose=purpose, mode=mode):
+                        settings = f"DEPTH = {depth}\nPURPOSE = {purpose!r}\nMODE = {mode!r}\n"
+                        result = subprocess.run([sys.executable, "-B", "-c", settings + code], cwd=ROOT,
+                                                capture_output=True, text=True, timeout=8)
+                        self.assertEqual(result.returncode, 0, result.stderr[-3000:])
+
+
 class ProcessRendererDependencyGenerateTests(unittest.TestCase):
     def assert_products(self, outputs, root, group, expected):
         from rules import parse

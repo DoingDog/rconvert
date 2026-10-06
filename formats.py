@@ -202,8 +202,10 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
             return None
         if not native_fields:
             payload = _field_value(payload)
-        if not payload.strip(trim):
+        if not payload.strip(' ' if kind in {'UID', 'DSCP'} else trim):
             return None
+        if kind in {'UID', 'DSCP'}:
+            payload = payload.replace(',', '/')
         kind, payload = _domain_value(kind, payload, domain_source, supported)
         if payload is None:
             return None
@@ -219,6 +221,9 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
             # 条件内的字面括号需要字段引用，防止参与逻辑包装。
             payload = _surge_value(payload, quote_parentheses=True)
         else:
+            # Surge UNKNOWN 匹配数据库无结果，Mihomo 的同名 payload 只作字符串比较。
+            if kind in {'IP-ASN', 'GEOIP'} and payload.upper() == 'UNKNOWN':
+                return None
             if kind == 'DEST-PORT':
                 kind = 'DST-PORT'
             elif kind == 'SRC-IP':
@@ -435,7 +440,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     for name in ("fin.txt", "fin-surge.txt"):
                         lines[name].append(f"{surge_kind},{value},no-resolve")
                         emitted.add(name)
-                if kind in MIHOMO_TYPES:
+                if kind in MIHOMO_TYPES and not (kind in {'IP-ASN', 'GEOIP'} and value.upper() == 'UNKNOWN'):
                     lines["fin.yaml"].append("  - " + _yaml_value(text + ",no-resolve"))
                     emitted.add("fin.yaml")
                 if kind in QX_TYPES:
@@ -472,8 +477,12 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST")
                 emitted.add("fin-qx.txt")
             mihomo_kind, mihomo_value = _domain_value(kind, value, rule.domain_source, MIHOMO_TYPES)
+            if kind in {'UID', 'DSCP'}:
+                mihomo_value = value.replace(',', '/')
             if kind == "DEST-PORT":
                 mihomo_kind = "DST-PORT"
+            if kind in {'IP-ASN', 'GEOIP'} and value.upper() == 'UNKNOWN':
+                mihomo_value = None
             if mihomo_value is not None:
                 mihomo_kind, mihomo_value = _process_value(mihomo_kind, mihomo_value, MIHOMO_TYPES,
                                                           rule.literal_process)
