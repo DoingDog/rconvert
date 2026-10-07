@@ -5,13 +5,12 @@ from datetime import datetime, timedelta, timezone
 from collections import Counter
 from collections.abc import Iterable
 
-from rules import (Rule, _REGEX, _QX_INTERFACE_OPTIONS, _delimiters,
+from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _delimiters,
                    _field_value, _fields, _logical_children, _valid_domain)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
 DOMAIN_SET_TYPES = {"DOMAIN", "DOMAIN-SUFFIX"}
-NO_RESOLVE_TYPES = {"IP-CIDR", "IP-CIDR6", "IP-SUFFIX", "IP-ASN", "GEOIP"}
 SURGE_TYPES = {
     "DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
     "IP-CIDR", "IP-CIDR6", "GEOIP", "IP-ASN", "USER-AGENT", "URL-REGEX",
@@ -60,6 +59,12 @@ def _surge_value(value: str, *, source_regex: bool = False, quote_parentheses: b
 
 
 def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tuple[str, str | None]:
+    if (supported is MIHOMO_TYPES and source == 'surge' and kind in {'DOMAIN', 'DOMAIN-SUFFIX'}
+            and value.isascii() and not value.endswith('.')):
+        literal = ''.join('[' + char.lower() + char.upper() + ']' if char.isalpha() else re.escape(char)
+                          for char in value)
+        start = r'\A' if kind == 'DOMAIN' else r'(?:\A|\.)'
+        return 'DOMAIN-REGEX', '(?-i:' + start + literal + r'\.?\z)'
     if kind not in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
         return kind, value
     if supported is SURGE_TYPES:
@@ -154,7 +159,7 @@ def _logical_regex_value(value: str, *, logical: bool = True) -> str | None:
     return ('(?:)' if value.startswith(' ') else '') + ''.join(parts) + ('(?:)' if value.endswith(' ') else '')
 
 
-def _logical_value(value: str, operator: str, supported: set[str], no_resolve: str = "keep",
+def _logical_value(value: str, operator: str, supported: set[str],
                    literal_process: bool = False, native_fields: bool = False,
                    domain_source: str = "surge") -> str | None:
     expression = f"({operator},{value})"
@@ -246,8 +251,7 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
             kind = 'IP-CIDR6'
         if kind not in supported:
             return None
-        if kind in NO_RESOLVE_TYPES and (no_resolve == 'add' or no_resolve == 'keep' and
-                                        any(option.lower() == 'no-resolve' for option in options)):
+        if kind in NO_RESOLVE_TYPES and any(option.lower() == 'no-resolve' for option in options):
             payload += ',no-resolve'
         edits.append((begin, end, f'({kind},{payload})'))
     parts, cursor = [], 0
@@ -407,25 +411,52 @@ def _dns_pattern(rule: Rule) -> str | None:
     return None
 
 
+def _mihomo_rule(rule: Rule) -> str | None:
+    kind, value = rule.kind, rule.value
+    options = tuple(option for option in rule.options if option not in _QX_INTERFACE_OPTIONS)
+    if rule.allow or options and (options != ('no-resolve',) or kind not in NO_RESOLVE_TYPES):
+        return None
+    mihomo_kind, payload = _domain_value(kind, value, rule.domain_source, MIHOMO_TYPES)
+    if kind in {'UID', 'DSCP'}:
+        payload = value.replace(',', '/')
+    if kind == 'DEST-PORT':
+        mihomo_kind = 'DST-PORT'
+    if kind in {'IP-ASN', 'GEOIP'} and value.upper() == 'UNKNOWN':
+        return None
+    if payload is not None:
+        mihomo_kind, payload = _process_value(mihomo_kind, payload, MIHOMO_TYPES, rule.literal_process)
+    if kind in LOGICAL:
+        payload = _logical_value(value, kind, MIHOMO_TYPES, rule.literal_process,
+                                 rule.native_fields, rule.domain_source)
+    elif mihomo_kind in _REGEX and payload is not None and not rule.native_fields:
+        payload = _logical_regex_value(payload, logical=False)
+    if kind == 'SRC-IP':
+        address = ipaddress.ip_address(value)
+        mihomo_kind, payload = 'SRC-IP-CIDR', f'{address}/{address.max_prefixlen}'
+    if kind == 'PROTOCOL' and value.upper() in {'TCP', 'UDP'}:
+        mihomo_kind, payload = 'NETWORK', value.lower()
+    if (mihomo_kind not in MIHOMO_TYPES or payload is None or
+            mihomo_kind.startswith('PROCESS-') and ',' in payload and not mihomo_kind.endswith('-REGEX')):
+        return None
+    return f'{mihomo_kind},{payload}' + (',no-resolve' if options else '')
+
+
 def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
+    mihomo_records = {}
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process, item.native_fields, item.domain_source)):
+        rule = _apply_no_resolve(rule, no_resolve)
+        effective = rule
         kind, value = rule.kind, rule.value
         interface_options = any(option in _QX_INTERFACE_OPTIONS for option in rule.options)
         if interface_options:
             rule = Rule(kind, value, tuple(option for option in rule.options
                                            if option not in _QX_INTERFACE_OPTIONS),
                         rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
-        if no_resolve == "strip":
-            rule = Rule(kind, value, tuple(option for option in rule.options if option != "no-resolve"),
-                        rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
-        elif no_resolve == "add" and not rule.allow and kind in NO_RESOLVE_TYPES:
-            rule = Rule(kind, value, rule.options + ("no-resolve",), rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
         line_safe = _LINE_UNSAFE.search(value) is None
         emitted = set()
-        text = f"{kind},{value}"
         logical = kind in LOGICAL
         if rule.allow:
             if not rule.options and purpose == "block" and line_safe:
@@ -440,9 +471,6 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     for name in ("fin.txt", "fin-surge.txt"):
                         lines[name].append(f"{surge_kind},{value},no-resolve")
                         emitted.add(name)
-                if kind in MIHOMO_TYPES and not (kind in {'IP-ASN', 'GEOIP'} and value.upper() == 'UNKNOWN'):
-                    lines["fin.yaml"].append("  - " + _yaml_value(text + ",no-resolve"))
-                    emitted.add("fin.yaml")
                 if kind in QX_TYPES:
                     qx_kind = "IP6-CIDR" if kind == "IP-CIDR" and ":" in value else QX_TYPES[kind]
                     lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST,no-resolve")
@@ -455,7 +483,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
             if kind == "NETWORK" and value.upper() in {"TCP", "UDP"}:
                 surge_kind, surge_payload = "PROTOCOL", value.upper()
             surge_kind = SURGE_ALIASES.get(surge_kind, surge_kind)
-            surge_value = (_logical_value(value, kind, SURGE_TYPES, no_resolve, rule.literal_process,
+            surge_value = (_logical_value(value, kind, SURGE_TYPES, rule.literal_process,
                                           rule.native_fields, rule.domain_source) if logical else
                            _surge_value(surge_payload, source_regex=kind == "URL-REGEX")
                            if surge_payload is not None else None)
@@ -476,30 +504,6 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     qx_kind = "IP6-CIDR"
                 lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST")
                 emitted.add("fin-qx.txt")
-            mihomo_kind, mihomo_value = _domain_value(kind, value, rule.domain_source, MIHOMO_TYPES)
-            if kind in {'UID', 'DSCP'}:
-                mihomo_value = value.replace(',', '/')
-            if kind == "DEST-PORT":
-                mihomo_kind = "DST-PORT"
-            if kind in {'IP-ASN', 'GEOIP'} and value.upper() == 'UNKNOWN':
-                mihomo_value = None
-            if mihomo_value is not None:
-                mihomo_kind, mihomo_value = _process_value(mihomo_kind, mihomo_value, MIHOMO_TYPES,
-                                                          rule.literal_process)
-            if logical:
-                mihomo_value = _logical_value(value, kind, MIHOMO_TYPES, no_resolve, rule.literal_process,
-                                              rule.native_fields, rule.domain_source)
-            elif mihomo_kind in _REGEX and mihomo_value is not None and not rule.native_fields:
-                mihomo_value = _logical_regex_value(mihomo_value, logical=False)
-            if kind == "SRC-IP":
-                address = ipaddress.ip_address(value)
-                mihomo_kind, mihomo_value = "SRC-IP-CIDR", f"{address}/{address.max_prefixlen}"
-            if kind == "PROTOCOL" and value.upper() in {"TCP", "UDP"}:
-                mihomo_kind, mihomo_value = "NETWORK", value.lower()
-            if (mihomo_kind in MIHOMO_TYPES and mihomo_value is not None and
-                    not (mihomo_kind.startswith("PROCESS-") and "," in mihomo_value and not mihomo_kind.endswith("-REGEX"))):
-                lines["fin.yaml"].append("  - " + _yaml_value(f"{mihomo_kind},{mihomo_value}"))
-                emitted.add("fin.yaml")
             if purpose == "block" and line_safe:
                 dns_pattern = _dns_pattern(rule)
                 if dns_pattern is not None:
@@ -508,6 +512,12 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
             if kind in DOMAIN_SET_TYPES and line_safe:
                 lines["fin-surge-ds.txt"].append(("." if kind == "DOMAIN-SUFFIX" else "") + value)
                 emitted.add("fin-surge-ds.txt")
+        payload = _mihomo_rule(effective)
+        if payload is not None:
+            line = '  - ' + _yaml_value(payload)
+            mihomo_records.setdefault(line, set()).add(effective)
+            lines['fin.yaml'].append(line)
+            emitted.add('fin.yaml')
         if interface_options and "fin-qx.txt" in emitted:
             skipped[f"fin-qx.txt:{kind}:interface-option"] += 1
         for name in FILES:
@@ -537,6 +547,13 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 return is_ip, family if is_ip else 0, kind, len(line), line
 
             body.sort(key=sort_key)
+    for index, line in enumerate(lines['fin.yaml']):
+        records = [[rule.kind, rule.value, rule.options, rule.allow, rule.literal_process,
+                    rule.native_fields, rule.domain_source]
+                   for rule in sorted(mihomo_records[line], key=lambda rule: (
+                       rule.kind, rule.value, rule.options, rule.allow, rule.literal_process,
+                       rule.native_fields, rule.domain_source))]
+        lines['fin.yaml'][index] += ' # rconvert-rule-v1 ' + json.dumps(records, ensure_ascii=True, separators=(',', ':'))
     out = {name: (
                "[Adblock Plus 2.0]\n"
                f"! Title: {title if title is not None else group}\n"

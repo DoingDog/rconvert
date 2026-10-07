@@ -1,4 +1,5 @@
 import ipaddress
+import json
 import re
 import warnings
 from bisect import bisect_right
@@ -21,10 +22,9 @@ class Rule:
         kind = self.kind.upper()
         object.__setattr__(self, "kind", kind)
         object.__setattr__(self, "options", tuple(sorted({option.lower() for option in self.options})))
-        if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
-            object.__setattr__(self, "value", self.value.removesuffix(".").lower())
-        elif kind == "DOMAIN-KEYWORD":
-            object.__setattr__(self, "value", self.value.lower())
+        if self.domain_source != "mihomo" and kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD", "DOMAIN-KEYWORD"}:
+            value = self.value if kind == "DOMAIN-KEYWORD" else self.value.removesuffix(".")
+            object.__setattr__(self, "value", value.lower() if value.isascii() else value)
 
 
 _DOMAIN = re.compile(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\Z", re.I)
@@ -40,6 +40,10 @@ _SIMPLE = {"IP-ASN", "SRC-IP-ASN", "GEOIP", "SRC-GEOIP", "GEOSITE",
            "HOSTNAME-TYPE", "SUBNET", "CELLULAR-RADIO", "CELLULAR-CARRIER",
            "DOMAIN-KEYWORD"}
 _LOGICAL = {"AND", "OR", "NOT"}
+NO_RESOLVE_TYPES = {"IP-CIDR", "IP-CIDR6", "IP-SUFFIX", "IP-ASN", "GEOIP"}
+_WHITELIST_TYPES = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-REGEX",
+                    "IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-ASN", "GEOIP",
+                    "SRC-IP-ASN", "SRC-GEOIP", "IP-SUFFIX", "SRC-IP-SUFFIX"}
 _QX_INTERFACE_OPTIONS = {"force-cellular", "multi-interface", "multi-interface-balance",
                          "via-interface=pdp_ip0", "via-interface=en1"}
 _QX_INTERFACE_KINDS = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD",
@@ -1110,7 +1114,8 @@ def _logical_children(expression, kind, begin, start, stop, groups, commas):
 
 
 def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None = None,
-                         native_fields: bool = False) -> str | None:
+                         native_fields: bool = False, *, domain_source: str = "surge",
+                         no_resolve: str = "keep") -> str | None:
     if not expression.startswith('(') or not expression.endswith(')'):
         return None
     trim = ' ' if native_fields else None
@@ -1205,7 +1210,7 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             if value.startswith(('<', '>')):
                 value = _port_comparison(value)
         elif kind in _SIMPLE:
-            if not _valid_simple(kind, checked, native_fields):
+            if not _valid_simple(kind, checked, native_fields or kind == 'DOMAIN-KEYWORD' and domain_source == 'mihomo'):
                 return None
             if kind == 'IP-ASN' and not native_fields and checked.startswith('AS'):
                 value = str(int(checked[2:].lstrip('0') or '0'))
@@ -1218,19 +1223,44 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
                 return None
         elif not value or kind not in _KINDS:
             return None
-        # 原生普通 matcher 的尾字段可参与括号范围，保留原字段才能再次消费完整条件。
-        tail = (',' + ','.join(fields[2:]) if native_fields and kind not in _REGEX
-                and len(fields) > 2 and any(char in value for char in '()') else '')
+        if kind in NO_RESOLVE_TYPES:
+            if no_resolve == 'add':
+                options.add('no-resolve')
+            elif no_resolve == 'strip':
+                options.discard('no-resolve')
+        # 原生普通 matcher 的尾字段可参与括号范围，保留 ignored 字段并只写一次有效标志。
+        tails = [field for field in fields[2:] if field != 'no-resolve' or kind not in NO_RESOLVE_TYPES]
+        tail = (',' + ','.join(tails) if native_fields and kind not in _REGEX
+                and tails and any(char in value for char in '()') else '')
         normalized.append(f"({kind},{value}{tail}{',no-resolve' if 'no-resolve' in options else ''})")
     return normalized[0]
 
 
 def _normalize_logic(kind: str, value: str, ignored_no_resolve: list[str] | None = None,
-                     native_fields: bool = False) -> str | None:
+                     native_fields: bool = False, *, domain_source: str = "surge",
+                     no_resolve: str = "keep") -> str | None:
     if not value.startswith('(') or not value.endswith(')'):
         return None
-    normalized = _normalize_condition(f"({kind},{value})", ignored_no_resolve, native_fields)
+    normalized = _normalize_condition(f"({kind},{value})", ignored_no_resolve, native_fields,
+                                      domain_source=domain_source, no_resolve=no_resolve)
     return normalized[len(kind) + 2:-1] if normalized is not None else None
+
+
+def _apply_no_resolve(rule: Rule, mode: str) -> Rule:
+    if mode not in {'add', 'strip', 'keep'}:
+        raise ValueError(f'invalid no_resolve: {mode}')
+    value, options = rule.value, rule.options
+    if rule.kind in _LOGICAL and mode != 'keep' and (mode != 'add' or not rule.allow):
+        normalized = _normalize_logic(rule.kind, value, native_fields=rule.native_fields,
+                                      domain_source=rule.domain_source, no_resolve=mode)
+        if normalized is not None:
+            value = normalized
+    if mode == 'strip':
+        options = tuple(option for option in options if option != 'no-resolve')
+    elif mode == 'add' and not rule.allow and rule.kind in NO_RESOLVE_TYPES:
+        options = tuple(sorted(set(options) | {'no-resolve'}))
+    return (rule if (value, options) == (rule.value, rule.options) else
+            Rule(rule.kind, value, options, rule.allow, rule.literal_process, rule.native_fields, rule.domain_source))
 
 
 def _condition_kinds(kind: str, value: str, native_fields: bool = False) -> set[str]:
@@ -1268,7 +1298,7 @@ _YAML_ESCAPES = dict(zip('0abtnvfre\t "\'\\N_LP',
                          '\0\a\b\t\n\v\f\r\x1b\t "\'\\\x85\xa0  '))
 
 
-def _yaml_quoted(scalar: str) -> tuple[str, int]:
+def _yaml_quoted(scalar: str, *, decode: bool = True) -> tuple[str, int]:
     quote, decoded, index = scalar[0], [], 1
     while index < len(scalar):
         char = scalar[index]
@@ -1282,6 +1312,9 @@ def _yaml_quoted(scalar: str) -> tuple[str, int]:
             index += 1
             if index == len(scalar):
                 break
+            if not decode:
+                index += 1
+                continue
             escape = scalar[index]
             if escape in _YAML_ESCAPES:
                 char = _YAML_ESCAPES[escape]
@@ -1312,7 +1345,21 @@ def _check_yaml_source(source: str) -> None:
             raise ValueError('invalid YAML payload')
 
 
-def _yaml_scalar(scalar: str) -> str:
+def _yaml_comment(scalar: str) -> str:
+    scalar = scalar.strip(' \t')
+    if scalar.startswith(("'", '"')):
+        try:
+            _, end = _yaml_quoted(scalar, decode=False)
+        except ValueError:
+            return ''
+        scalar = scalar[end:].lstrip(' \t')
+    for index, char in enumerate(scalar):
+        if char == '#' and (index == 0 or scalar[index - 1] in ' \t'):
+            return scalar[index:]
+    return ''
+
+
+def _yaml_scalar(scalar: str, *, with_comment: bool = False):
     _check_yaml_source(scalar)
     scalar = scalar.strip(' \t')
     if not scalar or scalar[0] in '&*!|>[{?%@`' or scalar.startswith(('-', ':')):
@@ -1322,14 +1369,15 @@ def _yaml_scalar(scalar: str) -> str:
         tail = scalar[end:].lstrip(' \t')
         if tail and not tail.startswith('#'):
             raise ValueError('invalid YAML payload')
-        return value
-    for index, char in enumerate(scalar):
-        if char == '#' and (index == 0 or scalar[index - 1] in ' \t'):
-            scalar = scalar[:index]
-            break
-        if char == ':' and (index + 1 == len(scalar) or scalar[index + 1] in ' \t'):
-            raise ValueError('invalid YAML payload')
-    return scalar.rstrip(' \t')
+        comment = tail
+    else:
+        comment = _yaml_comment(scalar)
+        value = scalar[:-len(comment)] if comment else scalar
+        for index, char in enumerate(value):
+            if char == ':' and (index + 1 == len(value) or value[index + 1] in ' \t'):
+                raise ValueError('invalid YAML payload')
+        value = value.rstrip(' \t')
+    return (value, comment) if with_comment else value
 
 
 def _provider_header(line: str) -> str | None:
@@ -1378,32 +1426,35 @@ def _has_literal_field(line: str, native_fields: bool = False) -> bool:
     ))
 
 
-def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list[Rule], list[str]]:
-    if purpose not in {"block", "direct", "proxy"}:
-        raise ValueError(f"invalid purpose: {purpose}")
-    lines = text.removeprefix('\ufeff').split('\n')
-    records = []
+class GeneratedRuleError(ValueError):
+    pass
+
+
+def _source_records(text: str):
     in_payload = False
-    for source in lines:
+    for number, source in enumerate(text.removeprefix('\ufeff').split('\n'), 1):
         source = source.removesuffix('\r')
         line = source.strip(' \t')
         if not line or line.startswith(('#', ';', '//')):
-            records.append((None, False, None, None))
+            yield None, False, None, None, ''
             continue
+        yaml_rule = in_payload and line.startswith('-')
+        scalar = line[1:].lstrip(' \t') if yaml_rule else ''
+        declared = False
         try:
             if any(char in source for char in '\0\r\v\f\x85\u2028\u2029'):
                 raise ValueError('unsupported physical line separator')
             header = _provider_header(source) if not source.startswith('\t') else None
             if header:
                 in_payload = True
-                records.append((None, False, None, None))
+                yield None, False, None, None, ''
                 continue
-            yaml_rule = in_payload and source.lstrip(' \t').startswith('-')
             if line.startswith('-'):
                 item = re.fullmatch(r" *- +([^ \t].*)", source)
                 if not yaml_rule or item is None:
                     raise ValueError('invalid YAML payload')
-                line = _yaml_scalar(item[1])
+                line, comment = _yaml_scalar(item[1], with_comment=True)
+                declared = comment.startswith('# rconvert-rule-')
                 parts = _native_parts(line)
             elif in_payload and source.startswith((' ', '\t')):
                 raise ValueError('invalid YAML payload')
@@ -1411,11 +1462,95 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 in_payload = False
                 parts, end = _source_parts(line)
                 line = line[:end].rstrip()
-            records.append((line, yaml_rule, parts, None))
+            yield line, yaml_rule, parts, None, comment if declared else ''
         except ValueError as exc:
-            records.append((line, False, None, str(exc)))
+            if declared or _yaml_comment(scalar).startswith('# rconvert-rule-'):
+                raise GeneratedRuleError(f'line {number}: {exc}') from exc
+            yield line, False, None, str(exc), ''
+
+
+def _restore_generated_rules(payload: str, metadata: str, *, number: int, purpose: str,
+                             ignore_policy: bool = False, _whitelist: bool = False) -> list[Rule]:
+    from formats import _mihomo_rule, _yaml_value
+
+    def fail(message):
+        raise GeneratedRuleError(f'line {number}: {message}')
+
+    prefix = '# rconvert-rule-v1 '
+    if not metadata.startswith(prefix):
+        fail('unsupported generated rule version')
+    try:
+        records = json.loads(metadata[len(prefix):])
+    except (ValueError, RecursionError) as exc:
+        fail(f'invalid generated rule JSON: {exc}')
+    if type(records) is not list or not records:
+        fail('generated records must be a nonempty array')
+    restored, seen = [], set()
+    for record in records:
+        if (type(record) is not list or len(record) != 7 or
+                any(type(record[index]) is not str for index in (0, 1, 6)) or
+                type(record[2]) is not list or any(type(option) is not str for option in record[2]) or
+                any(type(record[index]) is not bool for index in (3, 4, 5))):
+            fail('invalid generated seven-field record')
+        kind, value, options, allow, literal_process, native_fields, source = record
+        if kind not in _KINDS or source not in {'surge', 'mihomo', 'qx'}:
+            fail('invalid generated type or source')
+        if any(0xD800 <= ord(char) <= 0xDFFF for text in [kind, value, source, *options] for char in text):
+            fail('invalid generated Unicode')
+        allowed_options = ({'no-resolve'} if kind in NO_RESOLVE_TYPES else set()) | (
+            _QX_INTERFACE_OPTIONS if kind in _QX_INTERFACE_KINDS else set())
+        if set(options) - allowed_options or options != sorted(set(options)):
+            fail('invalid generated options')
+        if kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'}:
+            valid = _valid_domain(kind, value) or kind == 'DOMAIN' and _valid_domain('DOMAIN-SUFFIX', value)
+        elif kind in {'IP-CIDR', 'IP-CIDR6', 'SRC-IP-CIDR', 'SRC-IP'}:
+            try:
+                address = ipaddress.ip_address(value) if kind == 'SRC-IP' else ipaddress.ip_network(value, strict=False)
+                valid = kind != 'IP-CIDR6' or address.version == 6
+            except ValueError:
+                valid = False
+        elif kind in _PORTS:
+            valid = _valid_port(value)
+        elif kind in _SIMPLE:
+            valid = _valid_simple(kind, value, native_fields or kind == 'DOMAIN-KEYWORD' and source == 'mihomo')
+        elif kind in _REGEX:
+            valid = bool(value) and _valid_regex(kind, value)
+        elif kind in _LOGICAL:
+            ignored = []
+            valid = (_normalize_logic(kind, value, ignored, native_fields, domain_source=source) is not None
+                     and not ignored)
+        else:
+            valid = bool(value) and (kind not in {'IN-NAME', 'REMATCH-NAME'} or _valid_name_list(value))
+        if not valid:
+            fail('invalid generated public state')
+        rule = Rule(kind, value, tuple(options), allow, literal_process, native_fields, source)
+        if rule.value != value or rule.options != tuple(options):
+            fail('noncanonical generated public state')
+        if rule in seen:
+            fail('duplicate generated record')
+        if _whitelist and kind not in _WHITELIST_TYPES:
+            fail(f'unsupported whitelist rule {kind}')
+        if _mihomo_rule(rule) != payload:
+            fail('generated record does not bind to complete payload')
+        seen.add(rule)
+        restored.append(rule)
+    native, messages = parse('payload:\n  - ' + _yaml_value(payload), purpose=purpose, ignore_policy=ignore_policy)
+    if messages or len(native) != 1:
+        fail('invalid adjacent native scalar')
+    return restored
+
+
+def parse(text: str, *, purpose: str, ignore_policy: bool = False,
+          domain_set: bool = False, _whitelist: bool = False) -> tuple[list[Rule], list[str]]:
+    if purpose not in {"block", "direct", "proxy"}:
+        raise ValueError(f"invalid purpose: {purpose}")
+    lines = text.removeprefix('\ufeff').split('\n')
+    records = list(_source_records(text))
+    restored = {number: _restore_generated_rules(line, metadata, number=number, purpose=purpose,
+                                                ignore_policy=ignore_policy, _whitelist=_whitelist)
+                for number, (line, _, _, _, metadata) in enumerate(records, 1) if metadata}
     opening_tags, html_lines = {}, set()
-    for number, (line, yaml_rule, _, _) in enumerate(records, 1):
+    for number, (line, yaml_rule, _, _, _) in enumerate(records, 1):
         if line is None or line.lstrip().startswith(('#', ';', '//', '!')):
             continue
         if _has_literal_field(line, yaml_rule):
@@ -1441,7 +1576,10 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                           for number, line in enumerate(lines, 1)):
         return [], [f"line {min(html_lines)}: HTML document"]
     rules, warnings = [], []
-    for number, (line, yaml_rule, parts, error) in enumerate(records, 1):
+    for number, (line, yaml_rule, parts, error, _) in enumerate(records, 1):
+        if number in restored:
+            rules.extend(restored[number])
+            continue
         if error is not None:
             warnings.append(f"line {number}: {error}")
             continue
@@ -1488,7 +1626,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
         elif bare_network is not None:
             kind = "IP-CIDR6" if bare_network.version == 6 else "IP-CIDR"
             value, action = str(bare_network), ""
-        elif _valid_domain("DOMAIN-SUFFIX" if line.startswith('.') else "DOMAIN", line.removeprefix('.')):
+        elif (_valid_domain("DOMAIN-SUFFIX" if line.startswith('.') else "DOMAIN", line.removeprefix('.')) or
+              domain_set and not yaml_rule and _valid_domain("DOMAIN-SUFFIX", line)):
             kind, value, action = ("DOMAIN-SUFFIX" if line.startswith('.') else "DOMAIN"), line.removeprefix('.'), ""
         else:
             if len(parts) < 2:
@@ -1499,7 +1638,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 value = _field_value(value)
             if kind.upper() in {"HOST", "HOST-SUFFIX", "HOST-KEYWORD", "HOST-WILDCARD"}:
                 domain_source = "qx"
-            elif yaml_rule and kind.upper() in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
+            elif yaml_rule and kind.upper() in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
                 domain_source = "mihomo"
             kind = {
                 "HOST": "DOMAIN", "HOST-SUFFIX": "DOMAIN-SUFFIX",
@@ -1609,19 +1748,22 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
                 warnings.append(f"line {number}: invalid {kind} {value}")
                 continue
         elif kind in _LOGICAL:
+            if yaml_rule:
+                try:
+                    kinds = _condition_kinds(kind, value, yaml_rule)
+                except ValueError:
+                    warnings.append(f"line {number}: invalid logical expression {value}")
+                    continue
+                literal_process = "PROCESS-NAME" in kinds
+                if kinds & {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
+                    domain_source = "mihomo"
             ignored_no_resolve = []
-            normalized = _normalize_logic(kind, value, ignored_no_resolve, yaml_rule)
+            normalized = _normalize_logic(kind, value, ignored_no_resolve, yaml_rule, domain_source=domain_source)
             if normalized is None:
                 warnings.append(f"line {number}: invalid logical expression {value}")
                 continue
             warnings.extend(f"line {number}: unsupported no-resolve for {child_kind}"
                             for child_kind in ignored_no_resolve)
-            # 原生尾字段删除后可能改变字面括号范围，类型标志使用已验证的原始字段。
-            if yaml_rule:
-                kinds = _condition_kinds(kind, value, yaml_rule)
-                literal_process = "PROCESS-NAME" in kinds
-                if kinds & {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
-                    domain_source = "mihomo"
             value = normalized
         elif not (_valid_domain(kind, value) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
             warnings.append(f"line {number}: invalid domain {value}")
@@ -1640,14 +1782,11 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False) -> tuple[list
     return rules, warnings
 
 
-def parse_whitelist(text: str) -> list[Rule]:
-    parsed, messages = parse(text, purpose="block", ignore_policy=True)
-    supported = {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-REGEX",
-                 "IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-ASN", "GEOIP",
-                 "SRC-IP-ASN", "SRC-GEOIP", "IP-SUFFIX", "SRC-IP-SUFFIX"}
+def parse_whitelist(text: str, *, domain_set: bool = False) -> list[Rule]:
+    parsed, messages = parse(text, purpose="block", ignore_policy=True, domain_set=domain_set, _whitelist=True)
     whitelist = [Rule(rule.kind, rule.value, literal_process=rule.literal_process,
                       native_fields=rule.native_fields, domain_source=rule.domain_source)
-                 for rule in parsed if rule.kind in supported]
+                 for rule in parsed if rule.kind in _WHITELIST_TYPES]
     if not parsed and not messages:
         raise ValueError("no rules")
     if not whitelist and messages:
@@ -1657,6 +1796,14 @@ def parse_whitelist(text: str) -> list[Rule]:
     return whitelist
 
 
+def _domain_comparison_value(kind: str, value: str, source: str) -> str:
+    if source != 'mihomo':
+        return value.lower()
+    # 只使用已核实的 simple lowercase；其余字符保留字面比较，不推断新的跨值覆盖。
+    return value.translate(str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZİKΟΣΑ',
+                                        'abcdefghijklmnopqrstuvwxyzikοσα'))
+
+
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
     domain_groups, typed = {}, set()
     empty = (set(), set(), set(), set())
@@ -1664,14 +1811,15 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
     for entry in whitelist:
         exact, suffixes, keywords, wildcards = domain_groups.setdefault(
             entry.domain_source, (set(), set(), set(), set()))
+        value = _domain_comparison_value(entry.kind, entry.value, entry.domain_source)
         if entry.kind == "DOMAIN":
-            exact.add(entry.value)
+            exact.add(value)
         elif entry.kind == "DOMAIN-SUFFIX":
-            suffixes.add(entry.value)
+            suffixes.add(value)
         elif entry.kind == "DOMAIN-KEYWORD":
-            keywords.add(entry.value)
+            keywords.add(value)
         elif entry.kind == "DOMAIN-WILDCARD":
-            wildcards.add(entry.value)
+            wildcards.add(value)
         elif entry.kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
             direction = "src" if entry.kind.startswith("SRC-") else "dst"
             networks[direction].add(ipaddress.ip_network(entry.value, strict=False))
@@ -1689,7 +1837,7 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
         if rule.allow:
             kept.append(rule)
             continue
-        kind, value = rule.kind, rule.value
+        kind, value = rule.kind, _domain_comparison_value(rule.kind, rule.value, rule.domain_source)
         exact, suffixes, keywords, wildcards = domain_groups.get(rule.domain_source, empty)
         wildcard_chars = "*?" if rule.domain_source == "mihomo" else "*?[]"
         if kind == "DOMAIN" or (kind == "DOMAIN-WILDCARD" and not any(c in value for c in wildcard_chars)):
@@ -1737,37 +1885,38 @@ def _has_parent(domain: str, parents: set[str]) -> bool:
 
 
 def normalize(rules: Iterable[Rule]) -> list[Rule]:
-    unique = set(rules)
-    suffixes = {}
-    for rule in unique:
-        if rule.kind == "DOMAIN-SUFFIX":
-            suffixes.setdefault((rule.allow, rule.options, rule.domain_source), set()).add(rule.value)
-    keywords = {}
-    for rule in unique:
-        if rule.kind == "DOMAIN-KEYWORD":
-            keywords.setdefault((rule.allow, rule.options, rule.domain_source), set()).add(rule.value)
+    unique = {}
+    suffixes, keywords = {}, {}
+    for rule in sorted(set(rules), key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow,
+                                                    rule.literal_process, rule.native_fields, rule.domain_source)):
+        group = (rule.allow, rule.options, rule.literal_process, rule.native_fields, rule.domain_source)
+        value = (_domain_comparison_value(rule.kind, rule.value, rule.domain_source)
+                 if rule.kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} else rule.value)
+        unique.setdefault((rule.kind, value, group), rule)
+        if rule.kind == 'DOMAIN-SUFFIX':
+            suffixes.setdefault(group, set()).add(value)
+        elif rule.kind == 'DOMAIN-KEYWORD':
+            keywords.setdefault(group, set()).add(value)
     kept = []
-    for rule in unique:
-        if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
-            candidate = rule.value
-            if rule.kind == "DOMAIN-WILDCARD":
+    for (kind, value, group), rule in unique.items():
+        if kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'}:
+            candidate = value
+            if kind == 'DOMAIN-WILDCARD':
                 last_wildcard = max(candidate.rfind(char) for char in '*?]')
                 tail = candidate[last_wildcard + 1:]
                 candidate = tail.partition('.')[2]
-            group = suffixes.get((rule.allow, rule.options, rule.domain_source), set())
+            parents = suffixes.get(group, set())
             while candidate:
-                if candidate in group and (rule.kind != "DOMAIN-SUFFIX" or candidate != rule.value):
+                if candidate in parents and (kind != 'DOMAIN-SUFFIX' or candidate != value):
                     break
                 candidate = candidate.partition('.')[2]
             if candidate:
                 continue
-        if rule.kind == "DOMAIN-KEYWORD":
-            group = keywords[(rule.allow, rule.options, rule.domain_source)]
-            if any(rule.value[start:end] in group
-                   for start in range(len(rule.value))
-                   for end in range(start + 1, len(rule.value) + 1)
-                   if end - start < len(rule.value)):
-                continue
+        if kind == 'DOMAIN-KEYWORD' and any(value[start:stop] in keywords[group]
+                                           for start in range(len(value))
+                                           for stop in range(start + 1, len(value) + 1)
+                                           if stop - start < len(value)):
+            continue
         kept.append(rule)
     networks = {}
     others = []

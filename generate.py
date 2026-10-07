@@ -1,6 +1,7 @@
 import argparse
 import gzip
 import os
+import posixpath
 import shutil
 import sys
 import tempfile
@@ -10,7 +11,7 @@ from http.client import IncompleteRead
 from pathlib import Path
 from typing import Callable
 from urllib import error, request
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 from sources import load_config, resolve_source
 
@@ -103,8 +104,9 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     root = root.resolve()
     if not root.is_relative_to(Path(__file__).resolve().parent):
         raise ValueError("Source root escapes worktree")
-    from formats import FILES, NO_RESOLVE_TYPES, render
-    from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
+    from formats import FILES, render
+    from rules import (GeneratedRuleError, _apply_no_resolve, _source_records,
+                       exclude_covered, normalize, parse, parse_whitelist)
 
     configs = load_config(root)
     paths = {}
@@ -150,22 +152,24 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 return None
         if isinstance(source, str):
             text = data.decode("utf-8-sig", errors="surrogateescape")
+            list(_source_records(text))
             lines = []
             bad = 0
-            for number, line in enumerate(text.splitlines(keepends=True), 1):
+            for number, line in enumerate(text.split('\n'), 1):
                 if any("\udc80" <= char <= "\udcff" for char in line):
                     bad += 1
                     if bad <= 5:
                         print(f"{source}: line {number}: invalid UTF-8; skipped", file=sys.stderr)
-                    lines.append("\n")
+                    lines.append("")
                 else:
                     lines.append(line)
             if bad > 5:
                 print(f"{source}: {bad} invalid UTF-8 lines; first five shown", file=sys.stderr)
-            return "".join(lines)
+            return "\n".join(lines)
         try:
             return data.decode("utf-8-sig")
         except UnicodeError as exc:
+            list(_source_records(data.decode('utf-8-sig', errors='surrogateescape')))
             raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
 
     def generated_body(source: Path, text: str) -> tuple[int, list[str]]:
@@ -180,6 +184,11 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
         return next((message for message in messages
                      if int(message.partition(":")[0].removeprefix("line ")) > header), None)
 
+    def is_domain_set(source: str | Path) -> bool:
+        if isinstance(source, Path):
+            return source.name.lower() == "fin-surge-ds.txt"
+        return unquote(posixpath.basename(urlsplit(source).path)).lower() == "fin-surge-ds.txt"
+
     local_whitelists = {}
     for config in configs:
         for entry in config["whitelist"]:
@@ -187,7 +196,9 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             if isinstance(source, Path) and source not in generated and source not in local_whitelists:
                 text = read(source)
                 try:
-                    local_whitelists[source] = parse_whitelist(text)
+                    local_whitelists[source] = parse_whitelist(text, domain_set=is_domain_set(source))
+                except GeneratedRuleError as exc:
+                    raise GeneratedRuleError(f"Invalid whitelist {source}: {exc}") from exc
                 except ValueError as exc:
                     raise ValueError(f"Invalid whitelist {source}: {exc}") from exc
 
@@ -207,7 +218,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             if text is None:
                 unusable_source = True
                 continue
-            parsed, source_warnings = parse(text, purpose=purpose)
+            parsed, source_warnings = parse(text, purpose=purpose, domain_set=is_domain_set(source))
             for warning in source_warnings[:5]:
                 print(f"{source}: {warning}", file=sys.stderr)
             if len(source_warnings) > 5:
@@ -242,16 +253,19 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 header, body = generated_body(source, text)
                 if not body:
                     continue
-                parsed_whitelist, messages = parse(text, purpose="block", ignore_policy=True)
+                parsed_whitelist, messages = parse(text, purpose="block", ignore_policy=True,
+                                                   domain_set=is_domain_set(source))
                 if warning := body_warning(messages, header):
                     raise ValueError(f"Invalid whitelist {source}: {warning}")
             try:
-                selected = parse_whitelist(text)
+                selected = parse_whitelist(text, domain_set=is_domain_set(source))
                 if generated_whitelist and len(selected) != len(parsed_whitelist):
                     for number, line in enumerate(body, header + 1):
                         snippet = ("payload:\n" if source == source.with_name("fin.yaml") else "") + line
                         try:
-                            supported = parse_whitelist(snippet)
+                            supported = parse_whitelist(snippet, domain_set=is_domain_set(source))
+                        except GeneratedRuleError as exc:
+                            raise GeneratedRuleError(f"line {number}: {str(exc).partition(': ')[2]}") from exc
                         except ValueError:
                             supported = []
                         if not supported:
@@ -260,6 +274,8 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 if not selected and isinstance(source, str):
                     print(f"{source}: no supported whitelist rules; skipped", file=sys.stderr)
                 whitelist.extend(selected)
+            except GeneratedRuleError as exc:
+                raise GeneratedRuleError(f"Invalid whitelist {source}: {exc}") from exc
             except ValueError as exc:
                 if isinstance(source, Path):
                     raise ValueError(f"Invalid whitelist {source}: {exc}") from exc
@@ -269,15 +285,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             continue
         allowed = [rule for rule in rules if rule.allow]
         rules = exclude_covered(rules, whitelist + allowed)
-        if no_resolve == "add":
-            rules = [Rule(rule.kind, rule.value, rule.options + ("no-resolve",),
-                          rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
-                     if not rule.allow and rule.kind in NO_RESOLVE_TYPES else rule for rule in rules]
-        elif no_resolve == "strip":
-            rules = [Rule(rule.kind, rule.value,
-                          tuple(option for option in rule.options if option != "no-resolve"),
-                          rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
-                     for rule in rules]
+        rules = [_apply_no_resolve(rule, no_resolve) for rule in rules]
         rendered, skipped = render(group, normalize(rules), purpose=purpose,
                                    whitelist=whitelist, no_resolve=no_resolve,
                                    title=config.get("title", group))

@@ -7,11 +7,58 @@ from pathlib import Path
 
 import rules
 from rules import Rule, normalize, parse
+from tests.test_formats import expected_domain, generated_payload, generated_text
 
 
 def _quote_matcher(value):
     quote = next(mark for mark in ('"', "'") if mark not in value)
     return f"{quote}{value}{quote}"
+
+
+class PublicStateRestorationRuleTests(unittest.TestCase):
+    def test_native_four_domain_sources_and_root_values_are_public(self):
+        import json
+
+        for kind, value in (('DOMAIN', 'KEEP.EXAMPLE.ORG.'), ('DOMAIN-SUFFIX', 'KEEP.EXAMPLE.ORG.'),
+                            ('DOMAIN-WILDCARD', 'API-*.EXAMPLE.ORG.'), ('DOMAIN-KEYWORD', 'ΟΣ')):
+            for header in ('payload', 'rules'):
+                parsed, messages = parse(header + ':\n  - ' + json.dumps(kind + ',' + value), purpose='proxy')
+                self.assertEqual(messages, [])
+                self.assertEqual(parsed[0].domain_source, 'mihomo')
+                self.assertEqual(parsed[0].value, value)
+                self.assertFalse(parsed[0].native_fields)
+                expression = '((' + kind + ',' + value + '),(NETWORK,tcp))'
+                logical, messages = parse(header + ':\n  - ' + json.dumps('AND,' + expression), purpose='proxy')
+                self.assertEqual(messages, [])
+                self.assertEqual(logical[0].domain_source, 'mihomo')
+                self.assertEqual(logical[0].value, expression)
+                self.assertTrue(logical[0].native_fields)
+
+    def test_greek_comparison_keeps_original_values_and_scope(self):
+        source = 'payload:\n' + ''.join('  - DOMAIN-KEYWORD,' + value + '\n'
+                                         for value in ('ΟΣ', 'οσ', 'ος', 'ΑΟΣ', 'ΟΣΑ'))
+        parsed, messages = parse(source, purpose='block')
+        self.assertEqual(messages, [])
+        self.assertEqual([rule.value for rule in parsed], ['ΟΣ', 'οσ', 'ος', 'ΑΟΣ', 'ΟΣΑ'])
+        sigma, ordinary, final, longer, appended = parsed
+        self.assertEqual(rules.exclude_covered([sigma], [final]), [sigma])
+        self.assertEqual(rules.exclude_covered([sigma], [ordinary]), [])
+        self.assertEqual(rules.exclude_covered([longer], [final]), [longer])
+        self.assertEqual(normalize([longer, final]), [longer, final])
+        self.assertEqual(normalize(parsed), [sigma, final])
+        self.assertEqual(normalize(reversed(parsed)), [sigma, final])
+        protected = Rule('DOMAIN-KEYWORD', 'ΑΟΣ', ('force-cellular',), literal_process=True,
+                         native_fields=True, domain_source='mihomo')
+        self.assertIn(protected, normalize([protected, ordinary]))
+        self.assertEqual(rules.exclude_covered([protected], [ordinary]), [])
+
+    def test_real_generated_declaration_fails_before_html_or_warning(self):
+        declaration = 'payload:\n  - "DOMAIN,keep.example.org" # rconvert-rule-v1 [["DOMAIN","other.example.org",[],false,false,false,"mihomo"]]'
+        for prefix in ('', '﻿', '<!doctype html>\n', '<html>\n'):
+            with self.subTest(prefix=prefix), self.assertRaisesRegex(ValueError, r'line [23]:'):
+                parse(prefix + declaration, purpose='block')
+        with self.assertRaisesRegex(ValueError, 'line 2:'):
+            rules.parse_whitelist(declaration)
 
 
 class NativeKeywordRuleTests(unittest.TestCase):
@@ -59,7 +106,7 @@ class NativeKeywordRuleTests(unittest.TestCase):
         self.assertEqual(messages, [])
         keyword = Rule('DOMAIN-KEYWORD', '中文', domain_source='mihomo')
         longer = Rule('DOMAIN-KEYWORD', '中文广告', domain_source='mihomo')
-        neighbor = Rule('DOMAIN', 'keep.example.com')
+        neighbor = Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')
         self.assertEqual(parsed, [keyword, longer, neighbor])
         self.assertEqual(rules.parse_whitelist(source), parsed)
         self.assertEqual(normalize(parsed * 2), [neighbor, keyword])
@@ -73,7 +120,7 @@ class NativeKeywordRuleTests(unittest.TestCase):
             with self.subTest(value=value):
                 self.assertEqual(parse('payload:\n  - DOMAIN-KEYWORD,' + value + '\n  - DOMAIN,keep.example.com',
                                        purpose='block'),
-                                 ([Rule('DOMAIN', 'keep.example.com')], ['line 2: invalid DOMAIN-KEYWORD ']))
+                                 ([Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')], ['line 2: invalid DOMAIN-KEYWORD ']))
                 self.assertEqual(parse('payload:\n  - NOT,((DOMAIN-KEYWORD,' + value + '))', purpose='block'),
                                  ([], ['line 2: invalid logical expression ((DOMAIN-KEYWORD,' + value.strip(' ') + '))']))
         self.assertEqual(parse('DOMAIN-KEYWORD,中文\nDOMAIN,keep.example.com', purpose='block'),
@@ -276,6 +323,7 @@ import json
 import sys
 from dataclasses import fields
 from formats import render
+from tests.test_formats import generated_text
 from rules import Rule, parse, normalize, parse_whitelist
 limit = sys.getrecursionlimit()
 assert [field.name for field in fields(Rule)] == ['kind', 'value', 'options', 'allow', 'literal_process', 'native_fields', 'domain_source']
@@ -304,10 +352,10 @@ for leaf, canonical, literal in (
     for purpose in ('block', 'direct', 'proxy'):
         source = 'payload:\\n  - ' + json.dumps(matcher) + '\\n  - DOMAIN,keep.example.com'
         parsed, warnings = parse(source, purpose=purpose)
-        assert parsed == [Rule(kind, value, literal_process=literal, native_fields=True), Rule('DOMAIN', 'keep.example.com')], leaf
+        assert parsed == [Rule(kind, value, literal_process=literal, native_fields=True), Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')], leaf
         assert warnings == (['line 2: unsupported no-resolve for SRC-IP-CIDR'] if ',src,' in leaf else []), warnings
         assert normalize(parsed * 2) == normalize(parsed), leaf
-        assert parse_whitelist(source) == [Rule('DOMAIN', 'keep.example.com')], leaf
+        assert parse_whitelist(source) == [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')], leaf
         for mode in ('keep', 'add', 'strip'):
             emitted = canonical
             if mode == 'add' and emitted.startswith(('(GEOIP,', '(IP-ASN,', '(IP-CIDR,', '(IP-SUFFIX,')):
@@ -316,12 +364,12 @@ for leaf, canonical, literal in (
                 emitted = emitted.replace(',no-resolve', '')
             expected_mihomo = '# deep rules: 2\\npayload:\\n  - "DOMAIN,keep.example.com"\\n  - ' + json.dumps(nest(emitted)[1:-1]) + '\\n'
             rendered, skips = render('deep', parsed, purpose=purpose, no_resolve=mode)
-            assert rendered['fin.yaml'] == expected_mihomo, (leaf, mode)
-            assert parse(rendered['fin.yaml'], purpose=purpose)[0] == [Rule('DOMAIN', 'keep.example.com'), Rule(kind, nest(emitted)[5:-1], literal_process=literal, native_fields=True)], (leaf, mode)
+            assert generated_text(rendered['fin.yaml']) == expected_mihomo, (leaf, mode)
+            assert parse(rendered['fin.yaml'], purpose=purpose)[0] == [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'), Rule(kind, nest(emitted)[5:-1], literal_process=literal, native_fields=True)], (leaf, mode)
 for leaf in ('(IN-NAME,A//B)', '(REMATCH-NAME,/A)', '(IP-SUFFIX,192.0.2.7/255.255.255.0)', '(IN-TYPE,MIXED)'):
     matcher = nest(leaf)[1:-1]
     parsed, warnings = parse('payload:\\n  - ' + json.dumps(matcher) + '\\n  - DOMAIN,keep.example.com', purpose='proxy')
-    assert parsed == [Rule('DOMAIN', 'keep.example.com')], leaf
+    assert parsed == [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')], leaf
     assert warnings == ['line 2: invalid logical expression ' + matcher.split(',', 1)[1]], warnings
 assert sys.getrecursionlimit() == limit
 '''
@@ -385,7 +433,7 @@ class DnsExactHostsRuleTests(unittest.TestCase):
             for header in ("payload:", "rules:"):
                 source = header + "\n" + "".join(f"  - DOMAIN,{value.upper()}.\n" for value in DNS_EXACT_DOMAINS)
                 self.assertEqual(parse(source, purpose=purpose),
-                                 ([Rule("DOMAIN", value) for value in DNS_EXACT_DOMAINS], []))
+                                 ([Rule("DOMAIN", value.upper() + ".", domain_source="mihomo") for value in DNS_EXACT_DOMAINS], []))
             for source in ("x", "123", "ip-cidr6", "reject-200", "|x|", "@@|x|", "/^x$/", "@@/^x$/",
                            "payload:\n  - x", "rules:\n  - x"):
                 with self.subTest(purpose=purpose, source=source):
@@ -466,6 +514,95 @@ class DomainProvenanceRuleTests(unittest.TestCase):
                                  ([], ["line 1: unexpected fields"]))
 
 
+DOMAIN_SET_LABELS = tuple(sorted({
+    "localhost", "com", "local", "x", "1", "123", "a-b", "xn--p1ai", "a" * 63,
+    "host", "host-suffix", "host-keyword", "host-wildcard", "ip6-cidr", "direct", "proxy", "list",
+    *(kind.lower() for kind in rules._KINDS | rules._BLOCK_ACTIONS),
+}))
+
+
+class DomainSetSingleLabelParserTests(unittest.TestCase):
+    def test_explicit_context_preserves_all_legal_labels_and_rule_fields(self):
+        for purpose in ("block", "direct", "proxy"):
+            for label in DOMAIN_SET_LABELS:
+                with self.subTest(purpose=purpose, label=label):
+                    expected = [Rule("DOMAIN", label)]
+                    source = "﻿# domains\r\n\t" + label.upper() + ". \r\n"
+                    self.assertEqual(parse(source, purpose=purpose, domain_set=True), (expected, []))
+                    self.assertEqual(rules.parse_whitelist(source, domain_set=True), expected)
+                    for typed in (f"DOMAIN,{label}", f"payload:\n  - DOMAIN,{label}",
+                                  f"rules:\n  - DOMAIN,{label}", f"HOST,{label},LIST"):
+                        parsed, messages = parse(typed, purpose=purpose)
+                        self.assertEqual(messages, [])
+                        self.assertEqual(parsed, [Rule("DOMAIN", label,
+                                         domain_source="qx" if typed.startswith("HOST,") else
+                                         "mihomo" if typed.startswith(("payload:", "rules:")) else "surge")])
+
+    def test_default_and_provider_missing_matcher_boundaries_remain(self):
+        for label in DOMAIN_SET_LABELS:
+            with self.subTest(label=label):
+                self.assertEqual(parse("# parent rules: 1\n" + label, purpose="block"),
+                                 ([], ["line 2: invalid rule"]))
+                for header in ("payload", "rules"):
+                    self.assertEqual(parse(header + ":\n  - " + label, purpose="block", domain_set=True),
+                                     ([], ["line 2: invalid rule"]))
+        self.assertEqual(parse("DOMAIN\nOR\nNETWORK\nHOST\nDIRECT", purpose="block"),
+                         ([], [f"line {number}: invalid rule" for number in range(1, 6)]))
+
+    def test_illegal_neighbors_keep_exact_line_diagnostics(self):
+        entries = ("-bad", "bad-", "a_b", "*", ".", "..com", "a..b", "a/b", "192.0.2.1",
+                   "2001:db8::1", "a" * 64, ".".join(["a" * 63] * 4), "bücher", "рф",
+                   "a b", "a\x00b", "a b", "a\r b", "@@|localhost|", "/^localhost$/")
+        for entry in entries:
+            with self.subTest(entry=entry):
+                reason = ("invalid YAML payload" if entry == "-bad" else
+                          "unsupported physical line separator" if any(c in entry for c in "\x00 \r")
+                          else "invalid rule")
+                self.assertEqual(parse("localhost\n" + entry + "\nkeep.example.org", purpose="block", domain_set=True),
+                                 ([Rule("DOMAIN", "localhost"), Rule("DOMAIN", "keep.example.org")],
+                                  ["line 2: " + reason]))
+        self.assertEqual(parse("DOMAIN,-bad\nlocalhost", purpose="block", domain_set=True),
+                         ([Rule("DOMAIN", "localhost")], ["line 1: invalid domain -bad"]))
+
+    def test_exact_whitelist_does_not_cover_children_or_wide_suffixes(self):
+        routes = [Rule("DOMAIN", "localhost"), Rule("DOMAIN", "child.localhost"),
+                  Rule("DOMAIN-SUFFIX", "localhost"), Rule("DOMAIN", "keep.example.org")]
+        self.assertEqual(rules.exclude_covered(routes, rules.parse_whitelist("LOCALHOST.", domain_set=True)), routes[1:])
+        self.assertEqual(rules.exclude_covered(routes, rules.parse_whitelist(".localhost", domain_set=True)), routes[-1:])
+        self.assertEqual(parse(".com\n.localhost\nlocalhost\nexample.com", purpose="block", domain_set=True),
+                         ([Rule("DOMAIN-SUFFIX", "com"), Rule("DOMAIN-SUFFIX", "localhost"),
+                           Rule("DOMAIN", "localhost"), Rule("DOMAIN", "example.com")], []))
+
+
+class DomainSetPublicRestorationTests(unittest.TestCase):
+    def test_domain_set_context_keeps_native_and_generated_identity_and_strict_errors(self):
+        import json
+
+        examples = [("DOMAIN,LOCALHOST.", ["DOMAIN", "LOCALHOST.", [], False, False, False, "mihomo"]),
+                    (expected_domain("DOMAIN", "localhost"), ["DOMAIN", "localhost", [], False, False, False, "surge"])]
+        for payload, record in examples:
+            expected = Rule(record[0], record[1], tuple(record[2]), *record[3:])
+            marked = 'payload:\n  - ' + json.dumps(payload) + ' # rconvert-rule-v1 ' + json.dumps([record], separators=(',', ':')) + '\n'
+            for context in (False, True):
+                with self.subTest(payload=payload, context=context):
+                    self.assertEqual(parse(marked, purpose="block", domain_set=context), ([expected], []))
+                    self.assertEqual(rules.parse_whitelist(marked, domain_set=context), [expected])
+                    changed = record.copy()
+                    changed[1] = "other.example.org"
+                    invalid = '<html>\n</html>\n' + marked.replace(json.dumps([record], separators=(',', ':')),
+                                                                            json.dumps([changed], separators=(',', ':')))
+                    for consumer in (lambda text: parse(text, purpose="block", domain_set=context),
+                                     lambda text: rules.parse_whitelist(text, domain_set=context)):
+                        with self.assertRaisesRegex(rules.GeneratedRuleError, r"line 4:"):
+                            consumer(invalid)
+        unsupported = 'payload:\n  - "PROCESS-NAME,Foo" # rconvert-rule-v1 [["PROCESS-NAME","Foo",[],false,true,false,"surge"]]\n'
+        for context in (False, True):
+            self.assertEqual(parse(unsupported, purpose="proxy", domain_set=context),
+                             ([Rule("PROCESS-NAME", "Foo", literal_process=True)], []))
+            with self.assertRaisesRegex(rules.GeneratedRuleError, "unsupported whitelist"):
+                rules.parse_whitelist(unsupported, domain_set=context)
+
+
 class DomainSetSuffixParserTests(unittest.TestCase):
     def test_single_label_domain_set_suffix_uses_suffix_validation(self):
         for purpose in ("direct", "block", "proxy"):
@@ -539,8 +676,8 @@ class SurgeEscapedFieldParserTests(unittest.TestCase):
                         out, _ = render("group", parsed, purpose="proxy", no_resolve="keep")
                         expected = expression.replace(f"{kind},{field}",
                                                       expected_process(matcher) if kind == "PROCESS-NAME" else f"{kind},{matcher}")
-                        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                                         [f"{operator},{expected}"])
+                        self.assertEqual([generated_payload(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
+                                         [f"{operator}," + expected.replace("DOMAIN,x.example.com", expected_domain("DOMAIN", "x.example.com"))])
             if kind == "PROCESS-NAME":
                 native = "payload:\n  - " + json.dumps(f"{kind},{field}")
                 self.assertEqual(parse(native, purpose="proxy"), ([Rule(kind, field, literal_process=True)], []))
@@ -561,6 +698,7 @@ class SurgeEscapedFieldParserTests(unittest.TestCase):
 
 class SourceBoundaryFix8Tests(unittest.TestCase):
     keep = Rule("DOMAIN", "keep.example.com")
+    native_keep = Rule("DOMAIN", "keep.example.com", domain_source="mihomo")
 
     def test_bare_source_ambiguity_and_two_explicit_intents(self):
         values = ("^a{b$,My Proxy # note}c$|^foo$",
@@ -631,7 +769,7 @@ class SourceBoundaryFix8Tests(unittest.TestCase):
         self.assertEqual(parse(source, purpose="proxy"), ([
             Rule("PROCESS-NAME", "'Game'", literal_process=True),
             Rule("PROCESS-NAME", '"Other"', literal_process=True),
-            Rule("DOMAIN-REGEX", '"^ads$"'), Rule("AND", expression, native_fields=True),
+            Rule("DOMAIN-REGEX", '"^ads$"'), Rule("AND", expression, native_fields=True, domain_source="mihomo"),
         ], []))
         self.assertEqual(parse(f"AND,{expression},PROXY", purpose="proxy")[0], [])
         text = '((DOMAIN-REGEX,"^ads$"),(DOMAIN,x.example.com))'
@@ -658,7 +796,7 @@ class SourceBoundaryFix8Tests(unittest.TestCase):
                        r"\U0000D800", r"\U00110000"):
             with self.subTest(escape=escape):
                 self.assertEqual(parse(f'payload:\n  - "PROCESS-NAME,A{escape},B"\n  - DOMAIN,keep.example.com',
-                                       purpose="proxy"), ([self.keep], ["line 2: invalid YAML payload"]))
+                                       purpose="proxy"), ([self.native_keep], ["line 2: invalid YAML payload"]))
 
     def test_yaml_ascii_whitespace_plain_comments_and_unsupported_subset(self):
         for value in ("Game\xa0#Inc", "Game#Inc", "Game ;Inc", "Game //Inc"):
@@ -675,7 +813,7 @@ class SourceBoundaryFix8Tests(unittest.TestCase):
                      "- 'PROCESS-NAME,Game"):
             with self.subTest(item=item):
                 self.assertEqual(parse("payload:\n  " + item + "\n  - DOMAIN,keep.example.com", purpose="proxy"),
-                                 ([self.keep], ["line 2: invalid YAML payload"]))
+                                 ([self.native_keep], ["line 2: invalid YAML payload"]))
         self.assertEqual(parse("payload:\n  - 'PROCESS-NAME,Game: Inc'", purpose="proxy"),
                          ([Rule("PROCESS-NAME", "Game: Inc", literal_process=True)], []))
 
@@ -727,6 +865,7 @@ class SourceScannerContinuationTests(unittest.TestCase):
 
 class ScalarContinuationTests(unittest.TestCase):
     keep = Rule("DOMAIN", "keep.example.com")
+    native_keep = Rule("DOMAIN", "keep.example.com", domain_source="mihomo")
 
     def test_fixed_width_hex_and_scalar_boundaries_preserve_every_character(self):
         for escape, decoded in ((r"\x00", "\0"), (r"\xFF", "\xff"), (r"\x73z", "sz"),
@@ -773,7 +912,7 @@ class ScalarContinuationTests(unittest.TestCase):
         for scalar in invalid:
             with self.subTest(scalar=scalar):
                 self.assertEqual(parse("rules:\n  - " + scalar + "\n  - DOMAIN,keep.example.com", purpose="proxy"),
-                                 ([self.keep], ["line 2: invalid YAML payload"]))
+                                 ([self.native_keep], ["line 2: invalid YAML payload"]))
 
     def test_headers_dash_styles_and_content_whitespace_have_separate_boundaries(self):
         for header in ("payload:", "payload :", "payload\t:", '"payload" : #note',
@@ -781,7 +920,7 @@ class ScalarContinuationTests(unittest.TestCase):
             for dash in ("- ", "-  ", "  -   "):
                 with self.subTest(header=header, dash=dash):
                     self.assertEqual(parse(header + "\n" + dash + "DOMAIN,keep.example.com", purpose="proxy"),
-                                     ([self.keep], []))
+                                     ([self.native_keep], []))
         for header in ("payload\xa0:", "\xa0payload:", '"payload\\_":', "' payload':", '"payload" extra:',
                        "payload: []", "rules: &rules", '"pay\\qload":'):
             with self.subTest(header=header):
@@ -797,16 +936,16 @@ class ScalarContinuationTests(unittest.TestCase):
                              ([Rule("PROCESS-NAME", "Game", literal_process=True)], []))
         for control in ("\r", "\v", "\f", "\x85", "\u2028", "\u2029", "\0"):
             self.assertEqual(parse("payload:\n  - PROCESS-NAME,A" + control + "B\n  - DOMAIN,keep.example.com", purpose="proxy"),
-                             ([self.keep], ["line 2: unsupported physical line separator"]))
+                             ([self.native_keep], ["line 2: unsupported physical line separator"]))
 
     def test_provider_header_requires_separation_before_comment(self):
         for header in ("payload:#note", "rules:#note", '"payload":#note', "'rules':#note"):
             with self.subTest(header=header):
                 source = header + "\n  - DOMAIN,probe.example\npayload:\n  - DOMAIN,keep.example.com"
                 self.assertEqual(parse(source, purpose="proxy"),
-                                 ([self.keep], ["line 1: invalid YAML payload", "line 2: invalid YAML payload"]))
+                                 ([self.native_keep], ["line 1: invalid YAML payload", "line 2: invalid YAML payload"]))
         for header in ("payload: #note", "rules:\t#note", '"payload": #note', "'rules':\t#note"):
-            self.assertEqual(parse(header + "\n  - DOMAIN,keep.example.com", purpose="proxy"), ([self.keep], []))
+            self.assertEqual(parse(header + "\n  - DOMAIN,keep.example.com", purpose="proxy"), ([self.native_keep], []))
 
     def test_native_params_and_same_name_regex_suffixes_remain_source_specific(self):
         for header in ("payload:", "rules:"):
@@ -820,8 +959,8 @@ class ScalarContinuationTests(unittest.TestCase):
             self.assertEqual(parse(source, purpose="proxy"),
                              ([Rule("AND", expression, literal_process=True, native_fields=True)], []))
         self.assertEqual(parse("rules:\n  - DOMAIN,keep.example.com,PROXY\n  - IP-CIDR,198.51.100.0/24,no-resolve", purpose="proxy"),
-                         ([self.keep, Rule("IP-CIDR", "198.51.100.0/24", ("no-resolve",))], []))
-        self.assertEqual(rules.parse_whitelist("rules:\n  - DOMAIN,keep.example.com,PROXY"), [self.keep])
+                         ([self.native_keep, Rule("IP-CIDR", "198.51.100.0/24", ("no-resolve",))], []))
+        self.assertEqual(rules.parse_whitelist("rules:\n  - DOMAIN,keep.example.com,PROXY"), [self.native_keep])
 
     def test_bare_custom_policy_and_marker_matrix_keeps_legal_neighbor(self):
         for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX", "URL-REGEX"):
@@ -841,6 +980,7 @@ class ScalarContinuationTests(unittest.TestCase):
 
 class SourceAdapterParserFix1Tests(unittest.TestCase):
     keep = Rule("DOMAIN", "keep.example.com")
+    native_keep = Rule("DOMAIN", "keep.example.com", domain_source="mihomo")
 
     def test_mixed_quoted_regex_leaves_keep_complete_matcher_scope(self):
         for operator in ("AND", "OR", "NOT"):
@@ -906,7 +1046,7 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                 for params in ("", ",src", ",SRC", ",no-resolve", ",arbitrary", ",src,no-resolve,arbitrary"):
                     with self.subTest(header=header, kind=kind, params=params):
                         self.assertEqual(parse(f"{header}\n  - {kind},{value}{params}\n  - DOMAIN,keep.example.com",
-                                               purpose="proxy"), ([Rule(kind, value), self.keep], []))
+                                               purpose="proxy"), ([Rule(kind, value), self.native_keep], []))
                     for operator in ("AND", "OR", "NOT"):
                         with self.subTest(header=header, kind=kind, params=params, operator=operator):
                             leaf = f"({kind},{value}{params})"
@@ -916,7 +1056,7 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                             source = f"{header}\n  - '{operator},{expression}'\n  - DOMAIN,keep.example.com"
                             expected = Rule(operator, normalized, native_fields=True)
                             parsed, messages = parse(source, purpose="proxy")
-                            self.assertEqual((parsed, messages), ([expected, self.keep], []))
+                            self.assertEqual((parsed, messages), ([expected, self.native_keep], []))
                             self.assertIn(expected, normalize(parsed))
 
     def test_native_destination_params_keep_case_sensitive_direction(self):
@@ -932,7 +1072,7 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                 warning = [f"line 2: unsupported no-resolve for {source_kind}"] if params == ",src,no-resolve" else []
                 with self.subTest(kind=kind, params=params):
                     self.assertEqual(parse(f"payload:\n  - {kind},{value}{params}\n  - DOMAIN,keep.example.com",
-                                           purpose="proxy"), ([Rule(expected_kind, value, options), self.keep], warning))
+                                           purpose="proxy"), ([Rule(expected_kind, value, options), self.native_keep], warning))
                 for operator in ("AND", "OR", "NOT"):
                     with self.subTest(kind=kind, params=params, operator=operator):
                         leaf = f"({kind},{value}{params})"
@@ -941,7 +1081,7 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                         normalized = f"({clean})" if operator == "NOT" else f"({clean},(NETWORK,tcp))"
                         expected = Rule(operator, normalized, native_fields=True)
                         self.assertEqual(parse(f"payload:\n  - '{operator},{expression}'\n  - DOMAIN,keep.example.com",
-                                               purpose="proxy"), ([expected, self.keep], warning))
+                                               purpose="proxy"), ([expected, self.native_keep], warning))
 
     def test_native_fixed_source_params_do_not_relax_mixed_or_payload_validation(self):
         for params in ("src", "arbitrary"):
@@ -954,7 +1094,7 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                           ["line 1: unsupported no-resolve for SRC-IP-CIDR"]))
         expression = "((SRC-IP-CIDR,not-an-ip,src),(NETWORK,tcp))"
         self.assertEqual(parse(f"payload:\n  - 'AND,{expression}'\n  - DOMAIN,keep.example.com", purpose="proxy"),
-                         ([self.keep], [f"line 2: invalid logical expression {expression}"]))
+                         ([self.native_keep], [f"line 2: invalid logical expression {expression}"]))
 
     def test_yaml_raw_character_ranges_reject_invalid_quoted_plain_and_header_sources(self):
         points = [point for point in range(0x20) if point not in (9, 10)] + list(range(0x7F, 0xA0))
@@ -967,11 +1107,11 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                            f"PROCESS-NAME,A{control}B", f'"PROCESS-NAME,Game" # noteA{control}B'):
                 with self.subTest(point=hex(point), scalar=scalar):
                     self.assertEqual(parse(f"payload:\n  - {scalar}\n  - DOMAIN,keep.example.com", purpose="proxy"),
-                                     ([self.keep], [f"line 2: {message}"]))
+                                     ([self.native_keep], [f"line 2: {message}"]))
             for header in ("payload:", '"payload":', "'rules':"):
                 with self.subTest(point=hex(point), header=header):
                     source = f"{header} # A{control}B\npayload:\n  - DOMAIN,keep.example.com"
-                    self.assertEqual(parse(source, purpose="proxy"), ([self.keep], [f"line 1: {message}"]))
+                    self.assertEqual(parse(source, purpose="proxy"), ([self.native_keep], [f"line 1: {message}"]))
 
     def test_yaml_raw_printable_unicode_boundaries_and_tab_remain_literal(self):
         for point in (9, 0x20, 0x7E, 0xA0, 0xD7FF, 0xE000, 0xFDD0, 0xFFFD, 0x10000, 0x1F600, 0x10FFFF):
@@ -979,11 +1119,11 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
             for scalar in (f'"PROCESS-NAME,{value}"', f"'PROCESS-NAME,{value}'", f"PROCESS-NAME,{value}"):
                 with self.subTest(point=hex(point), scalar=scalar):
                     self.assertEqual(parse(f"payload:\n  - {scalar}\n  - DOMAIN,keep.example.com", purpose="proxy"),
-                                     ([Rule("PROCESS-NAME", value, literal_process=True), self.keep], []))
+                                     ([Rule("PROCESS-NAME", value, literal_process=True), self.native_keep], []))
             for header in ("payload:", '"payload":', "'rules':"):
                 with self.subTest(point=hex(point), header=header):
                     self.assertEqual(parse(f"{header} # {value}\n  - DOMAIN,keep.example.com", purpose="proxy"),
-                                     ([self.keep], []))
+                                     ([self.native_keep], []))
         self.assertEqual(parse('payload:\n  - "PROCESS-NAME,A\nB"\nDOMAIN,keep.example.com,PROXY', purpose="proxy"),
                          ([self.keep], ["line 2: invalid YAML payload", "line 3: invalid rule"]))
         self.assertEqual(parse("PROCESS-NAME,A\aB,PROXY", purpose="proxy"), ([Rule("PROCESS-NAME", "A\aB")], []))
@@ -996,7 +1136,7 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
             with self.subTest(escape=escape):
                 expected = Rule("PROCESS-NAME", "A" + control + "B", literal_process=True)
                 self.assertEqual(parse(f'payload:\n  - "PROCESS-NAME,A{escape}B"\n  - DOMAIN,keep.example.com',
-                                       purpose="proxy"), ([expected, self.keep], []))
+                                       purpose="proxy"), ([expected, self.native_keep], []))
         for escape, control in ((r"\a", "\a"), (r"\e", "\x1b"), (r"\x01", "\x01"), (r"\x1f", "\x1f")):
             with self.subTest(escape=escape):
                 expression = f"((DOMAIN-REGEX,^A{control}B$),(PROCESS-NAME,A{control}B))"
@@ -1014,9 +1154,9 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                     expression = f"({child})" if operator == "NOT" else f"({child},(DOMAIN,x.example.com))"
                     scalar = f"{operator},{expression}".replace("'", "''")
                     source = f"payload:\n  - '{scalar}'\n  - DOMAIN,keep.example.com"
-                    expected = Rule(operator, expression, native_fields=True)
+                    expected = Rule(operator, expression, native_fields=True, domain_source="surge" if operator == "NOT" else "mihomo")
                     parsed, messages = parse(source, purpose="proxy")
-                    self.assertEqual((parsed, messages), ([expected, self.keep], []))
+                    self.assertEqual((parsed, messages), ([expected, self.native_keep], []))
                     self.assertIn(expected, normalize(parsed))
 
 
@@ -1027,7 +1167,7 @@ class NativeLogicalRendererStructureTests(unittest.TestCase):
         for depth in (1, 600, 1000):
             matcher = ('(NOT,(' * depth + '(IN-USER,Foo(,ignored))' + '))' * depth)[1:-1]
             source = 'payload:\n  - ' + json.dumps(matcher) + '\n  - DOMAIN,keep.example.com\n'
-            expected = [Rule('NOT', matcher[4:], native_fields=True), Rule('DOMAIN', 'keep.example.com')]
+            expected = [Rule('NOT', matcher[4:], native_fields=True), Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')]
             with self.subTest(depth=depth):
                 parsed, messages = parse(source, purpose='proxy')
                 self.assertEqual(messages, [])
@@ -1068,6 +1208,7 @@ kind, value = condition[1:-1].split(',', 1)
 expected = Rule(kind, value, native_fields={native},
                 domain_source={'mihomo' if native and has_domain else 'surge'!r})
 source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if {native} else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+keep = native_keep if {native} else Rule("DOMAIN", "keep.example.com")
 parsed, messages = parse(source, purpose='block')
 assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
 assert normalize(parsed * 2) == normalize([expected, keep])
@@ -1084,9 +1225,9 @@ condition = nest({depth}, '({kind},Foo(,ignored))')
 clean = condition
 expected = Rule('NOT', clean[5:-1], literal_process={kind == 'PROCESS-NAME'}, native_fields=True)
 source = 'payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com'
-assert parse(source, purpose='block') == ([expected, keep], [])
-assert normalize(parse(source, purpose='block')[0] * 2) == normalize([expected, keep])
-assert parse_whitelist(source) == [keep]
+assert parse(source, purpose='block') == ([expected, native_keep], [])
+assert normalize(parse(source, purpose='block')[0] * 2) == normalize([expected, native_keep])
+assert parse_whitelist(source) == [native_keep]
 ''')
 
     def test_native_ignored_tail_does_not_abort_local_generation(self):
@@ -1109,7 +1250,7 @@ with tempfile.TemporaryDirectory(dir=staging) as directory:
         raise AssertionError(url)
     with contextlib.redirect_stderr(io.StringIO()) as messages:
         outputs = generate(root, unexpected_fetch)
-    assert '  - "DOMAIN,keep.example.com"\\n' in outputs[root / 'group/fin.yaml']
+    assert '  - "DOMAIN,keep.example.com" # rconvert-rule-v1 ' in outputs[root / 'group/fin.yaml']
     assert ': line ' not in messages.getvalue(), messages.getvalue()
 ''')
 
@@ -1120,6 +1261,7 @@ import sys
 from rules import Rule, parse, normalize, parse_whitelist, _has_process_name, _normalize_condition
 limit = sys.getrecursionlimit()
 keep = Rule('DOMAIN', 'keep.example.com')
+native_keep = Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')
 def nest(depth, leaf, mixed=False, bare=False):
     for index in range(depth):
         kind = ('NOT', 'AND', 'OR')[index % 3] if mixed else 'NOT'
@@ -1148,6 +1290,7 @@ condition = nest({depth}, '(PROCESS-NAME-REGEX,' + matcher + ')', mixed=True)
 kind, value = condition[1:-1].split(',', 1)
 expected = Rule(kind, value, native_fields={native})
 source = ('rules:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if {native} else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+keep = native_keep if {native} else Rule("DOMAIN", "keep.example.com")
 parsed, messages = parse(source, purpose='block')
 assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
 assert matcher in parsed[0].value and len(matcher) == 20397
@@ -1183,6 +1326,7 @@ assert parse_whitelist(condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJE
 condition = nest({depth}, {leaf!r})
 expected = Rule('NOT', nest({depth}, {clean!r})[5:-1], native_fields={native})
 source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if {native} else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+keep = native_keep if {native} else Rule("DOMAIN", "keep.example.com")
 parsed, messages = parse(source, purpose='block')
 number = 2 if {native} else 1
 assert parsed == [expected, keep], len(parsed)
@@ -1204,6 +1348,7 @@ assert normalize(parsed + parsed) == normalize([expected, keep])
 condition = nest({depth}, {leaf!r})
 for native in (False, True):
     source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if native else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+    keep = native_keep if native else Rule("DOMAIN", "keep.example.com")
     parsed, messages = parse(source, purpose='block')
     if native and {leaf!r} == '(IP-CIDR6,203.0.113.0/24,src)':
         expected = nest({depth}, '(SRC-IP-CIDR,203.0.113.0/24)')
@@ -1221,6 +1366,7 @@ condition = nest({depth}, '(DOMAIN,example.com)')
 line = condition[1:-1] + ')' if {extra} == 1 else condition[1:-2]
 for native in (False, True):
     source = ('rules:\\n  - ' + json.dumps(line) + '\\n  - DOMAIN,keep.example.com') if native else line + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
+    keep = native_keep if native else Rule("DOMAIN", "keep.example.com")
     parsed, messages = parse(source, purpose='block')
     assert parsed == [keep], len(parsed)
     number = 2 if native else 1
@@ -1232,8 +1378,8 @@ for native in (False, True):
             with self.subTest(depth=depth):
                 self.assert_subprocess(f'''
 condition = nest({depth}, '(DOMAIN,example.com,no-resolve)')
-expected = Rule('NOT', nest({depth}, '(DOMAIN,example.com)')[5:-1], native_fields=True)
-assert parse('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com', purpose='block') == ([expected, keep], [])
+expected = Rule('NOT', nest({depth}, '(DOMAIN,example.com)')[5:-1], native_fields=True, domain_source="mihomo")
+assert parse('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com', purpose='block') == ([expected, native_keep], [])
 parsed, messages = parse(condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT', purpose='block')
 assert parsed == [keep] and len(messages) == 1 and messages[0].startswith('line 1:'), messages
 ''')
@@ -1271,9 +1417,9 @@ condition = nest({depth}, {leaf!r}, mixed=True)
 kind, value = condition[1:-1].split(',', 1)
 expected = Rule(kind, value, literal_process={literal}, native_fields=True)
 parsed, messages = parse('rules:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com', purpose='block')
-assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
+assert (parsed, messages) == ([expected, native_keep], []), (len(parsed), messages)
 assert _has_process_name(kind, value, True) == {literal}
-assert normalize(parsed + parsed) == normalize([expected, keep])
+assert normalize(parsed + parsed) == normalize([expected, native_keep])
 ''')
 
     def test_deep_native_balanced_regex_class_parentheses_keep_field_scopes(self):
@@ -1284,8 +1430,8 @@ assert normalize(parsed + parsed) == normalize([expected, keep])
 condition = nest({depth}, {leaf!r})
 expected = Rule('NOT', condition[5:-1], native_fields=True)
 parsed, messages = parse('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com', purpose='block')
-assert (parsed, messages) == ([expected, keep], []), (len(parsed), messages)
-assert normalize(parsed + parsed) == normalize([expected, keep])
+assert (parsed, messages) == ([expected, native_keep], []), (len(parsed), messages)
+assert normalize(parsed + parsed) == normalize([expected, native_keep])
 ''')
 
     def test_deep_native_and_mixed_quotes_keep_distinct_provenance(self):
@@ -1380,8 +1526,8 @@ class ParseTests(unittest.TestCase):
             purpose="block",
         )
         self.assertEqual(rules, [
-            Rule("DOMAIN", "ads.example.com"),
-            Rule("DOMAIN-SUFFIX", "ad.example.com"),
+            Rule("DOMAIN", "ads.example.com", domain_source="mihomo"),
+            Rule("DOMAIN-SUFFIX", "AD.EXAMPLE.COM", domain_source="mihomo"),
         ])
         self.assertEqual(warnings, [])
 
@@ -1568,7 +1714,7 @@ class ParseTests(unittest.TestCase):
         )
         self.assertEqual(parsed, [
             Rule("URL-REGEX", r"^https://ads\.example/it's$"),
-            Rule("DOMAIN", "ads.example.com"),
+            Rule("DOMAIN", "ads.example.com", domain_source="mihomo"),
         ])
         self.assertEqual(messages, [])
 
@@ -1578,7 +1724,7 @@ class ParseTests(unittest.TestCase):
             "  - IP-CIDR,203.0.113.0/24\n", purpose="direct",
         )
         self.assertEqual(rules, [
-            Rule("DOMAIN-SUFFIX", "000607.com.cn"), Rule("IP-CIDR", "203.0.113.0/24"),
+            Rule("DOMAIN-SUFFIX", "000607.com.cn", domain_source="mihomo"), Rule("IP-CIDR", "203.0.113.0/24"),
         ])
         self.assertEqual(warnings, [])
 
@@ -1597,7 +1743,7 @@ class ParseTests(unittest.TestCase):
             Rule("PROCESS-NAME", "Game ;1", literal_process=True),
             Rule("PROCESS-NAME", "Game //1", literal_process=True),
             Rule("PROCESS-NAME", "Game", literal_process=True),
-            Rule("DOMAIN", "x.example.com"),
+            Rule("DOMAIN", "x.example.com", domain_source="mihomo"),
         ])
         self.assertEqual(messages, [])
 
@@ -1651,7 +1797,7 @@ class ParseTests(unittest.TestCase):
             purpose="block",
         )
         self.assertEqual(rules, [
-            Rule("DOMAIN", "good.example.com"), Rule("DOMAIN", "other.example.com")
+            Rule("DOMAIN", "good.example.com", domain_source="mihomo"), Rule("DOMAIN", "other.example.com")
         ])
         self.assertTrue(any("line 4" in message for message in warnings))
 
@@ -1869,8 +2015,8 @@ class ParseTests(unittest.TestCase):
         output, _ = render("group", parsed, purpose="proxy", no_resolve="keep")
         self.assertIn("SRC-IP,192.0.2.0/24\n", output["fin.txt"])
         self.assertIn("SRC-IP,2001:db8::1\n", output["fin-surge.txt"])
-        self.assertIn('  - "SRC-IP-CIDR,192.0.2.0/24"\n', output["fin.yaml"])
-        self.assertIn('  - "SRC-IP-CIDR,2001:db8::1/128"\n', output["fin.yaml"])
+        self.assertIn('  - "SRC-IP-CIDR,192.0.2.0/24"\n', generated_text(output["fin.yaml"]))
+        self.assertIn('  - "SRC-IP-CIDR,2001:db8::1/128"\n', generated_text(output["fin.yaml"]))
         self.assertNotIn("IP-CIDR,192.0.2.0/24", output["fin.txt"])
         self.assertIn("IP-CIDR,198.51.100.0/24,no-resolve\n", output["fin.txt"])
 
@@ -1889,7 +2035,7 @@ class ParseTests(unittest.TestCase):
 
         output, _ = render("group", parsed, purpose="direct", no_resolve="strip")
         self.assertIn("SRC-IP,192.0.2.0/24\n", output["fin.txt"])
-        self.assertIn('"SRC-IP-CIDR,192.0.2.0/24"', output["fin.yaml"])
+        self.assertIn('"SRC-IP-CIDR,192.0.2.0/24"', generated_text(output["fin.yaml"]))
 
     def test_port_rules_keep_source_destination_and_range(self):
         rules, warnings = parse(
@@ -1929,7 +2075,7 @@ class ParseTests(unittest.TestCase):
 
         output, _ = render("group", parsed, purpose="proxy", no_resolve="strip")
         self.assertIn("OR,((DEST-PORT,80),(DEST-PORT,443-445))\n", output["fin.txt"])
-        self.assertIn('"OR,((DST-PORT,80),(DST-PORT,443-445))"', output["fin.yaml"])
+        self.assertIn('"OR,((DST-PORT,80),(DST-PORT,443-445))"', generated_text(output["fin.yaml"]))
 
     def test_long_numeric_fields_are_skipped_without_aborting_other_rules(self):
         huge = '9' * 4400
@@ -1978,7 +2124,7 @@ class ParseTests(unittest.TestCase):
         )
         self.assertEqual(warnings, [])
         self.assertEqual(rules, [Rule(
-            "AND", "((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))", literal_process=True, native_fields=True,
+            "AND", "((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))", literal_process=True, native_fields=True, domain_source="mihomo",
         )])
 
     def test_process_source_intent_survives_normalize(self):
@@ -2137,7 +2283,7 @@ class ParseTests(unittest.TestCase):
         self.assertEqual(parsed, [Rule("PROCESS-NAME-REGEX", value)])
         self.assertEqual(messages, [])
         yaml = render("a3", parsed, purpose="direct", no_resolve="keep")[0]["fin.yaml"]
-        self.assertIn('  - "PROCESS-NAME-REGEX,^Game,\'foo{bar\'$"\n', yaml)
+        self.assertIn('  - "PROCESS-NAME-REGEX,^Game,\'foo{bar\'$"\n', generated_text(yaml))
         self.assertEqual(parse(yaml, purpose="direct"), ([Rule("PROCESS-NAME-REGEX", value)], []))
 
     def test_unquoted_regex_literal_brace_preceding_numeric_quantifier(self):
@@ -2755,8 +2901,8 @@ class ParseTests(unittest.TestCase):
             '  - "AND,((PROCESS-NAME-REGEX,^Game{1,2} #1$),(DOMAIN,x.example.com))"',
             purpose="proxy",
         )
-        self.assertEqual(yaml, [Rule("AND", value, literal_process=True, native_fields=True) for value in expressions[1:3]]
-                         + [Rule("AND", expressions[0], native_fields=True)])
+        self.assertEqual(yaml, [Rule("AND", value, literal_process=True, native_fields=True, domain_source="mihomo") for value in expressions[1:3]]
+                         + [Rule("AND", expressions[0], native_fields=True, domain_source="mihomo")])
         self.assertEqual(messages, [])
 
     def test_logical_port_comparison_keeps_both_children(self):
@@ -2898,7 +3044,8 @@ class ParseTests(unittest.TestCase):
 
         output, _ = render("group", parsed, purpose="block", no_resolve="strip")
         self.assertIn("AND,((IP-CIDR,192.0.2.0/24),(DOMAIN,ads.example.com))\n", output["fin.txt"])
-        self.assertIn('"AND,((IP-CIDR,192.0.2.0/24),(DOMAIN,ads.example.com))"', output["fin.yaml"])
+        self.assertEqual([generated_payload(line[4:]) for line in output["fin.yaml"].splitlines()[2:]],
+                         ["AND,((IP-CIDR,192.0.2.0/24),(" + expected_domain("DOMAIN", "ads.example.com") + "))"])
 
     def test_logical_child_normalizes_port_forms(self):
         parsed, messages = parse(
@@ -3158,7 +3305,7 @@ class FollowupParseTests(unittest.TestCase):
                 parsed, messages = parse(f"AND,{expression},China\nDOMAIN,keep.example.com,China", purpose="proxy")
                 output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
                 self.assertNotIn("fin.yaml:AND", skipped)
-                self.assertEqual(set(parse(output["fin.yaml"], purpose="proxy")[0]), {Rule("AND", expression, native_fields=True), Rule("DOMAIN", "keep.example.com")})
+                self.assertEqual(set(parse(output["fin.yaml"], purpose="proxy")[0]), {Rule("AND", expression), Rule("DOMAIN", "keep.example.com")})
                 self.assertEqual(messages, [])
             for marker in ("#", ";", "//"):
                 value = f"^a{{b$,My Proxy {marker} note}}$|^foo$"
@@ -3216,9 +3363,9 @@ class FollowupParseTests(unittest.TestCase):
                                     self.assertEqual((parsed, messages), (expected, []))
                                     self.assertEqual(set(normalize(parsed)), set(expected))
                                     output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
-                                    payload = [json.loads(line[4:]) for line in output["fin.yaml"].splitlines()
+                                    payload = [generated_payload(line[4:]) for line in output["fin.yaml"].splitlines()
                                                if line.startswith('  - "')]
-                                    self.assertEqual(set(payload), {f"{kind},{value}", "DOMAIN,keep.example.com"})
+                                    self.assertEqual(set(payload), {f"{kind},{value}", expected_domain("DOMAIN", "keep.example.com")})
                                     self.assertNotIn(f"fin.yaml:{kind}", skipped)
 
     def test_policy_literal_brace_does_not_close_unpaired_regex(self):
@@ -3251,10 +3398,10 @@ class FollowupParseTests(unittest.TestCase):
                             self.assertEqual((parsed, messages), ([expected, Rule("DOMAIN", "keep.example.com")], []))
                             self.assertEqual(set(normalize(parsed)), set(parsed))
                             output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
-                            payload = [json.loads(line[4:]) for line in output["fin.yaml"].splitlines()
+                            payload = [generated_payload(line[4:]) for line in output["fin.yaml"].splitlines()
                                        if line.startswith('  - "')]
-                            rendered = f"AND,(({kind},{value}),(DOMAIN,x.example.com))" if expected.kind == "AND" else f"{kind},{value}"
-                            self.assertEqual(set(payload), {rendered, "DOMAIN,keep.example.com"})
+                            rendered = f"AND,(({kind},{value}),({expected_domain('DOMAIN', 'x.example.com')}))" if expected.kind == "AND" else f"{kind},{value}"
+                            self.assertEqual(set(payload), {rendered, expected_domain("DOMAIN", "keep.example.com")})
                             self.assertNotIn(f"fin.yaml:{expected.kind}", skipped)
 
     def test_complete_invalid_paired_regex_is_rejected_at_public_entry(self):
@@ -3294,8 +3441,8 @@ class FollowupParseTests(unittest.TestCase):
                                      ([Rule("AND", expression), Rule("DOMAIN", "keep.example.com")], []))
                     self.assertEqual(set(normalize(parsed)), set(parsed))
                     output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
-                    payload = [json.loads(line[4:]) for line in output["fin.yaml"].splitlines() if line.startswith('  - "')]
-                    self.assertEqual(set(payload), {f"AND,{expression}", "DOMAIN,keep.example.com"})
+                    payload = [generated_payload(line[4:]) for line in output["fin.yaml"].splitlines() if line.startswith('  - "')]
+                    self.assertEqual(set(payload), {"AND," + expression.replace("DOMAIN,x.example.com", expected_domain("DOMAIN", "x.example.com")), expected_domain("DOMAIN", "keep.example.com")})
                     self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_confirmed_source_policy_regex_punctuation_is_literal(self):
@@ -3498,7 +3645,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
                         self.assertNotIn("no-resolve", output[name])
                         self.assertIn(f"{'Total count' if name == 'fin-adb.txt' else 'rules'}: {int(name in emitted)}",
                                       output[name])
-                    self.assertIn(f'  - "{source_kind},{value}"\n', output["fin.yaml"])
+                    self.assertIn(f'  - "{source_kind},{value}"\n', generated_text(output["fin.yaml"]))
                     if source_kind == "SRC-IP-CIDR":
                         self.assertIn(f"SRC-IP,{value}\n", output["fin.txt"])
                         self.assertIn(f"SRC-IP,{value}\n", output["fin-surge.txt"])
@@ -3551,7 +3698,7 @@ for opening, closing in ((r'\k<', '>'), ("\\k'", "'"), (r'\<', '>'), ("\\'", "'"
                 self.assertNotIn("SRC-IP-CIDR,192.0.2.0/24,no-resolve", output[name])
                 target = "IP-CIDR,198.51.100.0/24" + (",no-resolve" if mode != "strip" else "")
                 self.assertIn(target + ")", output[name])
-                self.assertEqual(output[name].count("no-resolve"), int(mode != "strip"))
+                self.assertEqual((generated_text(output[name]) if name == "fin.yaml" else output[name]).count("no-resolve"), int(mode != "strip"))
 
     def test_initial_class_escape_consumes_first_item(self):
         self.assert_regex_preserved(r"^[\d]+$")
@@ -4565,3 +4712,145 @@ class NormalizeTests(unittest.TestCase):
             Rule("DOMAIN-WILDCARD", "api-*.example.com"),
             Rule("DOMAIN-WILDCARD", "api-*.other.com"),
         ])
+
+
+class GeneratedDeclarationValidationTests(unittest.TestCase):
+    @staticmethod
+    def document(payload='DOMAIN,keep.example.org', records='default', version='v1'):
+        import json
+
+        if records == 'default':
+            records = [['DOMAIN', 'keep.example.org', [], False, False, False, 'mihomo']]
+        return ('payload:\n  - ' + json.dumps(payload, ensure_ascii=False) + ' # rconvert-rule-' +
+                version + ' ' + json.dumps(records, ensure_ascii=True, separators=(',', ':')) + '\n')
+
+    def test_exact_record_types_versions_unicode_and_options_are_terminal(self):
+        from copy import deepcopy
+
+        record = ['DOMAIN', 'keep.example.org', [], False, False, False, 'mihomo']
+        malformed = [None, {}, [], [record, record], [record[:-1]], [record + [False]],
+                     [[*record[:2], 'no-resolve', *record[3:]]]]
+        for index, bad in ((0, 3), (1, None), (2, [1]), (3, 0), (4, 1), (5, 'false'),
+                           (6, 'unknown'), (0, 'UNKNOWN'), (1, '\ud800'),
+                           (1, 'bad domain'), (2, ['no-resolve']), (2, ['FORCE-CELLULAR']),
+                           (2, ['force-cellular', 'force-cellular']),
+                           (2, ['via-interface=en1', 'force-cellular'])):
+            changed = deepcopy(record)
+            changed[index] = bad
+            malformed.append([changed])
+        for records in malformed:
+            document = self.document(records=records)
+            for consumer in (lambda text: parse(text, purpose='block'), rules.parse_whitelist):
+                with self.subTest(records=records, consumer=consumer), self.assertRaisesRegex(
+                        rules.GeneratedRuleError, r'line 2:'):
+                    consumer(document)
+        for version in ('v0', 'v2', 'v1', 'v10'):
+            document = self.document(version=version)
+            if version == 'v1':
+                document = document[:document.index(' # rconvert-rule-v1 ') + len(' # rconvert-rule-v1 ')] + '{'
+            with self.subTest(version=version), self.assertRaises(rules.GeneratedRuleError):
+                parse(document, purpose='proxy')
+
+    def test_complete_binding_rejects_any_record_and_all_payload_edits(self):
+        valid = ['DOMAIN', 'keep.example.org', [], False, False, False, 'mihomo']
+        same_payload = ['DOMAIN', 'keep.example.org', [], False, False, False, 'qx']
+        self.assertEqual(parse(self.document(records=[valid, same_payload]), purpose='proxy'),
+                         ([Rule('DOMAIN', 'keep.example.org', domain_source='mihomo'),
+                           Rule('DOMAIN', 'keep.example.org', domain_source='qx')], []))
+        for payload in ('DOMAIN,other.example.org', 'DOMAIN,keep.example.org,ignored',
+                        'DOMAIN,keep.example.org,no-resolve', 'DOMAIN-REGEX,keep.example.org'):
+            with self.subTest(payload=payload), self.assertRaises(rules.GeneratedRuleError):
+                parse(self.document(payload=payload), purpose='proxy')
+        for index, value in ((0, 'DOMAIN-SUFFIX'), (1, 'other.example.org'), (3, True), (6, 'surge')):
+            changed = valid.copy()
+            changed[index] = value
+            for records in ([valid, changed], [changed, valid]):
+                with self.subTest(index=index, records=records), self.assertRaises(rules.GeneratedRuleError):
+                    parse(self.document(records=records), purpose='proxy')
+        ip = ['IP-CIDR', '192.0.2.0/24', ['no-resolve'], False, False, False, 'surge']
+        self.assertEqual(parse(self.document('IP-CIDR,192.0.2.0/24,no-resolve', [ip]), purpose='proxy'),
+                         ([Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',))], []))
+        with self.assertRaises(rules.GeneratedRuleError):
+            parse(self.document('IP-CIDR,192.0.2.0/24', [ip]), purpose='proxy')
+        process = ['PROCESS-NAME', 'FooApp', [], False, False, False, 'surge']
+        with self.assertRaises(rules.GeneratedRuleError):
+            parse(self.document('PROCESS-NAME,FooApp', [process]), purpose='proxy')
+
+    def test_declaration_priority_bom_crlf_physical_characters_and_bad_escape(self):
+        valid = self.document()
+        for separator in ('\n', '\r\n'):
+            for prefix in ('', '﻿', '<!doctype html>' + separator, '<html>' + separator):
+                for bad in ('\0', '\v', '\f', '\x85', ' ', ' ', '\x7f', '\udcff'):
+                    document = prefix + valid.replace('keep.example.org"', 'keep.example.org' + bad + '"', 1).replace('\n', separator)
+                    number = 3 if '<' in prefix else 2
+                    with self.subTest(separator=separator, prefix=prefix, bad=bad), self.assertRaisesRegex(
+                            rules.GeneratedRuleError, f'line {number}:'):
+                        parse(document, purpose='block')
+        for scalar in ('"DOMAIN,keep.example.org\\q"', '"DOMAIN,keep.example.org\\uD800"',
+                       '"DOMAIN,keep.example.org" junk', '&a DOMAIN,keep.example.org'):
+            document = 'payload:\n  - ' + scalar + ' # rconvert-rule-v1 []\n'
+            with self.subTest(scalar=scalar), self.assertRaises(rules.GeneratedRuleError):
+                parse(document, purpose='block')
+
+    def test_internal_marker_and_legacy_sources_keep_their_original_interpretation(self):
+        import json
+
+        for value in ('a # rconvert-rule-v1 []', 'a # rconvert-rule-v2 []',
+                      'path/rconvert-rule-v1', 'a\\b # rconvert-rule-v1 {'):
+            native = 'payload:\n  - ' + json.dumps('DOMAIN-KEYWORD,' + value) + '\n'
+            self.assertEqual(parse(native, purpose='block'),
+                             ([Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')], []))
+            import re
+
+            pattern = '^' + re.escape(value).replace(r'\ \#\ ', ' # ') + '$'
+            regex = 'DOMAIN-REGEX,' + json.dumps(pattern) + ',REJECT\n'
+            self.assertEqual(parse(regex, purpose='block'), ([Rule('DOMAIN-REGEX', pattern)], []))
+        native = '# rconvert-rule-v2 []\npayload: # rconvert-rule-v2 []\n  - DOMAIN,KEEP.EXAMPLE.ORG.\n'
+        self.assertEqual(parse(native, purpose='proxy'),
+                         ([Rule('DOMAIN', 'KEEP.EXAMPLE.ORG.', domain_source='mihomo')], []))
+        self.assertEqual(parse('DOMAIN,KEEP.EXAMPLE.ORG.\n', purpose='proxy'), ([Rule('DOMAIN', 'keep.example.org')], []))
+        self.assertEqual(parse('HOST,KEEP.EXAMPLE.ORG.,LIST\n', purpose='proxy'),
+                         ([Rule('DOMAIN', 'keep.example.org', domain_source='qx')], []))
+        self.assertEqual(parse('payload:\n  - "DOMAIN,keep.example.org\\q"\n  - DOMAIN,neighbor.example.org', purpose='proxy')[0],
+                         [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')])
+
+    def test_effective_options_are_idempotent_and_keep_direction_order_and_tails(self):
+        from rules import _apply_no_resolve
+
+        value = '((NOT,((IP-CIDR,192.0.2.0/24,no-resolve))),(SRC-IP-CIDR,198.51.100.0/24),(IN-NAME,Foo(,ignored)))'
+        original = Rule('AND', value, native_fields=True)
+        for mode in ('add', 'strip', 'keep'):
+            effective = _apply_no_resolve(original, mode)
+            wanted = value.replace(',no-resolve', '') if mode == 'strip' else value
+            self.assertEqual(effective, Rule('AND', wanted, native_fields=True))
+            self.assertEqual(_apply_no_resolve(effective, mode), effective)
+            self.assertNotIn('SRC-IP-CIDR,198.51.100.0/24,no-resolve', effective.value)
+            self.assertEqual(_apply_no_resolve(Rule('SRC-IP-CIDR', '198.51.100.0/24'), mode),
+                             Rule('SRC-IP-CIDR', '198.51.100.0/24'))
+        unflagged = Rule('NOT', '((AND,((IP-CIDR,192.0.2.0/24),(DOMAIN,X.EXAMPLE.ORG.))))',
+                         native_fields=True, domain_source='mihomo')
+        self.assertEqual(_apply_no_resolve(unflagged, 'add').value,
+                         '((AND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,X.EXAMPLE.ORG.))))')
+        self.assertEqual(_apply_no_resolve(unflagged, 'keep'), unflagged)
+
+    def test_valid_quoted_scalars_are_scanned_once_per_native_consumer(self):
+        from unittest.mock import patch
+
+        records = [['DOMAIN', 'keep.example.org', [], False, False, False, source]
+                   for source in ('mihomo', 'qx')]
+        document = self.document('DOMAIN,keep.example.org', records)
+        expected = [Rule('DOMAIN', 'keep.example.org', domain_source=source)
+                    for source in ('mihomo', 'qx')]
+        with patch('rules._yaml_quoted', wraps=rules._yaml_quoted) as scan:
+            self.assertEqual(parse(document, purpose='proxy'), (expected, []))
+        # 完整声明与相邻 native scalar 各解码一次，成功路径复用结束位置。
+        self.assertEqual([call.kwargs.get('decode', True) for call in scan.call_args_list],
+                         [True, True])
+
+    def test_marked_whitelist_rejects_every_unsupported_identity(self):
+        aliases = [['DEST-PORT', '443', [], False, False, False, 'surge'],
+                   ['DST-PORT', '443', [], False, False, False, 'surge']]
+        document = self.document('DST-PORT,443', aliases)
+        self.assertEqual(len(parse(document, purpose='block')[0]), 2)
+        with self.assertRaisesRegex(rules.GeneratedRuleError, 'line 2: unsupported whitelist'):
+            rules.parse_whitelist(document)
