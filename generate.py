@@ -119,14 +119,14 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     generated = {root / config["name"] / name for config in configs for name in FILES}
     outputs: dict[Path, str] = {}
     cache: dict[str, bytes | None] = {}
-    frozen: set[str] = set()
+    frozen: set[Path] = set()
 
     def freeze(group: str) -> None:
         for name in FILES:
             path = root / group / name
             if not path.is_file() or not path.stat().st_size:
                 raise ValueError(f"Cannot freeze {group}: missing complete old file {path}")
-        frozen.add(group)
+        frozen.add((root / group).resolve())
 
     def read(source: str | Path) -> str | None:
         if isinstance(source, Path):
@@ -194,7 +194,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     for config in configs:
         group, purpose, no_resolve = config["name"], config["purpose"], config["no_resolve"]
         if any(isinstance(source := resolve_source(root, entry), Path) and
-               source in generated and source.parent.name in frozen
+               source in generated and source.parent in frozen
                for entry in config["sources"] + config["whitelist"]):
             freeze(group)
             continue
