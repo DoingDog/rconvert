@@ -123,7 +123,7 @@ def native_keyword_expected(group, purpose, mode):
     expected['fin-adb.txt'] = (
         f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
         '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
-        ('! Total count: 2\n/^.*中文.*$/\n0.0.0.0 keep.example.com\n' if purpose == 'block' else
+        ('! Total count: 2\n/(?s-i:\\A.*中文.*\\z)/\n0.0.0.0 keep.example.com\n' if purpose == 'block' else
          '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
     return expected
 
@@ -256,7 +256,7 @@ class NativeKeywordFormatTests(unittest.TestCase):
                 expected['fin-adb.txt'] = (
                     '[Adblock Plus 2.0]\n! Title: keyword\n! Homepage: https://github.com/DoingDog/rconvert\n'
                     '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
-                    ('! Total count: 1\n@@/^.*中文.*$/\n' if purpose == 'block' else
+                    ('! Total count: 1\n@@/(?s-i:\\A.*中文.*\\z)/\n' if purpose == 'block' else
                      '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
                 self.assertEqual(allowed, expected)
                 self.assertEqual(whitelisted, expected)
@@ -944,6 +944,86 @@ class ProcessRendererRound2FixTests(unittest.TestCase):
                                 self.assertEqual(skipped.get(f"{name}:{operator or kind}", 0), int(not allowed))
 
 
+def dns_regex(line):
+    expression = line.removeprefix('@@')[1:-1].replace(r'\z', r'\Z')
+    expression = re.sub(r'\\x\{([0-9a-fA-F]+)\}',
+                        lambda match: r'\U' + f'{int(match[1], 16):08x}', expression)
+    return re.compile(expression, re.I)
+
+
+class NativeDnsByteFormatTests(unittest.TestCase):
+    def test_native_byte_spans_share_block_allow_and_whitelist_predicate(self):
+        from dataclasses import replace
+        from rules import exclude_covered, normalize, parse, parse_whitelist
+
+        cases = (
+            ('api-?.example.org', ('api-a.example.org',), ('api-ı.example.org', 'api-ſ.example.org')),
+            ('api-??.example.org', ('api-ı.example.org', 'api-ſ.example.org'), ('api-a.example.org',)),
+            ('api-?*?.example.org', ('api-ı.example.org', 'api-中.example.org', 'api-ab.example.org'), ('api-a.example.org',)),
+            ('a*b*c.org', ('abc.org', 'a.中b.𐐨c.org'), ('a.bc.org.evil',)),
+            ('ı??ſ.example.org', ('ııſ.example.org',), ('iiſ.example.org', 'ıaſ.example.org')),
+            ('İ-??.EXAMPLE.ORG.', ('i-ı.example.org.',), ('i-ı.example.org', 'İ-ı.example.org.')),
+            ('????????.org', ('ı中中.org', '😀😀.org'), ('ı中a.org',)),
+        )
+        for pattern, positive, negative in cases:
+            source = 'payload:\n  - DOMAIN-WILDCARD,' + pattern
+            parsed, messages = parse(source, purpose='block')
+            self.assertEqual(messages, [])
+            self.assertEqual(parsed[0].value, pattern)
+            white = parse_whitelist(source)
+            for caller in ('block', 'allow', 'whitelist'):
+                with self.subTest(pattern=pattern, caller=caller):
+                    out, skipped = render_configured('bytes', normalize(parsed) if caller == 'block' else
+                        [replace(parsed[0], allow=True)] if caller == 'allow' else [],
+                        purpose='block', no_resolve='keep', whitelist=white if caller == 'whitelist' else ())
+                    body = out['fin-adb.txt'].splitlines()[7:]
+                    self.assertEqual(len(body), 1)
+                    self.assertEqual(body[0].startswith('@@'), caller != 'block')
+                    matcher = dns_regex(body[0])
+                    for host in positive:
+                        self.assertIsNotNone(matcher.fullmatch(host), host)
+                    for host in (*negative, positive[0].upper()):
+                        self.assertIsNone(matcher.fullmatch(host), host)
+                    self.assertNotIn('fin-adb.txt:DOMAIN-WILDCARD', skipped)
+            if pattern == 'api-?.example.org':
+                hosts, warnings = parse('payload:\n  - DOMAIN,api-a.example.org\n  - DOMAIN,api-ı.example.org', purpose='block')
+                self.assertEqual(warnings, [])
+                kept = normalize(exclude_covered(hosts, white))
+                self.assertEqual([rule.value for rule in kept], ['api-ı.example.org'])
+                out, _ = render_configured('bytes', kept, purpose='block', no_resolve='keep', whitelist=white)
+                self.assertIn('0.0.0.0 api-ı.example.org', out['fin-adb.txt'].splitlines()[7:])
+                for source_text in ('DOMAIN-WILDCARD,' + pattern, 'HOST-WILDCARD,' + pattern):
+                    ordinary, warnings = parse(source_text, purpose='block')
+                    self.assertEqual(warnings, [])
+                    outputs, _ = render_configured('bytes', normalize(ordinary), purpose='block', no_resolve='keep')
+                    self.assertIsNotNone(dns_regex(outputs['fin-adb.txt'].splitlines()[7]).fullmatch('api-ı.example.org'))
+                    self.assertNotEqual(outputs['fin-adb.txt'].splitlines()[7], body[0].removeprefix('@@'))
+
+    def test_native_keyword_constructor_and_strict_flags_share_three_callers(self):
+        from dataclasses import replace
+        from rules import normalize, parse, parse_whitelist
+
+        for value, positive, negative in (('İΟΣ', 'cdn.iοσ.example.org', 'cdn.iος.example.org'),
+                                          ('ſ', 'cdn.ſ.example.org', 'cdn.s.example.org'),
+                                          ('K', 'cdn.k.example.org', 'cdn.K.example.org')):
+            source = 'payload:\n  - DOMAIN-KEYWORD,' + value
+            parsed, messages = parse(source, purpose='block')
+            self.assertEqual(messages, [])
+            self.assertEqual(parsed[0].value, value)
+            for caller in ('block', 'allow', 'whitelist'):
+                with self.subTest(value=value, caller=caller):
+                    out, skipped = render_configured('keyword', normalize(parsed) if caller == 'block' else
+                        [replace(parsed[0], allow=True)] if caller == 'allow' else [], purpose='block',
+                        no_resolve='keep', whitelist=parse_whitelist(source) if caller == 'whitelist' else ())
+                    line = out['fin-adb.txt'].splitlines()[7]
+                    matcher = dns_regex(line)
+                    self.assertIsNotNone(matcher.fullmatch(positive))
+                    self.assertIsNone(matcher.fullmatch(negative))
+                    self.assertIsNone(matcher.fullmatch(positive.upper()))
+                    self.assertNotIn('fin-adb.txt:DOMAIN-KEYWORD', skipped)
+                    self.assertEqual(line.startswith('@@'), caller != 'block')
+
+
 class DomainProvenanceFormatTests(unittest.TestCase):
     def outputs(self, source, **kwargs):
         from rules import normalize, parse
@@ -1030,7 +1110,7 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                        "payload:\n  - DOMAIN-WILDCARD,api-*.example.com",
                        "payload:\n  - DOMAIN-KEYWORD,ads"):
             out, skipped = self.outputs(source)
-            expression = re.compile(out["fin-adb.txt"].splitlines()[7][1:-1])
+            expression = dns_regex(out["fin-adb.txt"].splitlines()[7])
             self.assertIsNotNone(expression.search("API-7.EXAMPLE.COM".lower()) if "ads" not in source
                                  else expression.search("CDN.ADS.EXAMPLE.COM".lower()))
             self.assertIsNone(expression.search("outside.example.org"))

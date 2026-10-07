@@ -2,6 +2,7 @@ import ipaddress
 import json
 import re
 from datetime import datetime, timedelta, timezone
+from functools import cache
 from collections import Counter
 from collections.abc import Iterable
 
@@ -281,6 +282,32 @@ def _wildcard_regex(value: str) -> str | None:
     ) + "$"
 
 
+def _native_wildcard_regex(value: str) -> str:
+    widths = (r'[\x00-\x7f]', r'[\x{80}-\x{7ff}]',
+              r'[\x{800}-\x{d7ff}\x{e000}-\x{ffff}]', r'[\x{10000}-\x{10ffff}]')
+
+    @cache
+    def span(size: int, minimum: bool = False) -> str:
+        if not size:
+            return '.*' if minimum else ''
+        if minimum and size == 1:
+            return '.+'
+        if size >= 8:
+            # byte 中点前的最后一个 rune 边界必在这四个位置，保持完整 UTF-8 长度语言。
+            choices = [span(left) + span(size - left, minimum)
+                       for left in range(size // 2 - 3, size // 2 + 1)]
+        else:
+            choices = [widths[width - 1] + span(size - width, minimum)
+                       for width in range(1, min(4, size - 1 if minimum else size) + 1)]
+            if minimum and size <= 4:
+                choices.append((r'[^\x00-\x7f]' if size == 2 else r'[^\x00-\x{7ff}]'
+                                if size == 3 else widths[3]) + '.*')
+        return '(?:' + '|'.join(choices) + ')' if len(choices) > 1 else choices[0]
+
+    return r'(?s-i:\A' + ''.join(span(part.count('?'), '*' in part) if index % 2 else re.escape(part)
+                                for index, part in enumerate(re.split(r'([?*]+)', value))) + r'\z)'
+
+
 def _dns_pattern(rule: Rule) -> str | None:
     if rule.kind == "DOMAIN":
         return f"0.0.0.0 {rule.value}"
@@ -288,6 +315,14 @@ def _dns_pattern(rule: Rule) -> str | None:
         return f"||{rule.value}^"
     if "/" in rule.value:
         return None
+    if rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and rule.domain_source == 'mihomo':
+        # 复用固定 Go case 范围，逐字符 lowercase 保留 simple mapping 与 Sigma；İ 映射为一个 i。
+        value = _PROCESS_CASE_VARIANTS.sub(lambda match: 'i' if match[0] == 'İ' else match[0].lower(), rule.value)
+        if rule.kind == 'DOMAIN-KEYWORD':
+            return r'/(?s-i:\A.*' + re.escape(value) + r'.*\z)/'
+        if any(char in value for char in '[]') or not _valid_domain(rule.kind, value):
+            return None
+        return '/' + _native_wildcard_regex(value) + '/'
     if rule.kind == "DOMAIN-KEYWORD":
         return f"/^.*{re.escape(rule.value)}.*$/"
     if rule.kind == "DOMAIN-WILDCARD":
