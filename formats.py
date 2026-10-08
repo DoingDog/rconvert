@@ -185,6 +185,8 @@ def _logical_value(value: str, operator: str, supported: set[str], no_resolve: s
             if children is None or kind not in supported:
                 return None
             ranges, wrapped = children
+            if supported is SURGE_TYPES and kind != 'NOT' and len(ranges) < 2:
+                return None
             if kind == 'NOT' and not wrapped:
                 edits.extend(((start, start, '('), (stop, stop, ')')))
             pending.extend((begin, end, depth + 1) for begin, end in reversed(ranges))

@@ -14,6 +14,121 @@ def _quote_matcher(value):
     return f"{quote}{value}{quote}"
 
 
+class NativeArityRuleTests(unittest.TestCase):
+    def test_native_single_and_empty_conditions_preserve_all_public_fields(self):
+        cases = (
+            ('AND', '((DOMAIN,x.example.com))', False, 'surge'),
+            ('OR', '((DOMAIN,x.example.com))', False, 'surge'),
+            ('AND', '()', False, 'surge'),
+            ('OR', '()', False, 'surge'),
+            ('AND', '((PROCESS-NAME,Foo*Bar))', True, 'surge'),
+            ('OR', '((DOMAIN-KEYWORD,ads))', False, 'mihomo'),
+            ('AND', '((DOMAIN,x.example.com),(OR,()),(AND,()))', False, 'surge'),
+            ('OR', '((AND,()),(DOMAIN,x.example.com),(OR,()))', False, 'surge'),
+            ('NOT', '((OR,()))', False, 'surge'),
+        )
+        import json
+        for kind, value, literal, source in cases:
+            expected = Rule(kind, value, (), False, literal, True, source)
+            for header in ('payload', 'rules'):
+                for scalar in (kind + ',' + value, "'" + kind + ',' + value + "'",
+                               json.dumps(kind + ',' + value)):
+                    for purpose in ('block', 'proxy', 'direct'):
+                        with self.subTest(kind=kind, value=value, header=header,
+                                          scalar=scalar, purpose=purpose):
+                            text = header + ':\n  - ' + scalar + '\n  - DOMAIN,keep.example.com\n'
+                            self.assertEqual(parse(text, purpose=purpose), ([expected, Rule('DOMAIN', 'keep.example.com')], []))
+                            self.assertEqual(normalize([expected, expected]), [expected])
+                            self.assertEqual(rules._normalize_condition('(' + kind + ',' + value + ')', native_fields=True),
+                                             '(' + kind + ',' + value + ')')
+                            self.assertEqual(rules._has_process_name(kind, value, True), literal)
+                            self.assertEqual(rules.parse_whitelist(text), [Rule('DOMAIN', 'keep.example.com')])
+
+    def test_native_not_rejects_missing_list_wrapper_and_keeps_neighbor(self):
+        import json
+
+        for child in ('OR,()', 'AND,()'):
+            matcher = 'NOT,(' + child + ')'
+            value = matcher.partition(',')[2]
+            for header in ('payload', 'rules'):
+                for scalar in (matcher, "'" + matcher + "'", json.dumps(matcher)):
+                    for purpose in ('block', 'proxy', 'direct'):
+                        with self.subTest(child=child, header=header, scalar=scalar, purpose=purpose):
+                            text = header + ':\n  - ' + scalar + '\n  - DOMAIN,keep.example.com\n'
+                            self.assertEqual(parse(text, purpose=purpose), ([Rule('DOMAIN', 'keep.example.com')],
+                                             [f'line 2: invalid logical expression {value}']))
+            valid = Rule('NOT', '((' + child + '))', native_fields=True)
+            self.assertEqual(parse('payload:\n  - NOT,' + valid.value, purpose='block'), ([valid], []))
+
+    def test_native_not_wrapper_validation_reaches_normalizer_and_kind_traversal(self):
+        for child in ('OR,()', 'AND,()'):
+            for kind, value in (('NOT', '(' + child + ')'),
+                                ('AND', '((DOMAIN,x.example.com),(NOT,(' + child + ')))')):
+                with self.subTest(child=child, kind=kind, check='normalize'):
+                    self.assertIsNone(rules._normalize_condition('(' + kind + ',' + value + ')', native_fields=True))
+                with self.subTest(child=child, kind=kind, check='kinds'):
+                    with self.assertRaisesRegex(ValueError, '^invalid logical expression$'):
+                        rules._condition_kinds(kind, value, True)
+            with self.subTest(child=child, check='whitelist'):
+                with self.assertRaisesRegex(ValueError, r'^line 2: invalid logical expression'):
+                    rules.parse_whitelist('payload:\n  - NOT,(' + child + ')')
+        ordinary = '(NOT,(OR,((DOMAIN,x.example.com),(DOMAIN,y.example.com))))'
+        self.assertEqual(rules._normalize_condition(ordinary), ordinary)
+        self.assertEqual(rules._condition_kinds('NOT', ordinary[5:-1]), {'NOT', 'OR', 'DOMAIN'})
+
+    def test_native_empty_siblings_do_not_consume_normalized_ip_children(self):
+        value = '((IP-CIDR,203.0.113.7/24,no-resolve,no-resolve),(OR,()),(IP-CIDR,198.51.100.7/24,src,no-resolve),(AND,()))'
+        expected = Rule('AND', '((IP-CIDR,203.0.113.0/24,no-resolve),(OR,()),(SRC-IP-CIDR,198.51.100.0/24),(AND,()))', native_fields=True)
+        self.assertEqual(parse('payload:\n  - AND,' + value, purpose='block'),
+                         ([expected], ['line 2: unsupported no-resolve for SRC-IP-CIDR']))
+        self.assertEqual(rules._condition_kinds(expected.kind, expected.value, True),
+                         {'AND', 'OR', 'IP-CIDR', 'SRC-IP-CIDR'})
+
+    def test_not_invalid_leaves_and_ordinary_minimum_arity_keep_source_boundaries(self):
+        native_invalid = ('NOT,()', 'NOT,((DOMAIN,x.example.com),(DOMAIN,y.example.com))',
+                          'AND,((DOMAIN,))', 'OR,((UNKNOWN,x.example.com))',
+                          'AND,((DOMAIN,x.example.com),)', 'AND,(,(DOMAIN,x.example.com))',
+                          'OR,(())', 'NOT,(((DOMAIN,x.example.com)))')
+        ordinary_invalid = ('AND,()', 'OR,()', 'AND,((DOMAIN,x.example.com))',
+                            'OR,((DOMAIN,x.example.com))')
+        for native, cases in ((True, native_invalid), (False, ordinary_invalid)):
+            for matcher in cases:
+                with self.subTest(native=native, matcher=matcher):
+                    text = ('payload:\n  - ' + matcher + '\n  - DOMAIN,keep.example.com' if native else
+                            matcher + ',REJECT\nDOMAIN,keep.example.com,REJECT')
+                    value = matcher.partition(',')[2]
+                    self.assertEqual(parse(text, purpose='block'), ([Rule('DOMAIN', 'keep.example.com')],
+                                     [f'line {2 if native else 1}: invalid logical expression {value}']))
+
+    def test_deep_native_single_chains_preserve_complete_conditions_within_eight_seconds(self):
+        for operator in ('AND', 'OR'):
+            for depth in (600, 1000):
+                with self.subTest(operator=operator, depth=depth):
+                    code = f'''
+import json
+import sys
+from rules import Rule, parse, normalize, _normalize_condition, _condition_kinds, _has_process_name
+limit = sys.getrecursionlimit()
+for leaf, literal in (('(DOMAIN,x.example.com)', False), ('(PROCESS-NAME,Foo*Bar)', True), ('(OR,())', False)):
+    condition = leaf
+    for _ in range({depth}):
+        condition = '({operator},(' + condition + '))'
+    kind, value = condition[1:-1].split(',', 1)
+    expected = Rule(kind, value, literal_process=literal, native_fields=True)
+    for purpose in ('block', 'proxy', 'direct'):
+        assert parse('payload:\\n  - ' + json.dumps(condition[1:-1]), purpose=purpose) == ([expected], [])
+    assert normalize([expected, expected]) == [expected]
+    assert _normalize_condition(condition, native_fields=True) == condition
+    assert _has_process_name(kind, value, True) == literal
+    assert _condition_kinds(kind, value, True) == {{'{operator}', leaf[1:].partition(',')[0]}}
+assert sys.getrecursionlimit() == limit
+'''
+                    result = subprocess.run([sys.executable, '-B', '-c', code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=8)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+
+
 class DomainProvenanceRuleTests(unittest.TestCase):
     def test_regex_whitelist_keeps_valid_matchers_without_guessing_coverage(self):
         regexes = ("ad", r"^api\-.*\.example\.com\.?$", r"^api\-[0-9]\.example\.com\.?$",
@@ -825,9 +940,12 @@ condition = nest({depth}, {leaf!r})
 for native in (False, True):
     source = ('payload:\\n  - ' + json.dumps(condition[1:-1]) + '\\n  - DOMAIN,keep.example.com') if native else condition[1:-1] + ',REJECT\\nDOMAIN,keep.example.com,REJECT'
     parsed, messages = parse(source, purpose='block')
-    assert parsed == [keep], len(parsed)
-    number = 2 if native else 1
-    assert len(messages) == 1 and messages[0].startswith(f'line {{number}}:'), messages
+    if native and {leaf!r} == '(AND,((DOMAIN,example.com)))':
+        assert (parsed, messages) == ([Rule('NOT', condition[5:-1], native_fields=True), keep], [])
+    else:
+        assert parsed == [keep], len(parsed)
+        number = 2 if native else 1
+        assert len(messages) == 1 and messages[0].startswith(f'line {{number}}:'), messages
 ''')
             for extra in (-1, 1):
                 with self.subTest(depth=depth, extra=extra):

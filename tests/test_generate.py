@@ -38,6 +38,221 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class NativeArityGenerateTests(unittest.TestCase):
+    def test_native_arity_preserves_six_dependencies_publish_and_disk_for_nine_options(self):
+        from tests.test_formats import native_arity_products
+
+        for purpose in ('block', 'proxy', 'direct'):
+            for mode in ('add', 'strip', 'keep'):
+                flag = '' if mode == 'strip' else ',no-resolve'
+                matchers = ['AND,()', 'AND,((DOMAIN,x.example.com))',
+                            f'AND,((IP-CIDR,203.0.113.0/24{flag}))',
+                            'DOMAIN,keep.example.com', 'NOT,((OR,()))', 'OR,()',
+                            'OR,((DOMAIN,x.example.com))']
+                for dependency in NAMES:
+                    with self.subTest(purpose=purpose, mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                        root = Path(directory)
+                        configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['input.yaml'], 'whitelist': []},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['parent/' + dependency], 'whitelist': []}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        source = ['AND,()', 'OR,()', 'AND,((DOMAIN,x.example.com))',
+                                  'OR,((DOMAIN,x.example.com))', 'NOT,((OR,()))',
+                                  'AND,((IP-CIDR,203.0.113.7/24,no-resolve,no-resolve))',
+                                  'DOMAIN,keep.example.com']
+                        (root / 'input.yaml').write_text('payload:\n' + ''.join('  - ' + json.dumps(item) + '\n' for item in source), encoding='utf-8')
+                        old = {}
+                        for group in ('parent', 'child'):
+                            (root / group).mkdir()
+                            for name in NAMES:
+                                path = root / group / name
+                                old[path] = b'old\r\ncomplete\x00' + name.encode('ascii')
+                                path.write_bytes(old[path])
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        parent = native_arity_products('parent', matchers, purpose)
+                        empty = dependency == 'fin-surge.txt' or dependency == 'fin-adb.txt' and purpose != 'block'
+                        child_matchers = matchers if dependency == 'fin.yaml' else ['DOMAIN,keep.example.com']
+                        child = native_arity_products('child', child_matchers, purpose)
+                        if empty:
+                            child = {name: '# child rules: 0\n' for name in NAMES}
+                            child['fin.yaml'] += 'payload:\n'
+                            child['fin-adb.txt'] = native_arity_products('child', [], purpose)['fin-adb.txt'].replace(
+                                '! Total count: 1\nkeep.example.com\n', '! Total count: 0\n')
+                        expected = {root / 'parent' / name: text for name, text in parent.items()}
+                        expected.update({root / 'child' / name: text for name, text in child.items()})
+                        self.assertEqual(outputs, expected)
+                        skips = {f'{name}:{kind}': count for name in
+                                 ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
+                                 for kind, count in (('AND', 3), ('NOT', 1), ('OR', 2))}
+                        if purpose != 'block':
+                            skips['fin-adb.txt:DOMAIN'] = 1
+                        child_skips = skips if dependency == 'fin.yaml' else (
+                            {'fin-adb.txt:DOMAIN': 1} if not empty and purpose != 'block' else {})
+                        source_warnings = (''.join(f'{root / "parent" / dependency}: line {number}: invalid rule\n'
+                                                  for number in range(1, 6)) +
+                                           f'{root / "parent" / dependency}: {7 if purpose == "block" else 8} skipped lines; first five shown\n'
+                                           if dependency == 'fin-adb.txt' else '')
+                        self.assertEqual(stderr.getvalue(),
+                                         ''.join(f'parent {key}: {count}\n' for key, count in sorted(skips.items())) +
+                                         source_warnings +
+                                         ''.join(f'child {key}: {count}\n' for key, count in sorted(child_skips.items())))
+                        publish(outputs)
+                        self.assertEqual({path: path.read_bytes() for path in outputs},
+                                         {path: text.encode('utf-8') for path, text in expected.items()})
+                        published = {path: path.read_bytes() for path in outputs}
+                        (root / 'input.yaml').unlink()
+                        (root / 'rulesets.json').unlink()
+                        (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as disk_stderr:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            if empty:
+                                with self.assertRaisesRegex(ValueError, 'No adaptable rules in '):
+                                    generate(root, lambda url: self.fail(url))
+                            else:
+                                disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk_stderr.getvalue(), source_warnings +
+                                         ('' if empty else ''.join(f'child {key}: {count}\n' for key, count in sorted(child_skips.items()))))
+                        if empty:
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+                            continue
+                        self.assertEqual(disk, {root / 'child' / name: text for name, text in child.items()})
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        publish(disk)
+                        self.assertEqual({path: path.read_bytes() for path in disk}, {path: text.encode('utf-8') for path, text in disk.items()})
+
+    def test_invalid_native_not_wrapper_is_not_published_or_reimported(self):
+        from tests.test_formats import native_arity_products
+
+        for child in ('OR,()', 'AND,()'):
+            for purpose in ('block', 'proxy', 'direct'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(child=child, purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                        root = Path(directory)
+                        configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['input.yaml'], 'whitelist': []},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['parent/fin.yaml'], 'whitelist': []}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        invalid = 'NOT,(' + child + ')'
+                        (root / 'input.yaml').write_text('payload:\n  - ' + invalid + '\n  - DOMAIN,keep.example.com\n', encoding='utf-8')
+                        old = {}
+                        for group in ('parent', 'child'):
+                            (root / group).mkdir()
+                            for name in NAMES:
+                                path = root / group / name
+                                old[path] = b'old complete\r\n\x00' + name.encode('ascii')
+                                path.write_bytes(old[path])
+                        skips = ''.join(f'{group} fin-adb.txt:DOMAIN: 1\n' for group in ('parent', 'child')) if purpose != 'block' else ''
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as messages:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(messages.getvalue(), f'{root / "input.yaml"}: line 2: invalid logical expression ({child})\n' + skips)
+                        expected = {root / group / name: text for group in ('parent', 'child')
+                                    for name, text in native_arity_products(group, ['DOMAIN,keep.example.com'], purpose).items()}
+                        self.assertEqual(outputs, expected)
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        publish(outputs)
+                        published = {path: text.encode('utf-8') for path, text in expected.items()}
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        (root / 'input.yaml').unlink()
+                        (root / 'rulesets.json').unlink()
+                        (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as disk_messages:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent.name == 'child'})
+                        self.assertEqual(disk_messages.getvalue(), 'child fin-adb.txt:DOMAIN: 1\n' if purpose != 'block' else '')
+                        publish(disk)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        (root / 'input.yaml').write_text('payload:\n  - ' + invalid + '\n', encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()) as rejected:
+                            with self.assertRaisesRegex(ValueError, 'No adaptable rules in '):
+                                generate(root, lambda url: self.fail(url))
+                        self.assertEqual(rejected.getvalue(), f'{root / "input.yaml"}: line 2: invalid logical expression ({child})\n')
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_logical_generated_whitelist_rejection_preserves_all_old_bytes(self):
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            configs = [{'name': 'parent', 'purpose': 'block', 'no_resolve': 'keep', 'sources': ['input.yaml'], 'whitelist': []},
+                       {'name': 'child', 'purpose': 'block', 'no_resolve': 'keep', 'sources': ['input.yaml'], 'whitelist': ['parent/fin.yaml']}]
+            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+            (root / 'input.yaml').write_text('payload:\n  - AND,()\n  - DOMAIN,keep.example.com\n', encoding='utf-8')
+            previous = {}
+            for group in ('parent', 'child'):
+                (root / group).mkdir()
+                for name in NAMES:
+                    path = root / group / name
+                    previous[path] = b'old complete\r\n\x00' + name.encode('ascii')
+                    path.write_bytes(previous[path])
+            with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                with self.assertRaisesRegex(ValueError, r'Invalid whitelist .*fin.yaml: line 3: unsupported rule'):
+                    generate(root, lambda url: self.fail(url))
+            self.assertNotIn(': line ', stderr.getvalue())
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+    def test_deep_native_single_generation_publishes_complete_twelve_files_within_eight_seconds(self):
+        for operator in ('AND', 'OR'):
+            for depth in (600, 1000):
+                with self.subTest(operator=operator, depth=depth):
+                    code = f'''
+import contextlib
+import io
+import json
+import sys
+import tempfile
+from datetime import datetime, timezone
+from pathlib import Path
+from unittest.mock import patch
+from generate import generate, publish
+from tests.test_formats import native_arity_products
+limit = sys.getrecursionlimit()
+with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
+    root = Path(directory)
+    for purpose in ('block', 'proxy', 'direct'):
+        for mode in ('add', 'strip', 'keep'):
+            flag = '' if mode == 'strip' else ',no-resolve'
+            def chain(flag):
+                condition = '(IP-CIDR,203.0.113.0/24' + flag + ')'
+                for _ in range({depth}):
+                    condition = '({operator},(' + condition + '))'
+                return condition[1:-1]
+            matcher = chain(flag)
+            ordered = [matcher, 'DOMAIN,keep.example.com'] if '{operator}' == 'AND' else ['DOMAIN,keep.example.com', matcher]
+            configs = [{{'name': 'parent', 'purpose': purpose, 'no_resolve': mode, 'sources': ['input.yaml'], 'whitelist': []}},
+                       {{'name': 'child', 'purpose': purpose, 'no_resolve': mode, 'sources': ['parent/fin.yaml'], 'whitelist': []}}]
+            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+            (root / 'input.yaml').write_text('payload:\\n  - ' + json.dumps(chain(',no-resolve')) + '\\n  - DOMAIN,keep.example.com\\n', encoding='utf-8')
+            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as messages:
+                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                outputs = generate(root, lambda url: (_ for _ in ()).throw(AssertionError(url)))
+            expected = {{root / group / name: text for group in ('parent', 'child')
+                        for name, text in native_arity_products(group, ordered, purpose).items()}}
+            assert outputs == expected
+            assert ': line ' not in messages.getvalue() and 'frozen' not in messages.getvalue()
+            publish(outputs)
+            assert {{path: path.read_bytes() for path in outputs}} == {{path: text.encode('utf-8') for path, text in expected.items()}}
+            (root / 'input.yaml').unlink()
+            (root / 'rulesets.json').unlink()
+            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                disk = generate(root, lambda url: (_ for _ in ()).throw(AssertionError(url)))
+            assert disk == {{root / 'child' / name: text for name, text in native_arity_products('child', ordered, purpose).items()}}
+            publish(disk)
+            assert all(path.read_bytes() == text.encode('utf-8') for path, text in disk.items())
+assert sys.getrecursionlimit() == limit
+'''
+                    result = subprocess.run([sys.executable, '-B', '-c', code], cwd=ROOT,
+                                            capture_output=True, text=True, timeout=8)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+
+
 class ProcessRendererDependencyGenerateTests(unittest.TestCase):
     def assert_products(self, outputs, root, group, expected):
         from rules import parse
