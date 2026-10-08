@@ -1,4 +1,4 @@
-# big-data rules: 10500
+# big-data rules: 10505
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -1301,6 +1301,7 @@ HOST,assets.safing.io,LIST
 HOST,assets.stash.com,LIST
 HOST,assets.toot.cafe,LIST
 HOST,assets.upload.io,LIST
+HOST,assets.vanta.com,LIST
 HOST,assets.vogue.com,LIST
 HOST,assets.volvo.com,LIST
 HOST,assets.xmind.net,LIST
@@ -1933,6 +1934,7 @@ HOST,mirrors.maine.edu,LIST
 HOST,mirrors.netix.net,LIST
 HOST,mirrors.sonic.net,LIST
 HOST,mirrors.ucr.ac.cr,LIST
+HOST,n.approveit.today,LIST
 HOST,netlify.apollo.io,LIST
 HOST,ocsp.comodoca.com,LIST
 HOST,ocsp.digicert.com,LIST
@@ -4373,12 +4375,14 @@ HOST,plug-mirror.rcac.purdue.edu,LIST
 HOST,prego-cache.prod.sketch.com,LIST
 HOST,public-pages.cbinsights.com,LIST
 HOST,resources-live.sketch.cloud,LIST
+HOST,rum-ingest.us1.signalfx.com,LIST
 HOST,safebrowsing.googleapis.com,LIST
 HOST,sessions-bugsnag.docker.com,LIST
 HOST,solve-widget.forethought.ai,LIST
 HOST,sourcepoint.theguardian.com,LIST
 HOST,static-production.npmjs.com,LIST
 HOST,static-webfonts.myfonts.com,LIST
+HOST,static.acm.account.sony.com,LIST
 HOST,static.captcha-delivery.com,LIST
 HOST,sts.online.visualstudio.com,LIST
 HOST,typescript.visualstudio.com,LIST
@@ -8410,6 +8414,7 @@ HOST-WILDCARD,*-intake-*-datadoghq.com,LIST
 HOST-WILDCARD,*-intake.*.datadoghq.com,LIST
 HOST-WILDCARD,cdn-msp?.jmcomic-zzz.one,LIST
 HOST-WILDCARD,video-thumbnail2.fc2.com,LIST
+HOST-WILDCARD,rum-ingest.*.signalfx.com,LIST
 HOST-WILDCARD,video?-thumbnail?.fc2.com,LIST
 HOST-WILDCARD,object-storage-*.vexxhost.net,LIST
 HOST-WILDCARD,vip-videoprem*-thumbnail?.fc2.com,LIST

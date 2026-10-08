@@ -1,4 +1,4 @@
-# big-data rules: 8295
+# big-data rules: 8299
 .aws
 .x.ai
 .db.tt
@@ -3864,6 +3864,7 @@ assets.safing.io
 assets.stash.com
 assets.toot.cafe
 assets.upload.io
+assets.vanta.com
 assets.vogue.com
 assets.volvo.com
 assets.xmind.net
@@ -4722,6 +4723,7 @@ mirrors.maine.edu
 mirrors.netix.net
 mirrors.sonic.net
 mirrors.ucr.ac.cr
+n.approveit.today
 netlify.apollo.io
 ocsp.comodoca.com
 ocsp.digicert.com
@@ -7903,12 +7905,14 @@ plug-mirror.rcac.purdue.edu
 prego-cache.prod.sketch.com
 public-pages.cbinsights.com
 resources-live.sketch.cloud
+rum-ingest.us1.signalfx.com
 safebrowsing.googleapis.com
 sessions-bugsnag.docker.com
 solve-widget.forethought.ai
 sourcepoint.theguardian.com
 static-production.npmjs.com
 static-webfonts.myfonts.com
+static.acm.account.sony.com
 static.captcha-delivery.com
 sts.online.visualstudio.com
 typescript.visualstudio.com

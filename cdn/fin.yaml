@@ -1,4 +1,4 @@
-# cdn rules: 4770
+# cdn rules: 4775
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -953,6 +953,7 @@ payload:
   - "DOMAIN,assets.toot.cafe"
   - "DOMAIN,assets.twitch.tv"
   - "DOMAIN,assets.upload.io"
+  - "DOMAIN,assets.vanta.com"
   - "DOMAIN,assets.vogue.com"
   - "DOMAIN,assets.volvo.com"
   - "DOMAIN,assets.xmind.net"
@@ -1394,6 +1395,7 @@ payload:
   - "DOMAIN,media.ettoday.net"
   - "DOMAIN,media.nngroup.com"
   - "DOMAIN,media.nownews.com"
+  - "DOMAIN,n.approveit.today"
   - "DOMAIN,netlify.apollo.io"
   - "DOMAIN,ocsp.comodoca.com"
   - "DOMAIN,ocsp.digicert.com"
@@ -3189,6 +3191,7 @@ payload:
   - "DOMAIN,prego-cache.prod.sketch.com"
   - "DOMAIN,public-pages.cbinsights.com"
   - "DOMAIN,resources-live.sketch.cloud"
+  - "DOMAIN,rum-ingest.us1.signalfx.com"
   - "DOMAIN,safebrowsing.googleapis.com"
   - "DOMAIN,sessions-bugsnag.docker.com"
   - "DOMAIN,solve-widget.forethought.ai"
@@ -3197,6 +3200,7 @@ payload:
   - "DOMAIN,static-mh.content.disney.io"
   - "DOMAIN,static-production.npmjs.com"
   - "DOMAIN,static-webfonts.myfonts.com"
+  - "DOMAIN,static.acm.account.sony.com"
   - "DOMAIN,static.captcha-delivery.com"
   - "DOMAIN,sts.online.visualstudio.com"
   - "DOMAIN,tvdownloaddw-a.akamaihd.net"
@@ -4764,6 +4768,7 @@ payload:
   - "DOMAIN-WILDCARD,*-intake.*.datadoghq.com"
   - "DOMAIN-WILDCARD,cdn-msp?.jmcomic-zzz.one"
   - "DOMAIN-WILDCARD,video-thumbnail2.fc2.com"
+  - "DOMAIN-WILDCARD,rum-ingest.*.signalfx.com"
   - "DOMAIN-WILDCARD,video?-thumbnail?.fc2.com"
   - "DOMAIN-WILDCARD,object-storage-*.vexxhost.net"
   - "DOMAIN-WILDCARD,vip-videoprem*-thumbnail?.fc2.com"

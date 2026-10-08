@@ -1,4 +1,4 @@
-# cdn rules: 4691
+# cdn rules: 4695
 0x0.st
 eep.io
 img.gs
@@ -1780,6 +1780,7 @@ assets.stash.com
 assets.toot.cafe
 assets.twitch.tv
 assets.upload.io
+assets.vanta.com
 assets.vogue.com
 assets.volvo.com
 assets.xmind.net
@@ -2311,6 +2312,7 @@ media.beehiiv.com
 media.ettoday.net
 media.nngroup.com
 media.nownews.com
+n.approveit.today
 netlify.apollo.io
 ocsp.comodoca.com
 ocsp.digicert.com
@@ -4395,6 +4397,7 @@ player-frontend.cnevids.com
 prego-cache.prod.sketch.com
 public-pages.cbinsights.com
 resources-live.sketch.cloud
+rum-ingest.us1.signalfx.com
 safebrowsing.googleapis.com
 sessions-bugsnag.docker.com
 solve-widget.forethought.ai
@@ -4403,6 +4406,7 @@ static-homepage-en.pluto.tv
 static-mh.content.disney.io
 static-production.npmjs.com
 static-webfonts.myfonts.com
+static.acm.account.sony.com
 static.captcha-delivery.com
 sts.online.visualstudio.com
 tvdownloaddw-a.akamaihd.net
