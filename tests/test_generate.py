@@ -38,6 +38,241 @@ def configure_groups(root, sources=None, whitelist=None):
         (root / group).mkdir(exist_ok=True)
 
 
+class DnsDeepRegexGenerateTests(unittest.TestCase):
+    def _expected(self, group, value, dns_value, purpose, *, neighbor=False, whitelist=False, dns_supported=True):
+        domain = 'DOMAIN,keep.example.test\n' if neighbor else ''
+        expected = {
+            'fin.txt': f'# {group} rules: {int(neighbor)}\n' + domain,
+            'fin-qx.txt': f'# {group} rules: {int(neighbor)}\n' + ('HOST,keep.example.test,LIST\n' if neighbor else ''),
+            'fin.yaml': f'# {group} rules: {1 + int(neighbor)}\npayload:\n' +
+                        (('  - "DOMAIN,keep.example.test"\n') if neighbor else '') +
+                        '  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n',
+            'fin-surge.txt': f'# {group} rules: 0\n',
+            'fin-surge-ds.txt': f'# {group} rules: {int(neighbor)}\n' + ('keep.example.test\n' if neighbor else ''),
+        }
+        dns = ''
+        if purpose == 'block':
+            dns = ('@@/' + dns_value + '/\n' if whitelist and dns_supported else '')
+            dns += '0.0.0.0 keep.example.test\n' if neighbor else ''
+            dns += '/' + dns_value + '/\n' if dns_supported else ''
+        expected['fin-adb.txt'] = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
+            '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
+            '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
+            f'! Total count: {len(dns.splitlines())}\n' + dns +
+            ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''))
+        return {name: expected[name] for name in NAMES}
+
+    def _check_generate(self, depth, *, prefix='(', atom='audit[.]example[.]test', suffix=')',
+                        dns_prefix='(?:', dns_supported=True):
+        from rules import Rule, parse
+
+        value = '^' + prefix * depth + atom + suffix * depth + '$'
+        dns_value = '^' + dns_prefix * depth + atom + suffix * depth + '$'
+        rule = Rule('DOMAIN-REGEX', value)
+        for purpose in ('block', 'proxy', 'direct'):
+            for mode in ('add', 'strip', 'keep'):
+                for whitelist in (False, True):
+                    with self.subTest(depth=depth, purpose=purpose, mode=mode, whitelist=whitelist), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                        root = Path(directory)
+                        configs = [{'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['input.yaml'], 'whitelist': []},
+                                   {'name': 'dependent', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['source/fin.yaml', 'neighbor.list'],
+                                    'whitelist': ['source/fin.yaml'] if whitelist else []}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        (root / 'input.yaml').write_text('payload:\n  - DOMAIN-REGEX,' + value + '\n', encoding='utf-8')
+                        (root / 'neighbor.list').write_text('DOMAIN,keep.example.test\n', encoding='utf-8')
+                        previous = {}
+                        for group in ('source', 'dependent'):
+                            (root / group).mkdir()
+                            for name in NAMES:
+                                path = root / group / name
+                                path.write_bytes(b'old product\x00\xff\r\n')
+                                previous[path] = path.read_bytes()
+                        expected = {root / group / name: text for group, neighbor in
+                                    (('source', False), ('dependent', True)) for name, text in
+                                    self._expected(group, value, dns_value, purpose, neighbor=neighbor,
+                                                   whitelist=whitelist and neighbor, dns_supported=dns_supported).items()}
+                        skips = {name + ':DOMAIN-REGEX': 1 for name in
+                                 ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')}
+                        source_skips = dict(skips)
+                        dependent_skips = dict(skips)
+                        if purpose != 'block':
+                            dependent_skips['fin-adb.txt:DOMAIN'] = 1
+                        if purpose != 'block' or not dns_supported:
+                            source_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
+                            dependent_skips['fin-adb.txt:DOMAIN-REGEX'] = 1 + int(whitelist and purpose == 'block')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(list(outputs), list(expected))
+                        self.assertEqual(outputs, expected)
+                        self.assertEqual(stderr.getvalue().splitlines(), [
+                            f'{group} {key}: {count}' for group, counts in
+                            (('source', source_skips), ('dependent', dependent_skips)) for key, count in sorted(counts.items())])
+                        self.assertEqual(parse(outputs[root / 'source' / 'fin.yaml'], purpose=purpose), ([rule], []))
+                        self.assertEqual(parse(outputs[root / 'dependent' / 'fin.yaml'], purpose=purpose),
+                                         ([Rule('DOMAIN', 'keep.example.test'), rule], []))
+                        self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                        publish(outputs)
+                        self.assertEqual({path: path.read_bytes() for path in outputs},
+                                         {path: text.encode('utf-8') for path, text in expected.items()})
+                        published = {path: path.read_bytes() for path in outputs}
+                        (root / 'input.yaml').unlink()
+                        (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent.name == 'dependent'})
+                        self.assertEqual(stderr.getvalue().splitlines(), [f'dependent {key}: {count}' for key, count in sorted(dependent_skips.items())])
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        publish(disk)
+                        self.assertEqual({path: path.read_bytes() for path in outputs}, published)
+
+    def _run_deep(self, depth, **kwargs):
+        code = ('from tests.test_generate import DnsDeepRegexGenerateTests; '
+                f'DnsDeepRegexGenerateTests()._check_generate({depth}, **{kwargs!r})')
+        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=ROOT,
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_600_capture_regex_publishes_and_reimports_disk_yaml(self):
+        self._run_deep(600)
+
+    def test_1000_capture_regex_publishes_and_reimports_equivalent_dns(self):
+        self._run_deep(1000)
+
+    def test_999_capture_regex_publishes_and_reimports_equivalent_dns(self):
+        self._run_deep(999)
+
+    def test_600_nested_concat_publishes_and_reimports_equivalent_dns(self):
+        self._run_deep(600, prefix='(a?', dns_prefix='(?:a?')
+
+    def test_998_quantified_atom_publishes_and_reimports_equivalent_dns(self):
+        self._run_deep(998, atom='audit.*')
+
+    def test_500_nested_quantifiers_publishes_and_reimports_equivalent_dns(self):
+        self._run_deep(500, suffix=')?')
+
+    def test_500_nested_alternations_publishes_and_reimports_equivalent_dns(self):
+        self._run_deep(500, prefix='(x|', dns_prefix='(?:x|')
+
+    def test_deep_nonportable_regex_skips_only_dns_and_reimports_disk(self):
+        self._run_deep(600, atom='a{1001}', dns_supported=False)
+
+    def _check_mixed(self, depth, purpose, mode, *, prefix='(', atom='audit[.]example[.]test',
+                     suffix=')', dns_prefix='(?:', dns_supported=True):
+        from rules import Rule, parse
+
+        value = '^' + prefix * depth + atom + suffix * depth + '$'
+        dns_value = '^' + dns_prefix * depth + atom + suffix * depth + '$'
+        logic = '((DOMAIN-REGEX,' + value + '),(IP-CIDR,203.0.113.0/24,no-resolve),'
+        logic += '(SRC-IP-CIDR,198.51.100.0/24),(PROCESS-NAME,Foo*Bar))'
+        source = 'payload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in (
+            'DOMAIN-REGEX,' + value, 'PROCESS-NAME-REGEX,' + value, 'AND,' + logic,
+            'DOMAIN,keep.example.test', 'IP-CIDR,203.0.113.0/24,no-resolve',
+            'SRC-IP-CIDR,198.51.100.0/24'))
+        initial = [Rule('DOMAIN-REGEX', value), Rule('PROCESS-NAME-REGEX', value),
+                   Rule('AND', logic, literal_process=True, native_fields=True),
+                   Rule('DOMAIN', 'keep.example.test'),
+                   Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',)),
+                   Rule('SRC-IP-CIDR', '198.51.100.0/24')]
+        self.assertEqual(parse(source, purpose=purpose), (initial, []))
+        flag = '' if mode == 'strip' else ',no-resolve'
+        options = () if mode == 'strip' else ('no-resolve',)
+        target_logic = logic.replace(',no-resolve', '') if mode == 'strip' else logic
+        ip = 'IP-CIDR,203.0.113.0/24' + flag
+        source_ip = 'SRC-IP,198.51.100.0/24'
+        yaml_lines = ['AND,' + target_logic, 'DOMAIN,keep.example.test', 'DOMAIN-REGEX,' + value,
+                      'PROCESS-NAME-REGEX,' + value, ip, 'SRC-IP-CIDR,198.51.100.0/24']
+        parsed_expected = [Rule('AND', target_logic, literal_process=True, native_fields=True),
+                           Rule('DOMAIN', 'keep.example.test'), Rule('DOMAIN-REGEX', value),
+                           Rule('PROCESS-NAME-REGEX', value),
+                           Rule('IP-CIDR', '203.0.113.0/24', options),
+                           Rule('SRC-IP-CIDR', '198.51.100.0/24')]
+        bodies = {'fin.txt': ['DOMAIN,keep.example.test', ip, source_ip],
+                  'fin-qx.txt': ['HOST,keep.example.test,LIST', 'IP-CIDR,203.0.113.0/24,LIST' + flag],
+                  'fin.yaml': ['payload:', *['  - ' + json.dumps(line) for line in yaml_lines]],
+                  'fin-surge.txt': [ip, source_ip], 'fin-surge-ds.txt': ['keep.example.test']}
+        dns = (['@@/' + dns_value + '/', '0.0.0.0 keep.example.test', '/' + dns_value + '/'] if dns_supported else
+               ['0.0.0.0 keep.example.test']) if purpose == 'block' else []
+        expected_skips = {}
+        supported = {'DOMAIN-REGEX': {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' and dns_supported else [])},
+                     'PROCESS-NAME-REGEX': {'fin.yaml'}, 'AND': {'fin.yaml'},
+                     'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
+                     'SRC-IP-CIDR': {'fin.txt', 'fin.yaml', 'fin-surge.txt'}}
+        for kind, names in supported.items():
+            for name in NAMES:
+                if name not in names:
+                    expected_skips[name + ':' + kind] = 1
+        if purpose != 'block':
+            expected_skips['fin-adb.txt:DOMAIN'] = 1
+        elif not dns_supported:
+            expected_skips['fin-adb.txt:DOMAIN-REGEX'] += 1
+        with tempfile.TemporaryDirectory(dir=ROOT) as directory:
+            root = Path(directory)
+            configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
+                        'sources': ['input.yaml'] if group == 'source' else ['source/fin.yaml'],
+                        'whitelist': ['white.yaml']} for group in ('source', 'dependent')]
+            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+            (root / 'input.yaml').write_text(source, encoding='utf-8')
+            (root / 'white.yaml').write_text('payload:\n  - DOMAIN-REGEX,' + value + '\n', encoding='utf-8')
+            expected = {}
+            previous = {}
+            for group in ('source', 'dependent'):
+                (root / group).mkdir()
+                for name in NAMES:
+                    path = root / group / name
+                    path.write_bytes(b'old mixed product\x00\xff\r\n')
+                    previous[path] = path.read_bytes()
+                    if name == 'fin-adb.txt':
+                        text = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
+                                '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
+                                '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
+                                f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
+                                ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''))
+                    else:
+                        count = len(bodies[name]) - int(name == 'fin.yaml')
+                        text = f'# {group} rules: {count}\n' + ''.join(line + '\n' for line in bodies[name])
+                    expected[path] = text
+            for disk_only in (False, True):
+                if disk_only:
+                    (root / 'input.yaml').unlink()
+                    (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                    actual = generate(root, lambda url: self.fail(url))
+                selected = {path: text for path, text in expected.items()
+                            if not disk_only or path.parent.name == 'dependent'}
+                self.assertEqual(list(actual), list(selected))
+                self.assertEqual(actual, selected)
+                groups = ('dependent',) if disk_only else ('source', 'dependent')
+                self.assertEqual(stderr.getvalue().splitlines(), [f'{group} {key}: {count}'
+                    for group in groups for key, count in sorted(expected_skips.items())])
+                for group in groups:
+                    self.assertEqual(parse(actual[root / group / 'fin.yaml'], purpose=purpose), (parsed_expected, []))
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                publish(actual)
+                previous = {path: text.encode('utf-8') for path, text in expected.items()}
+                self.assertEqual({path: path.read_bytes() for path in expected}, previous)
+
+    def test_deep_regex_mixed_neighbors_flags_and_twelve_ordered_products(self):
+        cases = [(600, {}), (999, {}), (1000, {}),
+                 (600, {'prefix': '(a?', 'dns_prefix': '(?:a?'}),
+                 (998, {'atom': 'audit.*'}), (500, {'suffix': ')?'}),
+                 (500, {'prefix': '(x|', 'dns_prefix': '(?:x|'}),
+                 (600, {'atom': 'a{1001}', 'dns_supported': False})]
+        for depth, kwargs in cases:
+            for purpose in ('block', 'proxy', 'direct'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(depth=depth, purpose=purpose, mode=mode, kwargs=kwargs):
+                        code = ('from tests.test_generate import DnsDeepRegexGenerateTests; '
+                                f'DnsDeepRegexGenerateTests()._check_mixed({depth}, {purpose!r}, {mode!r}, **{kwargs!r})')
+                        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=ROOT,
+                                                capture_output=True, text=True, timeout=8)
+                        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
 class NativeKeywordGenerateTests(unittest.TestCase):
     def test_r22_same_round_twelve_products_publish_and_disk_only_reimport(self):
         from tests.test_formats import NATIVE_KEYWORD_SOURCE, native_keyword_expected, native_keyword_skips

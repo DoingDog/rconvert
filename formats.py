@@ -6,7 +6,7 @@ from collections import Counter
 from collections.abc import Iterable
 
 from rules import (Rule, _REGEX, _QX_INTERFACE_OPTIONS, _delimiters,
-                   _field_value, _fields, _logical_children, _valid_domain)
+                   _field_value, _fields, _logical_children, _valid_deep_regex, _valid_domain)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -301,11 +301,14 @@ def _dns_pattern(rule: Rule) -> str | None:
         class_start = 0
         # Go 对嵌套数值量词检查组合重复次数，上限为 1000。
         repeat_groups = [[]]
+        capture_replacements = []
         while index < len(rule.value):
             char = rule.value[index]
             if not in_class:
                 if char == "(":
                     repeat_groups.append([])
+                    if not rule.value.startswith("(?", index):
+                        capture_replacements.append((index, index + 1, "(?:"))
                 elif char == ")":
                     if len(repeat_groups) == 1:
                         return None
@@ -356,17 +359,18 @@ def _dns_pattern(rule: Rule) -> str | None:
                 in_class = False
             elif char == "(" and not in_class and rule.value.startswith("(?", index):
                 if rule.value.startswith("(?:", index):
-                    translated.append("(?:")
+                    translated.append("(")
                     index += 3
                     continue
                 if rule.value.startswith("(?i:", index) and rule.value.isascii():
-                    translated.append("(?i:")
+                    translated.append("(")
                     index += 4
                     continue
                 named = re.match(r"\(\?<([A-Za-z_][A-Za-z0-9_]*)>", rule.value[index:])
                 if named is None:
                     return None
                 translated.append("(")
+                capture_replacements.append((index, index + len(named[0]), "(?:"))
                 index += len(named[0])
                 continue
             elif char == "{" and not in_class:
@@ -398,10 +402,15 @@ def _dns_pattern(rule: Rule) -> str | None:
             index += 1
         try:
             re.compile("".join(translated))
+        except RecursionError:
+            if not _valid_deep_regex("".join(translated)):
+                return None
+            # DNS 只消费匹配结果，且上述扫描已拒绝 backreference；非捕获组保留量词绑定。
+            replacements.extend(capture_replacements)
         except re.error:
             return None
         value = rule.value
-        for start, end, normalized in reversed(replacements):
+        for start, end, normalized in sorted(replacements, reverse=True):
             value = value[:start] + normalized + value[end:]
         return f"/{value}/"
     return None
