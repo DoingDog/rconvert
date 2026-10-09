@@ -90,6 +90,157 @@ def expected_process(value):
     return kind + ",(?-i:\\A" + escaped + end + ")"
 
 
+def native_arity_products(group, matchers, purpose, domain_source="surge"):
+    yaml = []
+    for matcher in matchers:
+        kind, _, value = matcher.partition(",")
+        logical = kind in {"AND", "OR", "NOT"}
+        source = domain_source if kind == "DOMAIN" or "(DOMAIN," in value else "surge"
+        payload = matcher
+        if source == "surge":
+            payload = (expected_domain(kind, value) if kind == "DOMAIN" else
+                       matcher.replace("DOMAIN,x.example.com", expected_domain("DOMAIN", "x.example.com")))
+        record = [[kind, value, [], False, False, logical, source]]
+        yaml.append("  - " + json.dumps(payload) + " # rconvert-rule-v1 " +
+                    json.dumps(record, separators=(",", ":")) + "\n")
+    dns = ('[Adblock Plus 2.0]\n'
+           f'! Title: {group}\n'
+           '! Homepage: https://github.com/DoingDog/rconvert\n'
+           '! Expires: 1 day\n'
+           '! License: Inherits upstream licenses\n'
+           '! Version: 202601021104\n')
+    return {
+        'fin.txt': f'# {group} rules: 1\nDOMAIN,keep.example.com\n',
+        'fin-qx.txt': f'# {group} rules: 1\nHOST,keep.example.com,LIST\n',
+        'fin.yaml': f'# {group} rules: {len(matchers)}\npayload:\n' +
+                    ''.join(yaml),
+        'fin-adb.txt': dns + ('! Total count: 1\n0.0.0.0 keep.example.com\n' if purpose == 'block' else
+                            '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'),
+        'fin-surge.txt': f'# {group} rules: 0\n',
+        'fin-surge-ds.txt': f'# {group} rules: 1\nkeep.example.com\n',
+    }
+
+
+class NativeArityFormatTests(unittest.TestCase):
+    def test_native_arity_emits_complete_ordered_six_products_for_nine_options(self):
+        from rules import normalize, parse
+
+        cases = ('AND,()', 'OR,()', 'AND,((DOMAIN,x.example.com))',
+                 'OR,((DOMAIN,x.example.com))', 'NOT,((OR,()))',
+                 'AND,((DOMAIN,x.example.com),(OR,()),(AND,()))')
+        for matcher in cases:
+            kind, _, value = matcher.partition(',')
+            native = Rule(kind, value, native_fields=True)
+            for purpose in ('block', 'proxy', 'direct'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(matcher=matcher, purpose=purpose, mode=mode):
+                        with patch('formats.datetime') as clock:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            out, skipped = render_configured('arity', normalize([native, Rule('DOMAIN', 'keep.example.com')]),
+                                                             purpose=purpose, no_resolve=mode)
+                        expected = native_arity_products('arity', [matcher, 'DOMAIN,keep.example.com'], purpose)
+                        # 按产物类型排序，AND 在 DOMAIN 前，NOT/OR 在 DOMAIN 后。
+                        if kind != 'AND':
+                            expected = native_arity_products('arity', ['DOMAIN,keep.example.com', matcher], purpose)
+                        self.assertEqual(out, expected)
+                        expected_skips = {f'{name}:{kind}': 1 for name in
+                                          ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')}
+                        if purpose != 'block':
+                            expected_skips['fin-adb.txt:DOMAIN'] = 1
+                        self.assertEqual(skipped, expected_skips)
+                        self.assertEqual(parse(out['fin.yaml'], purpose=purpose),
+                                         ([Rule('DOMAIN', 'keep.example.com'), native] if kind != 'AND' else
+                                          [native, Rule('DOMAIN', 'keep.example.com')], []))
+
+    def test_direct_native_rule_rejects_missing_not_wrapper_in_all_six_products(self):
+        for child in ('OR,()', 'AND,()'):
+            for kind, value in (('NOT', '(' + child + ')'),
+                                ('AND', '((DOMAIN,x.example.com),(NOT,(' + child + ')))')):
+                native = Rule(kind, value, native_fields=True)
+                for purpose in ('block', 'proxy', 'direct'):
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(child=child, kind=kind, purpose=purpose, mode=mode):
+                            with patch('formats.datetime') as clock:
+                                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                                out, skipped = render_configured('arity', [native, Rule('DOMAIN', 'keep.example.com')],
+                                                                 purpose=purpose, no_resolve=mode)
+                            self.assertEqual(out, native_arity_products('arity', ['DOMAIN,keep.example.com'], purpose))
+                            expected_skips = {f'{name}:{kind}': 1 for name in out}
+                            if purpose != 'block':
+                                expected_skips['fin-adb.txt:DOMAIN'] = 1
+                            self.assertEqual(skipped, expected_skips)
+
+    def test_single_native_ip_children_keep_flags_inside_destination_leaves(self):
+        from rules import parse
+
+        cases = (
+            ('AND,((IP-CIDR,203.0.113.0/24,no-resolve,no-resolve))',
+             'AND,((IP-CIDR,203.0.113.0/24{flag}))', ',no-resolve'),
+            ('OR,((IP-CIDR,203.0.113.0/24))', 'OR,((IP-CIDR,203.0.113.0/24{flag}))', ''),
+            ('AND,((IP-CIDR,198.51.100.0/24,src))', 'AND,((SRC-IP-CIDR,198.51.100.0/24))', ''),
+            ('OR,((IP-SUFFIX,203.0.113.0/24,no-resolve))',
+             'OR,((IP-SUFFIX,203.0.113.0/24{flag}))', ',no-resolve'),
+        )
+        for matcher, template, kept_flag in cases:
+            for purpose in ('block', 'proxy', 'direct'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(matcher=matcher, purpose=purpose, mode=mode):
+                        parsed, messages = parse('payload:\n  - ' + matcher, purpose=purpose)
+                        self.assertEqual(messages, [])
+                        flag = ',no-resolve' if mode == 'add' else '' if mode == 'strip' else kept_flag
+                        expected = template.format(flag=flag)
+                        out, skipped = render_configured('arity', parsed, purpose=purpose, no_resolve=mode)
+                        self.assertEqual(generated_text(out['fin.yaml']), '# arity rules: 1\npayload:\n  - ' + json.dumps(expected) + '\n')
+                        self.assertNotIn('fin.yaml:' + parsed[0].kind, skipped)
+                        self.assertEqual(parse(out['fin.yaml'], purpose=purpose)[1], [])
+                        self.assertEqual(parsed[0].options, ())
+                        self.assertTrue(parsed[0].native_fields)
+
+    def test_deep_single_native_renderers_apply_all_modes_within_eight_seconds(self):
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        for operator in ('AND', 'OR'):
+            for depth in (600, 1000):
+                with self.subTest(operator=operator, depth=depth):
+                    code = f'''
+import json
+import sys
+from rules import Rule, parse
+from formats import render, _logical_value, MIHOMO_TYPES, SURGE_TYPES
+from tests.test_formats import generated_text
+limit = sys.getrecursionlimit()
+for source, bare, kept in (('IP-CIDR,203.0.113.0/24,no-resolve', 'IP-CIDR,203.0.113.0/24', ',no-resolve'),
+                           ('IP-CIDR,203.0.113.0/24', 'IP-CIDR,203.0.113.0/24', ''),
+                           ('SRC-IP-CIDR,127.0.0.0/8', 'SRC-IP-CIDR,127.0.0.0/8', ''),
+                           ('OR,()', 'OR,()', '')):
+    def chain(leaf):
+        condition = '(' + leaf + ')'
+        for _ in range({depth}):
+            condition = '({operator},(' + condition + '))'
+        return condition[1:-1]
+    matcher = chain(source)
+    parsed, messages = parse('payload:\\n  - ' + json.dumps(matcher), purpose='block')
+    assert messages == [] and len(parsed) == 1, messages
+    for purpose in ('block', 'proxy', 'direct'):
+        for mode in ('add', 'strip', 'keep'):
+            flag = (',no-resolve' if mode == 'add' else '' if mode == 'strip' else kept) if bare.startswith('IP-CIDR,') else ''
+            expected = chain(bare + flag)
+            out, skipped = render('arity', parsed, purpose=purpose, no_resolve=mode)
+            assert generated_text(out['fin.yaml']) == '# arity rules: 1\\npayload:\\n  - ' + json.dumps(expected) + '\\n', (mode, len(out['fin.yaml']))
+            assert _logical_value(expected.partition(',')[2], '{operator}', MIHOMO_TYPES, native_fields=True) == expected.partition(',')[2]
+            assert _logical_value(expected.partition(',')[2], '{operator}', SURGE_TYPES, native_fields=True) is None
+            assert skipped == {{name + ':{operator}': 1 for name in ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')}}
+            assert parse(out['fin.yaml'], purpose=purpose)[1] == []
+assert sys.getrecursionlimit() == limit
+'''
+                    result = subprocess.run([sys.executable, '-B', '-c', code],
+                                            cwd=Path(__file__).resolve().parents[1],
+                                            capture_output=True, text=True, timeout=8)
+                    self.assertEqual(result.returncode, 0, result.stderr)
+
+
 NATIVE_KEYWORD_SOURCE = '''payload:
   - DOMAIN-KEYWORD,中文
   - AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))

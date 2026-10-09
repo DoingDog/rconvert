@@ -1070,11 +1070,12 @@ def _logical_children(expression, kind, begin, start, stop, groups, commas):
     wrapped = expression[start:start + 2] == '((' and expression[stop - 2:stop] == '))'
     if commas is not None:
         # 原生范围仍按字面括号计数；叶子的 regex 括号可以跨越字段包装。
-        bare = kind == "NOT" and not wrapped
-        if not bare and groups.get(start) != stop - 1:
+        if kind == "NOT" and not wrapped or groups.get(start) != stop - 1:
             return None
-        left, right = (start, stop) if bare else (start + 1, stop - 1)
-        positions = [left - 1, *(index for index in commas.get(begin if bare else start, [])
+        left, right = start + 1, stop - 1
+        if kind != "NOT" and not expression[left:right].strip(' '):
+            return [], wrapped
+        positions = [left - 1, *(index for index in commas.get(start, [])
                                 if left <= index < right), right]
         children = []
         for opening, closing in zip(positions, positions[1:]):
@@ -1108,7 +1109,8 @@ def _logical_children(expression, kind, begin, start, stop, groups, commas):
                 cursor += 1
                 if not expression[cursor:stop - 1].strip():
                     return None
-    if len(children) != 1 if kind == "NOT" else len(children) < 2:
+    if (kind == "NOT" and len(children) != 1 or
+            kind != "NOT" and commas is None and len(children) < 2):
         return None
     return children, wrapped
 
@@ -1132,8 +1134,9 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
         frame = pending.pop()
         if isinstance(frame, tuple) and len(frame) == 3:
             kind, count, wrapped = frame
-            children = normalized[-count:]
-            del normalized[-count:]
+            children = normalized[-count:] if count else []
+            if count:
+                del normalized[-count:]
             value = children[0] if kind == "NOT" and not wrapped else f"({','.join(children)})"
             normalized.append(f"({kind},{value})")
             continue
