@@ -3,7 +3,7 @@ import gzip
 import hashlib
 import io
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from http.client import IncompleteRead
 import os
 import subprocess
@@ -354,7 +354,164 @@ class PublicStateRestorationGenerateTests(unittest.TestCase):
                         self.assertEqual({path: path.read_bytes() for path in old}, old)
 
 
+R25_SOURCE = ("DOMAIN,current.example.org\nIP-CIDR,192.0.2.0/24,no-resolve\n"
+              "IP-CIDR,198.51.100.0/24\n")
+
+
+def r25_expected(group, purpose, mode, version, empty=False):
+    marked = ",no-resolve" if mode != "strip" else ""
+    unmarked = ",no-resolve" if mode == "add" else ""
+    bodies = {
+        "fin.txt": ("DOMAIN,current.example.org\n"
+                    f"IP-CIDR,192.0.2.0/24{marked}\nIP-CIDR,198.51.100.0/24{unmarked}\n"),
+        "fin-qx.txt": ("HOST,current.example.org,LIST\n"
+                       f"IP-CIDR,192.0.2.0/24,LIST{marked}\nIP-CIDR,198.51.100.0/24,LIST{unmarked}\n"),
+        "fin-surge.txt": f"IP-CIDR,192.0.2.0/24{marked}\nIP-CIDR,198.51.100.0/24{unmarked}\n",
+        "fin-surge-ds.txt": "current.example.org\n",
+    }
+    if mode == "keep":
+        bodies.update({
+            "fin.txt": "DOMAIN,current.example.org\nIP-CIDR,198.51.100.0/24\nIP-CIDR,192.0.2.0/24,no-resolve\n",
+            "fin-qx.txt": "HOST,current.example.org,LIST\nIP-CIDR,198.51.100.0/24,LIST\nIP-CIDR,192.0.2.0/24,LIST,no-resolve\n",
+            "fin-surge.txt": "IP-CIDR,198.51.100.0/24\nIP-CIDR,192.0.2.0/24,no-resolve\n",
+        })
+    ip_rules = [("192.0.2.0/24", marked), ("198.51.100.0/24", unmarked)]
+    if mode == "keep":
+        ip_rules.reverse()
+    yaml_rules = [("DOMAIN", "current.example.org", ""),
+                  *(("IP-CIDR", value, options) for value, options in ip_rules)]
+    bodies["fin.yaml"] = "".join(
+        "  - " + json.dumps(expected_domain(kind, value) if kind == "DOMAIN" else
+                            f"{kind},{value}{options}") + " # rconvert-rule-v1 " +
+        json.dumps([[kind, value, ["no-resolve"] if options else [], False, False, False, "surge"]],
+                   separators=(',', ':')) + "\n" for kind, value, options in yaml_rules)
+    counts = {"fin.txt": 3, "fin-qx.txt": 3, "fin.yaml": 3,
+              "fin-surge.txt": 2, "fin-surge-ds.txt": 1}
+    expected = {name: f"# {group} rules: {0 if empty else counts[name]}\n" +
+                ("payload:\n" if name == "fin.yaml" else "") + ("" if empty else body)
+                for name, body in bodies.items()}
+    dns = "0.0.0.0 current.example.org\n" if purpose == "block" and not empty else ""
+    expected["fin-adb.txt"] = (
+        f"[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n"
+        "! Expires: 1 day\n! License: Inherits upstream licenses\n" + version + "\n" +
+        f"! Total count: {1 if dns else 0}\n" + dns +
+        ("" if purpose == "block" else "! No AdBlock rules for non-advertising group.\n"))
+    return {name: expected[name] for name in NAMES}
+
+
+def r25_old_files(root, groups):
+    previous = {}
+    for group in groups:
+        (root / group).mkdir()
+        for name in NAMES:
+            path = root / group / name
+            previous[path] = f"OLD::{group}::{name}\r\n".encode() + b"\x00\x80\xff"
+            path.write_bytes(previous[path])
+    return previous
+
+
 class NativeKeywordGenerateTests(unittest.TestCase):
+    def test_no_resolve_runs_once_before_normalize_and_preserves_real_products(self):
+        import rules
+        from dataclasses import fields
+        from formats import render
+        from tests.test_formats import NATIVE_KEYWORD_SOURCE, native_keyword_expected
+
+        unmarked = "AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24),(SRC-IP-CIDR,198.51.100.0/24))"
+        source = NATIVE_KEYWORD_SOURCE + "  - " + unmarked + "\n  - IP-CIDR,203.0.113.0/24\n"
+        self.assertEqual([field.name for field in fields(rules.Rule)],
+                         ["kind", "value", "options", "allow", "literal_process", "native_fields", "domain_source"])
+        original = rules._normalize_logic
+        operations = []
+
+        def counted(*args, **kwargs):
+            result = original(*args, **kwargs)
+            # 只观察真实 add/strip 运算；parse 和 metadata 恢复的 keep 校验照常执行。
+            if kwargs.get("no_resolve", "keep") != "keep":
+                operations.append((kwargs["no_resolve"], args[0], args[1], result))
+            return result
+
+        for purpose in ("block", "direct", "proxy"):
+            for mode in ("add", "keep", "strip"):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                    root = Path(directory)
+                    flag = ",no-resolve" if mode != "strip" else ""
+                    conjunction = "AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24" + flag + "),(SRC-IP-CIDR,198.51.100.0/24))"
+                    values = [conjunction, "DOMAIN,keep.example.com", "DOMAIN-KEYWORD,中文",
+                              "NOT,((DOMAIN-KEYWORD,中文))", "OR,((DOMAIN-KEYWORD,中文),(NETWORK,udp))",
+                              "IP-CIDR,203.0.113.0/24" + flag, "SRC-IP-CIDR,198.51.100.0/24"]
+                    if mode == "keep":
+                        values += [unmarked, "IP-CIDR,203.0.113.0/24"]
+                    records = {}
+                    for value in values:
+                        kind, _, payload = value.partition(",")
+                        options = ["no-resolve"] if kind == "IP-CIDR" and payload.endswith(",no-resolve") else []
+                        if options:
+                            payload = payload.removesuffix(",no-resolve")
+                        records[value] = [[kind, payload, options, False, False, kind in {"AND", "NOT", "OR"},
+                                           "mihomo" if kind in {"AND", "DOMAIN", "DOMAIN-KEYWORD", "NOT", "OR"} else "surge"]]
+                    wanted_rules = {rules.Rule(row[0], row[1], tuple(row[2]), *row[3:])
+                                    for entries in records.values() for row in entries}
+
+                    def expected(group):
+                        texts = native_keyword_expected(group, purpose, mode)
+                        if mode == "keep":
+                            extra = {"fin.txt": [unmarked.replace("SRC-IP-CIDR,", "SRC-IP,"), "IP-CIDR,203.0.113.0/24"],
+                                     "fin-surge.txt": [unmarked.replace("SRC-IP-CIDR,", "SRC-IP,"), "IP-CIDR,203.0.113.0/24"],
+                                     "fin-qx.txt": ["IP-CIDR,203.0.113.0/24,LIST"],
+                                     "fin.yaml": ["  - " + json.dumps(unmarked, ensure_ascii=False), '  - "IP-CIDR,203.0.113.0/24"']}
+                            for name, additions in extra.items():
+                                body = texts[name].splitlines()[2 if name == "fin.yaml" else 1:] + additions
+                                def order(line):
+                                    kind = (json.loads(line[4:]) if name == "fin.yaml" else line).partition(",")[0]
+                                    return kind.startswith(("IP-", "SRC-IP")), kind, len(line), line
+                                texts[name] = f"# {group} rules: {len(body)}\n" + ("payload:\n" if name == "fin.yaml" else "") + "".join(line + "\n" for line in sorted(body, key=order))
+                        texts["fin.yaml"] = "\n".join(
+                            line + " # rconvert-rule-v1 " + json.dumps(records[json.loads(line[4:])], separators=(',', ':'))
+                            if line.startswith("  - ") else line for line in texts["fin.yaml"].splitlines()) + "\n"
+                        return texts
+
+                    parsed, messages = rules.parse(source, purpose=purpose)
+                    self.assertEqual(messages, [])
+                    operations.clear()
+                    with patch("rules._normalize_logic", counted), patch("formats.datetime") as clock:
+                        clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                        standalone, _ = render("parent", rules.normalize(parsed), purpose=purpose, no_resolve=mode)
+                    self.assertEqual(standalone, expected("parent"))
+                    self.assertEqual(len(operations), 0 if mode == "keep" else 4)
+                    configs = [{"name": group, "purpose": purpose, "no_resolve": mode,
+                                "sources": ["input.yaml" if group == "parent" else "parent/fin.yaml"], "whitelist": []}
+                               for group in ("parent", "child")]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "input.yaml").write_text(source, encoding="utf-8")
+                    parent_bytes = {}
+                    for phase in ("same-round", "disk-only", "repeat"):
+                        if phase == "disk-only":
+                            (root / "input.yaml").unlink()
+                            (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
+                        groups = ("parent", "child") if phase == "same-round" else ("child",)
+                        operations.clear()
+                        with patch("rules._normalize_logic", counted), contextlib.redirect_stderr(io.StringIO()), patch("formats.datetime") as clock:
+                            clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(outputs, {root / group / name: text for group in groups
+                                                   for name, text in expected(group).items()})
+                        for group in groups:
+                            restored, messages = rules.parse(outputs[root / group / "fin.yaml"], purpose=purpose)
+                            self.assertEqual(messages, [])
+                            self.assertEqual(set(restored), wanted_rules)
+                            self.assertEqual(len(restored), len(wanted_rules))
+                        publish(outputs)
+                        self.assertEqual({path: path.read_bytes() for path in outputs},
+                                         {path: text.encode("utf-8") for path, text in outputs.items()})
+                        if phase == "same-round":
+                            parent_bytes = {path: path.read_bytes() for path in outputs if path.parent.name == "parent"}
+                        else:
+                            self.assertFalse((root / "input.yaml").exists())
+                            self.assertEqual({path: path.read_bytes() for path in parent_bytes}, parent_bytes)
+                        self.assertEqual(len(operations), 0 if mode == "keep" else 7 if phase == "same-round" else 3,
+                                         (purpose, mode, phase, operations))
+
     def test_r22_same_round_twelve_products_publish_and_disk_only_reimport(self):
         from tests.test_formats import NATIVE_KEYWORD_SOURCE, native_keyword_expected, native_keyword_skips
 
@@ -3717,6 +3874,255 @@ class GenerateTests(unittest.TestCase):
                 (root / group / name).read_bytes() == b"previous version\n"
                 for group in ("cdn", "big-data", "archive") for name in NAMES
             ))
+
+    def _assert_r25_publication(self, root, outputs, previous, groups, purpose, mode, before, after):
+        expected = {}
+        for group, empty in groups:
+            version = outputs[root / group / "fin-adb.txt"].splitlines()[5]
+            self.assertRegex(version, r"^! Version: [0-9]{12}$")
+            stamp = datetime.strptime(version.removeprefix("! Version: "), "%Y%m%d%H%M").replace(
+                tzinfo=timezone(timedelta(hours=8)))
+            self.assertLessEqual(before.replace(second=0, microsecond=0), stamp)
+            self.assertLessEqual(stamp, after.replace(second=0, microsecond=0))
+            expected.update({root / group / name: text for name, text in
+                             r25_expected(group, purpose, mode, version, empty).items()})
+        self.assertEqual(list(outputs), list(expected))
+        self.assertEqual(outputs, expected)
+        self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+        publish(outputs)
+        self.assertEqual({path: path.read_bytes() for path in previous},
+                         {path: expected[path].encode("utf-8") if path in expected else old
+                          for path, old in previous.items()})
+        self.assertEqual({path: path.read_bytes() for path in expected},
+                         {path: text.encode("utf-8") for path, text in expected.items()})
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows case-insensitive group aliases")
+    def test_windows_frozen_group_aliases_propagate_through_source_and_whitelist_dependencies(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        missing = "https://example.org/missing-cdn.txt"
+        for purpose in ("block", "proxy", "direct"):
+            for mode in ("add", "strip", "keep"):
+                for configured, physical in (("CDN", "cdn"), ("cdn", "CDN"), ("cdn", "cdn")):
+                    for reason in ("404", "no-rules", "no-routable"):
+                        for dependency in ("sources", "whitelist"):
+                            for filename in NAMES:
+                                for healthy_first in (False, True):
+                                    with self.subTest(purpose=purpose, mode=mode, configured=configured,
+                                                      physical=physical, reason=reason, dependency=dependency,
+                                                      filename=filename, healthy_first=healthy_first), \
+                                            tempfile.TemporaryDirectory(dir=staging) as directory:
+                                        root = Path(directory)
+                                        configs = [
+                                            {"name": configured, "purpose": purpose, "no_resolve": mode,
+                                             "sources": ["bad.list" if reason == "no-routable" else missing], "whitelist": []},
+                                            {"name": "DEPENDENT", "purpose": purpose, "no_resolve": mode,
+                                             "sources": ["healthy.list"], "whitelist": []},
+                                            {"name": "archive", "purpose": purpose, "no_resolve": mode,
+                                             "sources": ["healthy.list"], "whitelist": ["dependent/FIN.TXT"]},
+                                        ]
+                                        configs[1][dependency] = [f"{configured.upper()}/{filename.upper()}"]
+                                        healthy = {"name": "healthy", "purpose": purpose, "no_resolve": mode,
+                                                   "sources": ["healthy.list"], "whitelist": []}
+                                        configs.insert(0 if healthy_first else len(configs), healthy)
+                                        (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                                        (root / "healthy.list").write_text(R25_SOURCE, encoding="utf-8")
+                                        fixture = "payload:\n  - " + json.dumps("USER-AGENT,A\x00B") + "\n"
+                                        (root / "bad.list").write_text(fixture, encoding="utf-8")
+                                        dependent = "DEPENDENT" if configured == physical == "cdn" else "dependent"
+                                        previous = r25_old_files(root, (physical, dependent, "archive", "healthy"))
+                                        self.assertTrue((root / configured).samefile(root / physical))
+                                        self.assertEqual((root / configured).resolve().name, physical)
+
+                                        def fetch(url):
+                                            self.assertEqual(url, missing)
+                                            if reason == "404":
+                                                raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(
+                                                    url, 404, "Not Found", {}, None)
+                                            self.assertEqual(reason, "no-rules")
+                                            return b"# no rules\n"
+
+                                        before = datetime.now().astimezone()
+                                        with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                                            outputs = generate(root, fetch)
+                                        after = datetime.now().astimezone()
+                                        cause = (f"{missing}: HTTP 404; skipped\n" if reason == "404" else
+                                                 f"{missing}: no adaptable rules; skipped\n" if reason == "no-rules" else
+                                                 f"{configured}: no routable rules; frozen\n")
+                                        skips = (("healthy fin-adb.txt:DOMAIN: 1\n" if purpose != "block" else "") +
+                                                 "healthy fin-adb.txt:IP-CIDR: 2\nhealthy fin-surge-ds.txt:IP-CIDR: 2\n")
+                                        self.assertEqual(stderr.getvalue(), skips + cause if healthy_first else cause + skips)
+                                        self._assert_r25_publication(root, outputs, previous, [("healthy", False)],
+                                                                     purpose, mode, before, after)
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows case-insensitive group aliases")
+    def test_windows_frozen_alias_incomplete_old_products_abort_publication(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        missing = "https://example.org/missing-cdn.txt"
+        for purpose in ("block", "proxy", "direct"):
+            for mode in ("add", "strip", "keep"):
+                for dependency in ("sources", "whitelist"):
+                    for broken in ("cdn", "dependent", "archive"):
+                        for filename in NAMES:
+                            for defect in ("missing", "empty"):
+                                with self.subTest(purpose=purpose, mode=mode, dependency=dependency,
+                                                  broken=broken, filename=filename, defect=defect), \
+                                        tempfile.TemporaryDirectory(dir=staging) as directory:
+                                    root = Path(directory)
+                                    configs = [{"name": group, "purpose": purpose, "no_resolve": mode,
+                                                "sources": [missing if group == "CDN" else "healthy.list"],
+                                                "whitelist": ["dependent/FIN.TXT"] if group == "archive" else []}
+                                               for group in ("healthy", "CDN", "DEPENDENT", "archive")]
+                                    configs[2][dependency] = ["cdn/FIN.TXT"]
+                                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                                    (root / "healthy.list").write_text(R25_SOURCE, encoding="utf-8")
+                                    previous = r25_old_files(root, ("healthy", "cdn", "dependent", "archive"))
+                                    damaged = root / broken / filename
+                                    if defect == "missing":
+                                        damaged.unlink()
+                                        previous.pop(damaged)
+                                    else:
+                                        damaged.write_bytes(b"")
+                                        previous[damaged] = b""
+
+                                    def fetch(url):
+                                        raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(
+                                            url, 404, "Not Found", {}, None)
+
+                                    group = {"cdn": "CDN", "dependent": "DEPENDENT", "archive": "archive"}[broken]
+                                    with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                                        with self.assertRaises(ValueError) as failure:
+                                            publish(generate(root, fetch))
+                                    self.assertEqual(str(failure.exception),
+                                                     f"Cannot freeze {group}: missing complete old file {root / group / filename}")
+                                    self.assertEqual(stderr.getvalue(),
+                                                     ("healthy fin-adb.txt:DOMAIN: 1\n" if purpose != "block" else "") +
+                                                     "healthy fin-adb.txt:IP-CIDR: 2\nhealthy fin-surge-ds.txt:IP-CIDR: 2\n" +
+                                                     f"{missing}: HTTP 404; skipped\n")
+                                    self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                                    self.assertEqual({path for group in ("healthy", "cdn", "dependent", "archive")
+                                                      for path in (root / group).iterdir()}, set(previous))
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows case-insensitive group aliases")
+    def test_windows_frozen_alias_does_not_hide_missing_local_whitelist(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        for purpose in ("block", "proxy", "direct"):
+            for mode in ("add", "strip", "keep"):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=staging) as directory:
+                    root = Path(directory)
+                    configs = [{"name": "CDN", "purpose": purpose, "no_resolve": mode,
+                                "sources": ["https://example.org/missing-cdn.txt"], "whitelist": []},
+                               {"name": "dependent", "purpose": purpose, "no_resolve": mode,
+                                "sources": ["cdn/FIN.TXT"], "whitelist": ["absent.list"]}]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    previous = r25_old_files(root, ("cdn", "dependent"))
+                    with contextlib.redirect_stderr(io.StringIO()) as stderr, self.assertRaises(FileNotFoundError) as failure:
+                        publish(generate(root, lambda url: self.fail("whitelist validation must precede fetch: " + url)))
+                    self.assertEqual(Path(failure.exception.filename), root / "absent.list")
+                    self.assertEqual(stderr.getvalue(), "")
+                    self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows case-insensitive group aliases")
+    def test_windows_case_alias_header_only_dependencies_publish_complete_products(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        for purpose in ("block", "proxy", "direct"):
+            for mode in ("add", "strip", "keep"):
+                for dependency in ("sources", "whitelist"):
+                    for filename in NAMES:
+                        with self.subTest(purpose=purpose, mode=mode, dependency=dependency, filename=filename), \
+                                tempfile.TemporaryDirectory(dir=staging) as directory:
+                            root = Path(directory)
+                            configs = [{"name": "CDN", "purpose": purpose, "no_resolve": mode,
+                                        "sources": ["source.list"], "whitelist": ["allow.list"]},
+                                       {"name": "DEPENDENT", "purpose": purpose, "no_resolve": mode,
+                                        "sources": ["healthy.list"], "whitelist": []}]
+                            configs[1][dependency] = [f"cdn/{filename.upper()}"]
+                            (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                            (root / "source.list").write_text("IP-CIDR,192.0.2.0/24,no-resolve\n", encoding="utf-8")
+                            (root / "allow.list").write_text("IP-CIDR,192.0.2.0/24,DIRECT\n", encoding="utf-8")
+                            (root / "healthy.list").write_text(R25_SOURCE, encoding="utf-8")
+                            previous = r25_old_files(root, ("cdn", "dependent"))
+                            before = datetime.now().astimezone()
+                            with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                                outputs = generate(root, lambda url: self.fail(url))
+                            after = datetime.now().astimezone()
+                            skips = "" if dependency == "sources" else (
+                                ("DEPENDENT fin-adb.txt:DOMAIN: 1\n" if purpose != "block" else "") +
+                                "DEPENDENT fin-adb.txt:IP-CIDR: 2\nDEPENDENT fin-surge-ds.txt:IP-CIDR: 2\n")
+                            if dependency == "sources" and filename == "fin-adb.txt":
+                                source = (root / "cdn" / filename).resolve()
+                                skips = "".join(f"{source}: line {number}: invalid rule\n" for number in range(1, 6))
+                                skips += f"{source}: {7 if purpose == 'block' else 8} skipped lines; first five shown\n"
+                            self.assertEqual(stderr.getvalue(), skips)
+                            self._assert_r25_publication(root, outputs, previous,
+                                                         [("CDN", True), ("DEPENDENT", dependency == "sources")],
+                                                         purpose, mode, before, after)
+
+    @unittest.skipUnless(os.name == "nt", "Requires real Windows case-insensitive group aliases")
+    def test_windows_case_alias_forward_dependencies_reject_stale_products(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        for purpose in ("block", "proxy", "direct"):
+            for mode in ("add", "strip", "keep"):
+                for dependency in ("sources", "whitelist"):
+                    for filename in NAMES:
+                        with self.subTest(purpose=purpose, mode=mode, dependency=dependency, filename=filename), \
+                                tempfile.TemporaryDirectory(dir=staging) as directory:
+                            root = Path(directory)
+                            configs = [{"name": "dependent", "purpose": purpose, "no_resolve": mode,
+                                        "sources": ["healthy.list"], "whitelist": []},
+                                       {"name": "CDN", "purpose": purpose, "no_resolve": mode,
+                                        "sources": ["https://example.org/missing-cdn.txt"], "whitelist": []}]
+                            configs[0][dependency] = [f"cdn/{filename.upper()}"]
+                            (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                            (root / "healthy.list").write_text(R25_SOURCE, encoding="utf-8")
+                            previous = r25_old_files(root, ("cdn", "dependent"))
+                            with contextlib.redirect_stderr(io.StringIO()) as stderr, self.assertRaises(ValueError) as failure:
+                                publish(generate(root, lambda url: self.fail("forward dependency must precede fetch: " + url)))
+                            self.assertEqual(str(failure.exception),
+                                             f"Dependent output not yet generated: {(root / 'cdn' / filename).resolve()}")
+                            self.assertEqual(stderr.getvalue(), "")
+                            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+    @unittest.skipIf(os.name == "nt", "Case-distinct freeze identities require a case-sensitive platform")
+    def test_case_distinct_freeze_does_not_freeze_healthy_group_on_case_sensitive_platform(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=staging) as directory:
+            root = Path(directory)
+            (root / "cdn").mkdir()
+            if (root / "CDN").exists():
+                self.skipTest("This filesystem does not support case-distinct directories")
+            (root / "CDN").mkdir()
+            (root / "dependent").mkdir()
+            for purpose in ("block", "proxy", "direct"):
+                for mode in ("add", "strip", "keep"):
+                    with self.subTest(purpose=purpose, mode=mode):
+                        configs = [{"name": group, "purpose": purpose, "no_resolve": mode,
+                                    "sources": ["https://example.org/missing.txt" if group == "CDN" else
+                                                "healthy.list" if group == "cdn" else "cdn/fin.yaml"], "whitelist": []}
+                                   for group in ("CDN", "cdn", "dependent")]
+                        (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                        (root / "healthy.list").write_text(R25_SOURCE, encoding="utf-8")
+                        previous = {}
+                        for group in ("CDN", "cdn", "dependent"):
+                            for name in NAMES:
+                                path = root / group / name
+                                previous[path] = f"OLD::{group}::{name}\r\n".encode() + b"\x00\x80\xff"
+                                path.write_bytes(previous[path])
+
+                        def fetch(url):
+                            raise RuntimeError(f"Failed to fetch {url}") from error.HTTPError(url, 404, "Not Found", {}, None)
+
+                        before = datetime.now().astimezone()
+                        with contextlib.redirect_stderr(io.StringIO()):
+                            outputs = generate(root, fetch)
+                        after = datetime.now().astimezone()
+                        self._assert_r25_publication(root, outputs, previous, [("cdn", False), ("dependent", False)],
+                                                     purpose, mode, before, after)
 
     def test_missing_local_whitelist_still_aborts_when_source_is_404(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
