@@ -1416,6 +1416,104 @@ class SourceFieldContinuationFormatTests(unittest.TestCase):
             self.assertEqual(parse_whitelist("ignored"), [Rule("IP-CIDR", "192.0.2.0/24", native_fields=True)])
 
 
+class DnsDeepRegexFormatTests(unittest.TestCase):
+    def _check_callers(self, depth, *, prefix='(', atom='audit[.]example[.]test', suffix=')',
+                       dns_prefix='(?:', dns_supported=True, parse_source=True):
+        from rules import exclude_covered, normalize, parse, parse_whitelist
+
+        value = '^' + prefix * depth + atom + suffix * depth + '$'
+        dns_value = '^' + dns_prefix * depth + atom + suffix * depth + '$'
+        rule = Rule('DOMAIN-REGEX', value)
+        if parse_source:
+            for source in ('payload:\n  - DOMAIN-REGEX,' + value,
+                           'rules:\n  - ' + json.dumps('DOMAIN-REGEX,' + value),
+                           "DOMAIN-REGEX,'" + value + "',REJECT"):
+                self.assertEqual(parse(source, purpose='block'), ([rule], []))
+        self.assertEqual(normalize([rule, rule]), [rule])
+        self.assertEqual(exclude_covered([rule], [Rule('DOMAIN-SUFFIX', 'other.test')]), [rule])
+        whitelist = parse_whitelist('payload:\n  - DOMAIN-REGEX,' + value) if parse_source else [rule]
+        self.assertEqual(whitelist, [rule])
+        for purpose in ('block', 'proxy', 'direct'):
+            for mode in ('add', 'strip', 'keep'):
+                for caller in ('block', 'allow', 'whitelist'):
+                    with self.subTest(depth=depth, purpose=purpose, mode=mode, caller=caller):
+                        rules = [rule] if caller == 'block' else [Rule('DOMAIN-REGEX', value, allow=True)] if caller == 'allow' else []
+                        with patch('formats.datetime') as clock:
+                            clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                            out, skipped = render_configured('deep', rules, purpose=purpose, no_resolve=mode,
+                                                             whitelist=whitelist if caller == 'whitelist' else [])
+                        yaml = ('  - ' + json.dumps('DOMAIN-REGEX,' + value) + ' # rconvert-rule-v1 ' +
+                                json.dumps([['DOMAIN-REGEX', value, [], False, False, False, 'surge']],
+                                           separators=(',', ':')) + '\n') if caller == 'block' else ''
+                        dns = (('@@' if caller != 'block' else '') + '/' + dns_value + '/\n'
+                               if purpose == 'block' and dns_supported else '')
+                        expected = {name: '# deep rules: 0\n' for name in
+                                    ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')}
+                        expected['fin.yaml'] = '# deep rules: ' + str(bool(yaml) * 1) + '\npayload:\n' + yaml
+                        expected['fin-adb.txt'] = ('[Adblock Plus 2.0]\n! Title: deep\n'
+                            '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
+                            '! License: Inherits upstream licenses\n! Version: 202610020000\n'
+                            '! Total count: ' + str(bool(dns) * 1) + '\n' + dns +
+                            ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''))
+                        self.assertEqual(tuple(out), ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt',
+                                                      'fin-surge.txt', 'fin-surge-ds.txt'))
+                        self.assertEqual(out, expected)
+                        expected_skips = {name + ':DOMAIN-REGEX': 1 for name in
+                                          ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')} if caller != 'whitelist' else {}
+                        if caller == 'allow':
+                            expected_skips['fin.yaml:DOMAIN-REGEX'] = 1
+                        if not dns and (caller != 'whitelist' or purpose == 'block'):
+                            expected_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
+                        self.assertEqual(skipped, expected_skips)
+                        if yaml and parse_source:
+                            self.assertEqual(parse(out['fin.yaml'], purpose=purpose), ([rule], []))
+
+    def _run_deep(self, depth, **kwargs):
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        code = ('from tests.test_formats import DnsDeepRegexFormatTests; '
+                f'DnsDeepRegexFormatTests()._check_callers({depth}, **{kwargs!r})')
+        result = subprocess.run([sys.executable, '-B', '-c', code],
+                                cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_600_captures_preserved_by_all_dns_callers(self):
+        self._run_deep(600)
+
+    def test_1000_captures_preserved_by_all_dns_callers(self):
+        self._run_deep(1000)
+
+    def test_go_full_height_root_concat_and_capture_preserve_equivalent_regex(self):
+        self._run_deep(998)
+        self._run_deep(999)
+
+    def test_go_full_height_nested_concat_preserves_equivalent_regex(self):
+        self._run_deep(498, prefix='(a?', dns_prefix='(?:a?')
+        self._run_deep(600, prefix='(a?', dns_prefix='(?:a?')
+
+    def test_go_full_height_quantifiers_preserve_binding_and_neighbors(self):
+        self._run_deep(996, atom='audit.*')
+        self._run_deep(998, atom='audit.*')
+        self._run_deep(499, suffix=')?')
+        self._run_deep(500, suffix=')?')
+
+    def test_go_full_height_alternation_and_noncaptures_preserve_equivalent_regex(self):
+        self._run_deep(499, prefix='(x|', dns_prefix='(?:x|')
+        self._run_deep(500, prefix='(x|', dns_prefix='(?:x|')
+        self._run_deep(998, atom='a|b')
+        self._run_deep(600, prefix='(?:a?', dns_prefix='(?:a?', parse_source=False)
+
+    def test_deep_named_groups_flags_classes_and_escaped_parentheses_preserve_renderer_scope(self):
+        self._run_deep(600, prefix='(?<name>', atom=r'(?i:audit)[()\(\)][.]example[.]test', parse_source=False)
+        self._run_deep(600, prefix='(?i:', dns_prefix='(?i:', parse_source=False)
+        self._run_deep(600, prefix='(?=', dns_supported=False, parse_source=False)
+        self._run_deep(600, atom=r'(audit)\1', dns_supported=False, parse_source=False)
+        self._run_deep(600, atom='a{1001}', dns_supported=False)
+
+
 class FormatTests(unittest.TestCase):
     def test_wildcard_survives_compatible_targets(self):
         out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-*.example.com")])
