@@ -1830,12 +1830,17 @@ def _domain_comparison_value(kind: str, value: str, source: str) -> str:
 
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
     domain_groups, typed = {}, set()
+    surge_literals = {'DOMAIN': set(), 'DOMAIN-SUFFIX': set()}
     empty = (set(), set(), set(), set())
     networks = {"src": set(), "dst": set()}
     for entry in whitelist:
         exact, suffixes, keywords, wildcards = domain_groups.setdefault(
             entry.domain_source, (set(), set(), set(), set()))
         value = _domain_comparison_value(entry.kind, entry.value, entry.domain_source)
+        if (entry.domain_source == 'surge' and entry.kind in surge_literals
+                and entry.value.isascii() and not value.endswith('.')
+                and _valid_domain('DOMAIN-SUFFIX', value)):
+            surge_literals[entry.kind].add(value)
         if entry.kind == "DOMAIN":
             exact.add(value)
         elif entry.kind == "DOMAIN-SUFFIX":
@@ -1895,6 +1900,12 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                     network = network.supernet()
         else:
             covered = (kind, value.upper()) in typed
+        # 较窄的 ASCII native literal 可被 Surge 覆盖；保留根点和未知 matcher 的来源差别。
+        if (not covered and rule.domain_source in {'mihomo', 'qx'}
+                and kind in {'DOMAIN', 'DOMAIN-SUFFIX'} and rule.value.isascii()
+                and not value.endswith('.') and _valid_domain('DOMAIN-SUFFIX', value)):
+            covered = (_has_parent(value, surge_literals['DOMAIN-SUFFIX']) or
+                       kind == 'DOMAIN' and value in surge_literals['DOMAIN'])
         if not covered:
             kept.append(rule)
     return kept
