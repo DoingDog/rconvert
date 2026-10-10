@@ -1782,17 +1782,17 @@ restorable = {Rule(rule.kind, rule.value, rule.options, rule.allow, rule.literal
 yaml_matchers = sorted({nest(emitted(leaf))[1:-1] for leaf in canonical_leaves}, key=lambda value: (len(value), value))
 def expected(group):
     parent = group == 'parent'
-    bodies = {'fin.txt': ['DOMAIN,neighbor.example.com'],
-              'fin-qx.txt': ['HOST,neighbor.example.com,LIST'],
-              'fin.yaml': ['  - "DOMAIN,neighbor.example.com"'] +
+    bodies = {'fin.txt': ['DOMAIN,neighbor.example.com'] if parent else [],
+              'fin-qx.txt': ['HOST,neighbor.example.com,LIST'] if parent else [],
+              'fin.yaml': (['  - "DOMAIN,neighbor.example.com"'] if parent else []) +
                           ['  - ' + json.dumps(matcher) for matcher in yaml_matchers],
-              'fin-surge.txt': [], 'fin-surge-ds.txt': ['neighbor.example.com']}
+              'fin-surge.txt': [], 'fin-surge-ds.txt': ['neighbor.example.com'] if parent else []}
     result = {name: f'# {group} rules: {len(body)}\\n' + ('payload:\\n' if name == 'fin.yaml' else '') +
                     ''.join(line + '\\n' for line in body) for name, body in bodies.items()}
     result['fin-adb.txt'] = ('[Adblock Plus 2.0]\\n! Title: ' + group + '\\n! Homepage: https://github.com/DoingDog/rconvert\\n'
                             '! Expires: 1 day\\n! License: Inherits upstream licenses\\n! Version: 202610061200\\n' +
                             (('! Total count: 1\\n0.0.0.0 neighbor.example.com\\n' if parent else
-                              '! Total count: 2\\n@@|neighbor.example.com|\\n0.0.0.0 neighbor.example.com\\n')
+                              '! Total count: 1\\n@@|neighbor.example.com|\\n')
                              if PURPOSE == 'block' else '! Total count: 0\\n! No AdBlock rules for non-advertising group.\\n'))
     return result
 def skip_lines(group):
@@ -1800,8 +1800,8 @@ def skip_lines(group):
     skipped = {name + ':NOT': count for name in names if name != 'fin.yaml'}
     if group == 'parent':
         skipped['fin.yaml:NOT'] = 2
-    if PURPOSE != 'block':
-        skipped['fin-adb.txt:DOMAIN'] = 1
+        if PURPOSE != 'block':
+            skipped['fin-adb.txt:DOMAIN'] = 1
     return [f'{group} {key}: {value}' for key, value in sorted(skipped.items())]
 with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
     root = Path(directory)
@@ -1842,7 +1842,7 @@ with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
         reparsed, messages = parse((root / 'parent' / 'fin.yaml').read_text(encoding='utf-8'), purpose=PURPOSE)
         assert set(reparsed) == restorable and len(reparsed) == len(restorable) and messages == [], (messages, DEPTH, PURPOSE, MODE)
         child, messages = parse((root / 'child' / 'fin.yaml').read_text(encoding='utf-8'), purpose=PURPOSE)
-        wanted = restorable
+        wanted = restorable - {Rule('DOMAIN', 'neighbor.example.com', domain_source='mihomo')}
         assert set(child) == wanted and len(child) == len(wanted) and messages == []
     assert {path for path in root.rglob('fin*') if path.is_file()} == set(old)
 assert sys.getrecursionlimit() == limit
