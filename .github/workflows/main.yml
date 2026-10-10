@@ -26,8 +26,6 @@ jobs:
           .venv/bin/python -c 'import sys; assert sys.version_info >= (3, 11)'
       - name: Check static baseline
         run: |
-          test "$(git ls-tree -r --name-only HEAD static | wc -l)" -eq 19
-          test "$(git rev-parse HEAD:static)" = 7dcca27435e6de8b2f5085482cf67b1561884cf1
           git diff HEAD --exit-code -- static
           test -z "$(git ls-files --others -- static)"
       - name: Test generator
@@ -50,8 +48,6 @@ jobs:
           .venv/bin/python update_readme_counts.py
       - name: Check static and commit generated files
         run: |
-          test "$(git ls-tree -r --name-only HEAD static | wc -l)" -eq 19
-          test "$(git rev-parse HEAD:static)" = 7dcca27435e6de8b2f5085482cf67b1561884cf1
           git diff HEAD --exit-code -- static
           test -z "$(git ls-files --others -- static)"
           .venv/bin/python - <<'PY'

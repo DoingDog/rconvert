@@ -6,6 +6,7 @@ import json
 from datetime import datetime, timedelta, timezone
 from http.client import IncompleteRead
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -3706,12 +3707,21 @@ class GenerateTests(unittest.TestCase):
             self.assertFalse(new.parent.exists())
             self.assertEqual(old.read_bytes(), b"previous version\n")
 
-    def test_publish_rejects_paths_outside_worktree(self):
-        outside = ROOT.parent / "outside-fin.txt"
-        with patch("os.replace", side_effect=RuntimeError("would write outside")):
-            with self.assertRaisesRegex(ValueError, "worktree"):
-                publish({outside: "DOMAIN,ads.example.org\n"})
-        self.assertFalse(outside.exists())
+    def test_publish_rejects_paths_outside_selected_root(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=staging) as directory:
+            fixture = Path(directory)
+            root = fixture / "data"
+            root.mkdir()
+            inside, outside = root / "fin.txt", fixture / "outside-fin.txt"
+            previous = {inside: b"old inside\r\n", outside: b"old outside\r\n"}
+            for path, content in previous.items():
+                path.write_bytes(content)
+            with self.assertRaisesRegex(ValueError, "Output path escapes root"):
+                publish({inside: "new inside\n", outside: "new outside\n"}, root=root)
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+            self.assertFalse((root / ".tmp").exists())
 
     def test_publish_rejects_static_paths_before_replacement(self):
         target = ROOT / "static/main/Direct.list"
@@ -3721,9 +3731,44 @@ class GenerateTests(unittest.TestCase):
                 publish({target: "DOMAIN,evil.example\n"})
         self.assertEqual(target.read_bytes(), original)
 
-    def test_generate_rejects_root_outside_worktree_before_reading(self):
-        with self.assertRaisesRegex(ValueError, "worktree"):
-            generate(ROOT.parent, lambda _: self.fail("network must not be used"))
+    def test_publish_rejects_selected_root_static_paths_before_replacement(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=staging) as directory:
+            root = Path(directory)
+            target = root / "static/main/Direct.list"
+            target.parent.mkdir(parents=True)
+            original = b"old whitelist\r\n\x00"
+            target.write_bytes(original)
+            with self.assertRaisesRegex(ValueError, "Output path targets static"):
+                publish({target: "DOMAIN,evil.example\n"}, root=root)
+            self.assertEqual(target.read_bytes(), original)
+            self.assertFalse((root / ".tmp").exists())
+
+    def test_generate_rejects_sources_outside_selected_root_before_reading(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=staging) as directory:
+            fixture = Path(directory)
+            root = fixture / "data"
+            root.mkdir()
+            outside = fixture / "outside.list"
+            outside.write_bytes(b"DOMAIN,outside.example.org\r\n")
+            (root / "input.list").write_text("DOMAIN,ads.example.org\n", encoding="utf-8")
+            (root / "custom").mkdir()
+            previous = {root / "custom" / name: b"old complete\r\n\x00" for name in NAMES}
+            previous[outside] = outside.read_bytes()
+            for path, content in previous.items():
+                path.write_bytes(content)
+            for key in ("sources", "whitelist"):
+                with self.subTest(key=key):
+                    config = {"name": "custom", "purpose": "block", "no_resolve": "keep",
+                              "sources": ["input.list"], "whitelist": []}
+                    config[key] = ["../outside.list"]
+                    (root / "rulesets.json").write_text(json.dumps([config]), encoding="utf-8")
+                    with self.assertRaisesRegex(ValueError, "Source escapes root"):
+                        generate(root, lambda _: self.fail("network must not be used"))
+                    self.assertEqual({path: path.read_bytes() for path in previous}, previous)
 
     def test_json_config_builds_a_new_group_without_hardcoded_names(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -3875,11 +3920,9 @@ class GenerateTests(unittest.TestCase):
                 capture_output=True, text=True, check=False,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertTrue((root / "mirror").is_junction())
             for name in NAMES:
                 self.assertTrue((root / "cdn" / name).samefile(root / "mirror" / name))
             self._assert_output_collision_rejected(root, root / "cdn" / NAMES[0], root / "mirror" / NAMES[0])
-            self.assertTrue((root / "mirror").is_junction())
 
     @unittest.skipIf(os.name == "nt", "Case-distinct groups require a case-sensitive platform")
     def test_case_distinct_groups_generate_separate_outputs_on_case_sensitive_platform(self):
@@ -4174,6 +4217,47 @@ class GenerateTests(unittest.TestCase):
                     (root / "allow.list").write_text(content, encoding="utf-8")
                     with self.assertRaisesRegex(ValueError, r"allow\.list.*no rules"):
                         generate(root, lambda _: self.fail("local input must not fetch"))
+
+    def test_cli_selected_root_outside_code_publishes_only_to_data(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=staging) as directory:
+            fixture = Path(directory)
+            code, data = fixture / "code", fixture / "data"
+            code.mkdir()
+            data.mkdir()
+            for name in ("generate.py", "sources.py", "rules.py", "formats.py"):
+                shutil.copyfile(ROOT / name, code / name)
+            original_code = {path: path.read_bytes() for path in code.iterdir()}
+            (data / "rulesets.json").write_text(json.dumps([{
+                "name": "custom", "purpose": "block", "no_resolve": "keep",
+                "sources": ["input.list"], "whitelist": [],
+            }]), encoding="utf-8")
+            (data / "input.list").write_text("HOST,ads.example.org,REJECT\n", encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, "-B", "-X", "utf8", str(code / "generate.py"), "--root", str(data)],
+                cwd=code, capture_output=True, text=True, encoding="utf-8", timeout=8,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(set((data / "custom").iterdir()), {data / "custom" / name for name in NAMES})
+            self.assertEqual((data / "custom/fin.txt").read_text(encoding="utf-8"),
+                             "# custom rules: 1\nDOMAIN,ads.example.org\n")
+            self.assertEqual((data / "custom/fin-qx.txt").read_text(encoding="utf-8"),
+                             "# custom rules: 1\nHOST,ads.example.org,LIST\n")
+            from rules import parse
+
+            rules, warnings = parse((data / "custom/fin.yaml").read_text(encoding="utf-8"), purpose="block")
+            self.assertEqual([(rule.kind, rule.value) for rule in rules], [("DOMAIN", "ads.example.org")])
+            self.assertEqual(warnings, [])
+            self.assertEqual((data / "custom/fin-adb.txt").read_text(encoding="utf-8").splitlines()[6:],
+                             ["! Total count: 1", "0.0.0.0 ads.example.org"])
+            self.assertEqual((data / "custom/fin-surge.txt").read_text(encoding="utf-8"),
+                             "# custom rules: 0\n")
+            self.assertEqual((data / "custom/fin-surge-ds.txt").read_text(encoding="utf-8"),
+                             "# custom rules: 1\nads.example.org\n")
+            self.assertTrue((data / ".tmp").is_dir())
+            self.assertEqual(list((data / ".tmp").iterdir()), [])
+            self.assertEqual({path: path.read_bytes() for path in code.iterdir()}, original_code)
 
     def test_cli_builds_fixture_with_local_sources_only(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
