@@ -250,6 +250,7 @@ def _delimiters(line: str, *, native_fields: bool = False,
     stack = []
     start, escaped, quote = 0, False, None
     regex_depth = literal_depth = None
+    literal_keyword = False
     class_first = class_hyphen = extended = regex_comment = False
     index = 0
     while index < len(line):
@@ -298,7 +299,7 @@ def _delimiters(line: str, *, native_fields: bool = False,
                 class_first = class_hyphen = False
             if regex_depth is not None and char == 'c':
                 index += 1
-        elif char == '\\':
+        elif char == '\\' and not (literal_keyword and not quote):
             escaped = True
         elif quote:
             if char == quote:
@@ -371,6 +372,7 @@ def _delimiters(line: str, *, native_fields: bool = False,
             elif regex_depth is None and literal_depth is None:
                 raise ValueError("unbalanced delimiters")
         elif char == ',':
+            literal_keyword = False
             if regex_depth is None and literal_depth is None:
                 scope_start = stack[-1][1] + 1 if stack else start
                 kind = line[scope_start:index].strip().upper()
@@ -381,6 +383,9 @@ def _delimiters(line: str, *, native_fields: bool = False,
                         regex_depth = len(stack)
                 elif kind in _KINDS and kind not in _LOGICAL:
                     literal_depth = len(stack)
+                elif kind == 'HOST-KEYWORD' and not stack:
+                    literal_depth = 0
+                    literal_keyword = True
             if not stack:
                 yield ',', index
             start = index + 1
@@ -503,8 +508,8 @@ def _source_parts(line: str) -> tuple[list[str], int]:
             if token == 'comment':
                 return [head.strip(), line[value_start:index].strip()], index
         return [head.strip(), value.strip()], len(line)
-    # 普通进程字段中的 marker 是字面内容；确定尾字段或注释后停止范围扫描。
-    process = kind in {'PROCESS-NAME', 'PROCESS-PATH', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'}
+    # 普通进程和 QX keyword 字段中的 marker 是字面内容；确定尾字段后停止范围扫描。
+    process = kind in {'HOST-KEYWORD', 'PROCESS-NAME', 'PROCESS-PATH', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'}
     for token, index in _delimiters(line):
         if token == 'comment' and not process:
             fields, _ = _literal_fields(line[:index])
@@ -535,8 +540,10 @@ def _valid_domain(kind: str, value: str) -> bool:
 def _valid_deep_regex(probe: str) -> bool:
     # 逐层验证普通组，再以空组原子替换已验证内容，保留父组的量词与分支语法。
     groups, escaped, in_class, class_first = [[]], False, False, False
-    class_start = 0
+    class_start = skip_until = 0
     for index, char in enumerate(probe):
+        if index < skip_until:
+            continue
         if escaped:
             groups[-1].extend(('\\', char))
             escaped = False
@@ -558,6 +565,10 @@ def _valid_deep_regex(probe: str) -> bool:
             if char != '^' or index != class_start + 1:
                 class_first = False
         elif char == '(':
+            if probe.startswith('(?#)', index):
+                groups[-1].append('(?#)')
+                skip_until = index + 4
+                continue
             if probe[index + 1:index + 2] == '?':
                 return False
             groups.append([])
@@ -610,21 +621,21 @@ def _valid_regex(kind: str, value: str) -> bool:
     class_start, class_probe, classes = 0, 0, []
     extended_stack, conditionals, references = [], [], []
     captures, explicit_capture, capture_slots = 0, False, {0}
-    conditional_head = False
+    conditional_head = after_options = False
+    quantifier_probe = 0
     while index < len(value) and kind != "URL-REGEX":
         char = value[index]
         if not in_class and value.startswith("(?#", index):
             end = value.find(")", index + 3)
             if end < 0:
                 return False
-            probe.append("(?#)")
+            probe.append('(?#)')
             index = end + 1
-            quantified = False
             continue
         if char == "\\":
             if index + 1 == len(value):
                 return False
-            quantified = False
+            quantified = after_options = False
             escape = value[index + 1]
             if in_class:
                 class_first = class_hyphen = False
@@ -724,21 +735,36 @@ def _valid_regex(kind: str, value: str) -> bool:
                 class_atom, range_from_literal = ("escaped_hyphen" if escape == "-" else "literal"), False
             index += 2
             continue
-        if extended and not in_class and char.isspace():
+        if extended and not in_class and char in ' \t\n\r\v\f':
+            probe.append('(?#)')
             index += 1
             continue
         if extended and not in_class and char == "#":
-            break
+            end = value.find('\n', index)
+            probe.append('(?#)')
+            index = len(value) if end < 0 else end + 1
+            continue
         if not in_class and char == "{":
             count = re.match(r"\{[0-9]+(?:,[0-9]*)?\}", value[index:])
             if count is not None:
+                if after_options:
+                    return False
+                quantifier_probe = len(probe)
                 probe.append(count[0])
                 index += len(count[0])
                 quantified = True
                 continue
-        if not in_class and char == "+" and quantified:
+        if not in_class and (char == "+" and quantified or after_options and char in "*+?"):
             return False
+        if not in_class and char == '?' and quantified:
+            # regexp2 在量词与 lazy modifier 之间允许 comment 和 x-mode 空白。
+            probe[quantifier_probe] += '?'
+            index += 1
+            continue
+        after_options = False
         quantified = not in_class and char in "*+?"
+        if quantified:
+            quantifier_probe = len(probe)
         if not in_class and char == "(":
             if value.startswith(('(?(?=', '(?(?!', '(?(?<=', '(?(?<!'), index):
                 extended_stack.append((extended, explicit_capture))
@@ -773,12 +799,9 @@ def _valid_regex(kind: str, value: str) -> bool:
             flags = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?\)", value[index:])
             if flags is not None and (flags[1] or flags[2]):
                 extended = (extended or "x" in flags[1]) and not (flags[2] and "x" in flags[2])
-                following = value[index + len(flags[0]):]
-                if extended:
-                    following = following.lstrip()
-                if following.startswith(("*", "+", "?")) or re.match(r"\{[0-9]+(?:,[0-9]*)?\}", following):
-                    return False
-                probe.append(f"(?{flags[1]}{'-' + flags[2] if flags[2] else ''}:)")
+                # comment marker 保留词法边界；global options 不提供量词对象。
+                probe.append('(?#)')
+                after_options = True
                 index += len(flags[0])
                 continue
             scoped = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?:", value[index:])
@@ -1059,7 +1082,7 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
             'REDIR', 'TPROXY', 'TROJAN', 'TUNNEL', 'TUN', 'TUIC', 'HYSTERIA2', 'ANYTLS', 'MIERU',
             'SUDOKU', 'TRUSTTUNNEL', 'SHADOWQUIC', 'INNER',
         } for part in value.split('/'))
-    if kind == "DOMAIN-KEYWORD" and native_fields:
+    if kind == "DOMAIN-KEYWORD":
         return bool(value)
     return bool(re.fullmatch(r"[a-z0-9._-]+", value, re.I))
 
@@ -1158,8 +1181,6 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             return None
         kind, value = fields[:2]
         kind = kind.upper()
-        if not native_fields and kind in _REGEX and value.endswith(",no-resolve"):
-            return None
         checked = value if native_fields else _field_value(value)
         if native_fields:
             options = {field for field in fields[2:] if field in {"src", "no-resolve"} and kind in _SOURCE_KINDS

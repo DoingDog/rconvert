@@ -178,6 +178,234 @@ class PublicStateRestorationRuleTests(unittest.TestCase):
 
 
 class NativeKeywordRuleTests(unittest.TestCase):
+    def test_qx_literal_backslashes_do_not_escape_policy_delimiters(self):
+        self._check_complete_qx_literal_fields(('\\', '\\\\', '\\\\\\'))
+
+    def test_qx_literal_parentheses_do_not_change_source_structure(self):
+        self._check_complete_qx_literal_fields(('(', ')', '(1', ')1', '(1)'))
+
+    def _check_complete_qx_literal_fields(self, suffixes):
+        import json
+
+        neighbor = Rule('DOMAIN', 'keep.example.com', domain_source='qx')
+        for prefix in ('中文', '中文 #1', '中文 ;1', '中文 //1'):
+            for suffix in suffixes:
+                value = prefix + suffix
+                keyword = Rule('DOMAIN-KEYWORD', value, domain_source='qx')
+                for field in (value, json.dumps(value, ensure_ascii=False)):
+                    for comment in ('', ' # note,ignored(', ' ; note,ignored)', ' // note,ignored('):
+                        text = 'HOST-KEYWORD,' + field + ',LIST' + comment + '\nHOST,keep.example.com,LIST\n'
+                        for purpose in ('block', 'direct', 'proxy'):
+                            for ignore_policy in (False, True):
+                                with self.subTest(value=value, field=field, comment=comment,
+                                                  purpose=purpose, ignore_policy=ignore_policy):
+                                    self.assertEqual(parse(text, purpose=purpose, ignore_policy=ignore_policy),
+                                                     ([keyword, neighbor], []))
+                        with self.subTest(value=value, field=field, comment=comment, caller='white'):
+                            with warnings.catch_warnings(record=True) as seen:
+                                self.assertEqual(rules.parse_whitelist(text), [keyword, neighbor])
+                            self.assertEqual(seen, [])
+                            shorter = Rule('DOMAIN-KEYWORD', '中文', domain_source='qx')
+                            longer = Rule('DOMAIN-KEYWORD', value + '9', domain_source='qx')
+                            allowed = Rule('DOMAIN-KEYWORD', value, allow=True, domain_source='qx')
+                            native = Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')
+                            self.assertEqual(rules.exclude_covered([shorter, keyword, longer, allowed, native], [keyword]),
+                                             [shorter, allowed, native])
+                            self.assertEqual(rules.exclude_covered([keyword], [longer]), [keyword])
+                for header in ('payload', 'rules'):
+                    text = header + ':\n  - ' + json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False)
+                    self.assertEqual(parse(text, purpose='proxy'),
+                                     ([Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')], []))
+                for option, message in (('no-resolve', 'unsupported no-resolve for DOMAIN-KEYWORD'),
+                                        ('extended-matching', 'unsupported ruleset option extended-matching'),
+                                        ('extra', 'unexpected fields')):
+                    text = 'HOST-KEYWORD,' + value + ',LIST,' + option + '\nHOST,keep.example.com,LIST\n'
+                    with self.subTest(value=value, option=option):
+                        self.assertEqual(parse(text, purpose='proxy'), ([neighbor], ['line 1: ' + message]))
+                        with warnings.catch_warnings(record=True) as seen:
+                            self.assertEqual(rules.parse_whitelist(text), [neighbor])
+                        self.assertEqual([str(item.message) for item in seen], ['line 1: ' + message])
+
+    def test_complete_keyword_fields_keep_existing_quotes_and_logical_boundaries(self):
+        import json
+
+        for value in ('中文\\', '中文 #1\\\\\\', '中文 ;1(', '中文 //1)', '中文(1)'):
+            field = json.dumps(value, ensure_ascii=False)
+            for operator in ('AND', 'OR', 'NOT'):
+                expression = ('((DOMAIN-KEYWORD,' + field + '))' if operator == 'NOT' else
+                              '((DOMAIN-KEYWORD,' + field + '),(IP-CIDR,192.0.2.0/24,no-resolve))')
+                text = operator + ',' + expression + ',LIST # note,ignored('
+                with self.subTest(value=value, operator=operator):
+                    self.assertEqual(parse(text, purpose='proxy'), ([Rule(operator, expression)], []))
+        for field in ("'中文 #1'", '"中文 #1"'):
+            self.assertEqual(parse('HOST-KEYWORD,' + field + ',LIST', purpose='proxy'),
+                             ([Rule('DOMAIN-KEYWORD', '中文 #1', domain_source='qx')], []))
+        self.assertEqual(parse('HOST-KEYWORD,,LIST\nHOST,keep.example.com,LIST', purpose='proxy'),
+                         ([Rule('DOMAIN', 'keep.example.com', domain_source='qx')], ['line 1: invalid DOMAIN-KEYWORD ']))
+
+    def test_qx_keyword_markers_preserve_complete_fields_and_whitelist_scope(self):
+        import json
+
+        for value in ('中文 #1', '中文 ;1', '中文 //1', '中文 #1 ;2 //3',
+                      '中文(1) #2', '中文 1', '中文(1)', '123#1', '123'):
+            keyword = Rule('DOMAIN-KEYWORD', value, domain_source='qx')
+            neighbor = Rule('DOMAIN', 'keep.example.com', domain_source='qx')
+            for field in (value, "'" + value + "'", json.dumps(value, ensure_ascii=False)):
+                for comment in ('', ' # note,ignored(', ' ; note,ignored(', ' // note,ignored('):
+                    text = 'HOST-KEYWORD,' + field + ',LIST' + comment + '\nHOST,keep.example.com,LIST\n'
+                    for purpose in ('block', 'direct', 'proxy'):
+                        for ignore_policy in (False, True):
+                            with self.subTest(value=value, field=field, comment=comment,
+                                              purpose=purpose, ignore_policy=ignore_policy):
+                                self.assertEqual(parse(text, purpose=purpose, ignore_policy=ignore_policy),
+                                                 ([keyword, neighbor], []))
+                    with self.subTest(value=value, field=field, comment=comment, caller='whitelist'):
+                        with warnings.catch_warnings(record=True) as messages:
+                            white = rules.parse_whitelist(text)
+                        self.assertEqual(white, [keyword, neighbor])
+                        self.assertEqual(messages, [])
+                        short = Rule('DOMAIN-KEYWORD', '中文', domain_source='qx')
+                        longer = Rule('DOMAIN-KEYWORD', value + '9', domain_source='qx')
+                        allowed = Rule('DOMAIN-KEYWORD', value, allow=True, domain_source='qx')
+                        native = Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')
+                        self.assertEqual(rules.exclude_covered([short, keyword, longer, allowed, native], [keyword]),
+                                         ([short] if value != '中文' else []) + [allowed, native])
+                        self.assertEqual(normalize([keyword, keyword]), [keyword])
+            for header in ('payload', 'rules'):
+                scalar = json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False)
+                self.assertEqual(parse(header + ':\n  - ' + scalar, purpose='proxy'),
+                                 ([Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')], []))
+            for action in ('REJECT', 'DIRECT', 'PROXY'):
+                for purpose in ('block', 'direct', 'proxy'):
+                    text = 'HOST-KEYWORD,' + value + ',' + action + ' # note'
+                    expected = ([keyword], []) if action == {'block': 'REJECT', 'direct': 'DIRECT', 'proxy': 'PROXY'}[purpose] else (
+                        [], ['line 1: incompatible action ' + action])
+                    with self.subTest(value=value, action=action, purpose=purpose):
+                        self.assertEqual(parse(text, purpose=purpose), expected)
+                        self.assertEqual(parse(text, purpose=purpose, ignore_policy=True), ([keyword], []))
+
+    def test_keyword_marker_boundaries_keep_ordinary_comments_and_invalid_neighbors(self):
+        import json
+
+        for marker in ('#', ';', '//'):
+            for kind, source in (('DOMAIN-KEYWORD', 'surge'), ('HOST-KEYWORD', 'qx')):
+                with self.subTest(marker=marker, kind=kind):
+                    value = '中文 ' + marker + '1'
+                    complete = Rule('DOMAIN-KEYWORD', value, domain_source=source)
+                    shortened = Rule('DOMAIN-KEYWORD', '中文', domain_source=source)
+                    comment_value = '中文 ' + marker + ' note' if kind == 'HOST-KEYWORD' else '中文'
+                    self.assertEqual(parse(kind + ',中文 ' + marker + ' note', purpose='proxy'),
+                                     ([Rule('DOMAIN-KEYWORD', comment_value, domain_source=source)], []))
+                    self.assertEqual(parse(kind + ",'" + value + "',LIST " + marker + ' note', purpose='proxy'),
+                                     ([complete], []))
+                    self.assertEqual(parse(kind + ',中文,LIST ' + marker + ' note,ignored(', purpose='proxy'),
+                                     ([shortened], []))
+            for kind, value in (('DOMAIN', 'keep.example.com'), ('HOST', 'keep.example.com'),
+                                ('DOMAIN-SUFFIX', 'example.com'), ('IP-CIDR', '192.0.2.0/24')):
+                source = 'qx' if kind == 'HOST' else 'surge'
+                expected = Rule('DOMAIN' if kind == 'HOST' else kind, value, domain_source=source)
+                self.assertEqual(parse(kind + ',' + value + ' ' + marker + ' note,ignored(', purpose='proxy'),
+                                 ([expected], []))
+            for operator in ('AND', 'OR', 'NOT'):
+                value = '中文 ' + marker + '1'
+                child = "(DOMAIN-KEYWORD,'" + value + "')"
+                expression = '(' + child + ')' if operator == 'NOT' else '(' + child + ',(IP-CIDR,192.0.2.0/24,no-resolve))'
+                expected = Rule(operator, expression)
+                self.assertEqual(parse(operator + ',' + expression + ',LIST ' + marker + ' note,ignored(', purpose='proxy'),
+                                 ([expected], []))
+                native_value = expression.replace("'", '')
+                self.assertEqual(parse('payload:\n  - ' + json.dumps(operator + ',' + native_value), purpose='proxy'),
+                                 ([Rule(operator, native_value, native_fields=True, domain_source='mihomo')], []))
+        neighbor = Rule('DOMAIN', 'keep.example.com')
+        for line, message in (
+                ('HOST-KEYWORD,,LIST', 'invalid DOMAIN-KEYWORD '),
+                ('HOST-KEYWORD,中文 #1,LIST,no-resolve', 'unsupported no-resolve for DOMAIN-KEYWORD'),
+                ('HOST-KEYWORD,中文 ;1,LIST,extra', 'unexpected fields'),
+                ('HOST-KEYWORD,中文 //1,LIST,extended-matching', 'unsupported ruleset option extended-matching'),
+                ("HOST-KEYWORD,'中文 #1,LIST", 'unbalanced delimiters')):
+            with self.subTest(line=line):
+                self.assertEqual(parse(line + '\nDOMAIN,keep.example.com', purpose='proxy'),
+                                 ([neighbor], ['line 1: ' + message]))
+                with warnings.catch_warnings(record=True) as messages:
+                    self.assertEqual(rules.parse_whitelist(line + '\nDOMAIN,keep.example.com'), [neighbor])
+                self.assertEqual([str(message.message) for message in messages], ['line 1: ' + message])
+
+    def test_emitted_keywords_reimport_complete_rules_aliases_and_whitelists(self):
+        from formats import render
+
+        for value in ('中文', '中文123', '123#1', '123'):
+            native = [Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')]
+            ordinary = [Rule('DOMAIN-KEYWORD', value)]
+            for operator in ('AND', 'OR', 'NOT'):
+                expression = (f'((DOMAIN-KEYWORD,{value}))' if operator == 'NOT' else
+                              f'((DOMAIN-KEYWORD,{value}),(NETWORK,tcp))')
+                native.append(Rule(operator, expression, native_fields=True, domain_source='mihomo'))
+                ordinary.append(Rule(operator, expression.replace('NETWORK,tcp', 'PROTOCOL,TCP')))
+            native.append(Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'))
+            text = 'payload:\n' + ''.join('  - ' + rule.kind + ',' + rule.value + '\n' for rule in native)
+            self.assertEqual(parse(text, purpose='proxy'), (native, []))
+            outputs, skipped = render('parent', native, purpose='proxy', no_resolve='keep')
+            for name in ('fin.txt', 'fin-surge.txt'):
+                expected = [ordinary[1], *([Rule('DOMAIN', 'keep.example.com')] if name == 'fin.txt' else []),
+                            ordinary[0], ordinary[3], ordinary[2]]
+                self.assertEqual(outputs[name], f'# parent rules: {len(expected)}\n' +
+                                 ''.join(rule.kind + ',' + rule.value + '\n' for rule in expected))
+                self.assertFalse(any(key.startswith(name + ':') for key in skipped))
+                for purpose in ('block', 'direct', 'proxy'):
+                    for ignore_policy in (False, True):
+                        with self.subTest(value=value, name=name, purpose=purpose, ignore_policy=ignore_policy):
+                            self.assertEqual(parse(outputs[name], purpose=purpose, ignore_policy=ignore_policy),
+                                             (expected, []))
+                            self.assertEqual(set(normalize(expected * 2)), set(expected))
+                with self.subTest(value=value, name=name, caller='whitelist'), warnings.catch_warnings(record=True) as messages:
+                    self.assertEqual(rules.parse_whitelist(outputs[name]),
+                                     [rule for rule in expected if rule.kind in {'DOMAIN', 'DOMAIN-KEYWORD'}])
+                    self.assertEqual(messages, [])
+            qx = [Rule('DOMAIN', 'keep.example.com', domain_source='qx'),
+                  Rule('DOMAIN-KEYWORD', value, domain_source='qx')]
+            self.assertEqual(outputs['fin-qx.txt'],
+                             '# parent rules: 2\nHOST,keep.example.com,LIST\nHOST-KEYWORD,' + value + ',LIST\n')
+            for purpose in ('block', 'direct', 'proxy'):
+                with self.subTest(value=value, name='fin-qx.txt', purpose=purpose):
+                    self.assertEqual(parse(outputs['fin-qx.txt'], purpose=purpose), (qx, []))
+            with self.subTest(value=value, name='fin-qx.txt', caller='whitelist'):
+                with warnings.catch_warnings(record=True) as messages:
+                    self.assertEqual(rules.parse_whitelist(outputs['fin-qx.txt']), qx)
+                self.assertEqual(messages, [])
+            self.assertEqual(parse(outputs['fin.yaml'], purpose='proxy'),
+                             ([native[1], native[4], native[0], native[3], native[2]], []))
+
+    def test_keyword_whitelist_preserves_literal_range_allow_and_source_identity(self):
+        for value in ('中文', '中文123', '123#1', '123'):
+            for source, prefix in (('surge', 'DOMAIN-KEYWORD,'), ('qx', 'HOST-KEYWORD,')):
+                keyword = Rule('DOMAIN-KEYWORD', value, domain_source=source)
+                longer = Rule('DOMAIN-KEYWORD', value + '9', domain_source=source)
+                neighbor = Rule('DOMAIN', 'keep.example.com', domain_source=source)
+                allowed = Rule('DOMAIN-KEYWORD', value, allow=True, domain_source=source)
+                native = Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')
+                text = prefix + value + ',DIRECT\n' + prefix + value + '9,DIRECT\n' + (
+                    'HOST,' if source == 'qx' else 'DOMAIN,') + 'keep.example.com,DIRECT\n'
+                with self.subTest(value=value, source=source), warnings.catch_warnings(record=True) as messages:
+                    self.assertEqual(rules.parse_whitelist(text), [keyword, longer, neighbor])
+                    white = rules.parse_whitelist(prefix + value + ',DIRECT')
+                self.assertEqual(messages, [])
+                self.assertEqual(rules.exclude_covered([keyword, longer, neighbor, allowed, native], white),
+                                 [neighbor, allowed, native])
+                self.assertEqual(rules.exclude_covered([keyword], [longer]), [keyword])
+                for purpose in ('block', 'direct', 'proxy'):
+                    self.assertEqual(parse(prefix + value + ',REJECT', purpose=purpose, ignore_policy=True),
+                                     ([keyword], []))
+                    self.assertEqual(parse(prefix + value + ',REJECT', purpose=purpose),
+                                     ([keyword], []) if purpose == 'block' else ([], ['line 1: incompatible action REJECT']))
+        for value in ('no-resolve', '123,no-resolve'):
+            field = "'" + value + "'"
+            self.assertEqual(parse('DOMAIN-KEYWORD,' + field, purpose='proxy'),
+                             ([Rule('DOMAIN-KEYWORD', value)], []))
+            expression = '((DOMAIN-KEYWORD,' + field + '),(IP-CIDR,192.0.2.0/24))'
+            self.assertEqual(parse('AND,' + expression, purpose='proxy'), ([Rule('AND', expression)], []))
+        self.assertEqual(parse('DOMAIN-KEYWORD,中文,no-resolve\nDOMAIN,keep.example.com', purpose='proxy'),
+                         ([Rule('DOMAIN', 'keep.example.com')], ['line 1: unsupported no-resolve for DOMAIN-KEYWORD']))
+
     def test_r22_native_scalars_keep_constructor_characters_and_seven_fields(self):
         import json
         from dataclasses import fields
@@ -240,7 +468,7 @@ class NativeKeywordRuleTests(unittest.TestCase):
                 self.assertEqual(parse('payload:\n  - NOT,((DOMAIN-KEYWORD,' + value + '))', purpose='block'),
                                  ([], ['line 2: invalid logical expression ((DOMAIN-KEYWORD,' + value.strip(' ') + '))']))
         self.assertEqual(parse('DOMAIN-KEYWORD,中文\nDOMAIN,keep.example.com', purpose='block'),
-                         ([Rule('DOMAIN', 'keep.example.com')], ['line 1: invalid DOMAIN-KEYWORD 中文']))
+                         ([Rule('DOMAIN-KEYWORD', '中文'), Rule('DOMAIN', 'keep.example.com')], []))
         self.assertEqual(parse('DOMAIN-KEYWORD,ads', purpose='block'), ([Rule('DOMAIN-KEYWORD', 'ads')], []))
         for document in ('<!doctype html>\nDOMAIN-KEYWORD,hidden',
                          '﻿<html>\nDOMAIN-KEYWORD,hidden\n</html>'):
@@ -1274,6 +1502,113 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                     parsed, messages = parse(source, purpose="proxy")
                     self.assertEqual((parsed, messages), ([expected, self.native_keep], []))
                     self.assertIn(expected, normalize(parsed))
+
+
+class BoundedRegexTailRuleTests(unittest.TestCase):
+    def test_complete_regex_tail_is_literal_in_all_bounded_logical_sources(self):
+        import json
+
+        for kind, matcher in (('PROCESS-NAME-REGEX', '^Foo,no-resolve'),
+                              ('PROCESS-PATH-REGEX', '^/tmp/Foo,no-resolve'),
+                              ('DOMAIN-REGEX', '^ads,no-resolve')):
+            for operator in ('AND', 'OR', 'NOT'):
+                for purpose, action in (('block', 'REJECT'), ('proxy', 'PROXY'), ('direct', 'DIRECT')):
+                    for source in ('ordinary', 'quoted', 'native'):
+                        leaf = '(' + kind + ',' + (_quote_matcher(matcher) if source == 'quoted' else matcher) + ')'
+                        expression = '(' + leaf + ('' if operator == 'NOT' else ',(NETWORK,tcp)') + ')'
+                        rule = Rule(operator, expression, native_fields=source == 'native')
+                        keep = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo' if source == 'native' else 'surge')
+                        text = ('payload:\n  - ' + json.dumps(operator + ',' + expression) + '\n  - DOMAIN,keep.example.org'
+                                if source == 'native' else operator + ',' + expression + ',' + action +
+                                '\nDOMAIN,keep.example.org,' + action)
+                        with self.subTest(kind=kind, operator=operator, purpose=purpose, source=source):
+                            self.assertEqual(parse(text, purpose=purpose), ([rule, keep], []))
+                            self.assertEqual(set(normalize([rule, keep, rule])), {rule, keep})
+                            self.assertEqual(rules.parse_whitelist(text), [keep])
+
+
+    def test_invalid_complete_matchers_options_and_top_level_ambiguity_keep_neighbors(self):
+        import json
+
+        for kind in ('PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX', 'DOMAIN-REGEX'):
+            for matcher in ('*Foo,no-resolve', '^Foo[,no-resolve'):
+                for operator in ('AND', 'OR', 'NOT'):
+                    for native in (False, True):
+                        leaf = '(' + kind + ',' + (matcher if native else _quote_matcher(matcher)) + ')'
+                        expression = '(' + leaf + ('' if operator == 'NOT' else ',(NETWORK,tcp)') + ')'
+                        text = ('payload:\n  - ' + json.dumps(operator + ',' + expression) + '\n  - DOMAIN,keep.example.org'
+                                if native else operator + ',' + expression + ',PROXY\nDOMAIN,keep.example.org,PROXY')
+                        keep = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo' if native else 'surge')
+                        with self.subTest(kind=kind, matcher=matcher, operator=operator, native=native):
+                            self.assertEqual(parse(text, purpose='proxy'),
+                                             ([keep], [f'line {2 if native else 1}: invalid logical expression {expression}']))
+            for purpose, action in (('block', 'REJECT'), ('proxy', 'PROXY'), ('direct', 'DIRECT')):
+                text = kind + ',^Foo,no-resolve\nDOMAIN,keep.example.org,' + action
+                self.assertEqual(parse(text, purpose=purpose), ([Rule('DOMAIN', 'keep.example.org')],
+                                 ['line 1: ambiguous unquoted regex comma or policy']))
+        for operator in ('AND', 'OR', 'NOT'):
+            leaf = '(NETWORK,tcp,no-resolve)'
+            expression = '(' + leaf + ('' if operator == 'NOT' else ',(DOMAIN,x.example.org)') + ')'
+            self.assertEqual(parse(operator + ',' + expression + ',PROXY\nDOMAIN,keep.example.org,PROXY', purpose='proxy'),
+                             ([Rule('DOMAIN', 'keep.example.org')], [f'line 1: invalid logical expression {expression}']))
+
+    def test_all_destination_ip_flags_change_without_touching_regex_source_or_domain(self):
+        destinations = (('IP-CIDR', '192.0.2.0/24'), ('IP-CIDR6', '2001:db8::/32'),
+                        ('IP-SUFFIX', '203.0.113.7/24'), ('IP-ASN', '13335'), ('GEOIP', 'CN'))
+        sources = ('(SRC-IP-CIDR,198.51.100.0/24),(SRC-IP-SUFFIX,203.0.113.7/24),'
+                   '(SRC-IP-ASN,13335),(SRC-GEOIP,CN),(SRC-IP,198.51.100.7),(DOMAIN,x.example.org)')
+        for native in (False, True):
+            for quoted in (False, True) if not native else (False,):
+                field = _quote_matcher('^Foo,no-resolve') if quoted else '^Foo,no-resolve'
+                for marked in (False, True):
+                    original = ('((PROCESS-NAME-REGEX,' + field + '),' + ','.join(
+                        f'({kind},{value}' + (',no-resolve' if marked else '') + ')' for kind, value in destinations) + ',' + sources + ')')
+                    for allow in (False, True):
+                        rule = Rule('AND', original, allow=allow, native_fields=native,
+                                    domain_source='mihomo' if native else 'surge')
+                        for mode in ('add', 'strip', 'keep'):
+                            flag = '' if mode == 'strip' else ',no-resolve' if marked or mode == 'add' and not allow else ''
+                            wanted = ('((PROCESS-NAME-REGEX,' + field + '),' + ','.join(
+                                f'({kind},{value}{flag})' for kind, value in destinations) + ',' + sources + ')')
+                            expected = Rule('AND', wanted, allow=allow, native_fields=native,
+                                            domain_source=rule.domain_source)
+                            with self.subTest(native=native, quoted=quoted, marked=marked, allow=allow, mode=mode):
+                                effective = rules._apply_no_resolve(rule, mode)
+                                self.assertEqual(effective, expected)
+                                self.assertEqual(rules._apply_no_resolve(effective, mode), expected)
+                                self.assertEqual(rule.value, original)
+                                self.assertEqual(effective.options, ())
+
+    def test_deep_bounded_tails_keep_complete_rules_and_all_modes(self):
+        for depth in (600, 1000):
+            for native in (False, True):
+                for kind, matcher in (('PROCESS-NAME-REGEX', '^Foo,no-resolve'),
+                                      ('PROCESS-PATH-REGEX', '^/tmp/Foo,no-resolve'),
+                                      ('DOMAIN-REGEX', '^ads,no-resolve')):
+                    with self.subTest(depth=depth, native=native, kind=kind):
+                        DeepLogicalParserTests.assert_subprocess(self, f'''
+from rules import _apply_no_resolve
+from formats import render
+from tests.test_formats import BoundedRegexTailFormatTests
+from datetime import datetime, timezone
+from unittest.mock import patch
+leaf = '({kind},{matcher})'
+inner = '(AND,(' + leaf + ',(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24)))'
+condition = nest({depth}, inner)
+original = Rule('NOT', condition[5:-1], native_fields={native})
+source = ('payload:\\n  - ' + json.dumps(condition[1:-1])) if {native} else condition[1:-1] + ',REJECT'
+assert parse(source, purpose='block') == ([original], [])
+for mode in ('add', 'strip', 'keep'):
+    wanted_inner = inner.replace('192.0.2.0/24,no-resolve', '192.0.2.0/24') if mode == 'strip' else inner
+    wanted = Rule('NOT', nest({depth}, wanted_inner)[5:-1], native_fields={native})
+    assert _apply_no_resolve(original, mode) == wanted
+    with patch('formats.datetime') as clock:
+        clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+        out, skipped = render('tail', [original, keep], purpose='block', no_resolve=mode)
+    expected, omissions = BoundedRegexTailFormatTests.products('tail', [(wanted, 'NOT,' + wanted.value)], 'block')
+    assert out == expected and skipped == omissions
+    assert set(parse(out['fin.yaml'], purpose='block')[0]) == {{wanted, keep}}
+''')
 
 
 class NativeLogicalRendererStructureTests(unittest.TestCase):
@@ -2977,10 +3312,13 @@ class ParseTests(unittest.TestCase):
         self.assertTrue(any("line 1" in message and "invalid" in message for message in messages))
         self.assertEqual(normalize(rules), rules)
 
-    def test_logical_regex_child_rejects_no_resolve_after_end_anchor(self):
+    def test_logical_regex_child_preserves_no_resolve_after_end_anchor(self):
         expression = "((DOMAIN-REGEX,^ads$,no-resolve),(DOMAIN,x.example.com))"
         self.assertEqual(parse(f"AND,{expression},REJECT", purpose="block"),
-                         ([], [f"line 1: invalid logical expression {expression}"]))
+                         ([Rule("AND", expression)], []))
+        invalid = "((NETWORK,tcp,no-resolve),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{invalid},REJECT", purpose="block"),
+                         ([], [f"line 1: invalid logical expression {invalid}"]))
 
     def test_logical_process_regex_literal_comma_is_preserved(self):
         expression = "((PROCESS-NAME-REGEX,^Game,Inc$),(DOMAIN,x.example.com))"
@@ -4830,6 +5168,205 @@ class NormalizeTests(unittest.TestCase):
             Rule("DOMAIN-WILDCARD", "api-*.example.com"),
             Rule("DOMAIN-WILDCARD", "api-*.other.com"),
         ])
+
+
+class RegexValidatorRuleTests(unittest.TestCase):
+    boundary_cases = (
+        (r'^\x(?#note)41$', False),
+        (r'^\u(?#note)0041$', False),
+        (r'^\x(?i)41$', False),
+        (r'^\x4(?#note)1$', False),
+        (r'^a{2,(?#note)1}$', True),
+        (r'^a{2,(?i)1}$', True),
+        (r'^a{2(?#note),1}$', True),
+        (r'^a{2(?i),1}$', True),
+        (r'^\x41$', True),
+        (r'^a(?#note)+$', True),
+        (r'^a*(?#note)?$', True),
+        (r'^a{1,2}(?#note)?$', True),
+        (r'^((?#note)?=a)$', False),
+        (r'(?x)^\x4 1$', False),
+        ('(?x)^\\u00# note\n41$', False),
+        ('(?x)^a{2,\t1}$', True),
+        ('(?x)^a{2,# note\n1}$', True),
+        (r'(?x)^( ? :a)$', False),
+        (r'(?x)^a* ?$', True),
+        ('(?x)^a*# note\n?$', True),
+    )
+    cases = (
+        ('(?x)^ads # note\n[', False),
+        ('(?x)^ads # note\n[.]example[.]org$', True),
+        ('(?x:^ads # note\n[.]example[.]org$)', True),
+        ('(?x)^ads # note[', True),
+        (r'(?x)^ads # note\n[', True),
+        ('(?-x)^ads # note\n[', False),
+        ('(?x)\u00a0+', True),
+        (r'(?x)\u00a0+', True),
+        ('(?-x)\u00a0+', True),
+        ('(?x:\u00a0+)', True),
+        ('(?x)\u2003+', True),
+        ('(?x)\u001c+', True),
+        ('(?x) +', False),
+        ('(?x)\t+', False),
+        ('(?x)a +', True),
+        ('(?i)(?#note)+a', False),
+        ('(?i)(?#note)a+', True),
+        ('(?i)+a', False),
+        ('(?#note)+a', False),
+        ('(?i:)(?#note)+a', True),
+        ('(?x)foo# note\n(', False),
+        ('(?x)(?i)# ignored\n+', False),
+        ('(?x)ads# ignored\n+', True),
+        ('(?x)^ads # note\n\\q', False),
+        ('a(?i)(?#note)+', False),
+        ('a+(?i)(?#note)?', False),
+        ('a(?#note)+', True),
+        ('(?i)(?:a)(?#note)+', True),
+        ('(?i)(?#note)(?:a)+', True),
+        ('(?x)a(?-x) +', True),
+        ('(?x:a # note\n)+', True),
+        (r'(?x)\#(?#note)+', True),
+        ('(?x)[ #]+', True),
+        ('(?x:\u2003+)', True),
+        ('(?x:\u001c+)', True),
+        ('(?x)[\u001c]+', True),
+        ('(?x)\u00a0(?i)+', False),
+        ('(?m)(?#note)+', False),
+        ('(?s)(?#note)+', False),
+        ('(?-i)(?#note)+', False),
+        ('(?x)(?#note)+', False),
+    ) + boundary_cases
+    kinds = ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX')
+
+    def test_native_complete_matcher_and_neighbor_follow_fixed_regexp2_syntax(self):
+        import json
+
+        neighbor = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
+        for purpose in ('block', 'direct', 'proxy'):
+            for value, valid in self.cases:
+                for kind in self.kinds:
+                    for logical in (False, True):
+                        expression = f'(({kind},{value}),(NETWORK,tcp))'
+                        matcher = f'AND,{expression}' if logical else f'{kind},{value}'
+                        document = 'payload:\n  - ' + json.dumps(matcher) + '\n  - DOMAIN,keep.example.org\n'
+                        expected = Rule('AND', expression, native_fields=True) if logical else Rule(kind, value)
+                        warning = (f'line 2: invalid logical expression {expression}' if logical else
+                                   f'line 2: invalid {kind} {value}')
+                        with self.subTest(purpose=purpose, value=value, kind=kind, logical=logical):
+                            self.assertEqual(rules._valid_regex(kind, value), valid)
+                            self.assertEqual(parse(document, purpose=purpose),
+                                             ([expected, neighbor], []) if valid else ([neighbor], [warning]))
+
+    def test_ordinary_quoted_top_and_three_operators_keep_complete_scope(self):
+        for value, valid in self.cases:
+            if '\n' in value:
+                continue
+            for kind in self.kinds:
+                for operator in ('top', 'AND', 'OR', 'NOT'):
+                    leaf = f'({kind},{_quote_matcher(value)})'
+                    expression = f'({leaf})' if operator == 'NOT' else f'({leaf},(NETWORK,tcp))'
+                    matcher = f'{kind},{_quote_matcher(value)}' if operator == 'top' else f'{operator},{expression}'
+                    expected = Rule(kind, value) if operator == 'top' else Rule(operator, expression)
+                    warning = (f'line 1: invalid {kind} {value}' if operator == 'top' else
+                               f'line 1: invalid logical expression {expression}')
+                    with self.subTest(value=value, kind=kind, operator=operator):
+                        self.assertEqual(parse(matcher + ',PROXY\nDOMAIN,keep.example.org,PROXY', purpose='proxy'),
+                                         ([expected, Rule('DOMAIN', 'keep.example.org')], []) if valid else
+                                         ([Rule('DOMAIN', 'keep.example.org')], [warning]))
+
+    def test_generated_seven_fields_reject_invalid_state_before_payload_binding(self):
+        for value, valid in self.cases:
+            for kind in self.kinds:
+                for logical in (False, True):
+                    expression = f'(({kind},{value}),(NETWORK,tcp))'
+                    record = ['AND', expression, [], False, False, True, 'surge'] if logical else [kind, value, [], False, False, False, 'surge']
+                    payload = f'AND,{expression}' if logical else f'{kind},{value}'
+                    document = GeneratedDeclarationValidationTests.document(payload, [record])
+                    with self.subTest(value=value, kind=kind, logical=logical):
+                        if valid:
+                            self.assertEqual(parse(document, purpose='block'),
+                                             ([Rule(record[0], record[1], native_fields=logical)], []))
+                        else:
+                            with self.assertRaisesRegex(rules.GeneratedRuleError, 'line 2: invalid generated public state'):
+                                parse(document, purpose='block')
+
+    def test_domain_regex_whitelist_keeps_valid_literals_and_warns_on_invalid_neighbors(self):
+        import json
+
+        for value, valid in self.cases:
+            document = 'payload:\n  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n  - DOMAIN,keep.example.org\n'
+            with self.subTest(value=value), warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter('always')
+                selected = rules.parse_whitelist(document)
+                self.assertEqual(selected, ([Rule('DOMAIN-REGEX', value)] if valid else []) +
+                                 [Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')])
+                self.assertEqual([str(item.message) for item in caught],
+                                 [] if valid else [f'line 2: invalid DOMAIN-REGEX {value}'])
+
+    def test_native_three_operators_and_strict_restore_keep_the_same_leaf_validity(self):
+        import json
+        from formats import render
+
+        for value, valid in (('(?x) +', True), ('(?x:^ads # note\n[.]example[.]org$)', True),
+                             ('(?i)(?#note)a+', True), ('(?x)foo# note\n[', False),
+                             ('(?i)(?#note)+a', False)) + self.boundary_cases:
+            for kind in self.kinds:
+                for operator in ('AND', 'OR', 'NOT'):
+                    expression = f'(({kind},{value}))' if operator == 'NOT' else f'(({kind},{value}),(NETWORK,tcp))'
+                    source = 'payload:\n  - ' + json.dumps(operator + ',' + expression) + '\n  - DOMAIN,keep.example.org\n'
+                    expected = ([Rule(operator, expression, native_fields=True)] if valid else []) + [Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')]
+                    with self.subTest(value=value, kind=kind, operator=operator):
+                        parsed, messages = parse(source, purpose='proxy')
+                        self.assertEqual(parsed, expected)
+                        self.assertEqual(messages, [] if valid else [f'line 2: invalid logical expression {expression}'])
+                        output, _ = render('regex', parsed, purpose='proxy', no_resolve='keep')
+                        self.assertEqual(set(parse(output['fin.yaml'], purpose='proxy')[0]), set(expected))
+                        self.assertEqual(parse(output['fin.yaml'], purpose='proxy')[1], [])
+
+    def test_comment_boundaries_preserve_deep_capture_quantifiers_and_reject_hex_fragments(self):
+        script = r'''
+import json
+import sys
+from formats import render
+from rules import Rule, parse
+assert sys.getrecursionlimit() == 1000
+for depth in (600, 1000):
+    for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX'):
+        for atom, valid in ((r'a(?#note)*?', True), (r'\x(?#note)41', False)):
+            value = '^' + '(' * depth + atom + ')' * depth + '$'
+            source = 'payload:\n  - ' + json.dumps(kind + ',' + value) + '\n  - DOMAIN,keep.example.org\n'
+            neighbor = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
+            expected = ([Rule(kind, value)] if valid else []) + [neighbor]
+            parsed, warnings = parse(source, purpose='proxy')
+            assert parsed == expected, (depth, kind, atom, parsed)
+            assert warnings == ([] if valid else [f'line 2: invalid {kind} {value}'])
+            output, skipped = render('regex', parsed, purpose='proxy', no_resolve='keep')
+            restored, messages = parse(output['fin.yaml'], purpose='proxy')
+            assert set(restored) == set(expected) and messages == []
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', script], capture_output=True,
+                                text=True, timeout=8, cwd=Path(__file__).resolve().parents[1])
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_ascii_x_whitespace_cannot_supply_an_atom_and_classes_keep_literals(self):
+        import json
+
+        for whitespace in ' \t\n\r\v\f':
+            for kind in self.kinds:
+                for value, valid in ((f'(?x){whitespace}+', False), (f'(?x:a{whitespace}+)', True),
+                                     (f'(?x)[{whitespace}]+', True), (f'(?-x){whitespace}+', True)):
+                    with self.subTest(whitespace=whitespace, kind=kind, value=value):
+                        document = 'payload:\n  - ' + json.dumps(kind + ',' + value) + '\n  - DOMAIN,keep.example.org\n'
+                        expected = ([Rule(kind, value)] if valid else []) + [Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')]
+                        self.assertEqual(parse(document, purpose='proxy'),
+                                         (expected, [] if valid else [f'line 2: invalid {kind} {value}']))
+
+    def test_url_regex_keeps_its_independent_python_validation(self):
+        for value, valid in (('(?x)^ads # note\n[', False),
+                             ('(?x:^ads # note\n[.]example[.]org$)', True),
+                             ('(?x)\u00a0+', True), ('(?i)(?#note)+a', False)):
+            with self.subTest(value=value):
+                self.assertEqual(rules._valid_regex('URL-REGEX', value), valid)
 
 
 class GeneratedDeclarationValidationTests(unittest.TestCase):
