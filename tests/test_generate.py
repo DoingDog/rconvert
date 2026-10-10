@@ -1007,7 +1007,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                                 publish(outputs)
                                 previous |= {path: text.encode('utf-8') for path, text in outputs.items()}
                                 self.assertEqual({path: path.read_bytes() for path in previous}, previous)
-                                if phase == 'parent':
+                                if phase in ('parent', 'same-round'):
                                     parent_bytes = {path: path.read_bytes() for path in previous if path.parent.name == 'parent'}
                                 self.assertEqual({path: path.read_bytes() for path in parent_bytes}, parent_bytes)
                                 self.assertEqual(outputs, expected)
