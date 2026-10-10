@@ -62,10 +62,10 @@ def fetch_https(url: str) -> bytes:
         raise RuntimeError(f"Failed to fetch {url}: {exc}") from exc
 
 
-def publish(outputs: dict[Path, str]) -> None:
-    root = Path(__file__).resolve().parent
+def publish(outputs: dict[Path, str], *, root: Path | None = None) -> None:
+    root = Path(__file__).resolve().parent if root is None else root.resolve()
     if any(not path.resolve().is_relative_to(root) for path in outputs):
-        raise ValueError("Output path escapes worktree")
+        raise ValueError("Output path escapes root")
     if any(path.resolve().is_relative_to(root / "static") for path in outputs):
         raise ValueError("Output path targets static")
     staging = root / ".tmp"
@@ -102,8 +102,6 @@ def publish(outputs: dict[Path, str]) -> None:
 
 def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     root = root.resolve()
-    if not root.is_relative_to(Path(__file__).resolve().parent):
-        raise ValueError("Source root escapes worktree")
     from formats import FILES, render
     from rules import _apply_no_resolve, exclude_covered, normalize, parse, parse_whitelist
 
@@ -299,4 +297,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent)
     arguments = parser.parse_args()
-    publish(generate(arguments.root, fetch_https))
+    publish(generate(arguments.root, fetch_https), root=arguments.root)
