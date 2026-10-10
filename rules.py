@@ -1,5 +1,4 @@
 import ipaddress
-import json
 import re
 import warnings
 from bisect import bisect_right
@@ -1322,7 +1321,7 @@ _YAML_ESCAPES = dict(zip('0abtnvfre\t "\'\\N_LP',
                          '\0\a\b\t\n\v\f\r\x1b\t "\'\\\x85\xa0  '))
 
 
-def _yaml_quoted(scalar: str, *, decode: bool = True) -> tuple[str, int]:
+def _yaml_quoted(scalar: str) -> tuple[str, int]:
     quote, decoded, index = scalar[0], [], 1
     while index < len(scalar):
         char = scalar[index]
@@ -1336,9 +1335,6 @@ def _yaml_quoted(scalar: str, *, decode: bool = True) -> tuple[str, int]:
             index += 1
             if index == len(scalar):
                 break
-            if not decode:
-                index += 1
-                continue
             escape = scalar[index]
             if escape in _YAML_ESCAPES:
                 char = _YAML_ESCAPES[escape]
@@ -1371,19 +1367,13 @@ def _check_yaml_source(source: str) -> None:
 
 def _yaml_comment(scalar: str) -> str:
     scalar = scalar.strip(' \t')
-    if scalar.startswith(("'", '"')):
-        try:
-            _, end = _yaml_quoted(scalar, decode=False)
-        except ValueError:
-            return ''
-        scalar = scalar[end:].lstrip(' \t')
     for index, char in enumerate(scalar):
         if char == '#' and (index == 0 or scalar[index - 1] in ' \t'):
             return scalar[index:]
     return ''
 
 
-def _yaml_scalar(scalar: str, *, with_comment: bool = False):
+def _yaml_scalar(scalar: str) -> str:
     _check_yaml_source(scalar)
     scalar = scalar.strip(' \t')
     if not scalar or scalar[0] in '&*!|>[{?%@`' or scalar.startswith(('-', ':')):
@@ -1393,7 +1383,6 @@ def _yaml_scalar(scalar: str, *, with_comment: bool = False):
         tail = scalar[end:].lstrip(' \t')
         if tail and not tail.startswith('#'):
             raise ValueError('invalid YAML payload')
-        comment = tail
     else:
         comment = _yaml_comment(scalar)
         value = scalar[:-len(comment)] if comment else scalar
@@ -1401,7 +1390,7 @@ def _yaml_scalar(scalar: str, *, with_comment: bool = False):
             if char == ':' and (index + 1 == len(value) or value[index + 1] in ' \t'):
                 raise ValueError('invalid YAML payload')
         value = value.rstrip(' \t')
-    return (value, comment) if with_comment else value
+    return value
 
 
 def _provider_header(line: str) -> str | None:
@@ -1450,35 +1439,28 @@ def _has_literal_field(line: str, native_fields: bool = False) -> bool:
     ))
 
 
-class GeneratedRuleError(ValueError):
-    pass
-
-
 def _source_records(text: str):
     in_payload = False
-    for number, source in enumerate(text.removeprefix('\ufeff').split('\n'), 1):
+    for source in text.removeprefix('\ufeff').split('\n'):
         source = source.removesuffix('\r')
         line = source.strip(' \t')
         if not line or line.startswith(('#', ';', '//')):
-            yield None, False, None, None, ''
+            yield None, False, None, None
             continue
         yaml_rule = in_payload and line.startswith('-')
-        scalar = line[1:].lstrip(' \t') if yaml_rule else ''
-        declared = False
         try:
             if any(char in source for char in '\0\r\v\f\x85\u2028\u2029'):
                 raise ValueError('unsupported physical line separator')
             header = _provider_header(source) if not source.startswith('\t') else None
             if header:
                 in_payload = True
-                yield None, False, None, None, ''
+                yield None, False, None, None
                 continue
             if line.startswith('-'):
                 item = re.fullmatch(r" *- +([^ \t].*)", source)
                 if not yaml_rule or item is None:
                     raise ValueError('invalid YAML payload')
-                line, comment = _yaml_scalar(item[1], with_comment=True)
-                declared = comment.startswith('# rconvert-rule-')
+                line = _yaml_scalar(item[1])
                 parts = _native_parts(line)
             elif in_payload and source.startswith((' ', '\t')):
                 raise ValueError('invalid YAML payload')
@@ -1486,95 +1468,19 @@ def _source_records(text: str):
                 in_payload = False
                 parts, end = _source_parts(line)
                 line = line[:end].rstrip()
-            yield line, yaml_rule, parts, None, comment if declared else ''
+            yield line, yaml_rule, parts, None
         except ValueError as exc:
-            if declared or _yaml_comment(scalar).startswith('# rconvert-rule-'):
-                raise GeneratedRuleError(f'line {number}: {exc}') from exc
-            yield line, False, None, str(exc), ''
-
-
-def _restore_generated_rules(payload: str, metadata: str, *, number: int, purpose: str,
-                             ignore_policy: bool = False, _whitelist: bool = False) -> list[Rule]:
-    from formats import _mihomo_rule, _yaml_value
-
-    def fail(message):
-        raise GeneratedRuleError(f'line {number}: {message}')
-
-    prefix = '# rconvert-rule-v1 '
-    if not metadata.startswith(prefix):
-        fail('unsupported generated rule version')
-    try:
-        records = json.loads(metadata[len(prefix):])
-    except (ValueError, RecursionError) as exc:
-        fail(f'invalid generated rule JSON: {exc}')
-    if type(records) is not list or not records:
-        fail('generated records must be a nonempty array')
-    restored, seen = [], set()
-    for record in records:
-        if (type(record) is not list or len(record) != 7 or
-                any(type(record[index]) is not str for index in (0, 1, 6)) or
-                type(record[2]) is not list or any(type(option) is not str for option in record[2]) or
-                any(type(record[index]) is not bool for index in (3, 4, 5))):
-            fail('invalid generated seven-field record')
-        kind, value, options, allow, literal_process, native_fields, source = record
-        if kind not in _KINDS or source not in {'surge', 'mihomo', 'qx'}:
-            fail('invalid generated type or source')
-        if any(0xD800 <= ord(char) <= 0xDFFF for text in [kind, value, source, *options] for char in text):
-            fail('invalid generated Unicode')
-        allowed_options = ({'no-resolve'} if kind in NO_RESOLVE_TYPES else set()) | (
-            _QX_INTERFACE_OPTIONS if kind in _QX_INTERFACE_KINDS else set())
-        if set(options) - allowed_options or options != sorted(set(options)):
-            fail('invalid generated options')
-        if kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'}:
-            valid = _valid_domain(kind, value) or kind == 'DOMAIN' and _valid_domain('DOMAIN-SUFFIX', value)
-        elif kind in {'IP-CIDR', 'IP-CIDR6', 'SRC-IP-CIDR', 'SRC-IP'}:
-            try:
-                address = ipaddress.ip_address(value) if kind == 'SRC-IP' else ipaddress.ip_network(value, strict=False)
-                valid = kind != 'IP-CIDR6' or address.version == 6
-            except ValueError:
-                valid = False
-        elif kind in _PORTS:
-            valid = _valid_port(value)
-        elif kind in _SIMPLE:
-            valid = _valid_simple(kind, value, native_fields or kind == 'DOMAIN-KEYWORD' and source == 'mihomo')
-        elif kind in _REGEX:
-            valid = bool(value) and _valid_regex(kind, value)
-        elif kind in _LOGICAL:
-            ignored = []
-            valid = (_normalize_logic(kind, value, ignored, native_fields, domain_source=source) is not None
-                     and not ignored)
-        else:
-            valid = bool(value) and (kind not in {'IN-NAME', 'REMATCH-NAME'} or _valid_name_list(value))
-        if not valid:
-            fail('invalid generated public state')
-        rule = Rule(kind, value, tuple(options), allow, literal_process, native_fields, source)
-        if rule.value != value or rule.options != tuple(options):
-            fail('noncanonical generated public state')
-        if rule in seen:
-            fail('duplicate generated record')
-        if _whitelist and kind not in _WHITELIST_TYPES:
-            fail(f'unsupported whitelist rule {kind}')
-        if _mihomo_rule(rule) != payload:
-            fail('generated record does not bind to complete payload')
-        seen.add(rule)
-        restored.append(rule)
-    native, messages = parse('payload:\n  - ' + _yaml_value(payload), purpose=purpose, ignore_policy=ignore_policy)
-    if messages or len(native) != 1:
-        fail('invalid adjacent native scalar')
-    return restored
+            yield line, False, None, str(exc)
 
 
 def parse(text: str, *, purpose: str, ignore_policy: bool = False,
-          domain_set: bool = False, _whitelist: bool = False) -> tuple[list[Rule], list[str]]:
+          domain_set: bool = False) -> tuple[list[Rule], list[str]]:
     if purpose not in {"block", "direct", "proxy"}:
         raise ValueError(f"invalid purpose: {purpose}")
     lines = text.removeprefix('\ufeff').split('\n')
     records = list(_source_records(text))
-    restored = {number: _restore_generated_rules(line, metadata, number=number, purpose=purpose,
-                                                ignore_policy=ignore_policy, _whitelist=_whitelist)
-                for number, (line, _, _, _, metadata) in enumerate(records, 1) if metadata}
     opening_tags, html_lines = {}, set()
-    for number, (line, yaml_rule, _, _, _) in enumerate(records, 1):
+    for number, (line, yaml_rule, _, _) in enumerate(records, 1):
         if line is None or line.lstrip().startswith(('#', ';', '//', '!')):
             continue
         if _has_literal_field(line, yaml_rule):
@@ -1600,10 +1506,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
                           for number, line in enumerate(lines, 1)):
         return [], [f"line {min(html_lines)}: HTML document"]
     rules, warnings = [], []
-    for number, (line, yaml_rule, parts, error, _) in enumerate(records, 1):
-        if number in restored:
-            rules.extend(restored[number])
-            continue
+    for number, (line, yaml_rule, parts, error) in enumerate(records, 1):
         if error is not None:
             warnings.append(f"line {number}: {error}")
             continue
@@ -1807,7 +1710,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
 
 
 def parse_whitelist(text: str, *, domain_set: bool = False) -> list[Rule]:
-    parsed, messages = parse(text, purpose="block", ignore_policy=True, domain_set=domain_set, _whitelist=True)
+    parsed, messages = parse(text, purpose="block", ignore_policy=True, domain_set=domain_set)
     whitelist = [Rule(rule.kind, rule.value, literal_process=rule.literal_process,
                       native_fields=rule.native_fields, domain_source=rule.domain_source)
                  for rule in parsed if rule.kind in _WHITELIST_TYPES]

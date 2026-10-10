@@ -16,8 +16,7 @@ from unittest.mock import patch
 from urllib import error, request
 
 from generate import fetch_https, generate, publish
-from tests.test_formats import (expected_domain, expected_ordinary_payload, expected_ordinary_text,
-                                generated_payload, generated_text, generated_texts)
+from tests.test_formats import expected_domain, expected_ordinary_payload, expected_ordinary_text
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,6 +37,26 @@ def configure_groups(root, sources=None, whitelist=None):
     ]), encoding="utf-8")
     for group in GROUPS:
         (root / group).mkdir(exist_ok=True)
+
+
+def native_domain_projection(texts, domains):
+    projected = dict(texts)
+    removed = {name: set() for name in NAMES}
+    for value in domains:
+        for name in ('fin.txt', 'fin-surge.txt'):
+            removed[name].add('DOMAIN,' + value)
+        removed['fin-qx.txt'].add('HOST,' + value + ',LIST')
+        removed['fin-surge-ds.txt'].add(value)
+        removed['fin-adb.txt'].add('0.0.0.0 ' + value)
+    for name, text in texts.items():
+        header = 7 if name == 'fin-adb.txt' else 2 if name == 'fin.yaml' else 1
+        lines = text.splitlines()
+        body = [line for line in lines[header:] if line not in removed[name]]
+        if body != lines[header:]:
+            index = 6 if name == 'fin-adb.txt' else 0
+            lines[index] = lines[index].rsplit(': ', 1)[0] + ': ' + str(len(body))
+            projected[name] = '\n'.join(lines[:header] + body) + '\n'
+    return projected
 
 
 class NativeArityGenerateTests(unittest.TestCase):
@@ -181,7 +200,6 @@ class NativeArityGenerateTests(unittest.TestCase):
                         self.assertEqual({path: path.read_bytes() for path in published}, published)
 
     def test_logical_generated_whitelist_rejection_preserves_all_old_bytes(self):
-        from rules import GeneratedRuleError
 
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
@@ -197,7 +215,7 @@ class NativeArityGenerateTests(unittest.TestCase):
                     previous[path] = b'old complete\r\n\x00' + name.encode('ascii')
                     path.write_bytes(previous[path])
             with contextlib.redirect_stderr(io.StringIO()) as stderr:
-                with self.assertRaisesRegex(GeneratedRuleError, r'Invalid whitelist .*fin.yaml: line 3: unsupported whitelist rule AND'):
+                with self.assertRaisesRegex(ValueError, r'Invalid whitelist .*fin.yaml: line 3: unsupported rule'):
                     generate(root, lambda url: self.fail(url))
             self.assertNotIn(': line ', stderr.getvalue())
             self.assertEqual({path: path.read_bytes() for path in previous}, previous)
@@ -260,7 +278,8 @@ assert sys.getrecursionlimit() == limit
 
 
 class DomainSetSingleLabelGenerateTests(unittest.TestCase):
-    def assert_products(self, outputs, root, group, purpose, exact, suffix=(), whitelist=()):
+    def assert_products(self, outputs, root, group, purpose, exact, suffix=(), whitelist=(),
+                        *, native_reimport=False, regex_whitelist=False):
         from rules import Rule, parse
 
         ordered = lambda lines: sorted(lines, key=lambda line: (line.partition(",")[0], len(line), line))
@@ -274,11 +293,13 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
         for kind, values in (("DOMAIN", exact), ("DOMAIN-SUFFIX", suffix)):
             for value in values:
                 scalar = "  - " + json.dumps(expected_domain(kind, value))
-                record = [[kind, value, [], False, False, False, "surge"]]
-                yaml.append((scalar, record))
-        yaml.sort(key=lambda entry: (len(entry[0]), entry[0]))
-        yaml_body = [scalar + ' # rconvert-rule-v1 ' + json.dumps(record, separators=(',', ':'))
-                     for scalar, record in yaml]
+                yaml.append(scalar)
+        yaml.sort(key=lambda line: (len(line), line))
+        yaml_body = yaml
+        if native_reimport:
+            typed, qx, ds, dns = [], [], [], []
+        if regex_whitelist:
+            dns = [line for line in dns if not line.startswith("@@")]
         bodies = {"fin.txt": typed, "fin-qx.txt": qx, "fin.yaml": yaml_body,
                   "fin-adb.txt": dns, "fin-surge.txt": [], "fin-surge-ds.txt": ds}
         for name, body in bodies.items():
@@ -303,13 +324,14 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
             self.assertEqual(text, header + "".join(line + "\n" for line in body))
             expected = ([Rule("DOMAIN", value, domain_source="qx" if name == "fin-qx.txt" else "surge") for value in exact] +
                         [Rule("DOMAIN-SUFFIX", value, domain_source="qx" if name == "fin-qx.txt" else "surge") for value in suffix])
+            if native_reimport and name != "fin.yaml":
+                expected = []
+            if name == "fin.yaml":
+                expected = [Rule("DOMAIN-REGEX", expected_domain(kind, value).split(",", 1)[1])
+                            for kind, values in (("DOMAIN", exact), ("DOMAIN-SUFFIX", suffix)) for value in values]
             parsed, messages = parse(text, purpose=purpose, domain_set=name == "fin-surge-ds.txt")
             self.assertEqual(set(parsed), set(expected) if name != "fin-surge.txt" else set())
             self.assertEqual(len(parsed), len(expected) if name != "fin-surge.txt" else 0)
-            if name == "fin.yaml":
-                self.assertEqual(parsed, [Rule(record[0][0], record[0][1]) for _, record in yaml])
-                for line, (_, record) in zip(body, yaml):
-                    generated_payload(line[4:], record)
             self.assertEqual(messages, [])
 
     def seed(self, root, groups):
@@ -347,12 +369,15 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                     (root / "original.list").write_text(source, encoding="utf-8")
                     (root / "routes.list").write_text(routes, encoding="utf-8")
                     previous = self.seed(root, ("parent", "source", "white", "yaml-source", "yaml-white"))
+                    white_values = tuple(value for value in values if value != "localhost") + ("retained.example.net",)
                     skips = [] if purpose == "block" else [
                         f"{group} fin-adb.txt:{kind}: {count}" for group, kind, count in
                         (("parent", "DOMAIN", len(values)), ("source", "DOMAIN", len(values)),
-                         ("white", "DOMAIN", 1), ("white", "DOMAIN-SUFFIX", 1),
-                         ("yaml-source", "DOMAIN", len(values)), ("yaml-white", "DOMAIN", 1),
-                         ("yaml-white", "DOMAIN-SUFFIX", 1))]
+                         ("white", "DOMAIN", 1), ("white", "DOMAIN-SUFFIX", 1))]
+                    skips += [f"yaml-source {name}:DOMAIN-REGEX: {len(values)}"
+                              for name in sorted(NAMES) if name != "fin.yaml"]
+                    skips += ([f"yaml-white fin-adb.txt:DOMAIN-REGEX: {len(values)}"] if purpose == "block" else
+                              [f"yaml-white fin-adb.txt:DOMAIN: {len(white_values)}", "yaml-white fin-adb.txt:DOMAIN-SUFFIX: 1"])
                     with contextlib.redirect_stderr(io.StringIO()) as stderr:
                         outputs = generate(root, lambda url: self.fail(url))
                     self.assertEqual(stderr.getvalue().splitlines(), skips)
@@ -362,9 +387,9 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                         self.assert_products(outputs, root, group, purpose, values)
                     self.assert_products(outputs, root, "white", purpose, ("retained.example.net",),
                                          ("localhost",), values)
-                    self.assert_products(outputs, root, "yaml-source", purpose, values)
-                    self.assert_products(outputs, root, "yaml-white", purpose, ("retained.example.net",),
-                                         ("localhost",), values)
+                    self.assert_products(outputs, root, "yaml-source", purpose, values, native_reimport=True)
+                    self.assert_products(outputs, root, "yaml-white", purpose, white_values,
+                                         ("localhost",), values, regex_whitelist=True)
                     publish(outputs)
                     self.assertEqual({path: path.read_bytes() for path in outputs},
                                      {path: text.encode("utf-8") for path, text in outputs.items()})
@@ -381,8 +406,8 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                     self.assertEqual(disk_stderr.getvalue().splitlines(), [line for line in skips if not line.startswith("parent ")])
                     self.assert_products(disk, root, "source", purpose, values)
                     self.assert_products(disk, root, "white", purpose, ("retained.example.net",), ("localhost",), values)
-                    self.assert_products(disk, root, "yaml-source", purpose, values)
-                    self.assert_products(disk, root, "yaml-white", purpose, ("retained.example.net",), ("localhost",), values)
+                    self.assert_products(disk, root, "yaml-source", purpose, values, native_reimport=True)
+                    self.assert_products(disk, root, "yaml-white", purpose, white_values, ("localhost",), values, regex_whitelist=True)
                     self.assertEqual({path: path.read_bytes() for path in disk}, {path: previous[path] for path in disk})
                     publish(disk)
                     self.assertEqual({path: path.read_bytes() for path in disk}, {path: text.encode() for path, text in disk.items()})
@@ -466,33 +491,6 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                 self.assertEqual(stderr.getvalue(), "" if whitelist else f"{root / 'fin-surge-ds.txt'}: line 2: invalid rule\n")
                 self.assertEqual({path: path.read_bytes() for path in previous}, previous)
 
-    def test_domain_set_named_marked_source_and_whitelist_errors_keep_binary_outputs(self):
-        from rules import GeneratedRuleError
-
-        marked = b'payload:\n  - "DOMAIN,localhost" # rconvert-rule-v1 [["DOMAIN","other.localhost",[],false,false,false,"mihomo"]]\n'
-        for remote in (False, True):
-            for whitelist in (False, True):
-                for data in (marked, marked.replace(b'other.localhost', b'\xff'), b'<html>\n' + marked):
-                    with self.subTest(remote=remote, whitelist=whitelist, data=data), tempfile.TemporaryDirectory(dir=ROOT) as directory:
-                        root = Path(directory)
-                        source = "https://example.org/%66in-surge-ds.txt?raw=1" if remote else "FIN-SURGE-DS.TXT"
-                        (root / "rulesets.json").write_text(json.dumps([{
-                            "name": "child", "purpose": "block", "no_resolve": "keep",
-                            "sources": ["neighbor.txt"] if whitelist else [source],
-                            "whitelist": [source] if whitelist else []}]), encoding="utf-8")
-                        (root / "neighbor.txt").write_text("DOMAIN,child.localhost\n", encoding="utf-8")
-                        (root / "FIN-SURGE-DS.TXT").write_bytes(data)
-                        previous = self.seed(root, ("child",))
-                        calls = []
-                        def fetch(url):
-                            calls.append(url)
-                            return data
-                        with contextlib.redirect_stderr(io.StringIO()) as stderr, self.assertRaises(GeneratedRuleError):
-                            publish(generate(root, fetch))
-                        self.assertEqual(stderr.getvalue(), "")
-                        self.assertEqual(calls, [source] if remote else [])
-                        self.assertEqual({path: path.read_bytes() for path in previous}, previous)
-                        self.assertEqual((root / "FIN-SURGE-DS.TXT").read_bytes(), data)
 
     def test_domain_set_generated_publish_failure_restores_all_bytes_and_new_directory(self):
         import os
@@ -527,8 +525,8 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                              {path: text.encode("utf-8") for path, text in outputs.items()})
 
 
-class PublicStateRestorationGenerateTests(unittest.TestCase):
-    def test_generated_ascii_yaml_same_round_and_disk_preserve_six_targets(self):
+class NativeProjectionGenerateTests(unittest.TestCase):
+    def test_generated_ascii_yaml_same_round_and_disk_follow_native_projection(self):
         from rules import Rule, parse
 
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -539,39 +537,26 @@ class PublicStateRestorationGenerateTests(unittest.TestCase):
                         'sources': ['parent/fin.yaml'], 'whitelist': []}]
             (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
             (root / 'input.txt').write_text('DOMAIN,keep.example.org\nDOMAIN-SUFFIX,broad.example.org', encoding='utf-8')
+            payloads = [expected_domain('DOMAIN', 'keep.example.org'),
+                        expected_domain('DOMAIN-SUFFIX', 'broad.example.org')]
+            wanted = [Rule('DOMAIN-REGEX', payload.split(',', 1)[1]) for payload in payloads]
             for disk in (False, True):
                 if disk:
                     (root / 'input.txt').unlink()
                     (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
                 with contextlib.redirect_stderr(io.StringIO()):
                     output = generate(root, lambda url: self.fail(url))
-                wanted = [Rule('DOMAIN', 'keep.example.org'), Rule('DOMAIN-SUFFIX', 'broad.example.org')]
+                self.assertEqual(set(output), {root / group / name for group in
+                                 (('child',) if disk else ('parent', 'child')) for name in NAMES})
                 self.assertEqual(parse(output[root / 'child/fin.yaml'], purpose='proxy'), (wanted, []))
-                self.assertEqual(output[root / 'child/fin-surge-ds.txt'], '# child rules: 2\nkeep.example.org\n.broad.example.org\n')
-                self.assertIn(' # rconvert-rule-v1 ', output[root / 'child/fin.yaml'])
+                self.assertEqual(output[root / 'child/fin.yaml'], '# child rules: 2\npayload:\n' +
+                                 ''.join('  - ' + json.dumps(payload) + '\n' for payload in payloads))
+                for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
+                    self.assertEqual(output[root / 'child' / name], '# child rules: 0\n')
                 publish(output)
+                self.assertEqual({path: path.read_bytes() for path in output},
+                                 {path: text.encode('utf-8') for path, text in output.items()})
 
-    def test_marked_local_remote_source_and_whitelist_errors_protect_old_bytes(self):
-        declared = b'payload:\n  - "DOMAIN,keep.example.org" # rconvert-rule-v1 []\n'
-        for remote in (False, True):
-            for whitelist in (False, True):
-                for data in (declared, declared.replace(b'[]', b'\xff')):
-                    with self.subTest(remote=remote, whitelist=whitelist, data=data), tempfile.TemporaryDirectory(dir=ROOT) as directory:
-                        root = Path(directory)
-                        source = 'https://example.org/generated.yaml' if remote else 'input.yaml'
-                        config = [{'name': 'child', 'purpose': 'block', 'no_resolve': 'keep',
-                                   'sources': ['neighbor.txt'] if whitelist else [source],
-                                   'whitelist': [source] if whitelist else []}]
-                        (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
-                        (root / 'neighbor.txt').write_text('DOMAIN,neighbor.example.org', encoding='utf-8')
-                        (root / 'input.yaml').write_bytes(data)
-                        (root / 'child').mkdir()
-                        old = {root / 'child' / name: bytes(range(256)) for name in NAMES}
-                        for path, value in old.items():
-                            path.write_bytes(value)
-                        with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(ValueError, 'line 2:'):
-                            publish(generate(root, lambda url: data))
-                        self.assertEqual({path: path.read_bytes() for path in old}, old)
 
 
 R25_SOURCE = ("DOMAIN,current.example.org\nIP-CIDR,192.0.2.0/24,no-resolve\n"
@@ -602,9 +587,7 @@ def r25_expected(group, purpose, mode, version, empty=False):
                   *(("IP-CIDR", value, options) for value, options in ip_rules)]
     bodies["fin.yaml"] = "".join(
         "  - " + json.dumps(expected_domain(kind, value) if kind == "DOMAIN" else
-                            f"{kind},{value}{options}") + " # rconvert-rule-v1 " +
-        json.dumps([[kind, value, ["no-resolve"] if options else [], False, False, False, "surge"]],
-                   separators=(',', ':')) + "\n" for kind, value, options in yaml_rules)
+                            f"{kind},{value}{options}") + "\n" for kind, value, options in yaml_rules)
     counts = {"fin.txt": 3, "fin-qx.txt": 3, "fin.yaml": 3,
               "fin-surge.txt": 2, "fin-surge-ds.txt": 1}
     expected = {name: f"# {group} rules: {0 if empty else counts[name]}\n" +
@@ -637,11 +620,8 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
             'fin.txt': f'# {group} rules: {int(neighbor)}\n' + domain,
             'fin-qx.txt': f'# {group} rules: {int(neighbor)}\n' + ('HOST,keep.example.test,LIST\n' if neighbor else ''),
             'fin.yaml': f'# {group} rules: {1 + int(neighbor)}\npayload:\n' +
-                        (('  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.test')) +
-                          ' # rconvert-rule-v1 [["DOMAIN","keep.example.test",[],false,false,false,"surge"]]\n')
-                         if neighbor else '') + '  - ' + json.dumps('DOMAIN-REGEX,' + value) +
-                        ' # rconvert-rule-v1 ' + json.dumps(
-                            [['DOMAIN-REGEX', value, [], False, False, False, 'surge']], separators=(',', ':')) + '\n',
+                        (('  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.test')) + '\n')
+                         if neighbor else '') + '  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n',
             'fin-surge.txt': f'# {group} rules: 0\n',
             'fin-surge-ds.txt': f'# {group} rules: {int(neighbor)}\n' + ('keep.example.test\n' if neighbor else ''),
         }
@@ -707,7 +687,7 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                             (('source', source_skips), ('dependent', dependent_skips)) for key, count in sorted(counts.items())])
                         self.assertEqual(parse(outputs[root / 'source' / 'fin.yaml'], purpose=purpose), ([rule], []))
                         self.assertEqual(parse(outputs[root / 'dependent' / 'fin.yaml'], purpose=purpose),
-                                         ([Rule('DOMAIN', 'keep.example.test'), rule], []))
+                                         ([Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.test').split(',', 1)[1]), rule], []))
                         self.assertEqual({path: path.read_bytes() for path in previous}, previous)
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
@@ -788,9 +768,7 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         bodies = {'fin.txt': ['DOMAIN,keep.example.test', ip, source_ip],
                   'fin-qx.txt': ['HOST,keep.example.test,LIST', 'IP-CIDR,203.0.113.0/24,LIST' + flag],
                   'fin.yaml': ['payload:', *[
-                      '  - ' + json.dumps(line) + ' # rconvert-rule-v1 ' + json.dumps(
-                          [[rule.kind, rule.value, list(rule.options), rule.allow, rule.literal_process,
-                            rule.native_fields, rule.domain_source]], separators=(',', ':'))
+                      '  - ' + json.dumps(line)
                       for line, rule in zip(yaml_lines, parsed_expected)]],
                   'fin-surge.txt': [ip, source_ip], 'fin-surge-ds.txt': ['keep.example.test']}
         dns = (['@@/' + dns_value + '/', '0.0.0.0 keep.example.test', '/' + dns_value + '/'] if dns_supported else
@@ -939,43 +917,6 @@ class RegexValidatorGenerateTests(unittest.TestCase):
                             publish(disk)
                             self.assertEqual({path: path.read_bytes() for path in old}, published)
 
-    def test_marked_local_and_remote_bytes_source_white_validate_complete_state(self):
-        from rules import GeneratedRuleError, Rule, parse
-        from tests.test_rules import GeneratedDeclarationValidationTests, RegexValidatorRuleTests
-
-        cases = (('(?x) +', True), ('(?x:^ads # note\n[.]example[.]org$)', True),
-                 ('(?i)(?#note)a+', True), ('(?x)^ads # note\n\\q', False),
-                 ('(?x)(?i)# ignored\n+', False), ('(?i)(?#note)+a', False)) + RegexValidatorRuleTests.boundary_cases[:8]
-        for value, valid in cases:
-            document = GeneratedDeclarationValidationTests.document('DOMAIN-REGEX,' + value,
-                         [['DOMAIN-REGEX', value, [], False, False, False, 'surge']])
-            for remote in (False, True):
-                for white in (False, True):
-                    with self.subTest(value=value, remote=remote, white=white), tempfile.TemporaryDirectory(dir=ROOT) as directory:
-                        root = Path(directory)
-                        entry = 'https://example.org/marked.yaml' if remote else 'marked.yaml'
-                        (root / 'marked.yaml').write_text(document, encoding='utf-8')
-                        (root / 'input.yaml').write_text('payload:\n  - DOMAIN,keep.example.com\n', encoding='utf-8')
-                        configs = [{'name': 'child', 'purpose': 'block', 'no_resolve': 'keep',
-                                    'sources': ['input.yaml'] if white else [entry], 'whitelist': [entry] if white else []}]
-                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
-                        (root / 'child').mkdir()
-                        old = {root / 'child' / name: b'old marked\x00\xff\r\n' for name in NAMES}
-                        for path, data in old.items():
-                            path.write_bytes(data)
-                        with contextlib.redirect_stderr(io.StringIO()) as stderr:
-                            if valid:
-                                outputs = generate(root, lambda url: document.encode('utf-8') if url == entry else self.fail(url))
-                                expected = [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')] if white else [Rule('DOMAIN-REGEX', value)]
-                                self.assertEqual(parse(outputs[root / 'child' / 'fin.yaml'], purpose='block'), (expected, []))
-                                self.assertNotIn('invalid whitelist', stderr.getvalue())
-                                self.assertNotIn('invalid generated', stderr.getvalue())
-                            else:
-                                with self.assertRaisesRegex(GeneratedRuleError, 'invalid generated public state'):
-                                    generate(root, lambda url: document.encode('utf-8') if url == entry else self.fail(url))
-                                self.assertEqual(stderr.getvalue(), '')
-                        self.assertEqual({path: path.read_bytes() for path in old}, old)
-
 
 class NativeKeywordGenerateTests(unittest.TestCase):
     complete_values = ('中文 #1\\', '中文 ;1\\', '中文 //1\\', '中文 #1\\\\\\',
@@ -1021,10 +962,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
             bodies['fin-qx.txt'].append('IP-CIDR,203.0.113.0/24,LIST' + flag)
         for rule in public:
             payload = rule.kind + ',' + rule.value + (',no-resolve' if rule.options else '')
-            record = [[rule.kind, rule.value, list(rule.options), rule.allow,
-                       rule.literal_process, rule.native_fields, rule.domain_source]]
-            bodies['fin.yaml'].append('  - ' + json.dumps(payload, ensure_ascii=False) +
-                                      ' # rconvert-rule-v1 ' + json.dumps(record, separators=(',', ':')))
+            bodies['fin.yaml'].append('  - ' + json.dumps(payload, ensure_ascii=False))
         expected = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
                     ''.join(line + '\n' for line in body) for name, body in bodies.items()}
         dns = []
@@ -1053,7 +991,9 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                                 ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')})
             if purpose == 'block' and white and not parent and '/' in value:
                 skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
-        return expected, public, skipped
+        native_public = [Rule(rule.kind, rule.value, rule.options, domain_source=
+                         'mihomo' if rule.kind.startswith('DOMAIN') else 'surge') for rule in public]
+        return expected, native_public, skipped
 
     def _check_qx_keyword_marker_dependency(self, white, values=('中文 #1', '中文 ;1', '中文 //1')):
         import warnings
@@ -1190,13 +1130,18 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                 if purpose == 'block':
                     expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
                         '0.0.0.0 keep.example.com\n', '').replace('! Total count: 2\n', '! Total count: 1\n')
-        lines = expected['fin.yaml'].splitlines()
-        for index, rule in enumerate(public, 2):
-            record = [[rule.kind, rule.value, list(rule.options), rule.allow,
-                       rule.literal_process, rule.native_fields, rule.domain_source]]
-            lines[index] += ' # rconvert-rule-v1 ' + json.dumps(record, separators=(',', ':'))
-        expected['fin.yaml'] = '\n'.join(lines) + '\n'
-        return expected, public
+        if dependency:
+            native_public = [Rule('AND', conjunction.replace('DOMAIN-KEYWORD,' + value, keyword), native_fields=True),
+                             Rule('DOMAIN-REGEX', re.escape(value)),
+                             Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').split(',', 1)[1]),
+                             Rule('NOT', '((DOMAIN-REGEX,' + re.escape(value) + '))', native_fields=True),
+                             Rule('OR', '((DOMAIN-REGEX,' + re.escape(value) + '),(NETWORK,udp))', native_fields=True),
+                             public[-2], public[-1]]
+            if dependency == 'fin-surge.txt':
+                native_public.pop(2)
+        else:
+            native_public = public
+        return expected, native_public
 
     def test_surge_keyword_source_publishes_six_products_and_disk_only_dependencies(self):
         from rules import parse
@@ -1280,14 +1225,12 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                             child_rule = Rule('DOMAIN', 'keep.example.com')
                             parent = {'fin.txt': '# parent rules: 1\nDOMAIN-KEYWORD,' + value + '\n',
                                       'fin-qx.txt': '# parent rules: 1\nHOST-KEYWORD,' + value + ',LIST\n',
-                                      'fin.yaml': '# parent rules: 1\npayload:\n  - ' + json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False) +
-                                                  ' # rconvert-rule-v1 ' + json.dumps([['DOMAIN-KEYWORD', value, [], False, False, False, 'mihomo']], separators=(',', ':')) + '\n',
+                                      'fin.yaml': '# parent rules: 1\npayload:\n  - ' + json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False) + '\n',
                                       'fin-surge.txt': '# parent rules: 1\nDOMAIN-KEYWORD,' + value + '\n',
                                       'fin-surge-ds.txt': '# parent rules: 0\n'}
                             child = {'fin.txt': '# child rules: 1\nDOMAIN,keep.example.com\n',
                                      'fin-qx.txt': '# child rules: 1\nHOST,keep.example.com,LIST\n',
-                                     'fin.yaml': '# child rules: 1\npayload:\n  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.com')) +
-                                                 ' # rconvert-rule-v1 [["DOMAIN","keep.example.com",[],false,false,false,"surge"]]\n',
+                                     'fin.yaml': '# child rules: 1\npayload:\n  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.com')) + '\n',
                                      'fin-surge.txt': '# child rules: 0\n',
                                      'fin-surge-ds.txt': '# child rules: 1\nkeep.example.com\n'}
                             for group, texts in (('parent', parent), ('child', child)):
@@ -1331,7 +1274,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                                 self.assertEqual(parse((root / 'parent' / 'fin.yaml').read_text(encoding='utf-8'), purpose=purpose), ([parent_rule], []))
                                 if 'child' in groups:
                                     self.assertEqual(parse_whitelist((root / 'parent' / dependency).read_text(encoding='utf-8')), [Rule('DOMAIN-KEYWORD', value)])
-                                    self.assertEqual(parse(outputs[root / 'child' / 'fin.yaml'], purpose=purpose), ([child_rule], []))
+                                    self.assertEqual(parse(outputs[root / 'child' / 'fin.yaml'], purpose=purpose), ([Rule('DOMAIN-REGEX', expected_domain('DOMAIN', child_rule.value).split(',', 1)[1])], []))
                                 self.assertEqual({root / 'parent' / name: (root / 'parent' / name).read_bytes() for name in NAMES},
                                                  {root / 'parent' / name: text.encode('utf-8') for name, text in parent.items()})
 
@@ -1350,7 +1293,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
 
         def counted(*args, **kwargs):
             result = original(*args, **kwargs)
-            # 只观察真实 add/strip 运算；parse 和 metadata 恢复的 keep 校验照常执行。
+            # 只观察真实 add/strip 运算；parse 的 keep 校验照常执行。
             if kwargs.get("no_resolve", "keep") != "keep":
                 operations.append((kwargs["no_resolve"], args[0], args[1], result))
             return result
@@ -1390,9 +1333,6 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                                     kind = (json.loads(line[4:]) if name == "fin.yaml" else line).partition(",")[0]
                                     return kind.startswith(("IP-", "SRC-IP")), kind, len(line), line
                                 texts[name] = f"# {group} rules: {len(body)}\n" + ("payload:\n" if name == "fin.yaml" else "") + "".join(line + "\n" for line in sorted(body, key=order))
-                        texts["fin.yaml"] = "\n".join(
-                            line + " # rconvert-rule-v1 " + json.dumps(records[json.loads(line[4:])], separators=(',', ':'))
-                            if line.startswith("  - ") else line for line in texts["fin.yaml"].splitlines()) + "\n"
                         return texts
 
                     parsed, messages = rules.parse(source, purpose=purpose)
@@ -1468,14 +1408,14 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                             outputs = generate(root, lambda url: self.fail(url))
                         expected = {root / group / name: text for group in groups
                                     for name, text in native_keyword_expected(group, purpose, mode).items()}
-                        self.assertEqual(generated_texts(outputs), expected)
+                        self.assertEqual(outputs, expected)
                         self.assertEqual(stderr.getvalue().splitlines(), [f'{group} {key}: {count}'
                                          for group in groups for key, count in sorted(native_keyword_skips(purpose).items())])
                         self.assertEqual({path: path.read_bytes() for path in old}, before)
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
                                          {path: value.encode("utf-8") for path, value in outputs.items()})
-                        self.assertEqual({path: generated_text(path.read_text(encoding="utf-8")).encode("utf-8") if path.name == "fin.yaml" else path.read_bytes() for path in expected},
+                        self.assertEqual({path: path.read_bytes() for path in expected},
                                          {path: text.encode('utf-8') for path, text in expected.items()})
                         if disk_only:
                             self.assertEqual({path: path.read_bytes() for path in before if path.parent.name == 'parent'},
@@ -1519,7 +1459,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                             clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
                             outputs = generate(root, lambda url: self.fail(url))
                         groups = ('consumer',) if disk_only else ('white', 'consumer')
-                        self.assertEqual(generated_texts(outputs), {root / group / name: text for group in groups
+                        self.assertEqual(outputs, {root / group / name: text for group in groups
                                                    for name, text in expected(group).items()})
                         messages = ([] if disk_only else ['white fin-adb.txt:DOMAIN-KEYWORD: 1'] if purpose != 'block' else [])
                         if not disk_only:
@@ -1552,7 +1492,6 @@ from pathlib import Path
 from unittest.mock import patch
 from generate import generate, publish
 from rules import Rule, normalize, parse, parse_whitelist
-from tests.test_formats import generated_texts
 limit = sys.getrecursionlimit()
 names = ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
 assert [field.name for field in fields(Rule)] == ['kind', 'value', 'options', 'allow', 'literal_process', 'native_fields', 'domain_source']
@@ -1605,7 +1544,7 @@ with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
         with contextlib.redirect_stderr(io.StringIO()) as stderr, patch('formats.datetime') as clock:
             clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
             outputs = generate(root, lambda url: (_ for _ in ()).throw(AssertionError(url)))
-        assert generated_texts(outputs) == {root / group / name: text for group in groups for name, text in expected(group).items()}
+        assert outputs == {root / group / name: text for group in groups for name, text in expected(group).items()}
         assert stderr.getvalue().splitlines() == [f'{group} {key}: {count}' for group in groups for key, count in sorted(skips.items())]
         assert {path: path.read_bytes() for path in old} == before
         publish(outputs)
@@ -1660,17 +1599,25 @@ class ConstructorGenerateTests(unittest.TestCase):
                             clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
                             outputs = generate(root, lambda url: self.fail(url))
                         expected = {root / group / name: text for group in groups
-                                    for name, text in constructor_expected(group, purpose, mode).items()}
+                                    for name, text in (native_domain_projection(constructor_expected(group, purpose, mode),
+                                                       ["neighbor.example.com"]) if group == "child" else
+                                                       constructor_expected(group, purpose, mode)).items()}
                         expected = {path: expected_ordinary_text(value) if path.name == "fin.yaml" else value for path, value in expected.items()}
-                        self.assertEqual(generated_texts(outputs), expected)
+                        self.assertEqual(outputs, expected)
+                        counters = {}
+                        for group in groups:
+                            counters[group] = constructor_skips(purpose)
+                            if group == "child":
+                                counters[group].pop("fin-adb.txt:DOMAIN", None)
+                                counters[group].update({name + ":DOMAIN-REGEX": 1 for name in NAMES if name != "fin.yaml"})
                         self.assertEqual(stderr.getvalue().splitlines(), [f"{group} {key}: {count}"
-                                         for group in groups for key, count in sorted(constructor_skips(purpose).items())])
+                                         for group in groups for key, count in sorted(counters[group].items())])
                         if not disk_only:
                             self.assertEqual({path: path.read_bytes() for path in old}, old)
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
                                          {path: value.encode("utf-8") for path, value in outputs.items()})
-                        self.assertEqual({path: generated_text(path.read_text(encoding="utf-8")).encode("utf-8") if path.name == "fin.yaml" else path.read_bytes() for path in expected},
+                        self.assertEqual({path: path.read_bytes() for path in expected},
                                          {path: text.encode("utf-8") for path, text in expected.items()})
                         if disk_only:
                             self.assertEqual({path: path.read_bytes() for path in parent_bytes}, parent_bytes)
@@ -1711,14 +1658,14 @@ class ConstructorGenerateTests(unittest.TestCase):
                         with contextlib.redirect_stderr(io.StringIO()) as stderr, patch("formats.datetime") as clock:
                             clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
                             outputs = generate(root, lambda url: self.fail(url))
-                        self.assertEqual({path.name: text for path, text in generated_texts(outputs).items() if path.parent.name == "consumer"}, expected)
+                        self.assertEqual({path.name: text for path, text in outputs.items() if path.parent.name == "consumer"}, expected)
                         self.assertEqual([line for line in stderr.getvalue().splitlines() if line.startswith("consumer ")],
                                          ["consumer fin-adb.txt:IP-ASN: 1", "consumer fin-surge-ds.txt:IP-ASN: 1"] if purpose == "block" else
                                          ["consumer fin-adb.txt:DOMAIN: 1", "consumer fin-adb.txt:IP-ASN: 1", "consumer fin-surge-ds.txt:IP-ASN: 1"])
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
                                          {path: value.encode("utf-8") for path, value in outputs.items()})
-                        self.assertEqual({name: generated_text((root / "consumer" / name).read_text(encoding="utf-8")).encode("utf-8") if name == "fin.yaml" else (root / "consumer" / name).read_bytes() for name in NAMES},
+                        self.assertEqual({name: (root / "consumer" / name).read_bytes() for name in NAMES},
                                          {name: text.encode("utf-8") for name, text in expected.items()})
 
     def test_invalid_constructor_source_warns_and_generated_whitelist_aborts_before_publish(self):
@@ -1735,7 +1682,7 @@ class ConstructorGenerateTests(unittest.TestCase):
                 with contextlib.redirect_stderr(io.StringIO()) as stderr:
                     outputs = generate(root, lambda url: self.fail(url))
                 self.assertEqual(stderr.getvalue().splitlines(), [f"{root / 'input.list'}: line 2: {reason}", "parent fin-adb.txt:DOMAIN: 1"])
-                self.assertEqual(generated_text(outputs[root / "parent" / "fin.yaml"]), '# parent rules: 1\npayload:\n  - "DOMAIN,keep.example.com"\n')
+                self.assertEqual(outputs[root / "parent" / "fin.yaml"], '# parent rules: 1\npayload:\n  - "DOMAIN,keep.example.com"\n')
                 (root / "input.list").write_text("payload:\n  - IN-USER,alice bob", encoding="utf-8")
                 config.append({"name": "consumer", "purpose": "proxy", "no_resolve": "keep",
                                "sources": ["good.list"], "whitelist": ["parent/fin.yaml"]})
@@ -1765,7 +1712,6 @@ from pathlib import Path
 from unittest.mock import patch
 from generate import generate, publish
 from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
-from tests.test_formats import generated_texts
 import re
 limit = sys.getrecursionlimit()
 names = ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
@@ -1829,7 +1775,9 @@ def emitted(leaf):
     return leaf
 effective = {Rule(rule.kind, emitted(rule.value), rule.options, rule.allow, rule.literal_process,
                   rule.native_fields, rule.domain_source) for rule in expected_rules}
-restorable = {rule for rule in effective if 'UNKNOWN' not in rule.value}
+restorable = {Rule(rule.kind, rule.value, rule.options, rule.allow, rule.literal_process,
+                   rule.kind in {'AND', 'OR', 'NOT'} or rule.native_fields, rule.domain_source)
+              for rule in effective if 'UNKNOWN' not in rule.value}
 yaml_matchers = sorted({nest(emitted(leaf))[1:-1] for leaf in canonical_leaves}, key=lambda value: (len(value), value))
 def expected(group):
     parent = group == 'parent'
@@ -1879,14 +1827,14 @@ with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
             clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
             outputs = generate(root, lambda url: (_ for _ in ()).throw(AssertionError(url)))
         expected_outputs = {root / group / name: text for group in groups for name, text in expected(group).items()}
-        assert generated_texts(outputs) == expected_outputs, (DEPTH, PURPOSE, MODE, disk_only)
+        assert outputs == expected_outputs, (DEPTH, PURPOSE, MODE, disk_only)
         messages = ([] if disk_only else [str(root / 'input.list') + ': ' + warning for warning in expected_warnings])
         messages += [line for group in groups for line in skip_lines(group)]
         assert stderr.getvalue().splitlines() == messages, stderr.getvalue()
         assert {path: path.read_bytes() for path in old} == before
         publish(outputs)
         assert {path: path.read_bytes() for path in outputs} == {path: text.encode('utf-8') for path, text in outputs.items()}
-        assert {path: text.encode('utf-8') for path, text in generated_texts(outputs).items()} == {path: text.encode('utf-8') for path, text in expected_outputs.items()}
+        assert {path: text.encode('utf-8') for path, text in outputs.items()} == {path: text.encode('utf-8') for path, text in expected_outputs.items()}
         parent_before = {path: data for path, data in before.items() if path.parent.name == 'parent'}
         if disk_only:
             assert {path: path.read_bytes() for path in parent_before} == parent_before
@@ -1927,7 +1875,7 @@ class DnsExactHostsGenerateTests(unittest.TestCase):
                 self.assertEqual(lines[0], f"# {group} rules: {len(expected)}")
                 if name == "fin.yaml":
                     self.assertEqual(lines[1], "payload:")
-                actual = [generated_payload(line[4:]) for line in lines[2:]] if name == "fin.yaml" else lines[1:]
+                actual = [json.loads(line[4:]) for line in lines[2:]] if name == "fin.yaml" else lines[1:]
             self.assertEqual(set(actual), expected, (group, name))
             self.assertEqual(len(actual), len(expected), (group, name))
 
@@ -2066,7 +2014,7 @@ class ProcessRendererDependencyGenerateTests(unittest.TestCase):
             text = outputs[root / group / name]
             lines = text.splitlines()
             header = 7 if name == "fin-adb.txt" else 2 if name == "fin.yaml" else 1
-            body = {generated_payload(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
+            body = {json.loads(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
             self.assertEqual(body, expected[name], (group, name))
             self.assertEqual(lines[6] if name == "fin-adb.txt" else lines[0],
                              f"! Total count: {len(body)}" if name == "fin-adb.txt" else
@@ -2119,17 +2067,17 @@ class ProcessRendererDependencyGenerateTests(unittest.TestCase):
                 publish(disk)
                 self.assertTrue(all(path.read_bytes() == text.encode("utf-8") for path, text in disk.items()))
 
-    def basic_products(self, flag, *, domain=True, ip=True, source_ip=True, domain_source="surge"):
+    def basic_products(self, flag, *, domain=True, ip=True, source_ip=True, domain_source="surge", domain_regex=False):
         dest = "IP-CIDR,203.0.113.0/24" + flag
-        plain = ({"DOMAIN,keep.example.com"} if domain else set()) | ({dest} if ip else set())
+        plain = ({"DOMAIN,keep.example.com"} if domain and not domain_regex else set()) | ({dest} if ip else set())
         surge = plain | ({"SRC-IP,127.0.0.0/8"} if source_ip else set())
         return {"fin.txt": surge, "fin-surge.txt": surge - {"DOMAIN,keep.example.com"},
                 "fin.yaml": ({expected_domain("DOMAIN", "keep.example.com") if domain_source == "surge" else
                               "DOMAIN,keep.example.com"} if domain else set()) | ({dest} if ip else set()) | ({"SRC-IP-CIDR,127.0.0.0/8"} if source_ip else set()),
-                "fin-qx.txt": ({"HOST,keep.example.com,LIST"} if domain else set()) |
+                "fin-qx.txt": ({"HOST,keep.example.com,LIST"} if domain and not domain_regex else set()) |
                               ({"IP-CIDR,203.0.113.0/24,LIST" + flag} if ip else set()),
-                "fin-adb.txt": {"0.0.0.0 keep.example.com"} if domain else set(),
-                "fin-surge-ds.txt": {"keep.example.com"} if domain else set()}
+                "fin-adb.txt": {"0.0.0.0 keep.example.com"} if domain and not domain_regex else set(),
+                "fin-surge-ds.txt": {"keep.example.com"} if domain and not domain_regex else set()}
 
     def test_surge_process_and_quoted_regex_preserve_six_generated_dependencies(self):
         from tests.test_formats import expected_process
@@ -2155,14 +2103,14 @@ class ProcessRendererDependencyGenerateTests(unittest.TestCase):
             for name in NAMES:
                 full = name in ("fin.txt", "fin-surge.txt", "fin.yaml")
                 body = self.basic_products(flag, domain=name != "fin-surge.txt",
-                                           ip=full or name == "fin-qx.txt", source_ip=full, domain_source="qx" if name == "fin-qx.txt" else "surge")
+                                           ip=full or name == "fin-qx.txt", source_ip=full, domain_source="qx" if name == "fin-qx.txt" else "surge", domain_regex=name == "fin.yaml")
                 if name in ("fin.txt", "fin-surge.txt"):
                     for target in ("fin.txt", "fin-surge.txt"):
                         body[target] |= names | {logic.replace("SRC-IP-CIDR,", "SRC-IP,")}
                     body["fin.yaml"] |= {expected_process(value) for value in values} | {logic}
                 elif name == "fin.yaml":
                     for target in ("fin.txt", "fin-surge.txt"):
-                        body[target] |= names - {"PROCESS-NAME,Foo*"} | {logic.replace("SRC-IP-CIDR,", "SRC-IP,")}
+                        body[target].add(logic.replace("SRC-IP-CIDR,", "SRC-IP,"))
                     body["fin.yaml"] |= {expected_process(value) for value in values} | regexes | {logic}
                 dependent[name] = body
             skips = {"fin.txt:AND": 2, "fin-surge.txt:AND": 2, "fin.yaml:PROCESS-NAME": 1}
@@ -2282,10 +2230,10 @@ class ProcessReviewDependencyGenerateTests(unittest.TestCase):
             parent["fin.yaml"] |= process_fields | regexes | {"DST-PORT,443"}
             dependent = {}
             for name in NAMES:
-                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False, domain_source="qx" if name == "fin-qx.txt" else "surge")
+                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False, domain_source="qx" if name == "fin-qx.txt" else "surge", domain_regex=name == "fin.yaml")
                 if name in ("fin.txt", "fin-surge.txt", "fin.yaml"):
                     for target in ("fin.txt", "fin-surge.txt"):
-                        body[target] |= {"DEST-PORT,443"} | (surge_fields if name != "fin.yaml" else {entry for entry in surge_fields if "PROCESS-NAME," in entry})
+                        body[target] |= {"DEST-PORT,443"} | (surge_fields if name != "fin.yaml" else set())
                     body["fin.yaml"] |= {"DST-PORT,443"} | process_fields | (regexes if name == "fin.yaml" else set())
                 dependent[name] = body
             skips = {f"{name}:AND": 3 for name in ("fin.txt", "fin-surge.txt")}
@@ -2334,7 +2282,7 @@ class ProcessReviewDependencyGenerateTests(unittest.TestCase):
             parent["fin.yaml"].add("DST-PORT,443")
             dependent = {}
             for name in NAMES:
-                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False, domain_source="qx" if name == "fin-qx.txt" else "surge")
+                body = self.basic_products("", domain=name != "fin-surge.txt", ip=False, source_ip=False, domain_source="qx" if name == "fin-qx.txt" else "surge", domain_regex=name == "fin.yaml")
                 if name in ("fin.txt", "fin-surge.txt", "fin.yaml"):
                     for target in ("fin.txt", "fin-surge.txt"):
                         body[target].add("DEST-PORT,443")
@@ -2436,7 +2384,7 @@ class ProcessRendererRound2DependencyGenerateTests(unittest.TestCase):
             dependent = {}
             for name in NAMES:
                 full = name in ("fin.txt", "fin-surge.txt", "fin.yaml")
-                body = self.basic_products(flag, domain=name != "fin-surge.txt", ip=full or name == "fin-qx.txt", source_ip=full, domain_source="qx" if name == "fin-qx.txt" else "surge")
+                body = self.basic_products(flag, domain=name != "fin-surge.txt", ip=full or name == "fin-qx.txt", source_ip=full, domain_source="qx" if name == "fin-qx.txt" else "surge", domain_regex=name == "fin.yaml")
                 if full:
                     for target in ("fin.txt", "fin-surge.txt"):
                         body[target].add("DEST-PORT,443")
@@ -2452,7 +2400,7 @@ class ProcessRendererRound2DependencyGenerateTests(unittest.TestCase):
 
 class NativeDnsByteGenerateTests(unittest.TestCase):
     def test_nine_modes_mixed_sources_publish_and_disk_only_preserve_byte_language(self):
-        from rules import GeneratedRuleError, Rule, parse, parse_whitelist
+        from rules import Rule, parse, parse_whitelist
         from tests.test_formats import dns_regex
 
         native = ('payload:\n  - DOMAIN-WILDCARD,api-?.example.org\n'
@@ -2462,12 +2410,6 @@ class NativeDnsByteGenerateTests(unittest.TestCase):
         routes = ('payload:\n  - DOMAIN,api-a.example.org\n  - DOMAIN,api-ı.example.org\n'
                   '  - DOMAIN,same-a.mix.org\n  - DOMAIN,same-ı.mix.org\n'
                   '  - DOMAIN,retained.example.net\n  - IP-CIDR,203.0.113.0/24,no-resolve\n')
-        records = [Rule('DOMAIN-WILDCARD', value, domain_source='mihomo') for value in
-                   ('api-?.example.org', 'same-?.mix.org', 'br-[0-9].example.org')]
-        records += [Rule('DOMAIN-KEYWORD', 'İΟΣ', domain_source='mihomo'),
-                    Rule('DOMAIN', 'keep.example.net', domain_source='mihomo')]
-        records += [Rule('DOMAIN-WILDCARD', 'same-?.mix.org', domain_source=source)
-                    for source in ('surge', 'qx')]
         native_patterns = {'api-?.example.org': r'/(?s-i:\Aapi\-[\x00-\x7f]\.example\.org\z)/',
                            'same-?.mix.org': r'/(?s-i:\Asame\-[\x00-\x7f]\.mix\.org\z)/'}
         ordinary = r'/^same\-.\.mix\.org$/'
@@ -2479,27 +2421,28 @@ class NativeDnsByteGenerateTests(unittest.TestCase):
             ip = 'IP-CIDR,' + ('203.0.113.0/24' if white else '192.0.2.0/24') + flag
             exact = ('api-ı.example.org', 'same-ı.mix.org', 'retained.example.net') if white else ('keep.example.net',)
             typed = ordered(['DOMAIN,' + value for value in exact] + [ip] + ([] if white else
-                            ['DOMAIN-WILDCARD,same-?.mix.org', 'SRC-IP,198.51.100.0/24']))
+                            (['DOMAIN-WILDCARD,same-?.mix.org'] if group == 'parent' else []) + ['SRC-IP,198.51.100.0/24']))
             qx = ordered(['HOST,' + value + ',LIST' for value in exact] + [ip.partition(',')[0] + ',' + ip.partition(',')[2].replace(flag, '') + ',LIST' + flag] + ([] if white else
                          ['HOST-WILDCARD,api-?.example.org,LIST', 'HOST-WILDCARD,same-?.mix.org,LIST', 'HOST-KEYWORD,İΟΣ,LIST']))
-            identities = ([Rule('DOMAIN', value, domain_source='mihomo') for value in exact] if white else records) + [Rule('IP-CIDR', ip.split(',')[1], ('no-resolve',) if flag else ())]
+            native_rules = ([Rule('DOMAIN', value, domain_source='mihomo') for value in exact] if white else
+                            [Rule('DOMAIN-WILDCARD', value, domain_source='mihomo') for value in
+                             ('api-?.example.org', 'same-?.mix.org', 'br-[0-9].example.org')] +
+                            [Rule('DOMAIN-KEYWORD', 'İΟΣ', domain_source='mihomo'),
+                             Rule('DOMAIN', 'keep.example.net', domain_source='mihomo'),
+                             Rule('DOMAIN-REGEX', r'^same\-.\.mix\.org\.?$')])
+            native_rules.append(Rule('IP-CIDR', ip.split(',')[1], ('no-resolve',) if flag else ()))
             if not white:
-                identities.append(Rule('SRC-IP-CIDR', '198.51.100.0/24'))
-            payloads = {}
-            for rule in identities:
-                payload = (r'DOMAIN-REGEX,^same\-.\.mix\.org\.?$' if rule.kind == 'DOMAIN-WILDCARD' and rule.domain_source == 'surge' else
-                           rule.kind + ',' + rule.value + (',' + ','.join(rule.options) if rule.options else ''))
-                scalar = '  - ' + json.dumps(payload, ensure_ascii=False)
-                payloads.setdefault(scalar, []).append([rule.kind, rule.value, list(rule.options), rule.allow,
-                                                       rule.literal_process, rule.native_fields, rule.domain_source])
+                native_rules.append(Rule('SRC-IP-CIDR', '198.51.100.0/24'))
+            payloads = ['  - ' + json.dumps(rule.kind + ',' + rule.value +
+                         (',' + ','.join(rule.options) if rule.options else ''), ensure_ascii=False)
+                        for rule in native_rules]
             def yaml_order(line):
                 kind, _, value = json.loads(line[4:]).partition(',')
                 return kind.startswith(('IP-', 'SRC-IP')), 1 if kind.startswith(('IP-', 'SRC-IP')) else 0, kind, len(line), line
-            yaml = [scalar + ' # rconvert-rule-v1 ' + json.dumps(sorted(payloads[scalar]), ensure_ascii=True, separators=(',', ':'))
-                    for scalar in sorted(payloads, key=yaml_order)]
+            yaml = sorted(payloads, key=yaml_order)
             dns = (['0.0.0.0 ' + value for value in exact] +
-                   (['@@' + line for line in (*native_patterns.values(), ordinary, keyword)] + ['@@|keep.example.net|'] if white else
-                    [*native_patterns.values(), ordinary, keyword])) if purpose == 'block' else []
+                   (['@@' + line for line in (*native_patterns.values(), r'/^same\-.\.mix\.org\.?$/', keyword)] + ['@@|keep.example.net|'] if white else
+                    [*native_patterns.values(), (ordinary if group == 'parent' else r'/^same\-.\.mix\.org\.?$/'), keyword])) if purpose == 'block' else []
             bodies = {'fin.txt': typed, 'fin-surge.txt': [line for line in typed if not line.startswith('DOMAIN,')],
                       'fin-qx.txt': qx, 'fin.yaml': yaml, 'fin-surge-ds.txt': sorted(exact, key=lambda value: (len(value), value)),
                       'fin-adb.txt': sorted(set(dns), key=lambda line: (not line.startswith('@@'), len(line), line))}
@@ -2509,13 +2452,13 @@ class NativeDnsByteGenerateTests(unittest.TestCase):
                 '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610081200\n' +
                 f'! Total count: {len(bodies["fin-adb.txt"])}\n' + ''.join(line + '\n' for line in bodies['fin-adb.txt']) +
                 ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''))
-            return texts, identities
+            return texts, native_rules
 
         def expected_skips(group, purpose):
             if group == 'white':
                 skipped = {'fin-adb.txt:IP-CIDR': 1, 'fin-surge-ds.txt:IP-CIDR': 1}
                 skipped.update({'fin-adb.txt:DOMAIN-WILDCARD': 1} if purpose == 'block' else
-                               {'fin-adb.txt:DOMAIN': 3})
+                               {'fin-adb.txt:DOMAIN': 5})
             else:
                 skipped = {'fin.txt:DOMAIN-KEYWORD': 1, 'fin.txt:DOMAIN-WILDCARD': 3,
                            'fin-adb.txt:IP-CIDR': 1, 'fin-adb.txt:SRC-IP-CIDR': 1,
@@ -2526,6 +2469,14 @@ class NativeDnsByteGenerateTests(unittest.TestCase):
                            'fin-surge-ds.txt:IP-CIDR': 1, 'fin-surge-ds.txt:SRC-IP-CIDR': 1}
                 if purpose != 'block':
                     skipped.update({'fin-adb.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN-KEYWORD': 1})
+            if group == 'source':
+                for name in ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
+                    skipped[name + ':DOMAIN-WILDCARD'] = 3
+                    skipped[name + ':DOMAIN-REGEX'] = 1
+                skipped['fin-qx.txt:DOMAIN-REGEX'] = 1
+                if purpose != 'block':
+                    skipped['fin-adb.txt:DOMAIN-WILDCARD'] = 3
+                    skipped['fin-adb.txt:DOMAIN-REGEX'] = 1
             return [f'{group} {key}: {count}' for key, count in sorted(skipped.items())]
 
         for purpose in ('block', 'direct', 'proxy'):
@@ -2580,8 +2531,8 @@ class NativeDnsByteGenerateTests(unittest.TestCase):
                     self.assertEqual({path: path.read_bytes() for path in published}, published)
                     adjacent = root / 'parent/fin.yaml'
                     original = adjacent.read_bytes()
-                    adjacent.write_bytes(original.replace(b'api-?.example.org', b'wrong.example.org', 1))
-                    with self.assertRaises(GeneratedRuleError):
+                    adjacent.write_bytes(b'payload:\n  - "DOMAIN-WILDCARD,broken\\q"\n')
+                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(ValueError, r'Invalid whitelist .*fin.yaml: line 2: invalid YAML payload'):
                         publish(generate(root, lambda url: self.fail(url)))
                     adjacent.write_bytes(original)
                     self.assertEqual({path: path.read_bytes() for path in published}, published)
@@ -2627,24 +2578,20 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                         expected_skips = (["allow fin-qx.txt:DOMAIN-WILDCARD: 1"] if "[0-9]" in matcher else [])
                         expected_skips.append(f"allow fin-surge-ds.txt:{matcher.split(',', 1)[0]}: 1")
                         if not disk_only:
-                            expected_skips += ["filtered fin-adb.txt:IP-CIDR: 1", "filtered fin-surge-ds.txt:IP-CIDR: 1"]
+                            expected_skips += ["filtered fin-adb.txt:DOMAIN-REGEX: 1", "filtered fin-adb.txt:IP-CIDR: 1", "filtered fin-surge-ds.txt:IP-CIDR: 1"]
                         self.assertEqual(stderr.getvalue().splitlines(), expected_skips)
                         allow_text = outputs[root / "allow/fin.yaml"]
                         self.assertEqual(set(parse_whitelist(allow_text)),
-                                         {Rule("DOMAIN", "safe.example.org"), Rule(*matcher.split(",", 1))})
+                                         {Rule("DOMAIN-REGEX", expected_domain("DOMAIN", "safe.example.org").split(",", 1)[1]), Rule("DOMAIN-REGEX", regex)})
                         if disk_only:
                             publish(outputs)
                             (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
                             with contextlib.redirect_stderr(io.StringIO()) as stderr:
                                 outputs = generate(root, lambda url: self.fail(url))
-                            self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
+                            self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:DOMAIN-REGEX: 1\nfiltered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
                         flag = "" if mode == "strip" else ",no-resolve"
-                        domains = {"DOMAIN,ads.example.com", "DOMAIN,api-7.example.com", "DOMAIN,keep.example.net"}
-                        if matcher.startswith("DOMAIN-KEYWORD,"):
-                            domains.remove("DOMAIN,ads.example.com")
-                        elif "*" in matcher:
-                            domains.remove("DOMAIN,api-7.example.com")
-                        dns_regex = "^.*ad.*$" if matcher.startswith("DOMAIN-KEYWORD,") else regex.replace(r"\.?$", "$")
+                        domains = {"DOMAIN,ads.example.com", "DOMAIN,api-7.example.com", "DOMAIN,keep.example.net", "DOMAIN,safe.example.org"}
+                        dns_regex = regex
                         ip = "IP-CIDR,192.0.2.0/24" + flag
                         expected = {"fin.txt": domains | {ip}, "fin.yaml": {expected_ordinary_payload(entry) for entry in domains} | {ip},
                                     "fin-qx.txt": {"HOST,ads.example.com,LIST", "HOST,api-7.example.com,LIST",
@@ -2655,13 +2602,13 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                                                     "@@|safe.example.org|", "@@/" + regex + "/"}}
                         expected["fin-qx.txt"] = {"HOST," + entry.split(",", 1)[1] + ",LIST" for entry in domains} | {"IP-CIDR,192.0.2.0/24,LIST" + flag}
                         expected["fin-surge-ds.txt"] = {entry.split(",", 1)[1] for entry in domains}
-                        expected["fin-adb.txt"] = {"0.0.0.0 " + entry.split(",", 1)[1] for entry in domains} | {"@@|safe.example.org|", "@@/" + dns_regex + "/"}
+                        expected["fin-adb.txt"] = {"0.0.0.0 " + entry.split(",", 1)[1] for entry in domains} | {"@@/" + dns_regex + "/"}
                         self.assertEqual(set(outputs), {root / group / name for group in
                                          (("filtered",) if disk_only else ("allow", "filtered")) for name in NAMES})
                         for name, expected_body in expected.items():
                             lines = outputs[root / "filtered" / name].splitlines()
                             header = 7 if name == "fin-adb.txt" else 2 if name == "fin.yaml" else 1
-                            body = {generated_payload(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
+                            body = {json.loads(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
                             self.assertEqual(body, expected_body, name)
                             self.assertEqual(lines[6] if name == "fin-adb.txt" else lines[0],
                                              f"! Total count: {len(expected_body)}" if name == "fin-adb.txt"
@@ -2673,7 +2620,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                         (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
                         with contextlib.redirect_stderr(io.StringIO()) as stderr:
                             disk = generate(root, lambda url: self.fail(url))
-                        self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
+                        self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:DOMAIN-REGEX: 1\nfiltered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
                         self.assertEqual(set(disk), {root / "filtered" / name for name in NAMES})
                         for name in NAMES:
                             start = 6 if name == "fin-adb.txt" else 0
@@ -2707,7 +2654,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                     with contextlib.redirect_stderr(io.StringIO()) as stderr:
                         outputs = generate(root, lambda url: self.fail(url))
                     self.assertEqual(set(outputs), {root / group / name for group in ("parent", "dependent") for name in NAMES})
-                    parent_yaml = {generated_payload(line[4:]) for line in outputs[root / "parent/fin.yaml"].splitlines()[2:]}
+                    parent_yaml = {json.loads(line[4:]) for line in outputs[root / "parent/fin.yaml"].splitlines()[2:]}
                     self.assertIn("DOMAIN-WILDCARD,api-[0-9].example.com", parent_yaml)
                     self.assertIn("DOMAIN-KEYWORD,ads", parent_yaml)
                     self.assertTrue(any(line.startswith("DOMAIN-REGEX,") and "ads" in line for line in parent_yaml))
@@ -2739,10 +2686,10 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                                          dependency == "fin-qx.txt" and kind.startswith("DOMAIN") else "surge")
                         expected_parsed.add(Rule(kind, value, options, domain_source=domain_source))
                     if dependency == "fin.yaml":
-                        expected_parsed = {Rule("DOMAIN", "keep.example.org"), Rule("IP-CIDR", "192.0.2.0/24", ("no-resolve",) if flag else ())}
-                        expected_parsed |= {Rule(*entry.split(",", 1), domain_source=source)
-                                            for source in ("surge", "mihomo") for entry in regular | {digit}}
-                        expected_parsed.add(Rule("DOMAIN-KEYWORD", "ads", domain_source="qx"))
+                        expected_parsed = {Rule("DOMAIN-REGEX", expected_domain("DOMAIN", "keep.example.org").split(",", 1)[1]),
+                                           Rule("IP-CIDR", "192.0.2.0/24", ("no-resolve",) if flag else ())}
+                        expected_parsed |= {Rule(*entry.split(",", 1), domain_source="mihomo") for entry in regular | {digit}}
+                        expected_parsed |= {Rule(*entry.split(",", 1)) for entry in regexes}
                     self.assertEqual(set(parsed), expected_parsed)
                     self.assertEqual(len(parsed), len(expected_parsed))
                     surge_body = expected_rules
@@ -2760,14 +2707,17 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                     if dependency in ("fin.txt", "fin-surge.txt", "fin.yaml"):
                         dns_body.add(r"/^api\-[0-9]\.example\.com$/")
                     if dependency == 'fin.yaml':
+                        surge_body = {ip}
+                        qx_body.discard('HOST,keep.example.org,LIST')
+                        dns_body = {'/' + entry.partition(',')[2] + '/' for entry in regexes}
                         dns_body.update({r'/(?s-i:\Aapi\-.*\.example\.com\z)/', r'/(?s-i:\A.*ads.*\z)/'})
                     bodies = {"fin.txt": surge_body, "fin-surge.txt": surge_body - exact,
                               "fin.yaml": yaml_body, "fin-qx.txt": qx_body, "fin-adb.txt": dns_body,
-                              "fin-surge-ds.txt": {"keep.example.org"} if exact else set()}
+                              "fin-surge-ds.txt": {"keep.example.org"} if exact and dependency != "fin.yaml" else set()}
                     for name, expected_body in bodies.items():
                         lines = outputs[root / "dependent" / name].splitlines()
                         header = 7 if name == "fin-adb.txt" else 2 if name == "fin.yaml" else 1
-                        actual_body = {generated_payload(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
+                        actual_body = {json.loads(line[4:]) if name == "fin.yaml" else line for line in lines[header:]}
                         self.assertEqual(actual_body, expected_body, name)
                         self.assertEqual(lines[6] if name == "fin-adb.txt" else lines[0],
                                          f"! Total count: {len(expected_body)}" if name == "fin-adb.txt"
@@ -2807,7 +2757,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                     outputs = generate(root, lambda url: self.fail(url))
                 self.assertIn("DOMAIN-KEYWORD,ads\n", outputs[root / "filtered/fin.txt"])
                 self.assertIn("HOST-KEYWORD,ads,LIST\n", outputs[root / "filtered/fin-qx.txt"])
-                yaml = [generated_payload(line[4:]) for line in outputs[root / "filtered/fin.yaml"].splitlines()[2:]]
+                yaml = [json.loads(line[4:]) for line in outputs[root / "filtered/fin.yaml"].splitlines()[2:]]
                 self.assertIn("DOMAIN-KEYWORD,ads", yaml)
                 self.assertTrue(any(line.startswith("DOMAIN-REGEX,") and "ads" in line for line in yaml))
                 publish(outputs)
@@ -2844,7 +2794,7 @@ class DomainSetSuffixGenerateTests(unittest.TestCase):
             count = len(body)
             if name == "fin.yaml":
                 self.assertEqual(lines[1], "payload:")
-                actual = [generated_payload(line[4:]) for line in lines[2:]]
+                actual = [json.loads(line[4:]) for line in lines[2:]]
             elif name == "fin-adb.txt":
                 if purpose != "block":
                     body, count = ("! No AdBlock rules for non-advertising group.",), 0
@@ -2859,6 +2809,8 @@ class DomainSetSuffixGenerateTests(unittest.TestCase):
             if name in ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-surge.txt", "fin-surge-ds.txt"):
                 parsed, messages = parse(text, purpose=purpose)
                 expected = {Rule(*line.split(",", 1), domain_source="qx" if name == "fin-qx.txt" else "surge") for line in bodies["fin.txt"]}
+                if name == "fin.yaml":
+                    expected = {Rule("DOMAIN-REGEX", line.split(",", 1)[1]) for line in body}
                 self.assertEqual(set(parsed), set() if name == "fin-surge.txt" else expected)
                 self.assertEqual(messages, [])
 
@@ -3057,7 +3009,7 @@ class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
                         yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
                         neighbors = {"DOMAIN-KEYWORD,keep"} if group == "source" or dependency == "fin.yaml" else set()
                         visible = expected if group == "source" or dependency == "fin.yaml" else {"NETWORK,tcp"}
-                        self.assertEqual({generated_payload(line[4:]) for line in yaml.splitlines()[2:]}, visible | neighbors)
+                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, visible | neighbors)
                         parsed, warnings = parse(yaml, purpose="proxy")
                         self.assertEqual(warnings, [])
                         self.assertTrue(all(rule.native_fields for rule in parsed if rule.kind in {"AND", "OR", "NOT"}))
@@ -3079,7 +3031,7 @@ class SurgeEscapedFieldDependencyGenerateTests(unittest.TestCase):
                         disk_outputs = generate(root, lambda url: self.fail(url))
                     publish(disk_outputs)
                     self.assertEqual(set(disk_outputs), {root / "disk" / name for name in NAMES})
-                    self.assertEqual({generated_payload(line[4:]) for line in
+                    self.assertEqual({json.loads(line[4:]) for line in
                                       (root / "disk" / "fin.yaml").read_text(encoding="utf-8").splitlines()[2:]},
                                      (expected | {"DOMAIN-KEYWORD,keep"}) if dependency == "fin.yaml" else {"NETWORK,tcp"})
                     self.assertNotIn(": line ", disk_stderr.getvalue())
@@ -3137,7 +3089,7 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                         neighbors = {"DOMAIN-KEYWORD,keep"} if group == "source" or dependency == "fin.yaml" else set()
                         values = values if group == "source" or dependency == "fin.yaml" else ()
                         yaml = (root / group / "fin.yaml").read_text(encoding="utf-8")
-                        self.assertEqual({generated_payload(line[4:]) for line in yaml.splitlines()[2:]},
+                        self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]},
                                          {f"{kind},{value}" for kind, value in values}
                                          | {"NETWORK,tcp"} | neighbors)
                         parsed, messages = parse(yaml, purpose="proxy")
@@ -3145,7 +3097,7 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                         self.assertEqual(set(parsed), {
                             Rule(kind, value, literal_process=True, native_fields=True,
                                   domain_source="mihomo" if "(DOMAIN," in value else "surge") for kind, value in values
-                        } | {Rule("NETWORK", "tcp") if group == "source" or dependency == "fin.yaml" else Rule("PROTOCOL", "TCP")} |
+                        } | {Rule("NETWORK", "tcp")} |
                             ({Rule("DOMAIN-KEYWORD", "keep", domain_source="mihomo")} if neighbors else set()))
                         for name in ("fin.txt", "fin-surge.txt"):
                             surge = (root / group / name).read_text(encoding="utf-8")
@@ -3228,13 +3180,13 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                     expected = {safe if group in ("source", "yaml") else expected_ordinary_payload(safe), "NETWORK,tcp"}
                     if group in ("source", "yaml"):
                         expected |= {f"{kind},{value}" for kind, value in invalid} | {"DOMAIN-KEYWORD,keep"}
-                    self.assertEqual({generated_payload(line[4:]) for line in yaml.splitlines()[2:]}, expected)
+                    self.assertEqual({json.loads(line[4:]) for line in yaml.splitlines()[2:]}, expected)
                     parsed, messages = parse(yaml, purpose="proxy")
                     self.assertEqual(messages, [])
                     self.assertEqual(set(parsed), {
-                        Rule("OR", safe[3:], native_fields=group in ("source", "yaml"),
+                        Rule("OR", (safe if group in ("source", "yaml") else expected_ordinary_payload(safe))[3:], native_fields=True,
                              domain_source="mihomo" if group in ("source", "yaml") else "surge"),
-                        Rule("NETWORK", "tcp") if group in ("source", "yaml") else Rule("PROTOCOL", "TCP"),
+                        Rule("NETWORK", "tcp"),
                     } | (set(original) | {Rule("DOMAIN-KEYWORD", "keep", domain_source="mihomo")}
                          if group in ("source", "yaml") else set()))
                 self.assertNotIn(": line ", stderr.getvalue())
@@ -3287,6 +3239,10 @@ class BoundedRegexTailGenerateTests(unittest.TestCase):
                         expected, diagnostics = {}, []
                         for group in ('parent', 'child'):
                             texts, skipped = BoundedRegexTailFormatTests.products(group, cases, purpose, neighbor_source)
+                            if group == "child" and not native:
+                                texts = native_domain_projection(texts, ["keep.example.com"])
+                                skipped.pop("fin-adb.txt:DOMAIN", None)
+                                skipped.update({name + ":DOMAIN-REGEX": 1 for name in NAMES if name != "fin.yaml"})
                             expected.update({root / group / name: text for name, text in texts.items()})
                             diagnostics.extend(f'{group} {key}: {count}\n' for key, count in sorted(skipped.items()))
                         with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as messages:
@@ -3298,8 +3254,10 @@ class BoundedRegexTailGenerateTests(unittest.TestCase):
                         for group in ('parent', 'child'):
                             restored, warnings = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
                             self.assertEqual(warnings, [])
-                            self.assertEqual(set(restored), {rule for rule, _ in cases} |
-                                             {Rule('DOMAIN', 'keep.example.com', domain_source=neighbor_source)})
+                            self.assertEqual(set(restored),
+                                             {Rule(payload.partition(',')[0], payload.partition(',')[2], native_fields=True) for _, payload in cases} |
+                                             ({Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')} if native else
+                                              {Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').split(',', 1)[1])}))
                             self.assertEqual(len(restored), 10)
                         publish(outputs)
                         published = {path: text.encode('utf-8') for path, text in outputs.items()}
@@ -3317,7 +3275,7 @@ class BoundedRegexTailGenerateTests(unittest.TestCase):
                         self.assertEqual({path: path.read_bytes() for path in published}, published)
 
     def test_generated_logical_whitelist_rejection_keeps_all_previous_bytes(self):
-        from rules import GeneratedRuleError, Rule
+        from rules import Rule
         from tests.test_formats import BoundedRegexTailFormatTests
 
         staging = ROOT / '.tmp'
@@ -3340,8 +3298,12 @@ class BoundedRegexTailGenerateTests(unittest.TestCase):
                     (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
                     previous.update({root / 'parent' / name: text.encode('utf-8') for name, text in texts.items()})
                 with contextlib.redirect_stderr(io.StringIO()) as messages:
-                    with self.assertRaisesRegex(GeneratedRuleError, r'Invalid whitelist .*fin.yaml: line 3: unsupported whitelist rule AND'):
-                        generate(root, lambda url: self.fail(url))
+                    if disk_only:
+                        output = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(set(output), {root / 'child' / name for name in NAMES})
+                    else:
+                        with self.assertRaisesRegex(ValueError, r'Invalid whitelist .*fin.yaml: line 3: unsupported rule'):
+                            generate(root, lambda url: self.fail(url))
                 self.assertNotIn(': line ', messages.getvalue())
                 self.assertEqual({path: path.read_bytes() for path in previous}, previous)
 
@@ -3365,7 +3327,7 @@ class NativeFieldFix8GenerateTests(unittest.TestCase):
                     outputs = generate(root, lambda url: self.fail(url))
                 for group in ("source", "dependent"):
                     text = outputs[root / group / "fin.yaml"]
-                    self.assertEqual([generated_payload(line[4:]) for line in text.splitlines()[2:]], ["AND," + expression])
+                    self.assertEqual([json.loads(line[4:]) for line in text.splitlines()[2:]], ["AND," + expression])
                     parsed, messages = parse(text, purpose="proxy")
                     self.assertEqual(messages, [])
                     self.assertTrue(parsed[0].native_fields)
@@ -3921,7 +3883,7 @@ class GenerateTests(unittest.TestCase):
             stderr = io.StringIO()
             with contextlib.redirect_stderr(stderr):
                 out = generate(root, lambda _: self.fail("local input must not fetch"))
-            self.assertEqual(generated_text(out[root / "proxy" / "fin.yaml"]),
+            self.assertEqual(out[root / "proxy" / "fin.yaml"],
                              '# proxy rules: 3\npayload:\n'
                              '  - "AND,((PROCESS-NAME,Foo*Bar),(DOMAIN,a.example.com))"\n'
                              '  - "DOMAIN-SUFFIX,googleapis.com"\n'
@@ -3977,8 +3939,8 @@ class GenerateTests(unittest.TestCase):
                 self.assertIn("SRC-IP,192.0.2.0/24\n", outputs[root / "proxy" / name])
                 self.assertNotIn("IP-CIDR,192.0.2.0/24", outputs[root / "proxy" / name])
                 self.assertNotIn("8.8.8.8/24", outputs[root / "proxy" / name])
-            self.assertIn('  - "SRC-IP-CIDR,192.0.2.0/24"\n', generated_text(outputs[root / "proxy" / "fin.yaml"]))
-            self.assertIn('  - "IP-SUFFIX,8.8.8.8/24,no-resolve"\n', generated_text(outputs[root / "proxy" / "fin.yaml"]))
+            self.assertIn('  - "SRC-IP-CIDR,192.0.2.0/24"\n', outputs[root / "proxy" / "fin.yaml"])
+            self.assertIn('  - "IP-SUFFIX,8.8.8.8/24,no-resolve"\n', outputs[root / "proxy" / "fin.yaml"])
             self.assertNotIn("192.0.2.0/24", outputs[root / "proxy" / "fin-qx.txt"])
             self.assertNotIn("8.8.8.8/24", outputs[root / "proxy" / "fin-qx.txt"])
             self.assertIn("proxy fin-qx.txt:SRC-IP-CIDR: 1", stderr.getvalue())
@@ -4039,8 +4001,7 @@ class GenerateTests(unittest.TestCase):
             }
             for name, expected in block.items():
                 with self.subTest(group="a3", name=name):
-                    self.assertEqual(generated_text((root / "a3" / name).read_text(encoding="utf-8")) if name == "fin.yaml" else
-                                     (root / "a3" / name).read_text(encoding="utf-8"),
+                    self.assertEqual((root / "a3" / name).read_text(encoding="utf-8"),
                                      expected_ordinary_text(expected) if name == "fin.yaml" else expected)
             self.assertEqual((root / "a3" / "fin-adb.txt").read_text(encoding="utf-8").splitlines()[6:], [
                 "! Total count: 3", "@@|safe.ads.example.org|", "||ads.example.org^",
@@ -4055,7 +4016,7 @@ class GenerateTests(unittest.TestCase):
                              f"# dirt rules: 1\n{direct}\n")
             self.assertEqual((root / "dirt" / "fin-surge.txt").read_text(encoding="utf-8"),
                              f"# dirt rules: 1\n{direct}\n")
-            self.assertEqual(generated_text((root / "dirt" / "fin.yaml").read_text(encoding="utf-8")),
+            self.assertEqual((root / "dirt" / "fin.yaml").read_text(encoding="utf-8"),
                              expected_ordinary_text(f'# dirt rules: 1\npayload:\n  - "{direct}"\n'))
             for name in ("fin-qx.txt", "fin-surge-ds.txt"):
                 self.assertEqual((root / "dirt" / name).read_text(encoding="utf-8"),
@@ -4460,7 +4421,7 @@ class GenerateTests(unittest.TestCase):
                                             for group in ("a3", "cdn") for name in NAMES})
             for group in ("a3", "cdn"):
                 text = outputs[root / group / "fin.yaml"]
-                self.assertEqual(sorted(generated_payload(line.removeprefix("  - "))
+                self.assertEqual(sorted(json.loads(line.removeprefix("  - "))
                                         for line in text.splitlines()[2:]),
                                  sorted(f"PROCESS-NAME-REGEX,{value}" for value in values))
             self.assertNotIn("source.list: line", stderr.getvalue())
@@ -4489,7 +4450,7 @@ class GenerateTests(unittest.TestCase):
                         f"AND,((DOMAIN-REGEX,^ads$,no-resolve),({expected_domain('DOMAIN', 'x.example.com')}))"}
             for group in ("a3", "cdn"):
                 yaml = outputs[root / group / "fin.yaml"]
-                self.assertEqual({generated_payload(line.removeprefix("  - "))
+                self.assertEqual({json.loads(line.removeprefix("  - "))
                                   for line in yaml.splitlines()[2:]}, expected)
             self.assertNotIn("source.list: line 3:", stderr.getvalue())
             self.assertNotIn("source.list: line 1:", stderr.getvalue())
@@ -5591,30 +5552,31 @@ class GenerateTests(unittest.TestCase):
         self.assertEqual(alias.resolve(), root / "physical")
         self.assertTrue(alias.resolve().is_relative_to(root))
 
-    def _resolved_alias_products(self, group, kind, value, *, domain_source="surge", whitelist=()):
+    def _resolved_alias_products(self, group, kind, value, *, domain_source="surge", whitelist=(),
+                                 native_reimport=False, extra=()):
         keyword = kind == "DOMAIN-KEYWORD"
-        payload = (value if keyword else expected_domain(kind, value).partition(",")[2])
+        values = sorted((value, *extra), key=lambda item: (len(item), item))
         yaml_kind = "DOMAIN-REGEX" if domain_source == "surge" else kind
-        if domain_source != "surge":
-            payload = value
-        record = [[kind, value, [], False, False, False, domain_source]]
-        yaml = "  - " + json.dumps(yaml_kind + "," + payload) + " # rconvert-rule-v1 " + \
-            json.dumps(record, separators=(",", ":")) + "\n"
+        payloads = [item if keyword or domain_source != "surge" else
+                    expected_domain(kind, item).partition(",")[2] for item in values]
         dns = ["@@" + (f"/^.*{item}.*$/" if keyword else f"|{item}|") for item in whitelist]
-        dns.append(f"/^.*{value}.*$/" if keyword else f"0.0.0.0 {value}")
-        return {
-            "fin.txt": f"# {group} rules: 1\n{kind},{value}\n",
-            "fin-qx.txt": f"# {group} rules: 1\nHOST{'-KEYWORD' if keyword else ''},{value},LIST\n",
-            "fin.yaml": f"# {group} rules: 1\npayload:\n" + yaml,
-            "fin-adb.txt": (f"[Adblock Plus 2.0]\n! Title: {group}\n"
-                            "! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n"
-                            "! License: Inherits upstream licenses\n! Version: 202601021104\n"
-                            f"! Total count: {len(dns)}\n" + "".join(item + "\n" for item in dns)),
-            "fin-surge.txt": f"# {group} rules: {1 if keyword else 0}\n" +
-                             (f"{kind},{value}\n" if keyword else ""),
-            "fin-surge-ds.txt": f"# {group} rules: {0 if keyword else 1}\n" +
-                                ("" if keyword else value + "\n"),
+        dns += [f"/^.*{item}.*$/" if keyword else f"0.0.0.0 {item}" for item in values]
+        bodies = {
+            "fin.txt": [f"{kind},{item}" for item in values],
+            "fin-qx.txt": [f"HOST{'-KEYWORD' if keyword else ''},{item},LIST" for item in values],
+            "fin.yaml": ["  - " + json.dumps(yaml_kind + "," + payload) for payload in payloads],
+            "fin-surge.txt": [f"{kind},{item}" for item in values] if keyword else [],
+            "fin-surge-ds.txt": [] if keyword else values,
         }
+        texts = {name: f"# {group} rules: {len(body)}\n" + ("payload:\n" if name == "fin.yaml" else "") +
+                 "".join(item + "\n" for item in body) for name, body in bodies.items()}
+        texts["fin-adb.txt"] = (f"[Adblock Plus 2.0]\n! Title: {group}\n"
+            "! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n"
+            "! License: Inherits upstream licenses\n! Version: 202601021104\n" +
+            f"! Total count: {len(dns)}\n" + "".join(item + "\n" for item in dns))
+        if native_reimport:
+            texts = native_domain_projection(texts, values)
+        return {name: texts[name] for name in NAMES}
 
     def test_resolved_directory_alias_sources_publish_and_reimport_all_six_formats(self):
         from rules import Rule, parse
@@ -5644,7 +5606,8 @@ class GenerateTests(unittest.TestCase):
                                     self._resolved_alias_products("parent", kind, new).items()}
                         source = "qx" if filename == "fin-qx.txt" else "surge"
                         expected.update({root / "child" / name: text for name, text in
-                                         self._resolved_alias_products("child", kind, new, domain_source=source).items()})
+                                         self._resolved_alias_products("child", kind, new, domain_source=source,
+                                                                       native_reimport=filename == "fin.yaml").items()})
                         with contextlib.redirect_stderr(io.StringIO()) as stderr:
                             outputs = generate(root, lambda url: self.fail(url))
                         self.assertEqual(outputs[root / "child" / "fin.txt"], expected[root / "child" / "fin.txt"])
@@ -5656,10 +5619,13 @@ class GenerateTests(unittest.TestCase):
                             warnings += f"{selected}: 7 skipped lines; first five shown\n"
                         if kind == "DOMAIN-KEYWORD":
                             warnings += f"child fin-surge-ds.txt:{kind}: 1\n"
+                        if filename == "fin.yaml":
+                            warnings += "".join(f"child {name}:DOMAIN-REGEX: 1\n" for name in sorted(NAMES) if name != "fin.yaml")
                         self.assertEqual(stderr.getvalue(), warnings)
                         self.assertEqual({path: path.read_bytes() for path in previous}, previous)
-                        self.assertEqual(parse(outputs[root / "child" / "fin.yaml"], purpose="block"),
-                                         ([Rule(kind, new, domain_source=source)], []))
+                        expected_rule = (Rule(kind, new, domain_source="mihomo") if source == "qx" else
+                                         Rule("DOMAIN-REGEX", new if kind == "DOMAIN-KEYWORD" else expected_domain(kind, new).partition(",")[2]))
+                        self.assertEqual(parse(outputs[root / "child" / "fin.yaml"], purpose="block"), ([expected_rule], []))
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
                                          {path: text.encode("utf-8") for path, text in expected.items()})
@@ -5708,7 +5674,8 @@ class GenerateTests(unittest.TestCase):
                                     self._resolved_alias_products("parent", kind, new).items()}
                         expected.update({root / "child" / name: text for name, text in
                                          self._resolved_alias_products("child", kind, stale, domain_source=source,
-                                                                       whitelist=(new,)).items()})
+                                                                       whitelist=() if filename == "fin.yaml" else (new,),
+                                                                       extra=(new,) if filename == "fin.yaml" else ()).items()})
                         with contextlib.redirect_stderr(io.StringIO()) as stderr, warnings.catch_warnings(record=True) as notices:
                             warnings.simplefilter("always")
                             outputs = generate(root, lambda url: self.fail(url))
@@ -5716,6 +5683,8 @@ class GenerateTests(unittest.TestCase):
                         self.assertEqual(outputs, expected)
                         expected_warnings = (f"parent fin-surge-ds.txt:{kind}: 1\nchild fin-surge-ds.txt:{kind}: 1\n"
                                              if kind == "DOMAIN-KEYWORD" else "")
+                        if filename == "fin.yaml":
+                            expected_warnings += "child fin-adb.txt:DOMAIN-REGEX: 1\n"
                         self.assertEqual(stderr.getvalue(), expected_warnings)
                         header_warnings = [f"line {number}: invalid rule" for number in range(1, 8)] if filename == "fin-adb.txt" else []
                         self.assertEqual([str(notice.message) for notice in notices], header_warnings)
@@ -5731,7 +5700,8 @@ class GenerateTests(unittest.TestCase):
                             disk = generate(root, lambda url: self.fail(url))
                         self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent == root / "child"})
                         self.assertEqual(disk_stderr.getvalue(), f"child fin-surge-ds.txt:{kind}: 1\n"
-                                         if kind == "DOMAIN-KEYWORD" else "")
+                                         if kind == "DOMAIN-KEYWORD" else "child fin-adb.txt:DOMAIN-REGEX: 1\n"
+                                         if filename == "fin.yaml" else "")
                         self.assertEqual([str(notice.message) for notice in notices], header_warnings)
                         publish(disk)
                         self.assertEqual({path: path.read_bytes() for path in disk},
@@ -5878,7 +5848,9 @@ class GenerateTests(unittest.TestCase):
                     (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
                     expected = {(root / group / name).resolve(): text
                                 for group in ("parent", "child")
-                                for name, text in r25_expected(group, purpose, mode, "! Version: 202601021104").items()}
+                                for name, text in (native_domain_projection(r25_expected(group, purpose, mode, "! Version: 202601021104"),
+                                                      ["current.example.org"]) if group == "child" else
+                                                      r25_expected(group, purpose, mode, "! Version: 202601021104")).items()}
                     with contextlib.redirect_stderr(io.StringIO()):
                         outputs = generate(root, lambda url: self.fail(url))
                     self.assertEqual(outputs, expected)
@@ -5945,7 +5917,9 @@ class GenerateTests(unittest.TestCase):
                         expected.update({root / "child" / name: text for name, text in
                                          self._resolved_alias_products("child", kind, stale if dependency == "whitelist" else new,
                                                                        domain_source=source,
-                                                                       whitelist=(new,) if dependency == "whitelist" else ()).items()})
+                                                                       whitelist=(new,) if dependency == "whitelist" and filename != "fin.yaml" else (),
+                                                                       native_reimport=dependency == "sources" and filename == "fin.yaml",
+                                                                       extra=(new,) if dependency == "whitelist" and filename == "fin.yaml" else ()).items()})
                         with contextlib.redirect_stderr(io.StringIO()) as stderr, warnings.catch_warnings(record=True) as notices:
                             warnings.simplefilter("always")
                             outputs = generate(root, lambda url: self.fail(url))
@@ -5958,12 +5932,19 @@ class GenerateTests(unittest.TestCase):
                             messages += f"{selected}: 7 skipped lines; first five shown\n"
                         if kind == "DOMAIN-KEYWORD":
                             messages += "child fin-surge-ds.txt:DOMAIN-KEYWORD: 1\n"
+                        if filename == "fin.yaml":
+                            messages += ("".join(f"child {name}:DOMAIN-REGEX: 1\n" for name in sorted(NAMES) if name != "fin.yaml")
+                                         if dependency == "sources" else "child fin-adb.txt:DOMAIN-REGEX: 1\n")
                         self.assertEqual(stderr.getvalue(), messages)
                         header_warnings = [f"line {number}: invalid rule" for number in range(1, 8)] \
                             if filename == "fin-adb.txt" and dependency == "whitelist" else []
                         self.assertEqual([str(notice.message) for notice in notices], header_warnings)
-                        self.assertEqual(parse(outputs[root / "child" / "fin.yaml"], purpose="block"),
-                                         ([Rule(kind, stale if dependency == "whitelist" else new, domain_source=source)], []))
+                        values = ([new, stale] if dependency == "whitelist" and filename == "fin.yaml" else
+                                  [stale if dependency == "whitelist" else new])
+                        expected_rules = [Rule(kind, value, domain_source="mihomo") if source == "qx" else
+                                          Rule("DOMAIN-REGEX", value if kind == "DOMAIN-KEYWORD" else expected_domain(kind, value).partition(",")[2])
+                                          for value in values]
+                        self.assertEqual(parse(outputs[root / "child" / "fin.yaml"], purpose="block"), (expected_rules, []))
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
                                          {path: text.encode("utf-8") for path, text in expected.items()})
@@ -6038,7 +6019,6 @@ class GenerateTests(unittest.TestCase):
                             self.assertEqual({path: path.read_bytes() for path in published}, published)
 
     def test_resolved_file_alias_unsupported_generated_whitelist_rejects_complete_body(self):
-        from rules import GeneratedRuleError
 
         staging = ROOT / ".tmp"
         staging.mkdir(exist_ok=True)
@@ -6057,9 +6037,9 @@ class GenerateTests(unittest.TestCase):
                     (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
                     with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(ValueError) as failure:
                         publish(generate(root, lambda url: self.fail(url)))
-                    self.assertEqual(type(failure.exception), GeneratedRuleError if filename == "fin.yaml" else ValueError)
+                    self.assertEqual(type(failure.exception), ValueError)
                     self.assertEqual(str(failure.exception), f"Invalid whitelist {selected}: " +
-                                     ("line 3: unsupported whitelist rule PROCESS-NAME" if filename == "fin.yaml" else
+                                     ("line 3: unsupported rule" if filename == "fin.yaml" else
                                       "line 2: unsupported rule"))
                     self.assertEqual({path: path.read_bytes() for path in previous}, previous)
 
@@ -6073,36 +6053,35 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
         logic = '((DOMAIN,logic.example.net),(IP-CIDR,198.51.100.0/24' + flag + '),(SRC-IP-CIDR,203.0.113.1/32))'
         surge_logic = 'AND,' + logic.replace('SRC-IP-CIDR,', 'SRC-IP,')
         target_logic = 'AND,((' + expected_domain('DOMAIN', 'logic.example.net') + '),(IP-CIDR,198.51.100.0/24' + flag + '),(SRC-IP-CIDR,203.0.113.1/32))'
-        keyword = Rule('DOMAIN-KEYWORD', 'ΟΣ', domain_source='mihomo')
-        native = Rule('DOMAIN', 'NATIVE.EXAMPLE.ORG.', domain_source='mihomo')
-        exact = Rule('DOMAIN', 'keep.example.org')
-        suffix = Rule('DOMAIN-SUFFIX', 'broad.example.net')
-        ip = Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ())
-        source = Rule('SRC-IP', '127.0.0.1')
-        logical = Rule('AND', logic)
-        pairs = [(target_logic, logical), ('DOMAIN,NATIVE.EXAMPLE.ORG.', native),
-                 ('DOMAIN-KEYWORD,ΟΣ', keyword)]
-        if not child:
-            pairs.append((expected_domain('DOMAIN', exact.value), exact))
-        pairs += [(expected_domain('DOMAIN-SUFFIX', suffix.value), suffix),
-                  ('IP-CIDR,192.0.2.0/24' + flag, ip), ('SRC-IP-CIDR,127.0.0.1/32', source)]
-        yaml_lines = []
-        for payload, rule in pairs:
-            record = [rule.kind, rule.value, list(rule.options), False, False, False, rule.domain_source]
-            yaml_lines.append('  - ' + json.dumps(payload, ensure_ascii=False) + ' # rconvert-rule-v1 ' +
-                              json.dumps([record], ensure_ascii=True, separators=(',', ':')))
-        domains = ([] if child else ['DOMAIN,keep.example.org']) + ['DOMAIN,NATIVE.EXAMPLE.ORG.']
-        hosts = ([] if child else ['HOST,keep.example.org,LIST']) + ['HOST,NATIVE.EXAMPLE.ORG.,LIST']
-        ds = ([] if child else ['keep.example.org']) + ['.broad.example.net', 'NATIVE.EXAMPLE.ORG.']
-        dns = (['@@|keep.example.org|'] if child else []) + [r'/(?s-i:\A.*οσ.*\z)/', '||broad.example.net^'] + (
-            [] if child else ['0.0.0.0 keep.example.org']) + ['0.0.0.0 NATIVE.EXAMPLE.ORG.']
-        bodies = {'fin.txt': [surge_logic, *domains, 'DOMAIN-KEYWORD,ΟΣ', 'DOMAIN-SUFFIX,broad.example.net',
-                              'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
-                  'fin-qx.txt': [*hosts, 'HOST-KEYWORD,ΟΣ,LIST', 'HOST-SUFFIX,broad.example.net,LIST',
-                                 'IP-CIDR,192.0.2.0/24,LIST' + flag],
-                  'fin.yaml': yaml_lines,
-                  'fin-surge.txt': [surge_logic, 'DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
-                  'fin-surge-ds.txt': ds}
+        payloads = [target_logic, 'DOMAIN,NATIVE.EXAMPLE.ORG.', 'DOMAIN-KEYWORD,ΟΣ',
+                    expected_domain('DOMAIN', 'keep.example.org'), expected_domain('DOMAIN-SUFFIX', 'broad.example.net'),
+                    'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP-CIDR,127.0.0.1/32']
+        native_rules = [Rule('AND', target_logic[4:], native_fields=True),
+                        Rule('DOMAIN', 'NATIVE.EXAMPLE.ORG.', domain_source='mihomo'),
+                        Rule('DOMAIN-KEYWORD', 'ΟΣ', domain_source='mihomo'),
+                        Rule('DOMAIN-REGEX', payloads[3].partition(',')[2]),
+                        Rule('DOMAIN-REGEX', payloads[4].partition(',')[2]),
+                        Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
+                        Rule('SRC-IP-CIDR', '127.0.0.1/32')]
+        yaml_lines = ['  - ' + json.dumps(payload, ensure_ascii=False) for payload in payloads]
+        dns = [r'/(?s-i:\A.*οσ.*\z)/', '0.0.0.0 NATIVE.EXAMPLE.ORG.']
+        if child:
+            bodies = {'fin.txt': ['DOMAIN,NATIVE.EXAMPLE.ORG.', 'DOMAIN-KEYWORD,ΟΣ',
+                                 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
+                      'fin-qx.txt': ['HOST,NATIVE.EXAMPLE.ORG.,LIST', 'HOST-KEYWORD,ΟΣ,LIST',
+                                    'IP-CIDR,192.0.2.0/24,LIST' + flag],
+                      'fin.yaml': yaml_lines,
+                      'fin-surge.txt': ['DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
+                      'fin-surge-ds.txt': ['NATIVE.EXAMPLE.ORG.']}
+        else:
+            dns = [dns[0], '||broad.example.net^', '0.0.0.0 keep.example.org', dns[1]]
+            bodies = {'fin.txt': [surge_logic, 'DOMAIN,keep.example.org', 'DOMAIN,NATIVE.EXAMPLE.ORG.', 'DOMAIN-KEYWORD,ΟΣ',
+                                 'DOMAIN-SUFFIX,broad.example.net', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
+                      'fin-qx.txt': ['HOST,keep.example.org,LIST', 'HOST,NATIVE.EXAMPLE.ORG.,LIST', 'HOST-KEYWORD,ΟΣ,LIST',
+                                    'HOST-SUFFIX,broad.example.net,LIST', 'IP-CIDR,192.0.2.0/24,LIST' + flag],
+                      'fin.yaml': yaml_lines,
+                      'fin-surge.txt': [surge_logic, 'DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
+                      'fin-surge-ds.txt': ['keep.example.org', '.broad.example.net', 'NATIVE.EXAMPLE.ORG.']}
         expected = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
                     ''.join(line + '\n' for line in body) for name, body in bodies.items()}
         expected['fin-adb.txt'] = (
@@ -6110,15 +6089,23 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
             '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610071200\n' +
             (f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) if purpose == 'block' else
              '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
-        skipped = {'fin-adb.txt:AND': 1, 'fin-adb.txt:IP-CIDR': 1, 'fin-adb.txt:SRC-IP': 1,
-                   'fin-qx.txt:AND': 1, 'fin-qx.txt:SRC-IP': 1, 'fin-surge-ds.txt:AND': 1,
-                   'fin-surge-ds.txt:DOMAIN-KEYWORD': 1, 'fin-surge-ds.txt:IP-CIDR': 1, 'fin-surge-ds.txt:SRC-IP': 1}
+        source_kind = 'SRC-IP-CIDR' if child else 'SRC-IP'
+        skipped = {'fin-adb.txt:AND': 1, 'fin-adb.txt:IP-CIDR': 1, 'fin-adb.txt:' + source_kind: 1,
+                   'fin-qx.txt:AND': 1, 'fin-qx.txt:' + source_kind: 1, 'fin-surge-ds.txt:AND': 1,
+                   'fin-surge-ds.txt:DOMAIN-KEYWORD': 1, 'fin-surge-ds.txt:IP-CIDR': 1,
+                   'fin-surge-ds.txt:' + source_kind: 1}
+        if child:
+            skipped.update({name + ':DOMAIN-REGEX': 2 for name in NAMES if name != 'fin.yaml'})
+            skipped.update({'fin.txt:AND': 1, 'fin-surge.txt:AND': 1})
+            if purpose == 'block':
+                skipped['fin-adb.txt:DOMAIN-REGEX'] += 1
         if purpose != 'block':
-            skipped.update({'fin-adb.txt:DOMAIN': 1 if child else 2, 'fin-adb.txt:DOMAIN-SUFFIX': 1,
-                            'fin-adb.txt:DOMAIN-KEYWORD': 1})
-        return expected, [rule for _, rule in pairs], skipped
+            skipped.update({'fin-adb.txt:DOMAIN': 1 if child else 2, 'fin-adb.txt:DOMAIN-KEYWORD': 1})
+            if not child:
+                skipped['fin-adb.txt:DOMAIN-SUFFIX'] = 1
+        return expected, native_rules, skipped
 
-    def test_nine_modes_full_six_texts_metadata_same_round_whitelist_and_disk_publish(self):
+    def test_nine_modes_native_texts_same_round_whitelist_and_disk_publish(self):
         from rules import parse
 
         for purpose in ('block', 'direct', 'proxy'):
@@ -6176,7 +6163,6 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
                             self.assertFalse((root / 'white.list').exists())
 
     def test_generated_unsupported_whitelist_is_terminal_and_preserves_all_old_binary_files(self):
-        from rules import GeneratedRuleError
 
         for purpose in ('block', 'direct', 'proxy'):
             for mode in ('add', 'strip', 'keep'):
@@ -6195,13 +6181,13 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
                         for name in NAMES:
                             old[root / group / name] = bytes(range(256))
                             (root / group / name).write_bytes(old[root / group / name])
-                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(GeneratedRuleError, r'white.*fin.yaml.*line 4:'):
+                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(ValueError, r'white.*fin.yaml.*line 4: unsupported rule'):
                         publish(generate(root, lambda url: self.fail(url)))
                     self.assertEqual({path: path.read_bytes() for path in old}, old)
 
 
 class PublicGeneratedDeepAndFailureTests(unittest.TestCase):
-    def test_flat_metadata_binding_and_publish_disk_at_600_and_1000_layers(self):
+    def test_native_payload_publish_and_disk_at_600_and_1000_layers(self):
         code = r'''
 import contextlib
 import io
@@ -6228,14 +6214,12 @@ initial = [Rule('NOT', matcher(flag)[4:], native_fields=native_fields)
 assert parse(plain, purpose=PURPOSE) == (initial[:2] + [neighbor], [])
 assert parse(native, purpose=PURPOSE) == (initial[2:], [])
 flags = ('', ',no-resolve') if MODE == 'keep' else (',no-resolve',) if MODE == 'add' else ('',)
-expected_rules = [neighbor]
-yaml_lines = ['  - ' + json.dumps(expected_domain('DOMAIN', neighbor.value)) + ' # rconvert-rule-v1 ' +
-              json.dumps([['DOMAIN', neighbor.value, [], False, False, False, 'surge']], separators=(',', ':'))]
+expected_rules = [Rule("DOMAIN-REGEX", expected_domain("DOMAIN", neighbor.value).partition(",")[2])]
+yaml_lines = ['  - ' + json.dumps(expected_domain('DOMAIN', neighbor.value))]
 for flag in flags:
     payload = matcher(flag)
-    records = [['NOT', payload[4:], [], False, False, native_fields, 'surge'] for native_fields in (False, True)]
-    yaml_lines.append('  - ' + json.dumps(payload) + ' # rconvert-rule-v1 ' + json.dumps(records, separators=(',', ':')))
-    expected_rules.extend(Rule('NOT', payload[4:], native_fields=native_fields) for native_fields in (False, True))
+    yaml_lines.append('  - ' + json.dumps(payload))
+    expected_rules.append(Rule('NOT', payload[4:], native_fields=True))
 with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
     root = Path(directory)
     configs = [{'name': 'parent', 'purpose': PURPOSE, 'no_resolve': MODE,
@@ -6255,24 +6239,29 @@ with tempfile.TemporaryDirectory(dir=Path.cwd()) as directory:
             clock.now.return_value = datetime(2026, 10, 7, 12, tzinfo=timezone.utc)
             outputs = generate(root, lambda url: (_ for _ in ()).throw(AssertionError(url)))
         groups = ('child',) if disk else ('parent', 'child')
-        count = 2 * len(flags)
-        skips = {name + ':NOT': count for name in names if name != 'fin.yaml'}
-        if PURPOSE != 'block':
-            skips['fin-adb.txt:DOMAIN'] = 1
-        assert stderr.getvalue().splitlines() == [f'{group} {key}: {value}' for group in groups for key, value in sorted(skips.items())]
+        expected_skips = []
+        for group in groups:
+            count = (2 if group == 'parent' else 1) * len(flags)
+            skips = {name + ':NOT': count for name in names if name != 'fin.yaml'}
+            if group == 'child':
+                skips.update({name + ':DOMAIN-REGEX': 1 for name in names if name != 'fin.yaml'})
+            elif PURPOSE != 'block':
+                skips['fin-adb.txt:DOMAIN'] = 1
+            expected_skips.extend(f'{group} {key}: {value}' for key, value in sorted(skips.items()))
+        assert stderr.getvalue().splitlines() == expected_skips
         for group in groups:
             wanted = f'# {group} rules: {len(yaml_lines)}\npayload:\n' + ''.join(line + '\n' for line in yaml_lines)
             assert outputs[root / group / 'fin.yaml'] == wanted
             assert parse(wanted, purpose=PURPOSE) == (expected_rules, [])
-            for scalar in yaml_lines:
-                records = json.loads(scalar.partition(' # rconvert-rule-v1 ')[2])
-                assert all(len(record) == 7 and isinstance(record[1], str) for record in records)
             for name, body in (('fin.txt', 'DOMAIN,keep.example.org\n'), ('fin-qx.txt', 'HOST,keep.example.org,LIST\n'),
                                ('fin-surge.txt', ''), ('fin-surge-ds.txt', 'keep.example.org\n')):
+                if group == 'child':
+                    body = ''
                 assert outputs[root / group / name] == f'# {group} rules: {int(bool(body))}\n' + body
             dns = (f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
                    '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610071200\n' +
-                   ('! Total count: 1\n0.0.0.0 keep.example.org\n' if PURPOSE == 'block' else
+                   ('! Total count: 1\n0.0.0.0 keep.example.org\n' if PURPOSE == 'block' and group == 'parent' else
+                    '! Total count: 0\n' if PURPOSE == 'block' else
                     '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
             assert outputs[root / group / 'fin-adb.txt'] == dns
         publish(outputs)
@@ -6293,40 +6282,6 @@ assert sys.getrecursionlimit() == limit
                                                 capture_output=True, text=True, timeout=8)
                         self.assertEqual(result.returncode, 0, result.stderr)
 
-    def test_local_remote_marked_failures_before_decode_html_skip_and_publish(self):
-        from rules import GeneratedRuleError
-
-        prefix = b'\xef\xbb\xbf<html>\r\n</html>\r\npayload:\r\n  - '
-        declarations = (b'"DOMAIN,keep.example.org" # rconvert-rule-v2 []',
-                        b'"DOMAIN,keep.example.org" # rconvert-rule-v1 null',
-                        b'"DOMAIN,keep.example.org" # rconvert-rule-v1 \xff',
-                        b'"DOMAIN,keep.example.org\\q" # rconvert-rule-v1 []',
-                        b'"DOMAIN,keep.example.org" junk # rconvert-rule-v1 []',
-                        b'"DOMAIN,keep.example.org\x00" # rconvert-rule-v1 []',
-                        b'"DOMAIN,keep.example.org\xff" # rconvert-rule-v1 []',
-                        b'"DOMAIN,keep.example.org" # rconvert-rule-v1 [["DOMAIN","other.example.org",[],false,false,false,"mihomo"]]')
-        for remote in (False, True):
-            for white in (False, True):
-                for declaration in declarations:
-                    with self.subTest(remote=remote, white=white, declaration=declaration), tempfile.TemporaryDirectory(dir=ROOT) as directory:
-                        root = Path(directory)
-                        endpoint = 'https://example.org/marked.yaml' if remote else 'marked.yaml'
-                        config = [{'name': 'consumer', 'purpose': 'block', 'no_resolve': 'keep',
-                                   'sources': ['good.list'] if white else [endpoint],
-                                   'whitelist': [endpoint] if white else []}]
-                        (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
-                        (root / 'good.list').write_text('DOMAIN,keep.example.org\n', encoding='utf-8')
-                        data = prefix + declaration + b'\r\n'
-                        (root / 'marked.yaml').write_bytes(data)
-                        (root / 'consumer').mkdir()
-                        old = {root / 'consumer' / name: bytes(range(256)) for name in NAMES}
-                        for path, value in old.items():
-                            path.write_bytes(value)
-                        with contextlib.redirect_stderr(io.StringIO()) as stderr, self.assertRaisesRegex(GeneratedRuleError, r'line 4:'):
-                            publish(generate(root, lambda url: data))
-                        self.assertEqual({path: path.read_bytes() for path in old}, old)
-                        self.assertNotIn('invalid UTF-8; skipped', stderr.getvalue())
-                        self.assertNotIn('invalid whitelist', stderr.getvalue())
 
     def test_real_generated_publish_failure_restores_binary_bytes_and_removes_new_directory(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:

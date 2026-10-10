@@ -105,8 +105,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     if not root.is_relative_to(Path(__file__).resolve().parent):
         raise ValueError("Source root escapes worktree")
     from formats import FILES, render
-    from rules import (GeneratedRuleError, _apply_no_resolve, _source_records,
-                       exclude_covered, normalize, parse, parse_whitelist)
+    from rules import _apply_no_resolve, exclude_covered, normalize, parse, parse_whitelist
 
     configs = load_config(root)
     paths = {}
@@ -152,7 +151,6 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 return None
         if isinstance(source, str):
             text = data.decode("utf-8-sig", errors="surrogateescape")
-            list(_source_records(text))
             lines = []
             bad = 0
             for number, line in enumerate(text.split('\n'), 1):
@@ -169,7 +167,6 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
         try:
             return data.decode("utf-8-sig")
         except UnicodeError as exc:
-            list(_source_records(data.decode('utf-8-sig', errors='surrogateescape')))
             raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
 
     def generated_body(source: Path, text: str) -> tuple[int, list[str]]:
@@ -198,8 +195,6 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 text = read(source)
                 try:
                     local_whitelists[source] = parse_whitelist(text, domain_set=is_domain_set(source))
-                except GeneratedRuleError as exc:
-                    raise GeneratedRuleError(f"Invalid whitelist {source}: {exc}") from exc
                 except ValueError as exc:
                     raise ValueError(f"Invalid whitelist {source}: {exc}") from exc
 
@@ -265,8 +260,6 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                         snippet = ("payload:\n" if paths[source] == paths[source].with_name("fin.yaml") else "") + line
                         try:
                             supported = parse_whitelist(snippet, domain_set=is_domain_set(source))
-                        except GeneratedRuleError as exc:
-                            raise GeneratedRuleError(f"line {number}: {str(exc).partition(': ')[2]}") from exc
                         except ValueError:
                             supported = []
                         if not supported:
@@ -275,8 +268,6 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 if not selected and isinstance(source, str):
                     print(f"{source}: no supported whitelist rules; skipped", file=sys.stderr)
                 whitelist.extend(selected)
-            except GeneratedRuleError as exc:
-                raise GeneratedRuleError(f"Invalid whitelist {source}: {exc}") from exc
             except ValueError as exc:
                 if isinstance(source, Path):
                     raise ValueError(f"Invalid whitelist {source}: {exc}") from exc

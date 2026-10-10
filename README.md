@@ -47,6 +47,8 @@
 
 [AdGuard Private DNS 的自定义列表额度](https://adguard-dns.io/kb/private-dns/setting-up-filtering/blocklists/)按套餐分别为 Personal 1,000、Team 5,000、Enterprise 100,000 条总规则，超额列表会自动停用。上表中 `a3`、`a4` 的 `fin-adb.txt` 各自超过 100,000 条，直接作为 Private DNS 自定义列表添加时会超额；生成文件保留全部可表达规则。
 
+生成的 `fin.yaml` 仅包含原生 YAML 规则。重新导入时按 Mihomo 原生语义解析已输出的 matcher，普通 YAML 注释被忽略；转换前的 Rule 类型和来源信息不通过文件恢复。
+
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
 Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。

@@ -491,7 +491,6 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
-    mihomo_records = {}
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process, item.native_fields, item.domain_source)):
         rule = _apply_no_resolve(rule, no_resolve)
         effective = rule
@@ -561,7 +560,6 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
         payload = _mihomo_rule(effective)
         if payload is not None:
             line = '  - ' + _yaml_value(payload)
-            mihomo_records.setdefault(line, set()).add(effective)
             lines['fin.yaml'].append(line)
             emitted.add('fin.yaml')
         if interface_options and "fin-qx.txt" in emitted:
@@ -593,13 +591,6 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 return is_ip, family if is_ip else 0, kind, len(line), line
 
             body.sort(key=sort_key)
-    for index, line in enumerate(lines['fin.yaml']):
-        records = [[rule.kind, rule.value, rule.options, rule.allow, rule.literal_process,
-                    rule.native_fields, rule.domain_source]
-                   for rule in sorted(mihomo_records[line], key=lambda rule: (
-                       rule.kind, rule.value, rule.options, rule.allow, rule.literal_process,
-                       rule.native_fields, rule.domain_source))]
-        lines['fin.yaml'][index] += ' # rconvert-rule-v1 ' + json.dumps(records, ensure_ascii=True, separators=(',', ':'))
     out = {name: (
                "[Adblock Plus 2.0]\n"
                f"! Title: {title if title is not None else group}\n"
