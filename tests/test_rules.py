@@ -1276,6 +1276,113 @@ class SourceAdapterParserFix1Tests(unittest.TestCase):
                     self.assertIn(expected, normalize(parsed))
 
 
+class BoundedRegexTailRuleTests(unittest.TestCase):
+    def test_complete_regex_tail_is_literal_in_all_bounded_logical_sources(self):
+        import json
+
+        for kind, matcher in (('PROCESS-NAME-REGEX', '^Foo,no-resolve'),
+                              ('PROCESS-PATH-REGEX', '^/tmp/Foo,no-resolve'),
+                              ('DOMAIN-REGEX', '^ads,no-resolve')):
+            for operator in ('AND', 'OR', 'NOT'):
+                for purpose, action in (('block', 'REJECT'), ('proxy', 'PROXY'), ('direct', 'DIRECT')):
+                    for source in ('ordinary', 'quoted', 'native'):
+                        leaf = '(' + kind + ',' + (_quote_matcher(matcher) if source == 'quoted' else matcher) + ')'
+                        expression = '(' + leaf + ('' if operator == 'NOT' else ',(NETWORK,tcp)') + ')'
+                        rule = Rule(operator, expression, native_fields=source == 'native')
+                        keep = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo' if source == 'native' else 'surge')
+                        text = ('payload:\n  - ' + json.dumps(operator + ',' + expression) + '\n  - DOMAIN,keep.example.org'
+                                if source == 'native' else operator + ',' + expression + ',' + action +
+                                '\nDOMAIN,keep.example.org,' + action)
+                        with self.subTest(kind=kind, operator=operator, purpose=purpose, source=source):
+                            self.assertEqual(parse(text, purpose=purpose), ([rule, keep], []))
+                            self.assertEqual(set(normalize([rule, keep, rule])), {rule, keep})
+                            self.assertEqual(rules.parse_whitelist(text), [keep])
+
+
+    def test_invalid_complete_matchers_options_and_top_level_ambiguity_keep_neighbors(self):
+        import json
+
+        for kind in ('PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX', 'DOMAIN-REGEX'):
+            for matcher in ('*Foo,no-resolve', '^Foo[,no-resolve'):
+                for operator in ('AND', 'OR', 'NOT'):
+                    for native in (False, True):
+                        leaf = '(' + kind + ',' + (matcher if native else _quote_matcher(matcher)) + ')'
+                        expression = '(' + leaf + ('' if operator == 'NOT' else ',(NETWORK,tcp)') + ')'
+                        text = ('payload:\n  - ' + json.dumps(operator + ',' + expression) + '\n  - DOMAIN,keep.example.org'
+                                if native else operator + ',' + expression + ',PROXY\nDOMAIN,keep.example.org,PROXY')
+                        keep = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo' if native else 'surge')
+                        with self.subTest(kind=kind, matcher=matcher, operator=operator, native=native):
+                            self.assertEqual(parse(text, purpose='proxy'),
+                                             ([keep], [f'line {2 if native else 1}: invalid logical expression {expression}']))
+            for purpose, action in (('block', 'REJECT'), ('proxy', 'PROXY'), ('direct', 'DIRECT')):
+                text = kind + ',^Foo,no-resolve\nDOMAIN,keep.example.org,' + action
+                self.assertEqual(parse(text, purpose=purpose), ([Rule('DOMAIN', 'keep.example.org')],
+                                 ['line 1: ambiguous unquoted regex comma or policy']))
+        for operator in ('AND', 'OR', 'NOT'):
+            leaf = '(NETWORK,tcp,no-resolve)'
+            expression = '(' + leaf + ('' if operator == 'NOT' else ',(DOMAIN,x.example.org)') + ')'
+            self.assertEqual(parse(operator + ',' + expression + ',PROXY\nDOMAIN,keep.example.org,PROXY', purpose='proxy'),
+                             ([Rule('DOMAIN', 'keep.example.org')], [f'line 1: invalid logical expression {expression}']))
+
+    def test_all_destination_ip_flags_change_without_touching_regex_source_or_domain(self):
+        destinations = (('IP-CIDR', '192.0.2.0/24'), ('IP-CIDR6', '2001:db8::/32'),
+                        ('IP-SUFFIX', '203.0.113.7/24'), ('IP-ASN', '13335'), ('GEOIP', 'CN'))
+        sources = ('(SRC-IP-CIDR,198.51.100.0/24),(SRC-IP-SUFFIX,203.0.113.7/24),'
+                   '(SRC-IP-ASN,13335),(SRC-GEOIP,CN),(SRC-IP,198.51.100.7),(DOMAIN,x.example.org)')
+        for native in (False, True):
+            for quoted in (False, True) if not native else (False,):
+                field = _quote_matcher('^Foo,no-resolve') if quoted else '^Foo,no-resolve'
+                for marked in (False, True):
+                    original = ('((PROCESS-NAME-REGEX,' + field + '),' + ','.join(
+                        f'({kind},{value}' + (',no-resolve' if marked else '') + ')' for kind, value in destinations) + ',' + sources + ')')
+                    for allow in (False, True):
+                        rule = Rule('AND', original, allow=allow, native_fields=native,
+                                    domain_source='mihomo' if native else 'surge')
+                        for mode in ('add', 'strip', 'keep'):
+                            flag = '' if mode == 'strip' else ',no-resolve' if marked or mode == 'add' and not allow else ''
+                            wanted = ('((PROCESS-NAME-REGEX,' + field + '),' + ','.join(
+                                f'({kind},{value}{flag})' for kind, value in destinations) + ',' + sources + ')')
+                            expected = Rule('AND', wanted, allow=allow, native_fields=native,
+                                            domain_source=rule.domain_source)
+                            with self.subTest(native=native, quoted=quoted, marked=marked, allow=allow, mode=mode):
+                                effective = rules._apply_no_resolve(rule, mode)
+                                self.assertEqual(effective, expected)
+                                self.assertEqual(rules._apply_no_resolve(effective, mode), expected)
+                                self.assertEqual(rule.value, original)
+                                self.assertEqual(effective.options, ())
+
+    def test_deep_bounded_tails_keep_complete_rules_and_all_modes(self):
+        for depth in (600, 1000):
+            for native in (False, True):
+                for kind, matcher in (('PROCESS-NAME-REGEX', '^Foo,no-resolve'),
+                                      ('PROCESS-PATH-REGEX', '^/tmp/Foo,no-resolve'),
+                                      ('DOMAIN-REGEX', '^ads,no-resolve')):
+                    with self.subTest(depth=depth, native=native, kind=kind):
+                        DeepLogicalParserTests.assert_subprocess(self, f'''
+from rules import _apply_no_resolve
+from formats import render
+from tests.test_formats import BoundedRegexTailFormatTests
+from datetime import datetime, timezone
+from unittest.mock import patch
+leaf = '({kind},{matcher})'
+inner = '(AND,(' + leaf + ',(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24)))'
+condition = nest({depth}, inner)
+original = Rule('NOT', condition[5:-1], native_fields={native})
+source = ('payload:\\n  - ' + json.dumps(condition[1:-1])) if {native} else condition[1:-1] + ',REJECT'
+assert parse(source, purpose='block') == ([original], [])
+for mode in ('add', 'strip', 'keep'):
+    wanted_inner = inner.replace('192.0.2.0/24,no-resolve', '192.0.2.0/24') if mode == 'strip' else inner
+    wanted = Rule('NOT', nest({depth}, wanted_inner)[5:-1], native_fields={native})
+    assert _apply_no_resolve(original, mode) == wanted
+    with patch('formats.datetime') as clock:
+        clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+        out, skipped = render('tail', [original, keep], purpose='block', no_resolve=mode)
+    expected, omissions = BoundedRegexTailFormatTests.products('tail', [(wanted, 'NOT,' + wanted.value)], 'block')
+    assert out == expected and skipped == omissions
+    assert set(parse(out['fin.yaml'], purpose='block')[0]) == {{wanted, keep}}
+''')
+
+
 class NativeLogicalRendererStructureTests(unittest.TestCase):
     def test_in_user_structural_tail_survives_parse_normalize_and_reparse(self):
         import json
@@ -2977,10 +3084,13 @@ class ParseTests(unittest.TestCase):
         self.assertTrue(any("line 1" in message and "invalid" in message for message in messages))
         self.assertEqual(normalize(rules), rules)
 
-    def test_logical_regex_child_rejects_no_resolve_after_end_anchor(self):
+    def test_logical_regex_child_preserves_no_resolve_after_end_anchor(self):
         expression = "((DOMAIN-REGEX,^ads$,no-resolve),(DOMAIN,x.example.com))"
         self.assertEqual(parse(f"AND,{expression},REJECT", purpose="block"),
-                         ([], [f"line 1: invalid logical expression {expression}"]))
+                         ([Rule("AND", expression)], []))
+        invalid = "((NETWORK,tcp,no-resolve),(DOMAIN,x.example.com))"
+        self.assertEqual(parse(f"AND,{invalid},REJECT", purpose="block"),
+                         ([], [f"line 1: invalid logical expression {invalid}"]))
 
     def test_logical_process_regex_literal_comma_is_preserved(self):
         expression = "((PROCESS-NAME-REGEX,^Game,Inc$),(DOMAIN,x.example.com))"

@@ -1158,8 +1158,6 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             return None
         kind, value = fields[:2]
         kind = kind.upper()
-        if not native_fields and kind in _REGEX and value.endswith(",no-resolve"):
-            return None
         checked = value if native_fields else _field_value(value)
         if native_fields:
             options = {field for field in fields[2:] if field in {"src", "no-resolve"} and kind in _SOURCE_KINDS

@@ -2778,6 +2778,111 @@ class LiteralQuoteDependencyGenerateTests(unittest.TestCase):
                 self.assertNotIn("no routable rules", stderr.getvalue())
 
 
+class BoundedRegexTailGenerateTests(unittest.TestCase):
+    def test_six_products_preserve_bounded_tails_same_round_publish_and_only_disk(self):
+        from rules import Rule, parse
+        from tests.test_formats import BoundedRegexTailFormatTests
+        from tests.test_rules import _quote_matcher
+
+        staging = ROOT / '.tmp'
+        staging.mkdir(exist_ok=True)
+        for purpose, action in (('block', 'REJECT'), ('proxy', 'PROXY'), ('direct', 'DIRECT')):
+            for mode in ('add', 'strip', 'keep'):
+                for source in ('ordinary', 'quoted', 'payload', 'rules'):
+                    native = source in ('payload', 'rules')
+                    cases, inputs = [], []
+                    for kind, matcher in (('PROCESS-NAME-REGEX', '^Foo,no-resolve'),
+                                          ('PROCESS-PATH-REGEX', '^/tmp/Foo,no-resolve'),
+                                          ('DOMAIN-REGEX', '^ads,no-resolve')):
+                        field = _quote_matcher(matcher) if source == 'quoted' else matcher
+                        for operator in ('AND', 'OR', 'NOT'):
+                            raw = (f'(({kind},{field}),(IP-CIDR,192.0.2.0/24,no-resolve,no-resolve),'
+                                   '(IP-CIDR,198.51.100.0/24),(SRC-IP-CIDR,203.0.113.0/24))')
+                            marked = '' if mode == 'strip' else ',no-resolve'
+                            unmarked = ',no-resolve' if mode == 'add' else ''
+                            wanted = (f'(({kind},{field}),(IP-CIDR,192.0.2.0/24{marked}),'
+                                      f'(IP-CIDR,198.51.100.0/24{unmarked}),(SRC-IP-CIDR,203.0.113.0/24))')
+                            if operator == 'NOT':
+                                raw, wanted = '((AND,' + raw + '))', '((AND,' + wanted + '))'
+                            rule = Rule(operator, wanted, native_fields=native)
+                            projected = wanted.replace(field, matcher) if source == 'quoted' else wanted
+                            cases.append((rule, operator + ',' + projected))
+                            inputs.append(operator + ',' + raw)
+                    neighbor_source = 'mihomo' if native else 'surge'
+                    document = (source + ':\n' + ''.join('  - ' + json.dumps(item) + '\n' for item in inputs) +
+                                '  - DOMAIN,keep.example.com\n' if native else
+                                ''.join(item + ',' + action + '\n' for item in inputs) + 'DOMAIN,keep.example.com,' + action + '\n')
+                    with self.subTest(purpose=purpose, mode=mode, source=source), tempfile.TemporaryDirectory(dir=staging) as directory:
+                        root = Path(directory)
+                        configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['input.list'], 'whitelist': []},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['parent/fin.yaml'], 'whitelist': []}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        (root / 'input.list').write_text(document, encoding='utf-8')
+                        previous = r25_old_files(root, ('parent', 'child'))
+                        expected, diagnostics = {}, []
+                        for group in ('parent', 'child'):
+                            texts, skipped = BoundedRegexTailFormatTests.products(group, cases, purpose, neighbor_source)
+                            expected.update({root / group / name: text for name, text in texts.items()})
+                            diagnostics.extend(f'{group} {key}: {count}\n' for key, count in sorted(skipped.items()))
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as messages:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(outputs, expected)
+                        self.assertEqual(messages.getvalue(), ''.join(diagnostics))
+                        self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                        for group in ('parent', 'child'):
+                            restored, warnings = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
+                            self.assertEqual(warnings, [])
+                            self.assertEqual(set(restored), {rule for rule, _ in cases} |
+                                             {Rule('DOMAIN', 'keep.example.com', domain_source=neighbor_source)})
+                            self.assertEqual(len(restored), 10)
+                        publish(outputs)
+                        published = {path: text.encode('utf-8') for path, text in outputs.items()}
+                        self.assertEqual({path: path.read_bytes() for path in outputs}, published)
+                        (root / 'input.list').unlink()
+                        (root / 'rulesets.json').unlink()
+                        (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as disk_messages:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent.name == 'child'})
+                        self.assertEqual(disk_messages.getvalue(), ''.join(line for line in diagnostics if line.startswith('child ')))
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        publish(disk)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_generated_logical_whitelist_rejection_keeps_all_previous_bytes(self):
+        from rules import GeneratedRuleError, Rule
+        from tests.test_formats import BoundedRegexTailFormatTests
+
+        staging = ROOT / '.tmp'
+        staging.mkdir(exist_ok=True)
+        for disk_only in (False, True):
+            with self.subTest(disk_only=disk_only), tempfile.TemporaryDirectory(dir=staging) as directory:
+                root = Path(directory)
+                configs = [{'name': 'parent', 'purpose': 'proxy', 'no_resolve': 'keep',
+                            'sources': ['input.list'], 'whitelist': []},
+                           {'name': 'child', 'purpose': 'proxy', 'no_resolve': 'keep',
+                            'sources': ['input.list'], 'whitelist': ['parent/fin.yaml']}]
+                expression = '((PROCESS-NAME-REGEX,^Foo,no-resolve),(NETWORK,tcp))'
+                (root / 'input.list').write_text('AND,' + expression + ',PROXY\nDOMAIN,keep.example.com,PROXY\n', encoding='utf-8')
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                previous = r25_old_files(root, ('parent', 'child'))
+                if disk_only:
+                    texts, _ = BoundedRegexTailFormatTests.products('parent', [(Rule('AND', expression), 'AND,' + expression)], 'proxy')
+                    publish({root / 'parent' / name: text for name, text in texts.items()})
+                    (root / 'rulesets.json').unlink()
+                    (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    previous.update({root / 'parent' / name: text.encode('utf-8') for name, text in texts.items()})
+                with contextlib.redirect_stderr(io.StringIO()) as messages:
+                    with self.assertRaisesRegex(GeneratedRuleError, r'Invalid whitelist .*fin.yaml: line 3: unsupported whitelist rule AND'):
+                        generate(root, lambda url: self.fail(url))
+                self.assertNotIn(': line ', messages.getvalue())
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+
+
 class NativeFieldFix8GenerateTests(unittest.TestCase):
     def test_generated_yaml_dependency_keeps_native_logic_provenance_for_all_modes(self):
         from rules import parse
@@ -3917,12 +4022,13 @@ class GenerateTests(unittest.TestCase):
             stderr = io.StringIO()
             with contextlib.redirect_stderr(stderr):
                 outputs = generate(root, lambda _: self.fail("local input must not fetch"))
-            expected = {"DOMAIN-REGEX,^foo$", f"DOMAIN-REGEX,{scoped}"}
+            expected = {"DOMAIN-REGEX,^foo$", f"DOMAIN-REGEX,{scoped}",
+                        f"AND,((DOMAIN-REGEX,^ads$,no-resolve),({expected_domain('DOMAIN', 'x.example.com')}))"}
             for group in ("a3", "cdn"):
                 yaml = outputs[root / group / "fin.yaml"]
                 self.assertEqual({generated_payload(line.removeprefix("  - "))
                                   for line in yaml.splitlines()[2:]}, expected)
-            self.assertIn("source.list: line 3: invalid logical expression", stderr.getvalue())
+            self.assertNotIn("source.list: line 3:", stderr.getvalue())
             self.assertNotIn("source.list: line 1:", stderr.getvalue())
             self.assertNotIn("source.list: line 2:", stderr.getvalue())
             self.assertNotIn("a3/fin.yaml: line", stderr.getvalue())

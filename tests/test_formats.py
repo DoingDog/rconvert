@@ -1511,6 +1511,131 @@ class LiteralQuoteFieldFormatTests(unittest.TestCase):
                     self.assertNotIn(f"{name}:PROCESS-NAME", skipped)
 
 
+class BoundedRegexTailFormatTests(unittest.TestCase):
+    @staticmethod
+    def products(group, cases, purpose, neighbor_source='surge'):
+        from collections import Counter
+
+        neighbor = Rule('DOMAIN', 'keep.example.com', domain_source=neighbor_source)
+        payload = 'DOMAIN,keep.example.com' if neighbor_source == 'mihomo' else expected_domain('DOMAIN', 'keep.example.com')
+        ordered = sorted([*cases, (neighbor, payload)], key=lambda pair: (pair[1].partition(',')[0], len(json.dumps(pair[1])), pair[1]))
+        out = native_arity_products(group, ['DOMAIN,keep.example.com'], purpose)
+        out['fin.yaml'] = f'# {group} rules: {len(ordered)}\npayload:\n' + ''.join(
+            '  - ' + json.dumps(payload) + ' # rconvert-rule-v1 ' + json.dumps(
+                [[rule.kind, rule.value, list(rule.options), rule.allow, rule.literal_process,
+                  rule.native_fields, rule.domain_source]], separators=(',', ':')) + '\n'
+            for rule, payload in ordered)
+        counts = Counter(rule.kind for rule, _ in cases)
+        skipped = {f'{name}:{kind}': count for name in
+                   ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
+                   for kind, count in counts.items()}
+        if purpose != 'block':
+            skipped['fin-adb.txt:DOMAIN'] = 1
+        return out, skipped
+
+    def test_typed_bounded_tails_restore_complete_records_and_skip_whole_other_targets(self):
+        from rules import parse
+
+        for kind, matcher in (('PROCESS-NAME-REGEX', '^Foo,no-resolve'),
+                              ('PROCESS-PATH-REGEX', '^/tmp/Foo,no-resolve'),
+                              ('DOMAIN-REGEX', '^ads,no-resolve')):
+            for operator in ('AND', 'OR', 'NOT'):
+                for source in ('ordinary', 'quoted', 'native'):
+                    leaf = '(' + kind + ',' + ('"' + matcher + '"' if source == 'quoted' else matcher) + ')'
+                    expression = '(' + leaf + ('' if operator == 'NOT' else ',(NETWORK,tcp)') + ')'
+                    projected = expression.replace('"' + matcher + '"', matcher) if source == 'quoted' else expression
+                    rule = Rule(operator, expression, native_fields=source == 'native')
+                    for purpose in ('block', 'proxy', 'direct'):
+                        with self.subTest(kind=kind, operator=operator, source=source, purpose=purpose):
+                            with patch('formats.datetime') as clock:
+                                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                                out, skipped = render_configured('tail', [rule, Rule('DOMAIN', 'keep.example.com')],
+                                                                 purpose=purpose, no_resolve='keep')
+                            expected, omissions = self.products('tail', [(rule, operator + ',' + projected)], purpose)
+                            self.assertEqual(out, expected)
+                            self.assertEqual(skipped, omissions)
+                            records = [generated_payload(line[4:]) for line in out['fin.yaml'].splitlines()[2:]]
+                            self.assertIn(operator + ',' + projected, records)
+                            restored, warnings = parse(out['fin.yaml'], purpose=purpose)
+                            self.assertEqual(warnings, [])
+                            self.assertEqual(set(restored), {rule, Rule('DOMAIN', 'keep.example.com')})
+
+    def test_ip_siblings_transform_without_changing_the_literal_process_tail(self):
+        from rules import parse
+
+        for native in (False, True):
+            for mode in ('add', 'strip', 'keep'):
+                for operator in ('AND', 'OR', 'NOT'):
+                    original = ('((PROCESS-NAME-REGEX,^Foo,no-resolve),'
+                                '(IP-CIDR,192.0.2.0/24,no-resolve),(IP-CIDR,198.51.100.0/24),'
+                                '(SRC-IP-CIDR,203.0.113.0/24))')
+                    marked = '' if mode == 'strip' else ',no-resolve'
+                    unmarked = ',no-resolve' if mode == 'add' else ''
+                    wanted = ('((PROCESS-NAME-REGEX,^Foo,no-resolve),'
+                              f'(IP-CIDR,192.0.2.0/24{marked}),(IP-CIDR,198.51.100.0/24{unmarked}),'
+                              '(SRC-IP-CIDR,203.0.113.0/24))')
+                    if operator == 'NOT':
+                        original, wanted = '((AND,' + original + '))', '((AND,' + wanted + '))'
+                    rule = Rule(operator, original, native_fields=native)
+                    effective = Rule(operator, wanted, native_fields=native)
+                    for purpose in ('block', 'proxy', 'direct'):
+                        with self.subTest(native=native, mode=mode, operator=operator, purpose=purpose):
+                            with patch('formats.datetime') as clock:
+                                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                                out, skipped = render_configured('tail', [rule, Rule('DOMAIN', 'keep.example.com')],
+                                                                 purpose=purpose, no_resolve=mode)
+                            expected, omissions = self.products('tail', [(effective, operator + ',' + wanted)], purpose)
+                            self.assertEqual(out, expected)
+                            self.assertEqual(skipped, omissions)
+                            self.assertEqual(set(parse(out['fin.yaml'], purpose=purpose)[0]),
+                                             {effective, Rule('DOMAIN', 'keep.example.com')})
+
+
+    def test_strict_restoration_keeps_identities_and_rejects_complete_payload_changes(self):
+        from rules import GeneratedRuleError, normalize, parse, parse_whitelist
+        from tests.test_rules import GeneratedDeclarationValidationTests
+
+        expression = '((PROCESS-NAME-REGEX,^Foo,no-resolve),(IP-CIDR,192.0.2.0/24,no-resolve))'
+        identities = [Rule('AND', expression, native_fields=native, domain_source=source)
+                      for native in (False, True) for source in ('mihomo', 'qx', 'surge')]
+        out, skipped = render_configured('tail', normalize(identities), purpose='proxy', no_resolve='keep')
+        records = [['AND', expression, [], False, False, native, source]
+                   for native in (False, True) for source in ('mihomo', 'qx', 'surge')]
+        expected = ('# tail rules: 1\npayload:\n  - ' + json.dumps('AND,' + expression) +
+                    ' # rconvert-rule-v1 ' + json.dumps(records, separators=(',', ':')) + '\n')
+        self.assertEqual(out['fin.yaml'], expected)
+        self.assertEqual(parse(expected, purpose='proxy'), (identities, []))
+        self.assertEqual(generated_payload(out['fin.yaml'].splitlines()[2][4:], records), 'AND,' + expression)
+        self.assertEqual(skipped, {f'{name}:AND': 6 for name in
+                                  ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+        with self.assertRaisesRegex(GeneratedRuleError, 'unsupported whitelist rule AND'):
+            parse_whitelist(expected)
+        record = records[-1]
+        for payload in ('AND,' + expression.replace('^Foo,no-resolve', '^Foo,resolve'),
+                        'AND,' + expression.replace('(IP-CIDR,192.0.2.0/24,no-resolve)', '(IP-CIDR,192.0.2.0/24)'),
+                        'AND,' + expression.replace('IP-CIDR,', 'SRC-IP-CIDR,')):
+            document = GeneratedDeclarationValidationTests.document(payload, [record])
+            with self.subTest(payload=payload), self.assertRaisesRegex(GeneratedRuleError, 'does not bind to complete payload'):
+                parse(document, purpose='proxy')
+        invalid = [*record[:2], ['no-resolve'], *record[3:]]
+        with self.assertRaisesRegex(GeneratedRuleError, 'invalid generated options'):
+            parse(GeneratedDeclarationValidationTests.document('AND,' + expression, [invalid]), purpose='proxy')
+
+    def test_allow_logic_skips_whole_rule_and_keeps_only_supported_neighbor(self):
+        for purpose in ('block', 'proxy', 'direct'):
+            for mode in ('add', 'strip', 'keep'):
+                source = Rule('AND', '((PROCESS-NAME-REGEX,^Foo,no-resolve),(IP-CIDR,192.0.2.0/24,no-resolve))', allow=True)
+                with self.subTest(purpose=purpose, mode=mode):
+                    with patch('formats.datetime') as clock:
+                        clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                        out, skipped = render_configured('tail', [source, Rule('DOMAIN', 'keep.example.com')],
+                                                         purpose=purpose, no_resolve=mode)
+                    expected, omissions = self.products('tail', [], purpose)
+                    omissions.update({f'{name}:AND': 1 for name in out})
+                    self.assertEqual(out, expected)
+                    self.assertEqual(skipped, omissions)
+
+
 class NativeFieldFix8FormatTests(unittest.TestCase):
     def test_native_logic_inner_quotes_and_comma_have_exact_decoded_payload(self):
         from rules import normalize, parse
