@@ -872,6 +872,363 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
 
 
 class NativeKeywordGenerateTests(unittest.TestCase):
+    complete_values = ('中文 #1\\', '中文 ;1\\', '中文 //1\\', '中文 #1\\\\\\',
+                       '中文\\', '中文\\\\', '中文 #1\\\\', '中文 #1(', '中文 #1)',
+                       '中文 ;1(', '中文 //1)', '中文(1', '中文)1', '中文(1) #2')
+
+    def test_qx_literal_source_publishes_complete_fields_same_round_and_disk(self):
+        self._check_qx_keyword_marker_dependency(False, self.complete_values)
+
+    def test_qx_literal_whitelist_preserves_shorter_matcher_same_round_and_disk(self):
+        self._check_qx_keyword_marker_dependency(True, self.complete_values)
+
+    def _qx_marker_products(self, group, purpose, mode, value, white, version):
+        import re
+        from rules import Rule
+
+        parent = group == 'parent'
+        only_keyword = parent and white
+        keyword = value if parent or not white else '中文'
+        source = 'mihomo' if parent else 'qx'
+        flag = ',no-resolve' if mode != 'strip' else ''
+        public = ([] if only_keyword else [Rule('DOMAIN', 'keep.example.com', domain_source=source)])
+        public.append(Rule('DOMAIN-KEYWORD', keyword, domain_source=source))
+        if not only_keyword:
+            public.append(Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',) if flag else ()))
+        if not only_keyword and (parent or white):
+            public.append(Rule('SRC-IP-CIDR', '198.51.100.0/24'))
+        if (len(keyword) - len(keyword.rstrip('\\'))) % 2:
+            field = json.dumps(keyword, ensure_ascii=False)
+        elif any(' ' + marker in keyword for marker in ('#', ';', '//')):
+            field = "'" + keyword + "'"
+        else:
+            field = keyword
+        bodies = {'fin.txt': ([] if only_keyword else ['DOMAIN,keep.example.com']) + ['DOMAIN-KEYWORD,' + field],
+                  'fin-qx.txt': ([] if only_keyword else ['HOST,keep.example.com,LIST']) + ['HOST-KEYWORD,' + keyword + ',LIST'],
+                  'fin-surge.txt': ['DOMAIN-KEYWORD,' + field],
+                  'fin-surge-ds.txt': [] if only_keyword else ['keep.example.com'], 'fin.yaml': []}
+        if not only_keyword:
+            for name in ('fin.txt', 'fin-surge.txt'):
+                bodies[name].append('IP-CIDR,203.0.113.0/24' + flag)
+                if parent or white:
+                    bodies[name].append('SRC-IP,198.51.100.0/24')
+            bodies['fin-qx.txt'].append('IP-CIDR,203.0.113.0/24,LIST' + flag)
+        for rule in public:
+            payload = rule.kind + ',' + rule.value + (',no-resolve' if rule.options else '')
+            record = [[rule.kind, rule.value, list(rule.options), rule.allow,
+                       rule.literal_process, rule.native_fields, rule.domain_source]]
+            bodies['fin.yaml'].append('  - ' + json.dumps(payload, ensure_ascii=False) +
+                                      ' # rconvert-rule-v1 ' + json.dumps(record, separators=(',', ':')))
+        expected = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
+                    ''.join(line + '\n' for line in body) for name, body in bodies.items()}
+        dns = []
+        if purpose == 'block':
+            if white and not parent and '/' not in value:
+                dns.append('@@/^.*' + re.escape(value) + '.*$/')
+            if '/' not in keyword:
+                dns.append(('/(?s-i:\\A.*' + re.escape(keyword) + '.*\\z)/') if parent else
+                           '/^.*' + re.escape(keyword) + '.*$/')
+            if not only_keyword:
+                dns.append('0.0.0.0 keep.example.com')
+        dns.sort(key=lambda line: (not line.startswith('@@'), len(line), line))
+        expected['fin-adb.txt'] = (f'[Adblock Plus 2.0]\n! Title: {group}\n'
+            '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n! License: Inherits upstream licenses\n'
+            '! Version: ' + version + f'\n! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
+            ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''))
+        skipped = {'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
+        if purpose != 'block' or '/' in keyword:
+            skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+        if not only_keyword:
+            skipped.update({'fin-adb.txt:IP-CIDR': 1, 'fin-surge-ds.txt:IP-CIDR': 1})
+            if purpose != 'block':
+                skipped['fin-adb.txt:DOMAIN'] = 1
+            if parent or white:
+                skipped.update({name + ':SRC-IP-CIDR': 1 for name in
+                                ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')})
+            if purpose == 'block' and white and not parent and '/' in value:
+                skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+        return expected, public, skipped
+
+    def _check_qx_keyword_marker_dependency(self, white, values=('中文 #1', '中文 ;1', '中文 //1')):
+        import warnings
+        from rules import Rule, parse, parse_whitelist
+
+        staging = ROOT / '.tmp'
+        staging.mkdir(exist_ok=True)
+        for value in values:
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'keep', 'strip'):
+                    with self.subTest(value=value, purpose=purpose, mode=mode, white=white), tempfile.TemporaryDirectory(dir=staging) as directory:
+                        root = Path(directory)
+                        configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['input.yaml'], 'whitelist': []},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['source.list'] if white else ['parent/fin-qx.txt'],
+                                    'whitelist': ['parent/fin-qx.txt'] if white else []}]
+                        matchers = ['DOMAIN-KEYWORD,' + value] if white else [
+                            'DOMAIN-KEYWORD,' + value, 'DOMAIN,keep.example.com',
+                            'IP-CIDR,203.0.113.0/24,no-resolve', 'SRC-IP-CIDR,198.51.100.0/24']
+                        (root / 'input.yaml').write_text('payload:\n' + ''.join('  - ' + json.dumps(matcher, ensure_ascii=False) + '\n'
+                                                                                for matcher in matchers), encoding='utf-8')
+                        if white:
+                            (root / 'source.list').write_text('HOST-KEYWORD,中文,LIST\nHOST-KEYWORD,' + value + ',LIST\nHOST-KEYWORD,' + value +
+                                '9,LIST\nHOST,keep.example.com,LIST\nIP-CIDR,203.0.113.0/24,LIST,no-resolve\nSRC-IP-CIDR,198.51.100.0/24\n', encoding='utf-8')
+                        previous = {}
+                        for group in ('parent', 'child'):
+                            (root / group).mkdir()
+                            for name in NAMES:
+                                path = root / group / name
+                                previous[path] = b'old\r\ncomplete\x00' + group.encode() + name.encode()
+                                path.write_bytes(previous[path])
+                        parent_bytes = {}
+                        for phase in ('parent', 'same-round', 'disk-only'):
+                            with self.subTest(value=value, purpose=purpose, mode=mode, white=white, phase=phase):
+                                if phase == 'disk-only':
+                                    (root / 'input.yaml').unlink()
+                                    (root / 'rulesets.json').unlink()
+                                selected = configs[:1] if phase == 'parent' else configs[1:] if phase == 'disk-only' else configs
+                                (root / 'rulesets.json').write_text(json.dumps(selected), encoding='utf-8')
+                                before = datetime.now(timezone(timedelta(hours=8))).strftime('%Y%m%d%H%M')
+                                with warnings.catch_warnings(record=True) as warnings_seen, contextlib.redirect_stderr(io.StringIO()) as messages:
+                                    outputs = generate(root, lambda url: self.fail(url))
+                                after = datetime.now(timezone(timedelta(hours=8))).strftime('%Y%m%d%H%M')
+                                groups = ('parent',) if phase == 'parent' else ('child',) if phase == 'disk-only' else ('parent', 'child')
+                                expected, identities, skips = {}, {}, []
+                                for group in groups:
+                                    version = outputs[root / group / 'fin-adb.txt'].splitlines()[5].removeprefix('! Version: ')
+                                    self.assertRegex(version, r'^[0-9]{12}$')
+                                    datetime.strptime(version, '%Y%m%d%H%M')
+                                    self.assertLessEqual(before, version)
+                                    self.assertLessEqual(version, after)
+                                    texts, identities[group], counters = self._qx_marker_products(group, purpose, mode, value, white, version)
+                                    expected.update({root / group / name: text for name, text in texts.items()})
+                                    skips.extend(f'{group} {key}: {count}' for key, count in sorted(counters.items()))
+                                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                                publish(outputs)
+                                previous |= {path: text.encode('utf-8') for path, text in outputs.items()}
+                                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                                if phase == 'parent':
+                                    parent_bytes = {path: path.read_bytes() for path in previous if path.parent.name == 'parent'}
+                                self.assertEqual({path: path.read_bytes() for path in parent_bytes}, parent_bytes)
+                                self.assertEqual(outputs, expected)
+                                self.assertEqual(messages.getvalue().splitlines(), skips)
+                                self.assertEqual(warnings_seen, [])
+                                for group in groups:
+                                    self.assertEqual(parse(outputs[root / group / 'fin.yaml'], purpose=purpose), (identities[group], []))
+                                with warnings.catch_warnings(record=True) as white_warnings:
+                                    self.assertEqual(parse_whitelist((root / 'parent' / 'fin-qx.txt').read_text(encoding='utf-8')),
+                                                     [Rule('DOMAIN-KEYWORD', value, domain_source='qx')] if white else
+                                                     [Rule('DOMAIN', 'keep.example.com', domain_source='qx'),
+                                                      Rule('DOMAIN-KEYWORD', value, domain_source='qx'), Rule('IP-CIDR', '203.0.113.0/24')])
+                                self.assertEqual(white_warnings, [])
+                                if phase == 'disk-only':
+                                    self.assertFalse((root / 'input.yaml').exists())
+                                    self.assertEqual(json.loads((root / 'rulesets.json').read_text(encoding='utf-8')), configs[1:])
+                        invalid = root / 'parent' / 'fin-qx.txt'
+                        invalid.write_text('HOST-KEYWORD,' + value + ',LIST,no-resolve\n', encoding='utf-8')
+                        old = {path: path.read_bytes() for path in previous}
+                        with contextlib.redirect_stderr(io.StringIO()) as messages, self.assertRaises(ValueError) as error_seen:
+                            publish(generate(root, lambda url: self.fail(url)))
+                        warning = 'line 1: unsupported no-resolve for DOMAIN-KEYWORD'
+                        self.assertEqual(str(error_seen.exception), f'Invalid whitelist {invalid}: {warning}' if white else
+                                         f'No adaptable rules in {invalid}')
+                        self.assertEqual(messages.getvalue(), '' if white else f'{invalid}: {warning}\n')
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+
+    def test_qx_keyword_source_preserves_markers_same_round_and_disk_without_mock(self):
+        self._check_qx_keyword_marker_dependency(False)
+
+    def test_qx_keyword_whitelist_keeps_short_keyword_same_round_and_disk_without_mock(self):
+        self._check_qx_keyword_marker_dependency(True)
+
+    def _surge_keyword_products(self, group, purpose, mode, value, dependency=None):
+        import re
+        from rules import Rule
+        from tests.test_formats import native_keyword_expected
+
+        flag = ',no-resolve' if mode != 'strip' else ''
+        conjunction = ('((DOMAIN-KEYWORD,' + value + '),(IP-CIDR,192.0.2.0/24' + flag +
+                       '),(SRC-IP-CIDR,198.51.100.0/24))')
+        source = 'surge' if dependency else 'mihomo'
+        public = [Rule('AND', conjunction.replace('SRC-IP-CIDR,', 'SRC-IP,') if dependency else conjunction,
+                       native_fields=not dependency, domain_source=source),
+                  Rule('DOMAIN', 'keep.example.com', domain_source=source),
+                  Rule('DOMAIN-KEYWORD', value, domain_source=source),
+                  Rule('NOT', '((DOMAIN-KEYWORD,' + value + '))', native_fields=not dependency, domain_source=source),
+                  Rule('OR', '((DOMAIN-KEYWORD,' + value + '),(' + ('PROTOCOL,UDP' if dependency else 'NETWORK,udp') + '))',
+                       native_fields=not dependency, domain_source=source),
+                  Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',) if flag else ()),
+                  Rule('SRC-IP-CIDR', '198.51.100.0/24')]
+        expected = {name: text.replace('中文', re.escape(value) if name == 'fin-adb.txt' else value)
+                    for name, text in native_keyword_expected(group, purpose, mode).items()}
+        if dependency:
+            keyword = 'DOMAIN-REGEX,' + re.escape(value)
+            payloads = ['AND,' + conjunction.replace('DOMAIN-KEYWORD,' + value, keyword), keyword,
+                        expected_domain('DOMAIN', 'keep.example.com'),
+                        'NOT,((DOMAIN-REGEX,' + re.escape(value) + '))',
+                        'OR,((DOMAIN-REGEX,' + re.escape(value) + '),(NETWORK,udp))',
+                        'IP-CIDR,203.0.113.0/24' + flag, 'SRC-IP-CIDR,198.51.100.0/24']
+            public[1:3] = [public[2], public[1]]
+            expected['fin.yaml'] = f'# {group} rules: 7\npayload:\n' + ''.join(
+                '  - ' + json.dumps(payload, ensure_ascii=False) + '\n' for payload in payloads)
+            expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                '/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/', '/^.*' + re.escape(value) + '.*$/')
+            if dependency == 'fin-surge.txt':
+                public = [rule for rule in public if rule.kind != 'DOMAIN']
+                for name, line, old_count in (('fin.txt', 'DOMAIN,keep.example.com', 7),
+                                             ('fin-qx.txt', 'HOST,keep.example.com,LIST', 3),
+                                             ('fin.yaml', '  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.com')), 7),
+                                             ('fin-surge-ds.txt', 'keep.example.com', 1)):
+                    expected[name] = expected[name].replace(line + '\n', '').replace(
+                        f'# {group} rules: {old_count}\n', f'# {group} rules: {old_count - 1}\n')
+                if purpose == 'block':
+                    expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                        '0.0.0.0 keep.example.com\n', '').replace('! Total count: 2\n', '! Total count: 1\n')
+        lines = expected['fin.yaml'].splitlines()
+        for index, rule in enumerate(public, 2):
+            record = [[rule.kind, rule.value, list(rule.options), rule.allow,
+                       rule.literal_process, rule.native_fields, rule.domain_source]]
+            lines[index] += ' # rconvert-rule-v1 ' + json.dumps(record, separators=(',', ':'))
+        expected['fin.yaml'] = '\n'.join(lines) + '\n'
+        return expected, public
+
+    def test_surge_keyword_source_publishes_six_products_and_disk_only_dependencies(self):
+        from rules import parse
+        from tests.test_formats import NATIVE_KEYWORD_SOURCE, native_keyword_skips
+
+        staging = ROOT / '.tmp'
+        staging.mkdir(exist_ok=True)
+        for value in ('中文', '中文123', '123#1', '123'):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'keep', 'strip'):
+                    for dependency in ('fin.txt', 'fin-surge.txt'):
+                        with self.subTest(value=value, purpose=purpose, mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=staging) as directory:
+                            root = Path(directory)
+                            configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['input.yaml'], 'whitelist': []},
+                                       {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['parent/' + dependency], 'whitelist': []}]
+                            (root / 'input.yaml').write_text(NATIVE_KEYWORD_SOURCE.replace('中文', value), encoding='utf-8')
+                            old = {}
+                            for group in ('parent', 'child'):
+                                (root / group).mkdir()
+                                for name in NAMES:
+                                    path = root / group / name
+                                    old[path] = b'old\r\ncomplete\x00' + name.encode('ascii')
+                                    path.write_bytes(old[path])
+                            parent, native = self._surge_keyword_products('parent', purpose, mode, value)
+                            child, ordinary = self._surge_keyword_products('child', purpose, mode, value, dependency)
+                            previous = old
+                            for phase in ('parent', 'same-round', 'disk-only'):
+                                if phase == 'disk-only':
+                                    (root / 'input.yaml').unlink()
+                                    (root / 'rulesets.json').unlink()
+                                selected = configs[:1] if phase == 'parent' else configs[1:] if phase == 'disk-only' else configs
+                                (root / 'rulesets.json').write_text(json.dumps(selected), encoding='utf-8')
+                                with contextlib.redirect_stderr(io.StringIO()) as messages, patch('formats.datetime') as clock:
+                                    clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                                    outputs = generate(root, lambda url: self.fail(url))
+                                groups = ('parent',) if phase == 'parent' else ('child',) if phase == 'disk-only' else ('parent', 'child')
+                                expected = {root / group / name: text for group in groups
+                                            for name, text in (parent if group == 'parent' else child).items()}
+                                self.assertEqual(outputs, expected)
+                                child_skips = native_keyword_skips(purpose)
+                                if dependency == 'fin-surge.txt' and purpose != 'block':
+                                    child_skips.pop('fin-adb.txt:DOMAIN')
+                                self.assertEqual(messages.getvalue().splitlines(), [f'{group} {key}: {count}' for group in groups
+                                                 for key, count in sorted((native_keyword_skips(purpose) if group == 'parent' else child_skips).items())])
+                                for group in groups:
+                                    self.assertEqual(parse(outputs[root / group / 'fin.yaml'], purpose=purpose),
+                                                     (native if group == 'parent' else ordinary, []))
+                                self.assertEqual({path: path.read_bytes() for path in old}, previous)
+                                publish(outputs)
+                                previous = previous | {path: text.encode('utf-8') for path, text in expected.items()}
+                                self.assertEqual({path: path.read_bytes() for path in old}, previous)
+                                self.assertEqual({root / 'parent' / name: (root / 'parent' / name).read_bytes() for name in NAMES},
+                                                 {root / 'parent' / name: text.encode('utf-8') for name, text in parent.items()})
+                                if phase == 'disk-only':
+                                    self.assertFalse((root / 'input.yaml').exists())
+                                    self.assertEqual(json.loads((root / 'rulesets.json').read_text(encoding='utf-8')), configs[1:])
+
+    def test_surge_keyword_whitelist_removes_only_covered_rules_same_round_and_disk(self):
+        import re
+        import warnings
+        from rules import Rule, parse, parse_whitelist
+
+        staging = ROOT / '.tmp'
+        staging.mkdir(exist_ok=True)
+        for value in ('中文', '中文123', '123#1', '123'):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'keep', 'strip'):
+                    for dependency in ('fin.txt', 'fin-surge.txt'):
+                        with self.subTest(value=value, purpose=purpose, mode=mode, dependency=dependency), tempfile.TemporaryDirectory(dir=staging) as directory:
+                            root = Path(directory)
+                            configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['input.yaml'], 'whitelist': []},
+                                       {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['source.list'], 'whitelist': ['parent/' + dependency]}]
+                            (root / 'input.yaml').write_text('payload:\n  - DOMAIN-KEYWORD,' + value + '\n', encoding='utf-8')
+                            (root / 'source.list').write_text('DOMAIN-KEYWORD,' + value + '\nDOMAIN-KEYWORD,' + value +
+                                                             '9\nDOMAIN,keep.example.com\n', encoding='utf-8')
+                            parent_rule = Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')
+                            child_rule = Rule('DOMAIN', 'keep.example.com')
+                            parent = {'fin.txt': '# parent rules: 1\nDOMAIN-KEYWORD,' + value + '\n',
+                                      'fin-qx.txt': '# parent rules: 1\nHOST-KEYWORD,' + value + ',LIST\n',
+                                      'fin.yaml': '# parent rules: 1\npayload:\n  - ' + json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False) +
+                                                  ' # rconvert-rule-v1 ' + json.dumps([['DOMAIN-KEYWORD', value, [], False, False, False, 'mihomo']], separators=(',', ':')) + '\n',
+                                      'fin-surge.txt': '# parent rules: 1\nDOMAIN-KEYWORD,' + value + '\n',
+                                      'fin-surge-ds.txt': '# parent rules: 0\n'}
+                            child = {'fin.txt': '# child rules: 1\nDOMAIN,keep.example.com\n',
+                                     'fin-qx.txt': '# child rules: 1\nHOST,keep.example.com,LIST\n',
+                                     'fin.yaml': '# child rules: 1\npayload:\n  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.com')) +
+                                                 ' # rconvert-rule-v1 [["DOMAIN","keep.example.com",[],false,false,false,"surge"]]\n',
+                                     'fin-surge.txt': '# child rules: 0\n',
+                                     'fin-surge-ds.txt': '# child rules: 1\nkeep.example.com\n'}
+                            for group, texts in (('parent', parent), ('child', child)):
+                                texts['fin-adb.txt'] = (f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
+                                    '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
+                                    ('! Total count: 1\n/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/\n' if group == 'parent' else
+                                     '! Total count: 2\n@@/^.*' + re.escape(value) + '.*$/\n0.0.0.0 keep.example.com\n') if purpose == 'block' else
+                                    f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
+                                    '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n'
+                                    '! Total count: 0\n! No AdBlock rules for non-advertising group.\n')
+                            previous = {}
+                            for group in ('parent', 'child'):
+                                (root / group).mkdir()
+                                for name in NAMES:
+                                    path = root / group / name
+                                    previous[path] = b'old\r\ncomplete\x00' + name.encode('ascii')
+                                    path.write_bytes(previous[path])
+                            for phase in ('parent', 'same-round', 'disk-only'):
+                                if phase == 'disk-only':
+                                    (root / 'input.yaml').unlink()
+                                    (root / 'rulesets.json').unlink()
+                                selected = configs[:1] if phase == 'parent' else configs[1:] if phase == 'disk-only' else configs
+                                (root / 'rulesets.json').write_text(json.dumps(selected), encoding='utf-8')
+                                with warnings.catch_warnings(record=True) as warnings_seen, contextlib.redirect_stderr(io.StringIO()) as messages, patch('formats.datetime') as clock:
+                                    clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                                    outputs = generate(root, lambda url: self.fail(url))
+                                self.assertEqual(warnings_seen, [])
+                                groups = ('parent',) if phase == 'parent' else ('child',) if phase == 'disk-only' else ('parent', 'child')
+                                expected = {root / group / name: text for group in groups
+                                            for name, text in (parent if group == 'parent' else child).items()}
+                                self.assertEqual(outputs, expected)
+                                skips = ['parent fin-surge-ds.txt:DOMAIN-KEYWORD: 1'] if 'parent' in groups else []
+                                if purpose != 'block':
+                                    skips = (['parent fin-adb.txt:DOMAIN-KEYWORD: 1'] if 'parent' in groups else []) + skips
+                                    skips += ['child fin-adb.txt:DOMAIN: 1'] if 'child' in groups else []
+                                self.assertEqual(messages.getvalue().splitlines(), skips)
+                                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                                publish(outputs)
+                                previous |= {path: text.encode('utf-8') for path, text in expected.items()}
+                                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                                self.assertEqual(parse((root / 'parent' / 'fin.yaml').read_text(encoding='utf-8'), purpose=purpose), ([parent_rule], []))
+                                if 'child' in groups:
+                                    self.assertEqual(parse_whitelist((root / 'parent' / dependency).read_text(encoding='utf-8')), [Rule('DOMAIN-KEYWORD', value)])
+                                    self.assertEqual(parse(outputs[root / 'child' / 'fin.yaml'], purpose=purpose), ([child_rule], []))
+                                self.assertEqual({root / 'parent' / name: (root / 'parent' / name).read_bytes() for name in NAMES},
+                                                 {root / 'parent' / name: text.encode('utf-8') for name, text in parent.items()})
+
     def test_no_resolve_runs_once_before_normalize_and_preserves_real_products(self):
         import rules
         from dataclasses import fields

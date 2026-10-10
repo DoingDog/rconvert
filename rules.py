@@ -250,6 +250,7 @@ def _delimiters(line: str, *, native_fields: bool = False,
     stack = []
     start, escaped, quote = 0, False, None
     regex_depth = literal_depth = None
+    literal_keyword = False
     class_first = class_hyphen = extended = regex_comment = False
     index = 0
     while index < len(line):
@@ -298,7 +299,7 @@ def _delimiters(line: str, *, native_fields: bool = False,
                 class_first = class_hyphen = False
             if regex_depth is not None and char == 'c':
                 index += 1
-        elif char == '\\':
+        elif char == '\\' and not (literal_keyword and not quote):
             escaped = True
         elif quote:
             if char == quote:
@@ -371,6 +372,7 @@ def _delimiters(line: str, *, native_fields: bool = False,
             elif regex_depth is None and literal_depth is None:
                 raise ValueError("unbalanced delimiters")
         elif char == ',':
+            literal_keyword = False
             if regex_depth is None and literal_depth is None:
                 scope_start = stack[-1][1] + 1 if stack else start
                 kind = line[scope_start:index].strip().upper()
@@ -381,6 +383,9 @@ def _delimiters(line: str, *, native_fields: bool = False,
                         regex_depth = len(stack)
                 elif kind in _KINDS and kind not in _LOGICAL:
                     literal_depth = len(stack)
+                elif kind == 'HOST-KEYWORD' and not stack:
+                    literal_depth = 0
+                    literal_keyword = True
             if not stack:
                 yield ',', index
             start = index + 1
@@ -503,8 +508,8 @@ def _source_parts(line: str) -> tuple[list[str], int]:
             if token == 'comment':
                 return [head.strip(), line[value_start:index].strip()], index
         return [head.strip(), value.strip()], len(line)
-    # 普通进程字段中的 marker 是字面内容；确定尾字段或注释后停止范围扫描。
-    process = kind in {'PROCESS-NAME', 'PROCESS-PATH', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'}
+    # 普通进程和 QX keyword 字段中的 marker 是字面内容；确定尾字段后停止范围扫描。
+    process = kind in {'HOST-KEYWORD', 'PROCESS-NAME', 'PROCESS-PATH', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'}
     for token, index in _delimiters(line):
         if token == 'comment' and not process:
             fields, _ = _literal_fields(line[:index])
@@ -1059,7 +1064,7 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
             'REDIR', 'TPROXY', 'TROJAN', 'TUNNEL', 'TUN', 'TUIC', 'HYSTERIA2', 'ANYTLS', 'MIERU',
             'SUDOKU', 'TRUSTTUNNEL', 'SHADOWQUIC', 'INNER',
         } for part in value.split('/'))
-    if kind == "DOMAIN-KEYWORD" and native_fields:
+    if kind == "DOMAIN-KEYWORD":
         return bool(value)
     return bool(re.fullmatch(r"[a-z0-9._-]+", value, re.I))
 

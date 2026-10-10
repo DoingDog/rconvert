@@ -376,6 +376,161 @@ class PublicStateRestorationFormatTests(unittest.TestCase):
 
 
 class NativeKeywordFormatTests(unittest.TestCase):
+    def test_literal_keyword_six_products_keep_qx_bytes_and_complete_reimports(self):
+        from rules import parse, parse_whitelist
+
+        for prefix in ('中文', '中文 #1', '中文 ;1', '中文 //1'):
+            for suffix in ('\\', '\\\\', '\\\\\\', '(', ')', '(1)'):
+                value = prefix + suffix
+                native = [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'),
+                          Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')]
+                source = 'payload:\n' + ''.join('  - ' + json.dumps(rule.kind + ',' + rule.value, ensure_ascii=False) + '\n'
+                                               for rule in native)
+                if (len(value) - len(value.rstrip('\\'))) % 2:
+                    field = json.dumps(value, ensure_ascii=False)
+                elif prefix != '中文':
+                    field = "'" + value + "'"
+                else:
+                    field = value
+                for purpose, mode in (('block', 'add'), ('direct', 'keep'), ('proxy', 'strip')):
+                    with self.subTest(value=value, purpose=purpose, mode=mode), patch('formats.datetime') as clock:
+                        clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                        self.assertEqual(parse(source, purpose=purpose), (native, []))
+                        out, skipped = render_configured('literal', native, purpose=purpose, no_resolve=mode)
+                        yaml = ''.join('  - ' + json.dumps(rule.kind + ',' + rule.value, ensure_ascii=False) +
+                                       ' # rconvert-rule-v1 ' + json.dumps([[rule.kind, rule.value, [], False, False, False,
+                                                                           rule.domain_source]], separators=(',', ':')) + '\n'
+                                       for rule in native)
+                        dns = sorted(['0.0.0.0 keep.example.com'] +
+                                     ([] if '/' in value else ['/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/']),
+                                     key=lambda line: (len(line), line)) if purpose == 'block' else []
+                        expected = {
+                            'fin.txt': '# literal rules: 2\nDOMAIN,keep.example.com\nDOMAIN-KEYWORD,' + field + '\n',
+                            'fin-qx.txt': '# literal rules: 2\nHOST,keep.example.com,LIST\nHOST-KEYWORD,' + value + ',LIST\n',
+                            'fin.yaml': '# literal rules: 2\npayload:\n' + yaml,
+                            'fin-surge.txt': '# literal rules: 1\nDOMAIN-KEYWORD,' + field + '\n',
+                            'fin-surge-ds.txt': '# literal rules: 1\nkeep.example.com\n',
+                            'fin-adb.txt': '[Adblock Plus 2.0]\n! Title: literal\n'
+                                '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
+                                '! License: Inherits upstream licenses\n! Version: 202610061200\n' +
+                                f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
+                                ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''),
+                        }
+                        expected_skips = {'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
+                        if purpose != 'block' or '/' in value:
+                            expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                        if purpose != 'block':
+                            expected_skips['fin-adb.txt:DOMAIN'] = 1
+                        self.assertEqual(out, expected)
+                        self.assertEqual(skipped, expected_skips)
+                        self.assertEqual(parse(out['fin.yaml'], purpose=purpose), (native, []))
+                        for rule, line in zip(native, out['fin.yaml'].splitlines()[2:]):
+                            generated_payload(line[4:], [[rule.kind, rule.value, [], False, False, False, rule.domain_source]])
+                        qx = [Rule('DOMAIN', 'keep.example.com', domain_source='qx'),
+                              Rule('DOMAIN-KEYWORD', value, domain_source='qx')]
+                        self.assertEqual(parse(out['fin-qx.txt'], purpose=purpose), (qx, []))
+                        self.assertEqual(parse_whitelist(out['fin-qx.txt']), qx)
+                        ordinary = [Rule('DOMAIN', 'keep.example.com'), Rule('DOMAIN-KEYWORD', value)]
+                        self.assertEqual(parse(out['fin.txt'], purpose=purpose), (ordinary, []))
+                        self.assertEqual(parse(out['fin-surge.txt'], purpose=purpose), ([ordinary[1]], []))
+
+    def test_keyword_markers_keep_six_texts_native_logic_and_complete_qx_reimport(self):
+        from rules import parse, parse_whitelist
+
+        for value in ('中文 #1', '中文 ;1', '中文 //1'):
+            source = 'payload:\n' + ''.join('  - ' + json.dumps(line[4:].replace('中文', value), ensure_ascii=False) + '\n'
+                                           for line in NATIVE_KEYWORD_SOURCE.splitlines()[1:])
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'keep', 'strip'):
+                    with self.subTest(value=value, purpose=purpose, mode=mode), patch('formats.datetime') as clock:
+                        clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                        parsed, messages = parse(source, purpose=purpose)
+                        self.assertEqual(messages, [])
+                        outputs, skipped = render_configured('keyword', parsed, purpose=purpose, no_resolve=mode)
+                        flag = ',no-resolve' if mode != 'strip' else ''
+                        conjunction = '((DOMAIN-KEYWORD,' + value + '),(IP-CIDR,192.0.2.0/24' + flag + '),(SRC-IP-CIDR,198.51.100.0/24))'
+                        native = [Rule('AND', conjunction, native_fields=True, domain_source='mihomo'),
+                                  Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'),
+                                  Rule('DOMAIN-KEYWORD', value, domain_source='mihomo'),
+                                  Rule('NOT', '((DOMAIN-KEYWORD,' + value + '))', native_fields=True, domain_source='mihomo'),
+                                  Rule('OR', '((DOMAIN-KEYWORD,' + value + '),(NETWORK,udp))', native_fields=True, domain_source='mihomo'),
+                                  Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',) if flag else ()),
+                                  Rule('SRC-IP-CIDR', '198.51.100.0/24')]
+                        expected = {}
+                        for name, text in native_keyword_expected('keyword', purpose, mode).items():
+                            replacement = re.escape(value) if name == 'fin-adb.txt' else value
+                            if name in ('fin.txt', 'fin-surge.txt'):
+                                text = text.replace('DOMAIN-KEYWORD,中文', "DOMAIN-KEYWORD,'" + value + "'")
+                            else:
+                                text = text.replace('中文', replacement)
+                            expected[name] = text
+                        expected_skips = native_keyword_skips(purpose)
+                        if purpose == 'block' and '/' in value:
+                            expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                                '/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/\n', '').replace('! Total count: 2\n', '! Total count: 1\n')
+                            expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                        lines = expected['fin.yaml'].splitlines()
+                        for index, rule in enumerate(native, 2):
+                            record = [[rule.kind, rule.value, list(rule.options), rule.allow,
+                                       rule.literal_process, rule.native_fields, rule.domain_source]]
+                            lines[index] += ' # rconvert-rule-v1 ' + json.dumps(record, separators=(',', ':'))
+                        expected['fin.yaml'] = '\n'.join(lines) + '\n'
+                        self.assertEqual(outputs, expected)
+                        self.assertEqual(skipped, expected_skips)
+                        self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), (native, []))
+                        qx = [Rule('DOMAIN', 'keep.example.com', domain_source='qx'),
+                              Rule('DOMAIN-KEYWORD', value, domain_source='qx'), native[-2]]
+                        self.assertEqual(parse(outputs['fin-qx.txt'], purpose=purpose), (qx, []))
+                        self.assertEqual(parse_whitelist(outputs['fin-qx.txt']),
+                                         [qx[0], qx[1], Rule('IP-CIDR', '203.0.113.0/24')])
+                        quoted = "'" + value + "'"
+                        ordinary = [Rule('AND', conjunction.replace(value, quoted).replace('SRC-IP-CIDR,', 'SRC-IP,')),
+                                    Rule('DOMAIN', 'keep.example.com'), Rule('DOMAIN-KEYWORD', value),
+                                    Rule('NOT', '((DOMAIN-KEYWORD,' + quoted + '))'),
+                                    Rule('OR', '((DOMAIN-KEYWORD,' + quoted + '),(PROTOCOL,UDP))'),
+                                    native[-2], native[-1]]
+                        for name in ('fin.txt', 'fin-surge.txt'):
+                            self.assertEqual(parse(outputs[name], purpose=purpose),
+                                             ([rule for rule in ordinary if name == 'fin.txt' or rule.kind != 'DOMAIN'], []))
+
+    def test_keyword_surge_reimport_keeps_all_leaves_flags_and_yaml_identity(self):
+        from rules import parse
+
+        for value in ('中文', '中文123', '123#1', '123'):
+            for purpose in ('block', 'direct', 'proxy'):
+                parsed, messages = parse(NATIVE_KEYWORD_SOURCE.replace('中文', value), purpose=purpose)
+                self.assertEqual(messages, [])
+                for mode in ('add', 'keep', 'strip'):
+                    with self.subTest(value=value, purpose=purpose, mode=mode), patch('formats.datetime') as clock:
+                        clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
+                        outputs, skipped = render_configured('keyword', parsed, purpose=purpose, no_resolve=mode)
+                        expected = {name: text.replace('中文', re.escape(value) if name == 'fin-adb.txt' else value)
+                                    for name, text in native_keyword_expected('keyword', purpose, mode).items()}
+                        self.assertEqual(generated_texts(outputs), expected)
+                        self.assertEqual(skipped, native_keyword_skips(purpose))
+                        flag = ',no-resolve' if mode != 'strip' else ''
+                        conjunction = ('((DOMAIN-KEYWORD,' + value + '),(IP-CIDR,192.0.2.0/24' + flag +
+                                       '),(SRC-IP-CIDR,198.51.100.0/24))')
+                        native = [Rule('AND', conjunction, native_fields=True, domain_source='mihomo'),
+                                  Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'),
+                                  Rule('DOMAIN-KEYWORD', value, domain_source='mihomo'),
+                                  Rule('NOT', '((DOMAIN-KEYWORD,' + value + '))', native_fields=True, domain_source='mihomo'),
+                                  Rule('OR', '((DOMAIN-KEYWORD,' + value + '),(NETWORK,udp))', native_fields=True, domain_source='mihomo'),
+                                  Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',) if flag else ()),
+                                  Rule('SRC-IP-CIDR', '198.51.100.0/24')]
+                        self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), (native, []))
+                        for rule, line in zip(native, outputs['fin.yaml'].splitlines()[2:]):
+                            generated_payload(line[4:], [[rule.kind, rule.value, list(rule.options), rule.allow,
+                                                          rule.literal_process, rule.native_fields, rule.domain_source]])
+                        ordinary = [Rule('AND', conjunction.replace('SRC-IP-CIDR,', 'SRC-IP,')), Rule('DOMAIN', 'keep.example.com'),
+                                    Rule('DOMAIN-KEYWORD', value), Rule('NOT', '((DOMAIN-KEYWORD,' + value + '))'),
+                                    Rule('OR', '((DOMAIN-KEYWORD,' + value + '),(PROTOCOL,UDP))'),
+                                    native[-2], native[-1]]
+                        for name in ('fin.txt', 'fin-surge.txt'):
+                            with self.subTest(value=value, purpose=purpose, mode=mode, name=name):
+                                self.assertEqual(parse(outputs[name], purpose=purpose),
+                                                 ([rule for rule in ordinary if name == 'fin.txt' or rule.kind != 'DOMAIN'], []))
+
     def test_r22_nine_modes_preserve_ordered_six_texts_and_leaf_flags(self):
         from rules import normalize, parse
 
