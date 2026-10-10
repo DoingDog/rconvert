@@ -1,4 +1,4 @@
-# cdn rules: 4766
+# cdn rules: 4775
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -952,6 +952,7 @@ HOST,assets.stash.com,LIST
 HOST,assets.toot.cafe,LIST
 HOST,assets.twitch.tv,LIST
 HOST,assets.upload.io,LIST
+HOST,assets.vanta.com,LIST
 HOST,assets.vogue.com,LIST
 HOST,assets.volvo.com,LIST
 HOST,assets.xmind.net,LIST
@@ -1393,6 +1394,7 @@ HOST,media.beehiiv.com,LIST
 HOST,media.ettoday.net,LIST
 HOST,media.nngroup.com,LIST
 HOST,media.nownews.com,LIST
+HOST,n.approveit.today,LIST
 HOST,netlify.apollo.io,LIST
 HOST,ocsp.comodoca.com,LIST
 HOST,ocsp.digicert.com,LIST
@@ -2714,6 +2716,7 @@ HOST,assets.clickfunnels.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
 HOST,assets.mcp.corespeed.io,LIST
 HOST,assets.science.nasa.gov,LIST
+HOST,assets.singaporeair.com,LIST
 HOST,assets.streamlinehq.com,LIST
 HOST,assets.xboxservices.com,LIST
 HOST,assets1.lottiefiles.com,LIST
@@ -2766,6 +2769,7 @@ HOST,image-stgus.samsung.com,LIST
 HOST,imagecdn.clips4sale.com,LIST
 HOST,imagizer.imageshack.com,LIST
 HOST,img.api.tryprofound.com,LIST
+HOST,img.helpnetsecurity.com,LIST
 HOST,img0.socialshopwave.com,LIST
 HOST,img1.ak.crunchyroll.com,LIST
 HOST,img1.socialshopwave.com,LIST
@@ -2916,6 +2920,7 @@ HOST,images.flightradar24.com,LIST
 HOST,images.indianexpress.com,LIST
 HOST,images.purevpn-tools.com,LIST
 HOST,images.spectrumnews1.com,LIST
+HOST,img2.helpnetsecurity.com,LIST
 HOST,integrations.gitbook.com,LIST
 HOST,keyframe-cdn.abcnews.com,LIST
 HOST,latency-test.lab.skk.moe,LIST
@@ -3185,6 +3190,7 @@ HOST,player-frontend.cnevids.com,LIST
 HOST,prego-cache.prod.sketch.com,LIST
 HOST,public-pages.cbinsights.com,LIST
 HOST,resources-live.sketch.cloud,LIST
+HOST,rum-ingest.us1.signalfx.com,LIST
 HOST,safebrowsing.googleapis.com,LIST
 HOST,sessions-bugsnag.docker.com,LIST
 HOST,solve-widget.forethought.ai,LIST
@@ -3193,6 +3199,7 @@ HOST,static-homepage-en.pluto.tv,LIST
 HOST,static-mh.content.disney.io,LIST
 HOST,static-production.npmjs.com,LIST
 HOST,static-webfonts.myfonts.com,LIST
+HOST,static.acm.account.sony.com,LIST
 HOST,static.captcha-delivery.com,LIST
 HOST,sts.online.visualstudio.com,LIST
 HOST,tvdownloaddw-a.akamaihd.net,LIST
@@ -3562,6 +3569,7 @@ HOST-SUFFIX,epimg.net,LIST
 HOST-SUFFIX,erocdn.co,LIST
 HOST-SUFFIX,eth.sucks,LIST
 HOST-SUFFIX,f-cdn.com,LIST
+HOST-SUFFIX,fal.media,LIST
 HOST-SUFFIX,fbcdn.com,LIST
 HOST-SUFFIX,fbcdn.net,LIST
 HOST-SUFFIX,fbsbx.com,LIST
@@ -4759,6 +4767,7 @@ HOST-WILDCARD,*-intake-*-datadoghq.com,LIST
 HOST-WILDCARD,*-intake.*.datadoghq.com,LIST
 HOST-WILDCARD,cdn-msp?.jmcomic-zzz.one,LIST
 HOST-WILDCARD,video-thumbnail2.fc2.com,LIST
+HOST-WILDCARD,rum-ingest.*.signalfx.com,LIST
 HOST-WILDCARD,video?-thumbnail?.fc2.com,LIST
 HOST-WILDCARD,object-storage-*.vexxhost.net,LIST
 HOST-WILDCARD,vip-videoprem*-thumbnail?.fc2.com,LIST

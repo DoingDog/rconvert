@@ -1,4 +1,4 @@
-# cdn rules: 4766
+# cdn rules: 4775
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -952,6 +952,7 @@ DOMAIN,assets.stash.com
 DOMAIN,assets.toot.cafe
 DOMAIN,assets.twitch.tv
 DOMAIN,assets.upload.io
+DOMAIN,assets.vanta.com
 DOMAIN,assets.vogue.com
 DOMAIN,assets.volvo.com
 DOMAIN,assets.xmind.net
@@ -1393,6 +1394,7 @@ DOMAIN,media.beehiiv.com
 DOMAIN,media.ettoday.net
 DOMAIN,media.nngroup.com
 DOMAIN,media.nownews.com
+DOMAIN,n.approveit.today
 DOMAIN,netlify.apollo.io
 DOMAIN,ocsp.comodoca.com
 DOMAIN,ocsp.digicert.com
@@ -2714,6 +2716,7 @@ DOMAIN,assets.clickfunnels.com
 DOMAIN,assets.lemonsqueezy.com
 DOMAIN,assets.mcp.corespeed.io
 DOMAIN,assets.science.nasa.gov
+DOMAIN,assets.singaporeair.com
 DOMAIN,assets.streamlinehq.com
 DOMAIN,assets.xboxservices.com
 DOMAIN,assets1.lottiefiles.com
@@ -2766,6 +2769,7 @@ DOMAIN,image-stgus.samsung.com
 DOMAIN,imagecdn.clips4sale.com
 DOMAIN,imagizer.imageshack.com
 DOMAIN,img.api.tryprofound.com
+DOMAIN,img.helpnetsecurity.com
 DOMAIN,img0.socialshopwave.com
 DOMAIN,img1.ak.crunchyroll.com
 DOMAIN,img1.socialshopwave.com
@@ -2916,6 +2920,7 @@ DOMAIN,images.flightradar24.com
 DOMAIN,images.indianexpress.com
 DOMAIN,images.purevpn-tools.com
 DOMAIN,images.spectrumnews1.com
+DOMAIN,img2.helpnetsecurity.com
 DOMAIN,integrations.gitbook.com
 DOMAIN,keyframe-cdn.abcnews.com
 DOMAIN,latency-test.lab.skk.moe
@@ -3185,6 +3190,7 @@ DOMAIN,player-frontend.cnevids.com
 DOMAIN,prego-cache.prod.sketch.com
 DOMAIN,public-pages.cbinsights.com
 DOMAIN,resources-live.sketch.cloud
+DOMAIN,rum-ingest.us1.signalfx.com
 DOMAIN,safebrowsing.googleapis.com
 DOMAIN,sessions-bugsnag.docker.com
 DOMAIN,solve-widget.forethought.ai
@@ -3193,6 +3199,7 @@ DOMAIN,static-homepage-en.pluto.tv
 DOMAIN,static-mh.content.disney.io
 DOMAIN,static-production.npmjs.com
 DOMAIN,static-webfonts.myfonts.com
+DOMAIN,static.acm.account.sony.com
 DOMAIN,static.captcha-delivery.com
 DOMAIN,sts.online.visualstudio.com
 DOMAIN,tvdownloaddw-a.akamaihd.net
@@ -3562,6 +3569,7 @@ DOMAIN-SUFFIX,epimg.net
 DOMAIN-SUFFIX,erocdn.co
 DOMAIN-SUFFIX,eth.sucks
 DOMAIN-SUFFIX,f-cdn.com
+DOMAIN-SUFFIX,fal.media
 DOMAIN-SUFFIX,fbcdn.com
 DOMAIN-SUFFIX,fbcdn.net
 DOMAIN-SUFFIX,fbsbx.com
@@ -4759,6 +4767,7 @@ DOMAIN-WILDCARD,*-intake-*-datadoghq.com
 DOMAIN-WILDCARD,*-intake.*.datadoghq.com
 DOMAIN-WILDCARD,cdn-msp?.jmcomic-zzz.one
 DOMAIN-WILDCARD,video-thumbnail2.fc2.com
+DOMAIN-WILDCARD,rum-ingest.*.signalfx.com
 DOMAIN-WILDCARD,video?-thumbnail?.fc2.com
 DOMAIN-WILDCARD,object-storage-*.vexxhost.net
 DOMAIN-WILDCARD,vip-videoprem*-thumbnail?.fc2.com

@@ -1,4 +1,4 @@
-# big-data rules: 10513
+# big-data rules: 10524
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -286,6 +286,7 @@ DOMAIN,data.peer.as
 DOMAIN,david-dm.org
 DOMAIN,deb.sury.org
 DOMAIN,debian.a1.bg
+DOMAIN,dl.heycue.io
 DOMAIN,dl.pikpak.io
 DOMAIN,docs.brew.sh
 DOMAIN,e.linear.app
@@ -1300,6 +1301,7 @@ DOMAIN,assets.safing.io
 DOMAIN,assets.stash.com
 DOMAIN,assets.toot.cafe
 DOMAIN,assets.upload.io
+DOMAIN,assets.vanta.com
 DOMAIN,assets.vogue.com
 DOMAIN,assets.volvo.com
 DOMAIN,assets.xmind.net
@@ -1768,6 +1770,7 @@ DOMAIN,dl.vibeisland.app
 DOMAIN,dlcdnets.asus.com
 DOMAIN,download.cnet.com
 DOMAIN,download.gimp.org
+DOMAIN,download.manus.im
 DOMAIN,download.xbox.com
 DOMAIN,dz2cdn1.dzone.com
 DOMAIN,e.calibermind.com
@@ -1931,6 +1934,7 @@ DOMAIN,mirrors.maine.edu
 DOMAIN,mirrors.netix.net
 DOMAIN,mirrors.sonic.net
 DOMAIN,mirrors.ucr.ac.cr
+DOMAIN,n.approveit.today
 DOMAIN,netlify.apollo.io
 DOMAIN,ocsp.comodoca.com
 DOMAIN,ocsp.digicert.com
@@ -3728,6 +3732,7 @@ DOMAIN,assets.clickfunnels.com
 DOMAIN,assets.lemonsqueezy.com
 DOMAIN,assets.mcp.corespeed.io
 DOMAIN,assets.science.nasa.gov
+DOMAIN,assets.singaporeair.com
 DOMAIN,assets.streamlinehq.com
 DOMAIN,assets1.lottiefiles.com
 DOMAIN,assets2.lottiefiles.com
@@ -3802,6 +3807,7 @@ DOMAIN,image-stgus.samsung.com
 DOMAIN,imagecdn.clips4sale.com
 DOMAIN,imagizer.imageshack.com
 DOMAIN,img.api.tryprofound.com
+DOMAIN,img.helpnetsecurity.com
 DOMAIN,img0.socialshopwave.com
 DOMAIN,img1.ak.crunchyroll.com
 DOMAIN,img1.socialshopwave.com
@@ -4008,6 +4014,7 @@ DOMAIN,images.flightradar24.com
 DOMAIN,images.indianexpress.com
 DOMAIN,images.purevpn-tools.com
 DOMAIN,images.spectrumnews1.com
+DOMAIN,img2.helpnetsecurity.com
 DOMAIN,integrations.gitbook.com
 DOMAIN,latency-test.lab.skk.moe
 DOMAIN,linkstorage.linkfire.com
@@ -4368,12 +4375,14 @@ DOMAIN,plug-mirror.rcac.purdue.edu
 DOMAIN,prego-cache.prod.sketch.com
 DOMAIN,public-pages.cbinsights.com
 DOMAIN,resources-live.sketch.cloud
+DOMAIN,rum-ingest.us1.signalfx.com
 DOMAIN,safebrowsing.googleapis.com
 DOMAIN,sessions-bugsnag.docker.com
 DOMAIN,solve-widget.forethought.ai
 DOMAIN,sourcepoint.theguardian.com
 DOMAIN,static-production.npmjs.com
 DOMAIN,static-webfonts.myfonts.com
+DOMAIN,static.acm.account.sony.com
 DOMAIN,static.captcha-delivery.com
 DOMAIN,sts.online.visualstudio.com
 DOMAIN,typescript.visualstudio.com
@@ -5171,6 +5180,7 @@ DOMAIN-SUFFIX,epimg.net
 DOMAIN-SUFFIX,erocdn.co
 DOMAIN-SUFFIX,eth.sucks
 DOMAIN-SUFFIX,f-cdn.com
+DOMAIN-SUFFIX,fal.media
 DOMAIN-SUFFIX,fbcdn.com
 DOMAIN-SUFFIX,fbcdn.net
 DOMAIN-SUFFIX,fbsbx.com
@@ -8404,6 +8414,7 @@ DOMAIN-WILDCARD,*-intake-*-datadoghq.com
 DOMAIN-WILDCARD,*-intake.*.datadoghq.com
 DOMAIN-WILDCARD,cdn-msp?.jmcomic-zzz.one
 DOMAIN-WILDCARD,video-thumbnail2.fc2.com
+DOMAIN-WILDCARD,rum-ingest.*.signalfx.com
 DOMAIN-WILDCARD,video?-thumbnail?.fc2.com
 DOMAIN-WILDCARD,object-storage-*.vexxhost.net
 DOMAIN-WILDCARD,vip-videoprem*-thumbnail?.fc2.com

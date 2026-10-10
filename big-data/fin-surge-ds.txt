@@ -1,4 +1,4 @@
-# big-data rules: 8289
+# big-data rules: 8299
 .aws
 .x.ai
 .db.tt
@@ -498,6 +498,7 @@ y.yarn.co
 .erocdn.co
 .eth.sucks
 .f-cdn.com
+.fal.media
 .fbcdn.com
 .fbcdn.net
 .fbsbx.com
@@ -1642,6 +1643,7 @@ data.peer.as
 david-dm.org
 deb.sury.org
 debian.a1.bg
+dl.heycue.io
 dl.pikpak.io
 docs.brew.sh
 e.linear.app
@@ -3862,6 +3864,7 @@ assets.safing.io
 assets.stash.com
 assets.toot.cafe
 assets.upload.io
+assets.vanta.com
 assets.vogue.com
 assets.volvo.com
 assets.xmind.net
@@ -4556,6 +4559,7 @@ dl.vibeisland.app
 dlcdnets.asus.com
 download.cnet.com
 download.gimp.org
+download.manus.im
 download.xbox.com
 dz2cdn1.dzone.com
 e.calibermind.com
@@ -4719,6 +4723,7 @@ mirrors.maine.edu
 mirrors.netix.net
 mirrors.sonic.net
 mirrors.ucr.ac.cr
+n.approveit.today
 netlify.apollo.io
 ocsp.comodoca.com
 ocsp.digicert.com
@@ -7122,6 +7127,7 @@ assets.clickfunnels.com
 assets.lemonsqueezy.com
 assets.mcp.corespeed.io
 assets.science.nasa.gov
+assets.singaporeair.com
 assets.streamlinehq.com
 assets1.lottiefiles.com
 assets2.lottiefiles.com
@@ -7196,6 +7202,7 @@ image-stgus.samsung.com
 imagecdn.clips4sale.com
 imagizer.imageshack.com
 img.api.tryprofound.com
+img.helpnetsecurity.com
 img0.socialshopwave.com
 img1.ak.crunchyroll.com
 img1.socialshopwave.com
@@ -7439,6 +7446,7 @@ images.flightradar24.com
 images.indianexpress.com
 images.purevpn-tools.com
 images.spectrumnews1.com
+img2.helpnetsecurity.com
 integrations.gitbook.com
 latency-test.lab.skk.moe
 linkstorage.linkfire.com
@@ -7897,12 +7905,14 @@ plug-mirror.rcac.purdue.edu
 prego-cache.prod.sketch.com
 public-pages.cbinsights.com
 resources-live.sketch.cloud
+rum-ingest.us1.signalfx.com
 safebrowsing.googleapis.com
 sessions-bugsnag.docker.com
 solve-widget.forethought.ai
 sourcepoint.theguardian.com
 static-production.npmjs.com
 static-webfonts.myfonts.com
+static.acm.account.sony.com
 static.captcha-delivery.com
 sts.online.visualstudio.com
 typescript.visualstudio.com

@@ -1,4 +1,4 @@
-# proxy rules: 6881
+# proxy rules: 6918
 .d.pr
 .g.ai
 .g.co
@@ -75,6 +75,7 @@ ip.cn
 .cn6.eu
 .d.cash
 .dbc.hk
+.dh.net
 .dns.sb
 .doh.sb
 .dot.sb
@@ -167,6 +168,7 @@ ip.cn
 .xm.com
 .xt.com
 .xt.pub
+.xx.net
 .zb.com
 .zi5.me
 .zim.vn
@@ -358,6 +360,7 @@ ip.cn
 .mohu.ml
 .moon.fm
 .msn.com
+.muse.ai
 .muzu.tv
 .myjs.tw
 .naol.ca
@@ -1289,6 +1292,7 @@ ip.cn
 .mgoon.com
 .mihua.org
 .milph.net
+.missav.ai
 .missav.ws
 .mixin.one
 .mixlr.com
@@ -1366,6 +1370,7 @@ ip.cn
 .pixnet.in
 .player.fm
 .plurk.com
+.poland.tw
 .popai.pro
 .potato.im
 .power.com
@@ -1684,6 +1689,7 @@ ip.cn
 .blogtd.net
 .blogtd.org
 .bmfinn.com
+.boylove.cc
 .briian.com
 .bt2mag.com
 .btbtav.com
@@ -1694,6 +1700,7 @@ ip.cn
 .c-span.org
 .c3pool.com
 .cableav.tv
+.cangku.moe
 .cap.org.hk
 .carfax.com
 .castbox.fm
@@ -1737,7 +1744,9 @@ ip.cn
 .coobay.com
 .cool18.com
 .costco.com
+.cpc.com.tw
 .crisp.chat
+.csc.com.tw
 .csuchen.de
 .csw.org.uk
 .cts.com.tw
@@ -1968,6 +1977,7 @@ ip.cn
 .jav101.com
 .jav321.com
 .javbus.com
+.javchu.com
 .javfree.me
 .javhip.com
 .javhub.net
@@ -1992,6 +2002,7 @@ ip.cn
 .kebrum.com
 .kepard.com
 .keycdn.com
+.khc.edu.tw
 .koornk.com
 .kraken.com
 .kucoin.com
@@ -2178,6 +2189,7 @@ ip.cn
 .qanote.com
 .qi-gong.me
 .qianbai.tw
+.qingse.one
 .qvodzy.org
 .r-pool.net
 .rawgit.com
@@ -2286,6 +2298,7 @@ ip.cn
 .telesco.pe
 .tenacy.com
 .textnow.me
+.tfd.org.tw
 .tgfcer.com
 .tgstat.com
 .thaicn.com
@@ -2318,6 +2331,7 @@ ip.cn
 .tsu.org.tw
 .tt-rss.org
 .tt1069.com
+.ttl.com.tw
 .ttv.com.tw
 .tu8964.com
 .tuidang.se
@@ -2482,6 +2496,7 @@ ip.cn
 .adguard.org
 .adpl.org.hk
 .adsense.com
+.aidc.com.tw
 .airasia.com
 .aiv-cdn.net
 .ajsands.com
@@ -2747,6 +2762,7 @@ ip.cn
 .gumroad.com
 .h-china.org
 .haijiao.com
+.hanime1.com
 .hanunyi.com
 .haproxy.org
 .heavy-r.com
@@ -2782,12 +2798,14 @@ ip.cn
 .i-cable.com
 .ibiblio.org
 .ibtimes.com
+.icdf.org.tw
 .idaiwan.com
 .idreamx.com
 .imageab.com
 .imgmega.com
 .ingress.com
 .insecam.org
+.ipac.global
 .ipalter.com
 .ipicture.ru
 .ipstack.com
@@ -2877,6 +2895,7 @@ ip.cn
 .mimivip.com
 .mingpao.com
 .minhhue.net
+.missav.live
 .mnewstv.com
 .mobatek.net
 .moegirl.org
@@ -2927,6 +2946,7 @@ ip.cn
 .nordvpn.com
 .nownews.com
 .nssurge.com
+.nstc.org.tw
 .ntdtv.co.kr
 .ntdtvla.com
 .nthlink.com
@@ -3023,6 +3043,7 @@ ip.cn
 .roadshow.hk
 .rocket.chat
 .rocksdb.org
+.rocmgov.org
 .roucdn.link
 .rpglogs.com
 .rsgamen.org
@@ -3198,6 +3219,7 @@ ip.cn
 .vpnjack.com
 .vpnpick.com
 .vrsmash.com
+.vscc.org.tw
 .vtunnel.com
 .vyprvpn.com
 .wangafu.net
@@ -3512,6 +3534,7 @@ tv.apple.com
 .furinkan.com
 .furrybar.com
 .futuesop.com
+.fuyin116.com
 .g6hentai.com
 .gabocorp.com
 .gaeproxy.com
@@ -3556,6 +3579,7 @@ tv.apple.com
 .guaguass.org
 .guaneryu.com
 .h5galgame.me
+.hanimeone.me
 .hanminzu.org
 .hatena.ne.jp
 .hcaptcha.com
@@ -3715,6 +3739,7 @@ tv.apple.com
 .milsurps.com
 .mindnode.com
 .miraheze.org
+.mirdc.org.tw
 .mitao.com.tw
 .mitbbsau.com
 .mizzmona.com
@@ -3983,6 +4008,7 @@ tv.apple.com
 .twitthat.com
 .twitturk.com
 .twtrland.com
+.tybio.com.tw
 .uc-japan.org
 .ucdc1998.org
 .uchicago.edu
@@ -4019,6 +4045,7 @@ tv.apple.com
 .waikeung.org
 .wailaike.net
 .waiwaier.com
+.wallhaven.cc
 .wallmama.com
 .wallsttv.com
 .wapedia.mobi
@@ -4146,6 +4173,7 @@ aqi.aqicn.org
 .bloglovin.com
 .bloodshed.net
 .bloomberg.com
+.blue-plus.net
 .bnbstatic.com
 .botanwang.com
 .boxunblog.com
@@ -4953,6 +4981,7 @@ aqi.aqicn.org
 .harunyahya.com
 .helloqueer.com
 .helplinfen.com
+.hentaiclub.net
 .heqinglian.net
 .herominers.com
 .hidemycomp.com
@@ -5030,6 +5059,7 @@ aqi.aqicn.org
 .magic-net.info
 .makemymood.com
 .mastodon.cloud
+.matichon.co.th
 .mattwilcox.net
 .mcadforums.com
 .megaupload.com
@@ -5041,6 +5071,7 @@ aqi.aqicn.org
 .mingpaotor.com
 .mingpaovan.com
 .mirrormedia.mg
+.moeli-desu.com
 .mofaxiehui.com
 .morningsun.org
 .mosucloud.site
@@ -5412,6 +5443,7 @@ books.apple.com
 .eraysoft.com.tr
 .etaiwannews.com
 .evchk.wikia.org
+.eximbank.com.tw
 .expatshield.com
 .expofutures.com
 .expressnews.com
@@ -5488,6 +5520,7 @@ books.apple.com
 .kingkong.com.tw
 .kwongwah.com.my
 .lagranepoca.com
+.landbank.com.tw
 .lightboxcdn.com
 .link-o-rama.com
 .liquiditytp.com
@@ -5686,6 +5719,7 @@ books.apple.com
 .tweetbackup.com
 .tweetmarker.net
 .tweettunnel.com
+.twfhcsec.com.tw
 .twilightsex.com
 .twitbrowser.net
 .uforadio.com.tw
@@ -5709,6 +5743,7 @@ books.apple.com
 .whatblocked.com
 .whatbrowser.org
 .wikilivres.info
+.wikispecies.org
 .wikiversity.org
 .williamhill.com
 .wufafangwen.com
@@ -6291,6 +6326,7 @@ sglong.wechat.com
 .westernwolves.com
 .wetpussygames.com
 .whereiswerner.com
+.wikifunctions.org
 .wikiunblocked.org
 .workerdemo.org.hk
 .workersthebig.net
@@ -6415,6 +6451,7 @@ sgshort.wechat.com
 .mirrormedia.com.tw
 .mysecondarydns.com
 .nationalreview.com
+.nationthailand.com
 .naughtyamerica.com
 .networkedblogs.com
 .newcenturynews.com
