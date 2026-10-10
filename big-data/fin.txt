@@ -1,4 +1,4 @@
-# big-data rules: 10524
+# big-data rules: 10561
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -2342,6 +2342,7 @@ DOMAIN,static.ada.support
 DOMAIN,static.adguard.com
 DOMAIN,static.ampcode.com
 DOMAIN,static.anyporn.com
+DOMAIN,static.apkpure.com
 DOMAIN,static.assetlab.io
 DOMAIN,static.bangumi.moe
 DOMAIN,static.bytepan.com
@@ -2955,6 +2956,7 @@ DOMAIN,download.maxmind.com
 DOMAIN,download.mersenne.ca
 DOMAIN,download.mozilla.org
 DOMAIN,download.nektony.com
+DOMAIN,downloads.cursor.com
 DOMAIN,edge.personalizer.io
 DOMAIN,embed-ssl.wistia.com
 DOMAIN,espejito.fder.edu.uy
@@ -4115,12 +4117,14 @@ DOMAIN,coin-images.coingecko.com
 DOMAIN,components.justanswer.com
 DOMAIN,cors-proxy.htmldriven.com
 DOMAIN,creativajs.altervista.org
+DOMAIN,cs428.wpc.edgecastcdn.net
 DOMAIN,daznfeeds.com.edgekey.net
 DOMAIN,design-assets.hubspot.com
 DOMAIN,dlassets-ssl.xboxlive.com
 DOMAIN,download.savannah.gnu.org
 DOMAIN,download.sysinternals.com
 DOMAIN,downloads.raspberrypi.com
+DOMAIN,downloads.sourceforge.net
 DOMAIN,edgeupdates.microsoft.com
 DOMAIN,euc-widget.freshworks.com
 DOMAIN,events-delivery.apple.com
@@ -4176,6 +4180,7 @@ DOMAIN,packages.hs-regensburg.de
 DOMAIN,psp-logos.uptimerobot.com
 DOMAIN,report-uri.cloudflare.com
 DOMAIN,resource.tnlmediagene.com
+DOMAIN,rthklive2-lh.akamaihd.net
 DOMAIN,s3.beta.coinmarketcap.com
 DOMAIN,scripts.scriptwrapper.com
 DOMAIN,simplicity.trustpilot.com
@@ -4241,6 +4246,7 @@ DOMAIN,documenter-assets.pstmn.io
 DOMAIN,download.hikarifield.co.jp
 DOMAIN,download.projectbluefin.io
 DOMAIN,downloads.lemonsqueezy.com
+DOMAIN,e13252.dscg.akamaiedge.net
 DOMAIN,emby-cdn1.nebula-media.org
 DOMAIN,encrypted-tbn0.gstatic.com
 DOMAIN,encrypted-tbn1.gstatic.com
@@ -4353,6 +4359,7 @@ DOMAIN,images3.welcomesoftware.com
 DOMAIN,images4.welcomesoftware.com
 DOMAIN,imgs02.aventertainments.com
 DOMAIN,irp-cdn.multiscreensite.com
+DOMAIN,itvpnpmobile-a.akamaihd.net
 DOMAIN,jslibs.blackmagicdesign.com
 DOMAIN,launcher-files.modrinth.com
 DOMAIN,mac-release-static.stash.ws
@@ -4446,6 +4453,7 @@ DOMAIN,static-r.kamihimeproject.net
 DOMAIN,static-secure-uploads.ui.com
 DOMAIN,static.community.workday.com
 DOMAIN,static.edge.microsoftapp.net
+DOMAIN,static2.sharepointonline.com
 DOMAIN,staticintl.cloudcachetci.com
 DOMAIN,store-images.s-microsoft.com
 DOMAIN,ui-statics-cf.streamable.com
@@ -4458,6 +4466,7 @@ DOMAIN,akamai-origin.myanimelist.net
 DOMAIN,analytics.welcomesoftware.com
 DOMAIN,assets-s3-us-east-1.ceros.com
 DOMAIN,assets-tcpviewer.proxyman.com
+DOMAIN,bcbolt446c5271-a.akamaihd.net
 DOMAIN,catalogartifact.azureedge.net
 DOMAIN,cdn.minecraft-server-list.com
 DOMAIN,cdn.sapphire.microsoftapp.net
@@ -4628,6 +4637,7 @@ DOMAIN,versioncheck-bg.addons.mozilla.org
 DOMAIN,wre-assets.prod.mapping.strava.com
 DOMAIN,akmcdnoversea-tw.inter.ptqy.gitv.tv
 DOMAIN,blade-public-static.blade-group.com
+DOMAIN,copilot-proxy.githubusercontent.com
 DOMAIN,download.visualstudio.microsoft.com
 DOMAIN,ecommplugins-scripts.trustpilot.com
 DOMAIN,firebaseremoteconfig.googleapis.com
@@ -4671,6 +4681,7 @@ DOMAIN,edgecdn-embza6g8cacagcbn.z01.azurefd.net
 DOMAIN,cdn.mcauto-images-production.sendgrid.net
 DOMAIN,cf-images.ap-northeast-1.prod.boltdns.net
 DOMAIN,marfeelexperimentsexperienceengine.mrf.io
+DOMAIN,images-daznservices-com.cdn.ampproject.org
 DOMAIN,talon-website-prod.ecosec.on.epicgames.com
 DOMAIN,chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
 DOMAIN,ecommplugins-trustboxsettings.trustpilot.com
@@ -4711,6 +4722,7 @@ DOMAIN-KEYWORD,strntt00
 DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,avoddashs
 DOMAIN-KEYWORD,hbogoasia
+DOMAIN-KEYWORD,tiktokcdn
 DOMAIN-KEYWORD,musical.ly
 DOMAIN-KEYWORD,jooxweb-api
 DOMAIN-KEYWORD,odysseyplus
@@ -5301,6 +5313,7 @@ DOMAIN-SUFFIX,raygun.io
 DOMAIN-SUFFIX,react.dev
 DOMAIN-SUFFIX,rghost.ru
 DOMAIN-SUFFIX,rlcdn.com
+DOMAIN-SUFFIX,s.yimg.jp
 DOMAIN-SUFFIX,sb-cd.com
 DOMAIN-SUFFIX,socdm.com
 DOMAIN-SUFFIX,srcdn.com
@@ -6843,6 +6856,7 @@ DOMAIN-SUFFIX,eu.orbitor.dev
 DOMAIN-SUFFIX,externulls.com
 DOMAIN-SUFFIX,faceit-cdn.net
 DOMAIN-SUFFIX,filecunhua.top
+DOMAIN-SUFFIX,files.1drv.com
 DOMAIN-SUFFIX,filesflash.com
 DOMAIN-SUFFIX,firebaseio.com
 DOMAIN-SUFFIX,florenfile.com
@@ -7693,6 +7707,7 @@ DOMAIN-SUFFIX,archive.ubuntu.com
 DOMAIN-SUFFIX,atv-ext.amazon.com
 DOMAIN-SUFFIX,awsautoscaling.com
 DOMAIN-SUFFIX,b2c-contenthub.com
+DOMAIN-SUFFIX,bbcfmt.s.llnwi.net
 DOMAIN-SUFFIX,betterstackcdn.com
 DOMAIN-SUFFIX,bytegecko-i18n.com
 DOMAIN-SUFFIX,casoneexchange.com
@@ -7723,6 +7738,7 @@ DOMAIN-SUFFIX,desktop.docker.com
 DOMAIN-SUFFIX,disneyinflight.com
 DOMAIN-SUFFIX,disneyworld-go.com
 DOMAIN-SUFFIX,dl.playstation.net
+DOMAIN-SUFFIX,dl.sourceforge.net
 DOMAIN-SUFFIX,dl.steam.ksyna.com
 DOMAIN-SUFFIX,dl2.discordapp.net
 DOMAIN-SUFFIX,dropboxcaptcha.com
@@ -7898,6 +7914,7 @@ DOMAIN-SUFFIX,motherlessmedia.com
 DOMAIN-SUFFIX,msftconnecttest.com
 DOMAIN-SUFFIX,myfoxlosangeles.com
 DOMAIN-SUFFIX,myfoxtwincities.com
+DOMAIN-SUFFIX,nbcsports.h-cdn.com
 DOMAIN-SUFFIX,netflixdnstest0.com
 DOMAIN-SUFFIX,netflixdnstest1.com
 DOMAIN-SUFFIX,netflixdnstest2.com
@@ -7933,6 +7950,7 @@ DOMAIN-SUFFIX,streamingdisney.net
 DOMAIN-SUFFIX,thegeorgiascene.com
 DOMAIN-SUFFIX,verizonbusiness.com
 DOMAIN-SUFFIX,verizonwireless.com
+DOMAIN-SUFFIX,videos-f.jwpsrv.com
 DOMAIN-SUFFIX,1fhjlv1.oloadcdn.net
 DOMAIN-SUFFIX,aayinltcs.arduino.cc
 DOMAIN-SUFFIX,amazonvideodirect.cc
@@ -8119,6 +8137,7 @@ DOMAIN-SUFFIX,pocket-image-cache.com
 DOMAIN-SUFFIX,realamericanstories.tv
 DOMAIN-SUFFIX,releases.hashicorp.com
 DOMAIN-SUFFIX,simpleflyingimages.com
+DOMAIN-SUFFIX,spoprod-a.akamaihd.net
 DOMAIN-SUFFIX,spotify-everywhere.com
 DOMAIN-SUFFIX,static2cdn.hubspot.com
 DOMAIN-SUFFIX,storage.googleapis.com
@@ -8157,7 +8176,13 @@ DOMAIN-SUFFIX,foxsportsneworleans.com
 DOMAIN-SUFFIX,foxsportsuniversity.com
 DOMAIN-SUFFIX,freepornhdonlinegay.com
 DOMAIN-SUFFIX,grazie.aws.intellij.net
+DOMAIN-SUFFIX,hboasia1-i.akamaihd.net
+DOMAIN-SUFFIX,hboasia2-i.akamaihd.net
+DOMAIN-SUFFIX,hboasia3-i.akamaihd.net
+DOMAIN-SUFFIX,hboasia4-i.akamaihd.net
+DOMAIN-SUFFIX,hboasia5-i.akamaihd.net
 DOMAIN-SUFFIX,ipfs.eth.aragon.network
+DOMAIN-SUFFIX,kalhlspd-a.akamaihd.net
 DOMAIN-SUFFIX,ks3-cn-hk-1.ksyuncs.com
 DOMAIN-SUFFIX,launchermeta.mojang.com
 DOMAIN-SUFFIX,mirror.norbert-ruehl.de
@@ -8217,6 +8242,7 @@ DOMAIN-SUFFIX,youtubemobilesupport.com
 DOMAIN-SUFFIX,20thcenturystudios.com.au
 DOMAIN-SUFFIX,20thcenturystudios.com.br
 DOMAIN-SUFFIX,assets.shortbread.aws.dev
+DOMAIN-SUFFIX,bcbolthboa-a.akamaihd.net
 DOMAIN-SUFFIX,challenges.cloudflare.com
 DOMAIN-SUFFIX,copr.fedorainfracloud.org
 DOMAIN-SUFFIX,cos.ap-seoul.myqcloud.com
@@ -8228,6 +8254,7 @@ DOMAIN-SUFFIX,disneychannelroadtrip.com
 DOMAIN-SUFFIX,disneyinternationalhd.com
 DOMAIN-SUFFIX,disneyjuniortreataday.com
 DOMAIN-SUFFIX,disneymagicmoments.gen.tr
+DOMAIN-SUFFIX,dl.dropboxusercontent.com
 DOMAIN-SUFFIX,download.cdp.bethesda.net
 DOMAIN-SUFFIX,dynamic-static-assets.com
 DOMAIN-SUFFIX,foxcreativeuniversity.com
@@ -8251,6 +8278,7 @@ DOMAIN-SUFFIX,tiles-api.maps.komoot.net
 DOMAIN-SUFFIX,viacomcbspressexpress.com
 DOMAIN-SUFFIX,wide-youtube.l.google.com
 DOMAIN-SUFFIX,app-analytics-services.com
+DOMAIN-SUFFIX,avodmp4s3ww-a.akamaihd.net
 DOMAIN-SUFFIX,cbsservice.aws.syncbak.com
 DOMAIN-SUFFIX,cdn-uploads.huggingface.co
 DOMAIN-SUFFIX,cdn.applicationinsights.io
@@ -8260,12 +8288,16 @@ DOMAIN-SUFFIX,egdownload.fastly-edge.com
 DOMAIN-SUFFIX,foxsmallbusinesscenter.com
 DOMAIN-SUFFIX,foxsmallbusinesscenter.net
 DOMAIN-SUFFIX,foxsmallbusinesscenter.org
+DOMAIN-SUFFIX,foxsports01-i.akamaihd.net
+DOMAIN-SUFFIX,foxsports02-i.akamaihd.net
+DOMAIN-SUFFIX,foxsports03-i.akamaihd.net
 DOMAIN-SUFFIX,gateway.originprotocol.com
 DOMAIN-SUFFIX,hackerone-user-content.com
 DOMAIN-SUFFIX,hbounify-prod.evergent.com
 DOMAIN-SUFFIX,hubspotusercontent-eu1.net
 DOMAIN-SUFFIX,hubspotusercontent-na1.net
 DOMAIN-SUFFIX,launchercontent.mojang.com
+DOMAIN-SUFFIX,m-content-viki.s.llnwi.net
 DOMAIN-SUFFIX,myanalytics.cdn.office.net
 DOMAIN-SUFFIX,oss-eu-west-1.aliyuncs.com
 DOMAIN-SUFFIX,oss-me-east-1.aliyuncs.com
@@ -8301,6 +8333,7 @@ DOMAIN-SUFFIX,applicationinsights.azure.cn
 DOMAIN-SUFFIX,cos.ap-hongkong.myqcloud.com
 DOMAIN-SUFFIX,cos.sa-saopaulo.myqcloud.com
 DOMAIN-SUFFIX,csp-reporting.cloudflare.com
+DOMAIN-SUFFIX,foxnewsplayer-a.akamaihd.net
 DOMAIN-SUFFIX,i-dont-care-about-cookies.eu
 DOMAIN-SUFFIX,marvelsuperheroseptember.com
 DOMAIN-SUFFIX,microsoftpersonalcontent.com
@@ -8318,6 +8351,7 @@ DOMAIN-SUFFIX,gold-usergeneratedcontent.net
 DOMAIN-SUFFIX,mobile-collector.newrelic.com
 DOMAIN-SUFFIX,oss-eu-central-1.aliyuncs.com
 DOMAIN-SUFFIX,tile-cyclosm.openstreetmap.fr
+DOMAIN-SUFFIX,assetshuluimcom-a.akamaihd.net
 DOMAIN-SUFFIX,beautyandthebeastmusical.co.uk
 DOMAIN-SUFFIX,cdn.chrome.marketplace.aws.dev
 DOMAIN-SUFFIX,firebasestorage.googleapis.com
@@ -8340,6 +8374,7 @@ DOMAIN-SUFFIX,oss-ap-southeast-6.aliyuncs.com
 DOMAIN-SUFFIX,oss-ap-southeast-7.aliyuncs.com
 DOMAIN-SUFFIX,software-download.microsoft.com
 DOMAIN-SUFFIX,starwarsgalacticstarcruiser.com
+DOMAIN-SUFFIX,voa-11.akacast.akamaistream.net
 DOMAIN-SUFFIX,commondatastorage.googleapis.com
 DOMAIN-SUFFIX,crash-reports.browser.yandex.net
 DOMAIN-SUFFIX,disneyplus.com.ssl.sc.omtrdc.net
@@ -8349,12 +8384,14 @@ DOMAIN-SUFFIX,cos.na-siliconvalley.myqcloud.com
 DOMAIN-SUFFIX,static-assets.photoshop.adobe.com
 DOMAIN-SUFFIX,assets.brightspot.abebooks.a2z.com
 DOMAIN-SUFFIX,autoupdatesvc.delivery.autodesk.com
+DOMAIN-SUFFIX,dca-ll-voddazn-dznvodjp.s.llnwi.net
 DOMAIN-SUFFIX,cloud-object-storage.appdomain.cloud
 DOMAIN-SUFFIX,crashlyticsreports-pa.googleapis.com
 DOMAIN-SUFFIX,oss-accelerate-overseas.aliyuncs.com
 DOMAIN-SUFFIX,youtubeembeddedplayer.googleapis.com
 DOMAIN-SUFFIX,content-storage-upload.googleapis.com
 DOMAIN-SUFFIX,dc1-lm-live2dazn.secure.footprint.net
+DOMAIN-SUFFIX,dca-ll-livedazn-dznlivejp.s.llnwi.net
 DOMAIN-SUFFIX,prod-east.frontend.public.atl-paas.net
 DOMAIN-SUFFIX,dc2-vodhls-perform.secure.footprint.net
 DOMAIN-SUFFIX,cf-images.ap-southeast-1.prod.boltdns.net

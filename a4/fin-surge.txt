@@ -1,4 +1,4 @@
-# a4 rules: 120
+# a4 rules: 121
 DOMAIN-KEYWORD,umeng
 DOMAIN-KEYWORD,adform
 DOMAIN-KEYWORD,dtscout
@@ -89,6 +89,7 @@ DOMAIN-KEYWORD,paradisestatic.vivo.com.cn
 DOMAIN-KEYWORD,splashimgbssdl.yun.kugou.com
 DOMAIN-KEYWORD,adsfilebssdlbig.ali.kugou.com
 DOMAIN-KEYWORD,kgstaticdlbssdlbig.tx.kugou.com
+DOMAIN-KEYWORD,-be-pack-sign.pglstatp-toutiao.com
 USER-AGENT,AVOS*
 IP-CIDR,203.107.1.0/24,no-resolve
 IP-CIDR,47.99.42.29/32,no-resolve

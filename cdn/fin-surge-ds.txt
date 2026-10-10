@@ -1,4 +1,4 @@
-# cdn rules: 4695
+# cdn rules: 4697
 0x0.st
 eep.io
 img.gs
@@ -1907,6 +1907,7 @@ img.connatix.com
 img.highporn.net
 img.informer.com
 img.javstore.net
+img.jsdelivr.com
 img.kbhgames.com
 img.moviefap.com
 img.novipnoad.ca
@@ -2235,6 +2236,7 @@ crl.usertrust.com
 crl3.digicert.com
 crt.usertrust.com
 csp.microsoft.com
+data.jsdelivr.com
 dh-site.b-cdn.net
 divhunt.b-cdn.net
 dmm-extension.com

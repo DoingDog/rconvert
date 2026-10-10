@@ -1,4 +1,4 @@
-# cdn rules: 4775
+# cdn rules: 4777
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -1079,6 +1079,7 @@ HOST,img.connatix.com,LIST
 HOST,img.highporn.net,LIST
 HOST,img.informer.com,LIST
 HOST,img.javstore.net,LIST
+HOST,img.jsdelivr.com,LIST
 HOST,img.kbhgames.com,LIST
 HOST,img.moviefap.com,LIST
 HOST,img.novipnoad.ca,LIST
@@ -1317,6 +1318,7 @@ HOST,crl.usertrust.com,LIST
 HOST,crl3.digicert.com,LIST
 HOST,crt.usertrust.com,LIST
 HOST,csp.microsoft.com,LIST
+HOST,data.jsdelivr.com,LIST
 HOST,dh-site.b-cdn.net,LIST
 HOST,divhunt.b-cdn.net,LIST
 HOST,dmm-extension.com,LIST

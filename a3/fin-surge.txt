@@ -1,4 +1,4 @@
-# a3 rules: 308
+# a3 rules: 310
 DOMAIN-KEYWORD,a8cv.
 DOMAIN-KEYWORD,admob
 DOMAIN-KEYWORD,adsby
@@ -215,10 +215,12 @@ DOMAIN-KEYWORD,trksvg.sustainablefinance.
 DOMAIN-KEYWORD,-analytics-events.apple.com
 DOMAIN-KEYWORD,trkhinv.sustainablefinance.
 DOMAIN-KEYWORD,splashimgbssdl.yun.kugou.com
+DOMAIN-KEYWORD,-be-pack.pglstatp-toutiao.com
 DOMAIN-KEYWORD,adsfilebssdlbig.ali.kugou.com
 DOMAIN-KEYWORD,telemetry.officeapps.live.com
 DOMAIN-KEYWORD,kgstaticdlbssdlbig.tx.kugou.com
 DOMAIN-KEYWORD,this_rule_set_is_made_by_sukkaw
+DOMAIN-KEYWORD,-be-pack-sign.pglstatp-toutiao.com
 DOMAIN-WILDCARD,ads-*.tiktok.com
 DOMAIN-WILDCARD,ads-*.xhscdn.com
 DOMAIN-WILDCARD,beacons*.gvt?.com

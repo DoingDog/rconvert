@@ -1,4 +1,4 @@
-# cdn rules: 4775
+# cdn rules: 4777
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -1079,6 +1079,7 @@ DOMAIN,img.connatix.com
 DOMAIN,img.highporn.net
 DOMAIN,img.informer.com
 DOMAIN,img.javstore.net
+DOMAIN,img.jsdelivr.com
 DOMAIN,img.kbhgames.com
 DOMAIN,img.moviefap.com
 DOMAIN,img.novipnoad.ca
@@ -1317,6 +1318,7 @@ DOMAIN,crl.usertrust.com
 DOMAIN,crl3.digicert.com
 DOMAIN,crt.usertrust.com
 DOMAIN,csp.microsoft.com
+DOMAIN,data.jsdelivr.com
 DOMAIN,dh-site.b-cdn.net
 DOMAIN,divhunt.b-cdn.net
 DOMAIN,dmm-extension.com

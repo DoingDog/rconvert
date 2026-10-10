@@ -1,29 +1,29 @@
 # tg rules: 27
 payload:
-  - "DOMAIN-SUFFIX,t.me"
-  - "DOMAIN-SUFFIX,tx.me"
-  - "DOMAIN-SUFFIX,tg.dev"
-  - "DOMAIN-SUFFIX,legra.ph"
-  - "DOMAIN-SUFFIX,graph.org"
-  - "DOMAIN-SUFFIX,telega.one"
-  - "DOMAIN-SUFFIX,telegra.ph"
-  - "DOMAIN-SUFFIX,telesco.pe"
-  - "DOMAIN-SUFFIX,telegram.me"
-  - "DOMAIN-SUFFIX,tdesktop.com"
-  - "DOMAIN-SUFFIX,telegram.dog"
-  - "DOMAIN-SUFFIX,telegram.org"
-  - "DOMAIN-SUFFIX,telegram.space"
-  - "DOMAIN-SUFFIX,cdn-telegram.org"
-  - "IP-CIDR,91.108.4.0/22,no-resolve"
-  - "IP-CIDR,91.108.8.0/21,no-resolve"
-  - "IP-CIDR,91.108.16.0/21,no-resolve"
-  - "IP-CIDR,91.108.56.0/22,no-resolve"
-  - "IP-CIDR,95.161.64.0/20,no-resolve"
-  - "IP-CIDR,185.76.151.0/24,no-resolve"
-  - "IP-CIDR,91.105.192.0/23,no-resolve"
-  - "IP-CIDR,149.154.160.0/20,no-resolve"
-  - "IP-CIDR,194.221.250.50/32,no-resolve"
-  - "IP-CIDR6,2a0a:f280::/32,no-resolve"
-  - "IP-CIDR6,2001:67c:4e8::/48,no-resolve"
-  - "IP-CIDR6,2001:b28:f23c::/47,no-resolve"
-  - "IP-CIDR6,2001:b28:f23f::/48,no-resolve"
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT]\\.[mM][eE]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","t.me",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][xX]\\.[mM][eE]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","tx.me",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][gG]\\.[dD][eE][vV]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","tg.dev",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[lL][eE][gG][rR][aA]\\.[pP][hH]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","legra.ph",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[gG][rR][aA][pP][hH]\\.[oO][rR][gG]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","graph.org",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][eE][lL][eE][gG][aA]\\.[oO][nN][eE]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","telega.one",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][eE][lL][eE][gG][rR][aA]\\.[pP][hH]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","telegra.ph",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][eE][lL][eE][sS][cC][oO]\\.[pP][eE]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","telesco.pe",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][eE][lL][eE][gG][rR][aA][mM]\\.[mM][eE]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","telegram.me",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][dD][eE][sS][kK][tT][oO][pP]\\.[cC][oO][mM]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","tdesktop.com",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][eE][lL][eE][gG][rR][aA][mM]\\.[dD][oO][gG]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","telegram.dog",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][eE][lL][eE][gG][rR][aA][mM]\\.[oO][rR][gG]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","telegram.org",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[tT][eE][lL][eE][gG][rR][aA][mM]\\.[sS][pP][aA][cC][eE]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","telegram.space",[],false,false,false,"surge"]]
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)[cC][dD][nN]\\-[tT][eE][lL][eE][gG][rR][aA][mM]\\.[oO][rR][gG]\\.?\\z)" # rconvert-rule-v1 [["DOMAIN-SUFFIX","cdn-telegram.org",[],false,false,false,"surge"]]
+  - "IP-CIDR,91.108.4.0/22,no-resolve" # rconvert-rule-v1 [["IP-CIDR","91.108.4.0/22",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,91.108.8.0/21,no-resolve" # rconvert-rule-v1 [["IP-CIDR","91.108.8.0/21",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,91.108.16.0/21,no-resolve" # rconvert-rule-v1 [["IP-CIDR","91.108.16.0/21",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,91.108.56.0/22,no-resolve" # rconvert-rule-v1 [["IP-CIDR","91.108.56.0/22",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,95.161.64.0/20,no-resolve" # rconvert-rule-v1 [["IP-CIDR","95.161.64.0/20",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,185.76.151.0/24,no-resolve" # rconvert-rule-v1 [["IP-CIDR","185.76.151.0/24",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,91.105.192.0/23,no-resolve" # rconvert-rule-v1 [["IP-CIDR","91.105.192.0/23",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,149.154.160.0/20,no-resolve" # rconvert-rule-v1 [["IP-CIDR","149.154.160.0/20",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR,194.221.250.50/32,no-resolve" # rconvert-rule-v1 [["IP-CIDR","194.221.250.50/32",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR6,2a0a:f280::/32,no-resolve" # rconvert-rule-v1 [["IP-CIDR6","2a0a:f280::/32",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR6,2001:67c:4e8::/48,no-resolve" # rconvert-rule-v1 [["IP-CIDR6","2001:67c:4e8::/48",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR6,2001:b28:f23c::/47,no-resolve" # rconvert-rule-v1 [["IP-CIDR6","2001:b28:f23c::/47",["no-resolve"],false,false,false,"surge"]]
+  - "IP-CIDR6,2001:b28:f23f::/48,no-resolve" # rconvert-rule-v1 [["IP-CIDR6","2001:b28:f23f::/48",["no-resolve"],false,false,false,"surge"]]
