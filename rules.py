@@ -535,8 +535,10 @@ def _valid_domain(kind: str, value: str) -> bool:
 def _valid_deep_regex(probe: str) -> bool:
     # 逐层验证普通组，再以空组原子替换已验证内容，保留父组的量词与分支语法。
     groups, escaped, in_class, class_first = [[]], False, False, False
-    class_start = 0
+    class_start = skip_until = 0
     for index, char in enumerate(probe):
+        if index < skip_until:
+            continue
         if escaped:
             groups[-1].extend(('\\', char))
             escaped = False
@@ -558,6 +560,10 @@ def _valid_deep_regex(probe: str) -> bool:
             if char != '^' or index != class_start + 1:
                 class_first = False
         elif char == '(':
+            if probe.startswith('(?#)', index):
+                groups[-1].append('(?#)')
+                skip_until = index + 4
+                continue
             if probe[index + 1:index + 2] == '?':
                 return False
             groups.append([])
@@ -610,21 +616,21 @@ def _valid_regex(kind: str, value: str) -> bool:
     class_start, class_probe, classes = 0, 0, []
     extended_stack, conditionals, references = [], [], []
     captures, explicit_capture, capture_slots = 0, False, {0}
-    conditional_head = False
+    conditional_head = after_options = False
+    quantifier_probe = 0
     while index < len(value) and kind != "URL-REGEX":
         char = value[index]
         if not in_class and value.startswith("(?#", index):
             end = value.find(")", index + 3)
             if end < 0:
                 return False
-            probe.append("(?#)")
+            probe.append('(?#)')
             index = end + 1
-            quantified = False
             continue
         if char == "\\":
             if index + 1 == len(value):
                 return False
-            quantified = False
+            quantified = after_options = False
             escape = value[index + 1]
             if in_class:
                 class_first = class_hyphen = False
@@ -724,21 +730,36 @@ def _valid_regex(kind: str, value: str) -> bool:
                 class_atom, range_from_literal = ("escaped_hyphen" if escape == "-" else "literal"), False
             index += 2
             continue
-        if extended and not in_class and char.isspace():
+        if extended and not in_class and char in ' \t\n\r\v\f':
+            probe.append('(?#)')
             index += 1
             continue
         if extended and not in_class and char == "#":
-            break
+            end = value.find('\n', index)
+            probe.append('(?#)')
+            index = len(value) if end < 0 else end + 1
+            continue
         if not in_class and char == "{":
             count = re.match(r"\{[0-9]+(?:,[0-9]*)?\}", value[index:])
             if count is not None:
+                if after_options:
+                    return False
+                quantifier_probe = len(probe)
                 probe.append(count[0])
                 index += len(count[0])
                 quantified = True
                 continue
-        if not in_class and char == "+" and quantified:
+        if not in_class and (char == "+" and quantified or after_options and char in "*+?"):
             return False
+        if not in_class and char == '?' and quantified:
+            # regexp2 在量词与 lazy modifier 之间允许 comment 和 x-mode 空白。
+            probe[quantifier_probe] += '?'
+            index += 1
+            continue
+        after_options = False
         quantified = not in_class and char in "*+?"
+        if quantified:
+            quantifier_probe = len(probe)
         if not in_class and char == "(":
             if value.startswith(('(?(?=', '(?(?!', '(?(?<=', '(?(?<!'), index):
                 extended_stack.append((extended, explicit_capture))
@@ -773,12 +794,9 @@ def _valid_regex(kind: str, value: str) -> bool:
             flags = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?\)", value[index:])
             if flags is not None and (flags[1] or flags[2]):
                 extended = (extended or "x" in flags[1]) and not (flags[2] and "x" in flags[2])
-                following = value[index + len(flags[0]):]
-                if extended:
-                    following = following.lstrip()
-                if following.startswith(("*", "+", "?")) or re.match(r"\{[0-9]+(?:,[0-9]*)?\}", following):
-                    return False
-                probe.append(f"(?{flags[1]}{'-' + flags[2] if flags[2] else ''}:)")
+                # comment marker 保留词法边界；global options 不提供量词对象。
+                probe.append('(?#)')
+                after_options = True
                 index += len(flags[0])
                 continue
             scoped = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?:", value[index:])

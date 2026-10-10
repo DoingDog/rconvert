@@ -4832,6 +4832,205 @@ class NormalizeTests(unittest.TestCase):
         ])
 
 
+class RegexValidatorRuleTests(unittest.TestCase):
+    boundary_cases = (
+        (r'^\x(?#note)41$', False),
+        (r'^\u(?#note)0041$', False),
+        (r'^\x(?i)41$', False),
+        (r'^\x4(?#note)1$', False),
+        (r'^a{2,(?#note)1}$', True),
+        (r'^a{2,(?i)1}$', True),
+        (r'^a{2(?#note),1}$', True),
+        (r'^a{2(?i),1}$', True),
+        (r'^\x41$', True),
+        (r'^a(?#note)+$', True),
+        (r'^a*(?#note)?$', True),
+        (r'^a{1,2}(?#note)?$', True),
+        (r'^((?#note)?=a)$', False),
+        (r'(?x)^\x4 1$', False),
+        ('(?x)^\\u00# note\n41$', False),
+        ('(?x)^a{2,\t1}$', True),
+        ('(?x)^a{2,# note\n1}$', True),
+        (r'(?x)^( ? :a)$', False),
+        (r'(?x)^a* ?$', True),
+        ('(?x)^a*# note\n?$', True),
+    )
+    cases = (
+        ('(?x)^ads # note\n[', False),
+        ('(?x)^ads # note\n[.]example[.]org$', True),
+        ('(?x:^ads # note\n[.]example[.]org$)', True),
+        ('(?x)^ads # note[', True),
+        (r'(?x)^ads # note\n[', True),
+        ('(?-x)^ads # note\n[', False),
+        ('(?x)\u00a0+', True),
+        (r'(?x)\u00a0+', True),
+        ('(?-x)\u00a0+', True),
+        ('(?x:\u00a0+)', True),
+        ('(?x)\u2003+', True),
+        ('(?x)\u001c+', True),
+        ('(?x) +', False),
+        ('(?x)\t+', False),
+        ('(?x)a +', True),
+        ('(?i)(?#note)+a', False),
+        ('(?i)(?#note)a+', True),
+        ('(?i)+a', False),
+        ('(?#note)+a', False),
+        ('(?i:)(?#note)+a', True),
+        ('(?x)foo# note\n(', False),
+        ('(?x)(?i)# ignored\n+', False),
+        ('(?x)ads# ignored\n+', True),
+        ('(?x)^ads # note\n\\q', False),
+        ('a(?i)(?#note)+', False),
+        ('a+(?i)(?#note)?', False),
+        ('a(?#note)+', True),
+        ('(?i)(?:a)(?#note)+', True),
+        ('(?i)(?#note)(?:a)+', True),
+        ('(?x)a(?-x) +', True),
+        ('(?x:a # note\n)+', True),
+        (r'(?x)\#(?#note)+', True),
+        ('(?x)[ #]+', True),
+        ('(?x:\u2003+)', True),
+        ('(?x:\u001c+)', True),
+        ('(?x)[\u001c]+', True),
+        ('(?x)\u00a0(?i)+', False),
+        ('(?m)(?#note)+', False),
+        ('(?s)(?#note)+', False),
+        ('(?-i)(?#note)+', False),
+        ('(?x)(?#note)+', False),
+    ) + boundary_cases
+    kinds = ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX')
+
+    def test_native_complete_matcher_and_neighbor_follow_fixed_regexp2_syntax(self):
+        import json
+
+        neighbor = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
+        for purpose in ('block', 'direct', 'proxy'):
+            for value, valid in self.cases:
+                for kind in self.kinds:
+                    for logical in (False, True):
+                        expression = f'(({kind},{value}),(NETWORK,tcp))'
+                        matcher = f'AND,{expression}' if logical else f'{kind},{value}'
+                        document = 'payload:\n  - ' + json.dumps(matcher) + '\n  - DOMAIN,keep.example.org\n'
+                        expected = Rule('AND', expression, native_fields=True) if logical else Rule(kind, value)
+                        warning = (f'line 2: invalid logical expression {expression}' if logical else
+                                   f'line 2: invalid {kind} {value}')
+                        with self.subTest(purpose=purpose, value=value, kind=kind, logical=logical):
+                            self.assertEqual(rules._valid_regex(kind, value), valid)
+                            self.assertEqual(parse(document, purpose=purpose),
+                                             ([expected, neighbor], []) if valid else ([neighbor], [warning]))
+
+    def test_ordinary_quoted_top_and_three_operators_keep_complete_scope(self):
+        for value, valid in self.cases:
+            if '\n' in value:
+                continue
+            for kind in self.kinds:
+                for operator in ('top', 'AND', 'OR', 'NOT'):
+                    leaf = f'({kind},{_quote_matcher(value)})'
+                    expression = f'({leaf})' if operator == 'NOT' else f'({leaf},(NETWORK,tcp))'
+                    matcher = f'{kind},{_quote_matcher(value)}' if operator == 'top' else f'{operator},{expression}'
+                    expected = Rule(kind, value) if operator == 'top' else Rule(operator, expression)
+                    warning = (f'line 1: invalid {kind} {value}' if operator == 'top' else
+                               f'line 1: invalid logical expression {expression}')
+                    with self.subTest(value=value, kind=kind, operator=operator):
+                        self.assertEqual(parse(matcher + ',PROXY\nDOMAIN,keep.example.org,PROXY', purpose='proxy'),
+                                         ([expected, Rule('DOMAIN', 'keep.example.org')], []) if valid else
+                                         ([Rule('DOMAIN', 'keep.example.org')], [warning]))
+
+    def test_generated_seven_fields_reject_invalid_state_before_payload_binding(self):
+        for value, valid in self.cases:
+            for kind in self.kinds:
+                for logical in (False, True):
+                    expression = f'(({kind},{value}),(NETWORK,tcp))'
+                    record = ['AND', expression, [], False, False, True, 'surge'] if logical else [kind, value, [], False, False, False, 'surge']
+                    payload = f'AND,{expression}' if logical else f'{kind},{value}'
+                    document = GeneratedDeclarationValidationTests.document(payload, [record])
+                    with self.subTest(value=value, kind=kind, logical=logical):
+                        if valid:
+                            self.assertEqual(parse(document, purpose='block'),
+                                             ([Rule(record[0], record[1], native_fields=logical)], []))
+                        else:
+                            with self.assertRaisesRegex(rules.GeneratedRuleError, 'line 2: invalid generated public state'):
+                                parse(document, purpose='block')
+
+    def test_domain_regex_whitelist_keeps_valid_literals_and_warns_on_invalid_neighbors(self):
+        import json
+
+        for value, valid in self.cases:
+            document = 'payload:\n  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n  - DOMAIN,keep.example.org\n'
+            with self.subTest(value=value), warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter('always')
+                selected = rules.parse_whitelist(document)
+                self.assertEqual(selected, ([Rule('DOMAIN-REGEX', value)] if valid else []) +
+                                 [Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')])
+                self.assertEqual([str(item.message) for item in caught],
+                                 [] if valid else [f'line 2: invalid DOMAIN-REGEX {value}'])
+
+    def test_native_three_operators_and_strict_restore_keep_the_same_leaf_validity(self):
+        import json
+        from formats import render
+
+        for value, valid in (('(?x) +', True), ('(?x:^ads # note\n[.]example[.]org$)', True),
+                             ('(?i)(?#note)a+', True), ('(?x)foo# note\n[', False),
+                             ('(?i)(?#note)+a', False)) + self.boundary_cases:
+            for kind in self.kinds:
+                for operator in ('AND', 'OR', 'NOT'):
+                    expression = f'(({kind},{value}))' if operator == 'NOT' else f'(({kind},{value}),(NETWORK,tcp))'
+                    source = 'payload:\n  - ' + json.dumps(operator + ',' + expression) + '\n  - DOMAIN,keep.example.org\n'
+                    expected = ([Rule(operator, expression, native_fields=True)] if valid else []) + [Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')]
+                    with self.subTest(value=value, kind=kind, operator=operator):
+                        parsed, messages = parse(source, purpose='proxy')
+                        self.assertEqual(parsed, expected)
+                        self.assertEqual(messages, [] if valid else [f'line 2: invalid logical expression {expression}'])
+                        output, _ = render('regex', parsed, purpose='proxy', no_resolve='keep')
+                        self.assertEqual(set(parse(output['fin.yaml'], purpose='proxy')[0]), set(expected))
+                        self.assertEqual(parse(output['fin.yaml'], purpose='proxy')[1], [])
+
+    def test_comment_boundaries_preserve_deep_capture_quantifiers_and_reject_hex_fragments(self):
+        script = r'''
+import json
+import sys
+from formats import render
+from rules import Rule, parse
+assert sys.getrecursionlimit() == 1000
+for depth in (600, 1000):
+    for kind in ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX'):
+        for atom, valid in ((r'a(?#note)*?', True), (r'\x(?#note)41', False)):
+            value = '^' + '(' * depth + atom + ')' * depth + '$'
+            source = 'payload:\n  - ' + json.dumps(kind + ',' + value) + '\n  - DOMAIN,keep.example.org\n'
+            neighbor = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
+            expected = ([Rule(kind, value)] if valid else []) + [neighbor]
+            parsed, warnings = parse(source, purpose='proxy')
+            assert parsed == expected, (depth, kind, atom, parsed)
+            assert warnings == ([] if valid else [f'line 2: invalid {kind} {value}'])
+            output, skipped = render('regex', parsed, purpose='proxy', no_resolve='keep')
+            restored, messages = parse(output['fin.yaml'], purpose='proxy')
+            assert set(restored) == set(expected) and messages == []
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', script], capture_output=True,
+                                text=True, timeout=8, cwd=Path(__file__).resolve().parents[1])
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_ascii_x_whitespace_cannot_supply_an_atom_and_classes_keep_literals(self):
+        import json
+
+        for whitespace in ' \t\n\r\v\f':
+            for kind in self.kinds:
+                for value, valid in ((f'(?x){whitespace}+', False), (f'(?x:a{whitespace}+)', True),
+                                     (f'(?x)[{whitespace}]+', True), (f'(?-x){whitespace}+', True)):
+                    with self.subTest(whitespace=whitespace, kind=kind, value=value):
+                        document = 'payload:\n  - ' + json.dumps(kind + ',' + value) + '\n  - DOMAIN,keep.example.org\n'
+                        expected = ([Rule(kind, value)] if valid else []) + [Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')]
+                        self.assertEqual(parse(document, purpose='proxy'),
+                                         (expected, [] if valid else [f'line 2: invalid {kind} {value}']))
+
+    def test_url_regex_keeps_its_independent_python_validation(self):
+        for value, valid in (('(?x)^ads # note\n[', False),
+                             ('(?x:^ads # note\n[.]example[.]org$)', True),
+                             ('(?x)\u00a0+', True), ('(?i)(?#note)+a', False)):
+            with self.subTest(value=value):
+                self.assertEqual(rules._valid_regex('URL-REGEX', value), valid)
+
+
 class GeneratedDeclarationValidationTests(unittest.TestCase):
     @staticmethod
     def document(payload='DOMAIN,keep.example.org', records='default', version='v1'):

@@ -871,6 +871,111 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
 
+class RegexValidatorGenerateTests(unittest.TestCase):
+    def test_regex_six_products_publish_same_round_and_disk_for_all_modes(self):
+        from rules import Rule, parse
+        from tests.test_formats import RegexValidatorFormatTests
+        from tests.test_rules import RegexValidatorRuleTests
+
+        cases = (('(?x) +', True), ('(?x:^ads # note\n[.]example[.]org$)', True),
+                 ('(?i)(?#note)a+', True), ('(?x)foo# note\n[', False),
+                 ('(?x)(?i)# ignored\n+', False), ('(?i)(?#note)+a', False)) + RegexValidatorRuleTests.boundary_cases[:8]
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for kind in RegexValidatorRuleTests.kinds:
+                    for value, valid in cases:
+                        with self.subTest(purpose=purpose, mode=mode, kind=kind, value=value), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                            root = Path(directory)
+                            initial = '' if mode == 'add' else ',no-resolve'
+                            flag = '' if mode == 'strip' else ',no-resolve'
+                            expression = f'(({kind},{value}),(IP-CIDR,192.0.2.0/24{initial}),(SRC-IP-CIDR,198.51.100.0/24))'
+                            wanted = f'(({kind},{value}),(IP-CIDR,192.0.2.0/24{flag}),(SRC-IP-CIDR,198.51.100.0/24))'
+                            configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['input.yaml'] if group == 'parent' else ['parent/fin.yaml'],
+                                        'whitelist': []} for group in ('parent', 'child')]
+                            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                            source = ('payload:\n  - ' + json.dumps('AND,' + expression) +
+                                      '\n  - DOMAIN-REGEX,*bad\n  - DOMAIN,keep.example.com\n')
+                            (root / 'input.yaml').write_text(source, encoding='utf-8')
+                            old = {}
+                            for group in ('parent', 'child'):
+                                (root / group).mkdir()
+                                for name in NAMES:
+                                    path = root / group / name
+                                    old[path] = b'old complete\x00\xff\r\n' + name.encode('ascii')
+                                    path.write_bytes(old[path])
+                            matchers = (['AND,' + wanted] if valid else []) + ['DOMAIN,keep.example.com']
+                            expected = {root / group / name: text for group in ('parent', 'child')
+                                        for name, text in RegexValidatorFormatTests.products(group, matchers, purpose).items()}
+                            skips = {name + ':AND': 1 for name in
+                                     ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')} if valid else {}
+                            if purpose != 'block':
+                                skips['fin-adb.txt:DOMAIN'] = 1
+                            warnings = ([] if valid else [f'{root / "input.yaml"}: line 2: invalid logical expression {expression}'])
+                            warnings += [f'{root / "input.yaml"}: line 3: invalid DOMAIN-REGEX *bad']
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                                outputs = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(outputs, expected)
+                            self.assertEqual(list(outputs), list(expected))
+                            self.assertEqual(stderr.getvalue(), ''.join(message + '\n' for message in warnings +
+                                             [f'{group} {key}: {count}' for group in ('parent', 'child') for key, count in sorted(skips.items())]))
+                            public = ([Rule('AND', wanted, native_fields=True)] if valid else []) + [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')]
+                            for group in ('parent', 'child'):
+                                self.assertEqual(parse(outputs[root / group / 'fin.yaml'], purpose=purpose), (public, []))
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            publish(outputs)
+                            published = {path: text.encode('utf-8') for path, text in expected.items()}
+                            self.assertEqual({path: path.read_bytes() for path in old}, published)
+                            (root / 'input.yaml').unlink()
+                            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
+                                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                                disk = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent.name == 'child'})
+                            self.assertEqual(stderr.getvalue().splitlines(), [f'child {key}: {count}' for key, count in sorted(skips.items())])
+                            self.assertEqual({path: path.read_bytes() for path in old}, published)
+                            publish(disk)
+                            self.assertEqual({path: path.read_bytes() for path in old}, published)
+
+    def test_marked_local_and_remote_bytes_source_white_validate_complete_state(self):
+        from rules import GeneratedRuleError, Rule, parse
+        from tests.test_rules import GeneratedDeclarationValidationTests, RegexValidatorRuleTests
+
+        cases = (('(?x) +', True), ('(?x:^ads # note\n[.]example[.]org$)', True),
+                 ('(?i)(?#note)a+', True), ('(?x)^ads # note\n\\q', False),
+                 ('(?x)(?i)# ignored\n+', False), ('(?i)(?#note)+a', False)) + RegexValidatorRuleTests.boundary_cases[:8]
+        for value, valid in cases:
+            document = GeneratedDeclarationValidationTests.document('DOMAIN-REGEX,' + value,
+                         [['DOMAIN-REGEX', value, [], False, False, False, 'surge']])
+            for remote in (False, True):
+                for white in (False, True):
+                    with self.subTest(value=value, remote=remote, white=white), tempfile.TemporaryDirectory(dir=ROOT) as directory:
+                        root = Path(directory)
+                        entry = 'https://example.org/marked.yaml' if remote else 'marked.yaml'
+                        (root / 'marked.yaml').write_text(document, encoding='utf-8')
+                        (root / 'input.yaml').write_text('payload:\n  - DOMAIN,keep.example.com\n', encoding='utf-8')
+                        configs = [{'name': 'child', 'purpose': 'block', 'no_resolve': 'keep',
+                                    'sources': ['input.yaml'] if white else [entry], 'whitelist': [entry] if white else []}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        (root / 'child').mkdir()
+                        old = {root / 'child' / name: b'old marked\x00\xff\r\n' for name in NAMES}
+                        for path, data in old.items():
+                            path.write_bytes(data)
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            if valid:
+                                outputs = generate(root, lambda url: document.encode('utf-8') if url == entry else self.fail(url))
+                                expected = [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')] if white else [Rule('DOMAIN-REGEX', value)]
+                                self.assertEqual(parse(outputs[root / 'child' / 'fin.yaml'], purpose='block'), (expected, []))
+                                self.assertNotIn('invalid whitelist', stderr.getvalue())
+                                self.assertNotIn('invalid generated', stderr.getvalue())
+                            else:
+                                with self.assertRaisesRegex(GeneratedRuleError, 'invalid generated public state'):
+                                    generate(root, lambda url: document.encode('utf-8') if url == entry else self.fail(url))
+                                self.assertEqual(stderr.getvalue(), '')
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+
+
 class NativeKeywordGenerateTests(unittest.TestCase):
     def test_no_resolve_runs_once_before_normalize_and_preserves_real_products(self):
         import rules

@@ -1567,6 +1567,87 @@ class SourceFieldContinuationFormatTests(unittest.TestCase):
             self.assertEqual(parse_whitelist("ignored"), [Rule("IP-CIDR", "192.0.2.0/24", native_fields=True)])
 
 
+class RegexValidatorFormatTests(unittest.TestCase):
+    @staticmethod
+    def products(group, matchers, purpose):
+        products = native_arity_products(group, matchers, purpose, domain_source='mihomo')
+        lines = products['fin.yaml'].split('\n')
+        for index, line in enumerate(lines):
+            if line.startswith('  - '):
+                payload, end = json.JSONDecoder().raw_decode(line[4:])
+                lines[index] = '  - ' + json.dumps(payload, ensure_ascii=False) + line[4 + end:]
+        products['fin.yaml'] = '\n'.join(lines)
+        return products
+
+    def test_validated_matchers_keep_six_texts_and_invalid_neighbors_never_reach_outputs(self):
+        from rules import parse
+        from tests.test_rules import RegexValidatorRuleTests
+
+        for value, valid in RegexValidatorRuleTests.cases:
+            for kind in RegexValidatorRuleTests.kinds:
+                for logical in (False, True):
+                    expression = f'(({kind},{value}),(NETWORK,tcp))'
+                    matcher = f'AND,{expression}' if logical else f'{kind},{value}'
+                    source = 'payload:\n  - ' + json.dumps(matcher) + '\n  - DOMAIN,keep.example.com\n'
+                    for purpose in ('block', 'direct', 'proxy'):
+                        with self.subTest(value=value, kind=kind, logical=logical, purpose=purpose):
+                            parsed, messages = parse(source, purpose=purpose)
+                            matchers = ([matcher] if valid and logical else []) + ['DOMAIN,keep.example.com'] + ([matcher] if valid and not logical else [])
+                            with patch('formats.datetime') as clock:
+                                clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                                out, skipped = render_configured('regex', parsed, purpose=purpose, no_resolve='keep')
+                            self.assertEqual(out, self.products('regex', matchers, purpose))
+                            self.assertEqual(parse(out['fin.yaml'], purpose=purpose),
+                                             ([parsed[1], parsed[0]], []) if valid and not logical else (parsed, []))
+                            expected_skips = {name + ':' + ('AND' if logical else kind): 1 for name in
+                                              ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')} if valid else {}
+                            if purpose != 'block':
+                                expected_skips['fin-adb.txt:DOMAIN'] = 1
+                            self.assertEqual(skipped, expected_skips)
+                            self.assertEqual(len(messages), int(not valid))
+
+    def test_non_ascii_x_literals_preserve_destination_ip_flags_and_source_direction(self):
+        from rules import _apply_no_resolve, parse
+        from tests.test_rules import RegexValidatorRuleTests
+
+        for kind in RegexValidatorRuleTests.kinds:
+            for value in ('(?x)\u00a0+', '(?x:\u2003+)', '(?x:\u001c+)', '(?x:ads # note\n[.]example[.]org$)',
+                          *[value for value, valid in RegexValidatorRuleTests.boundary_cases if valid]):
+                for flagged in (False, True):
+                    initial_flag = ',no-resolve' if flagged else ''
+                    expression = f'(({kind},{value}),(IP-CIDR,192.0.2.0/24{initial_flag}),(SRC-IP-CIDR,198.51.100.0/24))'
+                    original = Rule('AND', expression, native_fields=True)
+                    for mode in ('add', 'strip', 'keep'):
+                        flag = ',no-resolve' if mode == 'add' or mode == 'keep' and flagged else ''
+                        wanted = Rule('AND', f'(({kind},{value}),(IP-CIDR,192.0.2.0/24{flag}),(SRC-IP-CIDR,198.51.100.0/24))', native_fields=True)
+                        with self.subTest(kind=kind, value=value, flagged=flagged, mode=mode):
+                            self.assertEqual(_apply_no_resolve(original, mode), wanted)
+                            out, skipped = render_configured('regex', [original], purpose='proxy', no_resolve=mode)
+                            self.assertEqual(generated_payload(out['fin.yaml'].split('\n')[2][4:]), f'AND,{wanted.value}')
+                            self.assertEqual(parse(out['fin.yaml'], purpose='proxy'), ([wanted], []))
+                            self.assertEqual(skipped, {name + ':AND': 1 for name in
+                                             ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+
+    def test_allow_and_white_keep_target_local_boundaries(self):
+        from rules import parse_whitelist
+
+        for value in ('(?x)\u00a0+', '(?x:ads # note\n[.]example[.]org$)', '(?i)(?#note)a+'):
+            white = parse_whitelist('payload:\n  - ' + json.dumps('DOMAIN-REGEX,' + value))
+            for purpose in ('block', 'direct', 'proxy'):
+                with self.subTest(value=value, purpose=purpose):
+                    with patch('formats.datetime') as clock:
+                        clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                        out, skipped = render_configured('regex', [Rule('DOMAIN-REGEX', value, allow=True)],
+                                                         purpose=purpose, no_resolve='add', whitelist=white)
+                    self.assertEqual(out, native_arity_products('regex', [], purpose).copy() | {
+                        'fin.txt': '# regex rules: 0\n', 'fin-qx.txt': '# regex rules: 0\n',
+                        'fin-surge-ds.txt': '# regex rules: 0\n',
+                        'fin-adb.txt': native_arity_products('regex', [], purpose)['fin-adb.txt'].replace(
+                            '! Total count: 1\n0.0.0.0 keep.example.com\n', '! Total count: 0\n')})
+                    self.assertEqual(skipped, {name + ':DOMAIN-REGEX': 1 + int(name == 'fin-adb.txt' and purpose == 'block')
+                                              for name in ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+
+
 class DnsDeepRegexFormatTests(unittest.TestCase):
     def _check_callers(self, depth, *, prefix='(', atom='audit[.]example[.]test', suffix=')',
                        dns_prefix='(?:', dns_supported=True, parse_source=True):
