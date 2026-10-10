@@ -1,4 +1,4 @@
-# dirt rules: 56717
+# dirt rules: 56714
 HOST,dot.pub,LIST
 HOST,i.dell.com,LIST
 HOST,viayoo.com,LIST
@@ -68,7 +68,6 @@ HOST-KEYWORD,westlawchina,LIST
 HOST-KEYWORD,sciencedirect,LIST
 HOST-KEYWORD,sleep.pokemon,LIST
 HOST-SUFFIX,cn,LIST
-HOST-SUFFIX,ms,LIST
 HOST-SUFFIX,m2m,LIST
 HOST-SUFFIX,1.cn,LIST
 HOST-SUFFIX,3.cn,LIST
@@ -3760,7 +3759,6 @@ HOST-SUFFIX,lmb.pink,LIST
 HOST-SUFFIX,lmln.net,LIST
 HOST-SUFFIX,lncld.cn,LIST
 HOST-SUFFIX,lnk0.com,LIST
-HOST-SUFFIX,loli.net,LIST
 HOST-SUFFIX,loock.cc,LIST
 HOST-SUFFIX,loock.cn,LIST
 HOST-SUFFIX,lovev.cn,LIST
@@ -15719,7 +15717,6 @@ HOST-SUFFIX,tpi.net.cn,LIST
 HOST-SUFFIX,tplife.com,LIST
 HOST-SUFFIX,tplife.net,LIST
 HOST-SUFFIX,tplizi.com,LIST
-HOST-SUFFIX,tplogin.cn,LIST
 HOST-SUFFIX,tqle0r.com,LIST
 HOST-SUFFIX,tqzhibo.cn,LIST
 HOST-SUFFIX,tracup.com,LIST
