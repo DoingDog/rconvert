@@ -328,6 +328,7 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
         values = (*DOMAIN_SET_LABELS, "keep.example.org")
         source = "".join(f"DOMAIN,{value.upper()}.\n" for value in values)
         routes = source + "DOMAIN,child.localhost\nDOMAIN-SUFFIX,localhost\nDOMAIN,retained.example.net\n"
+        domain_set_source = "parent/FIN-SURGE-DS.TXT" if os.name == "nt" else "parent/fin-surge-ds.txt"
         for purpose in ("block", "direct", "proxy"):
             for mode in ("keep", "add", "strip"):
                 with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -335,9 +336,9 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                     configs = [{"name": "parent", "purpose": purpose, "no_resolve": mode,
                                 "sources": ["original.list"], "whitelist": []},
                                {"name": "source", "purpose": purpose, "no_resolve": mode,
-                                "sources": ["parent/FIN-SURGE-DS.TXT"], "whitelist": []},
+                                "sources": [domain_set_source], "whitelist": []},
                                {"name": "white", "purpose": purpose, "no_resolve": mode,
-                                "sources": ["routes.list"], "whitelist": ["parent/FIN-SURGE-DS.TXT"]},
+                                "sources": ["routes.list"], "whitelist": [domain_set_source]},
                                {"name": "yaml-source", "purpose": purpose, "no_resolve": mode,
                                 "sources": ["parent/fin.yaml"], "whitelist": []},
                                {"name": "yaml-white", "purpose": purpose, "no_resolve": mode,
