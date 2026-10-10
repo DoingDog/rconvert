@@ -118,7 +118,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 raise ValueError(f"Output path collision: {paths[resolved]} and {path}"
                                  f" resolve to {resolved}")
             paths[resolved] = path
-    generated = {root / config["name"] / name for config in configs for name in FILES}
+    generated = set(paths)
     outputs: dict[Path, str] = {}
     cache: dict[str, bytes | None] = {}
     frozen: set[Path] = set()
@@ -128,7 +128,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             path = root / group / name
             if not path.is_file() or not path.stat().st_size:
                 raise ValueError(f"Cannot freeze {group}: missing complete old file {path}")
-        frozen.add((root / group).resolve())
+        frozen.update((root / group / name).resolve() for name in FILES)
 
     def read(source: str | Path) -> str | None:
         if isinstance(source, Path):
@@ -173,6 +173,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             raise UnicodeError(f"Invalid UTF-8 in {source}: {exc}") from exc
 
     def generated_body(source: Path, text: str) -> tuple[int, list[str]]:
+        source = paths[source]
         adblock = source == source.with_name("fin-adb.txt")
         header = 7 if adblock else 2 if source == source.with_name("fin.yaml") else 1
         body = text.splitlines()[header:]
@@ -205,7 +206,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     for config in configs:
         group, purpose, no_resolve = config["name"], config["purpose"], config["no_resolve"]
         if any(isinstance(source := resolve_source(root, entry), Path) and
-               source in generated and source.parent in frozen
+               source in frozen
                for entry in config["sources"] + config["whitelist"]):
             freeze(group)
             continue
@@ -261,7 +262,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 selected = parse_whitelist(text, domain_set=is_domain_set(source))
                 if generated_whitelist and len(selected) != len(parsed_whitelist):
                     for number, line in enumerate(body, header + 1):
-                        snippet = ("payload:\n" if source == source.with_name("fin.yaml") else "") + line
+                        snippet = ("payload:\n" if paths[source] == paths[source].with_name("fin.yaml") else "") + line
                         try:
                             supported = parse_whitelist(snippet, domain_set=is_domain_set(source))
                         except GeneratedRuleError as exc:
@@ -299,7 +300,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             continue
         for key, count in sorted(skipped.items()):
             print(f"{group} {key}: {count}", file=sys.stderr)
-        outputs.update({root / group / name: text for name, text in rendered.items()})
+        outputs.update({(root / group / name).resolve(): text for name, text in rendered.items()})
     return outputs
 
 
