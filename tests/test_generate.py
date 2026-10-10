@@ -4950,7 +4950,7 @@ class GenerateTests(unittest.TestCase):
                 for group in ("cdn", "big-data", "archive") for name in NAMES
             ))
 
-    def _assert_r25_publication(self, root, outputs, previous, groups, purpose, mode, before, after):
+    def _assert_r25_publication(self, root, outputs, previous, groups, purpose, mode, before, after, *, native_groups=()):
         expected = {}
         for group, empty in groups:
             version = outputs[root / group / "fin-adb.txt"].splitlines()[5]
@@ -4959,8 +4959,10 @@ class GenerateTests(unittest.TestCase):
                 tzinfo=timezone(timedelta(hours=8)))
             self.assertLessEqual(before.replace(second=0, microsecond=0), stamp)
             self.assertLessEqual(stamp, after.replace(second=0, microsecond=0))
-            expected.update({root / group / name: text for name, text in
-                             r25_expected(group, purpose, mode, version, empty).items()})
+            texts = r25_expected(group, purpose, mode, version, empty)
+            if group in native_groups:
+                texts = native_domain_projection(texts, ["current.example.org"])
+            expected.update({root / group / name: text for name, text in texts.items()})
         self.assertEqual(list(outputs), list(expected))
         self.assertEqual(outputs, expected)
         self.assertEqual({path: path.read_bytes() for path in previous}, previous)
@@ -5162,6 +5164,26 @@ class GenerateTests(unittest.TestCase):
                             self.assertEqual(stderr.getvalue(), "")
                             self.assertEqual({path: path.read_bytes() for path in previous}, previous)
 
+    def test_generated_yaml_dependency_preserves_native_projection_across_modes(self):
+        staging = ROOT / ".tmp"
+        staging.mkdir(exist_ok=True)
+        for purpose in ("block", "proxy", "direct"):
+            for mode in ("add", "strip", "keep"):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory(dir=staging) as directory:
+                    root = Path(directory)
+                    configs = [{"name": group, "purpose": purpose, "no_resolve": mode,
+                                "sources": ["healthy.list" if group == "healthy" else "healthy/fin.yaml"],
+                                "whitelist": []} for group in ("healthy", "dependent")]
+                    (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
+                    (root / "healthy.list").write_text(R25_SOURCE, encoding="utf-8")
+                    previous = r25_old_files(root, ("healthy", "dependent"))
+                    before = datetime.now().astimezone()
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        outputs = generate(root, lambda url: self.fail(url))
+                    after = datetime.now().astimezone()
+                    self._assert_r25_publication(root, outputs, previous, [("healthy", False), ("dependent", False)],
+                                                 purpose, mode, before, after, native_groups=("dependent",))
+
     @unittest.skipIf(os.name == "nt", "Case-distinct freeze identities require a case-sensitive platform")
     def test_case_distinct_freeze_does_not_freeze_healthy_group_on_case_sensitive_platform(self):
         staging = ROOT / ".tmp"
@@ -5197,7 +5219,7 @@ class GenerateTests(unittest.TestCase):
                             outputs = generate(root, fetch)
                         after = datetime.now().astimezone()
                         self._assert_r25_publication(root, outputs, previous, [("cdn", False), ("dependent", False)],
-                                                     purpose, mode, before, after)
+                                                     purpose, mode, before, after, native_groups=("dependent",))
 
     def test_missing_local_whitelist_still_aborts_when_source_is_404(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
