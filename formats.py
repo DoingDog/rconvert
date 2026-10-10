@@ -7,7 +7,7 @@ from collections import Counter
 from collections.abc import Iterable
 
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _delimiters,
-                   _field_value, _fields, _logical_children, _valid_deep_regex, _valid_domain)
+                   _field_value, _fields, _has_parent, _logical_children, _valid_deep_regex, _valid_domain)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -491,6 +491,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
     lines = {name: [] for name in FILES}
     skipped = Counter()
+    mihomo_domains, mihomo_literals, mihomo_preserved = {}, [], set()
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process, item.native_fields, item.domain_source)):
         rule = _apply_no_resolve(rule, no_resolve)
         effective = rule
@@ -562,6 +563,15 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
             line = '  - ' + _yaml_value(payload)
             lines['fin.yaml'].append(line)
             emitted.add('fin.yaml')
+            if (kind in DOMAIN_SET_TYPES and rule.domain_source in {'surge', 'mihomo', 'qx'}
+                    and value.isascii() and not value.endswith('.') and _valid_domain('DOMAIN-SUFFIX', value)):
+                group_key = (rule.options, rule.allow)
+                if rule.domain_source == 'surge':
+                    mihomo_domains.setdefault((kind, group_key), set()).add(value.lower())
+                else:
+                    mihomo_literals.append((line, kind, value.lower(), group_key))
+            elif kind in DOMAIN_SET_TYPES:
+                mihomo_preserved.add(line)
         if interface_options and "fin-qx.txt" in emitted:
             skipped[f"fin-qx.txt:{kind}:interface-option"] += 1
         for name in FILES:
@@ -576,6 +586,11 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     skipped[f"fin-adb.txt:{rule.kind}"] += 1
                 else:
                     lines["fin-adb.txt"].append("@@" + (f"|{rule.value}|" if rule.kind == "DOMAIN" else pattern))
+    covered = {line for line, kind, value, group_key in mihomo_literals
+               if (kind == 'DOMAIN' and value in mihomo_domains.get(('DOMAIN', group_key), set()))
+               or _has_parent(value, mihomo_domains.get(('DOMAIN-SUFFIX', group_key), set()))}
+    lines['fin.yaml'] = [line for line in lines['fin.yaml']
+                         if line not in covered or line in mihomo_preserved]
     lines = {name: list(dict.fromkeys(body)) for name, body in lines.items()}
     for name, body in lines.items():
         if name == "fin-adb.txt":

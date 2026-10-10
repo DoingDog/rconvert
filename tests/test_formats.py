@@ -3261,14 +3261,13 @@ class NativeProjectionCollisionFormatTests(unittest.TestCase):
         native = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
         originals = [domain, domain_regex, process, process_regex, *qx, native]
         output, _ = render_configured('public', originals * 2, purpose='proxy', no_resolve='keep')
-        self.assertEqual(output['fin.yaml'].splitlines()[0], '# public rules: 3')
+        self.assertEqual(output['fin.yaml'].splitlines()[0], '# public rules: 2')
         self.assertEqual({json.loads(line[4:]) for line in output['fin.yaml'].splitlines()[2:]},
-                         {expected_domain('DOMAIN', domain.value), expected_process(process.value),
-                          'DOMAIN,keep.example.org'})
+                         {expected_domain('DOMAIN', domain.value), expected_process(process.value)})
         parsed, messages = parse(output['fin.yaml'], purpose='proxy')
         self.assertEqual(messages, [])
-        self.assertEqual(set(parsed), {native, domain_regex, process_regex})
-        self.assertEqual(len(parsed), 3)
+        self.assertEqual(set(parsed), {domain_regex, process_regex})
+        self.assertEqual(len(parsed), 2)
         repeated, _ = render_configured('public', parsed * 2, purpose='proxy', no_resolve='keep')
         self.assertEqual(repeated['fin.yaml'], output['fin.yaml'])
 
