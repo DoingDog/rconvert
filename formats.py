@@ -283,6 +283,10 @@ def _wildcard_regex(value: str) -> str | None:
     ) + "$"
 
 
+def _dns_literal(value: str) -> str:
+    return re.escape(value).replace('=', r'\x{3D}')
+
+
 def _native_wildcard_regex(value: str) -> str:
     widths = (r'[\x00-\x7f]', r'[\x{80}-\x{7ff}]',
               r'[\x{800}-\x{d7ff}\x{e000}-\x{ffff}]', r'[\x{10000}-\x{10ffff}]')
@@ -305,7 +309,7 @@ def _native_wildcard_regex(value: str) -> str:
                                 if size == 3 else widths[3]) + '.*')
         return '(?:' + '|'.join(choices) + ')' if len(choices) > 1 else choices[0]
 
-    return r'(?s-i:\A' + ''.join(span(part.count('?'), '*' in part) if index % 2 else re.escape(part)
+    return r'(?s-i:\A' + ''.join(span(part.count('?'), '*' in part) if index % 2 else _dns_literal(part)
                                 for index, part in enumerate(re.split(r'([?*]+)', value))) + r'\z)'
 
 
@@ -319,12 +323,12 @@ def _dns_pattern(rule: Rule) -> str | None:
     if rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and rule.domain_source == 'mihomo':
         value = _go_lower(rule.value)
         if rule.kind == 'DOMAIN-KEYWORD':
-            return r'/(?s-i:\A.*' + re.escape(value) + r'.*\z)/'
+            return r'/(?s-i:\A.*' + _dns_literal(value) + r'.*\z)/'
         if any(char in value for char in '[]') or not _valid_domain(rule.kind, value):
             return None
         return '/' + _native_wildcard_regex(value) + '/'
     if rule.kind == "DOMAIN-KEYWORD":
-        return f"/^.*{re.escape(rule.value)}.*$/"
+        return f"/^.*{_dns_literal(rule.value)}.*$/"
     if rule.kind == "DOMAIN-WILDCARD":
         if rule.domain_source != "surge" and any(char in rule.value for char in "[]"):
             return None
@@ -434,6 +438,8 @@ def _dns_pattern(rule: Rule) -> str | None:
                     index += len(bounds[0])
                     continue
                 repeat_groups[-1].append(1)
+            if char == "=":
+                replacements.append((index, index + 1, r"\x{3D}"))
             if char == "-" and in_class and translated[-1:] == [r"\w"]:
                 translated.append(r"\-")
             else:
