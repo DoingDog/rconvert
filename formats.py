@@ -103,6 +103,11 @@ _PROCESS_CASE_VARIANTS = re.compile(
 )
 
 
+def _go_lower(value: str) -> str:
+    # 固定 Go simple mapping；逐字符处理保留 Sigma，İ 映射为单个 i。
+    return _PROCESS_CASE_VARIANTS.sub(lambda match: 'i' if match[0] == 'İ' else match[0].lower(), value)
+
+
 def _process_value(kind: str, value: str, supported: set[str], literal_process: bool) -> tuple[str, str | None]:
     process_types = {"PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD"}
     if kind not in process_types:
@@ -306,14 +311,13 @@ def _native_wildcard_regex(value: str) -> str:
 
 def _dns_pattern(rule: Rule) -> str | None:
     if rule.kind == "DOMAIN":
-        return f"0.0.0.0 {rule.value}"
+        return f"0.0.0.0 {_go_lower(rule.value)}"
     if rule.kind == "DOMAIN-SUFFIX":
         return f"||{rule.value}^"
     if "/" in rule.value:
         return None
     if rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and rule.domain_source == 'mihomo':
-        # 复用固定 Go case 范围，逐字符 lowercase 保留 simple mapping 与 Sigma；İ 映射为一个 i。
-        value = _PROCESS_CASE_VARIANTS.sub(lambda match: 'i' if match[0] == 'İ' else match[0].lower(), rule.value)
+        value = _go_lower(rule.value)
         if rule.kind == 'DOMAIN-KEYWORD':
             return r'/(?s-i:\A.*' + re.escape(value) + r'.*\z)/'
         if any(char in value for char in '[]') or not _valid_domain(rule.kind, value):

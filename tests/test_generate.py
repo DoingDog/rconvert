@@ -6099,7 +6099,7 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
                         Rule('DOMAIN-SUFFIX', 'broad.example.net', domain_source='mihomo'),
                         Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
                         Rule('SRC-IP-CIDR', '127.0.0.1/32')]
-        dns = [r'/(?s-i:\A.*οσ.*\z)/', '||broad.example.net^', '0.0.0.0 NATIVE.EXAMPLE.ORG.']
+        dns = [r'/(?s-i:\A.*οσ.*\z)/', '||broad.example.net^', '0.0.0.0 native.example.org.']
         if child:
             payloads.pop(1)
             native_rules.pop(1)
