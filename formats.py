@@ -37,6 +37,7 @@ QX_TYPES = {
 }
 SURGE_ALIASES = {"SRC-IP-CIDR": "SRC-IP", "DST-PORT": "DEST-PORT", "PROCESS-NAME-WILDCARD": "PROCESS-NAME", "PROCESS-PATH": "PROCESS-NAME", "PROCESS-PATH-WILDCARD": "PROCESS-NAME"}
 LOGICAL = {"AND", "OR", "NOT"}
+_DNS_LINE_LIMIT = 65536
 # regexp2 类外 Unicode 原子在 Go regexp 中的等价集合。
 _DNS_UNICODE_ATOMS = {
     "d": r"\p{Nd}", "D": r"\P{Nd}",
@@ -283,52 +284,77 @@ def _wildcard_regex(value: str) -> str | None:
     ) + "$"
 
 
-def _dns_literal(value: str) -> str:
-    return re.escape(value).replace('=', r'\x{3D}')
+def _dns_join(parts: Iterable[str | None], budget: int, *, separator: str = '') -> str | None:
+    values = []
+    separator_size = len(separator.encode('utf-8'))
+    for part in parts:
+        if part is None:
+            return None
+        budget -= len(part.encode('utf-8')) + (separator_size if values else 0)
+        if budget < 0:
+            return None
+        values.append(part)
+    return separator.join(values)
 
 
-def _native_wildcard_regex(value: str) -> str:
+def _dns_literal(value: str, budget: int) -> str | None:
+    return _dns_join((re.escape(char).replace('=', r'\x{3D}') for char in value), budget)
+
+
+def _native_wildcard_regex(value: str, budget: int) -> str | None:
+    prefix, suffix = r'(?s-i:\A', r'\z)'
+    budget -= len(prefix) + len(suffix)
     widths = (r'[\x00-\x7f]', r'[\x{80}-\x{7ff}]',
               r'[\x{800}-\x{d7ff}\x{e000}-\x{ffff}]', r'[\x{10000}-\x{10ffff}]')
 
     @cache
-    def span(size: int, minimum: bool = False) -> str:
+    def span(size: int, minimum: bool = False) -> str | None:
         if not size:
-            return '.*' if minimum else ''
+            return _dns_join(('.*' if minimum else '',), budget)
         if minimum and size == 1:
-            return '.+'
+            return _dns_join(('.+',), budget)
         if size >= 8:
             # byte 中点前的最后一个 rune 边界必在这四个位置，保持完整 UTF-8 长度语言。
-            choices = [span(left) + span(size - left, minimum)
+            choices = [_dns_join((span(left), span(size - left, minimum)), budget)
                        for left in range(size // 2 - 3, size // 2 + 1)]
         else:
-            choices = [widths[width - 1] + span(size - width, minimum)
+            choices = [_dns_join((widths[width - 1], span(size - width, minimum)), budget)
                        for width in range(1, min(4, size - 1 if minimum else size) + 1)]
             if minimum and size <= 4:
-                choices.append((r'[^\x00-\x7f]' if size == 2 else r'[^\x00-\x{7ff}]'
-                                if size == 3 else widths[3]) + '.*')
-        return '(?:' + '|'.join(choices) + ')' if len(choices) > 1 else choices[0]
+                choices.append(_dns_join((r'[^\x00-\x7f]' if size == 2 else r'[^\x00-\x{7ff}]'
+                                          if size == 3 else widths[3], '.*'), budget))
+        if len(choices) == 1:
+            return choices[0]
+        body = _dns_join(choices, budget - 4, separator='|')
+        return '(?:' + body + ')' if body is not None else None
 
-    return r'(?s-i:\A' + ''.join(span(part.count('?'), '*' in part) if index % 2 else _dns_literal(part)
-                                for index, part in enumerate(re.split(r'([?*]+)', value))) + r'\z)'
+    body = _dns_join((span(part.count('?'), '*' in part) if index % 2 else _dns_literal(part, budget)
+                      for index, part in enumerate(re.split(r'([?*]+)', value))), budget)
+    return prefix + body + suffix if body is not None else None
 
 
-def _dns_pattern(rule: Rule) -> str | None:
+def _dns_pattern(rule: Rule, *, exception: bool = False) -> str | None:
+    budget = _DNS_LINE_LIMIT - 1 - (2 if exception else 0)
+    parts = ('|', rule.value, '|') if exception and rule.kind == 'DOMAIN' else (_dns_body(rule, budget),)
+    return _dns_join(parts, budget)
+
+
+def _dns_body(rule: Rule, budget: int) -> str | None:
     if rule.kind == "DOMAIN":
-        return f"0.0.0.0 {_go_lower(rule.value)}"
+        return _dns_join(('0.0.0.0 ', _go_lower(rule.value)), budget)
     if rule.kind == "DOMAIN-SUFFIX":
-        return f"||{rule.value}^"
+        return _dns_join(('||', rule.value, '^'), budget)
     if "/" in rule.value:
         return None
     if rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and rule.domain_source == 'mihomo':
         value = _go_lower(rule.value)
         if rule.kind == 'DOMAIN-KEYWORD':
-            return r'/(?s-i:\A.*' + _dns_literal(value) + r'.*\z)/'
+            return _dns_join((r'/(?s-i:\A.*', _dns_literal(value, budget), r'.*\z)/'), budget)
         if any(char in value for char in '[]') or not _valid_domain(rule.kind, value):
             return None
-        return '/' + _native_wildcard_regex(value) + '/'
+        return _dns_join(('/', _native_wildcard_regex(value, budget - 2), '/'), budget)
     if rule.kind == "DOMAIN-KEYWORD":
-        return f"/^.*{_dns_literal(rule.value)}.*$/"
+        return _dns_join(('/^.*', _dns_literal(rule.value, budget), '.*$/'), budget)
     if rule.kind == "DOMAIN-WILDCARD":
         if rule.domain_source != "surge" and any(char in rule.value for char in "[]"):
             return None
@@ -454,10 +480,13 @@ def _dns_pattern(rule: Rule) -> str | None:
             replacements.extend(capture_replacements)
         except re.error:
             return None
-        value = rule.value
-        for start, end, normalized in sorted(replacements, reverse=True):
-            value = value[:start] + normalized + value[end:]
-        return f"/{value}/"
+        parts = ['/']
+        cursor = 0
+        for start, end, normalized in sorted(replacements):
+            parts.extend((rule.value[cursor:start], normalized))
+            cursor = end
+        parts.extend((rule.value[cursor:], '/'))
+        return _dns_join(parts, budget)
     return None
 
 
@@ -509,9 +538,9 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
         logical = kind in LOGICAL
         if rule.allow:
             if not rule.options and purpose == "block" and line_safe:
-                dns_pattern = _dns_pattern(rule)
+                dns_pattern = _dns_pattern(rule, exception=True)
                 if dns_pattern is not None:
-                    lines["fin-adb.txt"].append("@@" + (f"|{value}|" if kind == "DOMAIN" else dns_pattern))
+                    lines["fin-adb.txt"].append("@@" + dns_pattern)
                     emitted.add("fin-adb.txt")
         elif rule.options:
             if rule.options == ("no-resolve",) and kind in NO_RESOLVE_TYPES:
@@ -575,11 +604,11 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
     if purpose == "block":
         for rule in sorted(whitelist, key=lambda item: (item.kind, item.value)):
             if rule.kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-KEYWORD", "DOMAIN-WILDCARD", "DOMAIN-REGEX"}:
-                pattern = _dns_pattern(rule) if _LINE_UNSAFE.search(rule.value) is None else None
+                pattern = _dns_pattern(rule, exception=True) if _LINE_UNSAFE.search(rule.value) is None else None
                 if pattern is None:
                     skipped[f"fin-adb.txt:{rule.kind}"] += 1
                 else:
-                    lines["fin-adb.txt"].append("@@" + (f"|{rule.value}|" if rule.kind == "DOMAIN" else pattern))
+                    lines["fin-adb.txt"].append("@@" + pattern)
     lines = {name: list(dict.fromkeys(body)) for name, body in lines.items()}
     for name, body in lines.items():
         if name == "fin-adb.txt":

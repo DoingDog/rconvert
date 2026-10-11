@@ -2,6 +2,9 @@ import contextlib
 import io
 import json
 from pathlib import Path
+import re
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -176,3 +179,249 @@ class DnsRegexLiteralTests(unittest.TestCase):
                     publish(out, root=root)
                     self.assertEqual({path: path.read_bytes() for path in out},
                                      {path: text.encode('utf-8') for path, text in out.items()})
+
+
+class DnsBodyBudgetTests(unittest.TestCase):
+    def test_eighteen_native_questions_skip_only_dns_and_keep_neighbor(self):
+        value = '?' * 18 + '.example.com'
+        source = Rule('DOMAIN-WILDCARD', value, domain_source='mihomo')
+        neighbor = Rule('DOMAIN', 'neighbor.example.com')
+        out, skipped = render('dns', [source, neighbor], purpose='block', no_resolve='keep')
+        sizes = [len(line.encode('utf-8')) + 1 for line in out['fin-adb.txt'].splitlines()[7:]]
+        self.assertTrue(all(size <= 65536 for size in sizes), f'DNS line sizes including LF: {sizes}')
+        self.assertEqual(out['fin-adb.txt'].splitlines()[7:], ['0.0.0.0 neighbor.example.com'])
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN-WILDCARD'], 1)
+        self.assertIn('DOMAIN-WILDCARD,' + value,
+                      [json.loads(line[4:]) for line in out['fin.yaml'].splitlines()[2:]])
+        reference, reference_skipped = render('dns', [source, neighbor], purpose='proxy', no_resolve='keep')
+        for name in out:
+            if name != 'fin-adb.txt':
+                self.assertEqual(out[name], reference[name])
+                self.assertEqual({key: count for key, count in skipped.items() if key.startswith(name + ':')},
+                                 {key: count for key, count in reference_skipped.items() if key.startswith(name + ':')})
+
+    def test_native_question_budget_has_public_subprocess_timeout_for_three_consumers(self):
+        code = r'''
+import json
+from formats import render
+from rules import Rule
+neighbor = Rule('DOMAIN', 'neighbor.example.com')
+for size in (17, 18, 20, 32, 63):
+    value = '?' * size + '.example.com'
+    for caller in ('block', 'allow', 'whitelist'):
+        source = Rule('DOMAIN-WILDCARD', value, allow=caller == 'allow', domain_source='mihomo')
+        out, skipped = render('dns', [neighbor, source] if caller != 'whitelist' else [neighbor],
+                              purpose='block', no_resolve='keep',
+                              whitelist=[source] if caller == 'whitelist' else [])
+        rows = out['fin-adb.txt'].splitlines()[7:]
+        assert all(len(row.encode('utf-8')) + 1 <= 65536 for row in rows), (size, caller)
+        assert '0.0.0.0 neighbor.example.com' in rows
+        assert len(rows) == (2 if size == 17 else 1), (size, caller, len(rows))
+        assert skipped.get('fin-adb.txt:DOMAIN-WILDCARD', 0) == (0 if size == 17 else 1)
+        if caller == 'block':
+            assert 'DOMAIN-WILDCARD,' + value in [json.loads(row[4:]) for row in out['fin.yaml'].splitlines()[2:]]
+        assert source.value == value
+value = '?' * 63 + '.' + '?' * 63 + '.' + '?' * 60 + '.example.com'
+out, skipped = render('dns', [Rule('DOMAIN-WILDCARD', value, domain_source='mihomo')],
+                      purpose='block', no_resolve='keep')
+assert out['fin-adb.txt'].splitlines()[7:] == []
+assert skipped['fin-adb.txt:DOMAIN-WILDCARD'] == 1
+print('bounded native question consumers passed')
+'''
+        process = subprocess.run([sys.executable, '-B', '-c', code],
+                                 cwd=Path(__file__).resolve().parents[1],
+                                 capture_output=True, text=True, encoding='utf-8', timeout=8, check=True)
+        self.assertIn('bounded native question consumers passed', process.stdout)
+
+    def test_native_question_regex_preserves_utf8_byte_counts_and_star_spans(self):
+        cases = (('?', ('a',), ('é', '中', '😀', 'aa')),
+                 ('??', ('aa', 'é'), ('a', '中', '😀')),
+                 ('???', ('aaa', '中', 'aé'), ('aa', '😀')),
+                 ('????', ('aaaa', '😀', 'éé'), ('aaa', '中')),
+                 ('?*?', ('é', '中', '😀', 'aa'), ('a',)),
+                 ('?' * 17, ('a' * 17, 'a' * 7 + 'é中😀z'),
+                  ('a' * 16, 'a' * 6 + 'é中😀z', 'a' * 8 + 'é中😀z')))
+        for wildcard, matches, misses in cases:
+            for caller in ('block', 'allow', 'whitelist'):
+                with self.subTest(wildcard=wildcard, caller=caller):
+                    source = Rule('DOMAIN-WILDCARD', wildcard + '.example.com',
+                                  allow=caller == 'allow', domain_source='mihomo')
+                    out, skipped = render('dns', [source] if caller != 'whitelist' else [],
+                                          purpose='block', no_resolve='keep',
+                                          whitelist=[source] if caller == 'whitelist' else [])
+                    rows = out['fin-adb.txt'].splitlines()[7:]
+                    self.assertEqual(len(rows), 1)
+                    self.assertNotIn('fin-adb.txt:DOMAIN-WILDCARD', skipped)
+                    pattern = rows[0].removeprefix('@@')[1:-1].replace(r'\z', r'\Z')
+                    pattern = re.sub(r'\\x\{([0-9a-f]+)\}', lambda match: chr(int(match[1], 16)), pattern)
+                    matcher = re.compile(pattern)
+                    for prefix in matches:
+                        self.assertIsNotNone(matcher.fullmatch(prefix + '.example.com'), prefix)
+                    for prefix in misses:
+                        self.assertIsNone(matcher.fullmatch(prefix + '.example.com'), prefix)
+
+    def test_final_ascii_body_boundary_uses_real_prefix_and_lf(self):
+        for caller in ('block', 'allow', 'whitelist'):
+            exception = caller != 'block'
+            cases = (('DOMAIN', 'a' * (65531 if exception else 65527),
+                      '|', '|', 'mihomo') if exception else
+                     ('DOMAIN', 'a' * 65527, '0.0.0.0 ', '', 'mihomo'),
+                     ('DOMAIN-SUFFIX', 'a' * (65530 if exception else 65532), '||', '^', 'mihomo'),
+                     ('DOMAIN-KEYWORD', 'a' * (65525 if exception else 65527), '/^.*', '.*$/', 'surge'),
+                     ('DOMAIN-KEYWORD', 'a' * (65516 if exception else 65518),
+                      r'/(?s-i:\A.*', r'.*\z)/', 'mihomo'),
+                     ('DOMAIN-REGEX', '^' + 'a' * (65529 if exception else 65531) + '$', '/', '/', 'mihomo'))
+            for kind, value, prefix, suffix, origin in cases:
+                for mode in ('add', 'strip', 'keep'):
+                    for extra in (0, 1):
+                        with self.subTest(caller=caller, kind=kind, origin=origin, mode=mode, extra=extra):
+                            expanded = value + 'a' * extra
+                            source = Rule(kind, expanded, allow=caller == 'allow', domain_source=origin)
+                            out, skipped = render('dns', [source] if caller != 'whitelist' else [],
+                                                  purpose='block', no_resolve=mode,
+                                                  whitelist=[source] if caller == 'whitelist' else [])
+                            rows = out['fin-adb.txt'].splitlines()[7:]
+                            self.assertEqual(len(rows), 0 if extra else 1)
+                            self.assertEqual(skipped.get('fin-adb.txt:' + kind, 0), extra)
+                            self.assertEqual(source.value, expanded)
+                            self.assertEqual(out['fin-adb.txt'].splitlines()[6], '! Total count: ' + str(len(rows)))
+                            if not extra:
+                                expected = ('@@' if exception else '') + prefix + value + suffix
+                                self.assertTrue(rows[0] == expected, 'DNS boundary matcher or prefix changed')
+                                self.assertEqual(len(rows[0].encode('utf-8')) + 1, 65536)
+
+    def test_multibyte_and_f3_expansion_use_final_bytes_in_three_consumers(self):
+        for caller in ('block', 'allow', 'whitelist'):
+            exception = caller != 'block'
+            cases = (('DOMAIN-KEYWORD', '中' * (21841 if exception else 21842) + 'a' * (2 if exception else 1),
+                      '/^.*', '.*$/', 'surge'),
+                     ('DOMAIN-KEYWORD', '=' * (10920 if exception else 10921) + 'a' * (5 if exception else 1),
+                      '/^.*', '.*$/', 'surge'),
+                     ('DOMAIN-REGEX', '^replace=' + 'a' * (65516 if exception else 65518) + '$',
+                      '/', '/', 'mihomo'))
+            for kind, value, prefix, suffix, origin in cases:
+                for extra in (0, 1):
+                    with self.subTest(caller=caller, kind=kind, origin=origin, extra=extra, first=value[:10]):
+                        expanded = value + 'a' * extra
+                        source = Rule(kind, expanded, allow=caller == 'allow', domain_source=origin)
+                        out, skipped = render('dns', [source] if caller != 'whitelist' else [],
+                                              purpose='block', no_resolve='keep',
+                                              whitelist=[source] if caller == 'whitelist' else [])
+                        rows = out['fin-adb.txt'].splitlines()[7:]
+                        self.assertEqual(len(rows), 0 if extra else 1)
+                        self.assertEqual(skipped.get('fin-adb.txt:' + kind, 0), extra)
+                        if not extra:
+                            expected = ('@@' if exception else '') + prefix + value.replace('=', r'\x{3D}') + suffix
+                            self.assertTrue(rows[0] == expected, 'DNS literal expansion changed')
+                            self.assertEqual(len(rows[0].encode('utf-8')) + 1, 65536)
+                        self.assertEqual(source.value, expanded)
+        for caller in ('block', 'allow', 'whitelist'):
+            source = Rule('DOMAIN-REGEX', r'\w' * 4096, allow=caller == 'allow')
+            out, skipped = render('dns', [source] if caller != 'whitelist' else [],
+                                  purpose='block', no_resolve='keep',
+                                  whitelist=[source] if caller == 'whitelist' else [])
+            self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
+            self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 1)
+            self.assertEqual(source.value, r'\w' * 4096)
+
+    def test_ordinary_surge_class_boundary_preserves_other_targets(self):
+        for caller in ('block', 'allow', 'whitelist'):
+            count = 65515 if caller == 'block' else 65513
+            for extra in (0, 1):
+                with self.subTest(caller=caller, extra=extra):
+                    value = '[' + 'a' * (count + extra) + '].example.com'
+                    parsed, warnings = parse('DOMAIN-WILDCARD,' + value, purpose='block')
+                    self.assertEqual(warnings, [])
+                    self.assertEqual(len(parsed), 1)
+                    source = Rule(parsed[0].kind, parsed[0].value, allow=caller == 'allow')
+                    out, skipped = render('dns', [source] if caller != 'whitelist' else [],
+                                          purpose='block', no_resolve='keep',
+                                          whitelist=[source] if caller == 'whitelist' else [])
+                    rows = out['fin-adb.txt'].splitlines()[7:]
+                    self.assertEqual(len(rows), 0 if extra else 1)
+                    self.assertEqual(skipped.get('fin-adb.txt:DOMAIN-WILDCARD', 0), extra)
+                    if not extra:
+                        expected = ('@@' if caller != 'block' else '') + '/^[' + 'a' * count + r']\.example\.com$/'
+                        self.assertTrue(rows[0] == expected, 'Surge class matcher changed')
+                        self.assertEqual(len(rows[0].encode('utf-8')) + 1, 65536)
+                    reference, reference_skipped = render('dns', [source] if caller != 'whitelist' else [],
+                                                          purpose='proxy', no_resolve='keep')
+                    for name in out:
+                        if name != 'fin-adb.txt':
+                            self.assertEqual(out[name], reference[name])
+                            self.assertEqual({key: count for key, count in skipped.items() if key.startswith(name + ':')},
+                                             {key: count for key, count in reference_skipped.items() if key.startswith(name + ':')})
+
+    def test_exact_body_budget_counts_constructor_output_and_original_exception(self):
+        for caller in ('block', 'allow', 'whitelist'):
+            value = 'İ' * 65527 if caller == 'block' else 'İ' * 32765 + 'a'
+            expected = '0.0.0.0 ' + 'i' * 65527 if caller == 'block' else '@@|' + value + '|'
+            for extra in (0, 1):
+                with self.subTest(caller=caller, extra=extra):
+                    source = Rule('DOMAIN', value + 'a' * extra, allow=caller == 'allow', domain_source='mihomo')
+                    out, skipped = render('dns', [source] if caller != 'whitelist' else [],
+                                          purpose='block', no_resolve='keep',
+                                          whitelist=[source] if caller == 'whitelist' else [])
+                    rows = out['fin-adb.txt'].splitlines()[7:]
+                    self.assertEqual(len(rows), 0 if extra else 1)
+                    self.assertEqual(skipped.get('fin-adb.txt:DOMAIN', 0), extra)
+                    if not extra:
+                        self.assertTrue(rows[0] == expected, 'Go simple lowercase or exception payload changed')
+                        self.assertEqual(len(rows[0].encode('utf-8')) + 1, 65536)
+                    self.assertEqual(source.value, value + 'a' * extra)
+
+    def test_body_budget_generate_publish_and_yaml_dependencies_keep_other_targets(self):
+        values = ['?' * size + '.example.com' for size in (17, 18)]
+        names = ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
+        for caller in ('block', 'whitelist'):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(caller=caller, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        white = ['white.yaml'] if caller == 'whitelist' else []
+                        configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['native.yaml'], 'whitelist': white},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['parent/fin.yaml'], 'whitelist': white}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        source = 'payload:\n  - DOMAIN,neighbor.example.com\n'
+                        wildcards = ''.join('  - DOMAIN-WILDCARD,' + value + '\n' for value in values)
+                        (root / 'native.yaml').write_text(source + (wildcards if caller == 'block' else ''), encoding='utf-8')
+                        if white:
+                            (root / 'white.yaml').write_text('payload:\n' + wildcards, encoding='utf-8')
+                        old = {}
+                        for group in ('parent', 'child'):
+                            (root / group).mkdir()
+                            for name in names:
+                                path = root / group / name
+                                old[path] = b'old\x00' + (group + name).encode('ascii')
+                                path.write_bytes(old[path])
+                        with contextlib.redirect_stderr(io.StringIO()) as stderr:
+                            out = generate(root, lambda url: self.fail(url))
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        self.assertNotIn('frozen', stderr.getvalue())
+                        for group in ('parent', 'child'):
+                            rows = out[root / group / 'fin-adb.txt'].splitlines()[7:]
+                            self.assertTrue(all(len(row.encode('utf-8')) + 1 <= 65536 for row in rows))
+                            if purpose == 'block':
+                                self.assertEqual(len(rows), 2)
+                                self.assertIn('0.0.0.0 neighbor.example.com', rows)
+                                self.assertEqual(sum(row.startswith('@@') for row in rows), caller == 'whitelist')
+                                self.assertIn(group + ' fin-adb.txt:DOMAIN-WILDCARD: 1', stderr.getvalue())
+                            else:
+                                self.assertEqual(rows, ['! No AdBlock rules for non-advertising group.'])
+                            native = [json.loads(row[4:]) for row in out[root / group / 'fin.yaml'].splitlines()[2:]]
+                            self.assertIn('DOMAIN,neighbor.example.com', native)
+                            if caller == 'block':
+                                for value in values:
+                                    self.assertIn('DOMAIN-WILDCARD,' + value, native)
+                        publish(out, root=root)
+                        self.assertEqual({path: path.read_bytes() for path in out},
+                                         {path: text.encode('utf-8') for path, text in out.items()})
+                        (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()):
+                            disk = generate(root, lambda url: self.fail(url))
+                        for name in names:
+                            header = 2 if name == 'fin.yaml' else 7 if name == 'fin-adb.txt' else 1
+                            self.assertEqual(disk[root / 'child' / name].splitlines()[header:],
+                                             out[root / 'child' / name].splitlines()[header:])
