@@ -611,6 +611,16 @@ def _capture_number(digits: str) -> int | None:
     return int(digits)
 
 
+def _hex_codepoint(digits: str) -> int | None:
+    if not re.fullmatch(r'[0-9a-fA-F]+', digits):
+        return None
+    digits = digits.lstrip('0') or '0'
+    if len(digits) > 6:
+        return None
+    codepoint = int(digits, 16)
+    return codepoint if codepoint <= 0x10FFFF else None
+
+
 def _valid_regex(kind: str, value: str) -> bool:
     if not value:
         return False
@@ -682,10 +692,10 @@ def _valid_regex(kind: str, value: str) -> bool:
                 end = value.find("}", index + 3)
                 if end < 0:
                     return False
-                digits = value[index + 3:end]
-                if not re.fullmatch(r"[0-9a-fA-F]{1,6}", digits) or int(digits, 16) > 0x10ffff:
+                codepoint = _hex_codepoint(value[index + 3:end])
+                if codepoint is None:
                     return False
-                probe.append(re.escape(chr(int(digits, 16))))
+                probe.append(re.escape(chr(codepoint)))
                 if in_class:
                     class_atom, range_from_literal = "literal", False
                 index = end + 1
