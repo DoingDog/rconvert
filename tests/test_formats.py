@@ -13,36 +13,7 @@ render = partial(render_configured, purpose="block", no_resolve="add")
 
 
 def expected_domain(kind, value):
-    # 独立的 ASCII 字面预期；固定大小写集合和两个锚点由本类字面回归另行检查。
-    alphabet = dict(zip('abcdefghijklmnopqrstuvwxyz',
-                        ('[' + char + char.upper() + ']' for char in 'abcdefghijklmnopqrstuvwxyz')))
-    literal = ''.join(alphabet.get(char, '\\' + char if char in '.-' else char) for char in value)
-    anchor = r'\A' if kind == 'DOMAIN' else r'(?:\A|\.)'
-    return 'DOMAIN-REGEX,(?-i:' + anchor + literal + r'\.?\z)'
-
-
-def expected_ordinary_payload(payload):
-    return re.sub(r'(^|\()DOMAIN(-SUFFIX)?,([a-z0-9.-]+)(?=\)|$)',
-                  lambda match: match[1] + expected_domain('DOMAIN' + (match[2] or ''), match[3]), payload)
-
-
-def expected_ordinary_text(text):
-    lines = text.split('\n')
-    entries = []
-    for index, line in enumerate(lines):
-        if line.startswith('  - '):
-            entries.append((index, '  - ' + json.dumps(expected_ordinary_payload(json.loads(line[4:])))))
-        elif line.startswith('"'):
-            lines[index] = json.dumps(expected_ordinary_payload(json.loads(line)))
-    if entries:
-        def order(line):
-            kind, _, value = json.loads(line[4:]).partition(',')
-            ip = kind.startswith(('IP-', 'IP6-', 'SRC-IP')) or kind in {'GEOIP', 'SRC-GEOIP'}
-            family = 0 if kind in {'GEOIP', 'IP-ASN', 'SRC-GEOIP', 'SRC-IP-ASN'} else 2 if ':' in value else 1
-            return ip, family if ip else 0, kind, len(line), line
-        for (index, _), line in zip(entries, sorted((line for _, line in entries), key=order)):
-            lines[index] = line
-    return '\n'.join(lines)
+    return kind + ',' + value
 
 
 def expected_process(value):
@@ -52,16 +23,8 @@ def expected_process(value):
     return kind + ",(?-i:\\A" + escaped + end + ")"
 
 
-def native_arity_products(group, matchers, purpose, domain_source="surge"):
-    yaml = []
-    for matcher in matchers:
-        kind, _, value = matcher.partition(",")
-        source = domain_source if kind == "DOMAIN" or "(DOMAIN," in value else "surge"
-        payload = matcher
-        if source == "surge":
-            payload = (expected_domain(kind, value) if kind == "DOMAIN" else
-                       matcher.replace("DOMAIN,x.example.com", expected_domain("DOMAIN", "x.example.com")))
-        yaml.append("  - " + json.dumps(payload) + "\n")
+def native_arity_products(group, matchers, purpose):
+    yaml = ["  - " + json.dumps(matcher) + "\n" for matcher in matchers]
     dns = ('[Adblock Plus 2.0]\n'
            f'! Title: {group}\n'
            '! Homepage: https://github.com/DoingDog/rconvert\n'
@@ -107,9 +70,9 @@ class NativeArityFormatTests(unittest.TestCase):
                         if purpose != 'block':
                             expected_skips['fin-adb.txt:DOMAIN'] = 1
                         self.assertEqual(skipped, expected_skips)
-                        projected = Rule(kind, value.replace('DOMAIN,x.example.com',
-                                         expected_domain('DOMAIN', 'x.example.com')), native_fields=True)
-                        neighbor = Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').split(',', 1)[1])
+                        projected = Rule(kind, value, native_fields=True,
+                                         domain_source='mihomo' if '(DOMAIN,' in value else 'surge')
+                        neighbor = Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')
                         self.assertEqual(parse(out['fin.yaml'], purpose=purpose),
                                          ([neighbor, projected] if kind != 'AND' else [projected, neighbor], []))
 
@@ -271,7 +234,7 @@ class DomainSetSingleLabelFormatTests(unittest.TestCase):
                         self.assertEqual(out["fin.yaml"], '# parent rules: 1\npayload:\n  - ' +
                                          json.dumps(expected_domain("DOMAIN", label)) + '\n')
                         self.assertEqual(parse(out["fin.yaml"], purpose=purpose),
-                                         ([Rule("DOMAIN-REGEX", expected_domain("DOMAIN", label).split(",", 1)[1])], []))
+                                         ([Rule("DOMAIN", label, domain_source='mihomo')], []))
                         dns = out["fin-adb.txt"].splitlines()
                         self.assertRegex(dns[5], r"^! Version: [0-9]{12}$")
                         datetime.strptime(dns[5].removeprefix("! Version: "), "%Y%m%d%H%M")
@@ -284,17 +247,17 @@ class DomainSetSingleLabelFormatTests(unittest.TestCase):
 
 
 class NativeProjectionFormatTests(unittest.TestCase):
-    def test_ordinary_ascii_exact_suffix_projection_reimports_native_regex(self):
+    def test_ordinary_ascii_exact_suffix_projection_reimports_native_domains(self):
         from rules import parse
 
-        expected = {'DOMAIN': r'DOMAIN-REGEX,(?-i:\A[kK][eE][eE][pP]\.[eE][xX][aA][mM][pP][lL][eE]\.[oO][rR][gG]\.?\z)',
-                    'DOMAIN-SUFFIX': r'DOMAIN-REGEX,(?-i:(?:\A|\.)[kK][eE][eE][pP]\.[eE][xX][aA][mM][pP][lL][eE]\.[oO][rR][gG]\.?\z)'}
+        expected = {'DOMAIN': 'DOMAIN,keep.example.org',
+                    'DOMAIN-SUFFIX': 'DOMAIN-SUFFIX,keep.example.org'}
         for kind, payload in expected.items():
             original = Rule(kind, 'keep.example.org')
             output, _ = render_configured('public', [original], purpose='proxy', no_resolve='keep')
             self.assertEqual(json.loads(output['fin.yaml'].splitlines()[2][4:]), payload)
             self.assertEqual(parse(output['fin.yaml'], purpose='proxy'),
-                             ([Rule('DOMAIN-REGEX', payload.split(',', 1)[1])], []))
+                             ([Rule(kind, 'keep.example.org', domain_source='mihomo')], []))
 
     def test_equal_native_payloads_are_deduplicated_before_counting(self):
         from rules import parse
@@ -600,7 +563,6 @@ class ConstructorRendererTests(unittest.TestCase):
                     clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
                     outputs, skipped = render_configured("constructors", normalize(parsed), purpose=purpose, no_resolve=mode)
                 expected = constructor_expected("constructors", purpose, mode)
-                expected["fin.yaml"] = expected_ordinary_text(expected["fin.yaml"])
                 self.assertEqual(outputs, expected)
                 self.assertEqual(skipped, constructor_skips(purpose))
                 self.assertEqual({name: text.encode("utf-8") for name, text in outputs.items()},
@@ -692,7 +654,7 @@ class DnsExactHostsFormatTests(unittest.TestCase):
                     header = f"# exact rules: {count}\n"
                     self.assertEqual(out["fin.txt"], header + "".join(f"DOMAIN,{value}\n" for value in ordered))
                     self.assertEqual(out["fin-qx.txt"], header + "".join(f"HOST,{value},LIST\n" for value in ordered))
-                    self.assertEqual(out["fin.yaml"], expected_ordinary_text(header + "payload:\n" + "".join(f'  - "DOMAIN,{value}"\n' for value in ordered)))
+                    self.assertEqual(out["fin.yaml"], header + "payload:\n" + "".join(f'  - "DOMAIN,{value}"\n' for value in ordered))
                     self.assertEqual(out["fin-surge-ds.txt"], header + "".join(value + "\n" for value in ordered))
                     self.assertEqual(out["fin-surge.txt"], "# exact rules: 0\n")
                     dns = out["fin-adb.txt"].splitlines()
@@ -875,7 +837,7 @@ class ProcessRendererCompletionTests(unittest.TestCase):
         from pathlib import Path
 
         code = r'''
-from tests.test_formats import expected_ordinary_payload
+
 
 import json, sys, time
 from rules import parse, normalize
@@ -900,8 +862,7 @@ for depth in (600, 1000):
                     expected = expression[1:-1].replace(',no-resolve', '')
                     if flag:
                         expected = expected.replace('IP-CIDR,203.0.113.0/24)', 'IP-CIDR,203.0.113.0/24,no-resolve)')
-                    if not native:
-                        expected = expected_ordinary_payload(expected)
+
                     actual = json.loads(out['fin.yaml'].splitlines()[2][4:])
                     assert actual == expected and actual.count('no-resolve') == int(flag)
                     for target in ('fin.txt', 'fin-surge.txt'):
@@ -1052,7 +1013,7 @@ class ProcessRendererReviewFixTests(unittest.TestCase):
                           matcher + ",PROXY\nDOMAIN,keep.example.com,PROXY")
                 with self.subTest(native=native, depth=depth):
                     out, skipped = self.outputs(source)
-                    self.assertEqual(set(self.yaml_body(out)), {matcher, "DOMAIN,keep.example.com"} if native else {expected_ordinary_payload(matcher), expected_domain("DOMAIN", "keep.example.com")})
+                    self.assertEqual(set(self.yaml_body(out)), {matcher, "DOMAIN,keep.example.com"})
                     allowed = depth <= 10
                     self.assertEqual(set(out["fin.txt"].splitlines()[1:]), {"DOMAIN,keep.example.com"} | ({matcher} if allowed else set()))
                     self.assertEqual(out["fin-surge.txt"], f"# group rules: {int(allowed)}\n" + (matcher + "\n" if allowed else ""))
@@ -1649,7 +1610,7 @@ class BoundedRegexTailFormatTests(unittest.TestCase):
                             self.assertEqual(warnings, [])
                             self.assertEqual(set(restored),
                                              {Rule(operator, projected, native_fields=True),
-                                              Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').split(',', 1)[1])})
+                                              Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')})
 
     def test_ip_siblings_transform_without_changing_the_literal_process_tail(self):
         from rules import parse
@@ -1680,7 +1641,7 @@ class BoundedRegexTailFormatTests(unittest.TestCase):
                             self.assertEqual(skipped, omissions)
                             self.assertEqual(set(parse(out['fin.yaml'], purpose=purpose)[0]),
                                              {Rule(operator, wanted, native_fields=True),
-                                              Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').split(',', 1)[1])})
+                                              Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')})
 
 
     def test_equal_logical_payloads_use_one_native_rule(self):
@@ -1770,7 +1731,7 @@ class SourceFieldContinuationFormatTests(unittest.TestCase):
 class RegexValidatorFormatTests(unittest.TestCase):
     @staticmethod
     def products(group, matchers, purpose):
-        products = native_arity_products(group, matchers, purpose, domain_source='mihomo')
+        products = native_arity_products(group, matchers, purpose)
         lines = products['fin.yaml'].split('\n')
         for index, line in enumerate(lines):
             if line.startswith('  - '):
@@ -1962,7 +1923,7 @@ class FormatTests(unittest.TestCase):
         self.assertIn("HOST,api-v2.example.org,LIST\n", out["fin-qx.txt"])
         self.assertIn(r"DOMAIN-REGEX,^api\-.*\.example\.org\.?$",
                       [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
-        self.assertIn(expected_ordinary_text('  - "DOMAIN,api-v2.example.org"\n'), out["fin.yaml"])
+        self.assertIn('  - "DOMAIN,api-v2.example.org"\n', out["fin.yaml"])
 
     def test_surge_character_class_wildcard_is_converted_for_mihomo_but_not_qx(self):
         out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-[0-9].example.com")])
@@ -2303,7 +2264,6 @@ class FormatTests(unittest.TestCase):
             "fin-surge.txt": "# a3 rules: 2\nDOMAIN-KEYWORD,ad\nPROTOCOL,UDP\n",
             "fin-surge-ds.txt": "# a3 rules: 5\na.org\nz.org\n.b.org\n.q.org\nlong.example.org\n",
         }
-        expected["fin.yaml"] = expected_ordinary_text(expected["fin.yaml"])
         self.assertEqual(out, expected)
 
     def test_ip_types_follow_other_types_and_split_same_type_by_address_family(self):
@@ -2322,12 +2282,12 @@ class FormatTests(unittest.TestCase):
             "HOST,a.org,LIST", "GEOIP,CN,LIST,no-resolve", "IP-ASN,64500,LIST,no-resolve",
             "IP-CIDR,192.0.2.0/24,LIST,no-resolve", "IP6-CIDR,2001:db8::/32,LIST,no-resolve",
         ])
-        self.assertEqual(out["fin.yaml"].splitlines()[2:], [expected_ordinary_text(entry) for entry in ([
+        self.assertEqual(out["fin.yaml"].splitlines()[2:], [
             '  - "DOMAIN,a.org"', '  - "NETWORK,udp"', '  - "GEOIP,CN,no-resolve"',
             '  - "IP-ASN,64500,no-resolve"', '  - "IP-CIDR,192.0.2.0/24,no-resolve"',
             '  - "SRC-IP-CIDR,192.0.2.0/24"', '  - "IP-CIDR,2001:db8::/32,no-resolve"',
             '  - "SRC-IP-CIDR,2001:db8::/32"',
-        ])])
+        ])
         self.assertEqual(out["fin-surge.txt"].splitlines()[1:], [
             "PROTOCOL,UDP", "GEOIP,CN,no-resolve", "IP-ASN,64500,no-resolve",
             "IP-CIDR,192.0.2.0/24,no-resolve", "SRC-IP,192.0.2.0/24",
@@ -2359,7 +2319,7 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("a3", [Rule("DOMAIN", "exact.example.com")])
         self.assertIn("DOMAIN,exact.example.com\n", out["fin.txt"])
         self.assertIn("HOST,exact.example.com,LIST\n", out["fin-qx.txt"])
-        self.assertIn(expected_ordinary_text('  - "DOMAIN,exact.example.com"\n'), out["fin.yaml"])
+        self.assertIn('  - "DOMAIN,exact.example.com"\n', out["fin.yaml"])
         self.assertIn("\nexact.example.com\n", out["fin-surge-ds.txt"])
         self.assertNotIn("exact.example.com", out["fin-surge.txt"])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "0.0.0.0 exact.example.com"])
@@ -2369,7 +2329,7 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")])
         self.assertIn("DOMAIN-SUFFIX,ads.example.com\n", out["fin.txt"])
         self.assertIn("HOST-SUFFIX,ads.example.com,LIST\n", out["fin-qx.txt"])
-        self.assertIn(expected_ordinary_text('  - "DOMAIN-SUFFIX,ads.example.com"\n'), out["fin.yaml"])
+        self.assertIn('  - "DOMAIN-SUFFIX,ads.example.com"\n', out["fin.yaml"])
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 1\n.ads.example.com\n")
         self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "||ads.example.com^"])
@@ -2510,7 +2470,7 @@ class FormatTests(unittest.TestCase):
                 self.assertEqual(messages, [])
                 self.assertEqual(len(parsed), 1)
                 out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
-                self.assertEqual(out["fin.yaml"], expected_ordinary_text('# cdn rules: 1\npayload:\n  - ' + json.dumps(expected) + '\n'))
+                self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - ' + json.dumps(expected) + '\n')
                 self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
                 self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
                 self.assertEqual(skipped, {
@@ -2538,7 +2498,7 @@ class FormatTests(unittest.TestCase):
                     self.assertEqual(out["fin.txt"], f"# cdn rules: 1\n{surge_rule}\n")
                     self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
                     self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                                     [expected_ordinary_payload(entry) for entry in ([mihomo_rule] if mihomo_rule else [])])
+                                     [mihomo_rule] if mihomo_rule else [])
                     self.assertEqual(skipped, {
                         f"{name}:{parsed[0].kind}": 1 for name in
                         ("fin-qx.txt", "fin-adb.txt", "fin-surge-ds.txt") + (("fin.yaml",) if mihomo_rule is None else ())
@@ -2825,7 +2785,7 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(messages, [])
         out, _ = render("cdn", parsed)
         self.assertIn("NOT,((DOMAIN,cdn.example.com))\n", out["fin.txt"])
-        self.assertIn(expected_ordinary_text('"NOT,((DOMAIN,cdn.example.com))"'), out["fin.yaml"])
+        self.assertIn('"NOT,((DOMAIN,cdn.example.com))"', out["fin.yaml"])
 
     def test_logical_rules_keep_parentheses_only_with_compatible_children(self):
         values = {
@@ -2837,7 +2797,7 @@ class FormatTests(unittest.TestCase):
             Rule("AND", "((RULE-SET,another-provider),(DOMAIN,ad.example.com))"),
         ])
         for kind, value in values.items():
-            self.assertIn(expected_ordinary_text(f'  - "{kind},{value}"\n'), out["fin.yaml"])
+            self.assertIn(f'  - "{kind},{value}"\n', out["fin.yaml"])
             self.assertEqual(skipped[f"fin-qx.txt:{kind}"], 1 if kind != "AND" else 2)
         self.assertIn("OR," + values["OR"] + "\n", out["fin.txt"])
         self.assertIn("NOT," + values["NOT"] + "\n", out["fin-surge.txt"])
@@ -2851,7 +2811,7 @@ class FormatTests(unittest.TestCase):
         expected = "# a3 rules: 1\nAND,((PROTOCOL,UDP),(DOMAIN,a.example.com))\n"
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text('# a3 rules: 1\npayload:\n  - "AND,((NETWORK,udp),(DOMAIN,a.example.com))"\n'))
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((NETWORK,udp),(DOMAIN,a.example.com))"\n')
         self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
@@ -2863,7 +2823,7 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("a3", [Rule("AND", "((DEST-PORT,443),(DOMAIN,a.example.com))")])
         self.assertEqual(out["fin.txt"], "# a3 rules: 1\nAND,((DEST-PORT,443),(DOMAIN,a.example.com))\n")
         self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text('# a3 rules: 1\npayload:\n  - "AND,((DST-PORT,443),(DOMAIN,a.example.com))"\n'))
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((DST-PORT,443),(DOMAIN,a.example.com))"\n')
         self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_logical_source_ip_and_protocol_aliases_keep_match_direction(self):
@@ -2885,10 +2845,10 @@ class FormatTests(unittest.TestCase):
         )
         self.assertEqual(messages, [])
         out, skipped = render("a3", parsed, no_resolve="add")
-        self.assertEqual(out["fin.yaml"].splitlines()[2:], [expected_ordinary_text(entry) for entry in ([
+        self.assertEqual(out["fin.yaml"].splitlines()[2:], [
             '  - "AND,((SRC-IP-CIDR,192.0.2.0/24),(DOMAIN,a.example.com))"',
             '  - "AND,((SRC-IP-CIDR,2001:db8::/32),(DOMAIN,a.example.com))"',
-        ])])
+        ])
         self.assertEqual(out["fin.txt"], out["fin-surge.txt"])
         self.assertIn("AND,((SRC-IP,192.0.2.0/24),(DOMAIN,a.example.com))\n", out["fin.txt"])
         self.assertIn("AND,((SRC-IP,2001:db8::/32),(DOMAIN,a.example.com))\n", out["fin.txt"])
@@ -2906,7 +2866,7 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                         [expected_ordinary_payload(entry) for entry in ([f"AND,(({expected_process('Foo,Bar')}),(DOMAIN,a.example.com))"])])
+                         [f"AND,(({expected_process('Foo,Bar')}),(DOMAIN,a.example.com))"])
         self.assertEqual(out["fin-surge-ds.txt"], "# cdn rules: 0\n")
         self.assertNotIn("fin.yaml:AND", skipped)
 
@@ -2930,11 +2890,11 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(messages, [])
         out, skipped = render("a3", parsed, no_resolve="keep")
         self.assertEqual(out["fin.yaml"],
-                         expected_ordinary_text('# a3 rules: 1\npayload:\n  - "AND,((DOMAIN-REGEX,^ads,[0-9]+[.]example$),(DOMAIN,a.example.com))"\n'))
+                         '# a3 rules: 1\npayload:\n  - "AND,((DOMAIN-REGEX,^ads,[0-9]+[.]example$),(DOMAIN,a.example.com))"\n')
         round_trip, warnings = parse(out["fin.yaml"], purpose="block")
         self.assertEqual(warnings, [])
         self.assertEqual(round_trip, [Rule('AND', '((DOMAIN-REGEX,^ads,[0-9]+[.]example$),(' +
-                         expected_domain('DOMAIN', 'a.example.com') + '))', native_fields=True)])
+                         expected_domain('DOMAIN', 'a.example.com') + '))', native_fields=True, domain_source='mihomo')])
         self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_logical_no_resolve_add_strip_keep_changes_only_destination_ip_leaves(self):
@@ -2961,7 +2921,7 @@ class FormatTests(unittest.TestCase):
         expected = "AND,((OR,((SRC-IP,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(DOMAIN,a.example.com))"
         self.assertEqual(out["fin.txt"], f"# a3 rules: 1\n{expected}\n")
         self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text('# a3 rules: 1\npayload:\n  - "AND,((OR,((SRC-IP-CIDR,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(DOMAIN,a.example.com))"\n'))
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((OR,((SRC-IP-CIDR,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(DOMAIN,a.example.com))"\n')
         self.assertNotIn("no-resolve", out["fin.txt"])
         self.assertNotIn("fin.txt:AND", skipped)
 
@@ -2983,14 +2943,14 @@ class FormatTests(unittest.TestCase):
         out, _ = render("a3", [source], no_resolve="add")
         self.assertEqual(out["fin.txt"], "# a3 rules: 1\nAND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,a.example.com))\n")
         self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text('# a3 rules: 1\npayload:\n  - "AND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,a.example.com))"\n'))
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,a.example.com))"\n')
 
     def test_unsupported_source_ip_child_skips_whole_surge_rule(self):
         source = Rule("AND", "((SRC-GEOIP,CN),(DOMAIN,a.example.com))")
         out, skipped = render("a3", [source])
         self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text('# a3 rules: 1\npayload:\n  - "AND,((SRC-GEOIP,CN),(DOMAIN,a.example.com))"\n'))
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((SRC-GEOIP,CN),(DOMAIN,a.example.com))"\n')
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
         self.assertEqual(skipped["fin.txt:AND"], 1)
         self.assertEqual(skipped["fin-surge.txt:AND"], 1)
@@ -3001,7 +2961,7 @@ class FormatTests(unittest.TestCase):
         expected = "# cdn rules: 0\n"
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text('# cdn rules: 1\npayload:\n  - "AND,((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(DOMAIN,a.example.com))"\n'))
+        self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - "AND,((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(DOMAIN,a.example.com))"\n')
         self.assertEqual(skipped["fin.txt:AND"], 1)
 
     def test_surge_translates_nested_source_cidr_and_destination_port(self):
@@ -3026,7 +2986,7 @@ class FormatTests(unittest.TestCase):
         value = "((IP-CIDR,2001:db8::/32),(DOMAIN,ads.example.com))"
         out, _ = render("a3", [Rule("OR", value)])
         self.assertIn("OR,((IP-CIDR6,2001:db8::/32,no-resolve),(DOMAIN,ads.example.com))\n", out["fin.txt"])
-        self.assertIn(expected_ordinary_text('  - "OR,((IP-CIDR6,2001:db8::/32,no-resolve),(DOMAIN,ads.example.com))"\n'), out["fin.yaml"])
+        self.assertIn('  - "OR,((IP-CIDR6,2001:db8::/32,no-resolve),(DOMAIN,ads.example.com))"\n', out["fin.yaml"])
 
     def test_mihomo_ipv6_cidr_inside_nested_logic_uses_ipv6_matcher(self):
         from rules import parse
@@ -3038,7 +2998,7 @@ class FormatTests(unittest.TestCase):
 
         out, _ = render("a3", parsed)
         expected = "AND,((OR,((IP-CIDR6,2001:db8::/32,no-resolve),(IP-CIDR,192.0.2.0/24,no-resolve))),(DOMAIN,ads.example.com))"
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text(f'# a3 rules: 1\npayload:\n  - "{expected}"\n'))
+        self.assertEqual(out["fin.yaml"], f'# a3 rules: 1\npayload:\n  - "{expected}"\n')
         self.assertEqual(out["fin.txt"], f"# a3 rules: 1\n{expected}\n")
         self.assertEqual(out["fin-surge.txt"], f"# a3 rules: 1\n{expected}\n")
 
@@ -3046,7 +3006,7 @@ class FormatTests(unittest.TestCase):
         expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
         out, skipped = render("a3", [Rule("AND", expression)])
         expected = r"AND,((DOMAIN-REGEX,^[a\x{29}b]\.example$),(DOMAIN,ads.example))"
-        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]], [expected_ordinary_payload(entry) for entry in ([expected])])
+        self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]], [expected])
         from rules import parse
         self.assertEqual(parse(out["fin.yaml"], purpose="block")[1], [])
         self.assertNotIn("fin.yaml:AND", skipped)
@@ -3059,7 +3019,7 @@ class FormatTests(unittest.TestCase):
         ], purpose="direct", no_resolve="strip")
         self.assertEqual(out["fin.txt"], f"# dirt rules: 1\nOR,{safe}\n")
         self.assertEqual(out["fin-surge.txt"], f"# dirt rules: 1\nOR,{safe}\n")
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text(f'# dirt rules: 1\npayload:\n  - "OR,{safe}"\n'))
+        self.assertEqual(out["fin.yaml"], f'# dirt rules: 1\npayload:\n  - "OR,{safe}"\n')
         self.assertEqual(skipped["fin.txt:AND"], 1)
         self.assertEqual(skipped["fin.yaml:AND"], 1)
 
@@ -3071,7 +3031,7 @@ class FormatTests(unittest.TestCase):
         ], purpose="direct", no_resolve="strip")
         self.assertEqual(out["fin.txt"], f"# dirt rules: 1\nOR,{valid}\n")
         self.assertEqual(out["fin-surge.txt"], f"# dirt rules: 1\nOR,{valid}\n")
-        self.assertEqual(out["fin.yaml"], expected_ordinary_text(f'# dirt rules: 1\npayload:\n  - "OR,{valid}"\n'))
+        self.assertEqual(out["fin.yaml"], f'# dirt rules: 1\npayload:\n  - "OR,{valid}"\n')
         self.assertEqual(skipped["fin.txt:AND"], 1)
         self.assertEqual(skipped["fin.yaml:AND"], 1)
 
@@ -3104,7 +3064,7 @@ class FormatTests(unittest.TestCase):
         value = "((DOMAIN-WILDCARD,api-[0-9].example.com),(DOMAIN,ads.example.com))"
         out, skipped = render("a3", [Rule("AND", value)])
         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                         [expected_ordinary_payload(entry) for entry in ([r"AND,((DOMAIN-REGEX,^api\-[0-9]\.example\.com\.?$),(DOMAIN,ads.example.com))"])])
+                         [r"AND,((DOMAIN-REGEX,^api\-[0-9]\.example\.com\.?$),(DOMAIN,ads.example.com))"])
         self.assertIn("AND," + value + "\n", out["fin.txt"])
         self.assertNotIn("fin.yaml:AND", skipped)
 
@@ -3253,20 +3213,19 @@ class NativeProjectionCollisionFormatTests(unittest.TestCase):
         from rules import parse
 
         domain = Rule('DOMAIN', 'keep.example.org')
-        domain_regex = Rule('DOMAIN-REGEX', expected_domain('DOMAIN', domain.value).split(',', 1)[1])
         process = Rule('PROCESS-NAME', 'FooApp')
         process_regex = Rule('PROCESS-NAME-REGEX', expected_process(process.value).split(',', 1)[1])
         qx, messages = parse('HOST,keep.example.org,LIST,via-interface=en1\n', purpose='proxy')
         self.assertEqual(messages, [])
         native = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
-        originals = [domain, domain_regex, process, process_regex, *qx, native]
+        originals = [domain, process, process_regex, *qx, native]
         output, _ = render_configured('public', originals * 2, purpose='proxy', no_resolve='keep')
         self.assertEqual(output['fin.yaml'].splitlines()[0], '# public rules: 2')
         self.assertEqual({json.loads(line[4:]) for line in output['fin.yaml'].splitlines()[2:]},
                          {expected_domain('DOMAIN', domain.value), expected_process(process.value)})
         parsed, messages = parse(output['fin.yaml'], purpose='proxy')
         self.assertEqual(messages, [])
-        self.assertEqual(set(parsed), {domain_regex, process_regex})
+        self.assertEqual(set(parsed), {native, process_regex})
         self.assertEqual(len(parsed), 2)
         repeated, _ = render_configured('public', parsed * 2, purpose='proxy', no_resolve='keep')
         self.assertEqual(repeated['fin.yaml'], output['fin.yaml'])

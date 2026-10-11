@@ -1552,7 +1552,7 @@ class BoundedRegexTailRuleTests(unittest.TestCase):
                         DeepLogicalParserTests.assert_subprocess(self, f'''
 from rules import _apply_no_resolve
 from formats import render
-from tests.test_formats import BoundedRegexTailFormatTests, expected_domain
+from tests.test_formats import BoundedRegexTailFormatTests
 from datetime import datetime, timezone
 from unittest.mock import patch
 leaf = '({kind},{matcher})'
@@ -1572,7 +1572,7 @@ for mode in ('add', 'strip', 'keep'):
     assert out == expected and skipped == omissions
     assert set(parse(out['fin.yaml'], purpose='block')[0]) == {{
         Rule('NOT', wanted.value, native_fields=True),
-        Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').split(',', 1)[1])}}
+        Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')}}
 ''')
 
 
@@ -1955,7 +1955,7 @@ class ParseTests(unittest.TestCase):
         document = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")],
                           purpose="block", no_resolve="add")[0]["fin.yaml"]
         rules, messages = parse(document, purpose="block")
-        self.assertEqual(rules, [Rule("DOMAIN-REGEX", expected_domain("DOMAIN-SUFFIX", "ads.example.com").split(",", 1)[1])])
+        self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "ads.example.com", domain_source='mihomo')])
         self.assertEqual(messages, [])
 
     def test_process_name_hash_survives_yaml_and_generated_surge_reparse(self):
@@ -3727,8 +3727,8 @@ class FollowupParseTests(unittest.TestCase):
                 output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
                 self.assertNotIn("fin.yaml:AND", skipped)
                 self.assertEqual(set(parse(output["fin.yaml"], purpose="proxy")[0]),
-                                 {Rule("AND", expression.replace("DOMAIN,x.example.com", expected_domain("DOMAIN", "x.example.com")), native_fields=True),
-                                  Rule("DOMAIN-REGEX", expected_domain("DOMAIN", "keep.example.com").split(",", 1)[1])})
+                                 {Rule("AND", expression, native_fields=True, domain_source="mihomo"),
+                                  Rule("DOMAIN", "keep.example.com", domain_source='mihomo')})
                 self.assertEqual(messages, [])
             for marker in ("#", ";", "//"):
                 value = f"^a{{b$,My Proxy {marker} note}}$|^foo$"
