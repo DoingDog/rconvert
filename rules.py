@@ -240,6 +240,22 @@ _REGEXP2_WORD_BOUNDARIES = (
 )
 
 
+def _scan_regex_options(value: str, index: int, extended: bool,
+                        explicit_capture: bool = False) -> tuple[int, str, bool, bool] | None:
+    header = re.match(r"\(\?([imnsxduIMNSXDU+-]+)([):])", value[index:])
+    if header is None:
+        return None
+    enabled = True
+    for option in header[1].lower():
+        if option in '+-':
+            enabled = option == '+'
+        elif option == 'x':
+            extended = enabled
+        elif option == 'n':
+            explicit_capture = enabled
+    return index + len(header[0]), header[2], extended, explicit_capture
+
+
 def _delimiters(line: str, *, native_fields: bool = False,
                 groups: dict[int, int] | None = None,
                 commas: dict[int, list[int]] | None = None,
@@ -346,12 +362,11 @@ def _delimiters(line: str, *, native_fields: bool = False,
             class_first = True
         elif char == '(' and (literal_depth is None or literal_depth > 0):
             if regex_depth is not None:
-                flags = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?([):])", line[index:])
-                if flags and (flags[1] or flags[2]):
-                    if flags[3] == ':':
+                flags = _scan_regex_options(line, index, extended)
+                if flags is not None:
+                    if flags[1] == ':':
                         stack.append(('(', index, extended))
-                    extended = (extended or 'x' in flags[1]) and not (flags[2] and 'x' in flags[2])
-                    index += len(flags[0])
+                    index, _, extended, _ = flags
                     continue
                 stack.append(('(', index, extended))
             else:
@@ -813,21 +828,19 @@ def _valid_regex(kind: str, value: str) -> bool:
                 probe.append('(?:')
                 index += 1
                 continue
-            flags = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?\)", value[index:])
-            if flags is not None and (flags[1] or flags[2]):
-                extended = (extended or "x" in flags[1]) and not (flags[2] and "x" in flags[2])
-                # comment marker 保留词法边界；global options 不提供量词对象。
-                probe.append('(?#)')
-                after_options = True
-                index += len(flags[0])
+            flags = _scan_regex_options(value, index, extended, explicit_capture)
+            if flags is not None:
+                if flags[1] == ':':
+                    extended_stack.append((extended, explicit_capture))
+                    probe.append('(?:')
+                else:
+                    # comment marker 保留词法边界；global options 不提供量词对象。
+                    probe.append('(?#)')
+                    after_options = True
+                index, _, extended, explicit_capture = flags
                 continue
-            scoped = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?:", value[index:])
-            if scoped is not None and (scoped[1] or scoped[2]):
-                extended_stack.append((extended, explicit_capture))
-                extended = (extended or "x" in scoped[1]) and not (scoped[2] and "x" in scoped[2])
-                probe.append(scoped[0])
-                index += len(scoped[0])
-                continue
+            if re.match(r"\(\?[A-Za-z+-]", value[index:]):
+                return False
             extended_stack.append((extended, explicit_capture))
             if value[index + 1:index + 2] != '?':
                 if explicit_capture:
@@ -887,15 +900,6 @@ def _valid_regex(kind: str, value: str) -> bool:
                     class_atom = None
             elif char != "^" or index != class_start + 1:
                 class_atom, range_from_literal = "literal", False
-        elif char == "(" and not in_class and value.startswith("(?P", index):
-            return False
-        elif char == "(" and not in_class and re.match(r"\(\?[aLu](?:\)|:)", value[index:]):
-            return False
-        elif char == "(" and not in_class and value.startswith("(?n:", index):
-            explicit_capture = True
-            probe.append("(?:")
-            index += 4
-            continue
         elif char == "(" and not in_class and value.startswith(("(?<", "(?'"), index):
             marker = value[index + 2]
             if marker == "<" and value[index + 3:index + 4] in {"=", "!"}:
