@@ -4056,26 +4056,30 @@ class GenerateTests(unittest.TestCase):
             root = Path(directory)
             whitelist = root / "static/main/NoDirect.list"
             whitelist.parent.mkdir(parents=True)
-            whitelist.write_bytes((ROOT / "static/main/NoDirect.list").read_bytes())
+            whitelist.write_text(
+                "DOMAIN-KEYWORD,localwhite\nDOMAIN-WILDCARD,allowed-*.example.net\n"
+                "DOMAIN-SUFFIX,white.example.org\nDOMAIN-SUFFIX,nested.white.example.org\n"
+                "DOMAIN-SUFFIX,assets.example.net\n", encoding="utf-8",
+            )
             (root / "rulesets.json").write_text(json.dumps([{
                 "name": "dirt", "purpose": "direct", "no_resolve": "strip",
                 "sources": ["direct.list"], "whitelist": ["static/main/NoDirect.list"],
             }]), encoding="utf-8")
             (root / "direct.list").write_text(
-                "DOMAIN-KEYWORD,microsoft\nDOMAIN-WILDCARD,windows-*.net\n"
-                "DOMAIN-SUFFIX,ms\nDOMAIN-SUFFIX,sm.ms\nDOMAIN-SUFFIX,loli.net\n"
-                "DOMAIN,office.ms\nDOMAIN,cdn.loli.net\nDOMAIN,keep.example.org\n",
-                encoding="utf-8",
+                "DOMAIN-KEYWORD,localwhite\nDOMAIN-WILDCARD,allowed-*.example.net\n"
+                "DOMAIN-SUFFIX,white.example.org\nDOMAIN-SUFFIX,nested.white.example.org\n"
+                "DOMAIN-SUFFIX,assets.example.net\nDOMAIN,office.white.example.org\n"
+                "DOMAIN,cdn.assets.example.net\nDOMAIN,keep.example.org\n", encoding="utf-8",
             )
             outputs = generate(root, lambda _: self.fail("local input must not fetch"))
             self.assertEqual(outputs[root / "dirt" / "fin.txt"].splitlines()[1:],
                              ["DOMAIN,keep.example.org"])
             for name in ("fin-qx.txt", "fin.yaml", "fin-surge.txt", "fin-surge-ds.txt"):
                 with self.subTest(name=name):
-                    self.assertNotIn("microsoft", outputs[root / "dirt" / name])
-                    self.assertNotIn("windows-*.net", outputs[root / "dirt" / name])
-                    self.assertNotIn("loli.net", outputs[root / "dirt" / name])
-                    self.assertNotIn("sm.ms", outputs[root / "dirt" / name])
+                    self.assertNotIn("localwhite", outputs[root / "dirt" / name])
+                    self.assertNotIn("allowed-*.example.net", outputs[root / "dirt" / name])
+                    self.assertNotIn("white.example.org", outputs[root / "dirt" / name])
+                    self.assertNotIn("assets.example.net", outputs[root / "dirt" / name])
 
     def test_html_whitelist_aborts_instead_of_silently_disabling_exclusions(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:

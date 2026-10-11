@@ -3,6 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from rules import parse_whitelist
 from sources import load_config, resolve_source
 
 
@@ -142,17 +143,14 @@ class SourcesTests(unittest.TestCase):
                 with self.subTest(group=name, filename=filename):
                     self.assertTrue((ROOT / name / filename).is_file(), f"{name}/{filename}")
 
-    def test_dirt_whitelist_lists_only_requested_routes(self):
-        path = ROOT / "static/main/NoDirect.list"
-        self.assertTrue(path.is_file())
-        entries = path.read_text(encoding="utf-8").splitlines()
-        self.assertEqual(entries, [
-            "DOMAIN-KEYWORD,microsoft",
-            "DOMAIN-WILDCARD,windows-*.net",
-            "DOMAIN-SUFFIX,ms",
-            "DOMAIN-SUFFIX,loli.net",
-            "DOMAIN-SUFFIX,sm.ms",
-        ])
+    def test_configured_local_static_whitelists_are_valid(self):
+        entries = {entry for group in load_config(ROOT) for entry in group["whitelist"]
+                   if entry.startswith("static/")}
+        for entry in entries:
+            with self.subTest(entry=entry):
+                path = resolve_source(ROOT, entry)
+                self.assertTrue(path.is_file())
+                parse_whitelist(path.read_text(encoding="utf-8-sig"))
 
     def test_utf8_bom_does_not_change_first_source(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
