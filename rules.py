@@ -748,8 +748,16 @@ def _valid_regex(kind: str, value: str) -> bool:
             if count is not None:
                 if after_options:
                     return False
+                lower, separator, upper = count[0][1:-1].partition(',')
+                minimum = _capture_number(lower)
+                maximum = _capture_number(upper) if upper else None
+                if minimum is None or upper and (maximum is None or minimum > maximum):
+                    return False
                 quantifier_probe = len(probe)
-                probe.append(count[0])
+                canonical = str(minimum)
+                if separator:
+                    canonical += ',' + (str(maximum) if upper else '')
+                probe.append('{' + canonical + '}')
                 index += len(count[0])
                 quantified = True
                 continue
@@ -915,7 +923,7 @@ def _valid_regex(kind: str, value: str) -> bool:
             conditionals[-1][1] += 1
             if conditionals[-1][1] > 1:
                 return False
-        probe.append(char)
+        probe.append(r'\{' if char == '{' and not in_class else char)
         index += 1
     if in_class or classes:
         return False
@@ -947,6 +955,12 @@ def _valid_regex(kind: str, value: str) -> bool:
     except RecursionError:
         return kind != "URL-REGEX" and _valid_deep_regex(''.join(probe))
     except (re.error, OverflowError):
+        return False
+    except ValueError as exc:
+        if kind != 'URL-REGEX' or not re.fullmatch(
+                r'Exceeds the limit \([0-9]+ digits\) for integer string conversion: value has '
+                r'[0-9]+ digits; use sys\.set_int_max_str_digits\(\) to increase the limit', str(exc)):
+            raise
         return False
     return True
 
