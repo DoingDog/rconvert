@@ -27,7 +27,9 @@ class _HttpsOnlyRedirect(request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         if urlsplit(newurl).scheme != "https":
             raise ValueError(f"HTTPS redirect required: {newurl}")
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+        accepted = super().redirect_request(req, fp, code, msg, headers, newurl)
+        fp.close()
+        return accepted
 
 
 def fetch_https(url: str) -> bytes:
