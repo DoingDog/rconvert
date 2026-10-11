@@ -153,7 +153,7 @@ native ASN `0`、`00`、`0013335` 原始字符串身份全部保留。顶层 nat
 | 同上 | `DOMAIN-WILDCARD,microsoft-*.com` |
 | `DOMAIN-WILDCARD,windows-*.net` | 同文的 native `DOMAIN-WILDCARD`、`DOMAIN,windows-abc.net` |
 
-证明范围限定为已核查的 ASCII payload、完整 literal 关系和安全 wildcard 关系：keyword 出现在 constructor 规范后的固定 literal 中，且不依赖末尾根点；Surge wildcard 可匹配固定 native exact literal。同文的仅含 `*` 的 wildcard 还须证明 native 全部命中属于 Surge white：以非 `.` 的必要字面字符结尾时，native 不会额外命中带尾根点的 Host，`windows-*.net` 属于这一安全子集；以 `*` 结尾时只采用已证明可吸收根点的形状，如去掉末尾全部星号后为空或末尾为非 `.` 必要字面字符。`*.*` 和 `*.123.*` 的 native 命中可仅依赖 Host 根点，不能据同文删除。来源覆盖只要求单向子集，不能套用 F4 目标投影的双向等价条件而拒绝 `windows-*.net`。复用现有 literal/keyword/wildcard 处理和 `fnmatchcase`，不引入通用 glob/regex 等价引擎。
+证明范围限定为已核查的 ASCII payload、完整 literal 关系和安全 wildcard 关系：keyword 出现在 constructor 规范后的固定 literal 中，且不依赖末尾根点；Surge wildcard 覆盖 native exact 时，仅在覆盖证明中对 constructor 规范后的固定 literal hostname 按 Surge 语义忽略单个尾根点，再作匹配；公共 native matcher 和 Mihomo 输出仍保留尾根点。同文的仅含 `*` 的 wildcard 还须证明 native 全部命中属于 Surge white：以非 `.` 的必要字面字符结尾时，native 不会额外命中带尾根点的 Host，`windows-*.net` 属于这一安全子集；以 `*` 结尾时只采用已证明可吸收根点的形状，如去掉末尾全部星号后为空或末尾为非 `.` 必要字面字符。`*.*` 和 `*.123.*` 的 native 命中可仅依赖 Host 根点，不能据同文删除。来源覆盖只要求单向子集，不能套用 F4 目标投影的双向等价条件而拒绝 `windows-*.net`。复用现有 literal/keyword/wildcard 处理和 `fnmatchcase`，不引入通用 glob/regex 等价引擎。
 
 必须保留反例：
 
@@ -162,6 +162,7 @@ native ASN `0`、`00`、`0013335` 原始字符串身份全部保留。顶层 nat
 - Surge `api-[0-9].example.com` 与 native 同文 wildcard，native `[]` 是字面。
 - 依赖 `microsoft.` keyword 的末尾根点差异，或未证明的 Unicode/simple-fold 关系。
 - Surge white 与 native blocker 同文为 `*.*` 或 `*.123.*`，分别在 `localhost.`、`cdn.123.` 上存在 native 命中而 white 不命中。
+- Surge white `DOMAIN-WILDCARD,*.*` 与 native exact `DOMAIN,localhost.`：Host `localhost.` 命中 native；Surge 忽略 Host 尾根点后只见 `localhost`，white 不命中，不能删除 native blocker。当前基准公开 `exclude_covered` 正确保留它，此项为规划的新扩展分支永久回归。
 - native `DOMAIN-SUFFIX,windows-abc.net` 被 `windows-*.net` 覆盖；其子域如 `x.windows-abc.net` 不匹配该 wildcard。
 - QX 原始 matcher 的未知 Unicode、case、root-dot、byte 语义。公共 Rule 不因目标输出相同而丢 provenance。
 
@@ -170,7 +171,7 @@ native ASN `0`、`00`、`0013335` 原始字符串身份全部保留。顶层 nat
 1. 一次 materialize `rules` 和 `whitelist`，保留一次性 iterable 支持。路由白名单包含外部 white 和输入中的 allow；DNS allow/white 仍使用 `@@`。
 2. 复用 `_domain_value`、`_mihomo_rule`、alias 和现有 payload 编码，取得真正要输出的 matcher，禁止从序列化字符串另写 parser。
 3. 实际目标 kind/payload 完全相同的 matcher 可安全过滤。Surge white 投影到 Mihomo 可能为 `DOMAIN-REGEX`，必须比较转换后的 raw matcher；不能只比较转换前的 kind/value。
-4. 对 Mihomo 实际 native keyword/suffix/wildcard/exact matcher，复用本项已证明的 Surge -> Mihomo 覆盖；例如 QX keyword 输出成 native `DOMAIN-KEYWORD,microsoft` 后，按该实际目标语义删除。Surge 实际 matcher 按已知 Surge 语义检查。QX 目标只使用已证明的相同 matcher/既有安全覆盖，不新增其未知语义推断。
+4. 对 Mihomo 实际 native keyword/suffix/wildcard/exact matcher，复用本项已证明的 Surge -> Mihomo 覆盖；例如 QX keyword 输出成 native `DOMAIN-KEYWORD,microsoft` 后，按该实际目标语义删除。Surge wildcard 覆盖 native exact 时同样只对覆盖证明专用的 constructor 规范后 literal hostname 忽略单个尾根点，不改写实际 matcher；`DOMAIN-WILDCARD,*.*` white 不覆盖 Mihomo `DOMAIN,localhost.`，须保留原文，不记该目标 whitelist-covered 或完整路由覆盖。来源单向覆盖与 native -> Surge 的完整保真分别验证，保留 `windows-*.net` 覆盖正例及已有 `*.*`、`*.123.*` wildcard 负例。Surge 实际 matcher 按已知 Surge 语义检查。QX 目标只使用已证明的相同 matcher/既有安全覆盖，不新增其未知语义推断。
 5. 只有白名单投影保持原范围，或已证明投影范围属于原 white，才可用于跨来源的删除。native white 不得借 Surge 的 case/root-dot 规范扩大原白名单。禁止把所有 white 改成目标来源后直接调用覆盖函数。
 6. 为每条规则区分实际 emitted、合法 covered 和 unsupported。现有第二返回值仍为诊断 `dict[str, int]`：目标合法删除使用 `<file>:<kind>:whitelist-covered`，完整路由覆盖使用 `whitelist-covered:<kind>`，已有 `<file>:<kind>` 继续只表示 unsupported。完整覆盖计数仅在该规范规则至少有一个有效路由投影、且四个路由文件中所有有效投影均被覆盖时增加一次；完全不支持的规则不得计入。未保留的接口参数只对真正输出的 QX matcher 记录限制。Surge 完整文件及两个拆分文件保持一致。
 

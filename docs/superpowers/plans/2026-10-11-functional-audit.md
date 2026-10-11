@@ -268,9 +268,9 @@ QX未知原始语义、闭源客户端运行、初始报告中的未确认候选
 
 #### R11：可证明的来源覆盖
 
-1. 失败测试：Surge keyword microsoft、wildcard windows-*.net对规格native keyword/suffix/exact/wildcard正例，parse/white/exclude公开入口；一次性iterable、allow、flags、顺序、邻居保持。
-2. 最小实现：仅改exclude_covered:1734-1814，维持provenance分组，只补已证明Surge ->Mihomo子集，复用constructor lowercase、固定literal关系及fnmatchcase，不从单个命中推断全部覆盖。
-3. 回归：反向native white、root-dot keyword、Unicode、literal[]/byte?、wildcard不覆盖suffix子域、未知QX；Surge/native同文`*.*`、`*.123.*`分别以`localhost.`、`cdn.123.`证明不能在来源层删除，`windows-*.net`的已证明单向覆盖必须保留。不能套用F4双向等价条件。test_domain_coverage:90-115拆为已证明正例和未知反例。来源层generate结果、完整回归、独立审查复审及提交；U2接收完整提交完成目标层。
+1. 失败测试：Surge keyword microsoft、wildcard windows-*.net对规格native keyword/suffix/exact/wildcard正例，parse/white/exclude公开入口；一次性iterable、allow、flags、顺序、邻居保持。另加永久回归：Surge white `DOMAIN-WILDCARD,*.*` 与 native exact `DOMAIN,localhost.`，Host `localhost.` 命中 native，Surge 忽略单个尾根点后 `localhost` 不命中 white，blocker 必须保留；当前基准公开 exclude_covered 正确保留，此例约束新扩展分支。
+2. 最小实现：仅改exclude_covered:1734-1814，维持provenance分组，只补已证明Surge ->Mihomo子集，复用constructor lowercase、固定literal关系及fnmatchcase，不从单个命中推断全部覆盖。Surge wildcard 覆盖 native exact 时，仅在覆盖证明中对 constructor 规范后的固定 literal hostname 按 Surge 语义忽略单个尾根点，再匹配；公共 native matcher 与 Mihomo 输出保留尾根点。
+3. 回归：反向native white、root-dot keyword、Unicode、literal[]/byte?、wildcard不覆盖suffix子域、未知QX；Surge/native同文`*.*`、`*.123.*`分别以`localhost.`、`cdn.123.`证明不能在来源层删除，`windows-*.net`的已证明单向覆盖必须保留。native exact 根点反例同时核查 matcher 原文未被覆盖证明改写。不能套用F4双向等价条件。test_domain_coverage:90-115拆为已证明正例和未知反例。来源层generate结果、完整回归、独立审查复审及提交；U2接收完整提交完成目标层。
 
 #### R12：Surge class whitelist
 
@@ -324,11 +324,11 @@ QX未知原始语义、闭源客户端运行、初始报告中的未确认候选
 
 #### R11：实际目标覆盖和合法空产物
 
-1. 失败测试：QX公共Rule未在来源层证明覆盖时保留，但实际Surge/Mihomo matcher被已知Surge white完整覆盖后不输出；直接render、一次性rules/white iterable、allow、不同来源white和generator均覆盖。
-2. 最小实现：复用_domain_value、_mihomo_rule、alias和实际编码，比较kind/payload，不parse输出、不改Rule provenance。只有原范围保持或投影属于原white的白名单可删除blocker；相同target raw regex按完整identity，不能扩大native white的case/root-dot。
-3. 诊断测试：目标删除记录<file>:<kind>:whitelist-covered；至少一有效route且全部有效route被覆盖的规范规则只记一次whitelist-covered:<kind>。完全unsupported不计覆盖；同kind不同value、去重、部分目标、allow和接口参数计数均核对。
+1. 失败测试：QX公共Rule未在来源层证明覆盖时保留，但实际Surge/Mihomo matcher被已知Surge white完整覆盖后不输出；直接render、一次性rules/white iterable、allow、不同来源white和generator均覆盖。加入 Surge white `DOMAIN-WILDCARD,*.*` 与 native exact `DOMAIN,localhost.` 永久反例：Host `localhost.` 命中 native，Surge 忽略尾根点后 white 不命中；直接 render 的 Mihomo matcher 必须原文保留，确证覆盖正例仍过滤。
+2. 最小实现：复用_domain_value、_mihomo_rule、alias和实际编码，比较kind/payload，不parse输出、不改Rule provenance。只有原范围保持或投影属于原white的白名单可删除blocker；相同target raw regex按完整identity，不能扩大native white的case/root-dot。Surge wildcard 覆盖 native exact 时，复用 U1 的覆盖证明专用 constructor 规范后 literal hostname，仅忽略单个尾根点，不改写公共 native matcher 或 Mihomo 输出；来源单向覆盖与 native -> Surge 完整保真分别验证。
+3. 诊断测试：目标删除记录<file>:<kind>:whitelist-covered；至少一有效route且全部有效route被覆盖的规范规则只记一次whitelist-covered:<kind>。完全unsupported不计覆盖；同kind不同value、去重、部分目标、allow和接口参数计数均核对。native `DOMAIN,localhost.` 未被 `DOMAIN-WILDCARD,*.*` 覆盖，不能记 Mihomo 目标或完整 whitelist-covered。
 4. generate联动：276-288使用同一normalized列表及非allow数，来源可用且全部这些规则完整覆盖才发布全空route。空route混入完全unsupported仍冻结；有效全来源过滤、DNS-only @@和不可用来源原分支保留。另测不可用来源与有效路由并存时仍按原部分来源行为发布，不能扩大冻结条件；公开二元返回形状不变。
-5. 回归：五类路由body、Surge full/split、white投影可用性/反向及未知QX反例、DNS例外、三purpose/三no_resolve、同轮依赖/磁盘实际bytes；完整render/generate count/排序/诊断一致。
+5. 回归：五类路由body、Surge full/split、white投影可用性/反向及未知QX反例、DNS例外、三purpose/三no_resolve、同轮依赖/磁盘实际bytes；完整render/generate count/排序/诊断一致。上述 native exact 根点反例须经 generate/publish、同轮及磁盘 `fin.yaml` 依赖验证 Mihomo `DOMAIN,localhost.` 原文保留，不能记该目标或完整 whitelist-covered；`windows-*.net` 确证正例仍过滤，已有 `*.*`、`*.123.*` wildcard 负例仍保留。
 6. 完成：完整suite、独立规格审查、修正简化、复审、各slice提交及整个U2交付。主动将R11实际诊断/冻结结果和提交通知U4，由其在同一worktree完成对应README说明；U2不等待U4，不修改README。
 
 ### U3. HTTPS transport
@@ -373,7 +373,7 @@ QX未知原始语义、闭源客户端运行、初始报告中的未确认候选
 **依赖：**U1-U4全部完整交付。**归属：**独立verification worktree/代理，Covers全部要求；不代替各编码任务补欠缺步骤。
 
 1. 核对所有提交和位置，确认shared helper/import、render、generate两个hunk及test_generate两个hunk无覆盖，单项TDD/规格审查可追溯。
-2. 完整unittest/diff检查，三purpose/三no_resolve/六输出联动，R11 mixed unsupported冻结、F2 body/header/实际例外预算、R14 parser/DNS、R4/R5消费及F4 whole-skip全部验收。
+2. 完整unittest/diff检查，三purpose/三no_resolve/六输出联动，R11 mixed unsupported冻结、F2 body/header/实际例外预算、R14 parser/DNS、R4/R5消费及F4 whole-skip全部验收。R11 永久回归须包含 Surge white `DOMAIN-WILDCARD,*.*` 与 native exact `DOMAIN,localhost.`：覆盖证明只对 constructor 规范后的 literal hostname 忽略单个尾根点，来源层保留 blocker；直接 render、generate/publish、同轮及磁盘 `fin.yaml` 依赖均保留 Mihomo 原文，不记该目标或完整 whitelist-covered，确证正例仍过滤，已有 wildcard 根点负例保留。
 3. 专用被忽略目录下载配置的全部真实source/white，使用真实fetch_https保存本轮bytes/HTTP元数据；全部本地输入也保存同轮快照。各下载隔离，自编脚本另目录，不执行外部代码。新生成/publish七组六文件，不抽样。
 4. 在独立隔离root通过公开generate分别运行基准`32236187e11d4fbc1f01245989798e6246ac42c6`及修复提交，重放同一份真实source/white和本地bytes，使用同一独立解释器与生成时刻。比较全部42文件的正文增删、header/body数量和诊断差异，逐项对应已确认修复或本轮输入；未解释变化不得完成。C2按各版本配置路径放置相同bytes，不比较跨平台Git blob，不固定生产数量或哈希；同轮依赖仍由各版本实际生成。基准异常同样记录真实复现及受影响范围，不能虚构对照产物。比较脚本及需复用的JSON结果保存在本worktree被忽略专用目录。
 5. 全量42文件核对UTF-8/LF、格式、header/body count、排序/去重、src/dst/no-resolve、Surge完整/拆分集合、DNS每行UTF-8 bytes含LF/@@/header、七条underscore、dirt已证明white及本轮依赖/磁盘重导入。成熟JSON/ipaddress parser复用，独立核查不共用同一未经验证推断；只检查修复版结构不替代同快照差异比较。
