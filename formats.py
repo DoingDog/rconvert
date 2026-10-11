@@ -637,4 +637,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            for name, body in lines.items()}
     if purpose != "block":
         out["fin-adb.txt"] += "! No AdBlock rules for non-advertising group.\n"
+    for number, line in enumerate(out["fin-adb.txt"].split("\n")[:-1], 1):
+        if len(line.encode("utf-8")) + 1 > _DNS_LINE_LIMIT:
+            label = "title" if number == 2 else f"line {number}"
+            raise ValueError(f"{group}: fin-adb.txt {label} exceeds {_DNS_LINE_LIMIT}-byte line limit including LF")
     return out, dict(skipped)

@@ -1,4 +1,5 @@
 import contextlib
+from datetime import datetime, timezone
 import io
 import json
 from pathlib import Path
@@ -7,10 +8,12 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from formats import render
 from generate import generate, publish
-from rules import Rule, normalize, parse
+from rules import Rule, normalize, parse, parse_whitelist
+from sources import load_config
 
 
 class DnsExactConstructorTests(unittest.TestCase):
@@ -425,3 +428,161 @@ print('bounded native question consumers passed')
                             header = 2 if name == 'fin.yaml' else 7 if name == 'fin-adb.txt' else 1
                             self.assertEqual(disk[root / 'child' / name].splitlines()[header:],
                                              out[root / 'child' / name].splitlines()[header:])
+
+
+class DnsHeaderBudgetTests(unittest.TestCase):
+    def test_title_budget_includes_utf8_prefix_and_lf_in_all_purposes(self):
+        source = Rule('DOMAIN', 'neighbor.example.com')
+        for char, count in (('T', 65526), ('中', 21842)):
+            for fallback in (False, True):
+                for purpose in ('block', 'direct', 'proxy'):
+                    for mode in ('add', 'strip', 'keep'):
+                        for extra in (0, 1):
+                            with self.subTest(char=char, fallback=fallback, purpose=purpose, mode=mode, extra=extra):
+                                title = char * (count + extra)
+                                group = title if fallback else 'dns'
+                                options = {} if fallback else {'title': title}
+                                if extra:
+                                    with self.assertRaisesRegex(ValueError, r'fin-adb\.txt.*title.*65536') as error:
+                                        render(group, [source], purpose=purpose, no_resolve=mode, **options)
+                                    self.assertIn(group, str(error.exception))
+                                else:
+                                    out, skipped = render(group, [source], purpose=purpose, no_resolve=mode, **options)
+                                    row = out['fin-adb.txt'].split('\n')[1]
+                                    self.assertTrue(row == '! Title: ' + title, 'DNS title was changed')
+                                    self.assertEqual(len(row.encode('utf-8')) + 1, 65536)
+                                    reference, reference_skipped = render(group, [source], purpose=purpose,
+                                                                        no_resolve=mode, title='short')
+                                    self.assertEqual(skipped, reference_skipped)
+                                    for name in out:
+                                        if name != 'fin-adb.txt':
+                                            self.assertEqual(out[name], reference[name])
+
+    def test_final_dns_comments_share_the_title_line_budget(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for extra in (0, 1):
+                with self.subTest(purpose=purpose, extra=extra):
+                    title = 'short\n! ' + 'T' * (65533 + extra)
+                    if extra:
+                        with self.assertRaisesRegex(ValueError, r'dns: fin-adb\.txt line 3.*65536'):
+                            render('dns', [], purpose=purpose, no_resolve='keep', title=title)
+                    else:
+                        out, _ = render('dns', [], purpose=purpose, no_resolve='keep', title=title)
+                        self.assertTrue(out['fin-adb.txt'].split('\n')[2] == '! ' + 'T' * 65533)
+                        self.assertEqual(len(out['fin-adb.txt'].split('\n')[2].encode('utf-8')) + 1, 65536)
+
+    def test_complete_dns_headers_and_non_block_comment_keep_exact_output(self):
+        parsed, warnings = parse('DOMAIN,blocked.example.com\n@@||allow.example.com^\nDOMAIN-KEYWORD,replace=\n',
+                                 purpose='block')
+        self.assertEqual(warnings, [])
+        white = parse_whitelist('DOMAIN,safe.example.com')
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), patch('formats.datetime') as clock:
+                    clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                    out, _ = render('dns', normalize(parsed), purpose=purpose, no_resolve=mode,
+                                    whitelist=white, title='中')
+                    expected = ('[Adblock Plus 2.0]\n! Title: 中\n'
+                                '! Homepage: https://github.com/DoingDog/rconvert\n'
+                                '! Expires: 1 day\n! License: Inherits upstream licenses\n'
+                                '! Version: 202601021104\n' +
+                                ('! Total count: 4\n@@|safe.example.com|\n@@||allow.example.com^\n'
+                                 '/^.*replace\\x{3D}.*$/\n0.0.0.0 blocked.example.com\n' if purpose == 'block' else
+                                 '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
+                    self.assertEqual(out['fin-adb.txt'], expected)
+                    self.assertNotIn('\r', out['fin-adb.txt'])
+                    self.assertTrue(all(len(line.encode('utf-8')) + 1 <= 65536
+                                        for line in out['fin-adb.txt'].split('\n')[:-1]))
+
+    def test_title_generate_publish_and_yaml_dependencies_preserve_inputs_and_old_files(self):
+        names = ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
+        for char, count in (('T', 65526), ('中', 21842)):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    for extra in (0, 1):
+                        with self.subTest(char=char, purpose=purpose, mode=mode, extra=extra), \
+                                tempfile.TemporaryDirectory() as directory, patch('formats.datetime') as clock:
+                            clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                            root = Path(directory)
+                            (root / 'static').mkdir()
+                            inputs = {root / 'static/rules.list': b'DOMAIN,neighbor.example.com\n',
+                                      root / 'static/white.list': b'DOMAIN,safe.example.com\n'}
+                            for path, data in inputs.items():
+                                path.write_bytes(data)
+                            title = char * (count + extra)
+                            configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['static/rules.list'] if group != 'child' else ['dns/fin.yaml'],
+                                        'whitelist': ['static/white.list'], **({'title': title} if group == 'dns' else {})}
+                                       for group in ('first', 'dns', 'child')]
+                            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                            self.assertEqual(load_config(root)[1]['title'], title)
+                            old = {}
+                            for group in ('first', 'dns', 'child'):
+                                (root / group).mkdir()
+                                for name in names:
+                                    path = root / group / name
+                                    old[path] = b'old\x00' + (group + name).encode('ascii')
+                                    path.write_bytes(old[path])
+                            with contextlib.redirect_stderr(io.StringIO()):
+                                if extra:
+                                    with self.assertRaisesRegex(ValueError, r'dns: fin-adb\.txt title.*65536'):
+                                        publish(generate(root, lambda url: self.fail(url)), root=root)
+                                else:
+                                    out = generate(root, lambda url: self.fail(url))
+                                    self.assertEqual(len(out), 18)
+                                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                                    dns = out[root / 'dns/fin-adb.txt']
+                                    self.assertTrue(dns.split('\n')[1] == '! Title: ' + title)
+                                    self.assertEqual(len(dns.split('\n')[1].encode('utf-8')) + 1, 65536)
+                                    self.assertTrue(all(len(line.encode('utf-8')) + 1 <= 65536
+                                                        for text in (out[root / group / 'fin-adb.txt']
+                                                                     for group in ('first', 'dns', 'child'))
+                                                        for line in text.split('\n')[:-1]))
+                                    publish(out, root=root)
+                                    self.assertEqual({path: path.read_bytes() for path in out},
+                                                     {path: text.encode('utf-8') for path, text in out.items()})
+                                    (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                                    disk = generate(root, lambda url: self.fail(url))
+                                    self.assertEqual(disk, {path: text for path, text in out.items() if path.parent.name == 'child'})
+                            if extra:
+                                self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+
+    def test_cli_title_failure_does_not_publish_any_group_or_write_static(self):
+        names = ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')
+        for char, count in (('T', 65526), ('中', 21842)):
+            for purpose in ('block', 'direct', 'proxy'):
+                with self.subTest(char=char, purpose=purpose), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'static').mkdir()
+                    source = root / 'static/rules.list'
+                    source.write_bytes(b'DOMAIN,neighbor.example.com\n')
+                    configs = [{'name': group, 'purpose': purpose, 'no_resolve': 'keep',
+                                'sources': ['static/rules.list'], 'whitelist': []}
+                               for group in ('first', 'dns')]
+                    old = {}
+                    for group in ('first', 'dns'):
+                        (root / group).mkdir()
+                        for name in names:
+                            path = root / group / name
+                            old[path] = b'old\x00' + (group + name).encode('ascii')
+                            path.write_bytes(old[path])
+                    for extra in (1, 0):
+                        configs[1]['title'] = char * (count + extra)
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        process = subprocess.run([sys.executable, '-B', '-X', 'utf8',
+                                                  str(Path(__file__).resolve().parents[1] / 'generate.py'),
+                                                  '--root', str(root)], cwd=Path(__file__).resolve().parents[1],
+                                                 capture_output=True, text=True, encoding='utf-8', timeout=8)
+                        if extra:
+                            self.assertNotEqual(process.returncode, 0)
+                            self.assertIn('ValueError: dns: fin-adb.txt title', process.stderr)
+                            self.assertIn('65536', process.stderr)
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        else:
+                            self.assertEqual(process.returncode, 0, process.stderr)
+                            self.assertTrue(all(path.read_bytes() != data for path, data in old.items()))
+                            row = (root / 'dns/fin-adb.txt').read_bytes().split(b'\n')[1]
+                            self.assertTrue(row == b'! Title: ' + configs[1]['title'].encode('utf-8'))
+                            self.assertEqual(len(row) + 1, 65536)
+                        self.assertEqual(source.read_bytes(), b'DOMAIN,neighbor.example.com\n')
