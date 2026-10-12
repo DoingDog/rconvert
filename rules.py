@@ -1871,7 +1871,7 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
     wildcard_patterns = {
         source: [''.join('[[]' if char == '[' else '[]]' if char == ']' else char
                          for char in pattern).encode('utf-8') if source == "mihomo" else pattern
-                 for pattern in group[3] if source == "mihomo" or '[' not in pattern]
+                 for pattern in group[3] if source in {"surge", "mihomo"} or '[' not in pattern]
         for source, group in domain_groups.items()
     }
     kept = []

@@ -18,6 +18,316 @@ from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 from tests import test_functional_audit_rules as audit_rules
 
 
+class SurgeClassWhitelistAuditTests(unittest.TestCase):
+    def test_surge_class_white_covers_matching_exact_hosts_and_keeps_label_neighbors(self):
+        source = ('DOMAIN,cdn-a.example.com\nDOMAIN,cdn-b.example.com\n'
+                  'DOMAIN,cdn-z.example.com\nDOMAIN,x.cdn-a.example.com\n'
+                  'DOMAIN,cdn-a.example.com.other\nDOMAIN-WILDCARD,cdn-[ab].example.com')
+        parsed, messages = parse(source, purpose='block')
+        self.assertEqual(messages, [])
+        white = parse_whitelist('DOMAIN-WILDCARD,cdn-[ab].example.com,DIRECT')
+        self.assertEqual(white, [Rule('DOMAIN-WILDCARD', 'cdn-[ab].example.com')])
+        self.assertEqual(exclude_covered(iter(parsed), iter(white)), parsed[2:5])
+
+    def test_ascii_classes_ranges_and_stars_keep_full_match_boundaries(self):
+        cases = (
+            ('cdn-[ab].example.com', ('cdn-a.example.com', 'cdn-b.example.com'),
+             ('cdn-z.example.com', 'cdn-aa.example.com', 'cdn-.example.com')),
+            ('cdn-[0-9].example.com', ('cdn-0.example.com', 'cdn-7.example.com', 'cdn-9.example.com'),
+             ('cdn-a.example.com', 'cdn-10.example.com')),
+            ('cdn-[a-c0-2].example.com', ('cdn-a.example.com', 'cdn-c.example.com', 'cdn-0.example.com', 'cdn-2.example.com'),
+             ('cdn-d.example.com', 'cdn-3.example.com', 'cdn-ac.example.com')),
+            ('cdn[a-]x.example.com', ('cdnax.example.com', 'cdn-x.example.com'), ('cdnbx.example.com',)),
+            ('cdn[-a]x.example.com', ('cdnax.example.com', 'cdn-x.example.com'), ('cdnbx.example.com',)),
+            ('cdn-[ab]?.example.com', ('cdn-aa.example.com', 'cdn-b9.example.com'),
+             ('cdn-a.example.com', 'cdn-aaa.example.com')),
+            ('cdn-[ab]*.example.com', ('cdn-a.example.com', 'cdn-b9.example.com', 'cdn-a.b.example.com'),
+             ('cdn-z.example.com', 'cdn-.example.com')),
+            ('cdn-[a][b].example.com', ('cdn-ab.example.com',), ('cdn-a.example.com', 'cdn-ba.example.com')),
+        )
+        for pattern, covered, kept in cases:
+            white = parse_whitelist('DOMAIN-WILDCARD,' + pattern)
+            for kind in ('DOMAIN', 'DOMAIN-WILDCARD'):
+                with self.subTest(pattern=pattern, kind=kind):
+                    hosts = [Rule(kind, host) for host in (*covered, *kept, 'x.' + covered[0], covered[0] + '.other')]
+                    self.assertEqual(exclude_covered(iter(hosts), iter(white)), hosts[len(covered):])
+            wider = [Rule('DOMAIN-SUFFIX', covered[0]), Rule('DOMAIN-WILDCARD', 'cdn-*.example.com')]
+            self.assertEqual(exclude_covered(wider, white), wider)
+
+    def test_class_coverage_keeps_source_identity_native_literals_and_unicode_boundaries(self):
+        pattern = 'cdn-[ab].example.com'
+        surge = parse_whitelist('DOMAIN-WILDCARD,' + pattern)
+        qx = parse_whitelist('HOST-WILDCARD,' + pattern + ',DIRECT')
+        native = parse_whitelist(audit_rules.native_text('DOMAIN-WILDCARD,' + pattern))
+        for white, source in ((surge, 'surge'), (qx, 'qx'), (native, 'mihomo')):
+            wildcard = Rule('DOMAIN-WILDCARD', pattern, domain_source=source)
+            exact = Rule('DOMAIN', 'cdn-a.example.com', domain_source=source)
+            foreign = [Rule('DOMAIN', 'cdn-a.example.com', domain_source=other)
+                       for other in ('surge', 'qx', 'mihomo') if other != source]
+            with self.subTest(source=source):
+                self.assertEqual(exclude_covered([exact, wildcard, *foreign], white),
+                                 foreign if source == 'surge' else [exact, *foreign])
+                self.assertEqual(white[0].domain_source, source)
+        literal = Rule('DOMAIN-WILDCARD', pattern, domain_source='mihomo')
+        self.assertEqual(exclude_covered([literal], surge), [literal])
+        self.assertEqual(exclude_covered([Rule('DOMAIN', pattern, domain_source='mihomo')], native), [])
+        for character in ('é', '中', '😀', 'ſ', 'ı'):
+            for source in ('surge', 'qx', 'mihomo'):
+                blocker = Rule('DOMAIN', 'cdn-' + character + '.example.com', domain_source=source)
+                self.assertEqual(exclude_covered([blocker], surge), [blocker])
+        byte_white = parse_whitelist(audit_rules.native_text('DOMAIN-WILDCARD,cdn-??.example.com'))
+        native_host = Rule('DOMAIN', 'cdn-é.example.com', domain_source='mihomo')
+        self.assertEqual(exclude_covered([native_host], byte_white), [])
+        self.assertEqual(exclude_covered([native_host], parse_whitelist('DOMAIN-WILDCARD,cdn-??.example.com')),
+                         [native_host])
+
+    def test_quotes_ascii_case_single_root_dot_flags_and_allow_preserve_input_order(self):
+        for quote in ('', "'", '"'):
+            white = parse_whitelist('DOMAIN-WILDCARD,' + quote + 'CDN-[AB].EXAMPLE.COM.' + quote + ',DIRECT')
+            self.assertEqual(white, [Rule('DOMAIN-WILDCARD', 'cdn-[ab].example.com')])
+            for purpose in ('block', 'direct', 'proxy'):
+                with self.subTest(quote=quote, purpose=purpose):
+                    parsed, messages = parse('DOMAIN,' + quote + 'CDN-A.EXAMPLE.COM.' + quote +
+                                             '\nDOMAIN,cdn-z.example.com\n@@||cdn-a.example.com^', purpose=purpose)
+                    self.assertEqual(messages, [])
+                    self.assertEqual(exclude_covered(iter(parsed), iter(white)), parsed[1:])
+                    self.assertEqual(parsed[0].value, 'cdn-a.example.com')
+            original = [Rule('DOMAIN', host, options, allow, literal, fields, source)
+                        for source in ('surge', 'qx', 'mihomo')
+                        for host in ('cdn-a.example.com', 'cdn-z.example.com')
+                        for options in ((), ('via-interface=en1',)) for allow in (False, True)
+                        for literal in (False, True) for fields in (False, True)]
+            expected = [rule for rule in original if rule.allow or rule.domain_source != 'surge'
+                        or rule.value == 'cdn-z.example.com']
+            self.assertEqual(exclude_covered(iter(original), iter(white)), expected)
+            self.assertEqual(set(normalize(original * 2)), set(original))
+        native_root = Rule('DOMAIN', 'CDN-A.EXAMPLE.COM.', domain_source='mihomo')
+        self.assertEqual(exclude_covered([native_root], white), [native_root])
+        self.assertEqual(native_root.value, 'CDN-A.EXAMPLE.COM.')
+        processes = [Rule(kind, 'cdn-[ab].example.com', literal_process=literal, native_fields=fields)
+                     for kind in ('PROCESS-NAME', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD')
+                     for literal in (False, True) for fields in (False, True)]
+        self.assertEqual(exclude_covered(processes, white), processes)
+
+    def test_unsupported_negation_escape_unicode_and_incomplete_classes_still_warn(self):
+        patterns = ('cdn-[!ab].example.com', 'cdn-[^ab].example.com', r'cdn-\[ab\].example.com',
+                    'cdn-[é].example.com', 'cdn-[中].example.com', 'cdn-[].example.com',
+                    'cdn-[ab.example.com', 'cdn-ab].example.com', 'cdn-[[ab]].example.com')
+        for purpose in ('block', 'direct', 'proxy'):
+            for pattern in patterns:
+                with self.subTest(purpose=purpose, pattern=pattern):
+                    source = 'DOMAIN-WILDCARD,' + pattern
+                    parsed, messages = parse(source + '\nDOMAIN,neighbor.example.org', purpose=purpose)
+                    self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org')])
+                    self.assertEqual(messages, ['line 1: invalid domain ' + pattern])
+                    with self.assertRaisesRegex(ValueError, 'line 1: invalid domain'):
+                        parse_whitelist(source)
+                    self.assertEqual(parse('NOT,((DOMAIN-WILDCARD,' + pattern + '))', purpose=purpose)[0], [])
+                    native, warnings = parse(audit_rules.native_text(source), purpose=purpose)
+                    self.assertEqual(warnings, [])
+                    self.assertEqual(native, [Rule('DOMAIN-WILDCARD', pattern, domain_source='mihomo')])
+
+    def test_logical_children_are_not_removed_or_reordered_by_external_class_white(self):
+        white = parse_whitelist('DOMAIN-WILDCARD,"CDN-[AB].EXAMPLE.COM.",DIRECT')
+        for operator, value in (
+                ('AND', '((DOMAIN,"cdn-a.example.com"),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))'),
+                ('OR', '((DOMAIN-WILDCARD,"cdn-[ab].example.com"),(DOMAIN,neighbor.example.org))'),
+                ('NOT', '((DOMAIN,"cdn-a.example.com"))'),
+                ('AND', '((NOT,((DOMAIN,"cdn-a.example.com"))),(OR,((DOMAIN,neighbor.example.org),(NETWORK,tcp))))')):
+            for purpose in ('block', 'direct', 'proxy'):
+                parsed, messages = parse(operator + ',' + value, purpose=purpose)
+                self.assertEqual(messages, [])
+                self.assertEqual(parsed, [Rule(operator, value)])
+                self.assertEqual(exclude_covered(iter(parsed), iter(white)), parsed)
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(operator=operator, purpose=purpose, mode=mode):
+                        outputs, _ = render('logical', parsed, purpose=purpose, no_resolve=mode, whitelist=white)
+                        expected = value.replace('"', '')
+                        if mode == 'strip':
+                            expected = expected.replace(',no-resolve)', ')')
+                        if operator == 'OR':
+                            expected = expected.replace('DOMAIN-WILDCARD,cdn-[ab].example.com',
+                                                        r'DOMAIN-REGEX,^cdn\-[ab]\.example\.com\.?$')
+                        self.assertEqual(outputs['fin.yaml'], '# logical rules: 1\npayload:\n  - ' +
+                                         json.dumps(operator + ',' + expected) + '\n')
+                        repeated, warnings = parse(outputs['fin.yaml'], purpose=purpose)
+                        self.assertEqual(warnings, [])
+                        self.assertEqual(len(repeated), 1)
+                        self.assertEqual(repeated[0].value, expected)
+                        self.assertIn(operator + ',', outputs['fin.txt'])
+                        self.assertNotIn('SRC-IP-CIDR,198.51.100.0/24,no-resolve', outputs['fin.yaml'])
+
+    def test_generate_class_white_keeps_actual_surge_and_mihomo_dependency_bytes(self):
+        source = ('DOMAIN,cdn-a.example.com\nDOMAIN,cdn-b.example.com\nDOMAIN,cdn-z.example.com\n'
+                  'DOMAIN,neighbor.example.org\nDOMAIN-WILDCARD,cdn-[ab].example.com\n'
+                  'IP-CIDR,192.0.2.0/24,no-resolve\nSRC-IP-CIDR,198.51.100.0/24\n@@||allow.example.org^\n')
+        white = 'DOMAIN-WILDCARD,"CDN-[AB].EXAMPLE.COM."\n'
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for remote in (False, True):
+                    with self.subTest(purpose=purpose, mode=mode, remote=remote), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        (root / 'static').mkdir()
+                        (root / 'static/source.list').write_text(source, encoding='utf-8')
+                        (root / 'static/white.list').write_text(white, encoding='utf-8')
+                        inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                        white_input = 'https://example.com/white' if remote else 'static/white.list'
+                        configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': [white_input], 'whitelist': []},
+                                   {'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['https://example.com/source' if remote else 'static/source.list'],
+                                    'whitelist': [white_input, 'white/fin.txt']},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['source/fin.yaml'], 'whitelist': ['white/fin.txt']}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        old = {}
+                        for group in ('white', 'source', 'child'):
+                            (root / group).mkdir()
+                            for name in FILES:
+                                path = root / group / name
+                                path.write_bytes(b'old product\x00\xff\r\n')
+                                old[path] = path.read_bytes()
+                        responses = {'https://example.com/white': white.encode(), 'https://example.com/source': source.encode()}
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostics:
+                            clock.now.return_value = datetime(2026, 10, 13, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: responses[url])
+                        self.assertEqual(set(outputs), set(old))
+                        self.assertNotIn('invalid ', diagnostics.getvalue())
+                        self.assertNotIn('frozen', diagnostics.getvalue())
+                        self.assertEqual(outputs[root / 'white/fin.txt'],
+                                         '# white rules: 1\nDOMAIN-WILDCARD,cdn-[ab].example.com\n')
+                        self.assertEqual(parse_whitelist(outputs[root / 'white/fin.txt']),
+                                         [Rule('DOMAIN-WILDCARD', 'cdn-[ab].example.com')])
+                        self.assertEqual(outputs[root / 'white/fin.yaml'], '# white rules: 1\npayload:\n  - ' +
+                                         json.dumps(r'DOMAIN-REGEX,^cdn\-[ab]\.example\.com\.?$') + '\n')
+                        option = '' if mode == 'strip' else ',no-resolve'
+                        surge_ip = 'IP-CIDR,192.0.2.0/24' + option
+                        source_ip = 'SRC-IP,198.51.100.0/24'
+                        for group in ('source', 'child'):
+                            bodies = {
+                                'fin.txt': ['DOMAIN,cdn-z.example.com', 'DOMAIN,neighbor.example.org', surge_ip, source_ip],
+                                'fin-surge.txt': [surge_ip, source_ip],
+                                'fin-surge-ds.txt': ['cdn-z.example.com', 'neighbor.example.org'],
+                                'fin-qx.txt': ['HOST,cdn-z.example.com,LIST', 'HOST,neighbor.example.org,LIST',
+                                               'IP-CIDR,192.0.2.0/24,LIST' + option],
+                                'fin.yaml': ['  - "DOMAIN,cdn-z.example.com"', '  - "DOMAIN,neighbor.example.org"',
+                                             '  - ' + json.dumps(surge_ip), '  - "SRC-IP-CIDR,198.51.100.0/24"'],
+                            }
+                            for name, body in bodies.items():
+                                self.assertEqual(outputs[root / group / name], f'# {group} rules: {len(body)}\n' +
+                                                 ('payload:\n' if name == 'fin.yaml' else '') +
+                                                 ''.join(line + '\n' for line in body))
+                            dns_body = ([*(['@@||allow.example.org^'] if group == 'source' else []),
+                                         r'@@/^cdn\-[ab]\.example\.com$/',
+                                         '0.0.0.0 cdn-z.example.com', '0.0.0.0 neighbor.example.org'] if purpose == 'block' else [])
+                            dns = outputs[root / group / 'fin-adb.txt'].splitlines()
+                            self.assertEqual(dns[6], f'! Total count: {len(dns_body)}')
+                            self.assertEqual(dns[7:], dns_body if purpose == 'block' else
+                                             ['! No AdBlock rules for non-advertising group.'])
+                            self.assertNotIn('cdn-a.example.com', outputs[root / group / 'fin.yaml'])
+                            self.assertNotIn('cdn-b.example.com', outputs[root / group / 'fin.yaml'])
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        publish(outputs, root=root)
+                        published = {path: path.read_bytes() for path in outputs}
+                        self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                        self.assertTrue(all(data.endswith(b'\n') and b'\r' not in data for data in published.values()))
+                        (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                        (root / 'static/source.list').unlink()
+                        (root / 'static/white.list').unlink()
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                            clock.now.return_value = datetime(2026, 10, 13, tzinfo=timezone.utc)
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+                        publish(disk, root=root)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_class_all_covered_empty_generation_freeze_strict_white_path_and_rollback(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'static').mkdir()
+                    (root / 'static/input.list').write_text('DOMAIN,cdn-a.example.com\nDOMAIN,cdn-b.example.com\n', encoding='utf-8')
+                    (root / 'static/white.list').write_text('DOMAIN-WILDCARD,cdn-[ab].example.com\n', encoding='utf-8')
+                    config = [{'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                               'sources': ['static/input.list'], 'whitelist': ['static/white.list']},
+                              {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                               'sources': ['source/fin.yaml'], 'whitelist': ['static/white.list']}]
+                    (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(len(outputs), 12)
+                    for group in ('source', 'child'):
+                        for name in FILES:
+                            text = outputs[root / group / name]
+                            if name == 'fin-adb.txt':
+                                self.assertEqual(text.splitlines()[6:],
+                                                 ['! Total count: 1', r'@@/^cdn\-[ab]\.example\.com$/'] if purpose == 'block' else
+                                                 ['! Total count: 0', '! No AdBlock rules for non-advertising group.'])
+                            else:
+                                self.assertEqual(text, f'# {group} rules: 0\n' + ('payload:\n' if name == 'fin.yaml' else ''))
+                    publish(outputs, root=root)
+                    published = {path: path.read_bytes() for path in outputs}
+                    config[0]['sources'] = ['https://example.com/missing']
+                    (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
+
+                    def unavailable(url):
+                        raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostics:
+                        self.assertEqual(generate(root, unavailable), {})
+                    self.assertIn('HTTP 404; skipped', diagnostics.getvalue())
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+                    config[0]['sources'] = ['static/input.list']
+                    (root / 'static/white.list').write_text('DOMAIN-WILDCARD,cdn-[!ab].example.com\n', encoding='utf-8')
+                    (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
+                    with self.assertRaisesRegex(ValueError, 'Invalid whitelist'):
+                        generate(root, lambda url: self.fail(url))
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+                    with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                        publish({root / 'static/forbidden.txt': 'x'}, root=root)
+                    config[0]['sources'] = ['../outside.list']
+                    (root / 'static/white.list').write_text('DOMAIN-WILDCARD,cdn-[ab].example.com\n', encoding='utf-8')
+                    (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
+                    with self.assertRaisesRegex(ValueError, 'Source escapes root'):
+                        generate(root, lambda url: self.fail(url))
+                    (root / 'not-a-directory').write_bytes(b'unchanged')
+                    with self.assertRaises(OSError):
+                        publish({root / 'source/fin.txt': 'replacement\n', root / 'not-a-directory/new.txt': 'x'}, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+                    self.assertEqual((root / 'not-a-directory').read_bytes(), b'unchanged')
+
+    def test_long_classes_and_deep_logical_preserve_original_limits_under_eight_seconds(self):
+        code = '''import json
+import sys
+from formats import render
+from rules import Rule, exclude_covered, parse, parse_whitelist
+before = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+pattern = 'cdn-[' + 'a' * 5000 + 'b].example.com'
+white = parse_whitelist('DOMAIN-WILDCARD,' + pattern)
+assert white == [Rule('DOMAIN-WILDCARD', pattern)]
+assert exclude_covered([Rule('DOMAIN', 'cdn-b.example.com')], white) == []
+assert exclude_covered([Rule('DOMAIN', 'cdn-z.example.com')], white) == [Rule('DOMAIN', 'cdn-z.example.com')]
+for depth in (600, 1000):
+    matcher = 'DOMAIN-WILDCARD,cdn-[ab].example.com'
+    for _ in range(depth):
+        matcher = 'NOT,((' + matcher + '))'
+    parsed, warnings = parse(matcher, purpose='proxy')
+    assert not warnings and parsed == [Rule('NOT', matcher[4:])]
+    assert exclude_covered(iter(parsed), iter(white)) == parsed
+    outputs, skips = render('deep', parsed, purpose='proxy', no_resolve='keep')
+    expected = matcher.replace('DOMAIN-WILDCARD,cdn-[ab].example.com', r'DOMAIN-REGEX,^cdn\\-[ab]\\.example\\.com\\.?$')
+    assert outputs['fin.yaml'] == '# deep rules: 1\\npayload:\\n  - ' + json.dumps(expected) + '\\n'
+    assert parse(outputs['fin.yaml'], purpose='proxy')[1] == []
+    assert skips['fin.txt:NOT'] == 1 and skips['fin-surge.txt:NOT'] == 1
+assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+
 class CrossSourceCoverageAuditTests(unittest.TestCase):
     def test_surge_keyword_covers_native_required_keyword_literal(self):
         parsed, messages = parse(audit_rules.native_text('DOMAIN-KEYWORD,MICROSOFT',

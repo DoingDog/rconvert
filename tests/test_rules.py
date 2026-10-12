@@ -4721,7 +4721,7 @@ class NativeWildcardWhitelistTests(unittest.TestCase):
             original = [Rule("DOMAIN", "api-7.example.org", domain_source=source),
                         Rule("DOMAIN-WILDCARD", "api-[0-9].example.org", domain_source=source)]
             wildcard = Rule("DOMAIN-WILDCARD", "api-[0-9].example.org", domain_source=source)
-            self.assertEqual(rules.exclude_covered(original, [wildcard]), original[:1])
+            self.assertEqual(rules.exclude_covered(original, [wildcard]), [] if source == "surge" else original[:1])
         processes = [Rule(kind, "App[0-9]ı?*", literal_process=literal, native_fields=native)
                      for kind in ("PROCESS-NAME", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD")
                      for literal in (False, True) for native in (False, True)]
