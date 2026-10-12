@@ -1027,28 +1027,47 @@ def _valid_name_list(value: str) -> bool:
     return all(part.strip(_GO_WHITESPACE) for part in value.split('/'))
 
 
-def _valid_unsigned_ranges(value: str, bits: int, maximum: int, *, allow_empty: bool = True) -> bool:
+def _unsigned_ranges(value: str, bits: int, maximum: int, *, allow_empty: bool = True) -> list[tuple[int, int]] | None:
     value = value.strip(_GO_WHITESPACE)
     if value in {'', '*'}:
-        return allow_empty
+        return [] if allow_empty else None
     parts = value.replace(',', '/').split('/')
     if len(parts) > 28:
-        return False
+        return None
+    ranges = []
     for part in parts:
         if not part:
             continue
         part = part.strip(_GO_WHITESPACE)
         endpoints = part.split('-') if part else ['0']
         if len(endpoints) > 2:
-            return False
+            return None
+        numbers = []
         for endpoint in endpoints:
             endpoint = endpoint.strip('[ ]')
             number = endpoint.lstrip('0') or '0'
             if (not endpoint.isascii() or not endpoint.isdecimal() or len(number) > 20
-                    or int(number) > 18446744073709551615
-                    or int(number) % (1 << bits) > maximum):
-                return False
-    return allow_empty or any(parts)
+                    or int(number) > 18446744073709551615):
+                return None
+            number = int(number) % (1 << bits)
+            if number > maximum:
+                return None
+            numbers.append(number)
+        ranges.append((min(numbers), max(numbers)))
+    return ranges if allow_empty or ranges else None
+
+
+def _valid_unsigned_ranges(value: str, bits: int, maximum: int, *, allow_empty: bool = True) -> bool:
+    return _unsigned_ranges(value, bits, maximum, allow_empty=allow_empty) is not None
+
+
+def _normalize_port(value: str, native_fields: bool) -> str | None:
+    if not native_fields:
+        return value if _valid_port(value) else None
+    ranges = _unsigned_ranges(value, 16, 65535, allow_empty=False)
+    if ranges is None:
+        return None
+    return '/'.join(str(start) if start == end else f'{start}-{end}' for start, end in ranges)
 
 
 def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
@@ -1267,8 +1286,8 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             except ValueError:
                 return None
         elif kind in _PORTS:
-            value = checked
-            if not _valid_port(value):
+            value = _normalize_port(checked, native_fields)
+            if value is None:
                 return None
             if '/' in value:
                 port_kind = "DST-PORT" if kind == "DEST-PORT" else kind
@@ -1687,9 +1706,11 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
                 warnings.append(f"line {number}: invalid CIDR {value}")
                 continue
         elif kind in _PORTS:
-            if not _valid_port(value):
+            port = _normalize_port(value, yaml_rule)
+            if port is None:
                 warnings.append(f"line {number}: invalid port {value}")
                 continue
+            value = port
             if '/' in value:
                 port_kind = "DST-PORT" if kind == "DEST-PORT" else kind
                 value = '(' + ','.join(f"({port_kind},{part})" for part in value.split('/')) + ')'

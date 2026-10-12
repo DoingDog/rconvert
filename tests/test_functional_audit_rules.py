@@ -13,7 +13,7 @@ from urllib.error import HTTPError
 
 from formats import FILES, render
 from generate import generate, publish
-from rules import Rule, normalize, parse, parse_whitelist
+from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 
 
 def native_text(*matchers):
@@ -1749,3 +1749,319 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                     self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
                     publish(disk, root=root)
                     self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+
+class NativeUnsignedPortAuditTests(unittest.TestCase):
+    kinds = ('DEST-PORT', 'DST-PORT', 'SRC-PORT', 'IN-PORT')
+    cases = (('443-80', '80-443'), ('[80-90]', '80-90'), ('/80//443/', '80/443'),
+             ('80/ /443', '80/0/443'), ('65536', '0'), ('65537-65536', '0-1'),
+             ('18446744073709551615', '65535'), ('000443', '443'), ('0000-80', '0-80'),
+             ('80-80', '80'), ('0-65536', '0'), ('80-0', '0-80'), ('80 - 90', '80-90'),
+             ('[ 80 ]-[ 90 ]', '80-90'), ('[[80]', '80'), ('80]]', '80'),
+             ('65535-65537', '1-65535'), ('/ /', '0'), ('80/\t/443', '80/0/443'),
+             ('80/ /443', '80/0/443'), ('80/ /443', '80/0/443'))
+
+    @staticmethod
+    def port_leaf(kind, canonical):
+        if '/' not in canonical:
+            return f'({kind},{canonical})'
+        port_kind = 'DST-PORT' if kind == 'DEST-PORT' else kind
+        return f"(OR,({','.join(f'({port_kind},{part})' for part in canonical.split('/'))}))"
+
+    def test_native_reversed_range_keeps_neighbor_and_sorts_converted_endpoints(self):
+        self.assertEqual(parse(native_text('DST-PORT,443-80', 'DOMAIN,neighbor.example.org'), purpose='proxy'),
+                         ([Rule('DST-PORT', '80-443'),
+                           Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')], []))
+
+    def test_constructor_ranges_top_logical_quotes_and_order_use_the_same_unsigned_values(self):
+        for kind in self.kinds:
+            for raw, canonical in self.cases:
+                leaf = self.port_leaf(kind, canonical)
+                top = Rule(kind, canonical) if '/' not in canonical else Rule('OR', leaf[4:-1], native_fields=True)
+                pairs = ((kind + ',' + raw, top),
+                         (f'AND,(({kind},{raw}),(NETWORK,tcp))', Rule('AND', f'({leaf},(NETWORK,tcp))', native_fields=True)),
+                         (f'OR,((NETWORK,tcp),({kind},{raw}))', Rule('OR', f'((NETWORK,tcp),{leaf})', native_fields=True)),
+                         (f'NOT,(({kind},{raw}))', Rule('NOT', f'({leaf})', native_fields=True)),
+                         (f'AND,((NOT,(({kind},{raw}))),(OR,((NETWORK,tcp),({kind},{raw}))))',
+                          Rule('AND', f'((NOT,({leaf})),(OR,((NETWORK,tcp),{leaf})))', native_fields=True)))
+                for matcher, wanted in pairs:
+                    for purpose in ('block', 'direct', 'proxy'):
+                        with self.subTest(kind=kind, raw=raw, matcher=matcher[:50], purpose=purpose):
+                            self.assertEqual(parse(native_text(matcher, 'DOMAIN,neighbor.example.org'), purpose=purpose),
+                                             ([wanted, Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')], []))
+        for header in ('payload', 'rules'):
+            for matcher, wanted in (('DST-PORT,[80-90]', Rule('DST-PORT', '80-90')),
+                                    ('NOT,((SRC-PORT,65537-65536))', Rule('NOT', '((SRC-PORT,0-1))', native_fields=True))):
+                for scalar in (matcher, "'" + matcher + "'", json.dumps(matcher)):
+                    self.assertEqual(parse(header + ':\n  - ' + scalar, purpose='proxy'), ([wanted], []))
+
+    def test_uint64_and_raw_segment_boundaries_keep_global_limits_and_empty_segments(self):
+        limits = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+        cases = (('0' * 5000 + '65537', '1'), ('0' * 5000 + '18446744073709551615', '65535'),
+                 ('/' * 27 + '80', '80'), ('80' + '/' * 27, '80'),
+                 ('/' * 13 + '80' + '/' * 14, '80'), ('/'.join(['80'] * 28), '/'.join(['80'] * 28)))
+        for raw, canonical in cases:
+            for kind in self.kinds:
+                leaf = self.port_leaf(kind, canonical)
+                wanted = Rule(kind, canonical) if '/' not in canonical else Rule('OR', leaf[4:-1], native_fields=True)
+                self.assertEqual(parse(native_text(kind + ',' + raw), purpose='block'), ([wanted], []))
+                self.assertEqual(parse(native_text(f'NOT,(({kind},{raw}))'), purpose='block'),
+                                 ([Rule('NOT', f'({leaf})', native_fields=True)], []))
+        for raw in ('/' * 28 + '80', '80' + '/' * 28, '/'.join(['80'] * 29),
+                    '18446744073709551616', '9' * 5000, '0' * 5000 + '18446744073709551616'):
+            parsed, messages = parse(native_text('DST-PORT,' + raw, 'DOMAIN,neighbor.example.org'), purpose='block')
+            self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')])
+            self.assertEqual(messages, ['line 2: invalid port ' + raw])
+        self.assertEqual((sys.get_int_max_str_digits(), sys.getrecursionlimit()), limits)
+
+    def test_invalid_native_values_warn_and_never_keep_partial_logical_rules(self):
+        invalid = ('', '*', '/', '//', '>80', '>=80', '<80', '<=80', '80/>90', '-1', '+443',
+                   '1-2-3', '80-', '-80', '[ ]', '80\t-90', '80-\t90', '80 -90',
+                   '80- 90', '0x50', '４４３', '\x1c80\x1c', '​80', '"443"', "'443'")
+        for kind in self.kinds:
+            for raw in invalid:
+                for operator in ('top', 'AND', 'OR', 'NOT'):
+                    expression = f'(({kind},{raw}))' if operator == 'NOT' else f'(({kind},{raw}),(NETWORK,tcp))'
+                    matcher = kind + ',' + raw if operator == 'top' else operator + ',' + expression
+                    with self.subTest(kind=kind, raw=raw, operator=operator):
+                        self.assertEqual(parse(native_text(matcher, 'DOMAIN,neighbor.example.org'), purpose='proxy'),
+                                         ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')],
+                                          ['line 2: invalid port ' + raw if operator == 'top' else
+                                           'line 2: invalid logical expression ' + expression]))
+        self.assertEqual(parse(native_text('DST-PORT,\t443 '), purpose='proxy'), ([Rule('DST-PORT', '443')], []))
+
+    def test_native_params_are_not_ports_and_ordinary_ranges_remain_strict(self):
+        for kind in self.kinds:
+            for params in ('443', '443,src,no-resolve,anything', 'src', 'no-resolve'):
+                self.assertEqual(parse(native_text(f'{kind},80,{params}'), purpose='proxy'), ([Rule(kind, '80')], []))
+                self.assertEqual(parse(native_text(f'AND,(({kind},80,{params}),(NETWORK,tcp))'), purpose='proxy'),
+                                 ([Rule('AND', f'(({kind},80),(NETWORK,tcp))', native_fields=True)], []))
+            for raw in ('65536', '65537-65536', '443-80', '[80-90]', '/80//443/', '80/ /443', '80-0'):
+                parsed, messages = parse(f'{kind},"{raw}"\nDOMAIN,neighbor.example.org', purpose='proxy')
+                self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org')])
+                self.assertEqual(messages, ['line 1: invalid port ' + raw])
+            for raw, canonical in (('>80', '81-65535'), ('<=443', '1-443'), ('000443', '000443')):
+                self.assertEqual(parse(f'NOT,(({kind},"{raw}"))', purpose='proxy'),
+                                 ([Rule('NOT', f'(({kind},{canonical}))')], []))
+            ordinary = 'DST-PORT' if kind == 'DEST-PORT' else kind
+            self.assertEqual(parse(f'{kind},80,443,PROXY', purpose='proxy'),
+                             ([Rule('OR', f'(({ordinary},80),({ordinary},443))')], []))
+        for kind, raw in (('UID', '4294967296-4294967298'), ('UID', '18446744073709551615'),
+                          ('DSCP', '256-319'), ('DSCP', '/'), ('DSCP', '*'), ('DSCP', '80/ /443')):
+            if raw == '80/ /443':
+                self.assertEqual(parse(native_text(kind + ',' + raw), purpose='proxy'),
+                                 ([], ['line 2: invalid DSCP ' + raw]))
+            else:
+                self.assertEqual(parse(native_text(kind + ',' + raw), purpose='proxy'), ([Rule(kind, raw)], []))
+        for kind in ('UID', 'DSCP'):
+            self.assertEqual(parse(native_text(kind + ',0/1/8-1'), purpose='proxy'), ([Rule(kind, '0/1/8-1')], []))
+            self.assertEqual(parse(native_text(kind + ',' + '/'.join(['0'] * 29)), purpose='proxy')[0], [])
+
+    def test_native_ports_preserve_sibling_source_identity_no_resolve_and_white_roles(self):
+        raw = ('((DST-PORT,65536),(SRC-PORT,443-80),(IN-PORT,80/ /443),'
+               '(DOMAIN,ADS.EXAMPLE.ORG.),(DOMAIN-WILDCARD,[ab]),(IP-ASN,00),'
+               '(PROCESS-NAME,"Game"),(IP-CIDR,192.0.2.7/24),(IP-CIDR,198.51.100.7/24,no-resolve),'
+               '(IP-CIDR,203.0.113.7/24,src,no-resolve))')
+        canonical = ('((DST-PORT,0),(SRC-PORT,80-443),(OR,((IN-PORT,80),(IN-PORT,0),(IN-PORT,443))),'
+                     '(DOMAIN,ADS.EXAMPLE.ORG.),(DOMAIN-WILDCARD,[ab]),(IP-ASN,00),'
+                     '(PROCESS-NAME,"Game"),(IP-CIDR,192.0.2.0/24),(IP-CIDR,198.51.100.0/24,no-resolve),'
+                     '(SRC-IP-CIDR,203.0.113.0/24))')
+        wanted = Rule('AND', canonical, literal_process=True, native_fields=True, domain_source='mihomo')
+        parsed, messages = parse(native_text('AND,' + raw), purpose='proxy')
+        self.assertEqual((parsed, messages), ([wanted], ['line 2: unsupported no-resolve for SRC-IP-CIDR']))
+        self.assertEqual(normalize(parsed * 2), [wanted])
+        self.assertEqual(exclude_covered(iter(parsed), iter([Rule('DOMAIN', 'ADS.EXAMPLE.ORG.', domain_source='mihomo')])), parsed)
+        for mode in ('add', 'strip', 'keep'):
+            emitted = canonical
+            if mode == 'add':
+                emitted = emitted.replace('(IP-ASN,00)', '(IP-ASN,00,no-resolve)').replace('192.0.2.0/24)', '192.0.2.0/24,no-resolve)')
+            elif mode == 'strip':
+                emitted = emitted.replace(',no-resolve', '')
+            outputs, _ = render('native-ports', iter(parsed), purpose='proxy', no_resolve=mode)
+            self.assertEqual(parse(outputs['fin.yaml'], purpose='proxy'),
+                             ([Rule('AND', emitted, literal_process=True, native_fields=True, domain_source='mihomo')], []))
+        self.assertEqual(parse_whitelist(native_text('DST-PORT,65536', 'NOT,((SRC-PORT,443-80))')), [])
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter('always')
+            self.assertEqual(parse_whitelist(native_text('DST-PORT,>80', 'DOMAIN,neighbor.example.org')),
+                             [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')])
+        self.assertEqual([str(item.message) for item in caught], ['line 2: invalid port >80'])
+        allowed = Rule('OR', '((DST-PORT,0),(DST-PORT,443))', allow=True, native_fields=True)
+        for mode in ('add', 'strip', 'keep'):
+            outputs, skipped = render('allow', [allowed], purpose='block', no_resolve=mode)
+            self.assertEqual(outputs['fin.yaml'], '# allow rules: 0\npayload:\n')
+            self.assertEqual(skipped, {name + ':OR': 1 for name in FILES})
+
+    def test_deep_native_port_logic_keeps_eight_second_timeout_and_global_limits(self):
+        code = '''import json
+import sys
+from formats import render
+from rules import Rule, parse
+before = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+for depth in (600, 1000):
+    matcher, canonical = 'SRC-PORT,65537-65536', 'SRC-PORT,0-1'
+    for _ in range(depth):
+        matcher, canonical = 'NOT,((' + matcher + '))', 'NOT,((' + canonical + '))'
+    source = 'payload:\\n  - ' + json.dumps(matcher)
+    parsed, messages = parse(source, purpose='proxy')
+    assert (parsed, messages) == ([Rule('NOT', canonical[4:], native_fields=True)], [])
+    outputs, skips = render('deep-port', parsed, purpose='proxy', no_resolve='add')
+    assert 'fin.yaml:NOT' not in skips
+    assert parse(outputs['fin.yaml'], purpose='proxy') == (parsed, [])
+assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_generate_native_ports_six_outputs_same_round_disk_and_generated_white(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for remote in (False, True):
+                    with self.subTest(purpose=purpose, mode=mode, remote=remote), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        initial = '' if mode == 'add' else ',no-resolve'
+                        flag = '' if mode == 'strip' else ',no-resolve'
+                        source = native_text('DST-PORT,65536', 'SRC-PORT,443-80', 'IN-PORT,[80-90]',
+                                             'DST-PORT,/80//443/', 'NOT,((DST-PORT,65537-65536))',
+                                             'AND,((SRC-PORT,80/ /443),(NETWORK,tcp),'
+                                             f'(IP-CIDR,192.0.2.7/24{initial}),(SRC-IP-CIDR,198.51.100.7/24))',
+                                             'OR,((IN-PORT,18446744073709551615),(DST-PORT,80,443))',
+                                             'DOMAIN,covered.example.org', 'DOMAIN,neighbor.example.org',
+                                             'DST-PORT,>80') + '@@||allow.example.org^\n'
+                        white = 'DOMAIN,covered.example.org\n'
+                        (root / 'static').mkdir()
+                        (root / 'static/source.list').write_text(source, encoding='utf-8')
+                        (root / 'static/white.list').write_text(white, encoding='utf-8')
+                        inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                        configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['https://example.com/white' if remote else 'static/white.list'], 'whitelist': []},
+                                   {'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['https://example.com/source' if remote else 'static/source.list'],
+                                    'whitelist': ['white/fin.txt']},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['source/fin.yaml'], 'whitelist': ['white/fin.txt']}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        old = {}
+                        for group in ('white', 'source', 'child'):
+                            (root / group).mkdir()
+                            for name in FILES:
+                                path = root / group / name
+                                path.write_bytes(b'old product\x00\xff\r\n')
+                                old[path] = path.read_bytes()
+                        responses = {'https://example.com/white': white.encode('utf-8'),
+                                     'https://example.com/source': source.encode('utf-8')}
+                        calls = []
+
+                        def fetch(url):
+                            calls.append(url)
+                            return responses[url]
+
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                            clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                            outputs = generate(root, fetch)
+                        self.assertEqual(calls, ['https://example.com/white', 'https://example.com/source'] if remote else [])
+                        self.assertIn('invalid port >80', diagnostic.getvalue())
+                        self.assertNotIn('invalid whitelist', diagnostic.getvalue())
+                        self.assertNotIn('frozen', diagnostic.getvalue())
+                        self.assertEqual(list(outputs), [root / group / name for group in ('white', 'source', 'child') for name in FILES])
+                        conjunction = ('((OR,((SRC-PORT,80),(SRC-PORT,0),(SRC-PORT,443))),(NETWORK,tcp),'
+                                       f'(IP-CIDR,192.0.2.0/24{flag}),(SRC-IP-CIDR,198.51.100.0/24))')
+                        yaml_body = ['AND,' + conjunction, 'DOMAIN,neighbor.example.org', 'DST-PORT,0', 'IN-PORT,80-90',
+                                     'NOT,((DST-PORT,0-1))', 'OR,((DST-PORT,80),(DST-PORT,443))',
+                                     'OR,((IN-PORT,65535),(DST-PORT,80))', 'SRC-PORT,80-443']
+                        surge_body = ['AND,' + conjunction.replace('NETWORK,tcp', 'PROTOCOL,TCP').replace('SRC-IP-CIDR,', 'SRC-IP,'),
+                                      'DEST-PORT,0', 'DOMAIN,neighbor.example.org', 'IN-PORT,80-90',
+                                      'NOT,((DEST-PORT,0-1))', 'OR,((DEST-PORT,80),(DEST-PORT,443))',
+                                      'OR,((IN-PORT,65535),(DEST-PORT,80))', 'SRC-PORT,80-443']
+                        for group in ('source', 'child'):
+                            dns_body = ((['@@||allow.example.org^'] if group == 'source' else []) +
+                                        ['@@|covered.example.org|', '0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                            expected = {'fin.yaml': f'# {group} rules: 8\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
+                                        'fin.txt': f'# {group} rules: 8\n' + '\n'.join(surge_body) + '\n',
+                                        'fin-qx.txt': f'# {group} rules: 1\nHOST,neighbor.example.org,LIST\n',
+                                        'fin-surge.txt': f'# {group} rules: 7\n' + '\n'.join(line for line in surge_body if not line.startswith('DOMAIN,')) + '\n',
+                                        'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                        'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
+                                                       '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
+                                                       '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
+                                                       f'! Total count: {len(dns_body)}\n' +
+                                                       (''.join(line + '\n' for line in dns_body) if purpose == 'block' else
+                                                        '! No AdBlock rules for non-advertising group.\n')}
+                            self.assertEqual({name: outputs[root / group / name] for name in FILES}, expected)
+                            restored, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
+                            self.assertEqual(messages, [])
+                            self.assertEqual([rule.kind + ',' + rule.value for rule in restored], yaml_body)
+                            self.assertEqual([line for line in diagnostic.getvalue().splitlines() if line.startswith(group + ' fin.yaml:')],
+                                             ['source fin.yaml:DOMAIN-SUFFIX: 1'] if group == 'source' else [])
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        publish(outputs, root=root)
+                        published = {path: path.read_bytes() for path in outputs}
+                        self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                        self.assertTrue(all(b'\r' not in data and data.endswith(b'\n') for data in published.values()))
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                        (root / 'static/source.list').unlink()
+                        (root / 'static/white.list').unlink()
+                        (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                            clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+                        publish(disk, root=root)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_invalid_native_port_sources_and_white_preserve_freeze_and_path_boundaries(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            with self.subTest(purpose=purpose), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                source = native_text('DST-PORT,65536', 'DOMAIN,neighbor.example.org')
+                invalid = native_text('NOT,((SRC-PORT,>80))')
+                (root / 'static').mkdir()
+                (root / 'input.list').write_text(source, encoding='utf-8')
+                (root / 'static/white.list').write_text(invalid, encoding='utf-8')
+                configs = [{'name': 'source', 'purpose': purpose, 'no_resolve': 'add',
+                            'sources': ['input.list'], 'whitelist': ['static/white.list']},
+                           {'name': 'child', 'purpose': purpose, 'no_resolve': 'keep',
+                            'sources': ['source/fin.yaml'], 'whitelist': []}]
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                old = {}
+                for group in ('source', 'child'):
+                    (root / group).mkdir()
+                    for name in FILES:
+                        path = root / group / name
+                        path.write_bytes(b'old product\x00\xff\r\n')
+                        old[path] = path.read_bytes()
+                with self.assertRaisesRegex(ValueError, 'Invalid whitelist'):
+                    generate(root, lambda url: self.fail(url))
+                self.assertEqual({path: path.read_bytes() for path in old}, old)
+                configs[0]['whitelist'] = ['https://example.com/invalid-white']
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                    outputs = generate(root, lambda url: invalid.encode('utf-8'))
+                self.assertIn('invalid whitelist', diagnostic.getvalue())
+                self.assertEqual(parse(outputs[root / 'source/fin.yaml'], purpose=purpose),
+                                 ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'), Rule('DST-PORT', '0')], []))
+                for path, message in ((root / 'static/white.list', 'Output path targets static'),
+                                      (root / '../escape.list', 'Output path escapes root')):
+                    with self.assertRaisesRegex(ValueError, message):
+                        publish({path: outputs[root / 'source/fin.yaml']}, root=root)
+                self.assertEqual((root / 'static/white.list').read_text(encoding='utf-8'), invalid)
+                configs[0]['sources'], configs[0]['whitelist'] = ['https://example.com/invalid-source'], []
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                    self.assertEqual(generate(root, lambda url: invalid.encode('utf-8')), {})
+                self.assertIn('no adaptable rules; skipped', diagnostic.getvalue())
+                self.assertEqual({path: path.read_bytes() for path in old}, old)
+                configs[0]['sources'] = ['https://example.com/missing']
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+
+                def unavailable(url):
+                    raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+                with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                    self.assertEqual(generate(root, unavailable), {})
+                self.assertIn('HTTP 404; skipped', diagnostic.getvalue())
+                self.assertEqual({path: path.read_bytes() for path in old}, old)
+                with self.assertRaisesRegex(RuntimeError, 'unexpected fetch failure'):
+                    generate(root, lambda url: (_ for _ in ()).throw(RuntimeError('unexpected fetch failure')))
+                self.assertEqual({path: path.read_bytes() for path in old}, old)

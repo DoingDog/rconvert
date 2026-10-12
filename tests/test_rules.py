@@ -540,10 +540,11 @@ class ConstructorValidationTests(unittest.TestCase):
 
     def test_r14_zero_lower_bound_ports_cover_all_callers(self):
         for kind in ("DST-PORT", "SRC-PORT", "IN-PORT"):
-            for value in ("0-65535", "0-80", "0000-80"):
-                self.check_matcher(kind, value)
+            for value, canonical in (("0-65535", "0-65535"), ("0-80", "0-80"), ("0000-80", "0-80"),
+                                     ("65536", "0"), ("0-65536", "0"), ("80-0", "0-80")):
+                self.check_matcher(kind, value, expected_value=canonical)
             for value in ("65536", "0-65536", "80-0"):
-                self.check_matcher(kind, value, valid=False)
+                self.check_matcher(kind, value, native=False, valid=False)
             for source in (f"{kind},0-80/443,PROXY", f"{kind},0-80,443,PROXY"):
                 self.assertEqual(parse(source, purpose="proxy"),
                                  ([Rule("OR", f"(({kind},0-80),({kind},443))")], []))
