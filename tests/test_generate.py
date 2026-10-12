@@ -595,9 +595,10 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         expected = {
             'fin.txt': f'# {group} rules: {int(neighbor)}\n' + domain,
             'fin-qx.txt': f'# {group} rules: {int(neighbor)}\n' + ('HOST,keep.example.test,LIST\n' if neighbor else ''),
-            'fin.yaml': f'# {group} rules: {1 + int(neighbor)}\npayload:\n' +
+            'fin.yaml': f'# {group} rules: {int(not whitelist) + int(neighbor)}\npayload:\n' +
                         (('  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.test')) + '\n')
-                         if neighbor else '') + '  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n',
+                         if neighbor else '') +
+                        ('' if whitelist else '  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n'),
             'fin-surge.txt': f'# {group} rules: 0\n',
             'fin-surge-ds.txt': f'# {group} rules: {int(neighbor)}\n' + ('keep.example.test\n' if neighbor else ''),
         }
@@ -605,7 +606,7 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         if purpose == 'block':
             dns = ('@@/' + dns_value + '/\n' if whitelist and dns_supported else '')
             dns += '0.0.0.0 keep.example.test\n' if neighbor else ''
-            dns += '/' + dns_value + '/\n' if dns_supported else ''
+            dns += '/' + dns_value + '/\n' if dns_supported and not whitelist else ''
         expected['fin-adb.txt'] = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
             '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
             '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
@@ -647,12 +648,13 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                         skips = {name + ':DOMAIN-REGEX': 1 for name in
                                  ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')}
                         source_skips = dict(skips)
-                        dependent_skips = dict(skips)
+                        dependent_skips = {} if whitelist else dict(skips)
                         if purpose != 'block':
                             dependent_skips['fin-adb.txt:DOMAIN'] = 1
                         if purpose != 'block' or not dns_supported:
                             source_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
-                            dependent_skips['fin-adb.txt:DOMAIN-REGEX'] = 1 + int(whitelist and purpose == 'block')
+                            if not whitelist or purpose == 'block':
+                                dependent_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
                         with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
                             clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
                             outputs = generate(root, lambda url: self.fail(url))
@@ -663,7 +665,8 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                             (('source', source_skips), ('dependent', dependent_skips)) for key, count in sorted(counts.items())])
                         self.assertEqual(parse(outputs[root / 'source' / 'fin.yaml'], purpose=purpose), ([rule], []))
                         self.assertEqual(parse(outputs[root / 'dependent' / 'fin.yaml'], purpose=purpose),
-                                         ([Rule('DOMAIN', 'keep.example.test', domain_source='mihomo'), rule], []))
+                                         ([Rule('DOMAIN', 'keep.example.test', domain_source='mihomo')] +
+                                          ([] if whitelist else [rule]), []))
                         self.assertEqual({path: path.read_bytes() for path in previous}, previous)
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
@@ -734,10 +737,10 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         target_logic = logic.replace(',no-resolve', '') if mode == 'strip' else logic
         ip = 'IP-CIDR,203.0.113.0/24' + flag
         source_ip = 'SRC-IP,198.51.100.0/24'
-        yaml_lines = ['AND,' + target_logic, 'DOMAIN,keep.example.test', 'DOMAIN-REGEX,' + value,
+        yaml_lines = ['AND,' + target_logic, 'DOMAIN,keep.example.test',
                       'PROCESS-NAME-REGEX,' + value, ip, 'SRC-IP-CIDR,198.51.100.0/24']
         parsed_expected = [Rule('AND', target_logic, literal_process=True, native_fields=True),
-                           Rule('DOMAIN', 'keep.example.test', domain_source='mihomo'), Rule('DOMAIN-REGEX', value),
+                           Rule('DOMAIN', 'keep.example.test', domain_source='mihomo'),
                            Rule('PROCESS-NAME-REGEX', value),
                            Rule('IP-CIDR', '203.0.113.0/24', options),
                            Rule('SRC-IP-CIDR', '198.51.100.0/24')]
@@ -747,11 +750,10 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                       '  - ' + json.dumps(line)
                       for line, rule in zip(yaml_lines, parsed_expected)]],
                   'fin-surge.txt': [ip, source_ip], 'fin-surge-ds.txt': ['keep.example.test']}
-        dns = (['@@/' + dns_value + '/', '0.0.0.0 keep.example.test', '/' + dns_value + '/'] if dns_supported else
+        dns = (['@@/' + dns_value + '/', '0.0.0.0 keep.example.test'] if dns_supported else
                ['0.0.0.0 keep.example.test']) if purpose == 'block' else []
         expected_skips = {}
-        supported = {'DOMAIN-REGEX': {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' and dns_supported else [])},
-                     'PROCESS-NAME-REGEX': {'fin.yaml'}, 'AND': {'fin.yaml'},
+        supported = {'PROCESS-NAME-REGEX': {'fin.yaml'}, 'AND': {'fin.yaml'},
                      'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
                      'SRC-IP-CIDR': {'fin.txt', 'fin.yaml', 'fin-surge.txt'}}
         for kind, names in supported.items():
@@ -761,7 +763,7 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         if purpose != 'block':
             expected_skips['fin-adb.txt:DOMAIN'] = 1
         elif not dns_supported:
-            expected_skips['fin-adb.txt:DOMAIN-REGEX'] += 1
+            expected_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,

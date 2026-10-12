@@ -355,10 +355,13 @@ class QuantifierAuditTests(unittest.TestCase):
                             warnings.simplefilter('always')
                             outputs = generate(root, lambda url: white.encode('utf-8'))
                         self.assertIn('invalid DOMAIN-REGEX ' + invalid, diagnostic.getvalue())
-                        expected = {*(Rule(kind, legal) for kind in self.kinds), Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')}
+                        expected = {*(Rule(kind, legal) for kind in self.kinds if kind != 'DOMAIN-REGEX'),
+                                    Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')}
                         for group in ('source', 'child'):
+                            self.assertNotIn(json.dumps('DOMAIN-REGEX,' + legal), outputs[root / group / 'fin.yaml'])
                             for kind in self.kinds:
-                                self.assertIn(json.dumps(kind + ',' + legal), outputs[root / group / 'fin.yaml'])
+                                if kind != 'DOMAIN-REGEX':
+                                    self.assertIn(json.dumps(kind + ',' + legal), outputs[root / group / 'fin.yaml'])
                             parsed, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
                             self.assertEqual(set(parsed), expected)
                             self.assertEqual(messages, [])

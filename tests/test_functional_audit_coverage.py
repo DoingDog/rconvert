@@ -18,6 +18,351 @@ from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 from tests import test_functional_audit_rules as audit_rules
 
 
+class RawRegexWhitelistAuditTests(unittest.TestCase):
+    def test_identical_raw_regex_white_removes_ordinary_blocker(self):
+        value = r'^ADS\.Example\.com$'
+        blocked, messages = parse('DOMAIN-REGEX,' + value, purpose='block')
+        self.assertEqual((blocked, messages), ([Rule('DOMAIN-REGEX', value)], []))
+        white = parse_whitelist(audit_rules.native_text('DOMAIN-REGEX,' + value))
+        self.assertEqual(white, blocked)
+        self.assertEqual(exclude_covered(iter(blocked), iter(white)), [])
+
+    def test_ordinary_native_quotes_policies_and_purposes_share_raw_white_identity(self):
+        values = (r'^ads\.example\.com$', r'^(?i:ADS)[.]example[.]com$', r'^(a,b)[)]$',
+                  r'^\x{0000061}ds$', r'^a{00001}$', r'^(?<name>a)\k<name>$', '^广告[.]例子$')
+        for value in values:
+            sources = ['DOMAIN-REGEX,' + quote + value + quote for quote in ('', "'", '"')]
+            sources += [audit_rules.native_text('DOMAIN-REGEX,' + value),
+                        'rules:\n  - ' + json.dumps('DOMAIN-REGEX,' + value)]
+            whites = [parse_whitelist(text + (',DIRECT' if not text.startswith(('payload:', 'rules:')) else ''),
+                                      domain_set=domain_set)
+                      for text in sources for domain_set in (False, True)]
+            for purpose in ('block', 'direct', 'proxy'):
+                for source in sources:
+                    with self.subTest(value=value, purpose=purpose, source=source):
+                        blocked, messages = parse(source, purpose=purpose)
+                        self.assertEqual((blocked, messages), ([Rule('DOMAIN-REGEX', value)], []))
+                        for white in whites:
+                            self.assertEqual(white, blocked)
+                            self.assertEqual(exclude_covered(iter(blocked), iter(white)), [])
+
+    def test_raw_case_escape_group_and_kind_differences_keep_neighbors_and_allow(self):
+        value = r'^ads\.example\.com$'
+        different = (r'^ADS\.example\.com$', r'^ads[.]example[.]com$',
+                     r'^(?:ads)\.example\.com$', r'(?i)^ads\.example\.com$',
+                     r'^ads\.example\.com\z', r'^ads\.example\.com$.')
+        original = [Rule('DOMAIN-REGEX', matcher, options, allow, literal, fields, source)
+                    for matcher in (value, *different) for source in ('surge', 'qx', 'mihomo')
+                    for options in ((), ('no-resolve',), ('via-interface=en1',)) for allow in (False, True)
+                    for literal in (False, True) for fields in (False, True)]
+        neighbors = [Rule(kind, value) for kind in ('DOMAIN-KEYWORD', 'DOMAIN-WILDCARD',
+                     'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX', 'URL-REGEX')]
+        neighbors += [Rule('DOMAIN', 'ads.example.com'), Rule('DOMAIN-SUFFIX', 'example.com'),
+                      Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',)),
+                      Rule('SRC-IP-CIDR', '192.0.2.0/24'),
+                      Rule('IP-ASN', '00'), Rule('IP-ASN', '0'),
+                      Rule('PROCESS-NAME', 'Foo*Bar', literal_process=True),
+                      Rule('DOMAIN-WILDCARD', 'api-[ab].example.com', domain_source='mihomo'),
+                      Rule('DOMAIN', 'neighbor.example.org.', domain_source='mihomo')]
+        white = parse_whitelist('DOMAIN-REGEX,' + value)
+        expected = [rule for rule in original if rule.allow or rule.value != value] + neighbors
+        self.assertEqual(exclude_covered(iter(original + neighbors), iter(white * 2)), expected)
+        self.assertEqual(exclude_covered(iter(original + neighbors), iter(())), original + neighbors)
+        self.assertEqual(set(normalize(original * 2)), set(original))
+        self.assertEqual(exclude_covered([Rule('DOMAIN-REGEX', value)], neighbors), [Rule('DOMAIN-REGEX', value)])
+
+    def test_long_numeric_hex_literal_and_deep_raw_identity_keeps_distinct_text_and_global_limits(self):
+        limits = sys.get_int_max_str_digits(), sys.getrecursionlimit()
+        pairs = ((r'^\x{' + '0' * 5000 + '61}$', r'^\x{61}$'),
+                 ('^a{' + '0' * 5000 + '1}$', '^a{1}$'),
+                 ('^a{,' + '9' * 5000 + '}$', '^a{,9}$'),
+                 *[('^' + opening * depth + 'a' + ')' * depth + '$',
+                    '^' + opening * depth + 'b' + ')' * depth + '$')
+                   for depth in (600, 1000) for opening in ('(', '(?:', '(?i:', '(?n:', '(?x:')])
+        for value, different in pairs:
+            for native in (False, True):
+                source = (audit_rules.native_text('DOMAIN-REGEX,' + value, 'DOMAIN-REGEX,' + different) if native else
+                          'DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN-REGEX,' + json.dumps(different))
+                white_text = 'DOMAIN-REGEX,' + json.dumps(value) if native else audit_rules.native_text('DOMAIN-REGEX,' + value)
+                with self.subTest(length=len(value), native=native):
+                    parsed, messages = parse(source, purpose='proxy')
+                    self.assertEqual((parsed, messages), ([Rule('DOMAIN-REGEX', value), Rule('DOMAIN-REGEX', different)], []))
+                    white = parse_whitelist(white_text)
+                    self.assertEqual(white, [Rule('DOMAIN-REGEX', value)])
+                    self.assertEqual(exclude_covered(iter(parsed), iter(white)), [Rule('DOMAIN-REGEX', different)])
+        self.assertEqual((sys.get_int_max_str_digits(), sys.getrecursionlimit()), limits)
+
+    def test_native_inner_quotes_remain_literal_and_invalid_white_still_warns(self):
+        value = '^ads$'
+        ordinary = parse_whitelist('DOMAIN-REGEX,"' + value + '"')
+        for quote in ("'", '"'):
+            native, messages = parse(audit_rules.native_text('DOMAIN-REGEX,' + quote + value + quote), purpose='block')
+            self.assertEqual(messages, [])
+            self.assertEqual(native, [Rule('DOMAIN-REGEX', quote + value + quote)])
+            self.assertEqual(exclude_covered(native, ordinary), native)
+            self.assertEqual(exclude_covered(native, parse_whitelist(audit_rules.native_text(
+                'DOMAIN-REGEX,' + quote + value + quote))), [])
+        for purpose in ('block', 'direct', 'proxy'):
+            for text, line in (('DOMAIN-REGEX,*ads\nDOMAIN,neighbor.example.org', 1),
+                               (audit_rules.native_text('DOMAIN-REGEX,*ads', 'DOMAIN,neighbor.example.org'), 2)):
+                parsed, messages = parse(text, purpose=purpose)
+                self.assertEqual(len(parsed), 1)
+                self.assertEqual(parsed[0].value, 'neighbor.example.org')
+                self.assertEqual(messages, [f'line {line}: invalid DOMAIN-REGEX *ads'])
+                with self.assertWarnsRegex(UserWarning, 'invalid DOMAIN-REGEX'):
+                    self.assertEqual(parse_whitelist(text), parsed)
+            parsed, messages = parse('DOMAIN-REGEX,"^ads$",no-resolve\nDOMAIN,neighbor.example.org', purpose=purpose)
+            self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org')])
+            self.assertEqual(messages, ['line 1: unsupported no-resolve for DOMAIN-REGEX'])
+        with self.assertRaisesRegex(ValueError, 'invalid DOMAIN-REGEX'):
+            parse_whitelist('DOMAIN-REGEX,*ads')
+
+    def test_external_raw_white_preserves_full_logical_structure_and_ip_flags(self):
+        value = '^ads[.]example[.]org$'
+        expressions = (
+            ('AND', '((DOMAIN-REGEX,' + value + '),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))'),
+            ('OR', '((DOMAIN-REGEX,' + value + '),(DOMAIN,neighbor.example.org))'),
+            ('NOT', '((DOMAIN-REGEX,' + value + '))'),
+            ('AND', '((NOT,((DOMAIN-REGEX,' + value + '))),(OR,((DOMAIN,neighbor.example.org),(NETWORK,tcp))))'),
+        )
+        for operator, expression in expressions:
+            for native in (False, True):
+                source = operator + ',' + expression
+                if native:
+                    source = audit_rules.native_text(source)
+                for purpose in ('block', 'direct', 'proxy'):
+                    parsed, messages = parse(source, purpose=purpose)
+                    self.assertEqual(messages, [])
+                    self.assertEqual(len(parsed), 1)
+                    self.assertEqual(parsed[0].value, expression)
+                    white = parse_whitelist('DOMAIN-REGEX,' + value)
+                    self.assertEqual(exclude_covered(iter(parsed), iter(white)), parsed)
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(operator=operator, native=native, purpose=purpose, mode=mode):
+                            outputs, skipped = render('logical', normalize(exclude_covered(parsed, white)),
+                                                      purpose=purpose, no_resolve=mode, whitelist=white)
+                            expected = expression.replace(',no-resolve)', ')') if mode == 'strip' else expression
+                            self.assertEqual(outputs['fin.yaml'], '# logical rules: 1\npayload:\n  - ' +
+                                             json.dumps(operator + ',' + expected) + '\n')
+                            self.assertEqual(skipped.get('fin.txt:' + operator), 1)
+                            self.assertNotIn('whitelist-covered:' + operator, skipped)
+                            self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose)[0][0].value, expected)
+                            self.assertNotIn('SRC-IP-CIDR,198.51.100.0/24,no-resolve', outputs['fin.yaml'])
+
+    def test_generate_raw_white_preserves_six_outputs_neighbors_and_actual_dependency_bytes(self):
+        value = '^ads[.]example[.]org$'
+        variant = '^ADS[.]example[.]org$'
+        expression = ('((DOMAIN-REGEX,' + value + '),(IP-CIDR,203.0.113.0/24,no-resolve),'
+                      '(SRC-IP-CIDR,198.51.100.0/24),(PROCESS-NAME,Foo*Bar))')
+        source = audit_rules.native_text('DOMAIN-REGEX,' + value, 'DOMAIN-REGEX,' + variant,
+            'AND,' + expression, 'DOMAIN,neighbor.example.org', 'IP-ASN,00',
+            'IP-CIDR,192.0.2.0/24,no-resolve', 'SRC-IP-CIDR,198.51.100.0/24')
+        white = audit_rules.native_text('DOMAIN-REGEX,' + value)
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for remote in (False, True):
+                    with self.subTest(purpose=purpose, mode=mode, remote=remote), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        (root / 'static').mkdir()
+                        paths = (root / 'static/source.list', root / 'static/white.list')
+                        for path, text in zip(paths, (source, white)):
+                            path.write_bytes(b'\xef\xbb\xbf' + text.replace('\n', '\r\n').encode('utf-8'))
+                        inputs = {path: path.read_bytes() for path in paths}
+                        source_input = 'https://example.com/source' if remote else 'static/source.list'
+                        white_input = 'https://example.com/white' if remote else 'static/white.list'
+                        configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': [white_input], 'whitelist': []},
+                                   {'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': [source_input], 'whitelist': [white_input]},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['source/fin.yaml'], 'whitelist': ['white/fin.yaml']}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        old = {}
+                        for group in ('white', 'source', 'child'):
+                            (root / group).mkdir()
+                            for name in FILES:
+                                path = root / group / name
+                                path.write_bytes(b'old complete product\x00\xff\r\n')
+                                old[path] = path.read_bytes()
+                        responses = {'https://example.com/source': inputs[paths[0]], 'https://example.com/white': inputs[paths[1]]}
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                            clock.now.return_value = datetime(2026, 10, 13, tzinfo=timezone.utc)
+                            outputs = generate(root, lambda url: responses[url])
+                        self.assertEqual(set(outputs), set(old))
+                        self.assertEqual(parse_whitelist(outputs[root / 'white/fin.yaml']), [Rule('DOMAIN-REGEX', value)])
+                        flag = '' if mode == 'strip' else ',no-resolve'
+                        asn_flag = ',no-resolve' if mode == 'add' else ''
+                        logic = expression.replace(',no-resolve)', ')') if mode == 'strip' else expression
+                        ip, asn = 'IP-CIDR,192.0.2.0/24' + flag, 'IP-ASN,00' + asn_flag
+                        yaml_lines = ['AND,' + logic, 'DOMAIN,neighbor.example.org', 'DOMAIN-REGEX,' + variant,
+                                      asn, ip, 'SRC-IP-CIDR,198.51.100.0/24']
+                        bodies = {
+                            'fin.txt': ['DOMAIN,neighbor.example.org', asn, ip, 'SRC-IP,198.51.100.0/24'],
+                            'fin-qx.txt': ['HOST,neighbor.example.org,LIST', 'IP-ASN,00,LIST' + asn_flag,
+                                           'IP-CIDR,192.0.2.0/24,LIST' + flag],
+                            'fin.yaml': ['  - ' + json.dumps(line) for line in yaml_lines],
+                            'fin-surge.txt': [asn, ip, 'SRC-IP,198.51.100.0/24'],
+                            'fin-surge-ds.txt': ['neighbor.example.org'],
+                        }
+                        expected = {}
+                        for group in ('white', 'source', 'child'):
+                            for name in FILES:
+                                if name == 'fin-adb.txt':
+                                    dns = (['@@/' + value + '/'] if group != 'white' else []) if purpose == 'block' else []
+                                    if purpose == 'block':
+                                        dns += (['/' + value + '/'] if group == 'white' else
+                                                ['/' + variant + '/', '0.0.0.0 neighbor.example.org'])
+                                    text = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
+                                            '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
+                                            '! License: Inherits upstream licenses\n! Version: 202610130000\n' +
+                                            f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
+                                            ('' if purpose == 'block' else '! No AdBlock rules for non-advertising group.\n'))
+                                else:
+                                    body = (['  - ' + json.dumps('DOMAIN-REGEX,' + value)] if name == 'fin.yaml' else []) if group == 'white' else bodies[name]
+                                    text = f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') + ''.join(line + '\n' for line in body)
+                                expected[root / group / name] = text
+                        self.assertEqual(outputs, expected)
+                        skips = {}
+                        supported = {'AND': {'fin.yaml'}, 'DOMAIN-REGEX': {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' else [])},
+                                     'IP-ASN': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
+                                     'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
+                                     'SRC-IP-CIDR': {'fin.txt', 'fin.yaml', 'fin-surge.txt'}}
+                        for kind, names in supported.items():
+                            for name in FILES:
+                                if name not in names:
+                                    skips[name + ':' + kind] = 1
+                        if purpose != 'block':
+                            skips['fin-adb.txt:DOMAIN'] = 1
+                        white_skips = {name + ':DOMAIN-REGEX': 1 for name in FILES
+                                       if name not in {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' else [])}}
+                        self.assertEqual(diagnostic.getvalue().splitlines(), [f'{group} {key}: {count}'
+                            for group, counts in (('white', white_skips), ('source', skips), ('child', skips))
+                            for key, count in sorted(counts.items())])
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        publish(outputs, root=root)
+                        published = {path: path.read_bytes() for path in outputs}
+                        self.assertEqual(published, {path: text.encode('utf-8') for path, text in expected.items()})
+                        self.assertTrue(all(data.endswith(b'\n') and b'\r' not in data for data in published.values()))
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                        wanted = [Rule('AND', logic, literal_process=True, native_fields=True),
+                                  Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                                  Rule('DOMAIN-REGEX', variant), Rule('IP-ASN', '00', ('no-resolve',) if asn_flag else ()),
+                                  Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
+                                  Rule('SRC-IP-CIDR', '198.51.100.0/24')]
+                        self.assertEqual(parse(outputs[root / 'child/fin.yaml'], purpose=purpose), (wanted, []))
+                        (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                            clock.now.return_value = datetime(2026, 10, 13, tzinfo=timezone.utc)
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent.name == 'child'})
+                        self.assertEqual(diagnostic.getvalue().splitlines(), [f'child {key}: {count}' for key, count in sorted(skips.items())])
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        publish(disk, root=root)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+
+    def test_all_covered_regex_publishes_empty_routes_dns_exceptions_and_empty_same_round_dependency(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for native in (False, True):
+                    for value, portable in (('^ads[.]example[.]org$', True), ('^(?=ads)ads[.]example[.]org$', False)):
+                        with self.subTest(purpose=purpose, mode=mode, native=native, portable=portable), tempfile.TemporaryDirectory() as directory:
+                            root = Path(directory)
+                            matcher = 'DOMAIN-REGEX,' + value
+                            (root / 'input.list').write_text(audit_rules.native_text(matcher) if native else matcher, encoding='utf-8')
+                            (root / 'white.list').write_text(matcher if native else audit_rules.native_text(matcher), encoding='utf-8')
+                            configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['input.list'] if group == 'source' else ['source/fin.yaml'],
+                                        'whitelist': ['white.list']} for group in ('source', 'child')]
+                            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                            old = {}
+                            for group in ('source', 'child'):
+                                (root / group).mkdir()
+                                for name in FILES:
+                                    path = root / group / name
+                                    path.write_bytes(b'old complete product\x00\xff\r\n')
+                                    old[path] = path.read_bytes()
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                                clock.now.return_value = datetime(2026, 10, 13, tzinfo=timezone.utc)
+                                outputs = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(set(outputs), set(old))
+                            self.assertEqual(diagnostic.getvalue().splitlines(), [f'{group} fin-adb.txt:DOMAIN-REGEX: 1'
+                                for group in ('source', 'child')] if purpose == 'block' and not portable else [])
+                            for group in ('source', 'child'):
+                                for name in FILES:
+                                    if name != 'fin-adb.txt':
+                                        self.assertEqual(outputs[root / group / name], f'# {group} rules: 0\n' +
+                                                         ('payload:\n' if name == 'fin.yaml' else ''))
+                                dns = ['@@/' + value + '/'] if purpose == 'block' and portable else []
+                                self.assertEqual(outputs[root / group / 'fin-adb.txt'], '[Adblock Plus 2.0]\n' +
+                                    f'! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
+                                    '! License: Inherits upstream licenses\n! Version: 202610130000\n' +
+                                    f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
+                                    ('' if purpose == 'block' else '! No AdBlock rules for non-advertising group.\n'))
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            publish(outputs, root=root)
+                            published = {path: path.read_bytes() for path in outputs}
+                            self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                            with self.assertRaisesRegex(ValueError, 'No adaptable rules in '):
+                                generate(root, lambda url: self.fail(url))
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_covered_regex_does_not_hide_unusable_sources_unsupported_rules_or_strict_white_errors(self):
+        value = '^ads[.]example[.]org$'
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'input.list').write_text(audit_rules.native_text('DOMAIN-REGEX,' + value, 'DEVICE-NAME,a\x00b'), encoding='utf-8')
+                    (root / 'white.list').write_text('DOMAIN-REGEX,' + value, encoding='utf-8')
+                    configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['input.list'] if group == 'source' else ['source/fin.yaml'],
+                                'whitelist': ['white.list']} for group in ('source', 'child')]
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    old = {}
+                    for group in ('source', 'child'):
+                        (root / group).mkdir()
+                        for name in FILES:
+                            path = root / group / name
+                            path.write_bytes(b'old complete product\x00\xff\r\n')
+                            old[path] = path.read_bytes()
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        self.assertEqual(generate(root, lambda url: self.fail(url)), {})
+                    self.assertEqual(diagnostic.getvalue().splitlines(), ['source: no routable rules; frozen'])
+                    (root / 'input.list').write_text('DOMAIN-REGEX,' + value, encoding='utf-8')
+                    configs[0]['sources'].append('https://example.com/missing')
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+
+                    def unavailable(url):
+                        raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        self.assertEqual(generate(root, unavailable), {})
+                    self.assertEqual(diagnostic.getvalue().splitlines(), ['https://example.com/missing: HTTP 404; skipped',
+                                                                          'source: no routable rules; frozen'])
+                    configs[0]['sources'] = ['input.list']
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    for invalid in ('DOMAIN-REGEX,*ads', ''):
+                        (root / 'white.list').write_text(invalid, encoding='utf-8')
+                        with self.assertRaisesRegex(ValueError, 'Invalid whitelist'):
+                            generate(root, lambda url: self.fail(url))
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    configs[0]['whitelist'] = ['https://example.com/bad-white']
+                    (root / 'rulesets.json').write_text(json.dumps(configs[:1]), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        recovered = generate(root, lambda url: b'DOMAIN-REGEX,*ads')
+                    self.assertIn('invalid whitelist', diagnostic.getvalue())
+                    self.assertEqual(recovered[root / 'source/fin.yaml'], '# source rules: 1\npayload:\n  - ' +
+                                     json.dumps('DOMAIN-REGEX,' + value) + '\n')
+                    def unexpected(url):
+                        raise RuntimeError('unexpected endpoint')
+
+                    with self.assertRaisesRegex(RuntimeError, 'unexpected endpoint'):
+                        generate(root, unexpected)
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+
+
 class SurgeClassWhitelistAuditTests(unittest.TestCase):
     def test_surge_class_white_covers_matching_exact_hosts_and_keeps_label_neighbors(self):
         source = ('DOMAIN,cdn-a.example.com\nDOMAIN,cdn-b.example.com\n'

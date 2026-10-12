@@ -1835,7 +1835,7 @@ def _domain_comparison_value(kind: str, value: str, source: str) -> str:
 
 
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
-    domain_groups, typed = {}, set()
+    domain_groups, typed, regexes = {}, set(), set()
     surge_literals = {'DOMAIN': set(), 'DOMAIN-SUFFIX': set()}
     surge_keywords, surge_wildcards = set(), set()
     empty = (set(), set(), set(), set())
@@ -1862,6 +1862,8 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
             keywords.add(value)
         elif entry.kind == "DOMAIN-WILDCARD":
             wildcards.add(value)
+        elif entry.kind == "DOMAIN-REGEX":
+            regexes.add(entry.value)
         elif entry.kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
             direction = "src" if entry.kind.startswith("SRC-") else "dst"
             networks[direction].add(ipaddress.ip_network(entry.value, strict=False))
@@ -1900,6 +1902,8 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                        any(keyword in segment for keyword in keywords
                            for segment in re.split(r"\*|\?" if rule.domain_source == "mihomo"
                                                    else r"\*|\?|\[[a-z0-9-]+\]", value)))
+        elif kind == "DOMAIN-REGEX":
+            covered = rule.value in regexes
         elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
             direction = "src" if kind.startswith("SRC-") else "dst"
             covered = False
