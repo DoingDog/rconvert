@@ -1,4 +1,4 @@
-# cdn rules: 4777
+# cdn rules: 4778
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -2032,6 +2032,7 @@ HOST,thumbs.onlyfans.com,LIST
 HOST,thumbs2.sendvid.com,LIST
 HOST,tile2.intervals.icu,LIST
 HOST,tiles.mapillary.com,LIST
+HOST,tiles.onemap.gov.sg,LIST
 HOST,tileserver.b10s.net,LIST
 HOST,time.cloudflare.com,LIST
 HOST,tuf-repo.github.com,LIST

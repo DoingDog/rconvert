@@ -1,4 +1,4 @@
-# cdn rules: 4777
+# cdn rules: 4778
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -2032,6 +2032,7 @@ DOMAIN,thumbs.onlyfans.com
 DOMAIN,thumbs2.sendvid.com
 DOMAIN,tile2.intervals.icu
 DOMAIN,tiles.mapillary.com
+DOMAIN,tiles.onemap.gov.sg
 DOMAIN,tileserver.b10s.net
 DOMAIN,time.cloudflare.com
 DOMAIN,tuf-repo.github.com

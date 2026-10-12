@@ -1,4 +1,4 @@
-# big-data rules: 10508
+# big-data rules: 10509
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -2801,6 +2801,7 @@ payload:
   - "DOMAIN,thumbs.onlyfans.com"
   - "DOMAIN,tile2.intervals.icu"
   - "DOMAIN,tiles.mapillary.com"
+  - "DOMAIN,tiles.onemap.gov.sg"
   - "DOMAIN,tileserver.b10s.net"
   - "DOMAIN,time.cloudflare.com"
   - "DOMAIN,tuf-repo.github.com"

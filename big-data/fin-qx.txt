@@ -1,4 +1,4 @@
-# big-data rules: 10542
+# big-data rules: 10543
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -2800,6 +2800,7 @@ HOST,thumbnails.padre.gg,LIST
 HOST,thumbs.onlyfans.com,LIST
 HOST,tile2.intervals.icu,LIST
 HOST,tiles.mapillary.com,LIST
+HOST,tiles.onemap.gov.sg,LIST
 HOST,tileserver.b10s.net,LIST
 HOST,time.cloudflare.com,LIST
 HOST,tuf-repo.github.com,LIST
