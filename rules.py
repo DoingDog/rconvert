@@ -1079,6 +1079,20 @@ def _reject_ip_scope(kind: str, value: str, native_fields: bool = False) -> None
         raise ValueError(f"IPv6 scope is not supported: {value}")
 
 
+def _normalize_ip_suffix(value: str) -> str | None:
+    address, separator, prefix = value.rpartition('/')
+    if not separator or not re.fullmatch(r'[0-9]+', prefix) or '%' in address:
+        return None
+    prefix = prefix.lstrip('0') or '0'
+    if len(prefix) > 3:
+        return None
+    try:
+        interface = ipaddress.ip_interface(address + '/' + prefix)
+    except ValueError:
+        return None
+    return f'{interface.ip}/{interface.network.prefixlen}'
+
+
 def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
     if kind in {"IP-ASN", "SRC-IP-ASN"}:
         if kind == 'IP-ASN' and not native_fields:
@@ -1090,14 +1104,7 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
         return (value.isascii() and value.isdecimal() and len(number) <= 10
                 and int(number) <= 4294967295)
     if kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
-        address, separator, prefix = value.rpartition('/')
-        if not separator or not re.fullmatch(r'[0-9]+', prefix) or '%' in address:
-            return False
-        try:
-            ipaddress.ip_interface(value)
-            return True
-        except ValueError:
-            return False
+        return _normalize_ip_suffix(value) is not None
     if kind == "SRC-IP":
         if '%' in value:
             return False
@@ -1308,6 +1315,10 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
                 continue
             if value.startswith(('<', '>')):
                 value = _port_comparison(value)
+        elif kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            value = _normalize_ip_suffix(checked)
+            if value is None:
+                return None
         elif kind in _SIMPLE:
             if not _valid_simple(kind, checked, native_fields or kind == 'DOMAIN-KEYWORD' and domain_source == 'mihomo'):
                 return None
@@ -1364,6 +1375,7 @@ def _apply_no_resolve(rule: Rule, mode: str) -> Rule:
 
 def _condition_kinds(kind: str, value: str, native_fields: bool = False, *,
                      reject_ip_scope: bool = False) -> set[str]:
+    kind = kind.upper()
     if kind not in _LOGICAL:
         return {kind}
     expression = f"({kind},{value})"
@@ -1374,9 +1386,7 @@ def _condition_kinds(kind: str, value: str, native_fields: bool = False, *,
     while pending:
         begin, end = pending.pop()
         comma = expression.find(',', begin + 1, end - 1)
-        kind = expression[begin + 1:comma].strip(trim)
-        if native_fields or reject_ip_scope:
-            kind = kind.upper()
+        kind = expression[begin + 1:comma].strip(trim).upper()
         kinds.add(kind)
         if kind not in _LOGICAL:
             if reject_ip_scope:
@@ -1745,6 +1755,12 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             except ValueError:
                 warnings.append(f"line {number}: invalid IP address {value}")
                 continue
+        elif kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            suffix = _normalize_ip_suffix(value)
+            if suffix is None:
+                warnings.append(f"line {number}: invalid {kind} {value}")
+                continue
+            value = suffix
         elif kind in _SIMPLE:
             if not _valid_simple(kind, value, yaml_rule):
                 warnings.append(f"line {number}: invalid {kind} {value}")
@@ -1918,6 +1934,20 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
     for rule in sorted(set(rules), key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow,
                                                     rule.literal_process, rule.native_fields, rule.domain_source)):
         _reject_ip_scope(rule.kind, rule.value, rule.native_fields)
+        value = rule.value
+        if rule.kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            value = _normalize_ip_suffix(value)
+            if value is None:
+                raise ValueError(f"invalid {rule.kind} {rule.value}")
+        elif rule.kind in _LOGICAL and 'IP-SUFFIX' in value.upper() and _condition_kinds(
+                rule.kind, value, rule.native_fields) & {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            value = _normalize_logic(rule.kind, value, native_fields=rule.native_fields,
+                                     domain_source=rule.domain_source)
+            if value is None:
+                raise ValueError(f"invalid logical expression {rule.value}")
+        if value != rule.value:
+            rule = Rule(rule.kind, value, rule.options, rule.allow, rule.literal_process,
+                        rule.native_fields, rule.domain_source)
         group = (rule.allow, rule.options, rule.literal_process, rule.native_fields, rule.domain_source)
         value = (_domain_comparison_value(rule.kind, rule.value, rule.domain_source)
                  if rule.kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} else rule.value)

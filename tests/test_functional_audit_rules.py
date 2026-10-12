@@ -2441,3 +2441,486 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                             self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
                             publish(disk, root=root)
                             self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+
+class IPSuffixPrefixAuditTests(unittest.TestCase):
+    def test_direct_normalize_reaches_lowercase_nested_logical_suffix(self):
+        raw = Rule('AND', '((not,((IP-SUFFIX,192.0.2.7/024))),(NETWORK,tcp))')
+        canonical = Rule('AND', '((NOT,((IP-SUFFIX,192.0.2.7/24))),(NETWORK,tcp))')
+        self.assertEqual(normalize(iter([raw, canonical])), [canonical])
+
+    def test_nested_logical_case_suffix_normalizes_and_deduplicates_with_fields_and_literal_neighbor(self):
+        for operator, body in (('NOT', '(({leaf}))'), ('AND', '(({leaf}),(NETWORK,tcp))'),
+                               ('OR', '(({leaf}),(NETWORK,tcp))')):
+            for spelling in (operator, operator.lower(), operator.title()):
+                for kind in ('IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                    for raw_value, value in (('192.0.2.7/024', '192.0.2.7/24'),
+                                             ('2001:DB8::7/064', '2001:db8::7/64')):
+                        literal = '(PROCESS-NAME,"IP-SUFFIX 192.0.2.7/024 not and or")'
+                        raw_value = f'(({spelling},{body.format(leaf=kind + "," + raw_value)}),{literal})'
+                        value = f'(({operator},{body.format(leaf=kind + "," + value)}),{literal})'
+                        for native in (False, True):
+                            for source in ('surge', 'qx', 'mihomo'):
+                                for allow in (False, True):
+                                    for options in ((), ('force-cellular',)):
+                                        with self.subTest(operator=spelling, kind=kind, native=native, source=source,
+                                                          allow=allow, options=options):
+                                            raw = Rule('AND', raw_value, options, allow, True, native, source)
+                                            canonical = Rule('AND', value, options, allow, True, native, source)
+                                            self.assertEqual(normalize(iter([raw, canonical])), [canonical])
+                                            self.assertEqual(raw.value, raw_value)
+        literal = Rule('AND', '((not,((PROCESS-NAME,"IP-SUFFIX 192.0.2.7/033"))),(NETWORK,tcp))')
+        self.assertEqual(normalize([literal]), [literal])
+
+    def test_nested_logical_case_invalid_suffix_is_rejected_by_direct_normalize_and_parse(self):
+        for operator, body in (('NOT', '(({leaf}))'), ('AND', '(({leaf}),(NETWORK,tcp))'),
+                               ('OR', '(({leaf}),(NETWORK,tcp))')):
+            for spelling in (operator, operator.lower(), operator.title()):
+                for native in (False, True):
+                    for kind in ('IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                        for value in ('192.0.2.7/033', '2001:db8::7/0129', '192.0.2.7/255.255.255.0',
+                                      '192.0.2.7/+24', '192.0.2.7/', 'fe80::7%eth0/064'):
+                            expression = f'(({spelling},{body.format(leaf=kind + "," + value)}),(NETWORK,tcp))'
+                            with self.subTest(operator=spelling, native=native, kind=kind, value=value):
+                                with self.assertRaises(ValueError):
+                                    normalize([Rule('AND', expression, native_fields=native)])
+                                text = native_text('AND,' + expression) if native else 'AND,' + expression
+                                self.assertEqual(parse(text, purpose='proxy'),
+                                                 ([], [f'line {2 if native else 1}: invalid logical expression ' + expression]))
+
+    def test_nested_logical_case_suffix_is_canonical_in_six_published_files_and_reimport(self):
+        raw = Rule('AND', '((not,((IP-SUFFIX,192.0.2.7/024))),(oR,((SRC-IP-SUFFIX,2001:DB8::7/064),(NETWORK,tcp))))')
+        canonical = 'AND,((NOT,((IP-SUFFIX,192.0.2.7/24{flag}))),(OR,((SRC-IP-SUFFIX,2001:db8::7/64),(NETWORK,tcp))))'
+        neighbor = Rule('DOMAIN', 'neighbor.example.org')
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    emitted = canonical.format(flag=',no-resolve' if mode == 'add' else '')
+                    with patch('formats.datetime') as clock:
+                        clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                        outputs, skipped = render('suffix', normalize(iter([raw, neighbor])), purpose=purpose,
+                                                  no_resolve=mode)
+                    dns = ['0.0.0.0 neighbor.example.org'] if purpose == 'block' else []
+                    expected = {'fin.yaml': '# suffix rules: 2\npayload:\n  - ' + json.dumps(emitted) + '\n  - "DOMAIN,neighbor.example.org"\n',
+                                'fin.txt': '# suffix rules: 1\nDOMAIN,neighbor.example.org\n',
+                                'fin-qx.txt': '# suffix rules: 1\nHOST,neighbor.example.org,LIST\n',
+                                'fin-surge.txt': '# suffix rules: 0\n',
+                                'fin-surge-ds.txt': '# suffix rules: 1\nneighbor.example.org\n',
+                                'fin-adb.txt': '[Adblock Plus 2.0]\n! Title: suffix\n' +
+                                               '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
+                                               '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
+                                               f'! Total count: {len(dns)}\n' +
+                                               (''.join(line + '\n' for line in dns) if purpose == 'block' else
+                                                '! No AdBlock rules for non-advertising group.\n')}
+                    self.assertEqual(outputs, expected)
+                    self.assertEqual({key: value for key, value in skipped.items() if key.endswith(':AND')},
+                                     {name + ':AND': 1 for name in FILES if name != 'fin.yaml'})
+                    paths = {root / 'suffix' / name: text for name, text in outputs.items()}
+                    publish(paths, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in paths},
+                                     {root / 'suffix' / name: text.encode('utf-8') for name, text in expected.items()})
+                    parsed = [Rule('AND', emitted[4:], native_fields=True),
+                              Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')]
+                    self.assertEqual(parse((root / 'suffix/fin.yaml').read_text(encoding='utf-8'), purpose=purpose),
+                                     (parsed, []))
+
+    def test_lowercase_deep_suffix_traversal_keeps_eight_second_timeout_and_global_limits(self):
+        code = '''import json
+import sys
+from formats import render
+from rules import Rule, normalize, parse
+before = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+for depth in (600, 1000):
+    raw = 'IP-SUFFIX,2001:DB8::7/064'
+    canonical = 'IP-SUFFIX,2001:db8::7/64'
+    invalid = 'IP-SUFFIX,192.0.2.7/033'
+    for index in range(depth):
+        operator = 'not' if index % 2 else 'nOt'
+        raw = operator + ',((' + raw + '))'
+        invalid = operator + ',((' + invalid + '))'
+        canonical = 'NOT,((' + canonical + '))'
+    for native in (False, True):
+        wanted = Rule('NOT', canonical[4:], native_fields=native)
+        assert normalize(iter([Rule('NOT', raw[4:], native_fields=native), wanted])) == [wanted]
+        try:
+            normalize([Rule('NOT', invalid[4:], native_fields=native)])
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('invalid nested suffix accepted')
+        source = 'payload:\\n  - ' + json.dumps(raw) if native else raw
+        assert parse(source, purpose='proxy') == ([wanted], [])
+        outputs, skipped = render('deep', [wanted], purpose='proxy', no_resolve='keep')
+        assert outputs['fin.yaml'] == '# deep rules: 1\\npayload:\\n  - ' + json.dumps(canonical) + '\\n'
+        assert 'fin.yaml:NOT' not in skipped
+        assert parse(outputs['fin.yaml'], purpose='proxy') == ([Rule('NOT', canonical[4:], native_fields=True)], [])
+assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_generate_suffix_white_six_outputs_and_same_round_disk_dependencies(self):
+        for native in (False, True):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    for remote in (False, True):
+                        with self.subTest(native=native, purpose=purpose, mode=mode, remote=remote), tempfile.TemporaryDirectory() as directory:
+                            root = Path(directory)
+                            initial = '' if mode == 'add' else ',no-resolve'
+                            flag = '' if mode == 'strip' else ',no-resolve'
+                            logic = '((IP-SUFFIX,192.0.2.8/024' + initial + '),(SRC-IP-SUFFIX,2001:DB8::8/064),(NETWORK,tcp))'
+                            matchers = ('IP-SUFFIX,192.0.2.7/24' + initial, 'SRC-IP-SUFFIX,2001:db8::7/64',
+                                        'IP-SUFFIX,192.0.2.8/024' + initial, 'SRC-IP-SUFFIX,192.0.2.7/024',
+                                        'IP-SUFFIX,2001:DB8::7/064' + initial, 'IP-CIDR,192.0.2.7/24' + initial,
+                                        'AND,' + logic, 'DOMAIN,neighbor.example.org')
+                            source = (native_text(*matchers) if native else '\n'.join(matchers) + '\n') + '@@||allow.example.org^\n'
+                            white_matchers = ('IP-SUFFIX,192.0.2.7/024', 'SRC-IP-SUFFIX,2001:DB8::7/064')
+                            white = native_text(*white_matchers) if native else '\n'.join(white_matchers)
+                            (root / 'static').mkdir()
+                            (root / 'static/source.list').write_text(source, encoding='utf-8')
+                            (root / 'static/white.list').write_text(white, encoding='utf-8')
+                            inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                            configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['https://example.com/white' if remote else 'static/white.list'], 'whitelist': []},
+                                       {'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['https://example.com/source' if remote else 'static/source.list'],
+                                        'whitelist': ['white/fin.yaml', 'https://example.com/white' if remote else 'static/white.list']},
+                                       {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['source/fin.yaml'], 'whitelist': ['white/fin.yaml']}]
+                            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                            old = {}
+                            for group in ('white', 'source', 'child'):
+                                (root / group).mkdir()
+                                for name in FILES:
+                                    path = root / group / name
+                                    path.write_bytes(b'old product\x00\xff\r\n')
+                                    old[path] = path.read_bytes()
+                            responses = {'https://example.com/white': white.encode('utf-8'),
+                                         'https://example.com/source': source.encode('utf-8')}
+                            calls = []
+
+                            def fetch(url):
+                                calls.append(url)
+                                return responses[url]
+
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                outputs = generate(root, fetch)
+                            self.assertEqual(calls, ['https://example.com/white', 'https://example.com/source'] if remote else [])
+                            self.assertNotIn('invalid ', diagnostic.getvalue())
+                            self.assertNotIn('frozen', diagnostic.getvalue())
+                            self.assertEqual(list(outputs), [root / group / name for group in ('white', 'source', 'child') for name in FILES])
+                            self.assertEqual(outputs[root / 'white/fin.yaml'], '# white rules: 2\npayload:\n' +
+                                             '  - "IP-SUFFIX,192.0.2.7/24' + (',no-resolve' if mode == 'add' else '') + '"\n' +
+                                             '  - "SRC-IP-SUFFIX,2001:db8::7/64"\n')
+                            yaml_body = ['AND,((IP-SUFFIX,192.0.2.8/24' + flag + '),(SRC-IP-SUFFIX,2001:db8::8/64),(NETWORK,tcp))',
+                                         'DOMAIN,neighbor.example.org', 'IP-CIDR,192.0.2.0/24' + flag,
+                                         'IP-SUFFIX,192.0.2.8/24' + flag, 'SRC-IP-SUFFIX,192.0.2.7/24',
+                                         'IP-SUFFIX,2001:db8::7/64' + flag]
+                            for group in ('source', 'child'):
+                                dns_body = (['@@||allow.example.org^', '0.0.0.0 neighbor.example.org'] if group == 'source' else
+                                            ['0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                                expected = {'fin.yaml': f'# {group} rules: 6\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
+                                            'fin.txt': f'# {group} rules: 2\nDOMAIN,neighbor.example.org\nIP-CIDR,192.0.2.0/24{flag}\n',
+                                            'fin-qx.txt': f'# {group} rules: 2\nHOST,neighbor.example.org,LIST\nIP-CIDR,192.0.2.0/24,LIST{flag}\n',
+                                            'fin-surge.txt': f'# {group} rules: 1\nIP-CIDR,192.0.2.0/24{flag}\n',
+                                            'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                            'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
+                                                           '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
+                                                           '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
+                                                           f'! Total count: {len(dns_body)}\n' +
+                                                           (''.join(line + '\n' for line in dns_body) if purpose == 'block' else
+                                                            '! No AdBlock rules for non-advertising group.\n')}
+                                self.assertEqual({name: outputs[root / group / name] for name in FILES}, expected)
+                                restored, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
+                                self.assertEqual(messages, [])
+                                self.assertEqual([rule.kind + ',' + rule.value + (',' + ','.join(rule.options) if rule.options else '')
+                                                  for rule in restored], yaml_body)
+                                self.assertEqual([line for line in diagnostic.getvalue().splitlines() if line.startswith(group + ' fin.yaml:')],
+                                                 ['source fin.yaml:DOMAIN-SUFFIX: 1'] if group == 'source' else [])
+                                for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt', 'fin-adb.txt'):
+                                    self.assertIn(f'{group} {name}:IP-SUFFIX: 2', diagnostic.getvalue())
+                                    self.assertIn(f'{group} {name}:SRC-IP-SUFFIX: 1', diagnostic.getvalue())
+                                    self.assertIn(f'{group} {name}:AND: 1', diagnostic.getvalue())
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            publish(outputs, root=root)
+                            published = {path: path.read_bytes() for path in outputs}
+                            self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                            self.assertTrue(all(b'\r' not in data and data.endswith(b'\n') for data in published.values()))
+                            self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                            (root / 'static/source.list').unlink()
+                            (root / 'static/white.list').unlink()
+                            (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                disk = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+                            publish(disk, root=root)
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_invalid_suffix_local_remote_white_and_unavailable_sources_keep_old_products(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    source = 'IP-SUFFIX,192.0.2.7/024\nDOMAIN,neighbor.example.org\n'
+                    invalid = native_text('IP-SUFFIX,192.0.2.7/00033')
+                    (root / 'static').mkdir()
+                    (root / 'static/source.list').write_text(source, encoding='utf-8')
+                    (root / 'static/white.list').write_text(invalid, encoding='utf-8')
+                    inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                    configs = [{'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['static/source.list'], 'whitelist': ['static/white.list']},
+                               {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['source/fin.yaml'], 'whitelist': []}]
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    old = {}
+                    for group in ('source', 'child'):
+                        (root / group).mkdir()
+                        for name in FILES:
+                            path = root / group / name
+                            path.write_bytes(b'old product\x00\xff\r\n')
+                            old[path] = path.read_bytes()
+                    with self.assertRaisesRegex(ValueError, 'Invalid whitelist .*line 2: invalid IP-SUFFIX'):
+                        generate(root, lambda url: self.fail(url))
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    configs[0]['whitelist'] = ['https://example.com/invalid-white']
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        outputs = generate(root, lambda url: invalid.encode('utf-8'))
+                    self.assertIn('invalid whitelist', diagnostic.getvalue())
+                    flag = ('no-resolve',) if mode == 'add' else ()
+                    self.assertEqual(parse(outputs[root / 'source/fin.yaml'], purpose=purpose),
+                                     ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'), Rule('IP-SUFFIX', '192.0.2.7/24', flag)], []))
+                    for path, message in ((root / 'static/white.list', 'Output path targets static'),
+                                          (root / '../escape.list', 'Output path escapes root')):
+                        with self.assertRaisesRegex(ValueError, message):
+                            publish({path: outputs[root / 'source/fin.yaml']}, root=root)
+                    configs[0]['sources'], configs[0]['whitelist'] = ['https://example.com/invalid-source'], []
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        self.assertEqual(generate(root, lambda url: invalid.encode('utf-8')), {})
+                    self.assertIn('no adaptable rules; skipped', diagnostic.getvalue())
+                    configs[0]['sources'] = ['https://example.com/missing']
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+
+                    def unavailable(url):
+                        raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        self.assertEqual(generate(root, unavailable), {})
+                    self.assertIn('HTTP 404; skipped', diagnostic.getvalue())
+                    with self.assertRaisesRegex(RuntimeError, 'unexpected fetch failure'):
+                        generate(root, lambda url: (_ for _ in ()).throw(RuntimeError('unexpected fetch failure')))
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+
+    def test_ordinary_suffix_prefix_is_canonical_without_masking_host_bits(self):
+        self.assertEqual(parse('IP-SUFFIX,192.0.2.7/024\nDOMAIN,neighbor.example.org', purpose='block'),
+                         ([Rule('IP-SUFFIX', '192.0.2.7/24'), Rule('DOMAIN', 'neighbor.example.org')], []))
+
+    def test_quoted_logical_suffix_uses_checked_value_and_preserves_child_order(self):
+        self.assertEqual(parse('AND,((SRC-IP-SUFFIX,"192.0.2.7/00"),(IP-SUFFIX,2001:db8::7/064))',
+                               purpose='proxy'),
+                         ([Rule('AND', '((SRC-IP-SUFFIX,192.0.2.7/0),(IP-SUFFIX,2001:db8::7/64))')], []))
+
+    def test_direct_normalize_canonicalizes_suffix_before_deduplication(self):
+        raw = Rule('IP-SUFFIX', '192.0.2.7/024', ('no-resolve',), domain_source='qx')
+        canonical = Rule('IP-SUFFIX', '192.0.2.7/24', ('no-resolve',), domain_source='qx')
+        self.assertEqual(normalize(iter([raw, canonical])), [canonical])
+        self.assertEqual(raw.value, '192.0.2.7/024')
+
+    def test_direct_normalize_canonicalizes_logical_suffix_without_changing_literal_neighbor(self):
+        raw = Rule('AND', '((IP-SUFFIX,2001:DB8::7/064),(PROCESS-NAME,"IP-SUFFIX 192.0.2.7/024"))',
+                   ('force-cellular',), allow=True, literal_process=True, domain_source='qx')
+        wanted = Rule('AND', '((IP-SUFFIX,2001:db8::7/64),(PROCESS-NAME,"IP-SUFFIX 192.0.2.7/024"))',
+                      ('force-cellular',), allow=True, literal_process=True, domain_source='qx')
+        self.assertEqual(normalize(iter([raw, wanted])), [wanted])
+        literal = Rule('NOT', '((PROCESS-NAME,"IP-SUFFIX 192.0.2.7/024"))')
+        self.assertEqual(normalize([literal]), [literal])
+
+    def test_suffix_prefix_family_extremes_long_zeros_sources_and_quotes(self):
+        cases = (('192.0.2.7/024', '192.0.2.7/24'), ('192.0.2.7/00', '192.0.2.7/0'),
+                 ('192.0.2.7/032', '192.0.2.7/32'), ('2001:DB8:0:0:0:0:0:7/064', '2001:db8::7/64'),
+                 ('2001:db8::7/000', '2001:db8::7/0'), ('2001:db8::7/0128', '2001:db8::7/128'),
+                 ('192.0.2.7/' + '0' * 5000 + '24', '192.0.2.7/24'),
+                 ('2001:db8::7/' + '0' * 5000 + '128', '2001:db8::7/128'),
+                 ('192.0.2.7/' + '0' * 5000, '192.0.2.7/0'))
+        before = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+        for native in (False, True):
+            for purpose, action in (('block', 'REJECT'), ('direct', 'DIRECT'), ('proxy', 'PROXY')):
+                for kind in ('IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                    for raw, canonical in cases:
+                        for quote in ('', "'", '"'):
+                            matcher = kind + ',' + quote + raw + quote
+                            text = native_text(matcher, 'DOMAIN,neighbor.example.org') if native else matcher + ',' + action + '\nDOMAIN,neighbor.example.org'
+                            neighbor = Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')
+                            with self.subTest(native=native, purpose=purpose, kind=kind, raw=raw[:60], quote=quote):
+                                parsed, messages = parse('﻿' + text.replace('\n', '\r\n'), purpose=purpose)
+                                wanted = ([Rule(kind, canonical)] if not native or not quote else []) + [neighbor]
+                                self.assertEqual(parsed, wanted)
+                                self.assertEqual(messages, [f'line 2: invalid {kind} {quote}{raw}{quote}'] if native and quote else [])
+                                self.assertEqual(normalize(iter(parsed)), sorted(wanted, key=lambda rule: (rule.kind, rule.value)))
+        self.assertEqual((sys.get_int_max_str_digits(), sys.getrecursionlimit()), before)
+
+    def test_suffix_src_params_and_logical_fields_preserve_direction_flags_and_literals(self):
+        for native in (False, True):
+            for purpose, action in (('block', 'REJECT'), ('direct', 'DIRECT'), ('proxy', 'PROXY')):
+                tail = ',src,no-resolve' if native else ',' + action + ',src,no-resolve'
+                matcher = 'IP-SUFFIX,192.0.2.7/024' + tail
+                self.assertEqual(parse(native_text(matcher) if native else matcher, purpose=purpose),
+                                 ([Rule('SRC-IP-SUFFIX', '192.0.2.7/24')],
+                                  [f'line {2 if native else 1}: unsupported no-resolve for SRC-IP-SUFFIX']))
+                for quote in ('', "'", '"'):
+                    value = quote + '192.0.2.7/024' + quote
+                    expressions = (('AND', f'((IP-SUFFIX,{value},no-resolve),(SRC-IP-SUFFIX,2001:DB8::7/064),(NETWORK,tcp))',
+                                    '((IP-SUFFIX,192.0.2.7/24{flag}),(SRC-IP-SUFFIX,2001:db8::7/64),(NETWORK,tcp))'),
+                                   ('OR', f'((SRC-IP-SUFFIX,{value}),(IP-SUFFIX,2001:DB8::7/064))',
+                                    '((SRC-IP-SUFFIX,192.0.2.7/24),(IP-SUFFIX,2001:db8::7/64{flag}))'),
+                                   ('NOT', f'((IP-SUFFIX,{value},src,no-resolve))', '((SRC-IP-SUFFIX,192.0.2.7/24))'),
+                                   ('AND', f'((NOT,((IP-SUFFIX,{value}))),(OR,((IP-SUFFIX,2001:DB8::7/064),(SRC-IP-SUFFIX,192.0.2.8/024))))',
+                                    '((NOT,((IP-SUFFIX,192.0.2.7/24{flag}))),(OR,((IP-SUFFIX,2001:db8::7/64{flag}),(SRC-IP-SUFFIX,192.0.2.8/24))))'))
+                    for operator, expression, canonical in expressions:
+                        with self.subTest(native=native, purpose=purpose, quote=quote, operator=operator):
+                            text = operator + ',' + expression
+                            parsed, messages = parse(native_text(text) if native else text, purpose=purpose)
+                            if native and quote:
+                                self.assertEqual((parsed, messages), ([], ['line 2: invalid logical expression ' + expression]))
+                                continue
+                            initial = ',no-resolve' if operator == 'AND' and expression.startswith('((IP-SUFFIX,') else ''
+                            self.assertEqual(parsed, [Rule(operator, canonical.format(flag=initial), native_fields=native)])
+                            self.assertEqual(messages, [f'line {2 if native else 1}: unsupported no-resolve for SRC-IP-SUFFIX'] if operator == 'NOT' else [])
+                            for mode in ('add', 'strip', 'keep'):
+                                flag = ',no-resolve' if mode == 'add' or mode == 'keep' and initial else ''
+                                emitted = operator + ',' + canonical.format(flag=flag)
+                                outputs, skipped = render('suffix', normalize(iter(parsed)), purpose=purpose, no_resolve=mode)
+                                self.assertEqual(outputs['fin.yaml'], '# suffix rules: 1\npayload:\n  - ' + json.dumps(emitted) + '\n')
+                                self.assertNotIn('fin.yaml:' + operator, skipped)
+                                self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose),
+                                                 ([Rule(operator, canonical.format(flag=flag), native_fields=True)], []))
+        self.assertEqual(parse(native_text('IP-SUFFIX,192.0.2.7/024,ignored,Src,NO-RESOLVE'), purpose='proxy'),
+                         ([Rule('IP-SUFFIX', '192.0.2.7/24')], []))
+        self.assertEqual(parse('IP-SUFFIX,192.0.2.7/024,src', purpose='proxy'),
+                         ([], ['line 1: ambiguous src policy or option']))
+        for matcher in ('DST-IP-SUFFIX,192.0.2.7/024', 'IP-SUFFIX6,2001:db8::7/064'):
+            self.assertEqual(parse(matcher, purpose='block'), ([], ['line 1: unknown type ' + matcher.split(',')[0]]))
+
+    def test_invalid_suffix_prefixes_warn_and_strict_white_rejects_without_losing_neighbor(self):
+        values = ('192.0.2.7/255.255.255.0', '192.0.2.7/0.0.0.255', '192.0.2.7/',
+                  '192.0.2.7/+24', '192.0.2.7/-1', '192.0.2.7/ 24', '192.0.2.7/24x',
+                  '192.0.2.7/３２', '192.0.2.7/33', '192.0.2.7/00033', '2001:db8::7/129',
+                  '2001:db8::7/00129', '192.0.2.7/24/0', '192.0.2.7', 'bad/24',
+                  'fe80::7%eth0/064', '192.0.2.7%eth0/24', '192.0.2.7/' + '9' * 5000)
+        for native in (False, True):
+            for kind in ('IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                for value in values:
+                    matcher = kind + ',' + value
+                    text = native_text(matcher, 'DOMAIN,neighbor.example.org') if native else '# source\n' + matcher + '\nDOMAIN,neighbor.example.org'
+                    neighbor = Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')
+                    with self.subTest(native=native, kind=kind, value=value[:60]):
+                        self.assertEqual(parse(text, purpose='proxy'), ([neighbor], [f'line 2: invalid {kind} {value}']))
+                        invalid_white = native_text(matcher) if native else '# source\n' + matcher
+                        with self.assertRaisesRegex(ValueError, 'line 2: invalid ' + kind):
+                            parse_whitelist(invalid_white)
+                        with warnings.catch_warnings(record=True) as caught:
+                            warnings.simplefilter('always')
+                            self.assertEqual(parse_whitelist(text), [neighbor])
+                        self.assertEqual([str(item.message) for item in caught], [f'line 2: invalid {kind} {value}'])
+                        with self.assertRaises(ValueError):
+                            normalize([Rule(kind, value)])
+                        expression = f'((NETWORK,tcp),({kind},{value}))'
+                        self.assertEqual(parse(native_text('AND,' + expression) if native else 'AND,' + expression,
+                                               purpose='proxy'),
+                                         ([], [f'line {2 if native else 1}: invalid logical expression ' + expression]))
+                        with self.assertRaises(ValueError):
+                            normalize([Rule('AND', expression, native_fields=native)])
+
+    def test_normalize_suffix_keeps_host_bits_options_allow_sources_and_neighbor_types(self):
+        for kind in ('IP-SUFFIX', 'SRC-IP-SUFFIX'):
+            for source in ('surge', 'qx', 'mihomo'):
+                for allow in (False, True):
+                    for native in (False, True):
+                        for options in ((), ('no-resolve',), ('force-cellular',)):
+                            raw = Rule(kind, '2001:DB8::7/064', options, allow, True, native, source)
+                            canonical = Rule(kind, '2001:db8::7/64', options, allow, True, native, source)
+                            adjacent = Rule(kind, '2001:db8::8/64', options, allow, True, native, source)
+                            self.assertEqual(normalize(iter([raw, canonical, adjacent])), [canonical, adjacent])
+                            self.assertEqual(raw.value, '2001:DB8::7/064')
+        rules = [Rule('IP-SUFFIX', '192.0.2.7/024'), Rule('SRC-IP-SUFFIX', '192.0.2.7/024'),
+                 Rule('IP-CIDR', '192.0.2.7/24'), Rule('IP-ASN', '00'), Rule('UNKNOWN-TYPE', '192.0.2.7/024'),
+                 Rule('DOMAIN-WILDCARD', '[ab].example.org', domain_source='mihomo')]
+        self.assertEqual(set(normalize(iter(rules))),
+                         {Rule('IP-SUFFIX', '192.0.2.7/24'), Rule('SRC-IP-SUFFIX', '192.0.2.7/24'),
+                          Rule('IP-CIDR', '192.0.2.0/24'), *rules[3:]})
+        for native in (False, True):
+            rule = Rule('AND', '((src-ip-suffix,192.0.2.7/00),(IP-SUFFIX,2001:DB8::7/064),(NETWORK,tcp))',
+                        native_fields=native, domain_source='mihomo')
+            canonical = Rule('AND', '((SRC-IP-SUFFIX,192.0.2.7/0),(IP-SUFFIX,2001:db8::7/64),(NETWORK,tcp))',
+                             native_fields=native, domain_source='mihomo')
+            self.assertEqual(normalize(iter([rule, canonical])), [canonical])
+
+    def test_suffix_normalization_preserves_native_asn_wildcard_root_dot_and_process_identity(self):
+        raw = Rule('AND', '((IP-SUFFIX,192.0.2.7/024),(IP-ASN,00),(DOMAIN-WILDCARD,[ab]),'
+                         '(DOMAIN,Native.Example.org.),(PROCESS-NAME,<Foo>))',
+                   native_fields=True, literal_process=True, domain_source='mihomo')
+        wanted = Rule('AND', '((IP-SUFFIX,192.0.2.7/24),(IP-ASN,00),(DOMAIN-WILDCARD,[ab]),'
+                            '(DOMAIN,Native.Example.org.),(PROCESS-NAME,<Foo>))',
+                      native_fields=True, literal_process=True, domain_source='mihomo')
+        self.assertEqual(normalize(iter([raw, wanted])), [wanted])
+        for mode in ('add', 'strip', 'keep'):
+            emitted = (wanted.value.replace('192.0.2.7/24)', '192.0.2.7/24,no-resolve)').replace('(IP-ASN,00)', '(IP-ASN,00,no-resolve)')
+                       if mode == 'add' else wanted.value)
+            outputs, _ = render('suffix', normalize([raw]), purpose='proxy', no_resolve=mode)
+            self.assertEqual(outputs['fin.yaml'], '# suffix rules: 1\npayload:\n  - ' + json.dumps('AND,' + emitted) + '\n')
+            self.assertEqual(parse(outputs['fin.yaml'], purpose='proxy'),
+                             ([Rule('AND', emitted, native_fields=True, literal_process=True, domain_source='mihomo')], []))
+        allowed = Rule('IP-SUFFIX', '192.0.2.7/024', allow=True)
+        self.assertEqual(normalize([allowed]), [Rule('IP-SUFFIX', '192.0.2.7/24', allow=True)])
+
+    def test_parsed_suffix_white_compares_canonical_identity_and_keeps_direction_host_bits(self):
+        for native in (False, True):
+            for white_native in (False, True):
+                matchers = ('IP-SUFFIX,192.0.2.7/024,no-resolve', 'SRC-IP-SUFFIX,192.0.2.7/00',
+                            'IP-SUFFIX,2001:DB8::7/064', 'IP-SUFFIX,192.0.2.8/024',
+                            'SRC-IP-SUFFIX,192.0.2.7/024', 'IP-CIDR,192.0.2.7/24',
+                            'AND,((IP-SUFFIX,192.0.2.7/024),(NETWORK,tcp))')
+                source, messages = parse(native_text(*matchers) if native else '\n'.join(matchers), purpose='block')
+                self.assertEqual(messages, [])
+                white_matchers = ('IP-SUFFIX,192.0.2.7/24', 'SRC-IP-SUFFIX,192.0.2.7/000', 'IP-SUFFIX,2001:db8::7/64')
+                white = parse_whitelist(native_text(*white_matchers) if white_native else '\n'.join(white_matchers))
+                self.assertEqual(white, [Rule('IP-SUFFIX', '192.0.2.7/24'), Rule('SRC-IP-SUFFIX', '192.0.2.7/0'),
+                                         Rule('IP-SUFFIX', '2001:db8::7/64')])
+                self.assertEqual(exclude_covered(iter(source), iter(white)), source[3:])
+                allowed = Rule('IP-SUFFIX', '192.0.2.7/24', allow=True)
+                self.assertEqual(exclude_covered([allowed], white), [allowed])
+                self.assertEqual(exclude_covered(source[:1], parse_whitelist('IP-CIDR,192.0.2.0/24')), source[:1])
+                self.assertEqual(exclude_covered(source[5:6], white), source[5:6])
+
+    def test_deep_suffix_normalize_and_reimport_keep_eight_second_timeout_and_global_limits(self):
+        code = '''import json
+import sys
+from formats import render
+from rules import Rule, normalize, parse
+before = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+for depth in (600, 1000):
+    raw = 'IP-SUFFIX,2001:DB8::7/064'
+    canonical = 'IP-SUFFIX,2001:db8::7/64'
+    for _ in range(depth):
+        raw, canonical = 'NOT,((' + raw + '))', 'NOT,((' + canonical + '))'
+    for native in (False, True):
+        source = 'payload:\\n  - ' + json.dumps(raw) if native else raw
+        parsed, messages = parse(source, purpose='proxy')
+        wanted = Rule('NOT', canonical[4:], native_fields=native)
+        assert (parsed, messages) == ([wanted], [])
+        assert normalize([Rule('NOT', raw[4:], native_fields=native), wanted]) == [wanted]
+        outputs, skipped = render('deep', parsed, purpose='proxy', no_resolve='strip')
+        assert outputs['fin.yaml'] == '# deep rules: 1\\npayload:\\n  - ' + json.dumps(canonical) + '\\n'
+        assert 'fin.yaml:NOT' not in skipped
+        assert parse(outputs['fin.yaml'], purpose='proxy') == ([Rule('NOT', canonical[4:], native_fields=True)], [])
+assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stderr)
