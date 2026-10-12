@@ -534,7 +534,10 @@ def _source_parts(line: str) -> tuple[list[str], int]:
     return [head.strip(), value.strip()], len(line)
 
 
-def _valid_domain(kind: str, value: str) -> bool:
+def _valid_domain(kind: str, value: str, *, domain_source: str = "surge") -> bool:
+    if kind == "DOMAIN-WILDCARD" and domain_source == "mihomo":
+        return bool(value) and not re.search(
+            r"[\x00-\x08\x0a-\x1f\x7f-\x9f\ud800-\udfff\u2028\u2029\ufffe\uffff]", value)
     value = value.removesuffix('.')
     try:
         ipaddress.ip_address(value)
@@ -1249,7 +1252,8 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             pending.extend(reversed(children))
             continue
         if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
-            if not (_valid_domain(kind, checked) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
+            if not (_valid_domain(kind, checked, domain_source=domain_source)
+                    or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
                 return None
         elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
             try:
@@ -1467,14 +1471,14 @@ def _without_comment(line: str) -> str:
 
 
 def _has_literal_field(line: str, native_fields: bool = False) -> bool:
-    head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+),''', line, re.I)
+    head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+) *,''', line, re.I)
     if head is None:
         return False
     kind = head[1].upper()
-    literal = _REGEX | ({'DOMAIN-KEYWORD', 'IN-USER', 'IN-NAME', 'REMATCH-NAME', 'PROCESS-NAME', 'PROCESS-PATH',
+    literal = _REGEX | ({'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD', 'IN-USER', 'IN-NAME', 'REMATCH-NAME', 'PROCESS-NAME', 'PROCESS-PATH',
                          'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'} if native_fields else set())
     return kind in literal or kind in _LOGICAL and bool(re.search(
-        r"\(\s*(?:" + '|'.join(sorted(literal)) + '),', line, re.I
+        r"\(\s*(?:" + '|'.join(sorted(literal)) + ') *,', line, re.I
     ))
 
 
@@ -1731,7 +1735,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             warnings.extend(f"line {number}: unsupported no-resolve for {child_kind}"
                             for child_kind in ignored_no_resolve)
             value = normalized
-        elif not (_valid_domain(kind, value) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
+        elif not (_valid_domain(kind, value, domain_source=domain_source)
+                  or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
             warnings.append(f"line {number}: invalid domain {value}")
             continue
         if action and not ignore_policy and not (purpose == "block" and action in _BLOCK_ACTIONS or

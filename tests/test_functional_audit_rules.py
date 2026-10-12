@@ -90,7 +90,7 @@ class UnderscoreDomainAuditTests(unittest.TestCase):
         self.assertEqual(parse('a_b', purpose='block'), ([], ['line 1: invalid rule']))
         self.assertEqual(parse('a_b', purpose='block', domain_set=True), ([Rule('DOMAIN', 'a_b')], []))
         self.assertEqual(parse('.a_b', purpose='proxy'), ([Rule('DOMAIN-SUFFIX', 'a_b')], []))
-        for kind in ('DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'):
+        for kind in ('DOMAIN', 'DOMAIN-SUFFIX'):
             for quote in ('\'', '"'):
                 text = native_text(kind + ',' + quote + 'ad_core.cctv.com' + quote)
                 self.assertEqual(parse(text, purpose='block')[0], [])
