@@ -1070,6 +1070,15 @@ def _normalize_port(value: str, native_fields: bool) -> str | None:
     return '/'.join(str(start) if start == end else f'{start}-{end}' for start, end in ranges)
 
 
+def _reject_ip_scope(kind: str, value: str, native_fields: bool = False) -> None:
+    if '%' not in value:
+        return
+    if kind in _LOGICAL:
+        _condition_kinds(kind, value, native_fields, reject_ip_scope=True)
+    elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-SUFFIX", "SRC-IP-SUFFIX"}:
+        raise ValueError(f"IPv6 scope is not supported: {value}")
+
+
 def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
     if kind in {"IP-ASN", "SRC-IP-ASN"}:
         if kind == 'IP-ASN' and not native_fields:
@@ -1090,6 +1099,8 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
         except ValueError:
             return False
     if kind == "SRC-IP":
+        if '%' in value:
+            return False
         try:
             (ipaddress.ip_network(value, strict=False) if '/' in value
              else ipaddress.ip_address(value))
@@ -1275,6 +1286,8 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
                     or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
                 return None
         elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
+            if '%' in checked:
+                return None
             try:
                 network = ipaddress.ip_network(checked, strict=False)
                 if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
@@ -1349,7 +1362,8 @@ def _apply_no_resolve(rule: Rule, mode: str) -> Rule:
             Rule(rule.kind, value, options, rule.allow, rule.literal_process, rule.native_fields, rule.domain_source))
 
 
-def _condition_kinds(kind: str, value: str, native_fields: bool = False) -> set[str]:
+def _condition_kinds(kind: str, value: str, native_fields: bool = False, *,
+                     reject_ip_scope: bool = False) -> set[str]:
     if kind not in _LOGICAL:
         return {kind}
     expression = f"({kind},{value})"
@@ -1361,10 +1375,14 @@ def _condition_kinds(kind: str, value: str, native_fields: bool = False) -> set[
         begin, end = pending.pop()
         comma = expression.find(',', begin + 1, end - 1)
         kind = expression[begin + 1:comma].strip(trim)
-        if native_fields:
+        if native_fields or reject_ip_scope:
             kind = kind.upper()
         kinds.add(kind)
         if kind not in _LOGICAL:
+            if reject_ip_scope:
+                fields = _fields(expression[begin + 1:end - 1], native_fields=native_fields)
+                if len(fields) >= 2:
+                    _reject_ip_scope(kind, fields[1] if native_fields else _field_value(fields[1]))
             continue
         payload = expression[comma + 1:end - 1]
         start = comma + 1 + len(payload) - len(payload.lstrip(trim))
@@ -1606,7 +1624,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
         domain_source = "surge"
         abp = re.fullmatch(r"(?:@@)?\|\|([^|^/$]+)\^", line)
         bare_network = None
-        if '/' in line and ',' not in line:
+        if '/' in line and ',' not in line and '%' not in line:
             try:
                 bare_network = ipaddress.ip_network(line, strict=False)
             except ValueError:
@@ -1695,6 +1713,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             continue
         if kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
             try:
+                if '%' in value:
+                    raise ValueError("IPv6 scope is not supported")
                 network = ipaddress.ip_network(value, strict=False)
                 if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
                     if not yaml_rule:
@@ -1719,6 +1739,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
                 value = _port_comparison(value)
         elif kind == "SRC-IP":
             try:
+                if '%' in value:
+                    raise ValueError("IPv6 scope is not supported")
                 value = str(ipaddress.ip_address(value))
             except ValueError:
                 warnings.append(f"line {number}: invalid IP address {value}")
@@ -1803,6 +1825,7 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
     empty = (set(), set(), set(), set())
     networks = {"src": set(), "dst": set()}
     for entry in whitelist:
+        _reject_ip_scope(entry.kind, entry.value, entry.native_fields)
         exact, suffixes, keywords, wildcards = domain_groups.setdefault(
             entry.domain_source, (set(), set(), set(), set()))
         value = _domain_comparison_value(entry.kind, entry.value, entry.domain_source)
@@ -1832,6 +1855,7 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
     }
     kept = []
     for rule in rules:
+        _reject_ip_scope(rule.kind, rule.value, rule.native_fields)
         if rule.allow:
             kept.append(rule)
             continue
@@ -1893,6 +1917,7 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
     suffixes, keywords = {}, {}
     for rule in sorted(set(rules), key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow,
                                                     rule.literal_process, rule.native_fields, rule.domain_source)):
+        _reject_ip_scope(rule.kind, rule.value, rule.native_fields)
         group = (rule.allow, rule.options, rule.literal_process, rule.native_fields, rule.domain_source)
         value = (_domain_comparison_value(rule.kind, rule.value, rule.domain_source)
                  if rule.kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} else rule.value)

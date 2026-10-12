@@ -2065,3 +2065,379 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                 with self.assertRaisesRegex(RuntimeError, 'unexpected fetch failure'):
                     generate(root, lambda url: (_ for _ in ()).throw(RuntimeError('unexpected fetch failure')))
                 self.assertEqual({path: path.read_bytes() for path in old}, old)
+
+
+class IPv6ScopeAuditTests(unittest.TestCase):
+    def test_direct_scope_checks_reach_leaves_after_invalid_siblings(self):
+        for native in (False, True):
+            for sibling in ('(DST-PORT,invalid)', '(DOMAIN,bad..example)', '(DOMAIN,valid.example.org,no-resolve)'):
+                for kind in ('IP-CIDR', 'IP-CIDR6', 'SRC-IP-CIDR', 'SRC-IP', 'IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                    value = 'fe80::1%eth0' if kind == 'SRC-IP' else 'fe80::1%eth0/64'
+                    for allow in (False, True):
+                        rule = Rule('AND', f'({sibling},({kind},{value}))', allow=allow, native_fields=native)
+                        for operation in (lambda: normalize([rule]), lambda: exclude_covered([rule], []),
+                                          lambda: exclude_covered([], [rule])):
+                            with self.subTest(native=native, sibling=sibling, kind=kind, allow=allow), self.assertRaisesRegex(ValueError, 'scope'):
+                                operation()
+            for expression in ('((DST-PORT,invalid),(DOMAIN-KEYWORD,%eth0),(IP-CIDR6,fe80::/64))',
+                               '((DOMAIN,bad..example),(IP-CIDR6,fe80::/64,ignored%literal))'):
+                rule = Rule('AND', expression, native_fields=native)
+                self.assertEqual(normalize([rule]), [rule])
+                self.assertEqual(exclude_covered([rule], []), [rule])
+
+    def test_scoped_local_white_errors_and_unavailable_scoped_sources_preserve_old_products(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'static').mkdir()
+                    source = 'IP-CIDR6,fe80::/64\nDOMAIN,neighbor.example.org\n'
+                    invalid = native_text('IP-CIDR6,fe80::1%eth0/64', 'NOT,((SRC-IP,fe80::1%eth1))')
+                    (root / 'static/source.list').write_text(source, encoding='utf-8')
+                    (root / 'static/white.list').write_text(invalid, encoding='utf-8')
+                    inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                    configs = [{'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['static/source.list'], 'whitelist': ['static/white.list']},
+                               {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['source/fin.yaml'], 'whitelist': []}]
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    old = {}
+                    for group in ('source', 'child'):
+                        (root / group).mkdir()
+                        for name in FILES:
+                            path = root / group / name
+                            path.write_bytes(b'old product\x00\xff\r\n')
+                            old[path] = path.read_bytes()
+                    with self.assertRaisesRegex(ValueError, 'Invalid whitelist .*line 2: invalid CIDR'):
+                        generate(root, lambda url: self.fail(url))
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    configs[0]['whitelist'] = ['https://example.com/invalid-white']
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        outputs = generate(root, lambda url: invalid.encode('utf-8'))
+                    self.assertIn('invalid whitelist', diagnostic.getvalue())
+                    expected = [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                                Rule('IP-CIDR6', 'fe80::/64', () if mode != 'add' else ('no-resolve',))]
+                    self.assertEqual(parse(outputs[root / 'source/fin.yaml'], purpose=purpose), (expected, []))
+                    for path, message in ((root / 'static/white.list', 'Output path targets static'),
+                                          (root / '../escape.list', 'Output path escapes root')):
+                        with self.assertRaisesRegex(ValueError, message):
+                            publish({path: outputs[root / 'source/fin.yaml']}, root=root)
+                    configs[0]['sources'], configs[0]['whitelist'] = ['https://example.com/invalid-source'], []
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        self.assertEqual(generate(root, lambda url: invalid.encode('utf-8')), {})
+                    self.assertIn('no adaptable rules; skipped', diagnostic.getvalue())
+                    configs[0]['sources'] = ['https://example.com/missing']
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+
+                    def unavailable(url):
+                        raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        self.assertEqual(generate(root, unavailable), {})
+                    self.assertIn('HTTP 404; skipped', diagnostic.getvalue())
+                    with self.assertRaisesRegex(RuntimeError, 'unexpected fetch failure'):
+                        generate(root, lambda url: (_ for _ in ()).throw(RuntimeError('unexpected fetch failure')))
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+
+    def test_cidr_scope_is_rejected_before_host_bits_remove_zone(self):
+        self.assertEqual(parse('# source\nIP-CIDR6,fe80::1%eth0/64\nDOMAIN,neighbor.example.org',
+                               purpose='block'),
+                         ([Rule('DOMAIN', 'neighbor.example.org')],
+                          ['line 2: invalid CIDR fe80::1%eth0/64']))
+
+    def test_bare_source_and_logical_scope_inputs_warn_without_removing_neighbors(self):
+        cases = (('fe80::1%eth0/64', 'invalid rule'),
+                 ('fe80::%eth0/64', 'invalid rule'),
+                 ('SRC-IP,fe80::1%eth0', 'invalid IP address fe80::1%eth0'),
+                 ('NOT,((SRC-IP,fe80::1%eth0))', 'invalid logical expression ((SRC-IP,fe80::1%eth0))'),
+                 ('AND,((IP-CIDR6,fe80::1%eth0/64),(NETWORK,tcp))',
+                  'invalid logical expression ((IP-CIDR6,fe80::1%eth0/64),(NETWORK,tcp))'))
+        for matcher, warning in cases:
+            with self.subTest(matcher=matcher):
+                self.assertEqual(parse('# source\n' + matcher + '\nDOMAIN,neighbor.example.org', purpose='proxy'),
+                                 ([Rule('DOMAIN', 'neighbor.example.org')], ['line 2: ' + warning]))
+
+    def test_direct_normalize_rejects_scoped_rules_before_collapse(self):
+        for kind in ('IP-CIDR', 'IP-CIDR6', 'SRC-IP-CIDR', 'SRC-IP', 'IP-SUFFIX', 'SRC-IP-SUFFIX'):
+            for value in ('fe80::%eth0/64', 'fe80::1%eth0/64', 'fe80::1%eth0'):
+                for allow in (False, True):
+                    with self.subTest(kind=kind, value=value, allow=allow), self.assertRaisesRegex(ValueError, 'scope'):
+                        normalize(iter([Rule(kind, value, allow=allow)]))
+        for kind, values in (('SRC-IP-CIDR', ('fe80::%eth0/64', 'fe80::%eth1/64')),
+                             ('IP-CIDR6', ('2001:db8::%eth0/32', '2001:db8::%eth1/32'))):
+            with self.subTest(kind=kind, pair=True), self.assertRaisesRegex(ValueError, 'scope'):
+                normalize(Rule(kind, value) for value in values)
+
+    def test_direct_exclude_rejects_scoped_white_and_rules_even_without_matching_networks(self):
+        for kind, value in (('IP-CIDR', 'fe80::1%eth0/64'), ('IP-CIDR6', 'fe80::%eth0/64'),
+                            ('SRC-IP-CIDR', 'fe80::1%eth0/64'), ('SRC-IP', 'fe80::1%eth0'),
+                            ('IP-SUFFIX', 'fe80::1%eth0/64'), ('SRC-IP-SUFFIX', 'fe80::1%eth0/64')):
+            ordinary = Rule(kind, value.replace('%eth0', ''))
+            for allow in (False, True):
+                scoped = Rule(kind, value, allow=allow)
+                for source, white in (([ordinary], [scoped]), ([scoped], []), ([scoped], [ordinary])):
+                    with self.subTest(kind=kind, allow=allow, white=bool(white)), self.assertRaisesRegex(ValueError, 'scope'):
+                        exclude_covered(iter(source), iter(white))
+
+    def test_direct_logical_scope_inputs_raise_in_normalize_and_exclude(self):
+        for native in (False, True):
+            for kind in ('IP-CIDR', 'IP-CIDR6', 'SRC-IP-CIDR', 'SRC-IP', 'IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                value = 'fe80::1%eth0' if kind == 'SRC-IP' else 'fe80::1%eth0/64'
+                leaf = f'({kind},{value})'
+                for operator, expression in (('NOT', f'({leaf})'),
+                                             ('AND', f'((NETWORK,tcp),{leaf})'),
+                                             ('OR', f'((NOT,({leaf})),(DOMAIN,neighbor.example.org))')):
+                    scoped = Rule(operator, expression, native_fields=native,
+                                  domain_source='mihomo' if native else 'surge')
+                    for operation in (lambda: normalize([scoped]),
+                                      lambda: exclude_covered([scoped], []),
+                                      lambda: exclude_covered([Rule('DOMAIN', 'neighbor.example.org')], [scoped])):
+                        with self.subTest(native=native, kind=kind, operator=operator), self.assertRaisesRegex(ValueError, 'scope'):
+                            operation()
+
+    def test_scope_rejection_covers_native_quotes_aliases_directions_suffixes_and_physical_lines(self):
+        values = ('fe80::%eth0/64', 'fe80::1%eth0/64', 'fe80::%eth1/64',
+                  'fe80::1%1/128', '::ffff:192.0.2.1%eth0/128', 'fe80::1%/64')
+        for native in (False, True):
+            for purpose in ('block', 'direct', 'proxy'):
+                for kind in ('IP-CIDR', 'IP-CIDR6', 'IP6-CIDR', 'SRC-IP-CIDR', 'SRC-IP', 'IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                    for value in values:
+                        for quote in ('', "'", '"'):
+                            matcher = kind + ',' + quote + value + quote
+                            text = native_text(matcher, 'DOMAIN,neighbor.example.org') if native else '# source\n' + matcher + '\nDOMAIN,neighbor.example.org'
+                            with self.subTest(native=native, purpose=purpose, kind=kind, value=value, quote=quote):
+                                parsed, messages = parse('﻿' + text.replace('\n', '\r\n'), purpose=purpose)
+                                self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')])
+                                self.assertEqual(len(messages), 1)
+                                self.assertTrue(messages[0].startswith('line 2: invalid '), messages)
+                                with self.assertRaisesRegex(ValueError, 'line 2: invalid'):
+                                    parse_whitelist('﻿' + text.rsplit('\n', 2 if native else 1)[0])
+                for kind in ('IP-CIDR', 'IP-CIDR6', 'IP-SUFFIX'):
+                    tail = ',src' if native else ',' + purpose.upper().replace('BLOCK', 'REJECT') + ',src'
+                    matcher = kind + ',fe80::1%eth0/64' + tail
+                    parsed, messages = parse(native_text(matcher) if native else matcher, purpose=purpose)
+                    self.assertEqual(parsed, [])
+                    self.assertEqual(messages, [f'line {2 if native else 1}: invalid ' +
+                                                ('CIDR' if kind != 'IP-SUFFIX' else 'SRC-IP-SUFFIX') + ' fe80::1%eth0/64'])
+        for value in ('fe80::1%eth0', 'fe80::1%eth1', 'fe80::1%', 'fe80::1%eth0%eth1'):
+            for matcher in (value, 'SRC-IP,' + value, 'DST-IP,' + value):
+                parsed, messages = parse(matcher + '\nDOMAIN,neighbor.example.org', purpose='proxy')
+                self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org')])
+                self.assertTrue(messages[0].startswith('line 1:'))
+        for kind in ('SRC-IP', 'IP-CIDR', 'IP-CIDR6', 'IP-SUFFIX', 'SRC-IP-SUFFIX'):
+            value = '192.0.2.1%eth0' + ('' if kind == 'SRC-IP' else '/24')
+            self.assertEqual(parse(kind + ',' + value, purpose='block')[0], [])
+        self.assertEqual(parse('DST-IP,2001:db8::1', purpose='block'), ([], ['line 1: unknown type DST-IP']))
+
+    def test_logical_scope_rejects_whole_expression_and_keeps_native_inner_literals(self):
+        for native in (False, True):
+            for kind in ('IP-CIDR', 'IP-CIDR6', 'SRC-IP-CIDR', 'SRC-IP', 'IP-SUFFIX', 'SRC-IP-SUFFIX'):
+                value = 'fe80::1%eth0' if kind == 'SRC-IP' else 'fe80::1%eth0/64'
+                for quote in ('', "'", '"'):
+                    leaf = f'({kind},{quote}{value}{quote})'
+                    for operator, expression in (('AND', f'((NETWORK,tcp),{leaf})'),
+                                                 ('OR', f'({leaf},(DOMAIN,neighbor.example.org))'),
+                                                 ('NOT', f'({leaf})'),
+                                                 ('AND', f'((NOT,({leaf})),(OR,((DOMAIN,neighbor.example.org),(NETWORK,tcp))))')):
+                        text = native_text(operator + ',' + expression, 'DOMAIN,neighbor.example.org') if native else operator + ',' + expression + '\nDOMAIN,neighbor.example.org'
+                        for purpose in ('block', 'direct', 'proxy'):
+                            with self.subTest(native=native, kind=kind, quote=quote, operator=operator, purpose=purpose):
+                                self.assertEqual(parse(text, purpose=purpose),
+                                                 ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')],
+                                                  [f'line {2 if native else 1}: invalid logical expression ' + expression]))
+        for native in (False, True):
+            for matcher in ('NOT,((DOMAIN-REGEX,^literal%eth0$))',
+                            'AND,((PROCESS-NAME,literal%eth0),(SRC-IP,2001:db8::1),(NETWORK,tcp))'):
+                parsed, messages = parse(native_text(matcher) if native else matcher, purpose='proxy')
+                self.assertEqual(messages, [])
+                self.assertEqual(len(parsed), 1)
+                self.assertEqual(normalize(iter(parsed)), parsed)
+                self.assertEqual(exclude_covered(iter(parsed), iter([])), parsed)
+        self.assertEqual(parse(native_text('NOT,((SRC-IP,"2001:db8::1"))'), purpose='proxy')[0], [])
+        self.assertEqual(parse('NOT,((SRC-IP,"2001:db8::1"))', purpose='proxy'),
+                         ([Rule('NOT', '((SRC-IP,"2001:db8::1"))')], []))
+
+    def test_scoped_white_warns_or_raises_and_never_deletes_unscoped_addresses(self):
+        for native in (False, True):
+            for kind, value in (('IP-CIDR6', 'fe80::1%eth0/64'), ('SRC-IP-CIDR', 'fe80::%eth0/64'),
+                                ('SRC-IP', 'fe80::1%eth0'), ('IP-SUFFIX', 'fe80::1%eth0/64'),
+                                ('SRC-IP-SUFFIX', 'fe80::1%eth0/64')):
+                matcher = kind + ',' + value
+                text = native_text(matcher) if native else matcher
+                with self.subTest(native=native, kind=kind), self.assertRaisesRegex(ValueError, 'line '):
+                    parse_whitelist(text)
+                neighbor = Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')
+                with warnings.catch_warnings(record=True) as caught:
+                    warnings.simplefilter('always')
+                    white = parse_whitelist(text + ('  - "DOMAIN,neighbor.example.org"\n' if native else '\nDOMAIN,neighbor.example.org'))
+                self.assertEqual(white, [neighbor])
+                self.assertEqual(len(caught), 1)
+                self.assertTrue(str(caught[0].message).startswith(f'line {2 if native else 1}: invalid '))
+                source = [Rule('IP-CIDR6', 'fe80::/64'), Rule('SRC-IP-CIDR', 'fe80::/64'),
+                          Rule('SRC-IP', 'fe80::1'), Rule('IP-SUFFIX', 'fe80::1/64'),
+                          Rule('SRC-IP-SUFFIX', 'fe80::1/64'), neighbor]
+                self.assertEqual(exclude_covered(iter(source), iter(white)), source[:-1])
+
+    def test_unscoped_collapse_keeps_family_direction_options_allow_and_provenance(self):
+        cases = ((('192.0.2.0/25', '192.0.2.128/25'), '192.0.2.0/24', 'IP-CIDR'),
+                 (('fe80::/64', 'fe80:0:0:1::/64'), 'fe80::/63', 'IP-CIDR6'),
+                 (('2001:db8::/33', '2001:db8:8000::/33'), '2001:db8::/32', 'IP-CIDR6'))
+        for values, collapsed, destination in cases:
+            for kind in (destination, 'SRC-IP-CIDR'):
+                for source in ('surge', 'qx', 'mihomo'):
+                    for options in ((), ('no-resolve',)):
+                        for allow in (False, True):
+                            raw = [Rule(kind, value, options, allow=allow, domain_source=source) for value in values]
+                            wanted = [Rule(kind, collapsed, options, allow=allow, domain_source=source)]
+                            self.assertEqual(normalize(iter(raw * 2)), wanted)
+                            separated = [Rule(kind, values[0], options, allow=allow, domain_source=source),
+                                         Rule(kind, values[1], options, allow=not allow, domain_source=source)]
+                            self.assertEqual(set(normalize(separated)), set(separated))
+                            options_split = [raw[0], Rule(kind, values[1], ('force-cellular',), allow=allow, domain_source=source)]
+                            self.assertEqual(set(normalize(options_split)), set(options_split))
+            directions = [Rule(destination, values[0]), Rule('SRC-IP-CIDR', values[1])]
+            self.assertEqual(set(normalize(directions)), set(directions))
+            provenance = [Rule(destination, values[0], domain_source='surge'), Rule(destination, values[1], domain_source='mihomo')]
+            self.assertEqual(set(normalize(provenance)), set(provenance))
+        values = [Rule('SRC-IP', 'fe80::1'), Rule('IP-SUFFIX', '2001:db8::7/64'), Rule('SRC-IP-SUFFIX', '192.0.2.7/24')]
+        self.assertEqual(set(normalize(values)), set(values))
+        self.assertEqual(exclude_covered([Rule('IP-CIDR6', 'fe80::/64'), Rule('SRC-IP-CIDR', 'fe80::/64')],
+                                         parse_whitelist('SRC-IP-CIDR,fe80::/63')),
+                         [Rule('IP-CIDR6', 'fe80::/64')])
+
+    def test_deep_scope_inputs_keep_eight_second_timeout_and_global_limits(self):
+        code = '''import json
+import sys
+from rules import Rule, exclude_covered, normalize, parse
+before = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+for depth in (600, 1000):
+    valid, scoped = 'SRC-IP,2001:db8::1', 'SRC-IP,fe80::1%eth0'
+    for _ in range(depth):
+        valid, scoped = 'NOT,((' + valid + '))', 'NOT,((' + scoped + '))'
+    for native in (False, True):
+        text = 'payload:\\n  - ' + json.dumps(scoped) if native else scoped
+        parsed, messages = parse(text, purpose='proxy')
+        assert parsed == [] and len(messages) == 1 and 'invalid logical expression' in messages[0]
+        raw = Rule('NOT', scoped[4:], native_fields=native)
+        for operation in (lambda: normalize([raw]), lambda: exclude_covered([raw], [])):
+            try:
+                operation()
+            except ValueError as exc:
+                assert 'scope' in str(exc)
+            else:
+                raise AssertionError('scoped logical Rule accepted')
+        text = 'payload:\\n  - ' + json.dumps(valid) if native else valid
+        parsed, messages = parse(text, purpose='proxy')
+        assert (parsed, messages) == ([Rule('NOT', valid[4:], native_fields=native)], [])
+        assert normalize(parsed) == parsed and exclude_covered(parsed, []) == parsed
+assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_generate_scope_rejection_six_products_publish_and_same_round_disk_dependencies(self):
+        for native in (False, True):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    for remote in (False, True):
+                        with self.subTest(native=native, purpose=purpose, mode=mode, remote=remote), tempfile.TemporaryDirectory() as directory:
+                            root = Path(directory)
+                            initial = '' if mode == 'add' else ',no-resolve'
+                            flag = '' if mode == 'strip' else ',no-resolve'
+                            matchers = ('IP-CIDR6,fe80::1%eth0/64', 'IP-CIDR6,fe80::%eth1/64',
+                                        'NOT,((SRC-IP,fe80::1%eth0))', 'IP-CIDR6,fe80::/64' + initial,
+                                        'IP-CIDR6,fe80:0:0:1::/64' + initial, 'IP-CIDR,192.0.2.7/25' + initial,
+                                        'IP-CIDR,192.0.2.129/25' + initial, 'SRC-IP-CIDR,2001:db8::7/33',
+                                        'SRC-IP-CIDR,2001:db8:8000::7/33', 'IP-SUFFIX,2001:db8::7/64' + initial,
+                                        'SRC-IP-SUFFIX,192.0.2.7/24',
+                                        'AND,((SRC-IP,2001:db8::1),(IP-CIDR6,2001:db8:abcd::7/48' + initial + '))',
+                                        'DOMAIN,covered.example.org', 'DOMAIN,neighbor.example.org')
+                            source = (native_text(*matchers) if native else '\n'.join(matchers) + '\n') + '@@||allow.example.org^\n'
+                            white = 'IP-CIDR6,fe80::1%eth0/64\nDOMAIN,covered.example.org\n'
+                            (root / 'static').mkdir()
+                            (root / 'static/source.list').write_text(source, encoding='utf-8')
+                            (root / 'static/white.list').write_text(white, encoding='utf-8')
+                            inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                            configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['https://example.com/white' if remote else 'static/white.list'], 'whitelist': []},
+                                       {'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['https://example.com/source' if remote else 'static/source.list'],
+                                        'whitelist': ['white/fin.txt', 'https://example.com/white' if remote else 'static/white.list']},
+                                       {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['source/fin.yaml'], 'whitelist': ['white/fin.txt']}]
+                            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                            old = {}
+                            for group in ('white', 'source', 'child'):
+                                (root / group).mkdir()
+                                for name in FILES:
+                                    path = root / group / name
+                                    path.write_bytes(b'old product\x00\xff\r\n')
+                                    old[path] = path.read_bytes()
+                            responses = {'https://example.com/white': white.encode('utf-8'),
+                                         'https://example.com/source': source.encode('utf-8')}
+                            calls = []
+
+                            def fetch(url):
+                                calls.append(url)
+                                return responses[url]
+
+                            with warnings.catch_warnings(record=True) as caught, patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                                warnings.simplefilter('always')
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                outputs = generate(root, fetch)
+                            self.assertEqual(calls, ['https://example.com/white', 'https://example.com/source'] if remote else [])
+                            self.assertEqual([str(item.message) for item in caught], ['line 1: invalid CIDR fe80::1%eth0/64'])
+                            self.assertIn('invalid CIDR fe80::1%eth0/64', diagnostic.getvalue())
+                            self.assertIn('invalid CIDR fe80::%eth1/64', diagnostic.getvalue())
+                            self.assertIn('invalid logical expression ((SRC-IP,fe80::1%eth0))', diagnostic.getvalue())
+                            self.assertNotIn('invalid whitelist', diagnostic.getvalue())
+                            self.assertNotIn('frozen', diagnostic.getvalue())
+                            self.assertEqual(list(outputs), [root / group / name for group in ('white', 'source', 'child') for name in FILES])
+                            yaml_body = [f'AND,((SRC-IP-CIDR,2001:db8::1/128),(IP-CIDR6,2001:db8:abcd::/48{flag}))',
+                                         'DOMAIN,neighbor.example.org', 'IP-CIDR,192.0.2.0/24' + flag,
+                                         'SRC-IP-SUFFIX,192.0.2.7/24', 'IP-CIDR6,fe80::/63' + flag,
+                                         'IP-SUFFIX,2001:db8::7/64' + flag, 'SRC-IP-CIDR,2001:db8::/32']
+                            surge_body = [f'AND,((SRC-IP,2001:db8::1),(IP-CIDR6,2001:db8:abcd::/48{flag}))',
+                                          'DOMAIN,neighbor.example.org', 'IP-CIDR,192.0.2.0/24' + flag,
+                                          'IP-CIDR6,fe80::/63' + flag, 'SRC-IP,2001:db8::/32']
+                            for group in ('source', 'child'):
+                                current_surge = surge_body if group == 'source' else [surge_body[0].replace('2001:db8::1)', '2001:db8::1/128)'), *surge_body[1:]]
+                                dns_body = ((['@@||allow.example.org^'] if group == 'source' else []) +
+                                            ['@@|covered.example.org|', '0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                                expected = {'fin.yaml': f'# {group} rules: 7\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
+                                            'fin.txt': f'# {group} rules: 5\n' + '\n'.join(current_surge) + '\n',
+                                            'fin-qx.txt': f'# {group} rules: 3\nHOST,neighbor.example.org,LIST\n' +
+                                                          'IP-CIDR,192.0.2.0/24,LIST' + flag + '\nIP6-CIDR,fe80::/63,LIST' + flag + '\n',
+                                            'fin-surge.txt': f'# {group} rules: 4\n' + '\n'.join(line for line in current_surge if not line.startswith('DOMAIN,')) + '\n',
+                                            'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                            'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
+                                                           '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
+                                                           '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
+                                                           f'! Total count: {len(dns_body)}\n' +
+                                                           (''.join(line + '\n' for line in dns_body) if purpose == 'block' else
+                                                            '! No AdBlock rules for non-advertising group.\n')}
+                                self.assertEqual({name: outputs[root / group / name] for name in FILES}, expected)
+                                restored, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
+                                self.assertEqual(messages, [])
+                                self.assertEqual([rule.kind + ',' + rule.value + (',' + ','.join(rule.options) if rule.options else '')
+                                                  for rule in restored], yaml_body)
+                                self.assertNotIn('%', ''.join(outputs[root / group / name] for name in FILES))
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            publish(outputs, root=root)
+                            published = {path: path.read_bytes() for path in outputs}
+                            self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                            self.assertTrue(all(b'\r' not in data and data.endswith(b'\n') for data in published.values()))
+                            self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                            (root / 'static/source.list').unlink()
+                            (root / 'static/white.list').unlink()
+                            (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                disk = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+                            publish(disk, root=root)
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
