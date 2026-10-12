@@ -26,7 +26,7 @@ class Rule:
             object.__setattr__(self, "value", value.lower() if value.isascii() else value)
 
 
-_DOMAIN = re.compile(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\Z", re.I)
+_DOMAIN = re.compile(r"(?=.{1,253}$)(?:[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9_])?\.)+[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9_])?\Z", re.I)
 _PORTS = {"SRC-PORT", "DEST-PORT", "DST-PORT", "IN-PORT"}
 _PROCESS = {"PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD",
             "PROCESS-PATH-WILDCARD", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX",

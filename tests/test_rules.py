@@ -747,7 +747,7 @@ class DnsExactHostsRuleTests(unittest.TestCase):
                     self.assertEqual(parse(source, purpose=purpose), ([], ["line 1: hosts entry is block-only"]))
 
     def test_hosts_validation_keeps_legal_neighbors_and_rejects_invalid_aliases(self):
-        invalid = ("-x", "x-", "a_b", ".x", "a..x", "*", "a/x", "192.0.2.1", "2001:db8::1",
+        invalid = ("-x", "x-", "a+b", ".x", "a..x", "*", "a/x", "192.0.2.1", "2001:db8::1",
                    "a" * 64, ".".join(["a" * 63] * 4))
         for value in invalid:
             with self.subTest(value=value):
@@ -886,7 +886,7 @@ class DomainSetSingleLabelParserTests(unittest.TestCase):
                          ([], [f"line {number}: invalid rule" for number in range(1, 6)]))
 
     def test_illegal_neighbors_keep_exact_line_diagnostics(self):
-        entries = ("-bad", "bad-", "a_b", "*", ".", "..com", "a..b", "a/b", "192.0.2.1",
+        entries = ("-bad", "bad-", "a+b", "*", ".", "..com", "a..b", "a/b", "192.0.2.1",
                    "2001:db8::1", "a" * 64, ".".join(["a" * 63] * 4), "bücher", "рф",
                    "a b", "a\x00b", "a b", "a\r b", "@@|localhost|", "/^localhost$/")
         for entry in entries:
@@ -935,7 +935,7 @@ class DomainSetSuffixParserTests(unittest.TestCase):
 
     def test_invalid_bare_entries_warn_at_their_line_and_keep_legal_neighbors(self):
         entries = ("com", "local", "x", "-com", "com-", "a_b", ".", "..com", ".a..com",
-                   ".-com", ".com-", ".a_b", ".*", ".a/b", ".192.0.2.1", ".2001:db8::1",
+                   ".-com", ".com-", ".a+b", ".*", ".a/b", ".192.0.2.1", ".2001:db8::1",
                    "." + "a" * 64, "." + ".".join(["a" * 63] * 4), "garbage{")
         for purpose in ("direct", "block", "proxy"):
             for entry in entries + (".com,REJECT",):

@@ -109,8 +109,10 @@ class DomainCoverageTests(unittest.TestCase):
         for source in ('qx', 'mihomo'):
             with self.subTest(source=source):
                 rules = [Rule('DOMAIN', value, domain_source=source)
-                         for value in ('*.ms', 'bad..ms', '-bad.ms', 'bad_.ms')]
+                         for value in ('*.ms', 'bad..ms', '-bad.ms', 'bad+.ms')]
                 self.assertEqual(exclude_covered(rules, [Rule('DOMAIN-SUFFIX', 'ms')]), rules)
+                underscore = Rule('DOMAIN', 'bad_.ms', domain_source=source)
+                self.assertEqual(exclude_covered([underscore], [Rule('DOMAIN-SUFFIX', 'ms')]), [])
                 literal = Rule('DOMAIN', 'ads.ms', domain_source=source)
                 self.assertEqual(exclude_covered([literal], [Rule('DOMAIN-SUFFIX', 'ms..')]), [literal])
 

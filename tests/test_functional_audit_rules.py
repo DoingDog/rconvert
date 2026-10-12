@@ -20,6 +20,258 @@ def native_text(*matchers):
     return 'payload:\n' + ''.join('  - ' + json.dumps(matcher) + '\n' for matcher in matchers)
 
 
+class UnderscoreDomainAuditTests(unittest.TestCase):
+    suffixes = ('ad-cdn_core.cctv.com', 'ad_core.cctv.com', 'ad_m.cctv.com',
+                'piano_log.kingsoft.jp', 'imp_track.zmaticoo.com', 'fb_servpub-a.akamaihd.net',
+                'at_w_atexxpressdata-c3a3188a23.exxpress.at')
+    upstream = ('host-suffix, ad-cdn_core.cctv.com, reject\n'
+                'host-suffix, ad_core.cctv.com, reject\n'
+                'host-suffix, ad_m.cctv.com, reject\n'
+                '.piano_log.kingsoft.jp\n.imp_track.zmaticoo.com\n'
+                '.fb_servpub-a.akamaihd.net\n.at_w_atexxpressdata-c3a3188a23.exxpress.at')
+
+    def test_real_native_suffix_preserves_underscore_and_neighbor(self):
+        self.assertEqual(parse(native_text('DOMAIN-SUFFIX,piano_log.kingsoft.jp',
+                                           'DOMAIN,neighbor.example.org'), purpose='block'),
+                         ([Rule('DOMAIN-SUFFIX', 'piano_log.kingsoft.jp', domain_source='mihomo'),
+                           Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')], []))
+
+    def test_seven_fixed_upstream_formats_and_shared_entries_keep_source_identity(self):
+        expected = [Rule('DOMAIN-SUFFIX', value, domain_source='qx' if index < 3 else 'surge')
+                    for index, value in enumerate(self.suffixes)]
+        self.assertEqual(parse(self.upstream, purpose='block'), (expected, []))
+        self.assertEqual(parse_whitelist(self.upstream), expected)
+        for purpose, policy in (('block', 'REJECT'), ('direct', 'DIRECT'), ('proxy', 'PROXY')):
+            for value in self.suffixes:
+                for kind in ('DOMAIN', 'DOMAIN-SUFFIX'):
+                    cases = ((f'{kind},"{value.upper()}.",{policy}', 'surge', value),
+                             (f'{"HOST" if kind == "DOMAIN" else "HOST-SUFFIX"},{value},{policy}', 'qx', value),
+                             (native_text(kind + ',' + value.upper() + '.'), 'mihomo', value.upper() + '.'))
+                    for text, source, raw in cases:
+                        with self.subTest(purpose=purpose, value=value, kind=kind, source=source):
+                            wanted = [Rule(kind, raw, domain_source=source)]
+                            self.assertEqual(parse(text, purpose=purpose), (wanted, []))
+                            self.assertEqual(parse_whitelist(text), wanted)
+                            self.assertEqual(normalize(wanted * 2), wanted)
+                for text, kind, allow in ((value, 'DOMAIN', False), ('.' + value, 'DOMAIN-SUFFIX', False),
+                                          ('||' + value + '^', 'DOMAIN-SUFFIX', False),
+                                          ('@@||' + value + '^', 'DOMAIN-SUFFIX', True)):
+                    with self.subTest(purpose=purpose, value=value, text=text):
+                        self.assertEqual(parse(text, purpose=purpose, domain_set=True),
+                                         ([], ['line 1: incompatible action REJECT']) if text.startswith('||') and purpose != 'block' else
+                                         ([Rule(kind, value, allow=allow)], []))
+            for address in ('0.0.0.0', '127.0.0.1', '::', '::1'):
+                text = address + ' ' + ' '.join(self.suffixes) + ' # tail\n'
+                with self.subTest(purpose=purpose, address=address):
+                    self.assertEqual(parse(text, purpose=purpose),
+                                     ([Rule('DOMAIN', value) for value in self.suffixes], []) if purpose == 'block' else
+                                     ([], ['line 1: hosts entry is block-only']))
+
+    def test_underscore_label_edges_lengths_and_invalid_neighbors_keep_boundaries(self):
+        longest = '.'.join(['_' * 63] * 3 + ['_' * 61])
+        valid = ('_', '_a', 'a_', '__', '_a-b_', '_' * 63, longest, 'ad_core.cctv.com.')
+        invalid = ('', '-_a.example', '_a-.example', 'ad_..example', '.ad_.example', 'ad_.example..',
+                   'ad_+x.example', 'ad_/x.example', 'ad_\\x.example', 'ad_ x.example', 'ad_\tx.example',
+                   'ad_\x7fx.example', 'ad_\x00x.example', 'ad_\rx.example', 'ad_ x.example',
+                   '_' * 64 + '.example', longest + '_', '192.0.2.1', '2001:db8::1')
+        for native in (False, True):
+            neighbor = Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')
+            for kind in ('DOMAIN', 'DOMAIN-SUFFIX'):
+                for value in valid + invalid:
+                    with self.subTest(native=native, kind=kind, value=value):
+                        matcher = kind + ',' + value
+                        text = native_text(matcher, 'DOMAIN,neighbor.example.org') if native else matcher + '\nDOMAIN,neighbor.example.org'
+                        parsed, messages = parse(text, purpose='proxy')
+                        wanted = ([Rule(kind, value, domain_source='mihomo' if native else 'surge')] if value in valid else []) + [neighbor]
+                        self.assertEqual(parsed, wanted)
+                        self.assertEqual(len(messages), int(value in invalid))
+                        if messages:
+                            self.assertTrue(messages[0].startswith(f'line {2 if native else 1}:'))
+        self.assertEqual(parse('a_b', purpose='block'), ([], ['line 1: invalid rule']))
+        self.assertEqual(parse('a_b', purpose='block', domain_set=True), ([Rule('DOMAIN', 'a_b')], []))
+        self.assertEqual(parse('.a_b', purpose='proxy'), ([Rule('DOMAIN-SUFFIX', 'a_b')], []))
+        for kind in ('DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'):
+            for quote in ('\'', '"'):
+                text = native_text(kind + ',' + quote + 'ad_core.cctv.com' + quote)
+                self.assertEqual(parse(text, purpose='block')[0], [])
+                with self.assertRaises(ValueError):
+                    parse_whitelist(text)
+
+    def test_logical_quotes_order_and_no_resolve_preserve_underscore_leaves(self):
+        for native in (False, True):
+            for quote in ('', '\'', '"'):
+                field = quote + 'ad_core.cctv.com' + quote
+                expressions = (('AND', f'((DOMAIN-SUFFIX,{field}),(IP-CIDR,192.0.2.7/24,no-resolve),(SRC-IP-CIDR,198.51.100.7/24))'),
+                               ('OR', f'((DOMAIN,{field}),(DOMAIN-SUFFIX,imp_track.zmaticoo.com))'),
+                               ('NOT', f'((DOMAIN,{field}))'),
+                               ('AND', f'((NOT,((DOMAIN,{field}))),(OR,((DOMAIN-SUFFIX,piano_log.kingsoft.jp),(NETWORK,tcp))))'))
+                for operator, expression in expressions:
+                    for purpose in ('block', 'direct', 'proxy'):
+                        with self.subTest(native=native, quote=quote, operator=operator, purpose=purpose):
+                            matcher = operator + ',' + expression
+                            text = native_text(matcher, 'DOMAIN,neighbor.example.org') if native else matcher + '\nDOMAIN,neighbor.example.org'
+                            neighbor = Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')
+                            parsed, messages = parse(text, purpose=purpose)
+                            if native and quote:
+                                self.assertEqual(parsed, [neighbor])
+                                self.assertEqual(messages, ['line 2: invalid logical expression ' + expression])
+                                continue
+                            wanted = expression.replace('192.0.2.7/24', '192.0.2.0/24').replace('198.51.100.7/24', '198.51.100.0/24')
+                            self.assertEqual((parsed, messages), ([Rule(operator, wanted, native_fields=native,
+                                                                     domain_source='mihomo' if native else 'surge'), neighbor], []))
+                            for mode in ('add', 'strip', 'keep'):
+                                outputs, _ = render('underscore', parsed, purpose=purpose, no_resolve=mode)
+                                emitted = wanted.replace(field, 'ad_core.cctv.com')
+                                if mode == 'strip':
+                                    emitted = emitted.replace(',no-resolve', '')
+                                self.assertIn(json.dumps(operator + ',' + emitted), outputs['fin.yaml'])
+                                self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose),
+                                                 ([neighbor if native else Rule('DOMAIN', neighbor.value, domain_source='mihomo'),
+                                                   Rule(operator, emitted, native_fields=True, domain_source='mihomo')]
+                                                  if operator in ('NOT', 'OR') else
+                                                  [Rule(operator, emitted, native_fields=True, domain_source='mihomo'),
+                                                   Rule('DOMAIN', neighbor.value, domain_source='mihomo')], []))
+
+    def test_mihomo_render_reimport_preserves_seven_suffixes_and_wildcard_literals(self):
+        for source in ('surge', 'qx', 'mihomo'):
+            rules = [Rule('DOMAIN-SUFFIX', value, domain_source=source) for value in self.suffixes]
+            rules += [Rule('DOMAIN', 'ad_core.cctv.com', domain_source=source),
+                      Rule('DOMAIN-WILDCARD', 'ad_core-*.example.org', domain_source=source)]
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(source=source, purpose=purpose, mode=mode):
+                        outputs, skipped = render('underscore', iter(rules), purpose=purpose, no_resolve=mode)
+                        self.assertFalse(any(key.startswith('fin.yaml:') for key in skipped))
+                        for value in self.suffixes:
+                            self.assertIn(json.dumps('DOMAIN-SUFFIX,' + value), outputs['fin.yaml'])
+                        wildcard = (Rule('DOMAIN-REGEX', r'^ad_core\-.*\.example\.org\.?$') if source == 'surge' else
+                                    Rule('DOMAIN-WILDCARD', 'ad_core-*.example.org', domain_source='mihomo'))
+                        wanted = {*(Rule('DOMAIN-SUFFIX', value, domain_source='mihomo') for value in self.suffixes),
+                                  Rule('DOMAIN', 'ad_core.cctv.com', domain_source='mihomo'), wildcard}
+                        parsed, messages = parse(outputs['fin.yaml'], purpose=purpose)
+                        self.assertEqual((set(parsed), messages), (wanted, []))
+
+    def test_generate_local_remote_inputs_and_yaml_dependencies_preserve_underscore(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for native in (False, True):
+                    for remote in (False, True):
+                        with self.subTest(purpose=purpose, mode=mode, native=native, remote=remote), tempfile.TemporaryDirectory() as directory:
+                            root = Path(directory)
+                            flag = '' if mode == 'strip' else ',no-resolve'
+                            logic = '((NOT,((DOMAIN,ad_core.cctv.com))),(DOMAIN-SUFFIX,piano_log.kingsoft.jp),'
+                            logic += '(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))'
+                            matchers = [*('DOMAIN-SUFFIX,' + value for value in self.suffixes),
+                                        'DOMAIN,ad_core.cctv.com', 'AND,' + logic, 'DOMAIN,covered_core.example.com',
+                                        'DOMAIN,neighbor.example.org', 'IP-CIDR,192.0.2.0/24,no-resolve',
+                                        'SRC-IP-CIDR,198.51.100.0/24']
+                            source = native_text(*matchers) if native else '\n'.join(matchers)
+                            source += '\n@@||allow_core.example.com^\n'
+                            white = 'DOMAIN-SUFFIX,covered_core.example.com\n'
+                            (root / 'input.list').write_text(source, encoding='utf-8')
+                            (root / 'static').mkdir()
+                            (root / 'static/white.list').write_text(white, encoding='utf-8')
+                            inputs = {path: path.read_bytes() for path in (root / 'input.list', root / 'static/white.list')}
+                            configs = [{'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['https://example.com/source' if remote else 'input.list'],
+                                        'whitelist': ['https://example.com/white' if remote else 'static/white.list']},
+                                       {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['source/fin.yaml'], 'whitelist': []}]
+                            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                            responses = {'https://example.com/source': source.encode('utf-8'),
+                                         'https://example.com/white': white.encode('utf-8')}
+                            old = {}
+                            for group in ('source', 'child'):
+                                (root / group).mkdir()
+                                for name in FILES:
+                                    path = root / group / name
+                                    path.write_bytes(b'old product\x00\xff\r\n')
+                                    old[path] = path.read_bytes()
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                outputs = generate(root, lambda url: responses[url])
+                            self.assertNotIn('invalid ', diagnostic.getvalue())
+                            self.assertEqual(list(outputs), [root / group / name for group in ('source', 'child') for name in FILES])
+                            wanted_logic = logic.replace(',no-resolve', '') if mode == 'strip' else logic
+                            wanted = {*(Rule('DOMAIN-SUFFIX', value, domain_source='mihomo') for value in self.suffixes),
+                                      Rule('AND', wanted_logic, native_fields=True, domain_source='mihomo'),
+                                      Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                                      Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
+                                      Rule('SRC-IP-CIDR', '198.51.100.0/24')}
+                            for group in ('source', 'child'):
+                                parsed, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
+                                self.assertEqual((set(parsed), messages), (wanted, []))
+                                self.assertNotIn('covered_core.example.com', outputs[root / group / 'fin.yaml'])
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            publish(outputs, root=root)
+                            published = {path: path.read_bytes() for path in outputs}
+                            self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                            self.assertTrue(all(b'\r' not in data and data.endswith(b'\n') for data in published.values()))
+                            self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                            (root / 'input.list').unlink()
+                            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                disk = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+                            publish(disk, root=root)
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_generated_underscore_white_empty_routes_and_disk_freeze_boundaries(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            with self.subTest(purpose=purpose), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                white = native_text('DOMAIN-SUFFIX,ad_core.cctv.com')
+                source = native_text('DOMAIN,ad_core.cctv.com', 'DOMAIN,sub.ad_core.cctv.com')
+                (root / 'white.list').write_text(white, encoding='utf-8')
+                (root / 'input.list').write_text(source, encoding='utf-8')
+                configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': 'keep', 'sources': ['white.list'], 'whitelist': []},
+                           {'name': 'source', 'purpose': purpose, 'no_resolve': 'keep', 'sources': ['input.list'], 'whitelist': ['white/fin.yaml']},
+                           {'name': 'child', 'purpose': purpose, 'no_resolve': 'keep', 'sources': ['source/fin.yaml'], 'whitelist': ['white/fin.yaml']}]
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                    clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                    outputs = generate(root, lambda url: self.fail(url))
+                self.assertEqual(parse_whitelist(outputs[root / 'white/fin.yaml']),
+                                 [Rule('DOMAIN-SUFFIX', 'ad_core.cctv.com', domain_source='mihomo')])
+                for group in ('source', 'child'):
+                    self.assertEqual(outputs[root / group / 'fin.yaml'], f'# {group} rules: 0\npayload:\n')
+                publish(outputs, root=root)
+                published = {path: path.read_bytes() for path in outputs}
+                configs[1]['sources'] = ['https://example.com/missing']
+                (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+
+                def unavailable(url):
+                    raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+                with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                    self.assertEqual(generate(root, unavailable), {})
+                self.assertIn('HTTP 404; skipped', diagnostic.getvalue())
+                self.assertEqual({path: path.read_bytes() for path in published}, published)
+                (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(ValueError, 'No adaptable rules in '):
+                    generate(root, lambda url: self.fail(url))
+                self.assertEqual({path: path.read_bytes() for path in published}, published)
+                with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                    publish({root / 'static/white.list': white}, root=root)
+                with self.assertRaisesRegex(ValueError, 'Output path escapes root'):
+                    publish({root / '../escape.list': white}, root=root)
+                for remote in (False, True):
+                    configs[1]['sources'] = ['input.list']
+                    configs[1]['whitelist'] = ['https://example.com/bad-white' if remote else 'white.list']
+                    (root / 'rulesets.json').write_text(json.dumps(configs[1:2]), encoding='utf-8')
+                    (root / 'white.list').write_text('DOMAIN-SUFFIX,bad_..example\n', encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        if remote:
+                            actual = generate(root, lambda url: b'DOMAIN-SUFFIX,bad_..example\n')
+                            self.assertIn('invalid whitelist', diagnostic.getvalue())
+                            self.assertIn('DOMAIN,ad_core.cctv.com', actual[root / 'source/fin.yaml'])
+                        else:
+                            with self.assertRaisesRegex(ValueError, 'Invalid whitelist'):
+                                generate(root, lambda url: self.fail(url))
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+
 class QuantifierAuditTests(unittest.TestCase):
     kinds = ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX')
     cases = (
