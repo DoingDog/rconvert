@@ -1267,6 +1267,7 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             except ValueError:
                 return None
         elif kind in _PORTS:
+            value = checked
             if not _valid_port(value):
                 return None
             if '/' in value:
