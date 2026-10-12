@@ -1606,7 +1606,7 @@ class ConstructorGenerateTests(unittest.TestCase):
                                 "sources": ["source.list"], "whitelist": ["white/fin.yaml"]}]
                     (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
                     (root / "white.list").write_text(source, encoding="utf-8")
-                    (root / "source.list").write_text(source + "DOMAIN,keep.example.com\nIP-ASN,00\n", encoding="utf-8")
+                    (root / "source.list").write_text(source + "  - IP-ASN,00\nDOMAIN,keep.example.com\n", encoding="utf-8")
                     flag = ",no-resolve" if mode == "add" else ""
                     expected = {
                         "fin.txt": "# consumer rules: 2\nDOMAIN,keep.example.com\nIP-ASN,00" + flag + "\n",

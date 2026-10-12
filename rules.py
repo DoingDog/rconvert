@@ -1095,11 +1095,10 @@ def _normalize_ip_suffix(value: str) -> str | None:
 
 def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
     if kind in {"IP-ASN", "SRC-IP-ASN"}:
-        if kind == 'IP-ASN' and not native_fields:
-            if value.upper() == 'UNKNOWN':
+        if not native_fields:
+            if kind == 'IP-ASN' and value.upper() == 'UNKNOWN':
                 return True
-            if value.startswith('AS'):
-                value = value[2:]
+            value = value.removeprefix('AS')
         number = value.lstrip('0') or '0'
         return (value.isascii() and value.isdecimal() and len(number) <= 10
                 and int(number) <= 4294967295)
@@ -1322,8 +1321,8 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
         elif kind in _SIMPLE:
             if not _valid_simple(kind, checked, native_fields or kind == 'DOMAIN-KEYWORD' and domain_source == 'mihomo'):
                 return None
-            if kind == 'IP-ASN' and not native_fields and checked.startswith('AS'):
-                value = str(int(checked[2:].lstrip('0') or '0'))
+            if kind in {'IP-ASN', 'SRC-IP-ASN'} and not native_fields and checked.upper() != 'UNKNOWN':
+                value = checked.removeprefix('AS').lstrip('0') or '0'
         elif kind in _REGEX:
             if not _valid_regex(kind, checked):
                 return None
@@ -1765,8 +1764,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             if not _valid_simple(kind, value, yaml_rule):
                 warnings.append(f"line {number}: invalid {kind} {value}")
                 continue
-            if kind == 'IP-ASN' and not yaml_rule and value.startswith('AS'):
-                value = str(int(value[2:].lstrip('0') or '0'))
+            if kind in {'IP-ASN', 'SRC-IP-ASN'} and not yaml_rule and value.upper() != 'UNKNOWN':
+                value = value.removeprefix('AS').lstrip('0') or '0'
         elif kind in _PROCESS:
             if (not value or kind in {'IN-NAME', 'REMATCH-NAME'} and not _valid_name_list(value)
                     or not yaml_rule and (any(char in value for char in '\r\n') or (

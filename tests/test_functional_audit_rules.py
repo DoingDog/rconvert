@@ -2443,6 +2443,367 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                             self.assertEqual({path: path.read_bytes() for path in published}, published)
 
 
+class DecimalASNAuditTests(unittest.TestCase):
+    def test_generate_decimal_white_native_identity_six_products_and_same_round_disk_dependencies(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for remote in (False, True):
+                    with self.subTest(purpose=purpose, mode=mode, remote=remote), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        initial = ',no-resolve' if mode == 'keep' else ''
+                        flag = ',no-resolve' if mode != 'strip' else ''
+                        source = ('IP-ASN,00\nIP-ASN,0013335' + initial + '\nIP-ASN,AS0013335' + initial + '\n'
+                                  'SRC-IP-ASN,00013335\nAND,((IP-ASN,"0013335"' + initial + '),(SRC-IP-ASN,00000),(NETWORK,tcp))\n' +
+                                  native_text('IP-ASN,0', 'IP-ASN,00' + initial, 'IP-ASN,0013335' + initial,
+                                              'AND,((IP-ASN,00' + initial + '),(SRC-IP-ASN,0013335),(NETWORK,tcp))') +
+                                  'DOMAIN,neighbor.example.org\n@@||allow.example.org^\n')
+                        white = 'IP-ASN,00\n'
+                        (root / 'static').mkdir()
+                        (root / 'static/source.list').write_text(source, encoding='utf-8')
+                        (root / 'static/white.list').write_text(white, encoding='utf-8')
+                        inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                        configs = [{'name': 'white', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['https://example.com/white' if remote else 'static/white.list'], 'whitelist': []},
+                                   {'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['https://example.com/source' if remote else 'static/source.list'],
+                                    'whitelist': ['white/fin.yaml', 'https://example.com/white' if remote else 'static/white.list']},
+                                   {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                    'sources': ['parent/fin.yaml'], 'whitelist': ['white/fin.yaml']}]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        old = {}
+                        for group in ('white', 'parent', 'child'):
+                            (root / group).mkdir()
+                            for name in FILES:
+                                path = root / group / name
+                                path.write_bytes(b'old product\x00\xff\r\n')
+                                old[path] = path.read_bytes()
+                        responses = {'https://example.com/white': white.encode(), 'https://example.com/source': source.encode()}
+                        calls = []
+
+                        def fetch(url):
+                            calls.append(url)
+                            return responses[url]
+
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                            clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                            outputs = generate(root, fetch)
+                        self.assertEqual(calls, ['https://example.com/white', 'https://example.com/source'] if remote else [])
+                        self.assertNotIn('invalid ', diagnostic.getvalue())
+                        self.assertNotIn('frozen', diagnostic.getvalue())
+                        self.assertEqual(list(outputs), [root / group / name for group in ('white', 'parent', 'child') for name in FILES])
+                        self.assertEqual(outputs[root / 'white/fin.yaml'], '# white rules: 1\npayload:\n  - "IP-ASN,0' +
+                                         (',no-resolve' if mode == 'add' else '') + '"\n')
+                        yaml_body = ['AND,((IP-ASN,13335' + flag + '),(SRC-IP-ASN,0),(NETWORK,tcp))',
+                                     'AND,((IP-ASN,00' + flag + '),(SRC-IP-ASN,0013335),(NETWORK,tcp))',
+                                     'DOMAIN,neighbor.example.org', 'IP-ASN,00' + flag,
+                                     'IP-ASN,13335' + flag, 'IP-ASN,0013335' + flag, 'SRC-IP-ASN,13335']
+                        for group in ('parent', 'child'):
+                            dns_body = (['@@||allow.example.org^', '0.0.0.0 neighbor.example.org'] if group == 'parent' else
+                                        ['0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                            expected = {'fin.yaml': f'# {group} rules: 7\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
+                                        'fin.txt': f'# {group} rules: 4\nDOMAIN,neighbor.example.org\n' +
+                                                   'IP-ASN,00' + flag + '\nIP-ASN,13335' + flag + '\nIP-ASN,0013335' + flag + '\n',
+                                        'fin-qx.txt': f'# {group} rules: 4\nHOST,neighbor.example.org,LIST\n' +
+                                                      'IP-ASN,00,LIST' + flag + '\nIP-ASN,13335,LIST' + flag + '\nIP-ASN,0013335,LIST' + flag + '\n',
+                                        'fin-surge.txt': f'# {group} rules: 3\nIP-ASN,00' + flag + '\nIP-ASN,13335' + flag + '\nIP-ASN,0013335' + flag + '\n',
+                                        'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                        'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
+                                                       '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
+                                                       '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
+                                                       f'! Total count: {len(dns_body)}\n' +
+                                                       (''.join(line + '\n' for line in dns_body) if purpose == 'block' else
+                                                        '! No AdBlock rules for non-advertising group.\n')}
+                            self.assertEqual({name: outputs[root / group / name] for name in FILES}, expected)
+                            restored, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
+                            self.assertEqual(messages, [])
+                            self.assertEqual([rule.kind + ',' + rule.value + (',' + ','.join(rule.options) if rule.options else '')
+                                              for rule in restored], yaml_body)
+                            self.assertIn(f'{group} fin-adb.txt:IP-ASN: 3', diagnostic.getvalue())
+                            self.assertIn(f'{group} fin-surge-ds.txt:IP-ASN: 3', diagnostic.getvalue())
+                            self.assertFalse(any(line.startswith(group + ' fin.yaml:IP-ASN') for line in diagnostic.getvalue().splitlines()))
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        publish(outputs, root=root)
+                        published = {path: path.read_bytes() for path in outputs}
+                        self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                        self.assertTrue(all(b'\r' not in data and data.endswith(b'\n') for data in published.values()))
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                        (root / 'static/source.list').unlink()
+                        (root / 'static/white.list').unlink()
+                        (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                            clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                            disk = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+                        publish(disk, root=root)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_all_ordinary_zero_asns_are_covered_and_same_round_empty_dependency_publishes(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'source.list').write_text('IP-ASN,00\nIP-ASN,AS000\nSRC-IP-ASN,000\n', encoding='utf-8')
+                    (root / 'white.list').write_text('IP-ASN,0\nSRC-IP-ASN,0\n', encoding='utf-8')
+                    configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['source.list'], 'whitelist': ['white.list']},
+                               {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['parent/fin.yaml'], 'whitelist': []}]
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(diagnostic.getvalue(), '')
+                    self.assertEqual(len(outputs), 12)
+                    for group in ('parent', 'child'):
+                        self.assertEqual(outputs[root / group / 'fin.yaml'], f'# {group} rules: 0\npayload:\n')
+                        for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
+                            self.assertEqual(outputs[root / group / name], f'# {group} rules: 0\n')
+                        self.assertIn('! Total count: 0\n', outputs[root / group / 'fin-adb.txt'])
+                    publish(outputs, root=root)
+                    published = {path: path.read_bytes() for path in outputs}
+                    (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    with self.assertRaisesRegex(ValueError, 'No adaptable rules .*parent.*fin.yaml'):
+                        generate(root, lambda url: self.fail(url))
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_invalid_asn_white_and_unavailable_source_keep_products_and_paths(self):
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'static').mkdir()
+                    (root / 'static/source.list').write_text('IP-ASN,0013335\nDOMAIN,neighbor.example.org\n', encoding='utf-8')
+                    (root / 'static/white.list').write_text('IP-ASN,4294967296\n', encoding='utf-8')
+                    inputs = {path: path.read_bytes() for path in (root / 'static/source.list', root / 'static/white.list')}
+                    configs = [{'name': 'parent', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['static/source.list'], 'whitelist': ['static/white.list']},
+                               {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['parent/fin.yaml'], 'whitelist': []}]
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    old = {}
+                    for group in ('parent', 'child'):
+                        (root / group).mkdir()
+                        for name in FILES:
+                            path = root / group / name
+                            path.write_bytes(b'old complete product\n')
+                            old[path] = path.read_bytes()
+                    with self.assertRaisesRegex(ValueError, 'Invalid whitelist .*line 1: invalid IP-ASN'):
+                        generate(root, lambda url: self.fail(url))
+                    configs[0]['whitelist'] = ['https://example.com/invalid-white']
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        outputs = generate(root, lambda url: b'IP-ASN,4294967296\n')
+                    self.assertIn('invalid whitelist', diagnostic.getvalue())
+                    self.assertEqual(parse(outputs[root / 'parent/fin.yaml'], purpose=purpose),
+                                     ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                                       Rule('IP-ASN', '13335', ('no-resolve',) if mode == 'add' else ())], []))
+                    for path, message in ((root / 'static/white.list', 'Output path targets static'),
+                                          (root / '../escape.list', 'Output path escapes root')):
+                        with self.assertRaisesRegex(ValueError, message):
+                            publish({path: outputs[root / 'parent/fin.yaml']}, root=root)
+                    configs[0]['sources'], configs[0]['whitelist'] = ['https://example.com/source'], []
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        self.assertEqual(generate(root, lambda url: b'IP-ASN,4294967296\n'), {})
+                    self.assertIn('no adaptable rules; skipped', diagnostic.getvalue())
+
+                    def unavailable(url):
+                        raise RuntimeError('unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        self.assertEqual(generate(root, unavailable), {})
+                    with self.assertRaisesRegex(RuntimeError, 'unexpected fetch failure'):
+                        generate(root, lambda url: (_ for _ in ()).throw(RuntimeError('unexpected fetch failure')))
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+
+    def test_deep_decimal_asn_and_native_identity_keep_eight_second_timeout_and_global_limits(self):
+        code = '''import json
+import sys
+from formats import render
+from rules import Rule, normalize, parse
+before = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+for depth in (600, 1000):
+    raw, canonical = 'IP-ASN,0013335', 'IP-ASN,13335'
+    for _ in range(depth):
+        raw, canonical = 'NOT,((' + raw + '))', 'NOT,((' + canonical + '))'
+    for native in (False, True):
+        expected = raw if native else canonical
+        text = 'payload:\\n  - ' + json.dumps(raw) if native else raw
+        wanted = Rule('NOT', expected[4:], native_fields=native)
+        assert parse(text, purpose='proxy') == ([wanted], [])
+        assert normalize([wanted, wanted]) == [wanted]
+        outputs, skips = render('deep', [wanted], purpose='proxy', no_resolve='strip')
+        assert outputs['fin.yaml'] == '# deep rules: 1\\npayload:\\n  - ' + json.dumps(expected) + '\\n'
+        assert 'fin.yaml:NOT' not in skips
+        assert parse(outputs['fin.yaml'], purpose='proxy') == ([Rule('NOT', expected[4:], native_fields=True)], [])
+assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
+'''
+        result = subprocess.run([sys.executable, '-B', '-c', code], cwd=Path(__file__).resolve().parents[1],
+                                capture_output=True, text=True, timeout=8)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_decimal_extremes_long_zeros_quotes_logical_and_source_direction(self):
+        cases = (('0', '0'), ('00', '0'), ('0013335', '13335'), ('AS0013335', '13335'),
+                 ('4294967295', '4294967295'), ('AS004294967295', '4294967295'),
+                 ('0' * 5000, '0'), ('0' * 5000 + '13335', '13335'),
+                 ('AS' + '0' * 5000 + '4294967295', '4294967295'))
+        limits = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+        for purpose, action in (('block', 'REJECT'), ('direct', 'DIRECT'), ('proxy', 'PROXY')):
+            for kind in ('IP-ASN', 'SRC-IP-ASN'):
+                for raw, canonical in cases:
+                    for quote in ('', "'", '"'):
+                        field = quote + raw + quote
+                        with self.subTest(purpose=purpose, kind=kind, raw=raw[:40], quote=quote):
+                            self.assertEqual(parse(kind + ',' + field + ',' + action, purpose=purpose),
+                                             ([Rule(kind, canonical)], []))
+                            for operator, expression, expected in (
+                                ('AND', f'(({kind},{field}),(NETWORK,tcp))', f'(({kind},{canonical}),(NETWORK,tcp))'),
+                                ('OR', f'((NETWORK,tcp),({kind},{field}))', f'((NETWORK,tcp),({kind},{canonical}))'),
+                                ('NOT', f'(({kind},{field}))', f'(({kind},{canonical}))')):
+                                self.assertEqual(parse(operator + ',' + expression, purpose=purpose),
+                                                 ([Rule(operator, expected)], []))
+                        tail = ',' + action + ',src,no-resolve'
+                        self.assertEqual(parse('IP-ASN,' + field + tail, purpose=purpose),
+                                         ([Rule('SRC-IP-ASN', canonical)],
+                                          ['line 1: unsupported no-resolve for SRC-IP-ASN']))
+                        expression = f'((IP-ASN,{field},src,no-resolve))'
+                        self.assertEqual(parse('NOT,' + expression, purpose=purpose),
+                                         ([Rule('NOT', f'((SRC-IP-ASN,{canonical}))')],
+                                          ['line 1: unsupported no-resolve for SRC-IP-ASN']))
+        self.assertEqual((sys.get_int_max_str_digits(), sys.getrecursionlimit()), limits)
+        self.assertEqual(parse('IP-ASN,0013335,src', purpose='proxy'),
+                         ([], ['line 1: ambiguous src policy or option']))
+        self.assertEqual(parse('IP-ASN,0013335,PROXY,Src', purpose='proxy'),
+                         ([Rule('IP-ASN', '13335')], ['line 1: unsupported src option Src']))
+
+    def test_native_asn_scalar_identity_and_inner_quotes_are_preserved(self):
+        for header in ('payload', 'rules'):
+            for scalar in ('plain', 'single', 'double'):
+                for kind in ('IP-ASN', 'SRC-IP-ASN'):
+                    for value in ('0', '00', '0013335', '4294967295', '0' * 5000 + '13335'):
+                        for operator in ('top', 'AND', 'OR', 'NOT'):
+                            expression = f'(({kind},{value}))' if operator == 'NOT' else f'(({kind},{value}),(NETWORK,tcp))'
+                            matcher = kind + ',' + value if operator == 'top' else operator + ',' + expression
+                            item = matcher if scalar == 'plain' else json.dumps(matcher) if scalar == 'double' else "'" + matcher + "'"
+                            wanted = Rule(kind, value) if operator == 'top' else Rule(operator, expression, native_fields=True)
+                            with self.subTest(header=header, scalar=scalar, kind=kind, value=value[:40], operator=operator):
+                                self.assertEqual(parse(header + ':\n  - ' + item, purpose='proxy'), ([wanted], []))
+        for kind in ('IP-ASN', 'SRC-IP-ASN'):
+            for quote in ("'", '"'):
+                for matcher in (kind + ',' + quote + '0013335' + quote,
+                                'NOT,((' + kind + ',' + quote + '0013335' + quote + '))'):
+                    parsed, messages = parse(native_text(matcher, 'DOMAIN,neighbor.example.org'), purpose='proxy')
+                    self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')])
+                    self.assertEqual(len(messages), 1)
+                    self.assertTrue(messages[0].startswith('line 2: invalid '))
+        self.assertEqual(parse(native_text('IP-ASN,0013335,src,no-resolve'), purpose='proxy'),
+                         ([Rule('SRC-IP-ASN', '0013335')], ['line 2: unsupported no-resolve for SRC-IP-ASN']))
+        self.assertEqual(parse(native_text('IP-ASN,0013335,Src,NO-RESOLVE,ignored'), purpose='proxy'),
+                         ([Rule('IP-ASN', '0013335')], []))
+        source = [Rule(kind, value, domain_source=origin) for kind in ('IP-ASN', 'SRC-IP-ASN')
+                  for value in ('0', '00', '0013335') for origin in ('surge', 'qx', 'mihomo')]
+        self.assertEqual(set(normalize(iter(source * 2))), set(source))
+        self.assertTrue(all(not rule.native_fields for rule in parse(native_text('IP-ASN,00'), purpose='proxy')[0]))
+
+    def test_unknown_scope_uint32_invalid_values_warnings_and_strict_white(self):
+        for value in ('UNKNOWN', 'unknown', 'Unknown'):
+            self.assertEqual(parse('IP-ASN,' + value, purpose='proxy'), ([Rule('IP-ASN', value)], []))
+            self.assertEqual(parse('NOT,((IP-ASN,' + value + '))', purpose='proxy'),
+                             ([Rule('NOT', '((IP-ASN,' + value + '))')], []))
+        invalid = ('', 'AS', 'ASabc', 'as0013335', '+1', '-1', 'AS-1', '1.0', '0x10',
+                   'NaN', '４２', '4294967296', 'AS4294967296', '0' * 5000 + '4294967296',
+                   '9' * 5000, ' 1 ', '\t1')
+        for native in (False, True):
+            for kind in ('IP-ASN', 'SRC-IP-ASN'):
+                values = invalid + (('UNKNOWN', 'AS0013335') if native else ('UNKNOWN',) if kind == 'SRC-IP-ASN' else ())
+                for value in values:
+                    field = json.dumps(value) if not native else '"' + value + '"' if value in (' 1 ', '\t1') else value
+                    matcher = kind + ',' + field
+                    text = native_text(matcher, 'DOMAIN,neighbor.example.org') if native else '# source\n' + matcher + '\nDOMAIN,neighbor.example.org'
+                    neighbor = Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')
+                    with self.subTest(native=native, kind=kind, value=value[:40]):
+                        parsed, messages = parse(text, purpose='proxy')
+                        self.assertEqual(parsed, [neighbor])
+                        self.assertEqual(len(messages), 1)
+                        self.assertTrue(messages[0].startswith('line 2: invalid '))
+                        with self.assertRaises(ValueError):
+                            parse_whitelist(native_text(matcher) if native else matcher)
+                        with warnings.catch_warnings(record=True) as caught:
+                            warnings.simplefilter('always')
+                            self.assertEqual(parse_whitelist(text), [neighbor])
+                        self.assertEqual(len(caught), 1)
+                    expression = '((' + matcher + '),(NETWORK,tcp))'
+                    self.assertEqual(parse(native_text('AND,' + expression) if native else 'AND,' + expression,
+                                           purpose='proxy'),
+                                     ([], [f'line {2 if native else 1}: invalid logical expression ' + expression]))
+        self.assertEqual(parse('IP-ASN,UNKNOWN,PROXY,src', purpose='proxy'),
+                         ([], ['line 1: invalid SRC-IP-ASN UNKNOWN']))
+
+    def test_white_uses_decimal_identity_without_merging_native_strings_or_directions(self):
+        ordinary, messages = parse('IP-ASN,00\nIP-ASN,0013335\nIP-ASN,AS0013335\n'
+                                   'SRC-IP-ASN,0013335\nDOMAIN,neighbor.example.org', purpose='proxy')
+        self.assertEqual(messages, [])
+        native, messages = parse(native_text('IP-ASN,0', 'IP-ASN,00', 'IP-ASN,0013335',
+                                             'SRC-IP-ASN,0013335'), purpose='proxy')
+        self.assertEqual(messages, [])
+        for text in ('IP-ASN,00\nIP-ASN,AS0013335', native_text('IP-ASN,0', 'IP-ASN,13335')):
+            white = parse_whitelist(text)
+            self.assertEqual(white, [Rule('IP-ASN', '0'), Rule('IP-ASN', '13335')])
+            self.assertEqual(exclude_covered(iter(ordinary + native), iter(white)),
+                             [ordinary[3], ordinary[4], native[1], native[2], native[3]])
+        white = parse_whitelist(native_text('IP-ASN,00', 'SRC-IP-ASN,0013335'))
+        self.assertEqual(exclude_covered(iter(ordinary + native), iter(white)), ordinary + native[:1] + native[2:3])
+        allowed = Rule('IP-ASN', '0', allow=True)
+        logical = Rule('NOT', '((IP-ASN,0))')
+        self.assertEqual(exclude_covered([allowed, logical], parse_whitelist('IP-ASN,00')), [allowed, logical])
+        self.assertEqual(exclude_covered(ordinary[:3], parse_whitelist('SRC-IP-ASN,AS0013335')), ordinary[:3])
+
+    def test_logical_no_resolve_only_changes_destination_leaves_and_preserves_native_neighbors(self):
+        for native in (False, True):
+            raw = ('((IP-ASN,0013335,no-resolve),(SRC-IP-ASN,00000),(NOT,((IP-ASN,00))),'
+                   '(IP-CIDR,192.0.2.7/24),(SRC-IP-CIDR,198.51.100.7/24),(NETWORK,tcp))')
+            canonical = (raw if native else raw.replace('0013335', '13335').replace('00000', '0').replace('IP-ASN,00)', 'IP-ASN,0)'))
+            canonical = canonical.replace('192.0.2.7/24', '192.0.2.0/24').replace('198.51.100.7/24', '198.51.100.0/24')
+            parsed, messages = parse(native_text('AND,' + raw) if native else 'AND,' + raw, purpose='proxy')
+            self.assertEqual((parsed, messages), ([Rule('AND', canonical, native_fields=native)], []))
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    emitted = canonical
+                    if mode == 'strip':
+                        emitted = emitted.replace(',no-resolve', '')
+                    elif mode == 'add':
+                        emitted = emitted.replace('IP-CIDR,192.0.2.0/24)', 'IP-CIDR,192.0.2.0/24,no-resolve)')
+                        emitted = emitted.replace('(IP-ASN,' + ('00)' if native else '0)'),
+                                                  '(IP-ASN,' + ('00' if native else '0') + ',no-resolve)')
+                    outputs, skipped = render('asn', normalize(iter(parsed)), purpose=purpose, no_resolve=mode)
+                    self.assertEqual(outputs['fin.yaml'], '# asn rules: 1\npayload:\n  - ' + json.dumps('AND,' + emitted) + '\n')
+                    self.assertNotIn('fin.yaml:AND', skipped)
+                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([Rule('AND', emitted, native_fields=True)], []))
+        expression = '((IP-ASN,00),(SRC-IP-ASN,0013335),(DOMAIN-WILDCARD,[ab]),(DOMAIN,Native.Example.org.),(PROCESS-NAME,"Game"))'
+        wanted = Rule('AND', expression, native_fields=True, literal_process=True, domain_source='mihomo')
+        self.assertEqual(parse(native_text('AND,' + expression), purpose='proxy'), ([wanted], []))
+        self.assertEqual(normalize(iter([wanted, wanted])), [wanted])
+        for mode in ('add', 'strip', 'keep'):
+            outputs, _ = render('native', [wanted], purpose='proxy', no_resolve=mode)
+            emitted = expression.replace('(IP-ASN,00)', '(IP-ASN,00,no-resolve)') if mode == 'add' else expression
+            self.assertEqual(parse(outputs['fin.yaml'], purpose='proxy'),
+                             ([Rule('AND', emitted, native_fields=True, literal_process=True, domain_source='mihomo')], []))
+
+    def test_ordinary_source_asn_prefix_has_same_decimal_identity(self):
+        self.assertEqual(parse('IP-ASN,AS0013335,PROXY,src\nSRC-IP-ASN,AS0013335\n'
+                               'NOT,((IP-ASN,AS0013335,src))', purpose='proxy'),
+                         ([Rule('SRC-IP-ASN', '13335'), Rule('SRC-IP-ASN', '13335'),
+                           Rule('NOT', '((SRC-IP-ASN,13335))')], []))
+
+    def test_ordinary_logical_asn_uses_checked_decimal_and_preserves_order(self):
+        self.assertEqual(parse('AND,((IP-ASN,"0013335"),(SRC-IP-ASN,00001),(NETWORK,tcp))', purpose='proxy'),
+                         ([Rule('AND', '((IP-ASN,13335),(SRC-IP-ASN,1),(NETWORK,tcp))')], []))
+
+    def test_ordinary_decimal_asn_has_constructor_numeric_string_identity(self):
+        self.assertEqual(parse('IP-ASN,0013335\nDOMAIN,neighbor.example.org', purpose='proxy'),
+                         ([Rule('IP-ASN', '13335'), Rule('DOMAIN', 'neighbor.example.org')], []))
+
+
 class IPSuffixPrefixAuditTests(unittest.TestCase):
     def test_direct_normalize_reaches_lowercase_nested_logical_suffix(self):
         raw = Rule('AND', '((not,((IP-SUFFIX,192.0.2.7/024))),(NETWORK,tcp))')
