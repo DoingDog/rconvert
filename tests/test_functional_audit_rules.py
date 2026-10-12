@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import io
 import json
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -437,6 +438,410 @@ class InlineOptionsAuditTests(unittest.TestCase):
                             with self.assertRaisesRegex(ValueError, 'Invalid whitelist'):
                                 generate(root, lambda url: self.fail(url))
                     self.assertEqual({path: path.read_bytes() for path in old}, old)
+
+
+class DeepRegexAuditTests(unittest.TestCase):
+    kinds = QuantifierAuditTests.kinds
+
+    def test_600_noncapture_groups_preserve_complete_raw_matcher(self):
+        value = '^' + '(?:' * 600 + 'ads' + ')' * 600 + '$'
+        self.assertEqual(parse('DOMAIN-REGEX,' + value + '\nDOMAIN,keep.example.com', purpose='block'),
+                         ([Rule('DOMAIN-REGEX', value), Rule('DOMAIN', 'keep.example.com')], []))
+
+    def test_expression_condition_has_no_first_branch_quantifier_operand(self):
+        value = '^' + '(?:' * 600 + '(?(?=a)+b)' + ')' * 600 + '$'
+        source = 'DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example.org'
+        self.assertEqual(parse(source, purpose='block'),
+                         ([Rule('DOMAIN', 'neighbor.example.org')], ['line 1: invalid DOMAIN-REGEX ' + value]))
+
+    def test_expression_condition_boundaries_keep_only_valid_branches_at_all_depths(self):
+        cases = (
+            ('(?(?=a)+b)', False), ('(?(?!a)*b)', False),
+            ('(?(?<!a)?b)', False), ('(?(?<=a){2}b)', False),
+            ('(?(?=a){0}b)', False), ('(?(?=a){1,2}b)', False),
+            ('(?(?=a){2,}b)', False), ('(?(?=a)(?#note)+b)', False),
+            ('(?(?=a)(?#note)*b)', False), ('(?(?=a)(?#note)?b)', False),
+            ('(?(?=a)(?#note){2}b)', False),
+            ('(?x:(?(?=a) \t (?#note) +b))', False),
+            ('(?x:(?(?=a) \t (?#note) {2}b))', False),
+            ('(?(?=(a(?=b)))(?#note)?b)', False),
+            ('(?(a|b)(?#note){2}b)', False), ('(?(missing)+b)', False),
+            ('(a)(?(1)+b)', False), ('(?<ad>a)(?(ad){2}b)', False),
+            ('(?(?=a)(?(?=b)+c)|d)', False),
+            ('(?(?=a)b|c)', True), ('(?(?=a)b*?|c{2})', True),
+            ('(?(?=a)(?#note)b(?#after)+|c)', True),
+            ('(?(?<=a)(?:)+b|c)', True), ('(?(?=a)|c)', True),
+            ('(?(?!a))', True), (r'(?(?=(a+))b|c)\k<1>', True),
+            ('(a)(?(1)b+|c{2})', True), ('(?<ad>a)(?(ad)b|c)', True),
+            (r'(?(?=a)\+{2}b|c)', True), ('(?(?=a)[+*?]{2}b|c)', True),
+            ('(?(?=a){x}b|c)', True), ('(?(?=a){,2}b|c)', True),
+            ('(?(?=a)(?:b?)+|c)', True), ('(?(?=a)(?(?=b)c+|d{2})|e)', True),
+            ('(?x:(?(?=a) (?#note) b (?#after) +|c))', True),
+            ('(?(?=a) +b|c)', True),
+        )
+        limits = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+        for depth in (0, 600, 1000):
+            for atom, valid in cases:
+                value = '^' + '(?:' * depth + atom + ')' * depth + '$'
+                for kind in self.kinds:
+                    for native in (False, True):
+                        for quoted in (False, True):
+                            escaped = value if native else value.replace('\\', '\\\\').replace('"', '\\"')
+                            field = '"' + escaped + '"' if quoted else value
+                            for operator in ('top', 'AND', 'OR', 'NOT'):
+                                logic = f'(({kind},{field}))' if operator == 'NOT' else f'(({kind},{field}),(NETWORK,tcp))'
+                                matcher = kind + ',' + field if operator == 'top' else operator + ',' + logic
+                                source = (native_text(matcher, 'DOMAIN,neighbor.example.org') if native else
+                                          matcher + '\nDOMAIN,neighbor.example.org')
+                                expected = (Rule(kind, field if native else value) if operator == 'top' else
+                                            Rule(operator, logic, native_fields=native))
+                                neighbor = Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo' if native else 'surge')
+                                message = f'invalid {kind} {field if native else value}' if operator == 'top' else f'invalid logical expression {logic}'
+                                with self.subTest(depth=depth, atom=atom, kind=kind, native=native, quoted=quoted, operator=operator):
+                                    parsed, messages = parse(source, purpose='proxy')
+                                    self.assertEqual(parsed, ([expected] if valid else []) + [neighbor])
+                                    self.assertEqual(messages, [] if valid else [f'line {2 if native else 1}: {message}'])
+                                    self.assertEqual(set(normalize(parsed)), set(parsed))
+                                    if kind == 'DOMAIN-REGEX' and operator == 'top':
+                                        with warnings.catch_warnings(record=True) as caught:
+                                            warnings.simplefilter('always')
+                                            self.assertEqual(parse_whitelist(source), ([expected] if valid else []) + [neighbor])
+                                        self.assertEqual([str(item.message) for item in caught], messages)
+                                        if not valid:
+                                            with self.assertRaisesRegex(ValueError, 'invalid DOMAIN-REGEX'):
+                                                parse_whitelist(native_text(matcher) if native else matcher)
+                                    if not valid:
+                                        outputs, _ = render('condition', parsed, purpose='proxy', no_resolve='keep')
+                                        self.assertEqual(parse(outputs['fin.yaml'], purpose='proxy'),
+                                                         ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')], []))
+        self.assertEqual((sys.get_int_max_str_digits(), sys.getrecursionlimit()), limits)
+
+    def test_native_expression_condition_x_comments_do_not_create_branch_operands(self):
+        for depth in (0, 600, 1000):
+            for atom, valid in (
+                    ('(?x:(?(?=a)# ignored\n+b|c))', False),
+                    ('(?x:(?(?=a) # ignored\n*b|c))', False),
+                    ('(?x:(?(?=a) # ignored\n?b|c))', False),
+                    ('(?x:(?(?=(a+)) # ignored\n{0}b|c))', False),
+                    ('(?x:(?(?=a) # ignored\nb+|c))', True),
+                    ('(?x:(?(?=a) # ignored\nb|c))(?-x: +a)', True)):
+                value = '^' + '(?:' * depth + atom + ')' * depth + '$'
+                for kind in self.kinds:
+                    for operator in ('top', 'AND', 'OR', 'NOT'):
+                        logic = f'(({kind},{value}))' if operator == 'NOT' else f'(({kind},{value}),(NETWORK,tcp))'
+                        matcher = kind + ',' + value if operator == 'top' else operator + ',' + logic
+                        expected = Rule(kind, value) if operator == 'top' else Rule(operator, logic, native_fields=True)
+                        message = f'invalid {kind} {value}' if operator == 'top' else f'invalid logical expression {logic}'
+                        with self.subTest(depth=depth, atom=atom, kind=kind, operator=operator):
+                            self.assertEqual(parse(native_text(matcher, 'DOMAIN,neighbor.example.org'), purpose='block'),
+                                             (([expected] if valid else []) + [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')],
+                                              [] if valid else ['line 2: ' + message]))
+
+    def _check_group_headers(self, depth):
+        limits = (sys.get_int_max_str_digits(), sys.getrecursionlimit())
+        for opening in ('(', '(?:', '(?i:', '(?n:', '(?x:', '(?<ad>', "(?'ad'", '(?<7>',
+                        '(?=', '(?!', '(?<=', '(?<!', '(?>', '(?(?=a)', '(?(?<=a)', '(?(missing)'):
+            value = '^' + opening * depth + 'a|b' + ')' * depth + '{2}?$'
+            for kind in self.kinds:
+                for native in (False, True):
+                    source = (native_text(kind + ',' + value, 'DOMAIN,keep.example.com') if native else
+                              kind + ',' + json.dumps(value) + '\nDOMAIN,keep.example.com')
+                    with self.subTest(depth=depth, opening=opening, kind=kind, native=native):
+                        self.assertEqual(parse(source, purpose='proxy'),
+                                         ([Rule(kind, value), Rule('DOMAIN', 'keep.example.com',
+                                          domain_source='mihomo' if native else 'surge')], []))
+        self.assertEqual((sys.get_int_max_str_digits(), sys.getrecursionlimit()), limits)
+
+    def test_600_and_1000_group_headers_keep_all_regexp2_kinds_within_eight_seconds(self):
+        for depth in (600, 1000):
+            with self.subTest(depth=depth):
+                code = ('from tests.test_functional_audit_rules import DeepRegexAuditTests; '
+                        f'DeepRegexAuditTests()._check_group_headers({depth})')
+                result = subprocess.run([sys.executable, '-B', '-c', code], capture_output=True, text=True,
+                                        timeout=8, cwd=Path(__file__).resolve().parents[1])
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_deep_mixed_groups_restore_options_captures_quotes_and_logical_order(self):
+        for depth in (600, 1000):
+            for atom, valid in ((r'(?N:(a))(?-n:(b))\k<1>', True),
+                                (r'(?N:(a))(?-n:(b))\k<2>', False),
+                                (r'(?<ad>a)(?(ad)b|c)\k<ad>', True),
+                                (r'(?<ad>a)(?(7)b|c)', False),
+                                (r'(?<7>a)(?(7)b|c)\k<7>', True),
+                                (r'(?<ad>a)(?<out-ad>b)\k<out>', True),
+                                (r'(?<ad>a)(?<out-missing>b)', False),
+                                (r'(?>ab|c)(?=a)(?!b)(?<=a+)(?<!b+)', True),
+                                (r'(?X:a[ # ])(?-x:b#c)', True),
+                                (r'[\]\(\)]a(?#note)*?', True)):
+                value = '^' + '(?i:(?:' * (depth // 2) + atom + '))' * (depth // 2) + '$'
+                for native in (False, True):
+                    for quoted in (False, True):
+                        field = ('"' + value + '"' if native else json.dumps(value)) if quoted else value
+                        for kind in self.kinds:
+                            for operator in ('top', 'AND', 'OR', 'NOT'):
+                                logic = f'(({kind},{field}))' if operator == 'NOT' else f'(({kind},{field}),(NETWORK,tcp))'
+                                matcher = kind + ',' + field if operator == 'top' else operator + ',' + logic
+                                source = (native_text(matcher, 'DOMAIN,keep.example.com') if native else
+                                          matcher + '\nDOMAIN,keep.example.com')
+                                expected = (Rule(kind, field if native else value) if operator == 'top' else
+                                            Rule(operator, logic, native_fields=native))
+                                neighbor = Rule('DOMAIN', 'keep.example.com', domain_source='mihomo' if native else 'surge')
+                                with self.subTest(depth=depth, atom=atom, native=native, quoted=quoted, kind=kind, operator=operator):
+                                    parsed, messages = parse(source, purpose='proxy')
+                                    self.assertEqual(parsed, ([expected] if valid else []) + [neighbor])
+                                    self.assertEqual(len(messages), int(not valid))
+                                    if messages:
+                                        self.assertTrue(messages[0].startswith(f'line {2 if native else 1}:'))
+                                    self.assertEqual(set(normalize(parsed)), set(parsed))
+
+    def test_deep_invalid_bodies_headers_and_delimiters_warn_and_keep_neighbors(self):
+        for depth in (600, 1000):
+            for atom in ('*a', 'a**', 'a{3,2}', r'\u{61}', r'\x(?#note)41',
+                         '[z-a]', '[abc', '(?q:a)', '(?P<ad>a)', '(?=*)', '(?>*)',
+                         '(?:*a)', '(?<ad name>a)', '(?(1)a|b)', '(?(?=a)b|c|d)',
+                         r'a\k<missing>', r'a\k<2147483648>', '(?n)+a'):
+                value = '^' + '(?:' * depth + atom + ')' * depth + '$'
+                for kind in self.kinds:
+                    for native in (False, True):
+                        source = (native_text(kind + ',' + value, 'DOMAIN,keep.example.com') if native else
+                                  kind + ',' + json.dumps(value) + '\nDOMAIN,keep.example.com')
+                        with self.subTest(depth=depth, atom=atom, kind=kind, native=native):
+                            parsed, messages = parse(source, purpose='proxy')
+                            self.assertEqual(parsed, [Rule('DOMAIN', 'keep.example.com',
+                                                          domain_source='mihomo' if native else 'surge')])
+                            self.assertEqual(messages, [f'line {2 if native else 1}: invalid {kind} {value}'])
+            for closers in (depth - 1, depth + 1):
+                value = '^' + '(?:' * depth + 'a' + ')' * closers + '$'
+                source = native_text('DOMAIN-REGEX,' + value, 'DOMAIN,keep.example.com')
+                parsed, messages = parse(source, purpose='block')
+                self.assertEqual(parsed, [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')])
+                self.assertEqual(len(messages), 1)
+
+    def test_deep_native_x_comments_and_scope_restore_after_newline(self):
+        for depth in (600, 1000):
+            for atom, valid in (('a # ignored,( [ *\n b', True), ('a # ignored )', False),
+                                ('a # ignored\n**', False), ('a # ignored\n*?', True)):
+                value = '^' + '(?XN:' * depth + atom + ')' * depth + '(b)\\k<1>$'
+                for kind in self.kinds:
+                    with self.subTest(depth=depth, atom=atom, kind=kind):
+                        parsed, messages = parse(native_text(kind + ',' + value, 'DOMAIN,keep.example.com'), purpose='block')
+                        self.assertEqual(parsed, ([Rule(kind, value)] if valid else []) +
+                                         [Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')])
+                        self.assertEqual(len(messages), int(not valid))
+
+    def test_deep_domain_whitelist_and_url_regex_keep_distinct_validation(self):
+        for depth in (600, 1000):
+            value = '^' + '(?n:' * depth + r'(?<ad>a)\k<ad>' + ')' * depth + '$'
+            invalid = '^' + '(?:' * depth + '(?(?<=a)(?#note){2}b)' + ')' * depth + '$'
+            for native in (False, True):
+                text = (native_text('DOMAIN-REGEX,' + value, 'DOMAIN-REGEX,' + invalid, 'DOMAIN,keep.example.com') if native else
+                        'DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN-REGEX,' + json.dumps(invalid) + '\nDOMAIN,keep.example.com')
+                with self.subTest(depth=depth, native=native), warnings.catch_warnings(record=True) as caught:
+                    warnings.simplefilter('always')
+                    self.assertEqual(parse_whitelist(text), [Rule('DOMAIN-REGEX', value),
+                                     Rule('DOMAIN', 'keep.example.com', domain_source='mihomo' if native else 'surge')])
+                    self.assertEqual([str(item.message) for item in caught],
+                                     [f'line {3 if native else 2}: invalid DOMAIN-REGEX {invalid}'])
+            url_value = '^' + '(?:' * depth + 'ads' + ')' * depth + '$'
+            self.assertEqual(parse('URL-REGEX,' + json.dumps(url_value) + '\nDOMAIN,keep.example.com', purpose='proxy'),
+                             ([Rule('DOMAIN', 'keep.example.com')], ['line 1: invalid URL-REGEX ' + url_value]))
+            with self.assertRaisesRegex(ValueError, 'invalid DOMAIN-REGEX'):
+                parse_whitelist(native_text('DOMAIN-REGEX,' + invalid))
+            blocker, allowed = Rule('DOMAIN-REGEX', value), Rule('DOMAIN-REGEX', value, allow=True)
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    outputs, skipped = render('deep', iter([blocker, allowed]), purpose=purpose, no_resolve=mode,
+                                              whitelist=iter([Rule('DOMAIN-REGEX', value.replace('a)', 'b)'))]))
+                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([blocker], []))
+                    self.assertEqual(normalize([allowed, blocker]), [blocker, allowed])
+                    self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 3 if purpose == 'block' else 2)
+        for value, valid in (('(a)(?(1)b+|c{2})', True), ('(?(?=a)b|c)', False),
+                             ('(a)(?(1)+b)', False), ('(?n:(a))(?(1)b|c)', False)):
+            self.assertEqual(parse('URL-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example.org', purpose='proxy'),
+                             (([Rule('URL-REGEX', value)] if valid else []) + [Rule('DOMAIN', 'neighbor.example.org')],
+                              [] if valid else ['line 1: invalid URL-REGEX ' + value]))
+
+    def test_deep_generate_local_remote_white_publish_and_yaml_dependencies(self):
+        value = '^' + '(?n:' * 1000 + r'(?<ad>a)\k<ad>' + ')' * 1000 + '$'
+        invalid = '^' + '(?:' * 600 + '(?(?=a)(?#note)+b)' + ')' * 600 + '$'
+        white_value = '^' + '(?n:' * 600 + r'(?<other>b)\k<other>' + ')' * 600 + '$'
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                for native in (False, True):
+                    for remote in (False, True):
+                        with self.subTest(purpose=purpose, mode=mode, native=native, remote=remote), tempfile.TemporaryDirectory() as directory:
+                            root = Path(directory)
+                            flag = '' if mode == 'strip' else ',no-resolve'
+                            initial = '' if mode == 'add' else ',no-resolve'
+                            field = value if native else json.dumps(value)
+                            logic = f'((NOT,((DOMAIN-REGEX,{field}))),(OR,((PROCESS-PATH-REGEX,{field}),(NETWORK,tcp))),'
+                            logic += f'(DOMAIN,leaf.example.com),(IP-CIDR,192.0.2.0/24{initial}),(SRC-IP-CIDR,198.51.100.0/24))'
+                            wanted = f'((NOT,((DOMAIN-REGEX,{value}))),(OR,((PROCESS-PATH-REGEX,{value}),(NETWORK,tcp))),'
+                            wanted += f'(DOMAIN,leaf.example.com),(IP-CIDR,192.0.2.0/24{flag}),(SRC-IP-CIDR,198.51.100.0/24))'
+                            bad_field = invalid if native else json.dumps(invalid)
+                            matchers = [*(kind + ',' + field for kind in self.kinds), 'AND,' + logic,
+                                        *(kind + ',' + bad_field for kind in self.kinds),
+                                        'AND,' + f'((DOMAIN-REGEX,{bad_field}),(NETWORK,tcp))',
+                                        'OR,' + f'((PROCESS-NAME-REGEX,{bad_field}),(NETWORK,tcp))',
+                                        'NOT,' + f'((PROCESS-PATH-REGEX,{bad_field}))',
+                                        'DOMAIN,covered.example.com', 'DOMAIN,keep.example.com',
+                                        'IP-CIDR,192.0.2.0/24' + initial, 'SRC-IP-CIDR,198.51.100.0/24']
+                            source = (native_text(*matchers) if native else '\n'.join(matchers)) + '\n@@||allow.example.com^\n'
+                            white = (native_text('DOMAIN-REGEX,' + white_value, 'DOMAIN,covered.example.com') if native else
+                                     'DOMAIN-REGEX,' + json.dumps(white_value) + '\nDOMAIN,covered.example.com')
+                            configs = [{'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['https://example.com/source' if remote else 'input.list'],
+                                        'whitelist': ['https://example.com/white' if remote else 'static/white.list']},
+                                       {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                        'sources': ['source/fin.yaml'], 'whitelist': []}]
+                            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                            (root / 'input.list').write_text(source, encoding='utf-8')
+                            (root / 'static').mkdir()
+                            (root / 'static/white.list').write_text(white, encoding='utf-8')
+                            inputs = {path: path.read_bytes() for path in (root / 'input.list', root / 'static/white.list')}
+                            old = {}
+                            for group in ('source', 'child'):
+                                (root / group).mkdir()
+                                for name in FILES:
+                                    path = root / group / name
+                                    path.write_bytes(b'old product\x00\xff\r\n')
+                                    old[path] = path.read_bytes()
+                            responses = {'https://example.com/source': source.encode('utf-8'),
+                                         'https://example.com/white': white.encode('utf-8')}
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                outputs = generate(root, lambda url: responses[url])
+                            for kind in self.kinds:
+                                self.assertIn('invalid ' + kind + ' ' + invalid, diagnostic.getvalue())
+                            self.assertIn('invalid logical expression', diagnostic.getvalue())
+                            self.assertNotIn('invalid whitelist', diagnostic.getvalue())
+                            expected = {*(Rule(kind, value) for kind in self.kinds),
+                                        Rule('AND', wanted, native_fields=True, domain_source='mihomo'),
+                                        Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'),
+                                        Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
+                                        Rule('SRC-IP-CIDR', '198.51.100.0/24')}
+                            self.assertEqual(list(outputs), [root / group / name for group in ('source', 'child') for name in FILES])
+                            for group in ('source', 'child'):
+                                parsed, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
+                                self.assertEqual(set(parsed), expected)
+                                self.assertEqual(messages, [])
+                                self.assertNotIn('covered.example.com', outputs[root / group / 'fin.yaml'])
+                                for kind in self.kinds:
+                                    self.assertIn(json.dumps(kind + ',' + value), outputs[root / group / 'fin.yaml'])
+                                self.assertEqual(outputs[root / group / 'fin.txt'].splitlines()[1:],
+                                                 ['DOMAIN,keep.example.com', 'IP-CIDR,192.0.2.0/24' + flag,
+                                                  'SRC-IP,198.51.100.0/24'])
+                                self.assertEqual(outputs[root / group / 'fin-surge-ds.txt'].splitlines()[1:], ['keep.example.com'])
+                            if purpose == 'block':
+                                self.assertIn('@@||allow.example.com^\n', outputs[root / 'source/fin-adb.txt'])
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            publish(outputs, root=root)
+                            published = {path: path.read_bytes() for path in outputs}
+                            self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                            self.assertTrue(all(b'\r' not in data and data.endswith(b'\n') for data in published.values()))
+                            self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                            (root / 'input.list').unlink()
+                            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                                disk = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+                            publish(disk, root=root)
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+
+    def test_illegal_expression_conditions_in_disk_yaml_do_not_reach_published_dependency(self):
+        invalid = '^' + '(?:' * 1000 + '(?(?<=a)(?#note){2}b)' + ')' * 1000 + '$'
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'source').mkdir()
+                    source = root / 'source/fin.yaml'
+                    source.write_text(native_text(*(kind + ',' + invalid for kind in self.kinds),
+                                                  'DOMAIN,neighbor.example.org'), encoding='utf-8')
+                    original = source.read_bytes()
+                    config = [{'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                               'sources': ['source/fin.yaml'], 'whitelist': []}]
+                    (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
+                    (root / 'child').mkdir()
+                    old = {}
+                    for name in FILES:
+                        path = root / 'child' / name
+                        path.write_bytes(b'old product\x00\xff\r\n')
+                        old[path] = path.read_bytes()
+                    with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        outputs = generate(root, lambda url: self.fail(url))
+                    for kind in self.kinds:
+                        self.assertIn('invalid ' + kind + ' ' + invalid, diagnostic.getvalue())
+                    self.assertEqual(parse(outputs[root / 'child/fin.yaml'], purpose=purpose),
+                                     ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')], []))
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    publish(outputs, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in outputs},
+                                     {path: text.encode('utf-8') for path, text in outputs.items()})
+                    self.assertEqual(source.read_bytes(), original)
+
+    def test_deep_generated_white_disk_freeze_and_strict_white_boundaries(self):
+        value = '^' + '(?n:' * 600 + r'(?<ad>a)\k<ad>' + ')' * 600 + '$'
+        white_value = '^' + '(?n:' * 600 + r'(?<other>b)\k<other>' + ')' * 600 + '$'
+        invalid = '^' + '(?:' * 600 + '(?(?=a)(?#note)+b)' + ')' * 600 + '$'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            configs = [{'name': 'white', 'purpose': 'proxy', 'no_resolve': 'keep',
+                        'sources': ['white.list'], 'whitelist': []},
+                       {'name': 'source', 'purpose': 'proxy', 'no_resolve': 'keep',
+                        'sources': ['input.list'], 'whitelist': ['white/fin.yaml']},
+                       {'name': 'child', 'purpose': 'proxy', 'no_resolve': 'keep',
+                        'sources': ['source/fin.yaml'], 'whitelist': ['white/fin.yaml']}]
+            (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+            (root / 'white.list').write_text(native_text('DOMAIN-REGEX,' + white_value, 'DOMAIN-REGEX,' + invalid,
+                                                        'DOMAIN,covered.example.com'), encoding='utf-8')
+            (root / 'input.list').write_text(native_text('DOMAIN-REGEX,' + value, 'DOMAIN-REGEX,' + invalid,
+                                                        'DOMAIN,covered.example.com', 'DOMAIN,keep.example.com'), encoding='utf-8')
+            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                outputs = generate(root, lambda url: self.fail(url))
+            self.assertEqual(parse_whitelist(outputs[root / 'white/fin.yaml']),
+                             [Rule('DOMAIN', 'covered.example.com', domain_source='mihomo'), Rule('DOMAIN-REGEX', white_value)])
+            for group in ('source', 'child'):
+                self.assertEqual(parse(outputs[root / group / 'fin.yaml'], purpose='proxy'),
+                                 ([Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'), Rule('DOMAIN-REGEX', value)], []))
+            publish(outputs, root=root)
+            published = {path: path.read_bytes() for path in outputs}
+            (root / 'input.list').unlink()
+            (root / 'white.list').unlink()
+            (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+            with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
+                disk = generate(root, lambda url: self.fail(url))
+            self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name == 'child'})
+            with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                publish({root / 'static/white.list': outputs[root / 'white/fin.yaml']}, root=root)
+            configs[1]['sources'] = ['https://example.com/missing']
+            (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+
+            def unavailable(url):
+                raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+
+            with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                self.assertEqual(generate(root, unavailable), {})
+            self.assertIn('HTTP 404; skipped', diagnostic.getvalue())
+            self.assertEqual({path: path.read_bytes() for path in published}, published)
+            (root / 'input.list').write_text(native_text('DOMAIN-REGEX,' + value), encoding='utf-8')
+            (root / 'white.list').write_text(native_text('DOMAIN-REGEX,' + invalid), encoding='utf-8')
+            for remote in (False, True):
+                config = {'name': 'source', 'purpose': 'proxy', 'no_resolve': 'keep', 'sources': ['input.list'],
+                          'whitelist': ['https://example.com/white' if remote else 'white.list']}
+                (root / 'rulesets.json').write_text(json.dumps([config]), encoding='utf-8')
+                with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                    if remote:
+                        actual = generate(root, lambda url: native_text('DOMAIN-REGEX,' + invalid).encode('utf-8'))
+                        self.assertEqual(parse(actual[root / 'source/fin.yaml'], purpose='proxy'), ([Rule('DOMAIN-REGEX', value)], []))
+                        self.assertIn('invalid whitelist', diagnostic.getvalue())
+                    else:
+                        with self.assertRaisesRegex(ValueError, 'Invalid whitelist'):
+                            generate(root, lambda url: self.fail(url))
+                self.assertEqual({path: path.read_bytes() for path in published}, published)
 
 
 class BracedHexAuditTests(unittest.TestCase):

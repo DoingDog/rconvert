@@ -552,7 +552,7 @@ def _valid_domain(kind: str, value: str) -> bool:
 
 
 def _valid_deep_regex(probe: str) -> bool:
-    # 逐层验证普通组，再以空组原子替换已验证内容，保留父组的量词与分支语法。
+    # 逐层验证 scanner 转换后的完整组，再以空组原子替换，保留父组的量词与分支语法。
     groups, escaped, in_class, class_first = [[]], False, False, False
     class_start = skip_until = 0
     for index, char in enumerate(probe):
@@ -583,15 +583,20 @@ def _valid_deep_regex(probe: str) -> bool:
                 groups[-1].append('(?#)')
                 skip_until = index + 4
                 continue
+            header = '('
             if probe[index + 1:index + 2] == '?':
-                return False
-            groups.append([])
+                match = re.match(r'\(\?(?:[:=!>]|P<g[0-9]+>)', probe[index:])
+                if match is None:
+                    return False
+                header = match[0]
+                skip_until = index + len(header)
+            groups.append([header])
             continue
         elif char == ')':
             if len(groups) == 1:
                 return False
             try:
-                re.compile(''.join(groups.pop()))
+                re.compile(''.join(groups.pop()) + ')')
             except (re.error, OverflowError, RecursionError):
                 return False
             groups[-1].append('(?:)')
@@ -645,7 +650,7 @@ def _valid_regex(kind: str, value: str) -> bool:
     class_start, class_probe, classes = 0, 0, []
     extended_stack, conditionals, references = [], [], []
     captures, explicit_capture, capture_slots = 0, False, {0}
-    conditional_head = after_options = False
+    conditional_head = missing_operand = False
     quantifier_probe = 0
     while index < len(value) and kind != "URL-REGEX":
         char = value[index]
@@ -659,7 +664,7 @@ def _valid_regex(kind: str, value: str) -> bool:
         if char == "\\":
             if index + 1 == len(value):
                 return False
-            quantified = after_options = False
+            quantified = missing_operand = False
             escape = value[index + 1]
             if in_class:
                 class_first = class_hyphen = False
@@ -771,7 +776,7 @@ def _valid_regex(kind: str, value: str) -> bool:
         if not in_class and char == "{":
             count = re.match(r"\{[0-9]+(?:,[0-9]*)?\}", value[index:])
             if count is not None:
-                if after_options:
+                if missing_operand:
                     return False
                 lower, separator, upper = count[0][1:-1].partition(',')
                 minimum = _capture_number(lower)
@@ -786,21 +791,21 @@ def _valid_regex(kind: str, value: str) -> bool:
                 index += len(count[0])
                 quantified = True
                 continue
-        if not in_class and (char == "+" and quantified or after_options and char in "*+?"):
+        if not in_class and (char == "+" and quantified or missing_operand and char in "*+?"):
             return False
         if not in_class and char == '?' and quantified:
             # regexp2 在量词与 lazy modifier 之间允许 comment 和 x-mode 空白。
             probe[quantifier_probe] += '?'
             index += 1
             continue
-        after_options = False
+        missing_operand = False
         quantified = not in_class and char in "*+?"
         if quantified:
             quantifier_probe = len(probe)
         if not in_class and char == "(":
             if value.startswith(('(?(?=', '(?(?!', '(?(?<=', '(?(?<!'), index):
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0])
+                conditionals.append([len(extended_stack), 0, True])
                 probe.append('(?:')
                 index += 2
                 continue
@@ -809,7 +814,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                 if numeric and (value[end:end + 1] != ')' or _capture_number(key) is None):
                     return False
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0])
+                conditionals.append([len(extended_stack), 0, False])
                 probe.append('(?:')
                 if key and value[end:end + 1] == ')':
                     # 条件头不分配捕获槽，引用在完整捕获集合建立后验证。
@@ -820,6 +825,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                     if head.startswith(('(?#', "(?'")) or (head.startswith('(?<') and head[3:4] not in {'=', '!'}):
                         return False
                     conditional_head = True
+                    conditionals[-1][2] = True
                     index += 2
                 continue
             if conditional_head:
@@ -836,7 +842,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                 else:
                     # comment marker 保留词法边界；global options 不提供量词对象。
                     probe.append('(?#)')
-                    after_options = True
+                    missing_operand = True
                 index, _, extended, explicit_capture = flags
                 continue
             if re.match(r"\(\?[A-Za-z+-]", value[index:]):
@@ -881,8 +887,13 @@ def _valid_regex(kind: str, value: str) -> bool:
                 class_atom, range_from_literal = None, False
         elif char == ")" and not in_class and extended_stack:
             extended, explicit_capture = extended_stack.pop()
-            if conditionals and len(extended_stack) < conditionals[-1][0]:
-                conditionals.pop()
+            if conditionals:
+                if len(extended_stack) < conditionals[-1][0]:
+                    conditionals.pop()
+                elif len(extended_stack) == conditionals[-1][0] and conditionals[-1][2]:
+                    # regexp2 的条件表达式结束后没有量词对象；comment 和 x-mode 空白保持此边界。
+                    missing_operand = True
+                    conditionals[-1][2] = False
         elif in_class:
             class_hyphen = char == '-' and not class_first
             if char != '^' or index != class_start + 1:
