@@ -383,7 +383,7 @@ class NativeKeywordRuleTests(unittest.TestCase):
                     white = rules.parse_whitelist(prefix + value + ',DIRECT')
                 self.assertEqual(messages, [])
                 self.assertEqual(rules.exclude_covered([keyword, longer, neighbor, allowed, native], white),
-                                 [neighbor, allowed, native])
+                                 [neighbor, allowed] + ([] if source == 'surge' and value in ('123#1', '123') else [native]))
                 self.assertEqual(rules.exclude_covered([keyword], [longer]), [keyword])
                 for purpose in ('block', 'direct', 'proxy'):
                     self.assertEqual(parse(prefix + value + ',REJECT', purpose=purpose, ignore_policy=True),

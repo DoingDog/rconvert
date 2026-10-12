@@ -1837,6 +1837,7 @@ def _domain_comparison_value(kind: str, value: str, source: str) -> str:
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
     domain_groups, typed = {}, set()
     surge_literals = {'DOMAIN': set(), 'DOMAIN-SUFFIX': set()}
+    surge_keywords, surge_wildcards = set(), set()
     empty = (set(), set(), set(), set())
     networks = {"src": set(), "dst": set()}
     for entry in whitelist:
@@ -1848,6 +1849,11 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                 and entry.value.isascii() and not value.endswith('.')
                 and _valid_domain('DOMAIN-SUFFIX', value)):
             surge_literals[entry.kind].add(value)
+        if entry.domain_source == 'surge' and entry.value.isascii():
+            if entry.kind == 'DOMAIN-KEYWORD':
+                surge_keywords.add(value)
+            elif entry.kind == 'DOMAIN-WILDCARD' and not any(char in value for char in '[]'):
+                surge_wildcards.add(value)
         if entry.kind == "DOMAIN":
             exact.add(value)
         elif entry.kind == "DOMAIN-SUFFIX":
@@ -1914,6 +1920,19 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                 and not value.endswith('.') and _valid_domain('DOMAIN-SUFFIX', value)):
             covered = (_has_parent(value, surge_literals['DOMAIN-SUFFIX']) or
                        kind == 'DOMAIN' and value in surge_literals['DOMAIN'])
+        if (not covered and rule.domain_source == 'mihomo' and rule.value.isascii()
+                and kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}):
+            # 必要字面部分不能只靠 Host 的末尾根点命中 keyword。
+            literal = (value.rstrip('*') if kind == 'DOMAIN-WILDCARD' else value).removesuffix('.')
+            segments = re.split(r'\*|\?', literal) if kind == 'DOMAIN-WILDCARD' else (literal,)
+            covered = any(keyword and keyword in segment for keyword in surge_keywords for segment in segments)
+            if not covered:
+                if (kind == 'DOMAIN' or kind == 'DOMAIN-WILDCARD' and not any(char in value for char in '*?')):
+                    covered = (_valid_domain('DOMAIN-SUFFIX', value) and
+                               any(fnmatchcase(value.removesuffix('.'), pattern) for pattern in surge_wildcards))
+                elif kind == 'DOMAIN-WILDCARD' and not any(char in value for char in '?[]'):
+                    # 非点字面结尾不命中根点 Host；尾星号须能吸收被 Surge 忽略的根点。
+                    covered = value in surge_wildcards and not value.rstrip('*').endswith('.')
         if not covered:
             kept.append(rule)
     return kept
