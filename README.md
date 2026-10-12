@@ -68,7 +68,7 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 
 [`rulesets.json`](rulesets.json) 按依赖顺序列出规则组。每组用 `name` 指定输出目录、可选的 `title` 指定 `fin-adb.txt` 文件头标题（省略时使用 `name`）、`purpose` 指定 `block`／`proxy`／`direct`、`sources` 指定规则来源、`whitelist` 指定白名单来源、`no_resolve` 指定 `add`／`strip`／`keep`。ADB 文件头按北京时间写入生成时间，`Total count` 是去重后的规则行数，包含 `@@` 例外。来源与白名单均可使用 HTTPS URL 或选定 root 的相对路径；本轮生成的 `cdn/fin.txt` 会直接供后续组读取。`tg` 和 `proxy` 与 `cdn`、`a3`、`a4`、`big-data` 一样使用 `add`，仅给可表达的目的 IP 规则添加 `no-resolve`；`dirt` 使用 `strip`。来源 IP 规则不被转换为目标 IP。
 
-所有规则组均使用 Sukka 的 [非 IP LAN 白名单](https://ruleset.skk.moe/Clash/non_ip/lan.txt) 和 [IP LAN 白名单](https://ruleset.skk.moe/Clash/ip/lan.txt)；`a4` 与 `a3` 的白名单相同。`tg` 还使用仓库根目录的 [`tg-sentinel.txt`](tg-sentinel.txt)，即使远端 LAN 白名单不可用，也排除上游的非 Telegram 哨兵。
+所有规则组均使用 Sukka 的 [非 IP LAN 白名单](https://ruleset.skk.moe/Clash/non_ip/lan.txt) 和 [IP LAN 白名单](https://ruleset.skk.moe/Clash/ip/lan.txt)；`a4` 与 `a3` 的白名单相同。`tg` 还使用 `static/` 中的 [`tg-sentinel.txt`](static/tg-sentinel.txt)，即使远端 LAN 白名单不可用，也排除上游的非 Telegram 哨兵。
 
 白名单只使用域名精确、后缀、keyword、wildcard 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。对于 `purpose: block`，`fin-adb.txt` 还输出白名单的 `@@` 放行例外，精确域名采用 `@@|safe.example.com|`；Surge、Quantumult X 与 Mihomo 输出不能表达部分放行，需在规则集之前放置显式放行规则。去重仅在能证明覆盖时删除规则，不能因 wildcard 不受目标格式支持就用它删除其他类型。
 

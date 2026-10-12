@@ -100,7 +100,7 @@
       "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Telegram.list"
     ],
     "whitelist": [
-      "tg-sentinel.txt",
+      "static/tg-sentinel.txt",
       "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
       "https://ruleset.skk.moe/Clash/ip/lan.txt"
     ]

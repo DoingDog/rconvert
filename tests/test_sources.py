@@ -124,7 +124,7 @@ class SourcesTests(unittest.TestCase):
             with self.subTest(group=name):
                 original = (["static/main/Direct.list", "static/main/NoReject.list"]
                             if name in ("a3", "a4") else ["static/main/NoDirect.list"]
-                            if name == "dirt" else ["tg-sentinel.txt"] if name == "tg" else [])
+                            if name == "dirt" else ["static/tg-sentinel.txt"] if name == "tg" else [])
                 self.assertEqual(group["whitelist"], original + [
                     "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
                     "https://ruleset.skk.moe/Clash/ip/lan.txt",
@@ -222,12 +222,14 @@ class SourcesTests(unittest.TestCase):
             "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Telegram.list",
         ])
         self.assertEqual(group["whitelist"], [
-            "tg-sentinel.txt",
+            "static/tg-sentinel.txt",
             "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
             "https://ruleset.skk.moe/Clash/ip/lan.txt",
         ])
-        self.assertEqual((ROOT / "tg-sentinel.txt").read_text(encoding="utf-8").splitlines(),
-                         ["DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"])
+        self.assertFalse((ROOT / "tg-sentinel.txt").exists())
+        path = resolve_source(ROOT, "static/tg-sentinel.txt")
+        self.assertTrue(path.is_file())
+        parse_whitelist(path.read_text(encoding="utf-8-sig"))
 
     def test_proxy_uses_only_targeted_proxy_sources_with_lan_whitelists(self):
         group = {group["name"]: group for group in load_config(ROOT)}["proxy"]

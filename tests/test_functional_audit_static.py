@@ -26,7 +26,8 @@ STATIC_EDITS = (
     ("crlf", b"DOMAIN,alpha.example.org\r\nDOMAIN,beta.example.org\r\n",
      {"alpha.example.org", "beta.example.org"}),
 )
-STATIC_WHITES = ("static/main/Direct.list", "static/main/NoReject.list", "static/main/NoDirect.list")
+STATIC_WHITES = ("static/main/Direct.list", "static/main/NoReject.list", "static/main/NoDirect.list",
+                 "static/tg-sentinel.txt")
 
 
 class StaticMaintenanceTests(unittest.TestCase):
