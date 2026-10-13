@@ -1975,7 +1975,7 @@ class FormatTests(unittest.TestCase):
             (r"^ads\.example\.com\z", r"/^ads\.example\.com\z/", r"@@/^ads\.example\.com\z/"),
             (r"^api\d\.example\.com$", r"/^api\p{Nd}\.example\.com$/", r"@@/^api\p{Nd}\.example\.com$/"),
             (r"^(?:ads|track)\.example\.com$", r"/^(?:ads|track)\.example\.com$/", r"@@/^(?:ads|track)\.example\.com$/"),
-            (r"^(?<name>ads)\.example\.com$", r"/^(?<name>ads)\.example\.com$/", r"@@/^(?<name>ads)\.example\.com$/"),
+            (r"^(?<name>ads)\.example\.com$", r"/^(?:ads)\.example\.com$/", r"@@/^(?:ads)\.example\.com$/"),
         )
         for value, block, allow in cases:
             with self.subTest(value=value):
@@ -1988,8 +1988,8 @@ class FormatTests(unittest.TestCase):
     def test_adguard_portable_capture_flags_and_property_emit_block_and_allow(self):
         cases = (
             (r"^(?<n>ad)(?<n>s)\.example\.com$",
-             r"/^(?<n>ad)(?<n>s)\.example\.com$/",
-             r"@@/^(?<n>ad)(?<n>s)\.example\.com$/"),
+             r"/^(?:ad)(?:s)\.example\.com$/",
+             r"@@/^(?:ad)(?:s)\.example\.com$/"),
             (r"^(?i:ads)\.example\.com$",
              r"/^(?i:ads)\.example\.com$/",
              r"@@/^(?i:ads)\.example\.com$/"),

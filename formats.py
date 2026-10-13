@@ -6,8 +6,8 @@ from functools import cache
 from collections import Counter
 from collections.abc import Iterable
 
-from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _delimiters,
-                   _field_value, _fields, _logical_children, _valid_deep_regex, _valid_domain)
+from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
+                   _field_value, _fields, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -368,41 +368,376 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
         index = 0
         in_class = False
         class_start = 0
-        # Go 对嵌套数值量词检查组合重复次数，上限为 1000。
-        repeat_groups = [[]]
+        # 节点记录重复次数、高度、operator、FoldCase、前缀摘要、提取后高度、marker、size 和 marker cost。
+        repeat_groups = [([], [], [0])]
+        # urlfilter 无 match-case modifier 时在表达式前添加 (?i)。
+        fold_groups = [True]
+        repeat_end = -1
         capture_replacements = []
+        branch_replacements = []
+        max_size = (128 << 20) // 40
+        folded_runes = {}
+
+        def literal_identity(char, folded):
+            if not folded or char in 'İı' or not _PROCESS_CASE_VARIANTS.fullmatch(char):
+                return char
+            lower = _go_lower(char)
+            fold = char.casefold()
+            variants = (char, lower, char.upper(), fold, fold.upper())
+            return min([part for part in variants if len(part) == 1] +
+                       (['µ'] if fold == 'μ' else ['ͅ'] if fold == 'ι' else ['ᲈ'] if fold == 'ꙋ' else []))
+
+        def class_runes(node):
+            if node[2] != 1:
+                return None
+            char = node[4]
+            runes = {char}
+            if node[3] and char not in 'İı' and _PROCESS_CASE_VARIANTS.fullmatch(char):
+                if char in folded_runes:
+                    return folded_runes[char]
+                # 固定 Go caseOrbit 的额外成员，其余成员由单字符 case mapping 给出。
+                variants = (char.lower(), char.upper(), char.title(), char.casefold(),
+                            'µ', 'ſ', 'ǅ', 'ǈ', 'ǋ', 'ǲ', 'ͅ', 'ς', 'ϐ', 'ϑ', 'ϕ', 'ϖ', 'ϰ', 'ϱ', 'ϴ', 'ϵ',
+                            'ᲀ', 'ᲁ', 'ᲂ', 'ᲃ', 'ᲄ', 'ᲅ', 'ᲆ', 'ᲇ', 'ᲈ', 'ẛ', 'ẞ', 'ι', 'Ω', 'K', 'Å')
+                identity = literal_identity(char, True)
+                runes.add(identity)
+                runes.update(part for part in variants if len(part) == 1 and
+                             literal_identity(part, True) == identity)
+                folded_runes[char] = frozenset(runes)
+            return frozenset(runes)
+
+        def clean_ranges(ranges):
+            result = []
+            for start, end in sorted(ranges):
+                if result and start <= result[-1][1] + 1:
+                    result[-1] = result[-1][0], max(end, result[-1][1])
+                else:
+                    result.append((start, end))
+            return tuple(result)
+
+        def negate_ranges(ranges):
+            result, start = [], 0
+            for left, right in ranges:
+                if start < left:
+                    result.append((start, left - 1))
+                start = right + 1
+            if start <= 0x10FFFF:
+                result.append((start, 0x10FFFF))
+            return tuple(result)
+
+        @cache
+        def folding_runes():
+            # 固定 Go minFold/maxFold；一次读取现有 case 集合，不随输入的最大码点扫描。
+            return _PROCESS_CASE_VARIANTS.findall(''.join(map(chr, range(0x41, 0x1E944))))
+
+        @cache
+        def folded_range(start, end):
+            if start == end:
+                return clean_ranges((ord(char), ord(char)) for char in class_runes((1, 1, 1, True, chr(start))))
+            ranges = [(start, end)]
+            if end >= 0x41 and start <= 0x1E943 and not (start <= 0x41 and end >= 0x1E943):
+                for char in folding_runes():
+                    if start <= ord(char) <= end:
+                        ranges.extend((ord(part), ord(part)) for part in class_runes((1, 1, 1, True, char)))
+            return clean_ranges(ranges)
+
+        @cache
+        def unicode_ranges(kind):
+            if kind == 'w':
+                return tuple((start, end - 1) for start, end in zip(_REGEXP2_WORD_BOUNDARIES[::2], _REGEXP2_WORD_BOUNDARIES[1::2]))
+            if kind == 's':
+                return ((9, 13), (0x85, 0x85), (0xA0, 0xA0), (0x1680, 0x1680),
+                        (0x2000, 0x200A), (0x2028, 0x2029), (0x202F, 0x202F), (0x205F, 0x205F), (0x3000, 0x3000))
+            # 只读取 U1 的固定 Go word 集合，补足 CPython 3.11 Unicode 14 未包含的 Go 15 字符。
+            added_letters = re.compile(r'[\U0001123f-\U00011240\U00011f02\U00011f04-\U00011f10\U00011f12-\U00011f33'
+                                       r'\U0001342f\U00013441-\U00013446\U0001b132\U0001b155\U0001df25-\U0001df2a'
+                                       r'\U0001e030-\U0001e06d\U0001e4d0-\U0001e4eb\U0002b739\U00031350-\U000323af]')
+            ranges, opened = [], None
+            for start, end in unicode_ranges('w'):
+                for point in range(start, end + 1):
+                    char = chr(point)
+                    matches = (char.isdecimal() or 0x11F50 <= point <= 0x11F59 or 0x1E4F0 <= point <= 0x1E4F9
+                               if kind == 'd' else char.isalpha() or point == 0x345 or added_letters.fullmatch(char))
+                    if matches and opened is None:
+                        opened = point
+                    elif not matches and opened is not None:
+                        ranges.append((opened, point - 1))
+                        opened = None
+                if opened is not None:
+                    ranges.append((opened, end))
+                    opened = None
+            return clean_ranges(ranges)
+
+        def class_node(identity, folded=True):
+            ranges = identity[1]
+            count = sum(end - start + 1 for start, end in ranges)
+            if count == 1:
+                return 1, 1, 1, False, chr(ranges[0][0]), 1, (), 1, 0
+            if count == 2:
+                runes = (chr(ranges[0][0]), chr(ranges[-1][1]))
+                if len({literal_identity(char, True) for char in runes}) == 1:
+                    return 1, 1, 1, True, runes[0], 1, (), 1, 0
+            if ranges in (((0, 0x10FFFF),), ((0, 9), (11, 0x10FFFF))):
+                folded = None
+            return 1, 1, 'class', folded, identity, 1, (), 1, 0
+
+        def class_union(nodes):
+            ranges = []
+            operator, folded = nodes[0][2:4]
+            for position, node in enumerate(nodes):
+                if node[2] == 1:
+                    ranges.extend((ord(char), ord(char)) for char in class_runes(node))
+                else:
+                    ranges.extend(node[4][1])
+                    # Go merge 保留目标 flags；class 优先于 literal，AnyChar 不比较 FoldCase。
+                    if operator == 1 or node[3] is None:
+                        folded = node[3]
+                if position:
+                    operator = 'class'
+            return class_node(('runes', clean_ranges(ranges)), folded)
+
+        # 移除前缀后，单个 alternate 尾节点仍需参与同类分支展开。
+        def leading(node):
+            if node[2] == 'concat' or node[2] == 'alternate' and node[4] is not None:
+                return node[4]
+            if node[4] is not None and (isinstance(node[2], int) and node[2] > 0 or
+                                       node[2] in {'class', 'class-repeat'}):
+                return (((node[2], node[3], node[4], node[1], node[7]),), 0, 0, False)
+            return (), node[5], 1, node[2] == 'alternate'
+
+        def suffix_height(prefix, tail):
+            count = len(prefix) + tail[1]
+            return max([part[3] for part in prefix] + [tail[0]]) + (count > 1) if count else 1
+
+        def group_bounds(group):
+            nodes, branches, starts = group
+            merged = []
+            for part in nodes:
+                literal = isinstance(part[2], int) and part[2] > 0
+                if (merged and literal and isinstance(merged[-1][2], int) and
+                        merged[-1][2] > 0 and part[3] == merged[-1][3]):
+                    merged[-1][2] += part[2]
+                    merged[-1][4].append(part[4])
+                    merged[-1][7] += part[7]
+                else:
+                    merged.append([*part[:4], [part[4]] if literal else part[4], *part[5:]])
+            nodes = [(*part[:4], ''.join(part[4]) if isinstance(part[2], int) and part[2] > 0 else part[4],
+                      *part[5:]) for part in merged]
+            if not nodes:
+                node = (1, 1, 0, None, None, 1, (), 1, 0)
+            elif len(nodes) == 1:
+                node = nodes[0]
+            else:
+                prefix, tail_factored, tail_count, tail_alternate = [], 0, 0, False
+                for part in nodes:
+                    tokens, factored, count, alternate = leading(part)
+                    if not tail_count:
+                        prefix.extend(tokens)
+                        tail_factored, tail_count, tail_alternate = factored, count, alternate
+                    else:
+                        tail_factored = max(tail_factored, part[5] - (
+                            part[2] == 'concat' or part[2] == 'alternate' and part[4] is not None))
+                        tail_count += len(tokens) + count
+                        tail_alternate = False
+                node = (max(part[0] for part in nodes),
+                        1 + max(part[1] - (part[2] == 'concat') for part in nodes), 'concat', None,
+                        (tuple(prefix), tail_factored, tail_count, tail_alternate),
+                        1 + max(part[5] - (part[2] == 'concat' or part[2] == 'alternate' and part[4] is not None)
+                                for part in nodes),
+                        tuple(marker for part in nodes for marker in part[6]),
+                        sum(part[7] for part in nodes), sum(part[8] for part in nodes))
+            if branches:
+                entries = []
+                for part, start in [*branches, (node, starts[-1])]:
+                    if entries and part[2] == entries[-1][0][2] == 0:
+                        continue
+                    entries.append((part, start))
+                if len(entries) == 1:
+                    return entries[0][0]
+                nodes = [part for part, _ in entries]
+                if all(part[2] == 1 and part[3:5] == nodes[0][3:5] for part in nodes):
+                    return nodes[0]
+                if all(part[2] == 1 or part[2] == 'class' for part in nodes):
+                    return class_union(nodes)
+                markers = []
+                height = 1 + max(part[1] - (part[2] == 'alternate') for part in nodes)
+                rows = []
+                for part, start in entries:
+                    tokens, *tail = leading(part)
+                    rows.append((list(tokens), tail, part[7], (start,), part[2] == 'alternate' and part[4] is None))
+                result = []
+                pending = [('visit', rows, result)]
+                # 对完整连续分支组缩短前缀，再处理剩余分支；显式列表保持非递归。
+                while pending:
+                    action, data, destination = pending.pop()
+                    if action == 'concat':
+                        prefix, suffix = data
+                        ending = suffix[0]
+                        tokens, _, tail_count, _ = ending[4]
+                        summary = ((prefix, *tokens), 0, 0, False) if len(tokens) == 1 and not tail_count else (
+                            (prefix,), ending[0], 1, ending[2])
+                        destination.append((1 + max(prefix[3], ending[0]), prefix[4] + ending[1], False, None, summary))
+                        continue
+                    if action == 'alternate':
+                        reduced = []
+                        for part in (slot[0] for slot in data):
+                            if reduced and part[3] is not None and reduced[-1][3] == part[3]:
+                                summary = ((), 0, 0, False)
+                                if part[3] == 'class':
+                                    tokens = [reduced[-1][4][0][0], part[4][0][0]]
+                                    if tokens[0][:3] == tokens[1][:3]:
+                                        token = tokens[0]
+                                    else:
+                                        # Go factor 第三轮选择 operator 和 Rune 数组最复杂的合并目标。
+                                        tokens.sort(key=lambda token: (token[0] == 'class', token[1] is None,
+                                                                      len(token[2][1]) if token[0] == 'class' else 1), reverse=True)
+                                        union = class_union([(1, token[3], *token[:3]) for token in tokens])
+                                        token = (*union[2:5], 1, 1)
+                                    summary = ((token,), 0, 0, False)
+                                reduced[-1] = (1, 1, False, part[3], summary)
+                            else:
+                                reduced.append(part)
+                        alternate_height = 1 + max(part[0] - part[2] for part in reduced)
+                        destination.append(reduced[0] if len(reduced) == 1 else
+                                           (alternate_height, sum(part[1] for part in reduced) + len(reduced) - 1,
+                                            True, None, ((), alternate_height, 1, True)))
+                        continue
+                    output, actions, position = [], [], 0
+                    while position < len(data):
+                        tokens, tail, item_size, _, alternate = data[position]
+                        first = tokens[0] if tokens else None
+                        stop, prefix = position + 1, first
+                        while first is not None and stop < len(data) and data[stop][0]:
+                            second = data[stop][0][0]
+                            if isinstance(first[0], int) and isinstance(second[0], int) and first[1] == second[1]:
+                                count = 0
+                                while count < min(len(prefix[2]), len(second[2])) and prefix[2][count] == second[2][count]:
+                                    count += 1
+                                if not count:
+                                    break
+                                prefix = (count, first[1], prefix[2][:count], first[3], count)
+                            elif first[:3] != second[:3]:
+                                break
+                            stop += 1
+                        slot = []
+                        output.append(slot)
+                        if stop == position + 1:
+                            atom = ('class' if not tail[1] and len(tokens) == 1 and tokens[0][0] in {1, 'class'} else
+                                    'empty' if not tail[1] and not tokens else None)
+                            slot.append((suffix_height(tokens, tail), item_size,
+                                         tail[2] if not tokens and tail[1] == 1 else alternate, atom,
+                                         (tuple(tokens), *tail)))
+                        else:
+                            suffix_rows = []
+                            for rest, ending, old_size, starts, _ in data[position:stop]:
+                                atom, *remaining = rest
+                                if isinstance(prefix[0], int) and len(prefix[2]) < len(atom[2]):
+                                    count = len(prefix[2])
+                                    remaining.insert(0, (len(atom[2]) - count, atom[1], atom[2][count:], atom[3], atom[4] - count))
+                                suffix_rows.append((remaining, ending, max(1, old_size - prefix[4]), starts, False))
+                                markers.extend((start, start, '(?:)') for start in starts)
+                            suffix = []
+                            actions.extend((('visit', suffix_rows, suffix), ('concat', (prefix, suffix), slot)))
+                        position = stop
+                    pending.append(('alternate', output, destination))
+                    pending.extend(reversed(actions))
+                factored, size = result[0][:2]
+                markers = tuple(dict.fromkeys(markers)) if factored > height else ()
+                savings = sum(part[7] for part in nodes) + len(nodes) - 1 - size
+                factored_concat = not result[0][2] and result[0][3] is None
+                reduced_concat = factored <= height and factored_concat
+                node = (max(part[0] for part in nodes), min(height, factored),
+                        'concat' if reduced_concat else 'alternate', None,
+                        result[0][4] if factored_concat else None, factored,
+                        tuple(marker for part in nodes for marker in part[6]) + markers, size,
+                        sum(part[8] for part in nodes) + (savings + len(markers) if markers else 0))
+            # 仅当共同前缀提取会越过高度上限时使用零宽组；保留浅层 factoring 的大小归约。
+            if node[1] <= 1000 < node[5]:
+                branch_replacements.extend(dict.fromkeys(node[6]))
+                node = (*node[:4], None if node[2] == 'alternate' else node[4],
+                        node[1] if node[6] else node[5], (), node[7] + node[8], 0)
+            return node
+
         while index < len(rule.value):
             char = rule.value[index]
             if not in_class:
+                nodes, branches, starts = repeat_groups[-1]
                 if char == "(":
-                    repeat_groups.append([])
+                    repeat_groups.append(([], [], [index + 1]))
+                    fold_groups.append(fold_groups[-1])
                     if not rule.value.startswith("(?", index):
                         capture_replacements.append((index, index + 1, "(?:"))
                 elif char == ")":
                     if len(repeat_groups) == 1:
                         return None
-                    repeat_count = max(repeat_groups.pop(), default=1)
-                    repeat_groups[-1].append(repeat_count)
-                elif char not in "*+?{":
-                    repeat_groups[-1].append(1)
+                    node = group_bounds(repeat_groups.pop())
+                    fold_groups.pop()
+                    if node[1] > 1000:
+                        return None
+                    repeat_groups[-1][0].append(node)
+                elif char == '|':
+                    node = group_bounds((nodes, [], starts))
+                    if node[1] > 1000:
+                        return None
+                    branches.append((node, starts[-1]))
+                    starts.append(index + 1)
+                    nodes.clear()
+                elif char in '*+?' and index != repeat_end:
+                    if not nodes:
+                        return None
+                    count, height = nodes[-1][:2]
+                    nodes[-1] = (count, height + 1, 'repeat', None, None, nodes[-1][5] + 1, nodes[-1][6],
+                                 nodes[-1][7] + (2 if char == '*' else 1), nodes[-1][8])
+                    if height + 1 > 1000:
+                        return None
+                    repeat_end = index + 1
+                elif char == '?' and index == repeat_end and nodes and nodes[-1][2] == 'class-repeat':
+                    previous = nodes[-1]
+                    nodes[-1] = (*previous[:4], (*previous[4][:-1], True), *previous[5:])
+                elif char not in '*+?{':
+                    escape = rule.value[index + 1:index + 2] if char == '\\' else ''
+                    operator = ('class' if char in '[.' or escape in _DNS_UNICODE_ATOMS or escape == 'p' else
+                                'atom' if char in '^$' or escape in {'A', 'z'} else 1)
+                    literal = escape or char
+                    literal = literal_identity(literal, fold_groups[-1])
+                    identity = literal if operator == 1 else None
+                    if escape in _DNS_UNICODE_ATOMS:
+                        ranges = unicode_ranges(escape.lower())
+                        identity = 'runes', negate_ranges(ranges) if escape.isupper() else ranges
+                    elif char == '.':
+                        identity = 'runes', ((0, 9), (11, 0x10FFFF))
+                    nodes.append((1, 1, operator, fold_groups[-1] if operator in {1, 'class'} and char != '.' else None,
+                                  identity, 1, (), 1, 0))
             if char == "\\":
                 if rule.value.startswith(r"\p{L}", index):
+                    if not in_class:
+                        nodes[-1] = class_node(('runes', unicode_ranges('L')))
+                    else:
+                        class_properties.add(len(translated))
+                        class_atoms.append(None)
                     translated.append(r"\w")
                     index += 5
                     continue
                 if rule.value.startswith(r"\p{Nd}", index):
                     if in_class:
                         return None
+                    nodes[-1] = class_node(('runes', unicode_ranges('d')))
                     translated.append(r"\d")
                     index += 6
                     continue
                 if rule.value.startswith(r"\x{", index):
-                    atom = re.match(r"\\x\{([0-9a-fA-F]{1,6})\}", rule.value[index:])
-                    if atom is None:
+                    atom = re.match(r"\\x\{([^}]*)\}", rule.value[index:])
+                    codepoint = _hex_codepoint(atom[1]) if atom is not None else None
+                    if codepoint is None or codepoint > 0x7f:
                         return None
-                    codepoint = int(atom[1], 16)
-                    if codepoint > 0x7f:
-                        return None
+                    normalized = r"\x{" + f"{codepoint:X}" + "}"
+                    if normalized != atom[0]:
+                        replacements.append((index, index + len(atom[0]), normalized))
+                    if not in_class:
+                        literal = chr(codepoint)
+                        nodes[-1] = (1, 1, 1, fold_groups[-1], literal_identity(literal, fold_groups[-1]), 1, (), 1, 0)
+                    else:
+                        class_atoms.append(codepoint)
                     translated.append(re.escape(chr(codepoint)))
                     index += len(atom[0])
                     continue
@@ -415,6 +750,8 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
                     replacements.append((index, index + 2, _DNS_UNICODE_ATOMS[escape]))
                 elif escape not in r"\.*+?{}()[]|^$-Az" or in_class and escape in "Az":
                     return None
+                if in_class:
+                    class_atoms.append(ord(escape))
                 translated.append(r"\Z" if escape == "z" else rule.value[index:index + 2])
                 index += 2
                 continue
@@ -423,17 +760,55 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
             if char == "[" and not in_class:
                 in_class = True
                 class_start = index
+                class_probe = len(translated)
+                class_properties = set()
+                class_atoms = []
             elif char == "]" and in_class and index > class_start + 1 + (
                     rule.value[class_start + 1:class_start + 2] == "^"):
                 in_class = False
+                probe = ''.join(part for point, part in enumerate(translated[class_probe:], class_probe)
+                                if point not in class_properties) + ']'
+                negated = probe.startswith('[^')
+                positive = '[' + probe[2:] if negated else probe
+                try:
+                    if positive != '[]':
+                        re.compile(positive)
+                except re.error:
+                    return None
+                ranges, point = [], 0
+                while point < len(class_atoms):
+                    start = class_atoms[point]
+                    if start is None:
+                        point += 1
+                        continue
+                    start = 45 if start == '-' else start
+                    if (point + 2 < len(class_atoms) and class_atoms[point + 1] == '-' and
+                            class_atoms[point + 2] is not None):
+                        end = class_atoms[point + 2]
+                        end = 45 if end == '-' else end
+                        if start > end:
+                            return None
+                        point += 3
+                    else:
+                        end = start
+                        point += 1
+                    ranges.extend(folded_range(start, end))
+                if class_properties:
+                    ranges.extend(unicode_ranges('L'))
+                ranges = clean_ranges(ranges)
+                # 同一个 Go push 归约用于原始 class 和两个并集合并位置。
+                nodes[-1] = class_node(('runes', negate_ranges(ranges) if negated else ranges))
             elif char == "(" and not in_class and rule.value.startswith("(?", index):
                 if rule.value.startswith("(?:", index):
                     translated.append("(")
                     index += 3
+                    repeat_groups[-1][2][0] = index
                     continue
                 if rule.value.startswith("(?i:", index) and rule.value.isascii():
                     translated.append("(")
+                    fold_groups[-1] = True
                     index += 4
+                    repeat_groups[-1][2][0] = index
                     continue
                 named = re.match(r"\(\?<([A-Za-z_][A-Za-z0-9_]*)>", rule.value[index:])
                 if named is None:
@@ -441,45 +816,67 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
                 translated.append("(")
                 capture_replacements.append((index, index + len(named[0]), "(?:"))
                 index += len(named[0])
+                repeat_groups[-1][2][0] = index
                 continue
             elif char == "{" and not in_class:
                 bounds = re.match(r"\{([0-9]+)(?:,([0-9]*))?\}", rule.value[index:])
                 if bounds:
-                    counts = tuple(count.lstrip("0") or "0" if count else count for count in bounds.groups())
-                    if any(len(count) > 4 or len(count) == 4 and count > "1000"
-                           for count in counts if count) or rule.value[index + len(bounds[0]):].startswith("+"):
+                    counts = tuple(_capture_number(count) if count else None for count in bounds.groups())
+                    if (counts[0] is None or bounds[2] and counts[1] is None or
+                            any(count > 1000 for count in counts if count is not None) or
+                            rule.value[index + len(bounds[0]):].startswith("+")):
                         return None
-                    if not repeat_groups[-1]:
+                    if not nodes:
                         return None
-                    repeat_count = int(counts[1] or counts[0])
-                    if counts[1] == "":
+                    repeat_count = counts[1] if counts[1] is not None else counts[0]
+                    if bounds[2] == "":
                         repeat_count = max(1, repeat_count)
-                    repeat_groups[-1][-1] *= repeat_count
-                    if repeat_groups[-1][-1] > 1000:
+                    previous = nodes[-1]
+                    count, height = previous[:2]
+                    fixed_class = previous[2] in {1, 'class'} and (bounds[2] is None or counts[0] == counts[1])
+                    size = (previous[7] + 2 if not counts[0] else counts[0] * previous[7] + 1) if bounds[2] == '' else (
+                        repeat_count * previous[7] + repeat_count - counts[0])
+                    nodes[-1] = (max(1, count) * repeat_count, height + 1,
+                                 'class-repeat' if fixed_class else 'repeat', None,
+                                 (previous[2], previous[3], previous[4], repeat_count, False) if fixed_class else None,
+                                 previous[5] + 1, previous[6], max(1, size), previous[8] * repeat_count)
+                    if nodes[-1][0] > 1000 or height + 1 > 1000 or nodes[-1][7] > max_size:
                         return None
-                    normalized = "{" + counts[0] + ("," + counts[1] if counts[1] is not None else "") + "}"
+                    repeat_end = index + len(bounds[0])
+                    normalized = "{" + str(counts[0])
+                    if bounds[2] is not None:
+                        normalized += "," + (str(counts[1]) if counts[1] is not None else "")
+                    normalized += "}"
                     if normalized != bounds[0]:
                         replacements.append((index, index + len(bounds[0]), normalized))
                     translated.append(normalized)
                     index += len(bounds[0])
                     continue
-                repeat_groups[-1].append(1)
+                nodes.append((1, 1, 1, fold_groups[-1], '{', 1, (), 1, 0))
+            if in_class and char != '[' and not (char == '^' and index == class_start + 1):
+                class_atoms.append('-' if char == '-' else ord(char))
             if char == "=":
                 replacements.append((index, index + 1, r"\x{3D}"))
             if char == "-" and in_class and translated[-1:] == [r"\w"]:
                 translated.append(r"\-")
             else:
-                translated.append(char)
+                translated.append(r"\{" if char == "{" and not in_class else char)
             index += 1
+        if in_class or len(repeat_groups) != 1:
+            return None
+        bounds = group_bounds(repeat_groups[0])
+        if bounds[1] > 1000 or bounds[7] > max_size:
+            return None
         try:
             re.compile("".join(translated))
         except RecursionError:
             if not _valid_deep_regex("".join(translated)):
                 return None
-            # DNS 只消费匹配结果，且上述扫描已拒绝 backreference；非捕获组保留量词绑定。
-            replacements.extend(capture_replacements)
         except re.error:
             return None
+        # DNS 只消费匹配结果，且上述扫描已拒绝 backreference；非捕获组保留量词绑定。
+        replacements.extend(capture_replacements)
+        replacements.extend(branch_replacements)
         parts = ['/']
         cursor = 0
         for start, end, normalized in sorted(replacements):
