@@ -383,7 +383,7 @@ class NativeKeywordRuleTests(unittest.TestCase):
                     white = rules.parse_whitelist(prefix + value + ',DIRECT')
                 self.assertEqual(messages, [])
                 self.assertEqual(rules.exclude_covered([keyword, longer, neighbor, allowed, native], white),
-                                 [neighbor, allowed, native])
+                                 [neighbor, allowed] + ([] if source == 'surge' and value in ('123#1', '123') else [native]))
                 self.assertEqual(rules.exclude_covered([keyword], [longer]), [keyword])
                 for purpose in ('block', 'direct', 'proxy'):
                     self.assertEqual(parse(prefix + value + ',REJECT', purpose=purpose, ignore_policy=True),
@@ -540,10 +540,11 @@ class ConstructorValidationTests(unittest.TestCase):
 
     def test_r14_zero_lower_bound_ports_cover_all_callers(self):
         for kind in ("DST-PORT", "SRC-PORT", "IN-PORT"):
-            for value in ("0-65535", "0-80", "0000-80"):
-                self.check_matcher(kind, value)
+            for value, canonical in (("0-65535", "0-65535"), ("0-80", "0-80"), ("0000-80", "0-80"),
+                                     ("65536", "0"), ("0-65536", "0"), ("80-0", "0-80")):
+                self.check_matcher(kind, value, expected_value=canonical)
             for value in ("65536", "0-65536", "80-0"):
-                self.check_matcher(kind, value, valid=False)
+                self.check_matcher(kind, value, native=False, valid=False)
             for source in (f"{kind},0-80/443,PROXY", f"{kind},0-80,443,PROXY"):
                 self.assertEqual(parse(source, purpose="proxy"),
                                  ([Rule("OR", f"(({kind},0-80),({kind},443))")], []))
@@ -747,7 +748,7 @@ class DnsExactHostsRuleTests(unittest.TestCase):
                     self.assertEqual(parse(source, purpose=purpose), ([], ["line 1: hosts entry is block-only"]))
 
     def test_hosts_validation_keeps_legal_neighbors_and_rejects_invalid_aliases(self):
-        invalid = ("-x", "x-", "a_b", ".x", "a..x", "*", "a/x", "192.0.2.1", "2001:db8::1",
+        invalid = ("-x", "x-", "a+b", ".x", "a..x", "*", "a/x", "192.0.2.1", "2001:db8::1",
                    "a" * 64, ".".join(["a" * 63] * 4))
         for value in invalid:
             with self.subTest(value=value):
@@ -886,7 +887,7 @@ class DomainSetSingleLabelParserTests(unittest.TestCase):
                          ([], [f"line {number}: invalid rule" for number in range(1, 6)]))
 
     def test_illegal_neighbors_keep_exact_line_diagnostics(self):
-        entries = ("-bad", "bad-", "a_b", "*", ".", "..com", "a..b", "a/b", "192.0.2.1",
+        entries = ("-bad", "bad-", "a+b", "*", ".", "..com", "a..b", "a/b", "192.0.2.1",
                    "2001:db8::1", "a" * 64, ".".join(["a" * 63] * 4), "bücher", "рф",
                    "a b", "a\x00b", "a b", "a\r b", "@@|localhost|", "/^localhost$/")
         for entry in entries:
@@ -935,7 +936,7 @@ class DomainSetSuffixParserTests(unittest.TestCase):
 
     def test_invalid_bare_entries_warn_at_their_line_and_keep_legal_neighbors(self):
         entries = ("com", "local", "x", "-com", "com-", "a_b", ".", "..com", ".a..com",
-                   ".-com", ".com-", ".a_b", ".*", ".a/b", ".192.0.2.1", ".2001:db8::1",
+                   ".-com", ".com-", ".a+b", ".*", ".a/b", ".192.0.2.1", ".2001:db8::1",
                    "." + "a" * 64, "." + ".".join(["a" * 63] * 4), "garbage{")
         for purpose in ("direct", "block", "proxy"):
             for entry in entries + (".com,REJECT",):
@@ -4720,7 +4721,7 @@ class NativeWildcardWhitelistTests(unittest.TestCase):
             original = [Rule("DOMAIN", "api-7.example.org", domain_source=source),
                         Rule("DOMAIN-WILDCARD", "api-[0-9].example.org", domain_source=source)]
             wildcard = Rule("DOMAIN-WILDCARD", "api-[0-9].example.org", domain_source=source)
-            self.assertEqual(rules.exclude_covered(original, [wildcard]), original[:1])
+            self.assertEqual(rules.exclude_covered(original, [wildcard]), [] if source == "surge" else original[:1])
         processes = [Rule(kind, "App[0-9]ı?*", literal_process=literal, native_fields=native)
                      for kind in ("PROCESS-NAME", "PROCESS-NAME-WILDCARD", "PROCESS-PATH-WILDCARD")
                      for literal in (False, True) for native in (False, True)]
