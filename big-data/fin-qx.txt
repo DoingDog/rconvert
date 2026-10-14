@@ -1,4 +1,4 @@
-# big-data rules: 10543
+# big-data rules: 10547
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -995,6 +995,7 @@ HOST,cdn.onetime.dog,LIST
 HOST,cdn.parsely.com,LIST
 HOST,cdn.perfops.net,LIST
 HOST,cdn.pixabay.com,LIST
+HOST,cdn.priv.center,LIST
 HOST,cdn.privacy.com,LIST
 HOST,cdn.quadpay.com,LIST
 HOST,cdn.readmoo.com,LIST
@@ -2729,6 +2730,7 @@ HOST,public.saasexch.com,LIST
 HOST,pubmirror.plutex.de,LIST
 HOST,qmod.quotemedia.com,LIST
 HOST,release.runcloud.io,LIST
+HOST,releases.openai.com,LIST
 HOST,replicate.npmjs.com,LIST
 HOST,repo.extreme-ix.org,LIST
 HOST,rum-cdn.perfops.net,LIST
@@ -3315,6 +3317,7 @@ HOST,images.en.aptoide.com,LIST
 HOST,images.everyplate.com,LIST
 HOST,images.findagrave.com,LIST
 HOST,images.icon-icons.com,LIST
+HOST,images.macworld.co.uk,LIST
 HOST,img.foresightnews.pro,LIST
 HOST,imgs.search.brave.com,LIST
 HOST,imgs.socialinsider.io,LIST
@@ -4521,6 +4524,7 @@ HOST,cdn.designerapp.osi.office.net,LIST
 HOST,cdn.quickemailverification.com,LIST
 HOST,cdn.rex.contents.rakuten.co.jp,LIST
 HOST,config.extension.grammarly.com,LIST
+HOST,customer-first-focus.b-cdn.net,LIST
 HOST,dev.visualwebsiteoptimizer.com,LIST
 HOST,distrib-coffee.ipsl.jussieu.fr,LIST
 HOST,download.tensorflow.google.com,LIST

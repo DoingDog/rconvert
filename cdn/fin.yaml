@@ -1,4 +1,4 @@
-# cdn rules: 4778
+# cdn rules: 4781
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -736,6 +736,7 @@ payload:
   - "DOMAIN,cdn.perfops.net"
   - "DOMAIN,cdn.pixabay.com"
   - "DOMAIN,cdn.plus500.com"
+  - "DOMAIN,cdn.priv.center"
   - "DOMAIN,cdn.privacy.com"
   - "DOMAIN,cdn.quadpay.com"
   - "DOMAIN,cdn.readmoo.com"
@@ -2417,6 +2418,7 @@ payload:
   - "DOMAIN,images.everyplate.com"
   - "DOMAIN,images.findagrave.com"
   - "DOMAIN,images.icon-icons.com"
+  - "DOMAIN,images.macworld.co.uk"
   - "DOMAIN,img.foresightnews.pro"
   - "DOMAIN,imgs.search.brave.com"
   - "DOMAIN,imgs.socialinsider.io"
@@ -3309,6 +3311,7 @@ payload:
   - "DOMAIN,cdn.quickemailverification.com"
   - "DOMAIN,cdn.rex.contents.rakuten.co.jp"
   - "DOMAIN,config.extension.grammarly.com"
+  - "DOMAIN,customer-first-focus.b-cdn.net"
   - "DOMAIN,dev.visualwebsiteoptimizer.com"
   - "DOMAIN,edgeassetservice.azureedge.net"
   - "DOMAIN,explorer-api.walletconnect.com"
