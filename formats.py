@@ -64,9 +64,19 @@ def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tu
     if kind not in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
         return kind, value
     if supported is SURGE_TYPES:
-        if source == "mihomo" and (re.search(r"[a-z]", value, re.I) or
-                                    kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")):
-            return kind, None
+        if source == "mihomo":
+            if (re.search(r"[a-z]", value, re.I) or
+                    kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]") or
+                    kind == "DOMAIN-KEYWORD" and value.endswith(".")):
+                return kind, None
+            if kind == "DOMAIN-WILDCARD":
+                # 尾星号仅在最后必要 token 为非点字面字符时吸收 hostname 根点。
+                if not value.endswith("*") or value.rstrip("*").endswith((".", "?")):
+                    return kind, None
+                # 一个 ? 与星号的连续片段只要求非空，UTF-8 byte 与字符匹配等价。
+                if any("?" in part and ("*" not in part or part.count("?") != 1)
+                       for part in re.findall(r"[?*]+", value)):
+                    return kind, None
     elif supported is MIHOMO_TYPES and source == "surge":
         if kind == "DOMAIN-KEYWORD":
             # Surge 忽略 hostname 末尾根点；keyword 的末尾点必须位于 hostname 内部。
