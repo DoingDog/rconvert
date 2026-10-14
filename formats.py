@@ -335,12 +335,14 @@ def _native_wildcard_regex(value: str, budget: int) -> str | None:
 
 def _dns_pattern(rule: Rule, *, exception: bool = False) -> str | None:
     budget = _DNS_LINE_LIMIT - 1 - (2 if exception else 0)
-    parts = ('|', rule.value, '|') if exception and rule.kind == 'DOMAIN' else (_dns_body(rule, budget),)
+    parts = ('|', rule.value, '|') if exception and rule.kind == 'DOMAIN' and '_' not in rule.value else (_dns_body(rule, budget),)
     return _dns_join(parts, budget)
 
 
 def _dns_body(rule: Rule, budget: int) -> str | None:
     if rule.kind == "DOMAIN":
+        if '_' in rule.value:
+            return _dns_join((r'/(?s-i:\A', _dns_literal(_go_lower(rule.value), budget), r'\z)/'), budget)
         return _dns_join(('0.0.0.0 ', _go_lower(rule.value)), budget)
     if rule.kind == "DOMAIN-SUFFIX":
         return _dns_join(('||', rule.value, '^'), budget)
@@ -350,7 +352,7 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
         value = _go_lower(rule.value)
         if rule.kind == 'DOMAIN-KEYWORD':
             return _dns_join((r'/(?s-i:\A.*', _dns_literal(value, budget), r'.*\z)/'), budget)
-        if any(char in value for char in '[]') or not _valid_domain(rule.kind, value):
+        if any(char in value for char in '[]') or not _valid_domain(rule.kind, value, domain_source=rule.domain_source):
             return None
         return _dns_join(('/', _native_wildcard_regex(value, budget - 2), '/'), budget)
     if rule.kind == "DOMAIN-KEYWORD":
