@@ -6,16 +6,17 @@ artifact_contract: ce-unified-plan/v1
 product_contract_source: confirmed-functional-audit
 execution: code
 origin: docs/superpowers/specs/2026-10-11-functional-audit-design.md
-baseline: 32236187e11d4fbc1f01245989798e6246ac42c6
+baseline: fe96a2b7946a530f29e055f531d6060326f0994b
+historical_baseline: 32236187e11d4fbc1f01245989798e6246ac42c6
 ---
 
 # 功能全面审查修复实施计划
 
 ## Goal Capsule
 
-**目标：**七组六格式的规则、白名单、HTTPS 来源及生产更新按已确认语义工作，22 项修复与迁移任务得到可核查的正确结果，用户合法维护 `static/` 不受内容或工作区状态限制。
+**目标：**七组六格式、白名单、HTTPS 来源及生产更新按已确认语义工作。原 22 项任务和 V6 static alias、V4 wildcard 根点两个 fix 已完整提交；当前在 fe96/tree `916ce25ddc10fddcc2a7b4acfc5af01263fc032f` 上完成规格 U5D1-U5D4，再完成新候选 U5 和真实 Ubuntu U6。static 的合法内容和状态不受固定断言限制。
 
-**方法：**按完整规格逐项 TDD，四个编码代理在独立 worktree 内连续完成实现、测试、独立规格审查、修正、简化、复审和提交；随后独立代理完成集成、真实来源和远程 Ubuntu 验收。主会话只合并完整提交、正常推送及委派远程验收。
+**方法：**本轮由独立 worktree 的一个编码 workflow 串行负责重叠的 formats 修改，按下文 S1-S4 连续完成公开 seam red -> minimal green、调用方/旧 fixture、相关回归、独立规格与正确性审查、修正简化、复审和正常英语提交。独立部分的只读审查并行；主会话只合并完整交付，不补未完编码。U1-U4 条款保留为已完成任务的范围和审计记录，不重新执行。
 
 **依据顺序：**本次明确约束、[完整修复规格](../specs/2026-10-11-functional-audit-design.md)、本计划、已完成且核对过的固定源码/反证。登记表的实现建议须服从实际调用链。文档提交不表示生产修复已完成。
 
@@ -25,15 +26,15 @@ baseline: 32236187e11d4fbc1f01245989798e6246ac42c6
 
 ### Summary
 
-按完整规格完成 21 项确认缺陷修复和 C2 原样文件迁移，验证七组实际产物与 Ubuntu 生产更新。
+保留已完成的 21 项缺陷修复和 C2 原样迁移，在其完整提交 fe96 上完成 U5D1-U5D4 的有限-profile 投影修复，验证新候选七组实际产物与 Ubuntu 更新。Surge Unicode/IDNA 全域等价、一般 canonical 反向转换和完整 Surge white 等价视图不列为修复承诺；其余明确边界不减少。
 
 ### Problem Frame
 
-已有测试通过的基准仍丢失合法 matcher、遗漏白名单覆盖并发布不符合目标限制的规则。生产 static 的固定内容测试限制合法维护；现有 tg 本地白名单还需按当前要求迁入 static。
+fe96 已包含原 22 项交付、static 合法维护和 tg-sentinel 原样迁移。后续独立反证确认 native 与 Surge/DNS 在可达 raw Host 的 case/root 上不同，DNS wire presentation 还改变部分 literal/regex 的匹配。当前修改针对这些已确认的目标转换及其 white/bytes/诊断调用方，未证明的闭源 Unicode/IDNA 保持未知。
 
 ### Requirements
 
-完整实现规格中的 R1-R14、F1-F4、N1-N2、C1-C2。以下表索引任务归属，具体行为、边界及反例见规格对应条款。
+原 R1-R14、F1-F4、N1-N2、C1-C2 的任务归属及回归条件保留。当前 U5D1-U5D4 细化实际入口的 case/root/wire 行为，F1 的 constructor-only DNS 预期按完整证据更正，F2/F3 的构造与加载正例继续实际验收。下表和规格共同约束新候选，不把旧绿灯用于批准新树。
 
 | 要求 | 可核查的结果 | 任务 |
 |---|---|---|
@@ -51,14 +52,18 @@ baseline: 32236187e11d4fbc1f01245989798e6246ac42c6
 | R12 | Surge 同来源字符类 white 删除匹配 exact，保留反例 | U1 |
 | R13 | 相同 raw DOMAIN-REGEX white 删除 blocker | U1，U2核查目标诊断 |
 | R14 | braced hex 按数值接受前导零，DNS canonical 转换 | U1、U2 |
-| F1 | native uppercase DNS exact hosts 按 Go simple lowercase 输出 | U2 |
+| F1 | 已完成 constructor lower 修复；本轮 native exact/suffix 按完整 case/root 证据在 DNS unsupported，普通正确 literal 保留 | 原 U2，当前 S2 |
 | F2 | DNS 有界构造，所有最终行含 LF 不超过65,536 bytes | U2 |
 | F3 | portable DNS regex 消除 replace= sentinel，匹配范围不变 | U2 |
 | F4 | 根点敏感 native matcher 不投影到 Surge，完整 logical skip | U2 |
 | N1 | gzip/x-gzip 的 ASCII OWS 正确解码，现有限制保留 | U3 |
 | N2 | redirect body 不被无界读取，标准 redirect 行为保留 | U3 |
 | C1 | static 合法编辑影响实际产物，生成器不修改输入 | U4 |
-| C2 | tg-sentinel 原样迁至 static，同步路径且单纯迁移不改变规则和数量 | U4 |
+| C2 | tg-sentinel 已原样迁至 static，保留路径、单纯迁移不改变数量及合法编辑回归 | 原 U4，当前 U5 |
+| U5D1 | native exact/suffix 的 Surge 局部 skip，Surge ASCII literal 的 Mihomo paired-class/profile 投影，非 ASCII legacy 不变 | S1 |
+| U5D2 | DNS 三消费者统一 case/root 判定，覆盖 exact exception 快路径、无字母 root 及 native * 正例 | S2 |
+| U5D3 | DNS 完整 actual raw matcher 的闭合 scanner 证书、rune/byte presentation 有界编码及未知结构局部 unsupported；取消非成员原输出 fallback，保留可证 regex、k/i aliases、A/B/C 和原控制 | S2、S3 |
+| U5D4 | actual white 完整包含、分流与原 kind 诊断、一次 global covered、真实 source/white bytes、冻结和 README | S1、S4、U5 |
 
 ### 边界与影响
 
@@ -72,15 +77,21 @@ baseline: 32236187e11d4fbc1f01245989798e6246ac42c6
 
 ### Key Technical Decisions
 
+KTD1-KTD5 记录已完成 U1-U4 的设计和保留边界；KTD6-KTD8 规定本轮规格 U5D1-U5D4 与实施 S1-S4。前序 U2 审计里的 D1-D4 是其已完成 slice 名称，本轮编号不改写或重开这些记录。
+
 - KTD1. **按共享修改位置分配四个 worktree。**R1-R14 的公共来源层归 U1；R3-R5、R11、R14 的全部目标消费及 F1-F4 归 U2；N1-N2 归 U3；C1-C2 归 U4。U2 合入完整 U1 提交后自行完成联动，全部 render 消费点由同一代理负责，避免并发修改同函数。
 - KTD2. **复用当前有界校验。**R1/R14 使用字符串界限和 canonical probe，R7 复用 unsigned range 循环，R9 使用 `ip_interface`，R3 扩展既有非递归 validator。它们保留实际来源语义，直接避免无界整数转换和已有 parser 之间的差异。
 - KTD3. **R11 在当前诊断 dict 中记录完整覆盖。**generate 使用一次 render 的逐规则结果，区分已覆盖与完全 unsupported；混合输入不会误清空旧产物，公开返回类型保持不变。
 - KTD4. **F2 在构造时使用真实最终行预算。**同一 U2 修改 pattern、三处 render 消费者及 header，按 block/allow/white 的实际前缀计数。这样既限制展开，也保留恰好达到 scanner 上限的合法行；F3 转义增长在同一预算中核查。
 - KTD5. **N2 复用标准 redirect 并关闭旧 response。**成功取得新 Request 后 close 旧 fp，阻止标准库 drain 消费旧 body，同时保留原 Location、aliases、loop 和最终读取限制。
 
+- KTD6. **U5D1 只增加已证 ASCII profile。**显式 `(?-i:)` 和 ASCII paired classes 关闭 regexp2 的额外 Unicode alias；suffix 的原 case-sensitive arm 完整保留非 ASCII legacy。全 render/white/重导入是否不回归另行验收，不能从单 matcher 直接推得。
+- KTD7. **U5D3 为完整 matcher 发放闭合结构证书并编码。**复用 DNS scanner 的既有 group/alt/class/repeat 摘要、固定 lower/range helpers 和预算；byte wildcard 用 T，rawregex 原子用实际来源 rune 集合的 E，case/root 证书与最终目标成本全部通过才输出。中性 group 继承证书，alternation 不漏分支，未获证书统一 DNS unsupported，禁止非成员旧输出 fallback。只做固定深度 UTF-8/decimal 目标编码，不增加一般 regex parser/AST/等价引擎、decoder/client matcher、新 cache/sidecar/公共类型/配置/依赖；被替代的 rune-width 实现删除。
+- KTD8. **U5D4 逐目标证明完整包含。**新 paired family 的有限识别只用于 actual-native 语义；不反向恢复 Surge，不建完整 Surge white 视图。white 可用、target blocker 属于 actual target white 两项同时满足才删除。canonical k 与部分 suffix white 的 K.TEST/K.test. 反例永久保留。
+
 ### 依赖与位置归属
 
-行号以基准提交为坐标。实施前按函数名重新定位，禁止按已变动行号执行替换。
+U1-U4 表及其单元内行号是原基准坐标，属于已完成归属记录；当前 U5D1-U5D4 以 fe96 的函数名重新定位，不按旧行号替换。新修改只由下文 S1-S4 的 owner 写入，原 U1-U4 不重新启动。
 
 | 任务 | 实施位置 | 测试/文档归属 | 不得修改的位置 |
 |---|---|---|---|
@@ -191,9 +202,11 @@ flowchart LR
 
 主集成worktree的`.tmp/coverage-critic/scripts/probe.py`包含R14公开入口复现；`.tmp/coverage-critic/probe.py`和`public-probes.json`提供92文件分类及其他公开接口对照。标题证据为同目录的`title_probe.py`与`title-probe.json`，全文覆盖归档为`completed-report-2026-10-11.md`。已读正式完成的`final-mapping-delta-wf_fc7b3a22-e49-2026-10-11.json`，保留21项确认缺陷和新增C2迁移。F4资料统一位于`.tmp/proof-surge-recovery/`，包括`public-results.json`、`scripts/proof_public.py`和实际存在的`source-index.json`，固定VLESS/metadata/RuleHost路径未运行客户端。所有资料只读，下载资料与自编脚本目录隔离，读取下载资料的Python使用`-I`。
 
-QX未知原始语义、闭源客户端运行、初始报告中的未确认候选不作为额外确认项。若收到新的充分确认，文档代理同步更新规格、依赖和验收并复审；当前完整交付涵盖22项。
+QX 未知原始语义、闭源客户端运行、初始未确认候选不升级为确认项。后续已确认的 ASCII、exact/suffix、无字母 root 和 wire 报告已纳入 U5D1-U5D4。`wf_500ecb6b-882` 草稿未获批准；`wf_b9b9cf48-117` 原 workflow completed/blocked 与后续 canonical DNS 24 文件封存分别记录。最新 semantic-proof SHA `e48dc5ef612f0ab3e319c776bd8f172c0216d1fc021d2ab729b4a100be14742f`、seal SHA `15da095b740f8f731b06adf3b643baeb70da15ab3bfdf932f66551b3c4178ecd`、wire conclusion SHA `87ac9335b03889a01be878cbd419f53bab00fed15cbc3c5fe773069dc45d4f4e` 均为当前依据；不重复其已完成矩阵，不把其 UNPROVEN 全域 Surge 等价写成实施前置条件。旧 bfae 的 1170 tests/TLS 成功仅对应旧候选，原 static 运行只等主动终态，不读 pending、不取消、不改稿、不重复 full/generation。
 
 ## Implementation Units
+
+U1-U4 以下原步骤保留为已完成任务的实施与审计记录，不作为本轮重开指令。其中 DNS constructor-only、raw Host regex 及旧 fixture 预期由当前规格 U5D1-U5D4 和 S1-S4 修订；历史通过结果不追认为新语义已验证。新的连续执行从 S1 开始。
 
 ### U1. 公共rules/parser与来源覆盖
 
@@ -368,25 +381,79 @@ QX未知原始语义、闭源客户端运行、初始报告中的未确认候选
 5. C2提交：新路径严格读取成功，旧文件消失，文件名和迁移时全部bytes不变；未覆盖已有不同目标。全套test_sources/test_readme/test_generate/workflow及完整suite、规格审查、简化修正、复审、diff检查后提交原样迁移及必要引用，C2的README精确链接在这一提交完成。
 6. README最终说明：收到完整U1/R13主动交付后，在自己的worktree合入并核对raw DOMAIN-REGEX white行为，更新:73相邻支持范围说明。收到完整U2/R11交付后核对covered/unsupported、冻结及其他必要目标说明，再更新同一README；不让其他owner编辑此文件。必要README断言、完整suite、规格审查、修正、复审和提交全部由U4连续完成。U4完整交付包括C1、C2、最终说明各提交及检查结果。
 
+### 当前 U5D1-U5D4：单一连续 workflow 的 S1-S4
+
+**基准与写入。**fresh worktree 核 branch/HEAD/index/工作区干净，仅正常 ff 到 fe96；发现已有内容即保护其现状。禁止 reset/stash/amend/force 或绕过 hooks/signing/权限。当前新文档 owner 在自身新 branch 用标准 JSON parser 从已核 completed bundle 显式映射两路径，核 CRLF 原 bytes/SHA 后先 spec 后 plan；原 owner 的文档 WIP 只读保留。只改这两正式路径，完整 draft、逐要求/正反例/调用方/safety checklist、diff 与回执另存自有 ignored UUID 目录。stage 两文档后 git write-tree 封存不可变 snapshot_tree，记录 base/两个 blob/实际 bytes/SHA，暂不 commit。两路独立审查在各自 worktree 只读共享 Git 对象的精确 tree/diff，不写 writer 原目录。必要修正后重封存并复审。最终新提交 owner 在自己 fresh worktree 正常 ff 同 base、核无 WIP，仅 `git restore --source=<approved_tree> --staged --worktree -- <两明确路径>` 导入；实际 tree 与批准 tree 一致、其余 99 tracked 不变后正常英语 commit，实际执行 hooks/signing，不跨目录提交或冒充原 owner，再启动编码。
+
+**生产修改范围。**主要文件仅 `formats.py`，复用 `_domain_value(64)`、`_logical_value(177)`、`_native_wildcard_regex(318)`、`_dns_pattern(350)`、`_dns_body(356)`、`_mihomo_rule(906)`、`_route_whitelist(936)`、`render(983)`。`rules.py` 的 parser/normalize/exclude_covered、`generate.py` 的既有 normalized 判空和 transport、`sources.py`、JSON、Actions、static 为验证范围；不预设产品修改。若公开失败证明必要联动，先记录具体输入和调用方，再由同一 owner 精确修复并完整审查，不改已正确的覆盖算法或配置来隐藏丢失。
+
+| 实际调用位置（fe96） | 必须触达的修改或检查 | 旧 fixture 影响 |
+|---|---|---|
+| `_domain_value` -> `_logical_value:231`、`_mihomo_rule:911`、`_route_whitelist:961,977`、`render:1019` | exact/suffix 来源判断及 U5D1 构造；原 wildcard/keyword 的 Surge 保护独立保留 | native/Surge/QX 同 payload 不能机械视为相同 matcher；logical 编码、顺序、native_fields 及 quotes 保留 |
+| `render:1037,1051-1053,1087-1090` | full/split/DOMAIN-SET 按实际投影 kind 分流；诊断记原 kind | native exact/suffix Surge skip，scalar split 豁免及整条 logical skip |
+| `_dns_pattern` -> `_dns_body`；`render:1004,1047,1094` | exact exception 快路径前统一 U5D2；U5D3 literal/token 构造、实际 @@ 和 LF 预算 | F1、native raw-host byte/keyword、原 17/18/20/32 支持预期不能继续当完整入口真值 |
+| `_route_whitelist`、`render:1058-1098` | actual white 可用性/包含证明、批量 remaining、原 kind/每条完整覆盖 | 新 native family 相互覆盖与 canonical blocker/partial-white 反例分开；不能按 kind 计数相抵 |
+| `generate:132-188,239-297` | 实际 bytes source/white、strict generated body、一次 normalized 判空 | 当前 big-data 读 cdn/fin.txt；fin.yaml 新 regex 回读的目标支持须按 actual kind，不能回补来源 |
+| `_logical_regex_value/_yaml_value`、最终排序/header | 不新增文件 parser；最终类型/行字符数/字典序、UTF-8/LF、65,536 上限 | 修改后字面预期由最终行计算，不固定旧数量/hash |
+
+**受影响测试与文档。**在现有 `tests/test_functional_audit_projection.py`、`tests/test_functional_audit_dns.py` 增加本次永久回归，更新 `tests/test_formats.py`、`tests/test_generate.py`、`tests/test_native_domains.py`、`tests/test_yaml_coverage.py`、`tests/test_rules.py` 的实际受影响断言，以及 `README.md/tests/test_readme.py` 的必要实际支持说明。`expected_domain` 在 test_formats/test_generate/test_rules 有 28 个调用，含嵌入子进程文本及同一行的多次调用；另核定义和 import 记录。每个调用逐处核原来源，保存位置、真实输入、expected kind/value、修改原因；不全局替换 native 对照，不只修改 helper 迎合结果。保持原输入/邻居、deep/磁盘/三 purpose×三 no_resolve 和原 8 秒/4300/1000 条件，不删测试、不加 skip。其余 domain coverage/YAML/static/transport/path/transaction 模块作为保留回归。
+
+#### S1：U5D1 路由与其不可分割的 U5D4 white
+
+1. **公开 red。**用 `parse/parse_whitelist/Rule/normalize/exclude_covered/render` 复现 native exact/suffix 的 A.test/a.test. Surge 扩大、Surge exact/suffix 的 Mihomo 遗漏，suffix X.a.test 正例；scalar、AND/OR/NOT/nested、ordinary/native quoted 字段和 native_fields=False 标量均覆盖。立即加入会被 kind 改变影响的 actual-white red，不能将 broken public render 留给后续 slice。
+2. **最小 green。**在 `_domain_value` 构造规格 U5D1 的显式 -i exact 与双 arm suffix，共用现有 logical/YAML 编码；native->Surge 局部 skip，DOMAIN-SET 只消费经过检查的实际投影。保留其余来源和非 ASCII legacy，不新增一般 canonical->Surge 或完整 white 等价视图。
+3. **实际包含。**只为新增 paired family 的顶层 matcher 增加严格形状/literal/回编码识别，不解析输出重造 Rule。same family E->S、S->parent S 分别证明两个 arm；new E 的 ASCII-only keyword/wildcard、new S 的必要 literal keyword 使用本目标实际谓词。复用当前批次、既有 literal/keyword/wildcard helpers 和 `_has_parent`，只加入实际用到的私有 tuple/index；不逐条重建白名单、不增加缓存公共 Rule。
+4. **反例与诊断。**原 canonical k.test blocker + U5D1 部分 suffix white test，在 K.TEST/K.test. 上不得删除；actual canonical E_a.test 属于完整 actual canonical S_test 的已证定理单独记录，不将其当本 slice 必须新增的功能。native white 反向、strict-subset white、宽 suffix + 窄 exact、logical 叶子覆盖不提升、localhost./`*.*`、cdn.123./`*.123.*`、windows suffix 保留；已证 windows-*.net 正例继续删除。不同 value/options/interface 同 kind、重复 projection、allow、全 unsupported 分别核 per-file unsupported/covered 和 global once。
+5. **调用方回归及提交。**完成 28 处 expected_domain 来源清单，修正由实际类型改变造成的完整六输出、排序、count、YAML 回读和 public generate 旧预期。ordinary U5D1 matcher 在非 ASCII及多根点上的 legacy 保持用字面控制核对，但不替代 white/冻结/依赖验收。运行相关 format/generate/native/YAML/rules/coverage 模块，独立规格和正确性审查，修正/简化/复审后仅提交完整 S1；任何保留公开覆盖回归未通过不得提交。
+
+#### S2：U5D2 与 native wire/byte 构造
+
+1. **公开 red。**DNS block、public allow、真实外部 white 同时覆盖 native exact/suffix 的 ASCII case/root、a.example/ad*.example wildcard、keyword a.test/A.test、无字母 *.*.* 的 x.test/x.test.。保留 native *、非空 FQDN profile 上的 *?* universal 控制、数字 keyword123、Unicode keywordé、keyword195 及 root-stable wildcard；native @@ 输入仍拒绝。真实外部 white 至少经配置、parse_whitelist、generate/publish 到磁盘，不以人工 allow 代替。
+2. **最小 green。**`_dns_pattern` 在 exception fast path 前共享来源判定；exact/suffix 及已证 case/root 不保真者仅 DNS unsupported。复用 `_go_lower` 和真正 ASCII 检查，不删除整个 native wildcard 或 Unicode。U5D3 在 `_native_wildcard_regex/_dns_body` 按完整 presentation token 编码 byte/literal，token 前缀从 \A 开始，不能在 decimal escape 内匹配数字。keyword 不依赖末点，wildcard root-stable；ASCII 特殊字节和 separator 按固定源码/profile，不能自行假造 decoder。
+3. **独立字面预期。**é.example -> engine `\195\169.example`、É -> `\195\137.example`；native é keyword 区分两者，195 不命中 escape 内数字，raw 195.example 仍命中。原 native * 保留；17/18/20/32 个问号的旧输入因 root 不保真而 skip，同时以 `?` 重复相同次数加 `123*`、ASCII 及封存 Unicode presentation 前缀实际构造 byte 正反例。测试不能实现一个新来源 matcher/decoder 自证，使用成熟 parser/re 的有限字面检查和已核固定源码，标明其验证范围。
+4. **F2/F3 不减少。**替代旧 rune-width 展开后删除旧实现，逐段 `_dns_join` 扣真实预算，无超预算 cache/临时串。线性构造低于上限就保留，不维持旧错误 skip 数量。block/allow/white 用 root-stable 数字/Unicode/`=` literal 安全形状分别达到恰好65,536和超一个 byte；block 不扣 @@。原 8 秒、巨量 ?、LF/header/title ValueError/旧产物保护全部保留，不能靠 U5D2 提前 skip 通过构造验收。
+5. **回归及提交。**修正 F1 constructor-only、NativeDnsByteFormat/Generate、DnsDomainConsumer/DnsExactConstructor 等旧 raw Host 预期，保留其输入、来源原文、三消费者和其他五目标。普通 exact/suffix、underscore、Surge class、literal[]/byte? 的来源区别保持。运行完整相关 DNS/formats/generate/来源依赖模块；独立规格/正确性审查、修正简化、复审后提交 S2。
+
+#### S3：完整 actual-native rawregex 的闭合 DNS 编码
+
+本 slice 实施 KTD7 和规格 U5D3 的允许语法、原子集合、case/root 证书、最终编码及逐项正例清单。复用原 scanner，不能另建 parser/AST/任意等价引擎，也不能只添加 A/B/C 文本或 wrapper 特判。
+
+1. **公开 red 与既有证据。**在新的失败测试中保留裸195/é/`^a[.]test$`，加 A=`195|zz`、B=`(?:é)`、C=`(?:^a[.]test$)`，a.test/a.test. 控制及有限中性 group/concat/alt/repeat 邻居。source 真值复用已核固定源码与 completed finder1327/verifieraa90，禁止重做原93身份/9source/wire/36+12产物矩阵。实际 parse 的 rawregex 常为 surge/native_fields=False，全部必须触达共享入口。三消费者分别验证；真实 external white 经 parse_whitelist/config/generate/publish，不能用 public allow 代替，native @@ 仍拒绝。A 的 195 不再命中 é 的 escape，B 必须命中 é/É，C 与裸 root-sensitive matcher 仅 DNS unsupported。
+2. **完整输入清单。**按规格 U5D3 表及 tests 的实际构造，逐个记输入 bytes、ordinary quoted/native/Rule 来源、是否已有真实语义证明、source/target predicate、保留/新编码/unsupported 及原因。至少包括 `test_formats.py:2021-2295`、`test_functional_audit_dns.py:461-558,966-2842` 的 rawregex 直接断言、其 helper/embedded 子进程/生成依赖，以及 coverage/rules/projection/generate 的 source/white 调用。114 个包含 rawregex 与 DNS 的测试函数上下文是静态索引，不能把每个上下文当一个确定 matcher 或只据旧绿灯认定正确。原输入/邻居/其他五目标保留；缺具体可达见证时写 missing certificate，不虚构已确认语义错误。必要安全同结构正例是新增检查，不能删除原输入或改 fixture 躲过失败。
+3. **共享安全入口。**`_dns_pattern` 在 exact exception fast path 之前统一分派整个 actual matcher。所有 raw DOMAIN-REGEX 都走同一个 scanner，任何 token/子分支无证书、case/root 不可恢复、source/target 成本或行预算失败均 None，沿用原 `fin-adb.txt:<原kind>`。不得以 provenance、生成来源、scoped wrapper、scanner compile 成功或原 family 非成员绕过，也不新增诊断键、skip 测试或 fallback。普通 Surge literal/class、native byte/keyword 与 rawregex 的来源处理明确分开；同 bytes 用户输入/生成后 YAML 作同一判定。
+4. **最小结构实现。**在既有 lexical/group/alternate/class/repeat 摘要上附带 nullable、末尾含点、case 及有限 anchor 位置；neutral/capture group 继承完整子证书，concat/alt/repeat 按规格的闭合规则合并，unknown 向外失败。只允许规格表所列 literal/ASCII braced hex、class、dot、现有 Unicode atoms、default i/已有 ASCII scoped i、无 anchor 的量词 body、合法边缘 anchor 及严格 canonical/U5D1 exact 模板。最终 raw search 采用 \A T* E(B)，beginning search 不加 T*；显式单可选尾点+End 且 B 的非空末尾非点时，删除可选尾点并编码严格结尾。另一允许尾部是包含点的 rune 集合 S 的无上界 S*，B 的末尾仍须非点，target 保留 E(S)*；`^ads.*$`、`^.*$`、`ads[.]*$` 不丢失，有限上界不套此证明。End 缺 root 证书不得输出。source 可空/universal 只能在完成原 Go 限额检查后作常量归约，不能提前绕过原1000条件。
+5. **原子、版本与来源集合。**先完成规格固定 Unicode 数据条款：README/Actions 允许 Python>=3.11，当前3.13.13/UCD15.1.0不能作为 fixed Go15 的 category/lower oracle。复用固定 word boundaries、显式 IsSpace、候选 case 域及 ranges 算法；以已绑定 Go15 tables/同版本 UCD 纯数据给既有 helper 提供最少私有不可变 Nd、nonletter-word intervals 和 simple-lower 映射，替代当前 isalpha/isdecimal/当前 Python lower 的版本依赖，不能并留 fallback。绑定版本/原件SHA/提取方法，完整核所有 intervals、CaseRanges/UpperLower/单点及候选域外identity；不是只核字面样本，也不运行Go或新增运行时配置/来源/依赖。必需数据未能完整核验时记录具体 missing basis，slice blocked，不全禁word/L/Nd或退回Python property。default literal 的完整 Go L preimage 复用 `_PROCESS_CASE_VARIANTS/_go_lower`，i<-İ、k<-K，s 不加 ſ、i 不加 ı。source class 先合并相邻 intervals，再依固定 CharSet singleton/range/category/negate 顺序取得 source-set；C 是 L 的 preimage，不使用目标 Go SimpleFold helpers 代替 source。只接受规格可精确证明的 ASCII interval、singleton、完整前缀 range 与现有固定 properties；其他 Unicode range 不复制旧 lcTable 冒充完整 L 像。Unicode literal、singleton/negated class、L/Nd/word/space 和既有 root-stable class/alt 正例都保留在闭合结构中，不整类禁用。
+6. **固定深度 encoder。**C 用现有 range 合并/补集，E(C) 按 UTF-8 宽度和 surrogate 边界分段，标准 encode 取得端点，有限 byte-prefix 区间分解的深度最多4，三位 decimal 区间最多3。合并完全相同尾区间，不逐 scalar 枚举到 high rune、不构造任意 regex 自动机或新 cache；每次消费一整个 rune，量词绑定完整 E，native byte `?` 仍只消费一个 T。prefix 从 \A 的 T 边界开始；合法 UTF-8 首 byte 排除 continuation 开始。D(h)=A(P(N(h)))，不能错写成 P(L(h))。目标统一 -i，literal `=` 共用 F3 编码；只用成熟 Python parser/re 的有限目标字面检查，source 真值仍明确来自固定代码，不执行 decoder 或 client matcher。
+7. **具体保留/拒绝。**canonical k/i exact/suffix 四例及 s/ſ、i/ı 对照实际编码，U5D1 paired exact ASCII-only 不加 alias；U5D1 suffix 的 non-ASCII legacy root 区分使其完整回读 DNS unsupported。裸 `replace=` 与原 F3 去除严格结尾的同结构安全值实际经过 builder；原 F3 的 root-sensitive 输入仍保留 native。root-stable `[K]x/[K]y`、σ/Σ、Unicode property、否定/constructed class、空分支、named/capture、lazy/数值量词、literal brace、长零 hex、high rune singleton/同端点/完整前缀 range 分别验目标，不从内层 atom 的安全性推出整个 anchored matcher 安全。一般 m/n/s/x/d/u/global/-i、非 ASCII braced hex、subtraction/POSIX、lookaround/ref/conditional 等原 DNS 拒绝保持。
+8. **成本与调用方回归。**复用原非递归 scanner、factoring/marker、实际 FoldCase 和 Go repeat/height/compiled-size 计算，同时核来源与最终目标。新增 E/T/外层包装、concat/alt/repeat 的所有目标节点均计入，1000/4300、8秒、65,536全部不提高。边界原值可能因正确编码改变长度或真实成本，按实际目标重算，不能固定旧 skip/count。原高层/大 class 输入保留，另以同层数/相同 operator 的安全结构真实触达 builder；F2/F3 的安全构造不得全部提前 skip。三消费者均核 LF、@@、block 不多扣两 bytes、header/title ValueError 保旧产物。
+9. **独立审查、修正及提交。**相关 DNS/formats/coverage/rules/generate/projection/依赖完整回归；同文 raw identity white、actual-white 包含、全部 purpose/no_resolve、完全 unsupported 不计 global covered、合法空/混 unsupported 冻结保持。规格审查逐 token/operator、source CharSet、case preimage、neutral/alt 传播、root 证书、未知入口、成本/字节以及全部正例清单；正确性审查用固定 source 的有限反例和独立目标字面值，不接受 Python re.I 或自写来源 matcher 自证。精确修正、删除重复实现、必要简化、复审后仅正常英语提交完整 S3。
+
+#### S4：完整公开生成依赖、说明与最终 suite
+
+1. **真实 fixture bytes。**分别对 fin.yaml、fin.txt、DOMAIN-SET 的 source/white 执行同轮与 disk-only 的 `load_config/resolve_source/generate/publish`。每次先在自建 static/本地 fixture 写输入，再记录 bytes，发布后核未改。U5D1 新 regex 的 Surge/QX unsupported 按实际类型报告，不恢复上游类型；同一 bytes 的六目标支持子集一致。
+2. **生产依赖和冻结。**真实 JSON big-data 读 cdn/fin.txt 的原定义不改。父组 native exact/suffix 导致 fin.yaml 有效而 Surge fin.txt 合法为空，下游只读实际 fin.txt；合法 all-route-covered 空发布、mixed wholly unsupported 冻结、零规则合法清空、DNS-only @@、partial404+有效route、strict generated source/white、冻结链旧产物与标题超界 publish 前终止均核。不得用 Rule 缓存或计数相消通过。
+3. **最终说明。**核 README:52、58、77-81、98-100 及 tests/test_readme.py，只改实际新增支持、目标局部 skip、有限 profile 和重导入边界；保留全部六种用法、排序、static 维护和数量更新入口。未证明闭源行为直接保留未知，不写完整等价承诺。
+4. **最终完成。**固定 Python 3.13.13 执行下面完整命令，不加 `-t`、不改 skip/8秒/4300/1000。一次最终完整 suite 在所有源码/fixture/说明修改后运行；审查修正改变行为时重跑受影响测试及必要完整 suite，不无依据倍增。双路独立终审核完整 spec/plan、全部实际 diff、逐要求/调用方/正反例和简化，修正、复审、正常英语提交全部由同一 workflow 连续完成。此交付只完成源码候选，不批准旧 bfae 或宣布 U5/U6 通过。
+
 ### U5. 完整集成、真实来源与覆盖复审
 
-**依赖：**U1-U4全部完整交付。**归属：**独立verification worktree/代理，Covers全部要求；不代替各编码任务补欠缺步骤。
+**依赖：**原 U1-U4/两个 fix 的完整提交及当前 S1-S4 全部完整交付。**归属：**独立 verification worktree/workflow；覆盖原22项+U5D1-U5D4、全部42/V8及所有必要边界，不代替编码任务补欠缺步骤。旧 bfae 候选不得发布；原 static bbr 运行只等待主动终态，不读 pending、不取消、不修改或重复其 full/generation。
 
-1. 核对所有提交和位置，确认shared helper/import、render、generate两个hunk及test_generate两个hunk无覆盖，单项TDD/规格审查可追溯。
-2. 完整unittest/diff检查，三purpose/三no_resolve/六输出联动，R11 mixed unsupported冻结、F2 body/header/实际例外预算、R14 parser/DNS、R4/R5消费及F4 whole-skip全部验收。R11 永久回归须包含 Surge white `DOMAIN-WILDCARD,*.*` 与 native exact `DOMAIN,localhost.`：覆盖证明只对 constructor 规范后的 literal hostname 忽略单个尾根点，来源层保留 blocker；直接 render、generate/publish、同轮及磁盘 `fin.yaml` 依赖均保留 Mihomo 原文，不记该目标或完整 whitelist-covered，确证正例仍过滤，已有 wildcard 根点负例保留。
-3. 专用被忽略目录下载配置的全部真实source/white，使用真实fetch_https保存本轮bytes/HTTP元数据；全部本地输入也保存同轮快照。各下载隔离，自编脚本另目录，不执行外部代码。新生成/publish七组六文件，不抽样。
-4. 在独立隔离root通过公开generate分别运行基准`32236187e11d4fbc1f01245989798e6246ac42c6`及修复提交，重放同一份真实source/white和本地bytes，使用同一独立解释器与生成时刻。比较全部42文件的正文增删、header/body数量和诊断差异，逐项对应已确认修复或本轮输入；未解释变化不得完成。C2按各版本配置路径放置相同bytes，不比较跨平台Git blob，不固定生产数量或哈希；同轮依赖仍由各版本实际生成。基准异常同样记录真实复现及受影响范围，不能虚构对照产物。比较脚本及需复用的JSON结果保存在本worktree被忽略专用目录。
-5. 全量42文件核对UTF-8/LF、格式、header/body count、排序/去重、src/dst/no-resolve、Surge完整/拆分集合、DNS每行UTF-8 bytes含LF/@@/header、七条underscore、dirt已证明white及本轮依赖/磁盘重导入。成熟JSON/ipaddress parser复用，独立核查不共用同一未经验证推断；只检查修复版结构不替代同快照差异比较。
-6. 隔离副本合法编辑static后完整suite、真实generation/publish，矩阵包含新的static/tg-sentinel.txt，实际内容决定结果且生成不改bytes；不修改生产static作测试。
-7. 大规模只读并行重审九范围：解析/regex，域名覆盖，IP/port/logical，Surge/QX，Mihomo/AdGuard，generate/publish，config/static/README，真实上游/42产物，Ubuntu/Actions。全部检查范围和文件覆盖列明，主动返回后逐项核对，补查遗漏，不以抽样代替。
-8. 本次未完整修复或新确认同范围问题在自己worktree先加失败测试、最小修复、完整验证、规格审查、简化修正、复审、提交并重跑。不能把未检查范围当安全，不能将可自行完成的检查交主会话。
-9. 完成：全suite、真实来源/42产物、同快照全部差异解释、static编辑检查、独立覆盖表无未处理确认问题；必要产物/README按项目生产流程形成提交，仅含本任务内容。报告实际commit/42文件身份与未运行客户端限制。
+1. 核提交、tree、解释器/实际加载模块和所有 changed hunks，保存完整路径定义及逐要求覆盖表。新代码的 caller、旧 fixture、TDD、独立规格/正确性审查、修正复审及英语提交均可追溯。主会话4582干净不代表可将未完候选合入。
+2. 新树完成最终完整 unittest/diff 检查，继承的结果明确绑定原 tree，必要 full/TLS/static9 按新树和实际变化实际执行或重新绑定。原 wf375-6 inheritance 目录不可访问的覆盖范围须重做并保留可访问资料，不为此重复无关旧 full。任何新行为修正都按影响重验，不将旧1170 tests或TLS直接称为新树通过。
+3. 复用已真实下载封存的56个唯一HTTPS/8个非生成local source/white快照，逐份核路径/SHA/HTTP元数据、配置覆盖和字节身份；生成依赖不充当local快照。下载数据与自编脚本分开，读取外部资料用固定Python `-I`，不执行下载代码。后续确需新的真实下载时另立新快照身份，不与固定T比较混用。
+4. 用同一固定解释器 `C:/Users/user/.local/bin/python.exe` 3.13.13、上述实际bytes、T=`2026-10-15T12:34:56+08:00` 通过公开 generate 重生成新候选全部42，与322/aa/旧bfae逐文件完整正文增删、header/body数量和diagnostics归因。各版本同轮依赖由其真实输出生成，C2按其各自配置路径放相同bytes；旧基准异常保留，不虚构对照、不为追齐SHA重做已结束矩阵。随后以实际时钟生成42并调用实际update_readme_counts；43个允许路径和实际changed清单分别按Git记录。
+5. **新表示规模及全部42。**fixed T、actual clock 两轮分别逐文件记录最终 UTF-8/LF bytes、对应 Git blob ID/bytes/SHA、42 总量和各文件最终 kind 数量，绑定各自 snapshot_tree；磁盘 CRLF 与输出 LF、旧树与新树不能混报。实际完成受影响 a3/a4 全量生成，核其适用的真实同轮与磁盘 source/white 回读，不以小 fixture 或抽样代替。fe96 的 Git blobs 总77,011,711、CRLF 工作区79,511,363、旧 snapshot 生成78,071,439仅为不同基准对象，不继承为新结果。全部42逐份检查格式、header/body count、最终类型/行字符数/字典序、去重、src/dst/no_resolve、Surge full/split/DSET 集合、DNS每条物理行含 LF/@@/hosts/regex/header/title 的65,536预算、underscore、dirt已证white及依赖。U5D1-U5D4 actual谓词/profile、A/B正确编码及C/未知结构统一拒绝、k/i aliases与partial-white、native*、R11永久正反例逐项核对，结构检查不代替差异归因。固定 Mihomo classical 已核逐条 regexp2.Compile 和顺序 Match，实际客户端加载/内存/匹配性能未测，不新增 benchmark 或将估算当缺陷。成熟JSON/AST/ipaddress/re只按真实能力复用。
+6. 新候选隔离副本执行必要static9合法编辑后的完整suite及真实generate/publish，含static/tg-sentinel替换、增删、重排、注释、BOM/CRLF和新增合法文件。实际编辑后bytes决定产物且全过程不改输入；不固定生产内容/hash/状态，不降低原完整suite/真实生成条件。沿用原已经核准运行的身份和终态，但它不代替新树必要验收。
+7. 以九范围表并行分配新树受影响的独立只读审查，保留旧全面审计和已完成fix的覆盖记录。每个tracked文件映射到已有可访问证据或本轮主责，动态新增同步分配；22+U5D1-U5D4/全部边界/42V8没有未检查项。需要重审的完整范围须全部检查，不以抽样代替；不重复已结束且仍有效的语义矩阵，也不重开已完成U1-U4。
+8. 确认且可安全修复的新问题由本workflow在自己独立worktree按公开red、最小修复、相关及必要完整suite、独立规格/正确性审查、简化修正、复审、正常提交连续完成。不能把未知闭源语义称确认问题，不能以未知全域转换阻塞已确认有限修复；有真实要求冲突则给具体输入/证据并返回blocked，不降规格或将可完成检查交主会话。
+9. **提交前发布边界和双终审。**按 GitHub 官方[单文件界限](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)，逐个核拟提交 Git blob：超过50 MiB仅warning，大于100 MiB不通过，记录具体文件、实际bytes、阈值。不能删正确规则、降低case/root语义、提高限额、改配置、amend/force或重写历史来通过。未压缩总量不冒充push pack大小；单次2 GiB限制由U6正常push如实验证。双独立终审确认源码、全部实际变化、同快照完整归因、新42规模/a3-a4回读、发布界限、full/static9/TLS/路径/22+D/42及可访问证据满足后，正常提交本候选产物/README，仅43允许路径按实际变化stage。之后才交U6正常合main/push。回执分清源码/产物/文档commit、tree、实际/继承检查和客户端性能未测；此项关闭 U5-NEW-REPRESENTATION-SCALE，不能引用旧28fe ready追认。
 
 ### U6. 合并、正常push与真实Ubuntu验收
 
 **依赖：**U5完整交付。**归属：**主会话负责Git合并/push，独立远程代理负责验收。
 
-1. 核对交付commit、原main现有改动及清洁状态，按明确退出要求退出集成worktree；只合并完整提交到本地main，正常push。禁止裸stash/pop、强推、hard reset或覆盖其他修改。
+1. 核对交付commit、原main现有改动及清洁状态，按明确退出要求退出集成worktree；只合并完整提交到本地main，正常push。如实核[2 GiB 单次 push 限制](https://docs.github.com/en/get-started/using-git/troubleshooting-the-2-gb-push-limit)的实际结果，文件未压缩总量不等于实际 pack；受限时记录真实 Git 错误、候选 commit/tree，不虚构成功。禁止裸stash/pop、强推、hard reset、amend/重写历史或覆盖其他修改。
 2. 独立代理在真实Actions run完成后主动报告Ubuntu test/update，核对head SHA/jobs/生成bot提交/main最终身份，不轮询后台日志或任务，不用本地绿灯代替。
 3. 最终生成提交全部42文件再验U5产物条件、README实际数量，production stage只有配置产物+README，无static或中间资料。
 4. 远程失败时另建独立修复worktree/代理完成复现、修复、审查、测试和提交，正常合并/push后重新核对新run及生成提交。完成报告给出源码/生成SHA、run链接、实际结果及客户端未检查项。
@@ -397,10 +464,10 @@ QX未知原始语义、闭源客户端运行、初始报告中的未确认候选
 
 代理在自身worktree保存新失败测试的实际输出，确认失败原因属于该缺陷，再修改根因及必要调用方。禁止先批量写全部测试后批量修改生产代码。独立规格审查按本slice/规格检查，代理处理结论、简化和复审，只stage该项文件与精确hunk，正常commit，不跳过hooks/signing。
 
-使用可运行的独立Python3.11+，记录`sys.executable`和版本。Windows当前PATH中的`python`属于LibreOffice，已有CLI子进程失败记录；本地选择用户目录`.local/bin/python.exe`，不能把该环境失败当作产品回归。Ubuntu使用生产`.venv/bin/python`。新模块是实施需创建的永久回归文件，只运行当时实际存在的模块。以下本地命令在对应独立worktree中运行。
+产品仍支持Python3.11+；本轮固定解释器 `C:/Users/user/.local/bin/python.exe` 3.13.13，记录 `sys.executable`、版本和实际加载模块，不通过修改PATH或调查本机解决无关环境问题。Ubuntu使用生产`.venv/bin/python`。当前原U1-U4测试模块已经存在，新回归优先加入现有模块；以下命令在所属独立worktree运行，最终完整命令必须为 `-B -m unittest discover -s tests -v`，不加 `-t`，不新增skip或提高8秒/4300/1000。
 
 ```powershell
-$Python = Join-Path $env:USERPROFILE '.local/bin/python.exe'
+$Python = 'C:/Users/user/.local/bin/python.exe'
 & $Python -c 'import sys; print(sys.executable); print(sys.version)'
 & $Python -B -m unittest tests.test_functional_audit_rules tests.test_functional_audit_coverage -v
 & $Python -B -m unittest tests.test_functional_audit_dns tests.test_functional_audit_projection -v
@@ -423,8 +490,8 @@ U5 将下表各范围交给一个独立只读 workflow/subagent 并行检查，�
 | V1，解析/regex | `rules.py`全部入口；`tests/test_rules.py`、`tests/test_yaml_coverage.py`及U1新模块；固定regexp2依据 | R1-R3/R14、quotes、capture、options、warnings、超时、非法输入与全部调用 |
 | V2，域名覆盖 | `rules.py`覆盖/normalize；`tests/test_domain_coverage.py`、`tests/test_native_domains.py`、U1覆盖模块及相关generate用例 | R4/R5/R11-R13、单向根点子集、QX未知来源保护、allow/white与完全覆盖 |
 | V3，IP/port/logical | `rules.py`、`formats.py`相关全部分支；`tests/test_rules.py`、`tests/test_formats.py`、`tests/test_yaml_coverage.py`、`tests/test_yaml_output.py`及生成矩阵 | R6-R10、scope、host bits、ASN身份、方向、完整布尔结构和no_resolve三态 |
-| V4，Surge/QX | `formats.py`全部目标转换；`tests/test_formats.py`、`tests/test_generate.py`、U2投影模块及对应产物 | F4及R11实际投影、完整/拆分一致、skip、接口参数限制与原始来源保护 |
-| V5，Mihomo/AdGuard | `formats.py`、共享rules helper；格式/YAML/native测试和U2 DNS模块；固定Go/urlfilter依据 | F1-F3、R3-R5/R14消费、byte wildcard、全部body/@@/header行长及真实可表达性 |
+| V4，Surge/QX | `formats.py`全部目标转换；`tests/test_formats.py`、`tests/test_generate.py`、U2投影模块及对应产物 | F4/R11、U5D1/U5D4 actual投影和white完整包含、partial/complete canonical区别、完整/拆分/DOMAIN-SET、原kind诊断、接口参数和来源保护 |
+| V5，Mihomo/AdGuard | `formats.py`、共享rules helper；格式/YAML/native测试和U2 DNS模块；固定Go/regexp2 class/urlfilter/miekg及Go15数据 | F1-F3、R3-R5/R14、U5D2/U5D3全部raw matcher共用证书、neutral/alt未知传播、fixed word/L/Nd/simple-lower与Python3.11+边界、rune/byte编码、A/B/C/alias/root、native*和真实安全builder、全部行限；客户端性能明确未测 |
 | V6，生成/下载/发布 | `generate.py`全文；`tests/test_generate.py`和U3 transport、集成模块；真实HTTPResponse与实际来源 | N1/N2、R11空判定、缺失/部分/冻结输入、同轮/磁盘依赖、path与回滚 |
 | V7，配置/static/文档 | `sources.py`、`rulesets.json`、全部static输入、`README.md`、`index.html`、`LICENSE`、`.gitignore`及全部历史/本次文档；source/readme/static测试 | C1/C2、唯一README归属、完整合法编辑suite、准确链接/配置和输入不写；依赖可见界面的判断须视觉检查 |
 | V8，真实来源/42产物 | 当轮配置全部source/white、本地快照、HTTP元数据、七组六文件及同快照两版本比较结果 | 全文格式/计数/集合/差异解释，不固定历史数量、hash或上游永久可用性 |
@@ -442,9 +509,9 @@ U5/U6检查全部source/white，失败/skip/freeze记录实际原因，不用fix
 
 ## Definition of Done
 
-- 两文档完整包含22项与全部边界，稳定92文件coveragecritic结论和独立文档审查已处理；文档代理仅提交这两个文件。
-- 各slice的失败复现、最小实现、调用方/旧fixtures、回归、规格审查、修正简化、复审和commit由所属代理在独立worktree连续完成，无欠缺转交主会话。
-- 四任务位置无冲突，U2在自己worktree完成U1合入及全部联动；完整suite、diff、真实来源/42产物、基准与修复版同快照全部差异解释、含迁入tg-sentinel的static合法编辑下完整suite及九范围覆盖审查通过。
+- 两文档完整保留22项、已完成状态和全部边界，纳入U5D1-U5D4的实际谓词/正反例/全部调用方和S1-S4。U5D3 完整 scanner 证书覆盖所有走 DNS 的 raw matcher，未知结构没有旧输出 fallback，保留支持正例和原输入逐项分类。新draft owner只改自身两文档，保存完整draft/requirements/examples/callers/safety checklist、两blob/SHA/bytes/完整diff及不可变snapshot_tree；既定两路独立审查和必要修正复审后，由自己的fresh提交owner核approved tree一致再正常英语提交，原WIP不写。
+- S1-S4各slice的公开失败复现、最小实现、调用方/28处expected_domain及其他旧fixture、相关回归、独立规格/正确性审查、修正简化、复审和commit由所属workflow在独立worktree连续完成，无欠缺转交主会话。未知Surge全域语义不冒充有限修复承诺；真实冲突有具体输入和证据。
+- 原四任务和两个fix不重开，重叠formats串行写；新树最终完整suite、必要full/static9/TLS/完整路径定义和22+U5D1-U5D4证据均可访问且真实绑定。56HTTPS/8local固定快照+解释器+T的新42与322/aa/旧bfae全部差异解释完成；fixed T 与实际时钟各42的最终UTF-8/LF bytes/Git blob bytes/总量/kind规模、a3/a4实际全量生成及适用同轮/磁盘回读、提交前100 MiB单blob检查均有新身份，50 MiB不误判拒绝。实际时钟42+README正常产物提交及全部42/V8检查完成；static合法编辑后的完整suite/真实generate不降低，九范围按新树逐项核实，U6正常push及最终42身份实核。
 - 无新增依赖/配置/输出格式/客户端执行/无关重构或static内容、哈希、状态限制；撤销方案、unused import/变量、试验代码、测试专用workaround不留在最终提交。
 - 集成交付后按明确要求退出worktree、合并本地main并正常push，独立代理确认真实Ubuntu test/update、生成commit及最终全部42产物。
 - 最终报告区分文档/源码/生成commit与run身份、本地/真实来源/远程/固定源码检查，不声称运行客户端，不以测试数量保证无缺陷。未完成、未核实项目直接说明。
