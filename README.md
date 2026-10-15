@@ -15,7 +15,7 @@
 | `fin-surge-ds.txt` | 4697 | 218551 | 217517 | 8335 | 14 | 6918 | 46652 |
 <!-- RULE_COUNTS_END -->
 
-使用 Python 3.11+ 标准库将上游规则合并、按匹配范围去重，生成 Surge、Quantumult X、Mihomo 和 AdGuard DNS 规则。构建不会下载或执行外部代码、客户端或二进制程序。`a3` 使用 `static/main/Direct.list` 和 `static/main/NoReject.list` 作为白名单，`dirt` 使用 `static/main/NoDirect.list` 作为白名单；构建不修改 `static/`。
+使用 Python 3.11+ 标准库将上游规则合并、按匹配范围去重，生成 Surge、Quantumult X、Mihomo 和 AdGuard DNS 规则。构建不会下载或执行外部代码、客户端或二进制程序。`a3` 使用 `static/main/Direct.list` 和 `static/main/NoReject.list` 作为白名单，`dirt` 使用 `static/main/NoDirect.list` 作为白名单。`static/` 可增删条目、重排、添加注释、使用 UTF-8 BOM／CRLF 或新增本地文件；构建读取当轮内容并保持输入不变。
 
 ## 下载链接
 
@@ -47,11 +47,15 @@
 
 [AdGuard Private DNS 的自定义列表额度](https://adguard-dns.io/kb/private-dns/setting-up-filtering/blocklists/)按套餐分别为 Personal 1,000、Team 5,000、Enterprise 100,000 条总规则，超额列表会自动停用。上表中 `a3`、`a4` 的 `fin-adb.txt` 各自超过 100,000 条，直接作为 Private DNS 自定义列表添加时会超额；生成文件保留全部可表达规则。
 
+`fin-adb.txt` 的每行上限为 65,536 UTF-8 bytes，计入结尾 LF、例外前缀 `@@`、regex 包装 `/.../` 及标题和其他文件头内容；恰好达到上限的行保留。规则或例外超限只跳过该条 DNS 输出，其他五种格式继续按各自支持范围转换。标题或其他文件头超限抛出 `ValueError`，在发布前终止本轮并保留全部旧产物。
+
 生成的 `fin.yaml` 仅包含原生 YAML 规则。重新导入时按 Mihomo 原生语义解析已输出的 matcher，普通 YAML 注释被忽略；转换前的 Rule 类型和来源信息不通过文件恢复。
 
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
 Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。
+
+Mihomo native 的 `DOMAIN-KEYWORD,123.`、`DOMAIN-WILDCARD,*.*` 等末尾根点敏感规则无法保真转换到 Surge 时，只跳过对应 Surge 输出；Mihomo 输出保留这些原生域名 matcher。逻辑规则任一叶子无法表达时，跳过该目标的整条 `AND`／`OR`／`NOT`。
 
 普通混合来源中的裸 regex 可能同时表示完整 matcher、策略或尾注释。例如 `DOMAIN-REGEX,^a{b$,My Proxy # note}c$|^foo$` 给出 `ambiguous unquoted regex comma or policy` warning，并保留后续合法行。用字段引号明确所需范围：
 
@@ -70,7 +74,11 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 
 所有规则组均使用 Sukka 的 [非 IP LAN 白名单](https://ruleset.skk.moe/Clash/non_ip/lan.txt) 和 [IP LAN 白名单](https://ruleset.skk.moe/Clash/ip/lan.txt)；`a4` 与 `a3` 的白名单相同。`tg` 还使用 `static/` 中的 [`tg-sentinel.txt`](static/tg-sentinel.txt)，即使远端 LAN 白名单不可用，也排除上游的非 Telegram 哨兵。
 
-白名单只使用域名精确、后缀、keyword、wildcard 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。对于 `purpose: block`，`fin-adb.txt` 还输出白名单的 `@@` 放行例外，精确域名采用 `@@|safe.example.com|`；Surge、Quantumult X 与 Mihomo 输出不能表达部分放行，需在规则集之前放置显式放行规则。去重仅在能证明覆盖时删除规则，不能因 wildcard 不受目标格式支持就用它删除其他类型。
+白名单使用域名精确、后缀、keyword、wildcard、`DOMAIN-REGEX` 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。`DOMAIN-REGEX` 只按 matcher 原文完全相同判定覆盖，大小写或表达式不同则保留，不推断任意 regex 等价。
+
+过滤分别核查来源匹配范围和各路由目标实际生成的 matcher。跨来源删除只使用匹配范围不变或属于原白名单已证明子集的目标投影；Mihomo native 与 QX 未证明等价的 Unicode、大小写、末尾根点及 byte／字符匹配差别按原来源保留。输入中的 allow 规则按 `no_resolve` 处理及移除受支持接口参数后的实际 matcher 参与路由白名单，外部白名单仍遵守原 options 限制。
+
+对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。Surge、Quantumult X 与 Mihomo 输出不能表达部分放行，需在规则集之前放置显式放行规则。去重仅在能证明覆盖时删除规则，不能因 wildcard 不受目标格式支持就用它删除其他类型。
 
 ## 本地构建
 
@@ -85,7 +93,13 @@ python3 -m venv .venv
 
 `generate.py` 默认以脚本所在目录为 root，也可用 `generate.py --root /path/to/project` 选择包含 `rulesets.json` 的独立项目目录。来源与白名单的本地路径以该 root 为边界，六种生成文件写入该目录下的规则组目录，发布暂存文件位于该目录的 `.tmp/`，该目录的 `static/` 保持不变。
 
-Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源及白名单均在 `rulesets.json` 中配置，不再使用 INI。远端普通来源或白名单返回 404 时跳过该 URL 并继续；远端白名单整份为 HTML、坏编码或无法识别时跳过，混合内容保留可识别行。429、服务器错误、超时或传输不完整会停止本轮发布。本轮某组普通来源不可用且无可路由规则，或过滤后没有可路由规则而仍有无法路由的拦截规则时，冻结该组及依赖组原有六种产物，其他健康组继续更新；有效来源被白名单全部覆盖、仅含可发布的 AdGuard DNS `@@`，或仅依赖本轮生成的空规则文件时仍更新六种产物；缺失旧产物则停止发布。本地白名单损坏也停止发布。日志包含来源行号与目标格式的跳过计数。GitHub Actions 的 PR job 只运行离线测试；向 `main` 推送后先测试再更新，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，仅暂存配置所列规则组的六种生成文件，不强推。
+Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源及白名单均在 `rulesets.json` 中配置，不再使用 INI。远端普通来源或白名单返回 404 时跳过该 URL 并继续；远端白名单整份为 HTML、坏编码或无法识别时跳过，混合内容保留可识别行。429、服务器错误、超时或传输不完整会停止本轮发布。
+
+来源可用时，规则经来源白名单过滤全部删除，或剩余非 allow 规范规则至少有一条、每条均有有效路由投影且全部有效投影均被白名单覆盖，都可正常更新六种产物，允许路由正文为空；仅含可发布的 AdGuard DNS `@@` 或仅依赖本轮空生成文件的清空也继续发布。无可路由规则时，混入完全 unsupported 规则或普通来源不可用仍冻结该组及依赖组原有六种产物，其他健康组继续更新；已有可路由规则时，部分普通来源不可用仍按现有行为发布。冻结时缺失旧产物，或本地白名单损坏，会停止本轮发布。
+
+日志包含来源行号与转换诊断。`<file>:<kind>` 表示该目标 unsupported；`<file>:<kind>:whitelist-covered` 表示目标 matcher 被白名单覆盖后的合法删除；`whitelist-covered:<kind>` 仅在一条规范规则至少有一个有效路由投影且全部有效路由投影均被覆盖时计一次，完全 unsupported 的规则不计完整覆盖。`fin-qx.txt:<kind>:interface-option` 只统计实际输出且移除了接口参数的 QX 规则。公开 `render` 返回 `(outputs, diagnostics)`，诊断仍为计数字典。
+
+GitHub Actions 的 PR job 只运行离线测试；向 `main` 推送后先测试再更新，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，仅暂存配置所列规则组的六种生成文件和 `README.md`，不强推。
 
 ## 上游与许可
 

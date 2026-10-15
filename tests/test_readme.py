@@ -96,3 +96,34 @@ class ReadmeTests(unittest.TestCase):
         self.assertIn("static/main/Direct.list", readme)
         self.assertIn("static/main/NoReject.list", readme)
         self.assertIn("static/main/NoDirect.list", readme)
+
+    def test_readme_explains_raw_regex_whitelist_identity_and_source_scope(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        whitelist = next(line for line in readme.splitlines() if line.startswith("白名单"))
+        self.assertIn("DOMAIN-REGEX", whitelist)
+        self.assertIn("原文完全相同", whitelist)
+        for term in ("子集", "Unicode", "末尾根点", "allow"):
+            with self.subTest(term=term):
+                self.assertIn(term, readme)
+
+    def test_readme_distinguishes_target_coverage_and_unsupported_diagnostics(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for key in ("<file>:<kind>", "<file>:<kind>:whitelist-covered",
+                    "whitelist-covered:<kind>", "fin-qx.txt:<kind>:interface-option"):
+            with self.subTest(key=key):
+                self.assertIn(key, readme)
+        self.assertIn("unsupported", readme)
+        self.assertIn("(outputs, diagnostics)", readme)
+
+    def test_readme_explains_final_dns_line_budget_and_publication_error(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for term in ("65,536", "UTF-8", "LF", "ValueError"):
+            with self.subTest(term=term):
+                self.assertIn(term, readme)
+
+    def test_readme_explains_native_root_dot_and_whole_logical_projection(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for matcher in ("DOMAIN-KEYWORD,123.", "DOMAIN-WILDCARD,*.*"):
+            with self.subTest(matcher=matcher):
+                self.assertIn(matcher, readme)
+        self.assertIn("整条", readme)
