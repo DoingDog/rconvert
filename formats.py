@@ -82,8 +82,11 @@ def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tu
         if kind == "DOMAIN-KEYWORD":
             # Surge 忽略 hostname 末尾根点；keyword 的末尾点必须位于 hostname 内部。
             return "DOMAIN-REGEX", re.escape(value.lower()) + (r"(?=.)" if value.endswith(".") else "")
-        pattern = _wildcard_regex(value.lower().removesuffix("."))
-        return "DOMAIN-REGEX", pattern[:-1] + r"\.?$" if pattern is not None else None
+        value = value.lower().removesuffix(".")
+        pattern = _wildcard_regex(value)
+        # 最后必要的点或 ? 不能依靠 hostname 根点满足。
+        boundary = r"(?<!\.)" if value.rstrip("*").endswith((".", "?")) else ""
+        return "DOMAIN-REGEX", pattern[:-1] + boundary + r"\.?$" if pattern is not None else None
     return kind, value
 
 
