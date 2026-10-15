@@ -1,4 +1,4 @@
-# cdn rules: 4781
+# cdn rules: 4782
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -820,6 +820,7 @@ HOST,icons.llamao.fi,LIST
 HOST,image.gyutto.jp,LIST
 HOST,image.status.io,LIST
 HOST,images.dmca.com,LIST
+HOST,images.higgs.ai,LIST
 HOST,images.kick.com,LIST
 HOST,images.pluto.tv,LIST
 HOST,images.vudu.com,LIST

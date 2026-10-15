@@ -1,4 +1,4 @@
-# big-data rules: 10513
+# big-data rules: 10514
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -1110,6 +1110,7 @@ payload:
   - "DOMAIN,image.gyutto.jp"
   - "DOMAIN,image.status.io"
   - "DOMAIN,images.dmca.com"
+  - "DOMAIN,images.higgs.ai"
   - "DOMAIN,images.kick.com"
   - "DOMAIN,images.vudu.com"
   - "DOMAIN,img.177pica.com"
