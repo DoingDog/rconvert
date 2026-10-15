@@ -7,7 +7,8 @@ from collections import Counter
 from collections.abc import Iterable
 
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
-                   _field_value, _fields, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain)
+                   _field_value, _fields, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
+                   exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -899,7 +900,7 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
     return None
 
 
-def _mihomo_rule(rule: Rule) -> str | None:
+def _mihomo_rule(rule: Rule) -> Rule | None:
     kind, value = rule.kind, rule.value
     options = tuple(option for option in rule.options if option not in _QX_INTERFACE_OPTIONS)
     if rule.allow or options and (options != ('no-resolve',) or kind not in NO_RESOLVE_TYPES):
@@ -926,15 +927,64 @@ def _mihomo_rule(rule: Rule) -> str | None:
     if (mihomo_kind not in MIHOMO_TYPES or payload is None or
             mihomo_kind.startswith('PROCESS-') and ',' in payload and not mihomo_kind.endswith('-REGEX')):
         return None
-    return f'{mihomo_kind},{payload}' + (',no-resolve' if options else '')
+    return Rule(mihomo_kind, payload, options, False, rule.literal_process, True, 'mihomo')
+
+
+def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], set[tuple[str, str]]]:
+    selected, identical = [], set()
+    domain_types = {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}
+    for entry in whitelist:
+        if entry.options and (entry.options != ('no-resolve',) or entry.kind not in NO_RESOLVE_TYPES):
+            continue
+        source, kind, value = entry.domain_source, entry.kind, entry.value
+        if target == 'mihomo':
+            # 已证明的 Surge 子集保留来源，另比较真正转换后的 raw regex。
+            if source == 'surge' and (kind not in domain_types or value.isascii()):
+                selected.append(entry)
+            if kind in domain_types and (source not in {'surge', 'mihomo'} or source == 'surge' and not value.isascii()):
+                continue
+            # 最后必要 token 不能用 Host 根点满足；保留原 white 的单向覆盖判断。
+            if source == 'surge' and kind == 'DOMAIN-WILDCARD' and value.rstrip('*').endswith(('.', '?')):
+                continue
+            projected = _mihomo_rule(Rule(kind, value, entry.options, literal_process=entry.literal_process,
+                                          native_fields=entry.native_fields, domain_source=source))
+            if projected is not None:
+                selected.append(projected)
+        elif target == 'surge':
+            # native white 的根点与 case 区别不能随 Surge 投影扩大。
+            if source != 'surge' and kind in domain_types:
+                if source != 'mihomo' or kind in DOMAIN_SET_TYPES or _PROCESS_CASE_VARIANTS.search(value):
+                    continue
+                kind, value = _domain_value(kind, value, source, SURGE_TYPES)
+                if value is None:
+                    continue
+            elif source == 'mihomo' and kind in {'GEOIP', 'IP-ASN'} and value.upper() == 'UNKNOWN':
+                continue
+            kind = SURGE_ALIASES.get(kind, kind)
+            if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None:
+                selected.append(Rule(kind, value, domain_source='surge'))
+        else:
+            # QX 只复用来源层已有保护，以及未改变 payload 的相同 matcher。
+            if source in {'surge', 'qx'}:
+                if kind not in domain_types or value.isascii():
+                    selected.append(entry)
+                if source == 'qx' or value.isascii():
+                    identical.add((kind, value))
+            elif source == 'mihomo' and kind not in DOMAIN_SET_TYPES:
+                _, compatible = _domain_value(kind, value, source, SURGE_TYPES)
+                if compatible is not None and (kind not in domain_types or not _PROCESS_CASE_VARIANTS.search(value)):
+                    identical.add((kind, value))
+    return selected, identical
 
 
 def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
            whitelist: Iterable[Rule] = (), title: str | None = None) -> tuple[dict[str, str], dict[str, int]]:
+    rules, whitelist = [_apply_no_resolve(rule, no_resolve) for rule in rules], list(whitelist)
+    routing_white = list(whitelist)
     lines = {name: [] for name in FILES}
     skipped = Counter()
+    pending = []
     for rule in sorted(rules, key=lambda item: (item.kind, item.value, item.options, item.allow, item.literal_process, item.native_fields, item.domain_source)):
-        rule = _apply_no_resolve(rule, no_resolve)
         effective = rule
         kind, value = rule.kind, rule.value
         interface_options = any(option in _QX_INTERFACE_OPTIONS for option in rule.options)
@@ -943,9 +993,10 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                                            if option not in _QX_INTERFACE_OPTIONS),
                         rule.allow, rule.literal_process, rule.native_fields, rule.domain_source)
         line_safe = _LINE_UNSAFE.search(value) is None
-        emitted = set()
+        emitted, routed = set(), {}
         logical = kind in LOGICAL
         if rule.allow:
+            routing_white.append(rule)
             if not rule.options and purpose == "block" and line_safe:
                 dns_pattern = _dns_pattern(rule, exception=True)
                 if dns_pattern is not None:
@@ -955,13 +1006,12 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
             if rule.options == ("no-resolve",) and kind in NO_RESOLVE_TYPES:
                 if kind in SURGE_TYPES:
                     surge_kind = "IP-CIDR6" if kind == "IP-CIDR" and ":" in value else kind
+                    matcher = Rule(surge_kind, value, (), False, rule.literal_process, rule.native_fields, 'surge')
                     for name in ("fin.txt", "fin-surge.txt"):
-                        lines[name].append(f"{surge_kind},{value},no-resolve")
-                        emitted.add(name)
+                        routed[name] = (f"{surge_kind},{value},no-resolve", matcher)
                 if kind in QX_TYPES:
                     qx_kind = "IP6-CIDR" if kind == "IP-CIDR" and ":" in value else QX_TYPES[kind]
-                    lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST,no-resolve")
-                    emitted.add("fin-qx.txt")
+                    routed["fin-qx.txt"] = (f"{qx_kind},{value},LIST,no-resolve", Rule(kind, value, (), False, rule.literal_process, rule.native_fields, 'qx'))
         else:
             surge_kind, surge_payload = _domain_value(kind, value, rule.domain_source, SURGE_TYPES)
             if surge_payload is not None:
@@ -978,37 +1028,62 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 if kind == "IP-CIDR" and ":" in value:
                     surge_kind = "IP-CIDR6"
                 surge_line = f"{surge_kind},{surge_value}"
-                lines["fin.txt"].append(surge_line)
-                emitted.add("fin.txt")
+                matcher = Rule(surge_kind, surge_value if logical else surge_payload, (), False,
+                               rule.literal_process, rule.native_fields, 'surge')
+                routed["fin.txt"] = (surge_line, matcher)
                 if kind not in DOMAIN_SET_TYPES:
-                    lines["fin-surge.txt"].append(surge_line)
-                    emitted.add("fin-surge.txt")
+                    routed["fin-surge.txt"] = (surge_line, matcher)
             if line_safe and kind in QX_TYPES and "," not in value and not (
                 kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")
             ):
                 qx_kind = QX_TYPES[kind]
                 if kind == "IP-CIDR" and ":" in value:
                     qx_kind = "IP6-CIDR"
-                lines["fin-qx.txt"].append(f"{qx_kind},{value},LIST")
-                emitted.add("fin-qx.txt")
+                routed["fin-qx.txt"] = (f"{qx_kind},{value},LIST", Rule(kind, value, (), False, rule.literal_process, rule.native_fields, 'qx'))
             if purpose == "block" and line_safe:
                 dns_pattern = _dns_pattern(rule)
                 if dns_pattern is not None:
                     lines["fin-adb.txt"].append(dns_pattern)
                     emitted.add("fin-adb.txt")
             if kind in DOMAIN_SET_TYPES and line_safe:
-                lines["fin-surge-ds.txt"].append(("." if kind == "DOMAIN-SUFFIX" else "") + value)
-                emitted.add("fin-surge-ds.txt")
-        payload = _mihomo_rule(effective)
-        if payload is not None:
-            line = '  - ' + _yaml_value(payload)
-            lines['fin.yaml'].append(line)
-            emitted.add('fin.yaml')
+                routed["fin-surge-ds.txt"] = (("." if kind == "DOMAIN-SUFFIX" else "") + value,
+                                               Rule(kind, value, (), False, rule.literal_process, rule.native_fields, 'surge'))
+        matcher = _mihomo_rule(effective)
+        if matcher is not None:
+            payload = f'{matcher.kind},{matcher.value}' + (',no-resolve' if matcher.options else '')
+            routed['fin.yaml'] = ('  - ' + _yaml_value(payload), matcher)
+        pending.append((rule, effective, emitted, routed, interface_options))
+    remaining, identities = {}, {}
+    for target, names in (('surge', ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt')),
+                          ('qx', ('fin-qx.txt',)), ('mihomo', ('fin.yaml',))):
+        white, identical = _route_whitelist(routing_white, target)
+        projected = [matcher for _, _, _, routed, _ in pending for name, (_, matcher) in routed.items() if name in names]
+        kept = set(exclude_covered(projected, white))
+        for name in names:
+            remaining[name], identities[name] = kept, identical
+    complete = set()
+    for rule, effective, emitted, routed, interface_options in pending:
+        kind = rule.kind
+        covered = set()
+        for name, (line, matcher) in routed.items():
+            value = effective.value if name == 'fin-qx.txt' else matcher.value
+            # QX 未证明的 case/root-dot 规范化只能比较实际输出的相同 payload。
+            if (value == matcher.value and (name != 'fin-qx.txt' or value.isascii())
+                    and matcher not in remaining[name] or (matcher.kind, value) in identities[name]):
+                covered.add(name)
+                skipped[f'{name}:{kind}:whitelist-covered'] += 1
+            else:
+                lines[name].append(line)
+                emitted.add(name)
+        valid_routes = set(routed) & {'fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin.yaml'}
+        if valid_routes and valid_routes <= covered and effective not in complete:
+            skipped[f'whitelist-covered:{kind}'] += 1
+            complete.add(effective)
         if interface_options and "fin-qx.txt" in emitted:
             skipped[f"fin-qx.txt:{kind}:interface-option"] += 1
         for name in FILES:
-            if name not in emitted and not (name == "fin-surge.txt" and kind in DOMAIN_SET_TYPES
-                                            and not rule.allow and not rule.options):
+            if name not in emitted | covered and not (name == "fin-surge.txt" and kind in DOMAIN_SET_TYPES
+                                                      and not rule.allow and not rule.options):
                 skipped[f"{name}:{kind}"] += 1
     if purpose == "block":
         for rule in sorted(whitelist, key=lambda item: (item.kind, item.value)):

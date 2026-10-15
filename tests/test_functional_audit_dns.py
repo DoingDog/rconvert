@@ -2237,7 +2237,7 @@ class DnsRegexConsumerTests(unittest.TestCase):
                             raw_regex = ['DOMAIN-REGEX,' + value for value in values]
                             for group in ('source', 'child'):
                                 domains = (['covered.example.com'] if not native and group == 'source' else []) + ['neighbor.example.com']
-                                yaml_matchers = ([expected_logic] + ['DOMAIN,' + domain for domain in domains] +
+                                yaml_matchers = ([expected_logic] + ['DOMAIN,' + domain for domain in domains if domain != 'covered.example.com'] +
                                                  sorted(raw_regex, key=lambda matcher: (len(matcher), matcher)) +
                                                  ['PROCESS-NAME-REGEX,' + values[0], 'PROCESS-PATH-REGEX,' + values[1],
                                                   'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP-CIDR,198.51.100.0/24'])

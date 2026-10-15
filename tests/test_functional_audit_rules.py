@@ -533,8 +533,9 @@ class InlineOptionsAuditTests(unittest.TestCase):
                 with self.subTest(purpose=purpose, mode=mode):
                     outputs, skipped = render('options', iter([blocker, allowed]), purpose=purpose, no_resolve=mode,
                                               whitelist=iter([Rule('DOMAIN-REGEX', r'^(?N)other$')]))
-                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([blocker], []))
-                    self.assertIn(json.dumps('DOMAIN-REGEX,' + value), outputs['fin.yaml'])
+                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([], []))
+                    self.assertEqual(outputs['fin.yaml'], '# options rules: 0\npayload:\n')
+                    self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
                     self.assertEqual(normalize([allowed, blocker]), [blocker, allowed])
                     self.assertEqual(allowed.value, value)
                     self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 3 if purpose == 'block' else 2)
@@ -907,7 +908,8 @@ class DeepRegexAuditTests(unittest.TestCase):
                 for mode in ('add', 'strip', 'keep'):
                     outputs, skipped = render('deep', iter([blocker, allowed]), purpose=purpose, no_resolve=mode,
                                               whitelist=iter([Rule('DOMAIN-REGEX', value.replace('a)', 'b)'))]))
-                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([blocker], []))
+                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([], []))
+                    self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
                     self.assertEqual(normalize([allowed, blocker]), [blocker, allowed])
                     self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 3 if purpose == 'block' else 2)
         for value, valid in (('(a)(?(1)b+|c{2})', True), ('(?(?=a)b|c)', False),
@@ -1269,9 +1271,10 @@ class BracedHexAuditTests(unittest.TestCase):
         for purpose in ('block', 'direct', 'proxy'):
             for mode in ('add', 'strip', 'keep'):
                 with self.subTest(purpose=purpose, mode=mode):
-                    outputs, _ = render('hex', [blocker, allowed], purpose=purpose, no_resolve=mode,
-                                        whitelist=[Rule('DOMAIN-REGEX', r'^\x{0000062}$')])
-                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([blocker], []))
+                    outputs, skipped = render('hex', [blocker, allowed], purpose=purpose, no_resolve=mode,
+                                              whitelist=[Rule('DOMAIN-REGEX', r'^\x{0000062}$')])
+                    self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), ([], []))
+                    self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
                     self.assertEqual(normalize([allowed, blocker]), [blocker, allowed])
                     self.assertEqual(allowed.value, value)
 
