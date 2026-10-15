@@ -68,7 +68,7 @@ def publish(outputs: dict[Path, str], *, root: Path | None = None) -> None:
     root = Path(__file__).resolve().parent if root is None else root.resolve()
     if any(not path.resolve().is_relative_to(root) for path in outputs):
         raise ValueError("Output path escapes root")
-    if any(path.resolve().is_relative_to(root / "static") for path in outputs):
+    if any(path.resolve().is_relative_to((root / "static").resolve()) for path in outputs):
         raise ValueError("Output path targets static")
     staging = root / ".tmp"
     staging.mkdir(exist_ok=True)
