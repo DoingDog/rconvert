@@ -27,7 +27,9 @@ class _HttpsOnlyRedirect(request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         if urlsplit(newurl).scheme != "https":
             raise ValueError(f"HTTPS redirect required: {newurl}")
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+        accepted = super().redirect_request(req, fp, code, msg, headers, newurl)
+        fp.close()
+        return accepted
 
 
 def fetch_https(url: str) -> bytes:
@@ -47,7 +49,7 @@ def fetch_https(url: str) -> bytes:
             expected = getattr(response, "headers", {}).get("Content-Length")
             if expected is not None and len(data) != int(expected):
                 raise ValueError(f"Incomplete source {url}: {len(data)} of {expected} bytes")
-            if getattr(response, "headers", {}).get("Content-Encoding", "").lower() == "gzip":
+            if getattr(response, "headers", {}).get("Content-Encoding", "").strip(' \t').lower() in ("gzip", "x-gzip"):
                 try:
                     with gzip.GzipFile(fileobj=BytesIO(data)) as stream:
                         data = stream.read(MAX_BYTES + 1)
