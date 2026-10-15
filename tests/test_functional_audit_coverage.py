@@ -16,6 +16,7 @@ from generate import generate, publish
 
 from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 from tests import test_functional_audit_rules as audit_rules
+from tests.test_formats import expected_domain
 
 
 class RawRegexWhitelistAuditTests(unittest.TestCase):
@@ -142,6 +143,8 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                             outputs, skipped = render('logical', normalize(exclude_covered(parsed, white)),
                                                       purpose=purpose, no_resolve=mode, whitelist=white)
                             expected = expression.replace(',no-resolve)', ')') if mode == 'strip' else expression
+                            if not native:
+                                expected = expected.replace('DOMAIN,neighbor.example.org', expected_domain('DOMAIN', 'neighbor.example.org'))
                             self.assertEqual(outputs['fin.yaml'], '# logical rules: 1\npayload:\n  - ' +
                                              json.dumps(operator + ',' + expected) + '\n')
                             self.assertEqual(skipped.get('fin.txt:' + operator), 1)
@@ -197,12 +200,12 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                         yaml_lines = ['AND,' + logic, 'DOMAIN,neighbor.example.org', 'DOMAIN-REGEX,' + variant,
                                       asn, ip, 'SRC-IP-CIDR,198.51.100.0/24']
                         bodies = {
-                            'fin.txt': ['DOMAIN,neighbor.example.org', asn, ip, 'SRC-IP,198.51.100.0/24'],
+                            'fin.txt': [asn, ip, 'SRC-IP,198.51.100.0/24'],
                             'fin-qx.txt': ['HOST,neighbor.example.org,LIST', 'IP-ASN,00,LIST' + asn_flag,
                                            'IP-CIDR,192.0.2.0/24,LIST' + flag],
                             'fin.yaml': ['  - ' + json.dumps(line) for line in yaml_lines],
                             'fin-surge.txt': [asn, ip, 'SRC-IP,198.51.100.0/24'],
-                            'fin-surge-ds.txt': ['neighbor.example.org'],
+                            'fin-surge-ds.txt': [],
                         }
                         expected = {}
                         for group in ('white', 'source', 'child'):
@@ -222,7 +225,7 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                                     text = f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') + ''.join(line + '\n' for line in body)
                                 expected[root / group / name] = text
                         self.assertEqual(outputs, expected)
-                        skips = {}
+                        skips = {'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1}
                         supported = {'AND': {'fin.yaml'}, 'DOMAIN-REGEX': {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' else [])},
                                      'IP-ASN': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
                                      'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
@@ -487,7 +490,8 @@ class SurgeClassWhitelistAuditTests(unittest.TestCase):
                 for mode in ('add', 'strip', 'keep'):
                     with self.subTest(operator=operator, purpose=purpose, mode=mode):
                         outputs, _ = render('logical', parsed, purpose=purpose, no_resolve=mode, whitelist=white)
-                        expected = value.replace('"', '')
+                        expected = value.replace('"', '').replace('DOMAIN,cdn-a.example.com', expected_domain('DOMAIN', 'cdn-a.example.com')).replace(
+                            'DOMAIN,neighbor.example.org', expected_domain('DOMAIN', 'neighbor.example.org'))
                         if mode == 'strip':
                             expected = expected.replace(',no-resolve)', ')')
                         if operator == 'OR':
@@ -550,12 +554,13 @@ class SurgeClassWhitelistAuditTests(unittest.TestCase):
                         source_ip = 'SRC-IP,198.51.100.0/24'
                         for group in ('source', 'child'):
                             bodies = {
-                                'fin.txt': ['DOMAIN,cdn-z.example.com', 'DOMAIN,neighbor.example.org', surge_ip, source_ip],
+                                'fin.txt': ['DOMAIN,cdn-z.example.com', 'DOMAIN,neighbor.example.org', surge_ip, source_ip] if group == 'source' else [surge_ip, source_ip],
                                 'fin-surge.txt': [surge_ip, source_ip],
-                                'fin-surge-ds.txt': ['cdn-z.example.com', 'neighbor.example.org'],
+                                'fin-surge-ds.txt': ['cdn-z.example.com', 'neighbor.example.org'] if group == 'source' else [],
                                 'fin-qx.txt': ['HOST,cdn-z.example.com,LIST', 'HOST,neighbor.example.org,LIST',
-                                               'IP-CIDR,192.0.2.0/24,LIST' + option],
-                                'fin.yaml': ['  - "DOMAIN,cdn-z.example.com"', '  - "DOMAIN,neighbor.example.org"',
+                                               'IP-CIDR,192.0.2.0/24,LIST' + option] if group == 'source' else ['IP-CIDR,192.0.2.0/24,LIST' + option],
+                                'fin.yaml': ['  - ' + json.dumps(expected_domain('DOMAIN', 'cdn-z.example.com')),
+                                             '  - ' + json.dumps(expected_domain('DOMAIN', 'neighbor.example.org')),
                                              '  - ' + json.dumps(surge_ip), '  - "SRC-IP-CIDR,198.51.100.0/24"'],
                             }
                             for name, body in bodies.items():
@@ -564,7 +569,7 @@ class SurgeClassWhitelistAuditTests(unittest.TestCase):
                                                  ''.join(line + '\n' for line in body))
                             dns_body = ([*(['@@||allow.example.org^'] if group == 'source' else []),
                                          r'@@/^cdn\-[ab]\.example\.com$/',
-                                         '0.0.0.0 cdn-z.example.com', '0.0.0.0 neighbor.example.org'] if purpose == 'block' else [])
+                                         *(['0.0.0.0 cdn-z.example.com', '0.0.0.0 neighbor.example.org'] if group == 'source' else [])] if purpose == 'block' else [])
                             dns = outputs[root / group / 'fin-adb.txt'].splitlines()
                             self.assertEqual(dns[6], f'! Total count: {len(dns_body)}')
                             self.assertEqual(dns[7:], dns_body if purpose == 'block' else
@@ -830,10 +835,11 @@ class CrossSourceCoverageAuditTests(unittest.TestCase):
                             self.assertEqual(warnings, [])
                             self.assertEqual(len(repeated), 1)
                             self.assertEqual(repeated[0].domain_source,
-                                             'mihomo' if native_source or '(DOMAIN,neighbor.example.org)' in value else 'surge')
+                                             'mihomo' if native_source else 'surge')
                             expected = value.replace(',no-resolve)', ')') if mode == 'strip' else value
                             if not native_source:
-                                expected = expected.replace('DOMAIN-KEYWORD,microsoft', 'DOMAIN-REGEX,microsoft')
+                                expected = expected.replace('DOMAIN-KEYWORD,microsoft', 'DOMAIN-REGEX,microsoft').replace(
+                                    'DOMAIN,neighbor.example.org', expected_domain('DOMAIN', 'neighbor.example.org'))
                             self.assertEqual(repeated[0].value, expected)
                             self.assertNotIn('fin.yaml:' + operator, skipped)
         self.assertEqual(exclude_covered([Rule('DOMAIN-REGEX', '^microsoft$')],

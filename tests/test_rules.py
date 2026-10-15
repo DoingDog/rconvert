@@ -339,11 +339,11 @@ class NativeKeywordRuleTests(unittest.TestCase):
             self.assertEqual(parse(text, purpose='proxy'), (native, []))
             outputs, skipped = render('parent', native, purpose='proxy', no_resolve='keep')
             for name in ('fin.txt', 'fin-surge.txt'):
-                expected = [ordinary[1], *([Rule('DOMAIN', 'keep.example.com')] if name == 'fin.txt' else []),
-                            ordinary[0], ordinary[3], ordinary[2]]
+                expected = [ordinary[1], ordinary[0], ordinary[3], ordinary[2]]
                 self.assertEqual(outputs[name], f'# parent rules: {len(expected)}\n' +
                                  ''.join(rule.kind + ',' + rule.value + '\n' for rule in expected))
-                self.assertFalse(any(key.startswith(name + ':') for key in skipped))
+                self.assertEqual({key: count for key, count in skipped.items() if key.startswith(name + ':')},
+                                 {'fin.txt:DOMAIN': 1} if name == 'fin.txt' else {})
                 for purpose in ('block', 'direct', 'proxy'):
                     for ignore_policy in (False, True):
                         with self.subTest(value=value, name=name, purpose=purpose, ignore_policy=ignore_policy):
@@ -1553,7 +1553,7 @@ class BoundedRegexTailRuleTests(unittest.TestCase):
                         DeepLogicalParserTests.assert_subprocess(self, f'''
 from rules import _apply_no_resolve
 from formats import render
-from tests.test_formats import BoundedRegexTailFormatTests
+from tests.test_formats import BoundedRegexTailFormatTests, expected_domain
 from datetime import datetime, timezone
 from unittest.mock import patch
 leaf = '({kind},{matcher})'
@@ -1573,7 +1573,7 @@ for mode in ('add', 'strip', 'keep'):
     assert out == expected and skipped == omissions
     assert set(parse(out['fin.yaml'], purpose='block')[0]) == {{
         Rule('NOT', wanted.value, native_fields=True),
-        Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')}}
+        Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2])}}
 ''')
 
 
@@ -1956,7 +1956,7 @@ class ParseTests(unittest.TestCase):
         document = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")],
                           purpose="block", no_resolve="add")[0]["fin.yaml"]
         rules, messages = parse(document, purpose="block")
-        self.assertEqual(rules, [Rule("DOMAIN-SUFFIX", "ads.example.com", domain_source='mihomo')])
+        self.assertEqual(rules, [Rule('DOMAIN-REGEX', expected_domain('DOMAIN-SUFFIX', 'ads.example.com').partition(',')[2])])
         self.assertEqual(messages, [])
 
     def test_process_name_hash_survives_yaml_and_generated_surge_reparse(self):
@@ -3728,8 +3728,8 @@ class FollowupParseTests(unittest.TestCase):
                 output, skipped = render("group", normalize(parsed), purpose="proxy", no_resolve="keep")
                 self.assertNotIn("fin.yaml:AND", skipped)
                 self.assertEqual(set(parse(output["fin.yaml"], purpose="proxy")[0]),
-                                 {Rule("AND", expression, native_fields=True, domain_source="mihomo"),
-                                  Rule("DOMAIN", "keep.example.com", domain_source='mihomo')})
+                                 {Rule('AND', expression.replace('DOMAIN,x.example.com', expected_domain('DOMAIN', 'x.example.com')), native_fields=True),
+                                  Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2])})
                 self.assertEqual(messages, [])
             for marker in ("#", ";", "//"):
                 value = f"^a{{b$,My Proxy {marker} note}}$|^foo$"

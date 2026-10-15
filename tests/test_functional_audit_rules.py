@@ -14,6 +14,7 @@ from urllib.error import HTTPError
 from formats import FILES, render
 from generate import generate, publish
 from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
+from tests.test_formats import expected_domain
 
 
 def native_text(*matchers):
@@ -124,13 +125,19 @@ class UnderscoreDomainAuditTests(unittest.TestCase):
                                 emitted = wanted.replace(field, 'ad_core.cctv.com')
                                 if mode == 'strip':
                                     emitted = emitted.replace(',no-resolve', '')
+                                if not native:
+                                    for kind, value in (('DOMAIN', 'ad_core.cctv.com'), ('DOMAIN-SUFFIX', 'ad_core.cctv.com'),
+                                                        ('DOMAIN-SUFFIX', 'imp_track.zmaticoo.com'),
+                                                        ('DOMAIN-SUFFIX', 'piano_log.kingsoft.jp')):
+                                        emitted = emitted.replace(kind + ',' + value, expected_domain(kind, value))
                                 self.assertIn(json.dumps(operator + ',' + emitted), outputs['fin.yaml'])
-                                self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose),
-                                                 ([neighbor if native else Rule('DOMAIN', neighbor.value, domain_source='mihomo'),
-                                                   Rule(operator, emitted, native_fields=True, domain_source='mihomo')]
-                                                  if operator in ('NOT', 'OR') else
-                                                  [Rule(operator, emitted, native_fields=True, domain_source='mihomo'),
-                                                   Rule('DOMAIN', neighbor.value, domain_source='mihomo')], []))
+                                restored_neighbor = neighbor if native else Rule(
+                                    'DOMAIN-REGEX', expected_domain('DOMAIN', neighbor.value).partition(',')[2])
+                                restored = [restored_neighbor, Rule(operator, emitted, native_fields=True,
+                                                                    domain_source='mihomo' if native else 'surge')]
+                                restored.sort(key=lambda rule: (rule.kind, len(json.dumps(rule.kind + ',' + rule.value)),
+                                                                json.dumps(rule.kind + ',' + rule.value)))
+                                self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), (restored, []))
 
     def test_mihomo_render_reimport_preserves_seven_suffixes_and_wildcard_literals(self):
         for source in ('surge', 'qx', 'mihomo'):
@@ -143,11 +150,15 @@ class UnderscoreDomainAuditTests(unittest.TestCase):
                         outputs, skipped = render('underscore', iter(rules), purpose=purpose, no_resolve=mode)
                         self.assertFalse(any(key.startswith('fin.yaml:') for key in skipped))
                         for value in self.suffixes:
-                            self.assertIn(json.dumps('DOMAIN-SUFFIX,' + value), outputs['fin.yaml'])
+                            self.assertIn(json.dumps(expected_domain('DOMAIN-SUFFIX', value) if source == 'surge' else
+                                                     'DOMAIN-SUFFIX,' + value), outputs['fin.yaml'])
                         wildcard = (Rule('DOMAIN-REGEX', r'^ad_core\-.*\.example\.org\.?$') if source == 'surge' else
                                     Rule('DOMAIN-WILDCARD', 'ad_core-*.example.org', domain_source='mihomo'))
-                        wanted = {*(Rule('DOMAIN-SUFFIX', value, domain_source='mihomo') for value in self.suffixes),
-                                  Rule('DOMAIN', 'ad_core.cctv.com', domain_source='mihomo'), wildcard}
+                        wanted = {*(Rule('DOMAIN-REGEX', expected_domain('DOMAIN-SUFFIX', value).partition(',')[2])
+                                    if source == 'surge' else Rule('DOMAIN-SUFFIX', value, domain_source='mihomo')
+                                    for value in self.suffixes),
+                                  Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'ad_core.cctv.com').partition(',')[2])
+                                  if source == 'surge' else Rule('DOMAIN', 'ad_core.cctv.com', domain_source='mihomo'), wildcard}
                         parsed, messages = parse(outputs['fin.yaml'], purpose=purpose)
                         self.assertEqual((set(parsed), messages), (wanted, []))
 
@@ -193,9 +204,14 @@ class UnderscoreDomainAuditTests(unittest.TestCase):
                             self.assertNotIn('invalid ', diagnostic.getvalue())
                             self.assertEqual(list(outputs), [root / group / name for group in ('source', 'child') for name in FILES])
                             wanted_logic = logic.replace(',no-resolve', '') if mode == 'strip' else logic
-                            wanted = {*(Rule('DOMAIN-SUFFIX', value, domain_source='mihomo') for value in self.suffixes),
-                                      Rule('AND', wanted_logic, native_fields=True, domain_source='mihomo'),
-                                      Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                            if not native:
+                                wanted_logic = wanted_logic.replace('DOMAIN,ad_core.cctv.com', expected_domain('DOMAIN', 'ad_core.cctv.com')).replace(
+                                    'DOMAIN-SUFFIX,piano_log.kingsoft.jp', expected_domain('DOMAIN-SUFFIX', 'piano_log.kingsoft.jp'))
+                            wanted = {*(Rule('DOMAIN-SUFFIX', value, domain_source='mihomo') if native else
+                                        Rule('DOMAIN-REGEX', expected_domain('DOMAIN-SUFFIX', value).partition(',')[2]) for value in self.suffixes),
+                                      Rule('AND', wanted_logic, native_fields=True, domain_source='mihomo' if native else 'surge'),
+                                      Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo') if native else
+                                      Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'neighbor.example.org').partition(',')[2]),
                                       Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
                                       Rule('SRC-IP-CIDR', '198.51.100.0/24')}
                             for group in ('source', 'child'):
@@ -589,7 +605,8 @@ class InlineOptionsAuditTests(unittest.TestCase):
                             expected = {*(Rule(kind, value) for kind in self.kinds), Rule('AND', wanted, native_fields=True),
                                         Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
                                         Rule('SRC-IP-CIDR', '198.51.100.0/24'),
-                                        Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')}
+                                        (Rule('DOMAIN', 'keep.example.com', domain_source='mihomo') if native else
+                                         Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2]))}
                             self.assertEqual(list(outputs), [root / group / name for group in ('source', 'child') for name in FILES])
                             for group in ('source', 'child'):
                                 self.assertEqual(set(parse(outputs[root / group / 'fin.yaml'], purpose=purpose)[0]), expected)
@@ -598,9 +615,10 @@ class InlineOptionsAuditTests(unittest.TestCase):
                                     self.assertIn(json.dumps(kind + ',' + value), outputs[root / group / 'fin.yaml'])
                                 self.assertNotIn('covered.example.com', outputs[root / group / 'fin.yaml'])
                                 self.assertEqual(outputs[root / group / 'fin.txt'].splitlines()[1:],
-                                                 ['DOMAIN,keep.example.com', 'IP-CIDR,192.0.2.0/24' + flag,
-                                                  'SRC-IP,198.51.100.0/24'])
-                                self.assertEqual(outputs[root / group / 'fin-surge-ds.txt'].splitlines()[1:], ['keep.example.com'])
+                                                 (['DOMAIN,keep.example.com'] if not native and group == 'source' else []) +
+                                                 ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,198.51.100.0/24'])
+                                self.assertEqual(outputs[root / group / 'fin-surge-ds.txt'].splitlines()[1:],
+                                                 ['keep.example.com'] if not native and group == 'source' else [])
                             if purpose == 'block':
                                 self.assertIn('@@||allow.example.com^\n', outputs[root / 'source/fin-adb.txt'])
                             self.assertEqual({path: path.read_bytes() for path in old}, old)
@@ -769,7 +787,7 @@ class DeepRegexAuditTests(unittest.TestCase):
                                     if not valid:
                                         outputs, _ = render('condition', parsed, purpose='proxy', no_resolve='keep')
                                         self.assertEqual(parse(outputs['fin.yaml'], purpose='proxy'),
-                                                         ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')], []))
+                                                         ([neighbor if native else Rule('DOMAIN-REGEX', expected_domain('DOMAIN', neighbor.value).partition(',')[2])], []))
         self.assertEqual((sys.get_int_max_str_digits(), sys.getrecursionlimit()), limits)
 
     def test_native_expression_condition_x_comments_do_not_create_branch_operands(self):
@@ -972,9 +990,12 @@ class DeepRegexAuditTests(unittest.TestCase):
                                 self.assertIn('invalid ' + kind + ' ' + invalid, diagnostic.getvalue())
                             self.assertIn('invalid logical expression', diagnostic.getvalue())
                             self.assertNotIn('invalid whitelist', diagnostic.getvalue())
+                            if not native:
+                                wanted = wanted.replace('DOMAIN,leaf.example.com', expected_domain('DOMAIN', 'leaf.example.com'))
                             expected = {*(Rule(kind, value) for kind in self.kinds),
-                                        Rule('AND', wanted, native_fields=True, domain_source='mihomo'),
-                                        Rule('DOMAIN', 'keep.example.com', domain_source='mihomo'),
+                                        Rule('AND', wanted, native_fields=True, domain_source='mihomo' if native else 'surge'),
+                                        (Rule('DOMAIN', 'keep.example.com', domain_source='mihomo') if native else
+                                         Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2])),
                                         Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
                                         Rule('SRC-IP-CIDR', '198.51.100.0/24')}
                             self.assertEqual(list(outputs), [root / group / name for group in ('source', 'child') for name in FILES])
@@ -986,9 +1007,10 @@ class DeepRegexAuditTests(unittest.TestCase):
                                 for kind in self.kinds:
                                     self.assertIn(json.dumps(kind + ',' + value), outputs[root / group / 'fin.yaml'])
                                 self.assertEqual(outputs[root / group / 'fin.txt'].splitlines()[1:],
-                                                 ['DOMAIN,keep.example.com', 'IP-CIDR,192.0.2.0/24' + flag,
-                                                  'SRC-IP,198.51.100.0/24'])
-                                self.assertEqual(outputs[root / group / 'fin-surge-ds.txt'].splitlines()[1:], ['keep.example.com'])
+                                                 (['DOMAIN,keep.example.com'] if not native and group == 'source' else []) +
+                                                 ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,198.51.100.0/24'])
+                                self.assertEqual(outputs[root / group / 'fin-surge-ds.txt'].splitlines()[1:],
+                                                 ['keep.example.com'] if not native and group == 'source' else [])
                             if purpose == 'block':
                                 self.assertIn('@@||allow.example.com^\n', outputs[root / 'source/fin-adb.txt'])
                             self.assertEqual({path: path.read_bytes() for path in old}, old)
@@ -1338,7 +1360,8 @@ class BracedHexAuditTests(unittest.TestCase):
                                         Rule('AND', wanted, native_fields=True),
                                         Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
                                         Rule('SRC-IP-CIDR', '198.51.100.0/24'),
-                                        Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')}
+                                        (Rule('DOMAIN', 'keep.example.com', domain_source='mihomo') if native else
+                                         Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2]))}
                             self.assertEqual(list(outputs), [root / group / name for group in ('source', 'child') for name in FILES])
                             for group in ('source', 'child'):
                                 parsed, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
@@ -1605,15 +1628,20 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                                           'OR,((OR,((DEST-PORT,80),(DEST-PORT,443))),(PROTOCOL,TCP))', 'SRC-PORT,123',
                                           'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,198.51.100.0/24']
                             qx_body = ['HOST,neighbor.example.org,LIST', 'IP-CIDR,192.0.2.0/24,LIST' + flag]
+                            if not native:
+                                yaml_body = [line.replace('DOMAIN,neighbor.example.org', expected_domain('DOMAIN', 'neighbor.example.org')) for line in yaml_body]
                             for group in ('source', 'child'):
-                                dns_body = (['@@||allow.example.org^'] if group == 'source' else []) + ['@@|covered.example.org|', '0.0.0.0 neighbor.example.org']
+                                route_neighbor = not native and group == 'source'
+                                qx_neighbor = native or group == 'source'
+                                current_surge = [line for line in surge_body if route_neighbor or not line.startswith('DOMAIN,')]
+                                dns_body = (['@@||allow.example.org^'] if group == 'source' else []) + ['@@|covered.example.org|', *(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])]
                                 if purpose != 'block':
                                     dns_body = []
                                 expected = {'fin.yaml': f'# {group} rules: 9\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
-                                            'fin.txt': f'# {group} rules: 9\n' + '\n'.join(surge_body) + '\n',
-                                            'fin-qx.txt': f'# {group} rules: 2\n' + '\n'.join(qx_body) + '\n',
+                                            'fin.txt': f'# {group} rules: {len(current_surge)}\n' + '\n'.join(current_surge) + '\n',
+                                            'fin-qx.txt': f'# {group} rules: {1 + int(qx_neighbor)}\n' + '\n'.join(qx_body if qx_neighbor else qx_body[1:]) + '\n',
                                             'fin-surge.txt': f'# {group} rules: 8\n' + '\n'.join(line for line in surge_body if not line.startswith('DOMAIN,')) + '\n',
-                                            'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                            'fin-surge-ds.txt': f'# {group} rules: {int(route_neighbor)}\n' + ('neighbor.example.org\n' if route_neighbor else ''),
                                             'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                                            '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
                                                            '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
@@ -1670,7 +1698,7 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                     outputs = generate(root, lambda url: white.encode('utf-8'))
                 self.assertIn('invalid whitelist', diagnostic.getvalue())
                 self.assertEqual(parse(outputs[root / 'source/fin.yaml'], purpose=purpose),
-                                 ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                                 ([Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'neighbor.example.org').partition(',')[2]),
                                    Rule('NOT', '((SRC-PORT,443))', native_fields=True)], []))
                 self.assertEqual({path: path.read_bytes() for path in old}, old)
                 for path, message in ((root / 'static/white.list', 'Output path targets static'),
@@ -1977,17 +2005,17 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                                      'NOT,((DST-PORT,0-1))', 'OR,((DST-PORT,80),(DST-PORT,443))',
                                      'OR,((IN-PORT,65535),(DST-PORT,80))', 'SRC-PORT,80-443']
                         surge_body = ['AND,' + conjunction.replace('NETWORK,tcp', 'PROTOCOL,TCP').replace('SRC-IP-CIDR,', 'SRC-IP,'),
-                                      'DEST-PORT,0', 'DOMAIN,neighbor.example.org', 'IN-PORT,80-90',
+                                      'DEST-PORT,0', 'IN-PORT,80-90',
                                       'NOT,((DEST-PORT,0-1))', 'OR,((DEST-PORT,80),(DEST-PORT,443))',
                                       'OR,((IN-PORT,65535),(DEST-PORT,80))', 'SRC-PORT,80-443']
                         for group in ('source', 'child'):
                             dns_body = ((['@@||allow.example.org^'] if group == 'source' else []) +
                                         ['@@|covered.example.org|', '0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
                             expected = {'fin.yaml': f'# {group} rules: 8\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
-                                        'fin.txt': f'# {group} rules: 8\n' + '\n'.join(surge_body) + '\n',
+                                        'fin.txt': f'# {group} rules: 7\n' + '\n'.join(surge_body) + '\n',
                                         'fin-qx.txt': f'# {group} rules: 1\nHOST,neighbor.example.org,LIST\n',
                                         'fin-surge.txt': f'# {group} rules: 7\n' + '\n'.join(line for line in surge_body if not line.startswith('DOMAIN,')) + '\n',
-                                        'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                        'fin-surge-ds.txt': f'# {group} rules: 0\n',
                                         'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                                        '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
                                                        '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
@@ -2122,7 +2150,7 @@ class IPv6ScopeAuditTests(unittest.TestCase):
                     with contextlib.redirect_stderr(io.StringIO()) as diagnostic:
                         outputs = generate(root, lambda url: invalid.encode('utf-8'))
                     self.assertIn('invalid whitelist', diagnostic.getvalue())
-                    expected = [Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                    expected = [Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'neighbor.example.org').partition(',')[2]),
                                 Rule('IP-CIDR6', 'fe80::/64', () if mode != 'add' else ('no-resolve',))]
                     self.assertEqual(parse(outputs[root / 'source/fin.yaml'], purpose=purpose), (expected, []))
                     for path, message in ((root / 'static/white.list', 'Output path targets static'),
@@ -2410,16 +2438,22 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                             surge_body = [f'AND,((SRC-IP,2001:db8::1),(IP-CIDR6,2001:db8:abcd::/48{flag}))',
                                           'DOMAIN,neighbor.example.org', 'IP-CIDR,192.0.2.0/24' + flag,
                                           'IP-CIDR6,fe80::/63' + flag, 'SRC-IP,2001:db8::/32']
+                            if not native:
+                                yaml_body = [line.replace('DOMAIN,neighbor.example.org', expected_domain('DOMAIN', 'neighbor.example.org')) for line in yaml_body]
                             for group in ('source', 'child'):
+                                route_neighbor = not native and group == 'source'
+                                qx_neighbor = native or group == 'source'
                                 current_surge = surge_body if group == 'source' else [surge_body[0].replace('2001:db8::1)', '2001:db8::1/128)'), *surge_body[1:]]
+                                current_surge = [line for line in current_surge if route_neighbor or not line.startswith('DOMAIN,')]
                                 dns_body = ((['@@||allow.example.org^'] if group == 'source' else []) +
-                                            ['@@|covered.example.org|', '0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                                            ['@@|covered.example.org|', *(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])]) if purpose == 'block' else []
                                 expected = {'fin.yaml': f'# {group} rules: 7\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
-                                            'fin.txt': f'# {group} rules: 5\n' + '\n'.join(current_surge) + '\n',
-                                            'fin-qx.txt': f'# {group} rules: 3\nHOST,neighbor.example.org,LIST\n' +
+                                            'fin.txt': f'# {group} rules: {len(current_surge)}\n' + '\n'.join(current_surge) + '\n',
+                                            'fin-qx.txt': f'# {group} rules: {2 + int(qx_neighbor)}\n' +
+                                                          ('HOST,neighbor.example.org,LIST\n' if qx_neighbor else '') +
                                                           'IP-CIDR,192.0.2.0/24,LIST' + flag + '\nIP6-CIDR,fe80::/63,LIST' + flag + '\n',
                                             'fin-surge.txt': f'# {group} rules: 4\n' + '\n'.join(line for line in current_surge if not line.startswith('DOMAIN,')) + '\n',
-                                            'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                            'fin-surge-ds.txt': f'# {group} rules: {int(route_neighbor)}\n' + ('neighbor.example.org\n' if route_neighbor else ''),
                                             'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                                            '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
                                                            '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
@@ -2501,18 +2535,21 @@ class DecimalASNAuditTests(unittest.TestCase):
                                          (',no-resolve' if mode == 'add' else '') + '"\n')
                         yaml_body = ['AND,((IP-ASN,13335' + flag + '),(SRC-IP-ASN,0),(NETWORK,tcp))',
                                      'AND,((IP-ASN,00' + flag + '),(SRC-IP-ASN,0013335),(NETWORK,tcp))',
-                                     'DOMAIN,neighbor.example.org', 'IP-ASN,00' + flag,
+                                     expected_domain('DOMAIN', 'neighbor.example.org'), 'IP-ASN,00' + flag,
                                      'IP-ASN,13335' + flag, 'IP-ASN,0013335' + flag, 'SRC-IP-ASN,13335']
                         for group in ('parent', 'child'):
+                            source_neighbor = group == 'parent'
                             dns_body = (['@@||allow.example.org^', '0.0.0.0 neighbor.example.org'] if group == 'parent' else
-                                        ['0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                                        []) if purpose == 'block' else []
                             expected = {'fin.yaml': f'# {group} rules: 7\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
-                                        'fin.txt': f'# {group} rules: 4\nDOMAIN,neighbor.example.org\n' +
+                                        'fin.txt': f'# {group} rules: {3 + int(source_neighbor)}\n' +
+                                                   ('DOMAIN,neighbor.example.org\n' if source_neighbor else '') +
                                                    'IP-ASN,00' + flag + '\nIP-ASN,13335' + flag + '\nIP-ASN,0013335' + flag + '\n',
-                                        'fin-qx.txt': f'# {group} rules: 4\nHOST,neighbor.example.org,LIST\n' +
+                                        'fin-qx.txt': f'# {group} rules: {3 + int(source_neighbor)}\n' +
+                                                      ('HOST,neighbor.example.org,LIST\n' if source_neighbor else '') +
                                                       'IP-ASN,00,LIST' + flag + '\nIP-ASN,13335,LIST' + flag + '\nIP-ASN,0013335,LIST' + flag + '\n',
                                         'fin-surge.txt': f'# {group} rules: 3\nIP-ASN,00' + flag + '\nIP-ASN,13335' + flag + '\nIP-ASN,0013335' + flag + '\n',
-                                        'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                        'fin-surge-ds.txt': f'# {group} rules: {int(source_neighbor)}\n' + ('neighbor.example.org\n' if source_neighbor else ''),
                                         'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                                        '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
                                                        '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
@@ -2600,7 +2637,7 @@ class DecimalASNAuditTests(unittest.TestCase):
                         outputs = generate(root, lambda url: b'IP-ASN,4294967296\n')
                     self.assertIn('invalid whitelist', diagnostic.getvalue())
                     self.assertEqual(parse(outputs[root / 'parent/fin.yaml'], purpose=purpose),
-                                     ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'),
+                                     ([Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'neighbor.example.org').partition(',')[2]),
                                        Rule('IP-ASN', '13335', ('no-resolve',) if mode == 'add' else ())], []))
                     for path, message in ((root / 'static/white.list', 'Output path targets static'),
                                           (root / '../escape.list', 'Output path escapes root')):
@@ -2869,7 +2906,8 @@ class IPSuffixPrefixAuditTests(unittest.TestCase):
                         outputs, skipped = render('suffix', normalize(iter([raw, neighbor])), purpose=purpose,
                                                   no_resolve=mode)
                     dns = ['0.0.0.0 neighbor.example.org'] if purpose == 'block' else []
-                    expected = {'fin.yaml': '# suffix rules: 2\npayload:\n  - ' + json.dumps(emitted) + '\n  - "DOMAIN,neighbor.example.org"\n',
+                    expected = {'fin.yaml': '# suffix rules: 2\npayload:\n  - ' + json.dumps(emitted) + '\n  - ' +
+                                               json.dumps(expected_domain('DOMAIN', 'neighbor.example.org')) + '\n',
                                 'fin.txt': '# suffix rules: 1\nDOMAIN,neighbor.example.org\n',
                                 'fin-qx.txt': '# suffix rules: 1\nHOST,neighbor.example.org,LIST\n',
                                 'fin-surge.txt': '# suffix rules: 0\n',
@@ -2888,7 +2926,7 @@ class IPSuffixPrefixAuditTests(unittest.TestCase):
                     self.assertEqual({path: path.read_bytes() for path in paths},
                                      {root / 'suffix' / name: text.encode('utf-8') for name, text in expected.items()})
                     parsed = [Rule('AND', emitted[4:], native_fields=True),
-                              Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo')]
+                              Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'neighbor.example.org').partition(',')[2])]
                     self.assertEqual(parse((root / 'suffix/fin.yaml').read_text(encoding='utf-8'), purpose=purpose),
                                      (parsed, []))
 
@@ -2986,14 +3024,20 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                                          'DOMAIN,neighbor.example.org', 'IP-CIDR,192.0.2.0/24' + flag,
                                          'IP-SUFFIX,192.0.2.8/24' + flag, 'SRC-IP-SUFFIX,192.0.2.7/24',
                                          'IP-SUFFIX,2001:db8::7/64' + flag]
+                            if not native:
+                                yaml_body = [line.replace('DOMAIN,neighbor.example.org', expected_domain('DOMAIN', 'neighbor.example.org')) for line in yaml_body]
                             for group in ('source', 'child'):
-                                dns_body = (['@@||allow.example.org^', '0.0.0.0 neighbor.example.org'] if group == 'source' else
-                                            ['0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                                route_neighbor = not native and group == 'source'
+                                qx_neighbor = native or group == 'source'
+                                dns_body = (['@@||allow.example.org^', *(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])] if group == 'source' else
+                                            [*(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])]) if purpose == 'block' else []
                                 expected = {'fin.yaml': f'# {group} rules: 6\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
-                                            'fin.txt': f'# {group} rules: 2\nDOMAIN,neighbor.example.org\nIP-CIDR,192.0.2.0/24{flag}\n',
-                                            'fin-qx.txt': f'# {group} rules: 2\nHOST,neighbor.example.org,LIST\nIP-CIDR,192.0.2.0/24,LIST{flag}\n',
+                                            'fin.txt': f'# {group} rules: {1 + int(route_neighbor)}\n' +
+                                                       ('DOMAIN,neighbor.example.org\n' if route_neighbor else '') + f'IP-CIDR,192.0.2.0/24{flag}\n',
+                                            'fin-qx.txt': f'# {group} rules: {1 + int(qx_neighbor)}\n' +
+                                                          ('HOST,neighbor.example.org,LIST\n' if qx_neighbor else '') + f'IP-CIDR,192.0.2.0/24,LIST{flag}\n',
                                             'fin-surge.txt': f'# {group} rules: 1\nIP-CIDR,192.0.2.0/24{flag}\n',
-                                            'fin-surge-ds.txt': f'# {group} rules: 1\nneighbor.example.org\n',
+                                            'fin-surge-ds.txt': f'# {group} rules: {int(route_neighbor)}\n' + ('neighbor.example.org\n' if route_neighbor else ''),
                                             'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                                            '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
                                                            '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
@@ -3060,7 +3104,7 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                     self.assertIn('invalid whitelist', diagnostic.getvalue())
                     flag = ('no-resolve',) if mode == 'add' else ()
                     self.assertEqual(parse(outputs[root / 'source/fin.yaml'], purpose=purpose),
-                                     ([Rule('DOMAIN', 'neighbor.example.org', domain_source='mihomo'), Rule('IP-SUFFIX', '192.0.2.7/24', flag)], []))
+                                     ([Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'neighbor.example.org').partition(',')[2]), Rule('IP-SUFFIX', '192.0.2.7/24', flag)], []))
                     for path, message in ((root / 'static/white.list', 'Output path targets static'),
                                           (root / '../escape.list', 'Output path escapes root')):
                         with self.assertRaisesRegex(ValueError, message):

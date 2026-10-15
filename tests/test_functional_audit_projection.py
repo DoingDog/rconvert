@@ -13,6 +13,271 @@ from urllib.error import HTTPError
 from formats import FILES, render
 from generate import generate, publish
 from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
+from tests.test_formats import expected_domain
+
+
+class NativeExactSuffixKeywordProjectionTests(unittest.TestCase):
+    def test_native_exact_suffix_with_keyword_keeps_whole_logical_scope(self):
+        for leaf in ('DOMAIN,a.test', 'DOMAIN,a.test.', 'DOMAIN,123.test',
+                     'DOMAIN,_a.test', 'DOMAIN-SUFFIX,a.test', 'DOMAIN-SUFFIX,a.test.'):
+            for matcher in (leaf, 'AND,((' + leaf + '),(DOMAIN-KEYWORD,123))',
+                            'OR,((DOMAIN-KEYWORD,123),(' + leaf + '))',
+                            'NOT,((' + leaf + '))',
+                            'AND,((NOT,((' + leaf + '))),(OR,((DOMAIN-KEYWORD,123),(DOMAIN-KEYWORD,456))))'):
+                parsed, warnings = parse('payload:\n  - ' + json.dumps(matcher), purpose='proxy')
+                self.assertEqual(warnings, [])
+                out, skipped = render('literal', normalize(exclude_covered(parsed, [])),
+                                      purpose='proxy', no_resolve='keep')
+                for name in ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
+                    self.assertEqual(out[name], '# literal rules: 0\n')
+                self.assertEqual(out['fin.yaml'], '# literal rules: 1\npayload:\n  - ' + json.dumps(matcher) + '\n')
+                self.assertNotIn('whitelist-covered:' + parsed[0].kind, skipped)
+
+
+class ExactSuffixRoutingProjectionTests(unittest.TestCase):
+    def test_native_exact_suffix_skip_checked_surge_full_domainset_and_whole_logical(self):
+        for leaf in ('DOMAIN,A.test', 'DOMAIN,a.test.', 'DOMAIN,123.test',
+                     'DOMAIN,ad_core.test', 'DOMAIN-SUFFIX,A.test', 'DOMAIN-SUFFIX,a.test.'):
+            matchers = (leaf, 'AND,((' + leaf + '),(DST-PORT,443))',
+                        'OR,((DST-PORT,443),(' + leaf + '))', 'NOT,((' + leaf + '))',
+                        'AND,((OR,((DST-PORT,443),(' + leaf + '))),(NOT,((NETWORK,udp))))')
+            for matcher in matchers:
+                for purpose in ('block', 'direct', 'proxy'):
+                    parsed, warnings = parse('payload:\n  - ' + json.dumps(matcher), purpose=purpose)
+                    self.assertEqual(warnings, [])
+                    self.assertEqual(len(parsed), 1)
+                    rule = parsed[0]
+                    self.assertEqual(rule.value, matcher.partition(',')[2])
+                    self.assertEqual(rule.domain_source, 'mihomo')
+                    self.assertEqual(rule.native_fields, rule.kind in {'AND', 'OR', 'NOT'})
+                    self.assertEqual(normalize(exclude_covered(parsed, [])), parsed)
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(matcher=matcher, purpose=purpose, mode=mode):
+                            out, skipped = render('exact', iter(parsed), purpose=purpose, no_resolve=mode)
+                            for name in ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
+                                self.assertEqual(out[name], '# exact rules: 0\n')
+                            self.assertEqual(skipped['fin.txt:' + rule.kind], 1)
+                            self.assertEqual(skipped['fin-surge-ds.txt:' + rule.kind], 1)
+                            self.assertEqual(skipped.get('fin-surge.txt:' + rule.kind, 0),
+                                             int(rule.kind not in {'DOMAIN', 'DOMAIN-SUFFIX'}))
+                            self.assertEqual(parse(out['fin.yaml'], purpose=purpose), (parsed, []))
+                            self.assertNotIn('fin.yaml:' + rule.kind, skipped)
+                            self.assertFalse(any('whitelist-covered' in key for key in skipped))
+                            SurgeRootDotProjectionTests.assert_counts_and_split(self, out, purpose, 'exact')
+
+
+class SurgePairedExactProjectionTests(unittest.TestCase):
+    def test_surge_exact_uses_ascii_pairs_and_keeps_qx_native_and_unicode_payloads(self):
+        expected = r'DOMAIN-REGEX,(?-i:\A[aA]\.[tT][eE][sS][tT]\.?\z)'
+        for text in ('DOMAIN,a.test', 'DOMAIN,"A.TEST."', "DOMAIN,'a.test'"):
+            for purpose in ('block', 'direct', 'proxy'):
+                parsed, warnings = parse(text, purpose=purpose)
+                self.assertEqual((parsed, warnings), ([Rule('DOMAIN', 'a.test')], []))
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(text=text, purpose=purpose, mode=mode):
+                        out, skipped = render('paired', parsed, purpose=purpose, no_resolve=mode)
+                        self.assertEqual(json.loads(out['fin.yaml'].splitlines()[2][4:]), expected)
+                        self.assertNotIn('fin.yaml:DOMAIN', skipped)
+                        self.assertEqual(out['fin.txt'], '# paired rules: 1\nDOMAIN,a.test\n')
+                        self.assertEqual(out['fin-surge-ds.txt'], '# paired rules: 1\na.test\n')
+                        payload = expected.partition(',')[2]
+                        # 只检查明确模板在有限 Host 字面值上的目标语义，不运行 regexp2。
+                        target = re.compile(payload.replace(r'\z', r'\Z'))
+                        for host, matches in (('a.test', True), ('A.TEST', True), ('a.test.', True),
+                                              ('A.test.', True), ('a.test..', False), ('x.a.test', False),
+                                              ('é.a.test', False)):
+                            self.assertEqual(target.search(host) is not None, matches, host)
+        for source in ('qx', 'mihomo', 'unknown'):
+            out, _ = render('paired', [Rule('DOMAIN', 'a.test', domain_source=source)],
+                            purpose='proxy', no_resolve='keep')
+            self.assertEqual(json.loads(out['fin.yaml'].splitlines()[2][4:]), 'DOMAIN,a.test')
+        for value in ('K.test', 'İ.test', '例子.test'):
+            out, _ = render('paired', [Rule('DOMAIN', value)], purpose='proxy', no_resolve='keep')
+            self.assertEqual(json.loads(out['fin.yaml'].splitlines()[2][4:]), 'DOMAIN,' + value)
+
+
+class SurgePairedSuffixProjectionTests(unittest.TestCase):
+    def test_surge_suffix_keeps_legacy_arm_and_adds_bounded_ascii_case_root_profile(self):
+        expected = (r'DOMAIN-REGEX,(?-i:(?:\A|\.)a\.test\z|'
+                    r'\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
+                    r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*'
+                    r'[aA]\.[tT][eE][sS][tT]\.?\z)')
+        rules, warnings = parse('DOMAIN-SUFFIX,"A.TEST."', purpose='proxy')
+        self.assertEqual((rules, warnings), ([Rule('DOMAIN-SUFFIX', 'a.test')], []))
+        out, _ = render('suffix', rules, purpose='proxy', no_resolve='keep')
+        self.assertEqual(json.loads(out['fin.yaml'].splitlines()[2][4:]), expected)
+        target = re.compile(expected.partition(',')[2].replace(r'\z', r'\Z'))
+        for host, matches in (('a.test', True), ('A.TEST', True), ('X.a.test.', True), ('x.A.TEST', True),
+                              ('é.a.test', True), ('é.a.test.', False), ('é.A.TEST', False),
+                              ('K.a.test', True), ('K.A.TEST', False), ('K.a.test.', False),
+                              ('a.test..', False), ('x..a.test', True), ('x..A.TEST', False),
+                              ('-x.a.test', True), ('-x.A.TEST', False), ('xa.test', False),
+                              ('a.test.evil', False), ('a' * 64 + '.a.test', True),
+                              ('a' * 64 + '.A.TEST', False), ('x_.A.TEST.', True),
+                              ('a' * 63 + '.' + 'b' * 63 + '.' + 'c' * 63 + '.' + 'd' * 54 + '.A.TEST.', True),
+                              ('a' * 63 + '.' + 'b' * 63 + '.' + 'c' * 63 + '.' + 'd' * 55 + '.A.TEST', False)):
+            with self.subTest(host=host):
+                self.assertEqual(target.search(host) is not None, matches)
+        logical, warnings = parse('AND,((DOMAIN-SUFFIX,"A.TEST."),(NOT,((DOMAIN,\'b.test\'))))', purpose='proxy')
+        self.assertEqual(warnings, [])
+        out, _ = render('suffix', logical, purpose='proxy', no_resolve='keep')
+        self.assertEqual(json.loads(out['fin.yaml'].splitlines()[2][4:]),
+                         'AND,((' + expected + '),(NOT,((DOMAIN-REGEX,(?-i:\\A[bB]\\.[tT][eE][sS][tT]\\.?\\z)))))')
+
+
+class PairedActualWhitelistTests(unittest.TestCase):
+    def test_paired_exact_and_suffix_are_covered_by_complete_actual_parent_suffix(self):
+        for text in ('DOMAIN,"A.TEST."', 'DOMAIN-SUFFIX,a.test'):
+            kind = text.partition(',')[0]
+            parsed, warnings = parse(text, purpose='proxy')
+            self.assertEqual(warnings, [])
+            white = parse_whitelist('DOMAIN-SUFFIX,test')
+            self.assertEqual(exclude_covered(parsed, white), [])
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(text=text, purpose=purpose, mode=mode):
+                        out, skipped = render('paired-white', iter(parsed), whitelist=iter(white),
+                                              purpose=purpose, no_resolve=mode)
+                        self.assertEqual(out['fin.yaml'], '# paired-white rules: 0\npayload:\n')
+                        self.assertEqual(skipped['fin.yaml:' + kind + ':whitelist-covered'], 1)
+                        self.assertEqual(skipped['whitelist-covered:' + kind], 1)
+                        self.assertNotIn('fin.yaml:' + kind, skipped)
+                        for name in ('fin.txt', 'fin-qx.txt', 'fin-surge-ds.txt'):
+                            self.assertEqual(out[name], '# paired-white rules: 0\n')
+                            self.assertEqual(skipped[name + ':' + kind + ':whitelist-covered'], 1)
+                        SurgeRootDotProjectionTests.assert_counts_and_split(self, out, purpose, 'paired-white')
+
+    def test_necessary_keyword_and_exact_wildcard_cover_complete_actual_paired_matchers(self):
+        cases = (('DOMAIN,a.test', 'DOMAIN-KEYWORD,a', True),
+                 ('DOMAIN-SUFFIX,a.test', 'DOMAIN-KEYWORD,a', True),
+                 ('DOMAIN,a.test', 'DOMAIN-KEYWORD,a.', True),
+                 ('DOMAIN,a.test', 'DOMAIN-WILDCARD,*.test', True),
+                 ('DOMAIN,a.test', 'DOMAIN-WILDCARD,*.*', True),
+                 ('DOMAIN,a.test', 'DOMAIN-WILDCARD,a.tes?', True),
+                 ('DOMAIN,a.test', 'DOMAIN-WILDCARD,a.*', True),
+                 ('DOMAIN,a.test', 'DOMAIN-WILDCARD,[ab].test', True),
+                 ('DOMAIN,123.test', 'payload:\n  - DOMAIN-KEYWORD,123', True),
+                 ('DOMAIN-SUFFIX,123.test', 'payload:\n  - DOMAIN-KEYWORD,123', True),
+                 ('DOMAIN,a.test', 'payload:\n  - DOMAIN-KEYWORD,a', False),
+                 ('DOMAIN-SUFFIX,a.test', 'DOMAIN-WILDCARD,*.test', False),
+                 ('DOMAIN,a.test', 'DOMAIN-KEYWORD,test.', False))
+        for text, white_text, covered in cases:
+            parsed, warnings = parse(text, purpose='proxy')
+            self.assertEqual(warnings, [])
+            white = parse_whitelist(white_text)
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(text=text, white=white_text, purpose=purpose, mode=mode):
+                        baseline, _ = render('literal-white', parsed, purpose=purpose, no_resolve=mode)
+                        out, skipped = render('literal-white', iter(parsed), whitelist=iter(white),
+                                              purpose=purpose, no_resolve=mode)
+                        self.assertEqual(out['fin.yaml'], '# literal-white rules: 0\npayload:\n'
+                                         if covered else baseline['fin.yaml'])
+                        self.assertEqual(skipped.get('fin.yaml:' + parsed[0].kind + ':whitelist-covered', 0), int(covered))
+                        self.assertNotIn('fin.yaml:' + parsed[0].kind, skipped)
+
+    def test_family_shape_subset_options_and_canonical_kelvin_counterexamples_remain(self):
+        exact = r'(?-i:\A[aA]\.[tT][eE][sS][tT]\.?\z)'
+        suffix = (r'(?-i:(?:\A|\.)test\z|\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
+                  r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*'
+                  r'[tT][eE][sS][tT]\.?\z)')
+        canonical = Rule('DOMAIN-REGEX', r'(?i:\Ak\.test\.?\z)')
+        white = parse_whitelist('DOMAIN-SUFFIX,test')
+        for host in ('K.TEST', 'K.test.'):
+            self.assertIsNotNone(re.search(r'(?i:\Ak\.test\.?\Z)', host))
+            self.assertIsNone(re.search(suffix.replace(r'\z', r'\Z'), host))
+        variants = (canonical, Rule('DOMAIN-REGEX', exact.replace('[aA]', '[aB]')),
+                    Rule('DOMAIN-REGEX', exact + '|z'),
+                    Rule('DOMAIN-REGEX', suffix.replace('{1,253}', '{1,254}')),
+                    Rule('DOMAIN-REGEX', suffix.replace(r'(?:\A|\.)test\z', r'(?:\A|\.)wide\z')),
+                    Rule('DOMAIN-SUFFIX', 'test'))
+        for rule in variants:
+            with self.subTest(rule=rule):
+                usable_white = parse_whitelist('DOMAIN,a.test') if rule.kind == 'DOMAIN-SUFFIX' else white
+                baseline, _ = render('shape', [rule], purpose='proxy', no_resolve='keep')
+                out, skipped = render('shape', [rule], whitelist=usable_white, purpose='proxy', no_resolve='keep')
+                self.assertEqual(out['fin.yaml'], baseline['fin.yaml'])
+                self.assertNotIn('fin.yaml:' + rule.kind + ':whitelist-covered', skipped)
+        for attributes in ({'options': ('unsupported',)}, {'options': ('no-resolve',)},
+                           {'domain_source': 'mihomo'}, {'domain_source': 'qx'}):
+            rule = Rule('DOMAIN', 'a.test')
+            out, skipped = render('scope', [rule], whitelist=[Rule('DOMAIN-SUFFIX', 'test', **attributes)],
+                                  purpose='proxy', no_resolve='keep')
+            self.assertIn('DOMAIN-REGEX,', out['fin.yaml'])
+            self.assertNotIn('fin.yaml:DOMAIN:whitelist-covered', skipped)
+        for operator, value in (('AND', '((DOMAIN,a.test),(DST-PORT,443))'),
+                                ('OR', '((DST-PORT,443),(DOMAIN,a.test))'),
+                                ('NOT', '((DOMAIN,a.test))')):
+            rule = Rule(operator, value)
+            baseline, _ = render('logical', [rule], purpose='proxy', no_resolve='keep')
+            out, skipped = render('logical', [rule], whitelist=white, purpose='proxy', no_resolve='keep')
+            self.assertEqual(out['fin.yaml'], baseline['fin.yaml'])
+            self.assertNotIn('whitelist-covered:' + operator, skipped)
+
+    def test_generated_paired_source_white_and_canonical_blocker_use_identical_round_and_disk_bytes(self):
+        canonical = r'DOMAIN-REGEX,(?i:\Ak\.test\.?\z)'
+        paired_exact = r'DOMAIN-REGEX,(?-i:\A[aA]\.[tT][eE][sS][tT]\.?\z)'
+        paired_white = (r'DOMAIN-REGEX,(?-i:(?:\A|\.)test\z|\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
+                        r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*'
+                        r'[tT][eE][sS][tT]\.?\z)')
+        for name in ('fin.yaml', 'fin.txt', 'fin-surge-ds.txt'):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(name=name, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        (root / 'static').mkdir()
+                        (root / 'static/white.list').write_bytes(b'\xef\xbb\xbfDOMAIN-SUFFIX,test\r\n')
+                        (root / 'static/source.list').write_text('DOMAIN,a.test\n' + canonical + '\n', encoding='utf-8')
+                        (root / 'static/blocker.list').write_text(canonical + '\n', encoding='utf-8')
+                        inputs = {path: path.read_bytes() for path in (root / 'static').iterdir()}
+                        configs = [dict(name=group, purpose=purpose, no_resolve=mode, sources=sources, whitelist=white)
+                                   for group, sources, white in (
+                                       ('white', ['static/white.list'], []),
+                                       ('source', ['static/source.list'], []),
+                                       ('consumer', ['source/' + name], ['white/' + name]),
+                                       ('canonical', ['static/blocker.list'], ['white/' + name]))]
+                        (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()) as diagnostics:
+                            outputs = generate(root, lambda url: self.fail(url))
+                        self.assertNotIn('frozen', diagnostics.getvalue())
+                        self.assertEqual(json.loads(outputs[root / 'white/fin.yaml'].splitlines()[2][4:]), paired_white)
+                        source_yaml = outputs[root / 'source/fin.yaml']
+                        self.assertIn(json.dumps(paired_exact), source_yaml)
+                        self.assertIn(json.dumps(canonical), source_yaml)
+                        canonical_yaml = '# canonical rules: 1\npayload:\n  - ' + json.dumps(canonical) + '\n'
+                        self.assertEqual(outputs[root / 'canonical/fin.yaml'], canonical_yaml)
+                        expected_consumer = ('# consumer rules: 1\npayload:\n  - ' + json.dumps(canonical) + '\n'
+                                             if name == 'fin.yaml' else '# consumer rules: 0\npayload:\n')
+                        self.assertEqual(outputs[root / 'consumer/fin.yaml'], expected_consumer)
+                        self.assertNotIn('canonical fin.yaml:DOMAIN-REGEX:whitelist-covered', diagnostics.getvalue())
+                        if name == 'fin.yaml':
+                            self.assertIn('consumer fin.yaml:DOMAIN-REGEX:whitelist-covered: 1', diagnostics.getvalue())
+                            self.assertIn('consumer whitelist-covered:DOMAIN-REGEX: 1', diagnostics.getvalue())
+                        publish(outputs, root=root)
+                        published = {path: path.read_bytes() for path in outputs}
+                        self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                        # 同文用户文件与生成依赖必须消费相同 bytes。
+                        for group in ('source', 'white'):
+                            path = root / 'static' / (group + '.copy')
+                            path.write_bytes(published[root / group / name])
+                        (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()) as disk_diagnostics:
+                            disk = generate(root, lambda url: self.fail(url))
+                        expected = {path: text for path, text in outputs.items() if path.parent.name in {'consumer', 'canonical'}}
+                        self.assertEqual(disk, expected)
+                        consumer_diagnostics = '\n'.join(line for line in diagnostics.getvalue().splitlines()
+                                                        if line.startswith(('consumer ', 'canonical '))) + '\n'
+                        self.assertEqual(disk_diagnostics.getvalue(), consumer_diagnostics)
+                        copied_configs = [dict(configs[2], sources=['static/source.copy'], whitelist=['static/white.copy']),
+                                          dict(configs[3], whitelist=['static/white.copy'])]
+                        (root / 'rulesets.json').write_text(json.dumps(copied_configs), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()) as copied_diagnostics:
+                            copied = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(copied, expected)
+                        self.assertEqual(copied_diagnostics.getvalue(), consumer_diagnostics)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
 
 
 class SurgeRootDotProjectionTests(unittest.TestCase):
@@ -125,7 +390,9 @@ class SurgeRootDotProjectionTests(unittest.TestCase):
                         rule = Rule(kind, value, domain_source='mihomo')
                         neighbor = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
                         out, skipped = render('root', iter(normalize([rule, neighbor, rule])), purpose=purpose, no_resolve=mode)
-                        self.assertEqual(out['fin.txt'], '# root rules: 1\nDOMAIN,keep.example.org\n')
+                        self.assertEqual(out['fin.txt'], '# root rules: 0\n')
+                        self.assertEqual(skipped['fin.txt:DOMAIN'], 1)
+                        self.assertEqual(skipped['fin-surge-ds.txt:DOMAIN'], 1)
                         self.assertEqual(out['fin-surge.txt'], '# root rules: 0\n')
                         self.assertEqual(parse(out['fin.yaml'], purpose=purpose), ([neighbor, rule], []))
                         self.assertEqual(skipped['fin.txt:' + kind], 1)
@@ -424,6 +691,7 @@ class SurgeWildcardBodyBoundaryTests(unittest.TestCase):
                             out, diagnostic = render('body', normalize(exclude_covered(parsed, [])),
                                                      purpose=purpose, no_resolve=mode)
                             actual = expected.replace(',no-resolve', '') if mode == 'strip' else expected
+                            actual = actual.replace('DOMAIN,keep.example.org', expected_domain('DOMAIN', 'keep.example.org'))
                             self.assertEqual(out['fin.yaml'], '# body rules: 1\npayload:\n  - ' + json.dumps(actual) + '\n')
                             original = source.replace(',no-resolve', '') if mode == 'strip' else source
                             self.assertEqual(out['fin.txt'], '# body rules: 1\n' + original + '\n')
@@ -434,7 +702,7 @@ class SurgeWildcardBodyBoundaryTests(unittest.TestCase):
                             readback, warnings = parse(out['fin.yaml'], purpose=purpose)
                             self.assertEqual(warnings, [])
                             self.assertEqual(readback, [Rule(operator, actual.partition(',')[2], native_fields=True,
-                                                            domain_source='mihomo' if '(DOMAIN,keep.example.org)' in actual else 'surge')])
+                                                            domain_source='surge')])
                             SurgeRootDotProjectionTests.assert_counts_and_split(self, out, purpose, 'body')
 
     def test_corrected_raw_regex_does_not_relax_external_or_input_allow_white_guard(self):
@@ -506,8 +774,9 @@ class SurgeWildcardBodyBoundaryTests(unittest.TestCase):
                     self.assertEqual(list(products), [root / group / name for group in ('source', 'child') for name in FILES])
                     self.assertNotIn('frozen', diagnostic.getvalue())
                     self.assertNotIn('whitelist-covered', diagnostic.getvalue())
-                    expected = {target.replace(',no-resolve', '') if mode == 'strip' else target for _, target in pairs}
-                    expected.update(('DOMAIN,keep.example.org', 'SRC-IP-CIDR,198.51.100.0/24',
+                    expected = {(target.replace(',no-resolve', '') if mode == 'strip' else target).replace(
+                        'DOMAIN,keep.example.org', expected_domain('DOMAIN', 'keep.example.org')) for _, target in pairs}
+                    expected.update((expected_domain('DOMAIN', 'keep.example.org'), 'SRC-IP-CIDR,198.51.100.0/24',
                                      'IP-CIDR,203.0.113.0/24' + (',no-resolve' if mode == 'add' else '')))
                     for group in ('source', 'child'):
                         output = {name: products[root / group / name] for name in FILES}
@@ -519,12 +788,12 @@ class SurgeWildcardBodyBoundaryTests(unittest.TestCase):
                         SurgeRootDotProjectionTests.assert_counts_and_split(self, output, purpose, group)
                         for operator in ('AND', 'OR', 'NOT'):
                             self.assertIn(group + ' fin-adb.txt:' + operator + ': 4\n', diagnostic.getvalue())
-                    self.assertIn('child fin-adb.txt:DOMAIN-REGEX: 4\n', diagnostic.getvalue())
+                    self.assertIn('child fin-adb.txt:DOMAIN-REGEX: 5\n', diagnostic.getvalue())
                     if purpose == 'block':
                         self.assertEqual(set(products[root / 'source/fin-adb.txt'].splitlines()[7:]),
                                          {r'/^.*\..*$/', r'/^.*\.123\..*$/', r'/^.*\.123.$/',
                                           r'/^.*\.com\..*$/', '0.0.0.0 keep.example.org'})
-                        self.assertEqual(products[root / 'child/fin-adb.txt'].splitlines()[7:], ['0.0.0.0 keep.example.org'])
+                        self.assertEqual(products[root / 'child/fin-adb.txt'].splitlines()[7:], [])
                     self.assertEqual({path: path.read_bytes() for path in old}, old)
                     self.assertEqual(config_path.read_bytes(), config_before)
                     publish(products, root=root)
@@ -1190,8 +1459,8 @@ class ActualTargetWhitelistTests(unittest.TestCase):
             for mode in ('add', 'strip', 'keep'):
                 with self.subTest(purpose=purpose, mode=mode):
                     out, skipped = render('raw', normalized, purpose=purpose, no_resolve=mode, whitelist=white)
-                    self.assertEqual(out['fin.yaml'], '# raw rules: 2\npayload:\n  - "DOMAIN,neighbor.example.org"\n'
-                                     '  - "DOMAIN-REGEX,^ADS$"\n')
+                    self.assertEqual(out['fin.yaml'], '# raw rules: 2\npayload:\n  - "DOMAIN-REGEX,^ADS$"\n  - ' +
+                                     json.dumps(expected_domain('DOMAIN', 'neighbor.example.org')) + '\n')
                     self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
                     self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX'], 1)
                     self.assertEqual(skipped['whitelist-covered:DOMAIN-REGEX'], 1)

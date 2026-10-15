@@ -3,11 +3,12 @@ import json
 import re
 from datetime import datetime, timedelta, timezone
 from functools import cache
+from fnmatch import fnmatchcase
 from collections import Counter
 from collections.abc import Iterable
 
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
-                   _field_value, _fields, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
+                   _field_value, _fields, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
                    exclude_covered)
 
 
@@ -62,6 +63,21 @@ def _surge_value(value: str, *, source_regex: bool = False, quote_parentheses: b
 
 
 def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tuple[str, str | None]:
+    if kind in DOMAIN_SET_TYPES:
+        if source == 'mihomo' and supported is SURGE_TYPES:
+            return kind, None
+        if source == 'surge' and supported is MIHOMO_TYPES and value.isascii():
+            literal = value.lower().removesuffix('.')
+            if literal.endswith('.') or not _valid_domain('DOMAIN-SUFFIX', literal):
+                return kind, value
+            value = literal
+            paired = ''.join('[' + char + char.upper() + ']' if 'a' <= char <= 'z' else re.escape(char)
+                             for char in value)
+            if kind == 'DOMAIN':
+                return 'DOMAIN-REGEX', r'(?-i:\A' + paired + r'\.?\z)'
+            return 'DOMAIN-REGEX', (r'(?-i:(?:\A|\.)' + re.escape(value) + r'\z|'
+                                    r'\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
+                                    r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*' + paired + r'\.?\z)')
     if kind not in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
         return kind, value
     if supported is SURGE_TYPES:
@@ -933,6 +949,25 @@ def _mihomo_rule(rule: Rule) -> Rule | None:
     return Rule(mihomo_kind, payload, options, False, rule.literal_process, True, 'mihomo')
 
 
+def _paired_domain(rule: Rule) -> tuple[str, str] | None:
+    if rule.kind != 'DOMAIN-REGEX' or rule.options:
+        return None
+    value = rule.value
+    if value.startswith(r'(?-i:\A') and value.endswith(r'\.?\z)'):
+        kind, literal = 'DOMAIN', value[7:-6]
+        literal = re.sub(r'\[([a-z])[A-Z]\]', r'\1', literal)
+    elif value.startswith(r'(?-i:(?:\A|\.)'):
+        kind, literal = 'DOMAIN-SUFFIX', value[14:].partition(r'\z|')[0]
+    else:
+        return None
+    literal = literal.replace(r'\.', '.').replace(r'\-', '-')
+    if (literal.isascii() and literal == literal.lower() and not literal.endswith('.') and
+            _valid_domain('DOMAIN-SUFFIX', literal) and
+            _domain_value(kind, literal, 'surge', MIHOMO_TYPES) == ('DOMAIN-REGEX', value)):
+        return kind, literal
+    return None
+
+
 def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], set[tuple[str, str]]]:
     selected, identical = [], set()
     domain_types = {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}
@@ -1034,7 +1069,9 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 matcher = Rule(surge_kind, surge_value if logical else surge_payload, (), False,
                                rule.literal_process, rule.native_fields, 'surge')
                 routed["fin.txt"] = (surge_line, matcher)
-                if kind not in DOMAIN_SET_TYPES:
+                if surge_kind in DOMAIN_SET_TYPES:
+                    routed["fin-surge-ds.txt"] = (("." if surge_kind == "DOMAIN-SUFFIX" else "") + surge_payload, matcher)
+                else:
                     routed["fin-surge.txt"] = (surge_line, matcher)
             if line_safe and kind in QX_TYPES and "," not in value and not (
                 kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")
@@ -1048,9 +1085,6 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                 if dns_pattern is not None:
                     lines["fin-adb.txt"].append(dns_pattern)
                     emitted.add("fin-adb.txt")
-            if kind in DOMAIN_SET_TYPES and line_safe:
-                routed["fin-surge-ds.txt"] = (("." if kind == "DOMAIN-SUFFIX" else "") + value,
-                                               Rule(kind, value, (), False, rule.literal_process, rule.native_fields, 'surge'))
         matcher = _mihomo_rule(effective)
         if matcher is not None:
             payload = f'{matcher.kind},{matcher.value}' + (',no-resolve' if matcher.options else '')
@@ -1062,6 +1096,23 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
         white, identical = _route_whitelist(routing_white, target)
         projected = [matcher for _, _, _, routed, _ in pending for name, (_, matcher) in routed.items() if name in names]
         kept = set(exclude_covered(projected, white))
+        if target == 'mihomo':
+            suffixes, keywords, wildcards = set(), set(), set()
+            for entry in white:
+                paired = _paired_domain(entry)
+                if paired is not None and paired[0] == 'DOMAIN-SUFFIX':
+                    suffixes.add(paired[1])
+                if entry.kind == 'DOMAIN-KEYWORD' and entry.value.isascii():
+                    if entry.domain_source == 'surge' or not re.search(r'[A-Za-z]', entry.value):
+                        keywords.add(entry.value)
+                if (entry.kind == 'DOMAIN-WILDCARD' and entry.domain_source == 'surge' and
+                        entry.value.isascii() and _wildcard_regex(entry.value) is not None):
+                    wildcards.add(entry.value)
+            # 后缀包含分别保持两个 arm；必要 keyword 存在于二者，wildcard 只证明 ASCII exact。
+            kept = {matcher for matcher in kept if (paired := _paired_domain(matcher)) is None or not (
+                    _has_parent(paired[1], suffixes) or
+                    any(keyword and keyword in paired[1] for keyword in keywords) or
+                    paired[0] == 'DOMAIN' and any(fnmatchcase(paired[1], pattern) for pattern in wildcards))}
         for name in names:
             remaining[name], identities[name] = kept, identical
     complete = set()
