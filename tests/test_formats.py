@@ -1247,6 +1247,67 @@ class DomainProvenanceFormatTests(unittest.TestCase):
             self.assertEqual(count_line, f"! Total count: {len(lines[header:])}" if name == "fin-adb.txt"
                              else f"# group rules: {len(lines[header:])}", name)
 
+    def test_surge_wildcard_cannot_use_host_root_dot_as_required_body(self):
+        cases = (('*.*', r'^.*\..*(?<!\.)\.?$', 'localhost.', 'a.b.'),
+                 ('*.123.*', r'^.*\.123\..*(?<!\.)\.?$', 'cdn.123.', 'cdn.123.x.'),
+                 ('*.123?', r'^.*\.123.(?<!\.)\.?$', 'cdn.123.', 'cdn.123x.'),
+                 ('*.com.*', r'^.*\.com\..*(?<!\.)\.?$', 'example.com.', 'example.com.x.'))
+        for pattern, expected, negative, positive in cases:
+            with self.subTest(pattern=pattern):
+                out, skipped = self.outputs('DOMAIN-WILDCARD,' + pattern + ',REJECT')
+                kind, _, regex = json.loads(out['fin.yaml'].splitlines()[2][4:]).partition(',')
+                self.assertEqual((kind, regex), ('DOMAIN-REGEX', expected))
+                # Python re 仅核查这些已核实语法的 ASCII 见证。
+                for host in (negative, negative.removesuffix('.'), negative.upper()):
+                    self.assertIsNone(re.search(regex, host, re.I), host)
+                for host in (positive, positive.removesuffix('.'), positive.upper()):
+                    self.assertIsNotNone(re.search(regex, host, re.I), host)
+                self.assertEqual(out['fin.txt'], '# group rules: 1\nDOMAIN-WILDCARD,' + pattern + '\n')
+                self.assertEqual(out['fin-surge.txt'], out['fin.txt'])
+                self.assertEqual(out['fin-qx.txt'], '# group rules: 1\nHOST-WILDCARD,' + pattern + ',LIST\n')
+                self.assertEqual(skipped, {'fin-surge-ds.txt:DOMAIN-WILDCARD': 1})
+                self.assert_counts(out)
+
+    def test_root_dot_body_fix_preserves_supported_terminal_class_scope(self):
+        cases = (('*.[12]', r'^.*\.[12]\.?$', 'cdn.1.'),
+                 ('*.[12]*', r'^.*\.[12].*\.?$', 'cdn.1.'),
+                 ('*.[-0]', r'^.*\.[-0]\.?$', 'cdn.0.'),
+                 ('*.[a-z]', r'^.*\.[a-z]\.?$', 'cdn.a.'),
+                 ('*.[0-z]', r'^.*\.[0-z]\.?$', 'cdn.a.'))
+        for pattern, regex, positive in cases:
+            with self.subTest(pattern=pattern):
+                out, skipped = self.outputs('DOMAIN-WILDCARD,' + pattern)
+                self.assertEqual(json.loads(out['fin.yaml'].splitlines()[2][4:]), 'DOMAIN-REGEX,' + regex)
+                self.assertIsNone(re.search(regex, 'cdn.', re.I))
+                self.assertIsNotNone(re.search(regex, positive, re.I))
+                self.assertIsNotNone(re.search(regex, positive.removesuffix('.'), re.I))
+                self.assertEqual(out['fin-adb.txt'].splitlines()[7:], ['/' + regex.removesuffix(r'\.?$') + '$/'])
+                self.assertEqual(skipped, {name + ':DOMAIN-WILDCARD': 1 for name in
+                                          ('fin-qx.txt', 'fin-surge-ds.txt')})
+                self.assert_counts(out)
+
+    def test_root_dot_body_fix_preserves_native_qx_and_dns_wildcards(self):
+        cases = (('*.*', r'/^.*\..*$/', r'/(?s-i:\A.*\..*\z)/'),
+                 ('*.123.*', r'/^.*\.123\..*$/', r'/(?s-i:\A.*\.123\..*\z)/'),
+                 ('*.123?', r'/^.*\.123.$/', r'/(?s-i:\A.*\.123[\x00-\x7f]\z)/'),
+                 ('*.com.*', r'/^.*\.com\..*$/', r'/(?s-i:\A.*\.com\..*\z)/'))
+        for pattern, dns, native_dns in cases:
+            with self.subTest(pattern=pattern):
+                surge, _ = self.outputs('DOMAIN-WILDCARD,' + pattern)
+                self.assertEqual(surge['fin-adb.txt'].splitlines()[7:], [dns])
+                matcher = 'DOMAIN-WILDCARD,' + pattern
+                native, skipped = self.outputs('payload:\n  - ' + json.dumps(matcher))
+                self.assertEqual(native['fin.yaml'], '# group rules: 1\npayload:\n  - ' + json.dumps(matcher) + '\n')
+                self.assertEqual(native['fin-adb.txt'].splitlines()[7:], [native_dns])
+                self.assertEqual(skipped, {name + ':DOMAIN-WILDCARD': 1 for name in
+                                          ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+                qx, skipped = self.outputs('HOST-WILDCARD,' + pattern + ',REJECT')
+                self.assertEqual(qx['fin.yaml'], native['fin.yaml'])
+                self.assertEqual(qx['fin-adb.txt'].splitlines()[7:], [dns])
+                self.assertEqual(skipped, {'fin-surge-ds.txt:DOMAIN-WILDCARD': 1})
+                self.assert_counts(native)
+                self.assert_counts(qx)
+
     def test_native_brackets_stay_literal_and_surge_class_matches_only_digits(self):
         value = "api-[0-9].example.com"
         native, skipped = self.outputs("payload:\n  - DOMAIN-WILDCARD," + value)

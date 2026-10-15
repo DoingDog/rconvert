@@ -397,6 +397,152 @@ class SurgeRootDotProjectionTests(unittest.TestCase):
                     self.assertEqual(white.read_text(encoding='utf-8'), 'DOMAIN,bad..example')
 
 
+class SurgeWildcardBodyBoundaryTests(unittest.TestCase):
+    def test_logical_wildcard_body_boundary_preserves_order_direction_and_no_resolve(self):
+        cases = (('*.*', r'^.*\..*(?<!\.)\.?$'),
+                 ('*.123.*', r'^.*\.123\..*(?<!\.)\.?$'),
+                 ('*.123?', r'^.*\.123.(?<!\.)\.?$'),
+                 ('*.com.*', r'^.*\.com\..*(?<!\.)\.?$'))
+        for pattern, regex in cases:
+            pairs = (
+                ('AND,((DOMAIN-WILDCARD,' + pattern + '),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP,198.51.100.0/24))',
+                 'AND,((DOMAIN-REGEX,' + regex + '),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))'),
+                ('OR,((DOMAIN,keep.example.org),(DOMAIN-WILDCARD,' + pattern + '))',
+                 'OR,((DOMAIN,keep.example.org),(DOMAIN-REGEX,' + regex + '))'),
+                ('NOT,((DOMAIN-WILDCARD,' + pattern + '))', 'NOT,((DOMAIN-REGEX,' + regex + '))'),
+                ('AND,((NOT,((DOMAIN-WILDCARD,' + pattern + '))),(OR,((DOMAIN,keep.example.org),(DEST-PORT,443))))',
+                 'AND,((NOT,((DOMAIN-REGEX,' + regex + '))),(OR,((DOMAIN,keep.example.org),(DST-PORT,443))))'),
+            )
+            for source, expected in pairs:
+                for purpose in ('block', 'direct', 'proxy'):
+                    parsed, warnings = parse(source, purpose=purpose)
+                    self.assertEqual(warnings, [])
+                    self.assertEqual(len(parsed), 1)
+                    self.assertEqual(parsed[0].domain_source, 'surge')
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(pattern=pattern, source=source, purpose=purpose, mode=mode):
+                            out, diagnostic = render('body', normalize(exclude_covered(parsed, [])),
+                                                     purpose=purpose, no_resolve=mode)
+                            actual = expected.replace(',no-resolve', '') if mode == 'strip' else expected
+                            self.assertEqual(out['fin.yaml'], '# body rules: 1\npayload:\n  - ' + json.dumps(actual) + '\n')
+                            original = source.replace(',no-resolve', '') if mode == 'strip' else source
+                            self.assertEqual(out['fin.txt'], '# body rules: 1\n' + original + '\n')
+                            self.assertEqual(out['fin-surge.txt'], out['fin.txt'])
+                            operator = parsed[0].kind
+                            self.assertEqual(diagnostic, {name + ':' + operator: 1 for name in
+                                                         ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')})
+                            readback, warnings = parse(out['fin.yaml'], purpose=purpose)
+                            self.assertEqual(warnings, [])
+                            self.assertEqual(readback, [Rule(operator, actual.partition(',')[2], native_fields=True,
+                                                            domain_source='mihomo' if '(DOMAIN,keep.example.org)' in actual else 'surge')])
+                            SurgeRootDotProjectionTests.assert_counts_and_split(self, out, purpose, 'body')
+
+    def test_corrected_raw_regex_does_not_relax_external_or_input_allow_white_guard(self):
+        cases = (('*.*', r'^.*\..*(?<!\.)\.?$'),
+                 ('*.123.*', r'^.*\.123\..*(?<!\.)\.?$'),
+                 ('*.123?', r'^.*\.123.(?<!\.)\.?$'),
+                 ('*.com.*', r'^.*\.com\..*(?<!\.)\.?$'))
+        for pattern, regex in cases:
+            white = parse_whitelist('DOMAIN-WILDCARD,' + pattern)
+            blocker = Rule('DOMAIN-REGEX', regex, domain_source='mihomo')
+            self.assertEqual(exclude_covered([blocker], white), [blocker])
+            for allowed in (False, True):
+                rules = [blocker] + ([Rule('DOMAIN-WILDCARD', pattern, allow=True)] if allowed else [])
+                for purpose in ('block', 'direct', 'proxy'):
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(pattern=pattern, allowed=allowed, purpose=purpose, mode=mode):
+                            out, diagnostic = render('guard', iter(rules), purpose=purpose, no_resolve=mode,
+                                                     whitelist=iter([] if allowed else white))
+                            self.assertEqual(out['fin.yaml'], '# guard rules: 1\npayload:\n  - ' +
+                                             json.dumps('DOMAIN-REGEX,' + regex) + '\n')
+                            self.assertNotIn('fin.yaml:DOMAIN-REGEX:whitelist-covered', diagnostic)
+                            self.assertNotIn('whitelist-covered:DOMAIN-REGEX', diagnostic)
+                            self.assertEqual(diagnostic['fin-adb.txt:DOMAIN-REGEX'], 1)
+                            if purpose == 'block':
+                                self.assertEqual(len(out['fin-adb.txt'].splitlines()[7:]), 1)
+                                self.assertTrue(out['fin-adb.txt'].splitlines()[7].startswith('@@/'))
+                            SurgeRootDotProjectionTests.assert_counts_and_split(self, out, purpose, 'guard')
+
+    def test_generate_publish_body_boundary_same_round_and_disk_in_nine_modes(self):
+        cases = (('*.*', r'^.*\..*(?<!\.)\.?$'),
+                 ('*.123.*', r'^.*\.123\..*(?<!\.)\.?$'),
+                 ('*.123?', r'^.*\.123.(?<!\.)\.?$'),
+                 ('*.com.*', r'^.*\.com\..*(?<!\.)\.?$'))
+        pairs = []
+        for pattern, regex in cases:
+            leaf, target = 'DOMAIN-WILDCARD,' + pattern, 'DOMAIN-REGEX,' + regex
+            pairs.extend(((leaf, target),
+                          ('AND,((' + leaf + '),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))',
+                           'AND,((' + target + '),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))'),
+                          ('OR,((' + leaf + '),(DOMAIN,keep.example.org))',
+                           'OR,((' + target + '),(DOMAIN,keep.example.org))'),
+                          ('NOT,((' + leaf + '))', 'NOT,((' + target + '))')))
+        source = '\n'.join(row for row, _ in pairs) + (
+            '\nDOMAIN,keep.example.org\nIP-CIDR,203.0.113.0/24\nSRC-IP-CIDR,198.51.100.0/24\n')
+        responses = {'https://example.org/body.list': source.encode('utf-8')}
+        for purpose in ('block', 'direct', 'proxy'):
+            parsed, warnings = parse(source, purpose=purpose)
+            self.assertEqual((len(parsed), warnings), (19, []))
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    configs = [{'name': 'source', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['https://example.org/body.list'], 'whitelist': []},
+                               {'name': 'child', 'purpose': purpose, 'no_resolve': mode,
+                                'sources': ['source/fin.yaml'], 'whitelist': []}]
+                    config_path = root / 'rulesets.json'
+                    config_path.write_text(json.dumps(configs), encoding='utf-8')
+                    config_before = config_path.read_bytes()
+                    old = {}
+                    for group in ('source', 'child'):
+                        (root / group).mkdir()
+                        for name in FILES:
+                            path = root / group / name
+                            path.write_bytes(b'old artifact\x00\xff\r\n')
+                            old[path] = path.read_bytes()
+                    with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        clock.now.return_value = datetime(2026, 10, 15, tzinfo=timezone.utc)
+                        products = generate(root, responses.__getitem__)
+                    self.assertEqual(list(products), [root / group / name for group in ('source', 'child') for name in FILES])
+                    self.assertNotIn('frozen', diagnostic.getvalue())
+                    self.assertNotIn('whitelist-covered', diagnostic.getvalue())
+                    expected = {target.replace(',no-resolve', '') if mode == 'strip' else target for _, target in pairs}
+                    expected.update(('DOMAIN,keep.example.org', 'SRC-IP-CIDR,198.51.100.0/24',
+                                     'IP-CIDR,203.0.113.0/24' + (',no-resolve' if mode == 'add' else '')))
+                    for group in ('source', 'child'):
+                        output = {name: products[root / group / name] for name in FILES}
+                        self.assertEqual({json.loads(line[4:]) for line in output['fin.yaml'].splitlines()[2:]}, expected)
+                        readback, warnings = parse(output['fin.yaml'], purpose=purpose)
+                        self.assertEqual((len(readback), warnings), (19, []))
+                        self.assertFalse(any(rule.kind == 'SRC-IP-CIDR' and rule.options for rule in readback))
+                        self.assertNotIn(group + ' fin.yaml:', diagnostic.getvalue())
+                        SurgeRootDotProjectionTests.assert_counts_and_split(self, output, purpose, group)
+                        for operator in ('AND', 'OR', 'NOT'):
+                            self.assertIn(group + ' fin-adb.txt:' + operator + ': 4\n', diagnostic.getvalue())
+                    self.assertIn('child fin-adb.txt:DOMAIN-REGEX: 4\n', diagnostic.getvalue())
+                    if purpose == 'block':
+                        self.assertEqual(set(products[root / 'source/fin-adb.txt'].splitlines()[7:]),
+                                         {r'/^.*\..*$/', r'/^.*\.123\..*$/', r'/^.*\.123.$/',
+                                          r'/^.*\.com\..*$/', '0.0.0.0 keep.example.org'})
+                        self.assertEqual(products[root / 'child/fin-adb.txt'].splitlines()[7:], ['0.0.0.0 keep.example.org'])
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    self.assertEqual(config_path.read_bytes(), config_before)
+                    publish(products, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in products},
+                                     {path: text.encode('utf-8') for path, text in products.items()})
+                    config_path.write_text(json.dumps(configs[-1:]), encoding='utf-8')
+                    config_before = config_path.read_bytes()
+                    with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as diagnostic:
+                        clock.now.return_value = datetime(2026, 10, 15, tzinfo=timezone.utc)
+                        disk = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(disk, {path: text for path, text in products.items() if path.parent.name == 'child'})
+                    self.assertNotIn('frozen', diagnostic.getvalue())
+                    self.assertEqual(config_path.read_bytes(), config_before)
+                    publish(disk, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in products},
+                                     {path: text.encode('utf-8') for path, text in products.items()})
+
+
 class ActualTargetWhitelistTests(unittest.TestCase):
     def test_input_allow_interface_options_keep_native_byte_and_root_dot_white_scope(self):
         cases = ((Rule('DOMAIN-WILDCARD', 'windows-??.net', domain_source='mihomo'),
