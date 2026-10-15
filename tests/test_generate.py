@@ -270,6 +270,8 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
         yaml = []
         for kind, values in (("DOMAIN", exact), ("DOMAIN-SUFFIX", suffix)):
             for value in values:
+                if kind == 'DOMAIN' and value in whitelist:
+                    continue
                 scalar = "  - " + json.dumps(expected_domain(kind, value))
                 yaml.append(scalar)
         yaml.sort(key=lambda line: (json.loads(line[4:]).partition(",")[0], len(line), line))
@@ -300,7 +302,8 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                         [Rule("DOMAIN-SUFFIX", value, domain_source="qx" if name == "fin-qx.txt" else "surge") for value in suffix])
             if name == "fin.yaml":
                 expected = [Rule(kind, value, domain_source='mihomo')
-                            for kind, values in (("DOMAIN", exact), ("DOMAIN-SUFFIX", suffix)) for value in values]
+                            for kind, values in (("DOMAIN", exact), ("DOMAIN-SUFFIX", suffix)) for value in values
+                            if kind != 'DOMAIN' or value not in whitelist]
             parsed, messages = parse(text, purpose=purpose, domain_set=name == "fin-surge-ds.txt")
             self.assertEqual(set(parsed), set(expected) if name != "fin-surge.txt" else set())
             self.assertEqual(len(parsed), len(expected) if name != "fin-surge.txt" else 0)
@@ -350,6 +353,7 @@ class DomainSetSingleLabelGenerateTests(unittest.TestCase):
                         skips += [f"yaml-source fin-adb.txt:DOMAIN: {len(values)}",
                                   f"yaml-white fin-adb.txt:DOMAIN: {len(white_values)}",
                                   "yaml-white fin-adb.txt:DOMAIN-SUFFIX: 1"]
+                    skips.append(f'yaml-white fin.yaml:DOMAIN:whitelist-covered: {len(white_values) - 1}')
                     with contextlib.redirect_stderr(io.StringIO()) as stderr:
                         outputs = generate(root, lambda url: self.fail(url))
                     self.assertEqual(stderr.getvalue().splitlines(), skips)
@@ -595,9 +599,10 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         expected = {
             'fin.txt': f'# {group} rules: {int(neighbor)}\n' + domain,
             'fin-qx.txt': f'# {group} rules: {int(neighbor)}\n' + ('HOST,keep.example.test,LIST\n' if neighbor else ''),
-            'fin.yaml': f'# {group} rules: {1 + int(neighbor)}\npayload:\n' +
+            'fin.yaml': f'# {group} rules: {int(not whitelist) + int(neighbor)}\npayload:\n' +
                         (('  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.test')) + '\n')
-                         if neighbor else '') + '  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n',
+                         if neighbor else '') +
+                        ('' if whitelist else '  - ' + json.dumps('DOMAIN-REGEX,' + value) + '\n'),
             'fin-surge.txt': f'# {group} rules: 0\n',
             'fin-surge-ds.txt': f'# {group} rules: {int(neighbor)}\n' + ('keep.example.test\n' if neighbor else ''),
         }
@@ -605,7 +610,7 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         if purpose == 'block':
             dns = ('@@/' + dns_value + '/\n' if whitelist and dns_supported else '')
             dns += '0.0.0.0 keep.example.test\n' if neighbor else ''
-            dns += '/' + dns_value + '/\n' if dns_supported else ''
+            dns += '/' + dns_value + '/\n' if dns_supported and not whitelist else ''
         expected['fin-adb.txt'] = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
             '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
             '! License: Inherits upstream licenses\n! Version: 202610020000\n' +
@@ -647,12 +652,13 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                         skips = {name + ':DOMAIN-REGEX': 1 for name in
                                  ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')}
                         source_skips = dict(skips)
-                        dependent_skips = dict(skips)
+                        dependent_skips = {} if whitelist else dict(skips)
                         if purpose != 'block':
                             dependent_skips['fin-adb.txt:DOMAIN'] = 1
                         if purpose != 'block' or not dns_supported:
                             source_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
-                            dependent_skips['fin-adb.txt:DOMAIN-REGEX'] = 1 + int(whitelist and purpose == 'block')
+                            if not whitelist or purpose == 'block':
+                                dependent_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
                         with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as stderr:
                             clock.now.return_value = datetime(2026, 10, 2, tzinfo=timezone.utc)
                             outputs = generate(root, lambda url: self.fail(url))
@@ -663,7 +669,8 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                             (('source', source_skips), ('dependent', dependent_skips)) for key, count in sorted(counts.items())])
                         self.assertEqual(parse(outputs[root / 'source' / 'fin.yaml'], purpose=purpose), ([rule], []))
                         self.assertEqual(parse(outputs[root / 'dependent' / 'fin.yaml'], purpose=purpose),
-                                         ([Rule('DOMAIN', 'keep.example.test', domain_source='mihomo'), rule], []))
+                                         ([Rule('DOMAIN', 'keep.example.test', domain_source='mihomo')] +
+                                          ([] if whitelist else [rule]), []))
                         self.assertEqual({path: path.read_bytes() for path in previous}, previous)
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
@@ -734,10 +741,10 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         target_logic = logic.replace(',no-resolve', '') if mode == 'strip' else logic
         ip = 'IP-CIDR,203.0.113.0/24' + flag
         source_ip = 'SRC-IP,198.51.100.0/24'
-        yaml_lines = ['AND,' + target_logic, 'DOMAIN,keep.example.test', 'DOMAIN-REGEX,' + value,
+        yaml_lines = ['AND,' + target_logic, 'DOMAIN,keep.example.test',
                       'PROCESS-NAME-REGEX,' + value, ip, 'SRC-IP-CIDR,198.51.100.0/24']
         parsed_expected = [Rule('AND', target_logic, literal_process=True, native_fields=True),
-                           Rule('DOMAIN', 'keep.example.test', domain_source='mihomo'), Rule('DOMAIN-REGEX', value),
+                           Rule('DOMAIN', 'keep.example.test', domain_source='mihomo'),
                            Rule('PROCESS-NAME-REGEX', value),
                            Rule('IP-CIDR', '203.0.113.0/24', options),
                            Rule('SRC-IP-CIDR', '198.51.100.0/24')]
@@ -747,11 +754,10 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
                       '  - ' + json.dumps(line)
                       for line, rule in zip(yaml_lines, parsed_expected)]],
                   'fin-surge.txt': [ip, source_ip], 'fin-surge-ds.txt': ['keep.example.test']}
-        dns = (['@@/' + dns_value + '/', '0.0.0.0 keep.example.test', '/' + dns_value + '/'] if dns_supported else
+        dns = (['@@/' + dns_value + '/', '0.0.0.0 keep.example.test'] if dns_supported else
                ['0.0.0.0 keep.example.test']) if purpose == 'block' else []
         expected_skips = {}
-        supported = {'DOMAIN-REGEX': {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' and dns_supported else [])},
-                     'PROCESS-NAME-REGEX': {'fin.yaml'}, 'AND': {'fin.yaml'},
+        supported = {'PROCESS-NAME-REGEX': {'fin.yaml'}, 'AND': {'fin.yaml'},
                      'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
                      'SRC-IP-CIDR': {'fin.txt', 'fin.yaml', 'fin-surge.txt'}}
         for kind, names in supported.items():
@@ -761,7 +767,7 @@ class DnsDeepRegexGenerateTests(unittest.TestCase):
         if purpose != 'block':
             expected_skips['fin-adb.txt:DOMAIN'] = 1
         elif not dns_supported:
-            expected_skips['fin-adb.txt:DOMAIN-REGEX'] += 1
+            expected_skips['fin-adb.txt:DOMAIN-REGEX'] = 1
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             root = Path(directory)
             configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
@@ -1606,7 +1612,7 @@ class ConstructorGenerateTests(unittest.TestCase):
                                 "sources": ["source.list"], "whitelist": ["white/fin.yaml"]}]
                     (root / "rulesets.json").write_text(json.dumps(configs), encoding="utf-8")
                     (root / "white.list").write_text(source, encoding="utf-8")
-                    (root / "source.list").write_text(source + "DOMAIN,keep.example.com\nIP-ASN,00\n", encoding="utf-8")
+                    (root / "source.list").write_text(source + "  - IP-ASN,00\nDOMAIN,keep.example.com\n", encoding="utf-8")
                     flag = ",no-resolve" if mode == "add" else ""
                     expected = {
                         "fin.txt": "# consumer rules: 2\nDOMAIN,keep.example.com\nIP-ASN,00" + flag + "\n",
@@ -2542,7 +2548,8 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                         expected_skips = (["allow fin-qx.txt:DOMAIN-WILDCARD: 1"] if "[0-9]" in matcher else [])
                         expected_skips.append(f"allow fin-surge-ds.txt:{matcher.split(',', 1)[0]}: 1")
                         if not disk_only:
-                            expected_skips += ["filtered fin-adb.txt:IP-CIDR: 1", "filtered fin-surge-ds.txt:IP-CIDR: 1"]
+                            expected_skips += ["filtered fin-adb.txt:IP-CIDR: 1", "filtered fin-surge-ds.txt:IP-CIDR: 1",
+                                               "filtered fin.yaml:DOMAIN:whitelist-covered: 1"]
                         self.assertEqual(stderr.getvalue().splitlines(), expected_skips)
                         allow_text = outputs[root / "allow/fin.yaml"]
                         self.assertEqual(set(parse_whitelist(allow_text)),
@@ -2552,12 +2559,13 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                             (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
                             with contextlib.redirect_stderr(io.StringIO()) as stderr:
                                 outputs = generate(root, lambda url: self.fail(url))
-                            self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
+                            self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n"
+                                         "filtered fin.yaml:DOMAIN:whitelist-covered: 1\n")
                         flag = "" if mode == "strip" else ",no-resolve"
                         domains = {"DOMAIN,ads.example.com", "DOMAIN,api-7.example.com", "DOMAIN,keep.example.net", "DOMAIN,safe.example.org"}
                         dns_regex = regex
                         ip = "IP-CIDR,192.0.2.0/24" + flag
-                        expected = {"fin.txt": domains | {ip}, "fin.yaml": set(domains) | {ip},
+                        expected = {"fin.txt": domains | {ip}, "fin.yaml": (domains - {'DOMAIN,safe.example.org'}) | {ip},
                                     "fin-qx.txt": {"HOST,ads.example.com,LIST", "HOST,api-7.example.com,LIST",
                                                    "HOST,keep.example.net,LIST", "IP-CIDR,192.0.2.0/24,LIST" + flag},
                                     "fin-surge.txt": {ip},
@@ -2584,7 +2592,8 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                         (root / "rulesets.json").write_text(json.dumps(configs[1:]), encoding="utf-8")
                         with contextlib.redirect_stderr(io.StringIO()) as stderr:
                             disk = generate(root, lambda url: self.fail(url))
-                        self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n")
+                        self.assertEqual(stderr.getvalue(), "filtered fin-adb.txt:IP-CIDR: 1\nfiltered fin-surge-ds.txt:IP-CIDR: 1\n"
+                                         "filtered fin.yaml:DOMAIN:whitelist-covered: 1\n")
                         self.assertEqual(set(disk), {root / "filtered" / name for name in NAMES})
                         for name in NAMES:
                             start = 6 if name == "fin-adb.txt" else 0
@@ -2719,7 +2728,7 @@ class DomainProvenanceGenerateTests(unittest.TestCase):
                 self.assertIn("DOMAIN-KEYWORD,ads\n", outputs[root / "filtered/fin.txt"])
                 self.assertIn("HOST-KEYWORD,ads,LIST\n", outputs[root / "filtered/fin-qx.txt"])
                 yaml = [json.loads(line[4:]) for line in outputs[root / "filtered/fin.yaml"].splitlines()[2:]]
-                self.assertIn("DOMAIN-KEYWORD,ads", yaml)
+                self.assertNotIn("DOMAIN-KEYWORD,ads", yaml)
                 self.assertTrue(any(line.startswith("DOMAIN-REGEX,") and "ads" in line for line in yaml))
                 publish(outputs)
                 (root / "rulesets.json").write_text(json.dumps([{
@@ -5621,7 +5630,8 @@ class GenerateTests(unittest.TestCase):
         bodies = {
             "fin.txt": [f"{kind},{item}" for item in values],
             "fin-qx.txt": [f"HOST{'-KEYWORD' if keyword else ''},{item},LIST" for item in values],
-            "fin.yaml": ["  - " + json.dumps(yaml_kind + "," + value) for value in values],
+            "fin.yaml": ["  - " + json.dumps(yaml_kind + "," + value) for value in values
+                         if keyword or value not in whitelist],
             "fin-surge.txt": [f"{kind},{item}" for item in values] if keyword else [],
             "fin-surge-ds.txt": [] if keyword else values,
         }
@@ -5735,6 +5745,8 @@ class GenerateTests(unittest.TestCase):
                         self.assertEqual(outputs, expected)
                         expected_warnings = (f"parent fin-surge-ds.txt:{kind}: 1\nchild fin-surge-ds.txt:{kind}: 1\n"
                                              if kind == "DOMAIN-KEYWORD" else "")
+                        if filename == 'fin.yaml':
+                            expected_warnings += 'child fin.yaml:DOMAIN:whitelist-covered: 1\n'
                         self.assertEqual(stderr.getvalue(), expected_warnings)
                         header_warnings = [f"line {number}: invalid rule" for number in range(1, 8)] if filename == "fin-adb.txt" else []
                         self.assertEqual([str(notice.message) for notice in notices], header_warnings)
@@ -5749,8 +5761,8 @@ class GenerateTests(unittest.TestCase):
                             warnings.simplefilter("always")
                             disk = generate(root, lambda url: self.fail(url))
                         self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent == root / "child"})
-                        self.assertEqual(disk_stderr.getvalue(), f"child fin-surge-ds.txt:{kind}: 1\n"
-                                         if kind == "DOMAIN-KEYWORD" else "")
+                        self.assertEqual(disk_stderr.getvalue(), expected_warnings.removeprefix(
+                            f'parent fin-surge-ds.txt:{kind}: 1\n'))
                         self.assertEqual([str(notice.message) for notice in notices], header_warnings)
                         publish(disk)
                         self.assertEqual({path: path.read_bytes() for path in disk},
@@ -5975,12 +5987,13 @@ class GenerateTests(unittest.TestCase):
                             messages += f"{selected}: 7 skipped lines; first five shown\n"
                         if kind == "DOMAIN-KEYWORD":
                             messages += "child fin-surge-ds.txt:DOMAIN-KEYWORD: 1\n"
+                        if dependency == 'whitelist' and filename == 'fin.yaml':
+                            messages += 'child fin.yaml:DOMAIN:whitelist-covered: 1\n'
                         self.assertEqual(stderr.getvalue(), messages)
                         header_warnings = [f"line {number}: invalid rule" for number in range(1, 8)] \
                             if filename == "fin-adb.txt" and dependency == "whitelist" else []
                         self.assertEqual([str(notice.message) for notice in notices], header_warnings)
-                        values = ([new, stale] if dependency == "whitelist" and filename == "fin.yaml" else
-                                  [stale if dependency == "whitelist" else new])
+                        values = [stale if dependency == "whitelist" else new]
                         expected_rules = [Rule("DOMAIN-REGEX", value) if kind == "DOMAIN-KEYWORD" and source == "surge" else
                                           Rule(kind, value, domain_source="mihomo")
                                           for value in values]
@@ -6103,7 +6116,7 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
                         Rule('DOMAIN-SUFFIX', 'broad.example.net', domain_source='mihomo'),
                         Rule('IP-CIDR', '192.0.2.0/24', ('no-resolve',) if flag else ()),
                         Rule('SRC-IP-CIDR', '127.0.0.1/32')]
-        dns = [r'/(?s-i:\A.*οσ.*\z)/', '||broad.example.net^', '0.0.0.0 NATIVE.EXAMPLE.ORG.']
+        dns = [r'/(?s-i:\A.*οσ.*\z)/', '||broad.example.net^', '0.0.0.0 native.example.org.']
         if child:
             payloads.pop(1)
             native_rules.pop(1)

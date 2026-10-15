@@ -100,17 +100,24 @@ class DomainCoverageTests(unittest.TestCase):
                 ]
                 self.assertEqual(exclude_covered(rules, [Rule('DOMAIN-SUFFIX', 'ms')]), rules)
                 literal = Rule('DOMAIN', 'ads.ms', domain_source=source)
-                for kind, value in (('DOMAIN-KEYWORD', 'ms'), ('DOMAIN-WILDCARD', '*.ms'),
-                                    ('DOMAIN-REGEX', r'^ads\.ms$')):
-                    with self.subTest(whitelist_kind=kind):
-                        self.assertEqual(exclude_covered([literal], [Rule(kind, value)]), [literal])
+                self.assertEqual(exclude_covered([literal], [Rule('DOMAIN-REGEX', r'^ads\.ms$')]), [literal])
+
+    def test_surge_keyword_and_wildcard_cover_native_ascii_exact_with_qx_preserved(self):
+        for source in ('qx', 'mihomo'):
+            literal = Rule('DOMAIN', 'ADS.MS', domain_source=source)
+            for kind, value in (('DOMAIN-KEYWORD', 'ms'), ('DOMAIN-WILDCARD', '*.ms')):
+                with self.subTest(source=source, whitelist_kind=kind):
+                    self.assertEqual(exclude_covered([literal], [Rule(kind, value)]),
+                                     [] if source == 'mihomo' else [literal])
 
     def test_cross_source_coverage_requires_valid_ascii_literal_labels(self):
         for source in ('qx', 'mihomo'):
             with self.subTest(source=source):
                 rules = [Rule('DOMAIN', value, domain_source=source)
-                         for value in ('*.ms', 'bad..ms', '-bad.ms', 'bad_.ms')]
+                         for value in ('*.ms', 'bad..ms', '-bad.ms', 'bad+.ms')]
                 self.assertEqual(exclude_covered(rules, [Rule('DOMAIN-SUFFIX', 'ms')]), rules)
+                underscore = Rule('DOMAIN', 'bad_.ms', domain_source=source)
+                self.assertEqual(exclude_covered([underscore], [Rule('DOMAIN-SUFFIX', 'ms')]), [])
                 literal = Rule('DOMAIN', 'ads.ms', domain_source=source)
                 self.assertEqual(exclude_covered([literal], [Rule('DOMAIN-SUFFIX', 'ms..')]), [literal])
 

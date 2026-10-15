@@ -1963,8 +1963,8 @@ class FormatTests(unittest.TestCase):
                                      Rule("DOMAIN-REGEX", value, allow=True)])
         self.assertEqual(out["fin-adb.txt"].splitlines()[7:],
                          [f"@@/{value}/", f"/{value}/"])
-        self.assertEqual(json.loads(out["fin.yaml"].splitlines()[2][4:]),
-                         f"DOMAIN-REGEX,{value}")
+        self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
         self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
         expression = re.compile(value)
         self.assertIsNotNone(expression.fullmatch("api7.example.com"))
@@ -1975,7 +1975,7 @@ class FormatTests(unittest.TestCase):
             (r"^ads\.example\.com\z", r"/^ads\.example\.com\z/", r"@@/^ads\.example\.com\z/"),
             (r"^api\d\.example\.com$", r"/^api\p{Nd}\.example\.com$/", r"@@/^api\p{Nd}\.example\.com$/"),
             (r"^(?:ads|track)\.example\.com$", r"/^(?:ads|track)\.example\.com$/", r"@@/^(?:ads|track)\.example\.com$/"),
-            (r"^(?<name>ads)\.example\.com$", r"/^(?<name>ads)\.example\.com$/", r"@@/^(?<name>ads)\.example\.com$/"),
+            (r"^(?<name>ads)\.example\.com$", r"/^(?:ads)\.example\.com$/", r"@@/^(?:ads)\.example\.com$/"),
         )
         for value, block, allow in cases:
             with self.subTest(value=value):
@@ -1988,8 +1988,8 @@ class FormatTests(unittest.TestCase):
     def test_adguard_portable_capture_flags_and_property_emit_block_and_allow(self):
         cases = (
             (r"^(?<n>ad)(?<n>s)\.example\.com$",
-             r"/^(?<n>ad)(?<n>s)\.example\.com$/",
-             r"@@/^(?<n>ad)(?<n>s)\.example\.com$/"),
+             r"/^(?:ad)(?:s)\.example\.com$/",
+             r"@@/^(?:ad)(?:s)\.example\.com$/"),
             (r"^(?i:ads)\.example\.com$",
              r"/^(?i:ads)\.example\.com$/",
              r"@@/^(?i:ads)\.example\.com$/"),
@@ -2020,8 +2020,8 @@ class FormatTests(unittest.TestCase):
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
                                  ["! Total count: 2", allow, block])
-                self.assertIn(f"DOMAIN-REGEX,{value}",
-                              [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+                self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+                self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
                 self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
 
     def test_go_invalid_property_range_stays_out_of_dns(self):
@@ -2030,8 +2030,8 @@ class FormatTests(unittest.TestCase):
                                      Rule("DOMAIN-REGEX", value, allow=True)])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
-        self.assertIn(f"DOMAIN-REGEX,{value}",
-                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+        self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
 
     def test_go_valid_property_class_followed_by_literal_hyphen_emits_dns(self):
         value = r"^[\p{L}-a]+\.example\.com$"
@@ -2047,9 +2047,10 @@ class FormatTests(unittest.TestCase):
         expected_dns = (["! Total count: 0"] if dns_value is None else
                         ["! Total count: 2", f"@@/{dns_value}/", f"/{dns_value}/"])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], expected_dns)
-        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - ' +
-                         json.dumps(f"DOMAIN-REGEX,{value}", ensure_ascii=False) + "\n")
-        expected_skipped = {"fin.yaml:DOMAIN-REGEX": 1}
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 0\npayload:\n')
+        expected_skipped = {"fin.yaml:DOMAIN-REGEX": 1,
+                            "fin.yaml:DOMAIN-REGEX:whitelist-covered": 1,
+                            "whitelist-covered:DOMAIN-REGEX": 1}
         for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt", "fin-surge-ds.txt"):
             self.assertEqual(out[name], "# a3 rules: 0\n")
             expected_skipped[f"{name}:DOMAIN-REGEX"] = 2
@@ -2200,8 +2201,8 @@ class FormatTests(unittest.TestCase):
                                      Rule("DOMAIN-REGEX", value, allow=True)])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
-        self.assertIn(f"DOMAIN-REGEX,{value}",
-                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+        self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
 
     def test_regexp2_only_domain_regex_stays_out_of_dns(self):
         for value in (r"^(ads)\1\.example\.com$", r"^ads(?=track)\.example\.com$",
@@ -2210,8 +2211,8 @@ class FormatTests(unittest.TestCase):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
-                self.assertIn(f"DOMAIN-REGEX,{value}",
-                              [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+                self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+                self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
                 self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_client_accepted_regexp2_rules_keep_go_portable_property_in_dns(self):

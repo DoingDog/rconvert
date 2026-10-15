@@ -275,14 +275,17 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             continue
         allowed = [rule for rule in rules if rule.allow]
         rules = exclude_covered(rules, whitelist + allowed)
-        rules = [_apply_no_resolve(rule, no_resolve) for rule in rules]
-        rendered, skipped = render(group, normalize(rules), purpose=purpose,
+        rules = normalize(_apply_no_resolve(rule, no_resolve) for rule in rules)
+        rendered, skipped = render(group, rules, purpose=purpose,
                                    whitelist=whitelist, no_resolve="keep",
                                    title=config.get("title", group))
+        non_allow_count = sum(not rule.allow for rule in rules)
+        covered_count = sum(count for key, count in skipped.items() if key.startswith('whitelist-covered:'))
         if (not any(rendered[name].splitlines()[1:] for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt"))
                 and len(rendered["fin.yaml"].splitlines()) <= 2
                 and (unusable_source or rules and not (
-                    purpose == "block" and not any(not rule.allow for rule in rules)
+                    0 < non_allow_count == covered_count
+                    or purpose == "block" and not non_allow_count
                     and any(line.startswith("@@") for line in rendered["fin-adb.txt"].splitlines()[7:])))):
             print(f"{group}: no routable rules; frozen", file=sys.stderr)
             freeze(group)

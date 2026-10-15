@@ -124,10 +124,11 @@ class YamlCoverageTests(unittest.TestCase):
                     output, skipped = self.assert_yaml_payloads(
                         [Rule('DOMAIN-SUFFIX', 'example.com', **attributes),
                          Rule('DOMAIN', 'example.com', domain_source=source)],
-                        ['DOMAIN,example.com'], purpose='block',
+                        [] if attributes == {'allow': True} else ['DOMAIN,example.com'], purpose='block',
                     )
                     self.assertEqual(skipped['fin.yaml:DOMAIN-SUFFIX'], 1)
                     if attributes == {'allow': True}:
+                        self.assertEqual(skipped['fin.yaml:DOMAIN:whitelist-covered'], 1)
                         self.assertIn('@@||example.com^\n', output['fin-adb.txt'])
         output, skipped = self.assert_yaml_payloads(
             [Rule('DOMAIN-SUFFIX', 'example.com'),
@@ -288,11 +289,11 @@ class YamlCoverageTests(unittest.TestCase):
         surge = Rule('DOMAIN-SUFFIX', 'example.com')
         self.assert_yaml_payloads([surge], [SURGE_SUFFIX])
 
-        output, _ = render('separate', [Rule('DOMAIN', 'example.com', domain_source='mihomo')],
-                           whitelist=[surge], purpose='block', no_resolve='keep')
+        output, skipped = render('separate', [Rule('DOMAIN', 'example.com', domain_source='mihomo')],
+                                 whitelist=[surge], purpose='block', no_resolve='keep')
 
-        self.assertEqual(output['fin.yaml'],
-                         '# separate rules: 1\npayload:\n  - "DOMAIN,example.com"\n')
+        self.assertEqual(output['fin.yaml'], '# separate rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN:whitelist-covered'], 1)
         self.assertIn('@@||example.com^\n', output['fin-adb.txt'])
 
 
