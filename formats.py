@@ -40,6 +40,7 @@ QX_TYPES = {
 SURGE_ALIASES = {"SRC-IP-CIDR": "SRC-IP", "DST-PORT": "DEST-PORT", "PROCESS-NAME-WILDCARD": "PROCESS-NAME", "PROCESS-PATH": "PROCESS-NAME", "PROCESS-PATH-WILDCARD": "PROCESS-NAME"}
 LOGICAL = {"AND", "OR", "NOT"}
 _DNS_LINE_LIMIT = 65536
+_DNS_BYTE_TOKEN = r'''(?:[^\\]|\\[. '@;()"\\]|\\[0-9]{3})'''
 # regexp2 类外 Unicode 原子在 Go regexp 中的等价集合。
 _DNS_UNICODE_ATOMS = {
     "d": r"\p{Nd}", "D": r"\P{Nd}",
@@ -327,43 +328,48 @@ def _dns_join(parts: Iterable[str | None], budget: int, *, separator: str = '') 
     return separator.join(values)
 
 
-def _dns_literal(value: str, budget: int) -> str | None:
-    return _dns_join((re.escape(char).replace('=', r'\x{3D}') for char in value), budget)
+def _dns_literal(value: str, budget: int, *, presentation: bool = False) -> str | None:
+    def parts():
+        for char in value:
+            if not presentation or char == '.':
+                yield re.escape(char).replace('=', r'\x{3D}')
+                continue
+            for byte in char.encode('utf-8'):
+                text = chr(byte)
+                if text in ''' '@;()"\\''':
+                    text = '\\' + text
+                elif not 0x21 <= byte <= 0x7E:
+                    text = '\\' + f'{byte:03d}'
+                yield re.escape(text).replace('=', r'\x{3D}')
+    return _dns_join(parts(), budget)
 
 
 def _native_wildcard_regex(value: str, budget: int) -> str | None:
     prefix, suffix = r'(?s-i:\A', r'\z)'
-    budget -= len(prefix) + len(suffix)
-    widths = (r'[\x00-\x7f]', r'[\x{80}-\x{7ff}]',
-              r'[\x{800}-\x{d7ff}\x{e000}-\x{ffff}]', r'[\x{10000}-\x{10ffff}]')
-
-    @cache
-    def span(size: int, minimum: bool = False) -> str | None:
-        if not size:
-            return _dns_join(('.*' if minimum else '',), budget)
-        if minimum and size == 1:
-            return _dns_join(('.+',), budget)
-        if size >= 8:
-            # byte 中点前的最后一个 rune 边界必在这四个位置，保持完整 UTF-8 长度语言。
-            choices = [_dns_join((span(left), span(size - left, minimum)), budget)
-                       for left in range(size // 2 - 3, size // 2 + 1)]
-        else:
-            choices = [_dns_join((widths[width - 1], span(size - width, minimum)), budget)
-                       for width in range(1, min(4, size - 1 if minimum else size) + 1)]
-            if minimum and size <= 4:
-                choices.append(_dns_join((r'[^\x00-\x7f]' if size == 2 else r'[^\x00-\x{7ff}]'
-                                          if size == 3 else widths[3], '.*'), budget))
-        if len(choices) == 1:
-            return choices[0]
-        body = _dns_join(choices, budget - 4, separator='|')
-        return '(?:' + body + ')' if body is not None else None
-
-    body = _dns_join((span(part.count('?'), '*' in part) if index % 2 else _dns_literal(part, budget)
-                      for index, part in enumerate(re.split(r'([?*]+)', value))), budget)
-    return prefix + body + suffix if body is not None else None
+    body_budget = budget - len(prefix) - len(suffix)
+    if value and not value.strip('*'):
+        body = _dns_join(('.*',), body_budget)
+    else:
+        body = _dns_join((_DNS_BYTE_TOKEN + '*' if char == '*' else _DNS_BYTE_TOKEN if char == '?' else
+                          _dns_literal(char, body_budget, presentation=True) for char in value), body_budget)
+    return _dns_join((prefix, body, suffix), budget)
 
 
 def _dns_pattern(rule: Rule, *, exception: bool = False) -> str | None:
+    if rule.domain_source == 'mihomo':
+        if rule.kind in DOMAIN_SET_TYPES:
+            return None
+        if rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}:
+            value = _go_lower(rule.value)
+            if re.search(r'[A-Za-z]', value):
+                return None
+            if rule.kind == 'DOMAIN-KEYWORD' and value.endswith('.'):
+                return None
+            if rule.kind == 'DOMAIN-WILDCARD':
+                universal = set(value) <= {'*', '?'} and value.count('?') == 1 and '*' in value
+                if (any(char in value for char in '[]') or
+                        not universal and (not value.endswith('*') or value.rstrip('*').endswith(('.', '?')))):
+                    return None
     budget = _DNS_LINE_LIMIT - 1 - (2 if exception else 0)
     parts = ('|', rule.value, '|') if exception and rule.kind == 'DOMAIN' and '_' not in rule.value else (_dns_body(rule, budget),)
     return _dns_join(parts, budget)
@@ -381,8 +387,9 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
     if rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and rule.domain_source == 'mihomo':
         value = _go_lower(rule.value)
         if rule.kind == 'DOMAIN-KEYWORD':
-            return _dns_join((r'/(?s-i:\A.*', _dns_literal(value, budget), r'.*\z)/'), budget)
-        if any(char in value for char in '[]') or not _valid_domain(rule.kind, value, domain_source=rule.domain_source):
+            prefix, suffix = r'/(?s-i:\A' + _DNS_BYTE_TOKEN + '*', _DNS_BYTE_TOKEN + r'*\z)/'
+            return _dns_join((prefix, _dns_literal(value, budget - len(prefix) - len(suffix), presentation=True), suffix), budget)
+        if not _valid_domain(rule.kind, value, domain_source=rule.domain_source):
             return None
         return _dns_join(('/', _native_wildcard_regex(value, budget - 2), '/'), budget)
     if rule.kind == "DOMAIN-KEYWORD":

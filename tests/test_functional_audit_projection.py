@@ -291,9 +291,9 @@ class SurgeRootDotProjectionTests(unittest.TestCase):
             self.assertEqual(skipped[name + ':DOMAIN-KEYWORD'], 1)
         self.assertEqual(out['fin.yaml'], '# root rules: 1\npayload:\n  - "DOMAIN-KEYWORD,123."\n')
         self.assertEqual(out['fin-qx.txt'], '# root rules: 1\nHOST-KEYWORD,123.,LIST\n')
-        self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [r'/(?s-i:\A.*123\..*\z)/'])
+        self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
         self.assertEqual(skipped, {name + ':DOMAIN-KEYWORD': 1 for name in
-                                  ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+                                  ('fin.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
 
     def test_native_wildcard_root_dot_counterexamples_skip_only_surge(self):
         for value in ('*.*', '*.123', '*.123.*', '*.??*'):
@@ -308,9 +308,9 @@ class SurgeRootDotProjectionTests(unittest.TestCase):
                     self.assertEqual(skipped[name + ':DOMAIN-WILDCARD'], 1)
                 self.assertEqual(out['fin.yaml'], '# root rules: 1\npayload:\n  - ' + json.dumps(matcher) + '\n')
                 self.assertEqual(out['fin-qx.txt'], '# root rules: 1\nHOST-WILDCARD,' + value + ',LIST\n')
-                self.assertEqual(len(out['fin-adb.txt'].splitlines()[7:]), 1)
+                self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
                 self.assertEqual(skipped, {name + ':DOMAIN-WILDCARD': 1 for name in
-                                          ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+                                          ('fin.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
 
     def test_native_questions_require_independent_byte_character_equivalence(self):
         cases = (('*??123*', 'é123.example.', True, False), ('?123*', 'é123.example.', False, True),
@@ -613,7 +613,8 @@ class SurgeRootDotProjectionTests(unittest.TestCase):
                                 self.assertIn('SRC-IP,198.51.100.0/24\n', products[name])
                             self.assert_counts_and_split(products, purpose, group)
                             if purpose == 'block':
-                                self.assertIn(r'@@/(?s-i:\A.*999\..*\z)/' + '\n', products['fin-adb.txt'])
+                                self.assertFalse(any(line.startswith('@@') for line in products['fin-adb.txt'].splitlines()[7:]))
+                                self.assertIn(f'{group} fin-adb.txt:DOMAIN-KEYWORD: 1', diagnostic.getvalue())
                         publish(out, root=root)
                         self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
                         self.assertEqual({path: path.read_bytes() for path in out},
@@ -1085,7 +1086,7 @@ class ActualTargetWhitelistTests(unittest.TestCase):
                                 self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
 
     def test_native_unicode_white_does_not_expand_surge_case_scope(self):
-        for value, dns_value in (('σ', 'σ'), ('Σ', 'σ'), ('ς', 'ς')):
+        for value, dns_value in (('σ', r'\\207\\131'), ('Σ', r'\\207\\131'), ('ς', r'\\207\\130')):
             blocked, warnings = parse('DOMAIN-KEYWORD,' + value, purpose='block')
             white = parse_whitelist('payload:\n  - "DOMAIN-KEYWORD,' + value + '"\n')
             self.assertEqual((blocked, warnings), ([Rule('DOMAIN-KEYWORD', value)], []))
@@ -1106,7 +1107,8 @@ class ActualTargetWhitelistTests(unittest.TestCase):
                             self.assertEqual(blocked[0].value, value)
                             self.assertEqual(white[0].domain_source, 'mihomo')
                             if purpose == 'block':
-                                self.assertIn(r'@@/(?s-i:\A.*' + dns_value + r'.*\z)/',
+                                token = r'''(?:[^\\]|\\[. '@;()"\\]|\\[0-9]{3})'''
+                                self.assertIn(r'@@/(?s-i:\A' + token + '*' + dns_value + token + r'*\z)/',
                                               out['fin-adb.txt'].splitlines()[7:])
 
     def test_qx_unicode_lowercase_does_not_prove_different_payload_coverage(self):
@@ -1138,13 +1140,15 @@ class ActualTargetWhitelistTests(unittest.TestCase):
         self.assertNotIn('fin-qx.txt:DOMAIN-KEYWORD:whitelist-covered', diagnostic)
 
     def test_unicode_whitelist_counterexamples_keep_real_generation_and_dependency_bytes(self):
+        token = r'''(?:[^\\]|\\[. '@;()"\\]|\\[0-9]{3})'''
+        native_dns = r'/(?s-i:\A' + token + r'*\\207\\131' + token + r'*\z)/'
         cases = (
             ('DOMAIN-KEYWORD,σ\n', 'payload:\n  - "DOMAIN-KEYWORD,σ"\n', 'fin.yaml',
              'fin.txt', 'DOMAIN-KEYWORD,σ', 'DOMAIN-REGEX,σ',
-             [r'@@/(?s-i:\A.*σ.*\z)/', '/^.*σ.*$/']),
+             ['@@' + native_dns, '/^.*σ.*$/']),
             ('payload:\n  - "DOMAIN-KEYWORD,Σ"\n', 'HOST-KEYWORD,σ\n', 'fin-qx.txt',
              'fin-qx.txt', 'HOST-KEYWORD,Σ,LIST', 'DOMAIN-KEYWORD,Σ',
-             ['@@/^.*σ.*$/', r'/(?s-i:\A.*σ.*\z)/']),
+             ['@@/^.*σ.*$/', native_dns]),
         )
         for source_text, white_text, white_file, target, expected_target, expected_yaml, expected_dns in cases:
             for generated_white in (False, True):
@@ -1376,7 +1380,8 @@ class ActualTargetWhitelistTests(unittest.TestCase):
                             self.assertNotIn('whitelist-covered:' + kind, skipped)
                         if purpose == 'block':
                             self.assertTrue(any(line.startswith('@@') for line in out['fin-adb.txt'].splitlines()[7:]))
-                            self.assertTrue(any(not line.startswith('@@') for line in out['fin-adb.txt'].splitlines()[7:]))
+                            self.assertFalse(any(not line.startswith('@@') for line in out['fin-adb.txt'].splitlines()[7:]))
+                            self.assertEqual(skipped['fin-adb.txt:' + kind], 1)
 
     def test_qx_partial_targets_only_identical_or_existing_safe_coverage(self):
         rule = Rule('DOMAIN-KEYWORD', 'xmicrosofty', ('force-cellular',), domain_source='qx')

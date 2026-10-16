@@ -43,7 +43,7 @@ def native_arity_products(group, matchers, purpose, *, native=True):
         'fin-qx.txt': f'# {group} rules: {int(domain)}\n' + ('HOST,keep.example.com,LIST\n' if domain else ''),
         'fin.yaml': f'# {group} rules: {len(matchers)}\npayload:\n' +
                     ''.join(yaml),
-        'fin-adb.txt': dns + (f'! Total count: {int(domain)}\n' + ('0.0.0.0 keep.example.com\n' if domain else '') if purpose == 'block' else
+        'fin-adb.txt': dns + (f'! Total count: {int(route)}\n' + ('0.0.0.0 keep.example.com\n' if route else '') if purpose == 'block' else
                             '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'),
         'fin-surge.txt': f'# {group} rules: 0\n',
         'fin-surge-ds.txt': f'# {group} rules: {int(route)}\n' + ('keep.example.com\n' if route else ''),
@@ -183,6 +183,10 @@ NATIVE_KEYWORD_SOURCE = '''payload:
 '''
 
 
+DNS_BYTE_TOKEN = r'''(?:[^\\]|\\[. '@;()"\\]|\\[0-9]{3})'''
+DNS_CHINESE_KEYWORD = r'/(?s-i:\A' + DNS_BYTE_TOKEN + r'*\\228\\184\\173\\230\\150\\135' + DNS_BYTE_TOKEN + r'*\z)/'
+
+
 def native_keyword_expected(group, purpose, mode):
     flag = ',no-resolve' if mode != 'strip' else ''
     conjunction = ('AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24' + flag +
@@ -205,7 +209,7 @@ def native_keyword_expected(group, purpose, mode):
     expected['fin-adb.txt'] = (
         f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
         '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
-        ('! Total count: 2\n/(?s-i:\\A.*中文.*\\z)/\n0.0.0.0 keep.example.com\n' if purpose == 'block' else
+        ('! Total count: 1\n' + DNS_CHINESE_KEYWORD + '\n' if purpose == 'block' else
          '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
     return expected
 
@@ -213,10 +217,10 @@ def native_keyword_expected(group, purpose, mode):
 def native_keyword_skips(purpose):
     skipped = {f'{name}:{kind}': 1 for name in ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')
                for kind in ('AND', 'NOT', 'OR', 'SRC-IP-CIDR')}
-    skipped.update({'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-adb.txt:IP-CIDR': 1, 'fin-surge-ds.txt:IP-CIDR': 1,
-                    'fin-surge-ds.txt:DOMAIN-KEYWORD': 1})
+    skipped.update({'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1,
+                    'fin-adb.txt:IP-CIDR': 1, 'fin-surge-ds.txt:IP-CIDR': 1, 'fin-surge-ds.txt:DOMAIN-KEYWORD': 1})
     if purpose != 'block':
-        skipped.update({'fin-adb.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN-KEYWORD': 1})
+        skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
     return skipped
 
 
@@ -318,9 +322,13 @@ class NativeKeywordFormatTests(unittest.TestCase):
                         out, skipped = render_configured('literal', native, purpose=purpose, no_resolve=mode)
                         yaml = ''.join('  - ' + json.dumps(rule.kind + ',' + rule.value, ensure_ascii=False) + '\n'
                                        for rule in native)
-                        dns = sorted(['0.0.0.0 keep.example.com'] +
-                                     ([] if '/' in value else ['/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/']),
-                                     key=lambda line: (len(line), line)) if purpose == 'block' else []
+                        prefix_literal = {'中文': r'\\228\\184\\173\\230\\150\\135',
+                                          '中文 #1': r'\\228\\184\\173\\230\\150\\135\\\ \#1',
+                                          '中文 ;1': r'\\228\\184\\173\\230\\150\\135\\\ \\;1'}
+                        suffix_literal = {'\\': r'\\\\', '\\\\': r'\\\\\\\\', '\\\\\\': r'\\\\\\\\\\\\',
+                                          '(': r'\\\(', ')': r'\\\)', '(1)': r'\\\(1\\\)'}
+                        dns = ([r'/(?s-i:\A' + DNS_BYTE_TOKEN + '*' + prefix_literal[prefix] + suffix_literal[suffix] +
+                                DNS_BYTE_TOKEN + r'*\z)/'] if purpose == 'block' and '/' not in value else [])
                         expected = {
                             'fin.txt': '# literal rules: 1\nDOMAIN-KEYWORD,' + field + '\n',
                             'fin-qx.txt': '# literal rules: 2\nHOST,keep.example.com,LIST\nHOST-KEYWORD,' + value + ',LIST\n',
@@ -333,11 +341,10 @@ class NativeKeywordFormatTests(unittest.TestCase):
                                 f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
                                 ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''),
                         }
-                        expected_skips = {'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
+                        expected_skips = {'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1,
+                                          'fin-adb.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
                         if purpose != 'block' or '/' in value:
                             expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
-                        if purpose != 'block':
-                            expected_skips['fin-adb.txt:DOMAIN'] = 1
                         self.assertEqual(out, expected)
                         self.assertEqual(skipped, expected_skips)
                         self.assertEqual(parse(out['fin.yaml'], purpose=purpose), (native, []))
@@ -373,17 +380,22 @@ class NativeKeywordFormatTests(unittest.TestCase):
                                   Rule('SRC-IP-CIDR', '198.51.100.0/24')]
                         expected = {}
                         for name, text in native_keyword_expected('keyword', purpose, mode).items():
-                            replacement = re.escape(value) if name == 'fin-adb.txt' else value
                             if name in ('fin.txt', 'fin-surge.txt'):
                                 text = text.replace('DOMAIN-KEYWORD,中文', "DOMAIN-KEYWORD,'" + value + "'")
-                            else:
-                                text = text.replace('中文', replacement)
+                            elif name != 'fin-adb.txt':
+                                text = text.replace('中文', value)
                             expected[name] = text
                         expected_skips = native_keyword_skips(purpose)
-                        if purpose == 'block' and '/' in value:
-                            expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
-                                '/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/\n', '').replace('! Total count: 2\n', '! Total count: 1\n')
-                            expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                        if purpose == 'block':
+                            tail = {'中文 #1': r'\\\ \#1', '中文 ;1': r'\\\ \\;1'}.get(value)
+                            if tail is None:
+                                expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                                    '! Total count: 1\n' + DNS_CHINESE_KEYWORD + '\n', '! Total count: 0\n')
+                                expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                            else:
+                                expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                                    DNS_CHINESE_KEYWORD, r'/(?s-i:\A' + DNS_BYTE_TOKEN +
+                                    r'*\\228\\184\\173\\230\\150\\135' + tail + DNS_BYTE_TOKEN + r'*\z)/')
                         self.assertEqual(outputs, expected)
                         self.assertEqual(skipped, expected_skips)
                         self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), (native, []))
@@ -413,8 +425,13 @@ class NativeKeywordFormatTests(unittest.TestCase):
                     with self.subTest(value=value, purpose=purpose, mode=mode), patch('formats.datetime') as clock:
                         clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
                         outputs, skipped = render_configured('keyword', parsed, purpose=purpose, no_resolve=mode)
-                        expected = {name: text.replace('中文', re.escape(value) if name == 'fin-adb.txt' else value)
+                        expected = {name: text if name == 'fin-adb.txt' else text.replace('中文', value)
                                     for name, text in native_keyword_expected('keyword', purpose, mode).items()}
+                        literal = {'中文': r'\\228\\184\\173\\230\\150\\135',
+                                   '中文123': r'\\228\\184\\173\\230\\150\\135123',
+                                   '123#1': r'123\#1', '123': '123'}[value]
+                        expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                            DNS_CHINESE_KEYWORD, r'/(?s-i:\A' + DNS_BYTE_TOKEN + '*' + literal + DNS_BYTE_TOKEN + r'*\z)/')
                         self.assertEqual(outputs, expected)
                         self.assertEqual(skipped, native_keyword_skips(purpose))
                         flag = ',no-resolve' if mode != 'strip' else ''
@@ -468,7 +485,7 @@ class NativeKeywordFormatTests(unittest.TestCase):
                 expected['fin-adb.txt'] = (
                     '[Adblock Plus 2.0]\n! Title: keyword\n! Homepage: https://github.com/DoingDog/rconvert\n'
                     '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
-                    ('! Total count: 1\n@@/(?s-i:\\A.*中文.*\\z)/\n' if purpose == 'block' else
+                    ('! Total count: 1\n@@' + DNS_CHINESE_KEYWORD + '\n' if purpose == 'block' else
                      '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
                 self.assertEqual(allowed, expected)
                 self.assertEqual(whitelisted, expected)
@@ -1186,34 +1203,32 @@ class NativeDnsByteFormatTests(unittest.TestCase):
             parsed, messages = parse(source, purpose='block')
             self.assertEqual(messages, [])
             self.assertEqual(parsed[0].value, pattern)
+            # 保留原 byte 见证；此处只验完整 native 输入的目标局部拒绝。
             white = parse_whitelist(source)
             for caller in ('block', 'allow', 'whitelist'):
-                with self.subTest(pattern=pattern, caller=caller):
+                with self.subTest(pattern=pattern, positive=positive, negative=negative, caller=caller):
                     out, skipped = render_configured('bytes', normalize(parsed) if caller == 'block' else
                         [replace(parsed[0], allow=True)] if caller == 'allow' else [],
                         purpose='block', no_resolve='keep', whitelist=white if caller == 'whitelist' else ())
                     body = out['fin-adb.txt'].splitlines()[7:]
-                    self.assertEqual(len(body), 1)
-                    self.assertEqual(body[0].startswith('@@'), caller != 'block')
-                    matcher = dns_regex(body[0])
-                    for host in positive:
-                        self.assertIsNotNone(matcher.fullmatch(host), host)
-                    for host in (*negative, positive[0].upper()):
-                        self.assertIsNone(matcher.fullmatch(host), host)
-                    self.assertNotIn('fin-adb.txt:DOMAIN-WILDCARD', skipped)
+                    self.assertEqual(body, [])
+                    self.assertEqual(skipped['fin-adb.txt:DOMAIN-WILDCARD'], 1)
+                    if caller == 'block':
+                        self.assertIn('DOMAIN-WILDCARD,' + pattern,
+                                      [json.loads(row[4:]) for row in out['fin.yaml'].splitlines()[2:]])
             if pattern == 'api-?.example.org':
                 hosts, warnings = parse('payload:\n  - DOMAIN,api-a.example.org\n  - DOMAIN,api-ı.example.org', purpose='block')
                 self.assertEqual(warnings, [])
                 kept = normalize(exclude_covered(hosts, white))
                 self.assertEqual([rule.value for rule in kept], ['api-ı.example.org'])
                 out, _ = render_configured('bytes', kept, purpose='block', no_resolve='keep', whitelist=white)
-                self.assertIn('0.0.0.0 api-ı.example.org', out['fin-adb.txt'].splitlines()[7:])
+                self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
                 for source_text in ('DOMAIN-WILDCARD,' + pattern, 'HOST-WILDCARD,' + pattern):
                     ordinary, warnings = parse(source_text, purpose='block')
                     self.assertEqual(warnings, [])
                     outputs, _ = render_configured('bytes', normalize(ordinary), purpose='block', no_resolve='keep')
                     self.assertIsNotNone(dns_regex(outputs['fin-adb.txt'].splitlines()[7]).fullmatch('api-ı.example.org'))
-                    self.assertNotEqual(outputs['fin-adb.txt'].splitlines()[7], body[0].removeprefix('@@'))
+                    self.assertEqual(len(outputs['fin-adb.txt'].splitlines()[7:]), 1)
 
     def test_native_keyword_constructor_and_strict_flags_share_three_callers(self):
         from dataclasses import replace
@@ -1231,13 +1246,18 @@ class NativeDnsByteFormatTests(unittest.TestCase):
                     out, skipped = render_configured('keyword', normalize(parsed) if caller == 'block' else
                         [replace(parsed[0], allow=True)] if caller == 'allow' else [], purpose='block',
                         no_resolve='keep', whitelist=parse_whitelist(source) if caller == 'whitelist' else ())
-                    line = out['fin-adb.txt'].splitlines()[7]
-                    matcher = dns_regex(line)
-                    self.assertIsNotNone(matcher.fullmatch(positive))
-                    self.assertIsNone(matcher.fullmatch(negative))
-                    self.assertIsNone(matcher.fullmatch(positive.upper()))
-                    self.assertNotIn('fin-adb.txt:DOMAIN-KEYWORD', skipped)
-                    self.assertEqual(line.startswith('@@'), caller != 'block')
+                    rows = out['fin-adb.txt'].splitlines()[7:]
+                    if value != 'ſ':
+                        self.assertEqual(rows, [])
+                        self.assertEqual(skipped['fin-adb.txt:DOMAIN-KEYWORD'], 1)
+                    else:
+                        expected = ('@@' if caller != 'block' else '') + r'/(?s-i:\A' + DNS_BYTE_TOKEN + r'*\\197\\191' + DNS_BYTE_TOKEN + r'*\z)/'
+                        self.assertEqual(rows, [expected])
+                        matcher = dns_regex(expected)
+                        self.assertIsNotNone(matcher.fullmatch(r'cdn.\197\191.example.org'))
+                        self.assertIsNone(matcher.fullmatch(negative))
+                        self.assertIsNone(matcher.fullmatch(positive.upper()))
+                        self.assertNotIn('fin-adb.txt:DOMAIN-KEYWORD', skipped)
 
 
 class DomainProvenanceFormatTests(unittest.TestCase):
@@ -1300,20 +1320,20 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                 self.assert_counts(out)
 
     def test_root_dot_body_fix_preserves_native_qx_and_dns_wildcards(self):
-        cases = (('*.*', r'/^.*\..*$/', r'/(?s-i:\A.*\..*\z)/'),
-                 ('*.123.*', r'/^.*\.123\..*$/', r'/(?s-i:\A.*\.123\..*\z)/'),
-                 ('*.123?', r'/^.*\.123.$/', r'/(?s-i:\A.*\.123[\x00-\x7f]\z)/'),
-                 ('*.com.*', r'/^.*\.com\..*$/', r'/(?s-i:\A.*\.com\..*\z)/'))
-        for pattern, dns, native_dns in cases:
+        cases = (('*.*', r'/^.*\..*$/'),
+                 ('*.123.*', r'/^.*\.123\..*$/'),
+                 ('*.123?', r'/^.*\.123.$/'),
+                 ('*.com.*', r'/^.*\.com\..*$/'))
+        for pattern, dns in cases:
             with self.subTest(pattern=pattern):
                 surge, _ = self.outputs('DOMAIN-WILDCARD,' + pattern)
                 self.assertEqual(surge['fin-adb.txt'].splitlines()[7:], [dns])
                 matcher = 'DOMAIN-WILDCARD,' + pattern
                 native, skipped = self.outputs('payload:\n  - ' + json.dumps(matcher))
                 self.assertEqual(native['fin.yaml'], '# group rules: 1\npayload:\n  - ' + json.dumps(matcher) + '\n')
-                self.assertEqual(native['fin-adb.txt'].splitlines()[7:], [native_dns])
+                self.assertEqual(native['fin-adb.txt'].splitlines()[7:], [])
                 self.assertEqual(skipped, {name + ':DOMAIN-WILDCARD': 1 for name in
-                                          ('fin.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+                                          ('fin.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
                 qx, skipped = self.outputs('HOST-WILDCARD,' + pattern + ',REJECT')
                 self.assertEqual(qx['fin.yaml'], native['fin.yaml'])
                 self.assertEqual(qx['fin-adb.txt'].splitlines()[7:], [dns])
@@ -1364,7 +1384,7 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                     self.assertEqual([json.loads(line[4:]) for line in native["fin.yaml"].splitlines()[2:]],
                                      [f"{kind},{value}"])
                     self.assertEqual(native_skipped, {f"{name}:{kind}": 1 for name in
-                                                      ("fin.txt", "fin-surge.txt", "fin-surge-ds.txt")})
+                                                      ("fin.txt", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")})
                     self.assert_counts(native)
 
     def test_dns_native_literal_class_skips_block_allow_and_whitelist(self):
@@ -1387,11 +1407,14 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                        "payload:\n  - DOMAIN-WILDCARD,api-*.example.com",
                        "payload:\n  - DOMAIN-KEYWORD,ads"):
             out, skipped = self.outputs(source)
-            expression = dns_regex(out["fin-adb.txt"].splitlines()[7])
-            self.assertIsNotNone(expression.search("API-7.EXAMPLE.COM".lower()) if "ads" not in source
-                                 else expression.search("CDN.ADS.EXAMPLE.COM".lower()))
-            self.assertIsNone(expression.search("outside.example.org"))
-            self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
+            if source.startswith('payload:'):
+                self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
+                self.assertEqual(skipped['fin-adb.txt:' + ('DOMAIN-KEYWORD' if 'KEYWORD' in source else 'DOMAIN-WILDCARD')], 1)
+            else:
+                expression = dns_regex(out["fin-adb.txt"].splitlines()[7])
+                self.assertIsNotNone(expression.search("API-7.EXAMPLE.COM".lower()))
+                self.assertIsNone(expression.search("outside.example.org"))
+                self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
 
     def test_logical_domain_provenance_skips_whole_target_with_flags_intact(self):
         for operator in ("AND", "OR", "NOT"):
@@ -1836,9 +1859,7 @@ class RegexValidatorFormatTests(unittest.TestCase):
                                              ([parsed[1], parsed[0]], []) if valid and not logical else (parsed, []))
                             expected_skips = {name + ':' + ('AND' if logical else kind): 1 for name in
                                               ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')} if valid else {}
-                            if purpose != 'block':
-                                expected_skips['fin-adb.txt:DOMAIN'] = 1
-                            expected_skips.update({'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1})
+                            expected_skips.update({'fin.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1})
                             self.assertEqual(skipped, expected_skips)
                             self.assertEqual(len(messages), int(not valid))
 

@@ -136,7 +136,8 @@ class YamlCoverageTests(unittest.TestCase):
             [SURGE_SUFFIX], purpose='block',
         )
         self.assertEqual(skipped['fin.yaml:DOMAIN'], 1)
-        self.assertIn('@@|example.com|\n', output['fin-adb.txt'])
+        self.assertNotIn('@@|example.com|\n', output['fin-adb.txt'])
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN'], 1)
 
     def test_no_resolve_mode_is_applied_before_emission(self):
         rules = [Rule('DOMAIN-SUFFIX', 'example.com', ('no-resolve',)),
@@ -277,10 +278,11 @@ class YamlCoverageTests(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertEqual(output[name], '# fixture rules: ' + str(len(body)) + '\n'
                                  + ''.join(line + '\n' for line in body))
-        self.assertEqual(output['fin-adb.txt'].splitlines()[6], '! Total count: 5')
+        self.assertEqual(output['fin-adb.txt'].splitlines()[6], '! Total count: 3')
         self.assertCountEqual(output['fin-adb.txt'].splitlines()[7:],
-                              ['||example.com^', '||child.example.com^', '||grand.example.com^',
-                               '0.0.0.0 example.com', '0.0.0.0 child.example.com'])
+                              ['||example.com^', '||grand.example.com^', '0.0.0.0 example.com'])
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN'], 1)
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN-SUFFIX'], 1)
         self.assertFalse(any(key.startswith('fin.yaml:') for key in skipped))
 
     def test_whitelist_stays_separate_from_rendered_yaml(self):

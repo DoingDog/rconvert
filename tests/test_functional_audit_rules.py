@@ -1634,7 +1634,9 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                                 route_neighbor = not native and group == 'source'
                                 qx_neighbor = native or group == 'source'
                                 current_surge = [line for line in surge_body if route_neighbor or not line.startswith('DOMAIN,')]
-                                dns_body = (['@@||allow.example.org^'] if group == 'source' else []) + ['@@|covered.example.org|', *(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])]
+                                if native:
+                                    self.assertIn(f'{group} fin-adb.txt:DOMAIN: 1\n', diagnostic.getvalue())
+                                dns_body = (['@@||allow.example.org^'] if group == 'source' else []) + ['@@|covered.example.org|', *(['0.0.0.0 neighbor.example.org'] if route_neighbor else [])]
                                 if purpose != 'block':
                                     dns_body = []
                                 expected = {'fin.yaml': f'# {group} rules: 9\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
@@ -2009,8 +2011,9 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                                       'NOT,((DEST-PORT,0-1))', 'OR,((DEST-PORT,80),(DEST-PORT,443))',
                                       'OR,((IN-PORT,65535),(DEST-PORT,80))', 'SRC-PORT,80-443']
                         for group in ('source', 'child'):
+                            self.assertIn(f'{group} fin-adb.txt:DOMAIN: 1\n', diagnostic.getvalue())
                             dns_body = ((['@@||allow.example.org^'] if group == 'source' else []) +
-                                        ['@@|covered.example.org|', '0.0.0.0 neighbor.example.org']) if purpose == 'block' else []
+                                        ['@@|covered.example.org|']) if purpose == 'block' else []
                             expected = {'fin.yaml': f'# {group} rules: 8\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
                                         'fin.txt': f'# {group} rules: 7\n' + '\n'.join(surge_body) + '\n',
                                         'fin-qx.txt': f'# {group} rules: 1\nHOST,neighbor.example.org,LIST\n',
@@ -2445,8 +2448,10 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                                 qx_neighbor = native or group == 'source'
                                 current_surge = surge_body if group == 'source' else [surge_body[0].replace('2001:db8::1)', '2001:db8::1/128)'), *surge_body[1:]]
                                 current_surge = [line for line in current_surge if route_neighbor or not line.startswith('DOMAIN,')]
+                                if native:
+                                    self.assertIn(f'{group} fin-adb.txt:DOMAIN: 1\n', diagnostic.getvalue())
                                 dns_body = ((['@@||allow.example.org^'] if group == 'source' else []) +
-                                            ['@@|covered.example.org|', *(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])]) if purpose == 'block' else []
+                                            ['@@|covered.example.org|', *(['0.0.0.0 neighbor.example.org'] if route_neighbor else [])]) if purpose == 'block' else []
                                 expected = {'fin.yaml': f'# {group} rules: 7\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
                                             'fin.txt': f'# {group} rules: {len(current_surge)}\n' + '\n'.join(current_surge) + '\n',
                                             'fin-qx.txt': f'# {group} rules: {2 + int(qx_neighbor)}\n' +
@@ -3029,8 +3034,10 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                             for group in ('source', 'child'):
                                 route_neighbor = not native and group == 'source'
                                 qx_neighbor = native or group == 'source'
-                                dns_body = (['@@||allow.example.org^', *(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])] if group == 'source' else
-                                            [*(['0.0.0.0 neighbor.example.org'] if qx_neighbor else [])]) if purpose == 'block' else []
+                                if native:
+                                    self.assertIn(f'{group} fin-adb.txt:DOMAIN: 1\n', diagnostic.getvalue())
+                                dns_body = ((['@@||allow.example.org^'] if group == 'source' else []) +
+                                            (['0.0.0.0 neighbor.example.org'] if route_neighbor else [])) if purpose == 'block' else []
                                 expected = {'fin.yaml': f'# {group} rules: 6\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
                                             'fin.txt': f'# {group} rules: {1 + int(route_neighbor)}\n' +
                                                        ('DOMAIN,neighbor.example.org\n' if route_neighbor else '') + f'IP-CIDR,192.0.2.0/24{flag}\n',

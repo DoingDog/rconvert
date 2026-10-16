@@ -213,8 +213,7 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                                 if name == 'fin-adb.txt':
                                     dns = (['@@/' + value + '/'] if group != 'white' else []) if purpose == 'block' else []
                                     if purpose == 'block':
-                                        dns += (['/' + value + '/'] if group == 'white' else
-                                                ['/' + variant + '/', '0.0.0.0 neighbor.example.org'])
+                                        dns += ['/' + (value if group == 'white' else variant) + '/']
                                     text = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                             '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
                                             '! License: Inherits upstream licenses\n! Version: 202610130000\n' +
@@ -225,7 +224,7 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                                     text = f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') + ''.join(line + '\n' for line in body)
                                 expected[root / group / name] = text
                         self.assertEqual(outputs, expected)
-                        skips = {'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1}
+                        skips = {'fin.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1}
                         supported = {'AND': {'fin.yaml'}, 'DOMAIN-REGEX': {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' else [])},
                                      'IP-ASN': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
                                      'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
@@ -234,8 +233,6 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                             for name in FILES:
                                 if name not in names:
                                     skips[name + ':' + kind] = 1
-                        if purpose != 'block':
-                            skips['fin-adb.txt:DOMAIN'] = 1
                         white_skips = {name + ':DOMAIN-REGEX': 1 for name in FILES
                                        if name not in {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' else [])}}
                         self.assertEqual(diagnostic.getvalue().splitlines(), [f'{group} {key}: {count}'
