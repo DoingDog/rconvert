@@ -1,4 +1,4 @@
-# cdn rules: 4782
+# cdn rules: 4784
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -2464,6 +2464,7 @@ HOST,sequoia.cdn-apple.com,LIST
 HOST,services.linkfire.com,LIST
 HOST,sig.grumpybumpers.com,LIST
 HOST,siloh-ns1.plutotv.net,LIST
+HOST,sl3-cdn.karousell.com,LIST
 HOST,speedmedia2.jfrog.com,LIST
 HOST,st3.depositphotos.com,LIST
 HOST,start-page.buffer.com,LIST
@@ -2630,6 +2631,7 @@ HOST,media.infosec.exchange,LIST
 HOST,media.steampowered.com,LIST
 HOST,megapx-assets.dcard.tw,LIST
 HOST,moderate.cleantalk.org,LIST
+HOST,mweb-cdn.karousell.com,LIST
 HOST,newassets.hcaptcha.com,LIST
 HOST,nodeassets.nbcnews.com,LIST
 HOST,parts.blog.livedoor.jp,LIST

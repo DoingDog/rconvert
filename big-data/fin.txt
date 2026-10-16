@@ -1,4 +1,4 @@
-# big-data rules: 10567
+# big-data rules: 10574
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -2020,6 +2020,7 @@ DOMAIN,static.tumblr.com
 DOMAIN,static.vinted.com
 DOMAIN,static.vocadb.net
 DOMAIN,static.zaobao.com
+DOMAIN,status.claude.com
 DOMAIN,status.openai.com
 DOMAIN,stbff.newfold.com
 DOMAIN,storage.ko-fi.com
@@ -2595,6 +2596,7 @@ DOMAIN,download.osmand.net
 DOMAIN,download.sketch.com
 DOMAIN,download.umbrel.com
 DOMAIN,download01.logi.com
+DOMAIN,downloads.claude.ai
 DOMAIN,downloads.x-wrt.com
 DOMAIN,downloads.xrite.com
 DOMAIN,error.rakuten.co.jp
@@ -2731,6 +2733,7 @@ DOMAIN,public.saasexch.com
 DOMAIN,pubmirror.plutex.de
 DOMAIN,qmod.quotemedia.com
 DOMAIN,release.runcloud.io
+DOMAIN,releases.claude.com
 DOMAIN,releases.openai.com
 DOMAIN,replicate.npmjs.com
 DOMAIN,repo.extreme-ix.org
@@ -3404,6 +3407,7 @@ DOMAIN,sequoia.cdn-apple.com
 DOMAIN,services.linkfire.com
 DOMAIN,sig.grumpybumpers.com
 DOMAIN,siloh-ns1.plutotv.net
+DOMAIN,sl3-cdn.karousell.com
 DOMAIN,speedmedia2.jfrog.com
 DOMAIN,st3.depositphotos.com
 DOMAIN,start-page.buffer.com
@@ -3634,6 +3638,7 @@ DOMAIN,mirror2.infomaniak.com
 DOMAIN,mirrors.pidginhost.com
 DOMAIN,mirrors.usinternet.com
 DOMAIN,moderate.cleantalk.org
+DOMAIN,mweb-cdn.karousell.com
 DOMAIN,newassets.hcaptcha.com
 DOMAIN,opensource.nchc.org.tw
 DOMAIN,packages-cf.termux.dev
@@ -6163,6 +6168,7 @@ DOMAIN-SUFFIX,bunnycdn.com
 DOMAIN-SUFFIX,bytedapm.com
 DOMAIN-SUFFIX,c4assets.com
 DOMAIN-SUFFIX,callhulu.com
+DOMAIN-SUFFIX,capcutapi.us
 DOMAIN-SUFFIX,carlos.trade
 DOMAIN-SUFFIX,cartocdn.com
 DOMAIN-SUFFIX,cbsradio.com
@@ -6482,6 +6488,7 @@ DOMAIN-SUFFIX,bigcontent.io
 DOMAIN-SUFFIX,bitgetimg.com
 DOMAIN-SUFFIX,bnbstatic.com
 DOMAIN-SUFFIX,byspotify.com
+DOMAIN-SUFFIX,capcutapi.com
 DOMAIN-SUFFIX,cbsivideo.com
 DOMAIN-SUFFIX,cbssports.com
 DOMAIN-SUFFIX,cbsstatic.com

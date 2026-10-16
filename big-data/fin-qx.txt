@@ -1,4 +1,4 @@
-# big-data rules: 10548
+# big-data rules: 10555
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -2020,6 +2020,7 @@ HOST,static.tumblr.com,LIST
 HOST,static.vinted.com,LIST
 HOST,static.vocadb.net,LIST
 HOST,static.zaobao.com,LIST
+HOST,status.claude.com,LIST
 HOST,status.openai.com,LIST
 HOST,stbff.newfold.com,LIST
 HOST,storage.ko-fi.com,LIST
@@ -2595,6 +2596,7 @@ HOST,download.osmand.net,LIST
 HOST,download.sketch.com,LIST
 HOST,download.umbrel.com,LIST
 HOST,download01.logi.com,LIST
+HOST,downloads.claude.ai,LIST
 HOST,downloads.x-wrt.com,LIST
 HOST,downloads.xrite.com,LIST
 HOST,error.rakuten.co.jp,LIST
@@ -2731,6 +2733,7 @@ HOST,public.saasexch.com,LIST
 HOST,pubmirror.plutex.de,LIST
 HOST,qmod.quotemedia.com,LIST
 HOST,release.runcloud.io,LIST
+HOST,releases.claude.com,LIST
 HOST,releases.openai.com,LIST
 HOST,replicate.npmjs.com,LIST
 HOST,repo.extreme-ix.org,LIST
@@ -3404,6 +3407,7 @@ HOST,sequoia.cdn-apple.com,LIST
 HOST,services.linkfire.com,LIST
 HOST,sig.grumpybumpers.com,LIST
 HOST,siloh-ns1.plutotv.net,LIST
+HOST,sl3-cdn.karousell.com,LIST
 HOST,speedmedia2.jfrog.com,LIST
 HOST,st3.depositphotos.com,LIST
 HOST,start-page.buffer.com,LIST
@@ -3634,6 +3638,7 @@ HOST,mirror2.infomaniak.com,LIST
 HOST,mirrors.pidginhost.com,LIST
 HOST,mirrors.usinternet.com,LIST
 HOST,moderate.cleantalk.org,LIST
+HOST,mweb-cdn.karousell.com,LIST
 HOST,newassets.hcaptcha.com,LIST
 HOST,opensource.nchc.org.tw,LIST
 HOST,packages-cf.termux.dev,LIST
@@ -6163,6 +6168,7 @@ HOST-SUFFIX,bunnycdn.com,LIST
 HOST-SUFFIX,bytedapm.com,LIST
 HOST-SUFFIX,c4assets.com,LIST
 HOST-SUFFIX,callhulu.com,LIST
+HOST-SUFFIX,capcutapi.us,LIST
 HOST-SUFFIX,carlos.trade,LIST
 HOST-SUFFIX,cartocdn.com,LIST
 HOST-SUFFIX,cbsradio.com,LIST
@@ -6482,6 +6488,7 @@ HOST-SUFFIX,bigcontent.io,LIST
 HOST-SUFFIX,bitgetimg.com,LIST
 HOST-SUFFIX,bnbstatic.com,LIST
 HOST-SUFFIX,byspotify.com,LIST
+HOST-SUFFIX,capcutapi.com,LIST
 HOST-SUFFIX,cbsivideo.com,LIST
 HOST-SUFFIX,cbssports.com,LIST
 HOST-SUFFIX,cbsstatic.com,LIST

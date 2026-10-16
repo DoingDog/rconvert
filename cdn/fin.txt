@@ -1,4 +1,4 @@
-# cdn rules: 4782
+# cdn rules: 4784
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -2464,6 +2464,7 @@ DOMAIN,sequoia.cdn-apple.com
 DOMAIN,services.linkfire.com
 DOMAIN,sig.grumpybumpers.com
 DOMAIN,siloh-ns1.plutotv.net
+DOMAIN,sl3-cdn.karousell.com
 DOMAIN,speedmedia2.jfrog.com
 DOMAIN,st3.depositphotos.com
 DOMAIN,start-page.buffer.com
@@ -2630,6 +2631,7 @@ DOMAIN,media.infosec.exchange
 DOMAIN,media.steampowered.com
 DOMAIN,megapx-assets.dcard.tw
 DOMAIN,moderate.cleantalk.org
+DOMAIN,mweb-cdn.karousell.com
 DOMAIN,newassets.hcaptcha.com
 DOMAIN,nodeassets.nbcnews.com
 DOMAIN,parts.blog.livedoor.jp
