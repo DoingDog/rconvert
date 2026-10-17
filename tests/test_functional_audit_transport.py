@@ -14,6 +14,7 @@ from unittest.mock import patch
 from urllib import error, request
 
 from generate import fetch_https, generate, publish
+from tests.test_formats import expected_domain
 
 
 URL = "https://example.org/list.txt"
@@ -472,7 +473,7 @@ print(json.dumps({"body_read_attempts": 0, "closed": True}))
                         expected = {
                             "fin.txt": "# sample rules: 1\nDOMAIN,keep.example.org\n",
                             "fin-qx.txt": "# sample rules: 1\nHOST,keep.example.org,LIST\n",
-                            "fin.yaml": '# sample rules: 1\npayload:\n  - "DOMAIN,keep.example.org"\n',
+                            "fin.yaml": '# sample rules: 1\npayload:\n  - ' + json.dumps(expected_domain("DOMAIN", "keep.example.org")) + '\n',
                             "fin-surge.txt": "# sample rules: 0\n",
                             "fin-surge-ds.txt": "# sample rules: 1\nkeep.example.org\n",
                             "fin-adb.txt": "[Adblock Plus 2.0]\n! Title: sample\n"

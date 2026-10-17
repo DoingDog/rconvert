@@ -13,6 +13,7 @@ from urllib.error import HTTPError
 from formats import FILES, render
 from generate import generate, publish
 from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
+from sources import load_config, resolve_source
 from tests.test_formats import expected_domain
 
 
@@ -223,13 +224,16 @@ class PairedActualWhitelistTests(unittest.TestCase):
         for name in ('fin.yaml', 'fin.txt', 'fin-surge-ds.txt'):
             for purpose in ('block', 'direct', 'proxy'):
                 for mode in ('add', 'strip', 'keep'):
-                    with self.subTest(name=name, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    with self.subTest(name=name, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory, \
+                            patch('formats.datetime') as clock:
+                        clock.now.return_value = datetime(2026, 10, 17, tzinfo=timezone.utc)
                         root = Path(directory)
                         (root / 'static').mkdir()
-                        (root / 'static/white.list').write_bytes(b'\xef\xbb\xbfDOMAIN-SUFFIX,test\r\n')
-                        (root / 'static/source.list').write_text('DOMAIN,a.test\n' + canonical + '\n', encoding='utf-8')
-                        (root / 'static/blocker.list').write_text(canonical + '\n', encoding='utf-8')
-                        inputs = {path: path.read_bytes() for path in (root / 'static').iterdir()}
+                        inputs = {root / 'static/white.list': b'\xef\xbb\xbfDOMAIN-SUFFIX,test\r\n',
+                                  root / 'static/source.list': ('DOMAIN,a.test\n' + canonical + '\n').encode(),
+                                  root / 'static/blocker.list': (canonical + '\n').encode()}
+                        for path, data in inputs.items():
+                            path.write_bytes(data)
                         configs = [dict(name=group, purpose=purpose, no_resolve=mode, sources=sources, whitelist=white)
                                    for group, sources, white in (
                                        ('white', ['static/white.list'], []),
@@ -237,47 +241,57 @@ class PairedActualWhitelistTests(unittest.TestCase):
                                        ('consumer', ['source/' + name], ['white/' + name]),
                                        ('canonical', ['static/blocker.list'], ['white/' + name]))]
                         (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                        self.assertEqual(load_config(root), configs)
+                        for config in configs:
+                            for entry in config['sources'] + config['whitelist']:
+                                self.assertEqual(resolve_source(root, entry), root / entry)
                         with contextlib.redirect_stderr(io.StringIO()) as diagnostics:
                             outputs = generate(root, lambda url: self.fail(url))
+                        self.assertEqual(set(outputs), {root / config['name'] / filename for config in configs for filename in FILES})
                         self.assertNotIn('frozen', diagnostics.getvalue())
                         self.assertEqual(json.loads(outputs[root / 'white/fin.yaml'].splitlines()[2][4:]), paired_white)
                         source_yaml = outputs[root / 'source/fin.yaml']
-                        self.assertIn(json.dumps(paired_exact), source_yaml)
-                        self.assertIn(json.dumps(canonical), source_yaml)
-                        canonical_yaml = '# canonical rules: 1\npayload:\n  - ' + json.dumps(canonical) + '\n'
-                        self.assertEqual(outputs[root / 'canonical/fin.yaml'], canonical_yaml)
-                        expected_consumer = ('# consumer rules: 1\npayload:\n  - ' + json.dumps(canonical) + '\n'
-                                             if name == 'fin.yaml' else '# consumer rules: 0\npayload:\n')
-                        self.assertEqual(outputs[root / 'consumer/fin.yaml'], expected_consumer)
+                        for matcher in (paired_exact, canonical):
+                            self.assertIn(json.dumps(matcher), source_yaml)
+                        self.assertEqual(outputs[root / 'canonical/fin.yaml'],
+                                         '# canonical rules: 1\npayload:\n  - ' + json.dumps(canonical) + '\n')
+                        self.assertEqual(outputs[root / 'consumer/fin.yaml'],
+                                         '# consumer rules: 1\npayload:\n  - ' + json.dumps(canonical) + '\n'
+                                         if name == 'fin.yaml' else '# consumer rules: 0\npayload:\n')
                         self.assertNotIn('canonical fin.yaml:DOMAIN-REGEX:whitelist-covered', diagnostics.getvalue())
                         if name == 'fin.yaml':
                             self.assertIn('consumer fin.yaml:DOMAIN-REGEX:whitelist-covered: 1', diagnostics.getvalue())
                             self.assertIn('consumer whitelist-covered:DOMAIN-REGEX: 1', diagnostics.getvalue())
+                        consumer_diagnostics = [line for line in diagnostics.getvalue().splitlines()
+                                                if line.startswith(('consumer ', 'canonical '))]
+                        for group in ('white', 'source', 'consumer', 'canonical'):
+                            SurgeRootDotProjectionTests.assert_counts_and_split(self,
+                                {filename: outputs[root / group / filename] for filename in FILES}, purpose, group)
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
                         publish(outputs, root=root)
                         published = {path: path.read_bytes() for path in outputs}
                         self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
                         self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
-                        # 同文用户文件与生成依赖必须消费相同 bytes。
+                        # 保留文件名上下文，DOMAIN-SET 的单 label 规则按同一消费方式读取。
                         for group in ('source', 'white'):
-                            path = root / 'static' / (group + '.copy')
-                            path.write_bytes(published[root / group / name])
-                        (root / 'rulesets.json').write_text(json.dumps(configs[2:]), encoding='utf-8')
-                        with contextlib.redirect_stderr(io.StringIO()) as disk_diagnostics:
-                            disk = generate(root, lambda url: self.fail(url))
+                            path = root / 'static' / (group + '-copy') / name
+                            path.parent.mkdir()
+                            inputs[path] = published[root / group / name]
+                            path.write_bytes(inputs[path])
                         expected = {path: text for path, text in outputs.items() if path.parent.name in {'consumer', 'canonical'}}
-                        self.assertEqual(disk, expected)
-                        consumer_diagnostics = '\n'.join(line for line in diagnostics.getvalue().splitlines()
-                                                        if line.startswith(('consumer ', 'canonical '))) + '\n'
-                        self.assertEqual(disk_diagnostics.getvalue(), consumer_diagnostics)
-                        copied_configs = [dict(configs[2], sources=['static/source.copy'], whitelist=['static/white.copy']),
-                                          dict(configs[3], whitelist=['static/white.copy'])]
-                        (root / 'rulesets.json').write_text(json.dumps(copied_configs), encoding='utf-8')
-                        with contextlib.redirect_stderr(io.StringIO()) as copied_diagnostics:
-                            copied = generate(root, lambda url: self.fail(url))
-                        self.assertEqual(copied, expected)
-                        self.assertEqual(copied_diagnostics.getvalue(), consumer_diagnostics)
-                        self.assertEqual({path: path.read_bytes() for path in published}, published)
-                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                        copied_configs = [dict(configs[2], sources=['static/source-copy/' + name], whitelist=['static/white-copy/' + name]),
+                                          dict(configs[3], whitelist=['static/white-copy/' + name])]
+                        for selected in (configs[2:], copied_configs):
+                            (root / 'rulesets.json').write_text(json.dumps(selected), encoding='utf-8')
+                            self.assertEqual(load_config(root), selected)
+                            with contextlib.redirect_stderr(io.StringIO()) as reread_diagnostics:
+                                reread = generate(root, lambda url: self.fail(url))
+                            self.assertEqual(reread, expected)
+                            self.assertEqual(reread_diagnostics.getvalue().splitlines(), consumer_diagnostics)
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+                            publish(reread, root=root)
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+                            self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
 
 
 class SurgeRootDotProjectionTests(unittest.TestCase):

@@ -9,6 +9,7 @@ from urllib import error
 from formats import FILES
 from generate import generate, publish
 from sources import load_config, resolve_source
+from tests.test_formats import expected_domain
 
 
 class StaticMigrationTests(unittest.TestCase):
@@ -50,7 +51,7 @@ class StaticMigrationTests(unittest.TestCase):
             expected = {
                 "fin.txt": "# tg rules: 1\nDOMAIN,keep.example.org\n",
                 "fin-qx.txt": "# tg rules: 1\nHOST,keep.example.org,LIST\n",
-                "fin.yaml": '# tg rules: 1\npayload:\n  - "DOMAIN,keep.example.org"\n',
+                "fin.yaml": '# tg rules: 1\npayload:\n  - ' + json.dumps(expected_domain("DOMAIN", "keep.example.org")) + '\n',
                 "fin-surge.txt": "# tg rules: 0\n",
                 "fin-surge-ds.txt": "# tg rules: 1\nkeep.example.org\n",
             }
