@@ -1,4 +1,4 @@
-# dirt rules: 56697
+# dirt rules: 56698
 payload:
   - "DOMAIN,dot.pub"
   - "DOMAIN,i.dell.com"
@@ -52932,6 +52932,7 @@ payload:
   - "IP-CIDR,192.140.160.0/19"
   - "IP-CIDR,192.140.192.0/20"
   - "IP-CIDR,192.140.208.0/21"
+  - "IP-CIDR,192.140.244.0/23"
   - "IP-CIDR,192.144.128.0/17"
   - "IP-CIDR,194.138.202.0/23"
   - "IP-CIDR,194.138.245.0/24"
