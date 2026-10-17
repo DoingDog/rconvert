@@ -211,9 +211,7 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                         for group in ('white', 'source', 'child'):
                             for name in FILES:
                                 if name == 'fin-adb.txt':
-                                    dns = (['@@/' + value + '/'] if group != 'white' else []) if purpose == 'block' else []
-                                    if purpose == 'block':
-                                        dns += ['/' + (value if group == 'white' else variant) + '/']
+                                    dns = []
                                     text = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                             '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
                                             '! License: Inherits upstream licenses\n! Version: 202610130000\n' +
@@ -225,7 +223,7 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                                 expected[root / group / name] = text
                         self.assertEqual(outputs, expected)
                         skips = {'fin.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1}
-                        supported = {'AND': {'fin.yaml'}, 'DOMAIN-REGEX': {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' else [])},
+                        supported = {'AND': {'fin.yaml'}, 'DOMAIN-REGEX': {'fin.yaml'},
                                      'IP-ASN': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
                                      'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
                                      'SRC-IP-CIDR': {'fin.txt', 'fin.yaml', 'fin-surge.txt'}}
@@ -233,8 +231,9 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                             for name in FILES:
                                 if name not in names:
                                     skips[name + ':' + kind] = 1
+                        skips['fin-adb.txt:DOMAIN-REGEX'] = 2 if purpose == 'block' else 1
                         white_skips = {name + ':DOMAIN-REGEX': 1 for name in FILES
-                                       if name not in {'fin.yaml', *(['fin-adb.txt'] if purpose == 'block' else [])}}
+                                       if name != 'fin.yaml'}
                         self.assertEqual(diagnostic.getvalue().splitlines(), [f'{group} {key}: {count}'
                             for group, counts in (('white', white_skips), ('source', skips), ('child', skips))
                             for key, count in sorted(counts.items())])
@@ -287,13 +286,13 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                                 outputs = generate(root, lambda url: self.fail(url))
                             self.assertEqual(set(outputs), set(old))
                             self.assertEqual(diagnostic.getvalue().splitlines(), [f'{group} fin-adb.txt:DOMAIN-REGEX: 1'
-                                for group in ('source', 'child')] if purpose == 'block' and not portable else [])
+                                for group in ('source', 'child')] if purpose == 'block' else [])
                             for group in ('source', 'child'):
                                 for name in FILES:
                                     if name != 'fin-adb.txt':
                                         self.assertEqual(outputs[root / group / name], f'# {group} rules: 0\n' +
                                                          ('payload:\n' if name == 'fin.yaml' else ''))
-                                dns = ['@@/' + value + '/'] if purpose == 'block' and portable else []
+                                dns = []
                                 self.assertEqual(outputs[root / group / 'fin-adb.txt'], '[Adblock Plus 2.0]\n' +
                                     f'! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
                                     '! License: Inherits upstream licenses\n! Version: 202610130000\n' +
@@ -566,7 +565,8 @@ class SurgeClassWhitelistAuditTests(unittest.TestCase):
                                                  ''.join(line + '\n' for line in body))
                             dns_body = ([*(['@@||allow.example.org^'] if group == 'source' else []),
                                          r'@@/^cdn\-[ab]\.example\.com$/',
-                                         *(['0.0.0.0 cdn-z.example.com', '0.0.0.0 neighbor.example.org'] if group == 'source' else [])] if purpose == 'block' else [])
+                                         *(['0.0.0.0 cdn-z.example.com', '0.0.0.0 neighbor.example.org'] if group == 'source' else
+                                           [r'/(?-i:\Acdn\-z\.example\.com\z)/', r'/(?-i:\Aneighbor\.example\.org\z)/'])] if purpose == 'block' else [])
                             dns = outputs[root / group / 'fin-adb.txt'].splitlines()
                             self.assertEqual(dns[6], f'! Total count: {len(dns_body)}')
                             self.assertEqual(dns[7:], dns_body if purpose == 'block' else

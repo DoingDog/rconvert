@@ -21,6 +21,10 @@ def expected_domain(kind, value):
             r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*' + paired + r'\.?\z)')
 
 
+def expected_paired_dns(value, *, exception=False):
+    return ('@@' if exception else '') + r'/(?-i:\A' + re.escape(value) + r'\z)/'
+
+
 def expected_process(value):
     kind = "PROCESS-PATH-REGEX" if value.startswith("/") else "PROCESS-NAME-REGEX"
     escaped = "".join("\\x{" + format(ord(char), "X") + "}" for char in value)
@@ -709,10 +713,12 @@ class DnsExactHostsFormatTests(unittest.TestCase):
                             whitelist.append(Rule("DOMAIN", value))
                         out, skipped = render_configured("exact", selected, purpose="block", no_resolve=mode,
                                                          whitelist=whitelist)
+                        # ads.example.org/ads.example.org. 的 source 决定不同，DNS 缺 root 证书。
                         expected = [f"@@|{value}|", f"0.0.0.0 {value}", "||broad.example.org^", "/^.*track.*$/",
-                                    r"/^api\-.*\.example\.org$/", "/^ads[.]example[.]org$/"]
+                                    r"/^api\-.*\.example\.org$/"]
                         self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                         ["! Total count: 6"] + sorted(expected, key=lambda line: (not line.startswith("@@"), len(line), line)))
+                                         ["! Total count: 5"] + sorted(expected, key=lambda line: (not line.startswith("@@"), len(line), line)))
+                        self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 1)
                         self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
                         self.assertEqual(skipped.get("fin-surge-ds.txt:DOMAIN-REGEX"), 1)
                         if allow:
@@ -1450,9 +1456,14 @@ class DomainProvenanceFormatTests(unittest.TestCase):
             with self.subTest(mode=mode):
                 out, skipped = render_configured("group", [Rule("DOMAIN", "keep.example.org")],
                                                  purpose="block", no_resolve=mode, whitelist=whitelist)
-                self.assertEqual(set(out["fin-adb.txt"].splitlines()[7:]),
-                                 {"0.0.0.0 keep.example.org", "@@/ad/", r"@@/^api\-.*\.example\.com\.?$/",
-                                  r"@@/^api\-[0-9]\.example\.com\.?$/"})
+                rows = out["fin-adb.txt"].splitlines()[7:]
+                self.assertIn('0.0.0.0 keep.example.org', rows)
+                exceptions = [dns_regex(row) for row in rows if row.startswith('@@')]
+                self.assertEqual(len(exceptions), 3)
+                for host in ('ad.example.org', 'api-xyz.example.com', 'api-7.example.com'):
+                    self.assertTrue(any(matcher.search(host) for matcher in exceptions), host)
+                for host in ('keep.example.org', r'\097\100.example.org'):
+                    self.assertFalse(any(matcher.search(host) for matcher in exceptions), host)
                 self.assertEqual(skipped, {"fin-adb.txt:DOMAIN-REGEX": 2})
                 self.assert_counts(out)
                 for name in ("fin.txt", "fin-surge.txt", "fin.yaml", "fin-qx.txt", "fin-surge-ds.txt"):
@@ -1911,7 +1922,15 @@ class DnsDeepRegexFormatTests(unittest.TestCase):
         from rules import exclude_covered, normalize, parse, parse_whitelist
 
         value = '^' + prefix * depth + atom + suffix * depth + '$'
-        dns_value = '^' + dns_prefix * depth + atom + suffix * depth + '$'
+        # 原 strict End 输入缺 root 证书；audit.* 的无上界尾集合独立保留。
+        dns_supported = dns_supported and atom == 'audit.*' and prefix == '('
+        dns_value = None
+        if dns_supported:
+            safe, safe_skips = render_configured('deep', [Rule('DOMAIN-REGEX', '^audit.*$')],
+                                                purpose='block', no_resolve='keep')
+            self.assertNotIn('fin-adb.txt:DOMAIN-REGEX', safe_skips)
+            dns_value = safe['fin-adb.txt'].splitlines()[7][1:-1]
+            self.assertIsNotNone(dns_regex('/' + dns_value + '/').search('audit.example.test'))
         rule = Rule('DOMAIN-REGEX', value)
         if parse_source:
             for source in ('payload:\n  - DOMAIN-REGEX,' + value,
@@ -1945,6 +1964,12 @@ class DnsDeepRegexFormatTests(unittest.TestCase):
                         self.assertEqual(tuple(out), ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt',
                                                       'fin-surge.txt', 'fin-surge-ds.txt'))
                         self.assertEqual(out, expected)
+                        if dns:
+                            matcher = dns_regex(out['fin-adb.txt'].splitlines()[7])
+                            for host in ('audit.example.test', 'audit', r'aud\196\176t.example.test'):
+                                self.assertIsNotNone(matcher.search(host), host)
+                            for host in ('x.audit.example.test', 'aud.example.test', r'aud\196\177t.example.test'):
+                                self.assertIsNone(matcher.search(host), host)
                         expected_skips = {name + ':DOMAIN-REGEX': 1 for name in
                                           ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')} if caller != 'whitelist' else {}
                         if caller == 'allow':
@@ -2057,68 +2082,50 @@ class FormatTests(unittest.TestCase):
         value = r"^api[0-9]\.example\.com$"
         out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                      Rule("DOMAIN-REGEX", value, allow=True)])
-        self.assertEqual(out["fin-adb.txt"].splitlines()[7:],
-                         [f"@@/{value}/", f"/{value}/"])
+        self.assertEqual(out["fin-adb.txt"].splitlines()[7:], [])
         self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
         self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
-        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
         expression = re.compile(value)
         self.assertIsNotNone(expression.fullmatch("api7.example.com"))
         self.assertIsNone(expression.fullmatch("apia.example.com"))
 
     def test_go_portable_domain_regex_emits_literal_dns_block_and_allow(self):
         cases = (
-            (r"^ads\.example\.com\z", r"/^ads\.example\.com\z/", r"@@/^ads\.example\.com\z/"),
-            (r"^api\d\.example\.com$", r"/^api\p{Nd}\.example\.com$/", r"@@/^api\p{Nd}\.example\.com$/"),
-            (r"^(?:ads|track)\.example\.com$", r"/^(?:ads|track)\.example\.com$/", r"@@/^(?:ads|track)\.example\.com$/"),
-            (r"^(?<name>ads)\.example\.com$", r"/^(?:ads)\.example\.com$/", r"@@/^(?:ads)\.example\.com$/"),
+            r"^ads\.example\.com\z",
+            r"^api\d\.example\.com$",
+            r"^(?:ads|track)\.example\.com$",
+            r"^(?<name>ads)\.example\.com$",
         )
-        for value, block, allow in cases:
+        for value in cases:
             with self.subTest(value=value):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                 ["! Total count: 2", allow, block])
-                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+                                 ["! Total count: 0"])
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_adguard_portable_capture_flags_and_property_emit_block_and_allow(self):
-        cases = (
-            (r"^(?<n>ad)(?<n>s)\.example\.com$",
-             r"/^(?:ad)(?:s)\.example\.com$/",
-             r"@@/^(?:ad)(?:s)\.example\.com$/"),
-            (r"^(?i:ads)\.example\.com$",
-             r"/^(?i:ads)\.example\.com$/",
-             r"@@/^(?i:ads)\.example\.com$/"),
-            (r"^\p{L}+\.example\.com$",
-             r"/^\p{L}+\.example\.com$/",
-             r"@@/^\p{L}+\.example\.com$/"),
-        )
-        for value, block, allow in cases:
+        cases = (r"^(?<n>ad)(?<n>s)\.example\.com$", r"^(?i:ads)\.example\.com$", r"^\p{L}+\.example\.com$")
+        for value in cases:
             with self.subTest(value=value):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                 ["! Total count: 2", allow, block])
-                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+                                 ["! Total count: 0"])
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_regexp2_zero_padded_repetition_keeps_its_count_in_dns(self):
-        cases = (
-            (r"^a{01}\.example\.com$", r"/^a{1}\.example\.com$/",
-             r"@@/^a{1}\.example\.com$/"),
-            (r"^a{00,01}\.example\.com$", r"/^a{0,1}\.example\.com$/",
-             r"@@/^a{0,1}\.example\.com$/"),
-            (r"^a{0001,}\.example\.com$", r"/^a{1,}\.example\.com$/",
-             r"@@/^a{1,}\.example\.com$/"),
-        )
-        for value, block, allow in cases:
+        cases = (r"^a{01}\.example\.com$", r"^a{00,01}\.example\.com$", r"^a{0001,}\.example\.com$")
+        for value in cases:
             with self.subTest(value=value):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                 ["! Total count: 2", allow, block])
+                                 ["! Total count: 0"])
                 self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
                 self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
-                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_go_invalid_property_range_stays_out_of_dns(self):
         value = r"^[a-\p{L}]+\.example\.com$"
@@ -2131,7 +2138,7 @@ class FormatTests(unittest.TestCase):
 
     def test_go_valid_property_class_followed_by_literal_hyphen_emits_dns(self):
         value = r"^[\p{L}-a]+\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def _assert_domain_regex_dns(self, value, dns_value):
         from rules import parse
@@ -2173,26 +2180,26 @@ class FormatTests(unittest.TestCase):
         self._assert_domain_regex_dns(r"^[a-z-[aeiou]]+\.example\.com$", None)
 
     def test_unicode_decimal_digit_atom_is_translated_for_dns(self):
-        self._assert_domain_regex_dns(r"^\d+\.example\.com$", r"^\p{Nd}+\.example\.com$")
+        self._assert_domain_regex_dns(r"^\d+\.example\.com$", None)
 
     def test_unicode_decimal_digit_class_combination_stays_out_of_dns(self):
         self._assert_domain_regex_dns(r"^[a\d]+\.example\.com$", None)
 
     def test_literal_backslash_digit_is_not_translated_for_dns(self):
         value = r"^\\d\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_character_class_literal_braces_are_not_rewritten_as_quantifiers(self):
         value = r"^[a{01}]+\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_absolute_anchors_are_preserved_for_dns(self):
         value = r"\Aads\.example\.com\z"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_braced_hex_atom_is_preserved_for_dns(self):
         value = r"^\x{61}ds\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unproved_nonascii_hex_casefold_stays_out_of_dns(self):
         self._assert_domain_regex_dns(r"^\x{130}\.example\.com$", None)
@@ -2200,11 +2207,11 @@ class FormatTests(unittest.TestCase):
     def test_nested_counted_repetition_respects_go_combined_limit(self):
         self._assert_domain_regex_dns(r"^(?:\w{500}){3}\.example\.com$", None)
         self._assert_domain_regex_dns(r"^(?:\w{500}){2}\.example\.com$",
-                                      r"^(?:[\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]{500}){2}\.example\.com$")
+                                      None)
         value = r"^(?:a{500}){0,1}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
         value = r"^(?:(?:a{500}){0}){3}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_zero_minimum_unbounded_repeat_preserves_inner_go_budget(self):
         for atom in (r"\d{500}", "a{500}", "a{0500}"):
@@ -2219,48 +2226,42 @@ class FormatTests(unittest.TestCase):
                 self._assert_domain_regex_dns(value, None)
 
     def test_zero_minimum_repeat_keeps_valid_go_boundaries(self):
-        for repeat, normalized in (("{0,}", "{0,}"), ("{00,}", "{0,}"),
-                                   ("*", "*"), ("+", "+"), ("?", "?"),
-                                   ("{1,}", "{1,}"), ("{0001,}", "{1,}"),
-                                   ("{0,1}", "{0,1}"), ("{00,01}", "{0,1}")):
+        for repeat in ("{0,}", "{00,}", "*", "+", "?", "{1,}", "{0001,}", "{0,1}", "{00,01}"):
             value = rf"^(?:(?:a{{500}}|b){repeat}){{2}}\.example\.com$"
-            dns_value = rf"^(?:(?:a{{500}}|b){normalized}){{2}}\.example\.com$"
             with self.subTest(value=value):
-                self._assert_domain_regex_dns(value, dns_value)
-        for repeat, normalized in (("{0}", "{0}"), ("{0,0}", "{0,0}"),
-                                   ("{00}", "{0}"), ("{00,00}", "{0,0}")):
+                self._assert_domain_regex_dns(value, None)
+        for repeat in ("{0}", "{0,0}", "{00}", "{00,00}"):
             value = rf"^(?:(?:a{{500}}){repeat}|b){{3}}\.example\.com$"
-            dns_value = rf"^(?:(?:a{{500}}){normalized}|b){{3}}\.example\.com$"
             with self.subTest(value=value):
-                self._assert_domain_regex_dns(value, dns_value)
+                self._assert_domain_regex_dns(value, None)
         value = r"^(?:(?:\d{0500}|b){00,}){02}\.example\.com$"
-        self._assert_domain_regex_dns(value, r"^(?:(?:\p{Nd}{500}|b){0,}){2}\.example\.com$")
+        self._assert_domain_regex_dns(value, None)
         value = r"^(?:(?:a{250}|b){0,2}){2}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unicode_nd_property_is_preserved_for_dns(self):
         value = r"^\p{Nd}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unicode_nondigit_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^ad\Dtrack\.example\.com$",
-                                      r"^ad\P{Nd}track\.example\.com$")
+                                      None)
 
     def test_unicode_word_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^\w+\.example\.com$",
-                                      r"^[\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]+\.example\.com$")
+                                      None)
 
     def test_unicode_nonword_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^ad\Wtrack\.example\.com$",
-                                      r"^ad[^\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]track\.example\.com$")
+                                      None)
 
     def test_unicode_space_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^ads\s?\.example\.com$",
-                                      r"^ads[\x09-\x0D\x{85}\p{Z}]?\.example\.com$")
+                                      None)
 
     def test_unicode_nonspace_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^\S+\.example\.com$",
-                                      r"^[^\x09-\x0D\x{85}\p{Z}]+\.example\.com$")
+                                      None)
 
     def test_unproved_unicode_class_combinations_stay_out_of_dns(self):
         for atom in (r"\d", r"\D", r"\w", r"\W", r"\s", r"\S", r"\p{Nd}"):
@@ -2279,10 +2280,10 @@ class FormatTests(unittest.TestCase):
         for atom in ("d", "D", "w", "W", "s", "S", "b", "p{Nd}", "x{61}", "A", "z"):
             value = rf"^\\{atom}\.example\.com$"
             with self.subTest(value=value):
-                self._assert_domain_regex_dns(value, value)
-        self._assert_domain_regex_dns(r"^\\\d\.example\.com$", r"^\\\p{Nd}\.example\.com$")
+                self._assert_domain_regex_dns(value, None)
+        self._assert_domain_regex_dns(r"^\\\d\.example\.com$", None)
         value = r"^[a\\d]+\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unsupported_regex_constructs_keep_yaml_and_dns_skip_counts(self):
         for value in (r"^ads/track\.example\.com$", r"^ads\/track\.example\.com$",
@@ -2323,10 +2324,8 @@ class FormatTests(unittest.TestCase):
         self.assertEqual({json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]},
                          {f"DOMAIN-REGEX,{value}" for value in values} |
                          {"PROCESS-NAME-REGEX,^[(?P]$"})
-        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                         ["! Total count: 2", r"/^\p{L}+\.example\.com$/",
-                          r"/^\x{61}ds\.example\.com$/"])
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], len(values) - 2)
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], len(values))
         self.assertEqual(skipped["fin-adb.txt:PROCESS-NAME-REGEX"], 1)
 
     def test_six_files_are_ordered_and_count_actual_lines(self):

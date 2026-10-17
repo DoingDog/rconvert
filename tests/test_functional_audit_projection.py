@@ -789,12 +789,12 @@ class SurgeWildcardBodyBoundaryTests(unittest.TestCase):
                         SurgeRootDotProjectionTests.assert_counts_and_split(self, output, purpose, group)
                         for operator in ('AND', 'OR', 'NOT'):
                             self.assertIn(group + ' fin-adb.txt:' + operator + ': 4\n', diagnostic.getvalue())
-                    self.assertIn('child fin-adb.txt:DOMAIN-REGEX: 5\n', diagnostic.getvalue())
+                    self.assertIn('child fin-adb.txt:DOMAIN-REGEX: ' + ('4' if purpose == 'block' else '5') + '\n', diagnostic.getvalue())
                     if purpose == 'block':
                         self.assertEqual(set(products[root / 'source/fin-adb.txt'].splitlines()[7:]),
                                          {r'/^.*\..*$/', r'/^.*\.123\..*$/', r'/^.*\.123.$/',
                                           r'/^.*\.com\..*$/', '0.0.0.0 keep.example.org'})
-                        self.assertEqual(products[root / 'child/fin-adb.txt'].splitlines()[7:], [])
+                        self.assertEqual(products[root / 'child/fin-adb.txt'].splitlines()[7:], [r'/(?-i:\Akeep\.example\.org\z)/'])
                     self.assertEqual({path: path.read_bytes() for path in old}, old)
                     self.assertEqual(config_path.read_bytes(), config_before)
                     publish(products, root=root)
@@ -1007,7 +1007,11 @@ class ActualTargetWhitelistTests(unittest.TestCase):
                             self.assertEqual(diagnostic.get('fin.yaml:DOMAIN-REGEX', 0), 0)
                             if purpose == 'block':
                                 dns = out['fin-adb.txt'].splitlines()[7:]
-                                self.assertIn('/' + regex + '/', dns)
+                                raw = [line for line in dns if line.startswith('/')]
+                                supported = pattern in ('windows-*.net', 'api-[0-9].example.com')
+                                self.assertEqual(len(raw), int(supported))
+                                if raw:
+                                    self.assertTrue(raw[0].startswith(r'/(?-i:\A'))
                                 self.assertTrue(any(line.startswith('@@/') for line in dns))
                             SurgeRootDotProjectionTests.assert_counts_and_split(self, out, purpose, 'root')
                             self.assertEqual(blocked[0].value, regex)
@@ -1066,7 +1070,7 @@ class ActualTargetWhitelistTests(unittest.TestCase):
                                                      ([Rule('DOMAIN-REGEX', regex)], []))
                                     SurgeRootDotProjectionTests.assert_counts_and_split(self, products, purpose, group)
                                     if purpose == 'block':
-                                        self.assertIn('/' + regex + '/', products['fin-adb.txt'].splitlines()[7:])
+                                        self.assertFalse(any(line.startswith('/') for line in products['fin-adb.txt'].splitlines()[7:]))
                                         self.assertTrue(any(line.startswith('@@/') for line in products['fin-adb.txt'].splitlines()[7:]))
                                 self.assertEqual({path: path.read_bytes() for path in old}, old)
                                 publish(out, root=root)
@@ -1317,8 +1321,11 @@ class ActualTargetWhitelistTests(unittest.TestCase):
         self.assertEqual(skipped['whitelist-covered:DOMAIN-REGEX'], 1)
         self.assertEqual(skipped['fin.txt:DOMAIN-REGEX'], 2)
         self.assertNotIn('fin.yaml:DOMAIN-REGEX', skipped)
-        self.assertEqual(out['fin-adb.txt'].splitlines()[7:],
-                         ['@@/^.*microsoft.*$/', '/microsoft/', '/^microsoft$/'])
+        rows = out['fin-adb.txt'].splitlines()[7:]
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(rows[0], '@@/^.*microsoft.*$/')
+        self.assertTrue(rows[1].startswith(r'/(?-i:\A'))
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 1)
 
     def test_allow_and_one_shot_white_filter_routes_but_keep_dns_block_and_exceptions(self):
         blocked = Rule('DOMAIN', 'ads.example.org')
@@ -1476,7 +1483,7 @@ class ActualTargetWhitelistTests(unittest.TestCase):
                     SurgeRootDotProjectionTests.assert_counts_and_split(self, out, purpose, 'raw')
                     if purpose == 'block':
                         self.assertEqual(out['fin-adb.txt'].splitlines()[7:],
-                                         ['@@/^ads$/', '/^ADS$/', '/^ads$/', '0.0.0.0 neighbor.example.org'])
+                                         ['0.0.0.0 neighbor.example.org'])
 
     def test_keyword_suffix_wildcard_literal_byte_and_unknown_qx_boundaries(self):
         white = parse_whitelist('DOMAIN-KEYWORD,microsoft\nDOMAIN-WILDCARD,windows-*.net\n'
