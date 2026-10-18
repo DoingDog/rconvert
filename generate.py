@@ -64,13 +64,38 @@ def fetch_https(url: str) -> bytes:
         raise RuntimeError(f"Failed to fetch {url}: {exc}") from exc
 
 
+def _output_path(root: Path, path: Path) -> Path:
+    paths = (path.parent.resolve() / path.name, path.resolve())
+    if any(not candidate.is_relative_to(root) for candidate in paths):
+        raise ValueError("Output path escapes root")
+    protected = (root / "static", (root / "static").resolve())
+    pending = [path]
+    checked = set()
+    while pending:
+        candidate = pending.pop()
+        if candidate.name == "..":
+            candidate = candidate.resolve()
+        if candidate in checked:
+            continue
+        checked.add(candidate)
+        location = candidate.parent.resolve() / candidate.name
+        if any(location.is_relative_to(directory) for directory in protected):
+            raise ValueError("Output path targets static")
+        if candidate.is_symlink():
+            pending.append(location.parent / candidate.readlink())
+        if candidate.parent != candidate:
+            pending.append(candidate.parent)
+    if any(paths[1].is_relative_to(directory) for directory in protected):
+        raise ValueError("Output path targets static")
+    return paths[1]
+
+
 def publish(outputs: dict[Path, str], *, root: Path | None = None) -> None:
     root = Path(__file__).resolve().parent if root is None else root.resolve()
-    if any(not path.resolve().is_relative_to(root) for path in outputs):
-        raise ValueError("Output path escapes root")
-    if any(path.resolve().is_relative_to((root / "static").resolve()) for path in outputs):
-        raise ValueError("Output path targets static")
+    for path in outputs:
+        _output_path(root, path)
     staging = root / ".tmp"
+    _output_path(root, staging)
     staging.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(dir=staging) as directory:
         staged = []
@@ -112,7 +137,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     for config in configs:
         for name in FILES:
             path = root / config["name"] / name
-            resolved = path.resolve()
+            resolved = _output_path(root, path)
             if resolved in paths:
                 raise ValueError(f"Output path collision: {paths[resolved]} and {path}"
                                  f" resolve to {resolved}")

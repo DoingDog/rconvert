@@ -6491,6 +6491,327 @@ assert sys.getrecursionlimit() == limit
 
 
 class StaticAliasPublishTests(unittest.TestCase):
+    def test_non_static_relative_aliases_with_dotdot_generate_and_publish(self):
+        from sources import load_config, resolve_source
+
+        for kind in ('directory', 'file', 'staging'):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory).resolve()
+                for name in ('static', 'products', 'cache'):
+                    (root / name).mkdir()
+                if kind == 'directory':
+                    alias, target = root / 'cdn', Path('static/../products')
+                else:
+                    (root / 'cdn').mkdir()
+                    alias, target = ((root / 'cdn/fin.txt', Path('../static/../products/fin.txt'))
+                                     if kind == 'file' else (root / '.tmp', Path('static/../cache')))
+                alias.symlink_to(target, target_is_directory=kind != 'file')
+                configs = [{'name': 'cdn', 'purpose': 'block', 'no_resolve': 'keep',
+                            'sources': ['static/source.list'], 'whitelist': ['static/white.list']}]
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                (root / 'static/source.list').write_bytes(
+                    b'DOMAIN,blocked.example.org\r\nDOMAIN,safe.example.org\r\n')
+                (root / 'static/white.list').write_bytes(
+                    b'\xef\xbb\xbf# manual edit\r\nDOMAIN,safe.example.org\r\n')
+                inputs = {path: path.read_bytes() for path in
+                          (root / 'rulesets.json', root / 'static/source.list', root / 'static/white.list')}
+                expected = {root / ('products' if kind == 'directory' or kind == 'file' and name == 'fin.txt'
+                                    else 'cdn') / name for name in NAMES}
+                previous = {path: b'old complete\r\n\x00' + path.name.encode('ascii') for path in expected}
+                for path, data in previous.items():
+                    path.write_bytes(data)
+                self.assertTrue(alias.samefile(root / ('products/fin.txt' if kind == 'file'
+                                                      else 'products' if kind == 'directory' else 'cache')))
+                self.assertEqual(load_config(root), configs)
+                self.assertEqual(resolve_source(root, 'static/white.list'), root / 'static/white.list')
+                outputs = generate(root, lambda url: self.fail(url))
+                self.assertEqual(set(outputs), expected)
+                fin = root / ('products' if kind in ('directory', 'file') else 'cdn') / 'fin.txt'
+                self.assertEqual(outputs[fin], '# cdn rules: 1\nDOMAIN,blocked.example.org\n')
+                self.assertIn('@@|safe.example.org|\n', outputs[root / ('products' if kind == 'directory'
+                                                                                     else 'cdn') / 'fin-adb.txt'])
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                publish(outputs, root=root)
+                self.assertEqual({path: path.read_bytes() for path in outputs},
+                                 {path: text.encode('utf-8') for path, text in outputs.items()})
+                self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                self.assertTrue(alias.is_symlink())
+                self.assertEqual(alias.readlink(), target)
+                self.assertEqual(list((root / 'cache').iterdir()), [])
+                self.assertEqual(set((root / 'static').iterdir()),
+                                 {root / 'static/source.list', root / 'static/white.list'})
+
+    def test_publish_relative_symlink_cycle_terminates_and_preserves_outputs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve() / 'root'
+            root.mkdir()
+            (root / '.tmp').mkdir()
+            previous = {root / 'healthy.txt': b'old healthy\r\n\x00\xff',
+                        root / 'crlf.txt': b'first\r\nsecond\r\n'}
+            for path, data in previous.items():
+                path.write_bytes(data)
+            link = root / 'loop'
+            link.symlink_to(Path('../root/loop'), target_is_directory=True)
+            original_link = link.readlink()
+            entries = set(root.iterdir())
+            code = '''
+import errno
+from pathlib import Path
+import sys
+from generate import publish
+
+root = Path(sys.argv[1])
+try:
+    publish({root / 'new-group/fin.txt': 'new group\\n',
+             root / 'healthy.txt': 'new healthy\\n', root / 'crlf.txt': 'new text\\n',
+             root / 'loop/fin.txt': 'loop\\n'}, root=root)
+except OSError as exc:
+    if exc.errno not in (errno.ELOOP, errno.ENAMETOOLONG, errno.EEXIST):
+        raise
+except RuntimeError as exc:
+    if 'Symlink loop' not in str(exc):
+        raise
+else:
+    raise AssertionError('Publication through a symlink cycle must fail')
+'''
+            try:
+                result = subprocess.run([sys.executable, '-B', '-c', code, str(root)], cwd=ROOT,
+                                        capture_output=True, text=True, timeout=8)
+            finally:
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                self.assertTrue(link.is_symlink())
+                self.assertEqual(link.readlink(), original_link)
+                self.assertEqual(set(root.iterdir()), entries)
+                self.assertEqual(list((root / '.tmp').iterdir()), [])
+                self.assertFalse((root / 'new-group').exists())
+            self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_publish_rejects_nested_static_directory_aliases_before_replacing_any_output(self):
+        for entry in ('static/main/white.list', 'cdn/white.list', 'relay/white.list', 'file-alias.list'):
+            with self.subTest(entry=entry), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory).resolve()
+                for name in ('static', 'storage'):
+                    (root / name).mkdir()
+                for alias, target in (('static/main', '../storage'), ('cdn', 'static/main'), ('relay', 'cdn')):
+                    (root / alias).symlink_to(Path(target), target_is_directory=True)
+                (root / 'file-alias.list').symlink_to(Path('relay/white.list'))
+                self.assertTrue((root / 'static/main').samefile(root / 'storage'))
+                self.assertTrue((root / 'relay').samefile(root / 'storage'))
+                links = {root / name: (root / name).readlink()
+                         for name in ('static/main', 'cdn', 'relay', 'file-alias.list')}
+                healthy, new = root / 'healthy.txt', root / 'new-group/fin.txt'
+                previous = {root / 'storage/white.list': b'\xef\xbb\xbf# maintained\r\nDOMAIN,safe.example.org\r\n',
+                            healthy: b'old healthy\r\n\x00'}
+                for path, data in previous.items():
+                    path.write_bytes(data)
+                with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                    publish({new: 'new group\n', healthy: 'new healthy\n',
+                             root / entry: 'DOMAIN,replaced.example.org\n'}, root=root)
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                for alias, target in links.items():
+                    self.assertTrue(alias.is_symlink())
+                    self.assertEqual(alias.readlink(), target)
+                self.assertFalse(new.parent.exists())
+                self.assertFalse((root / '.tmp').exists())
+
+    def test_generate_rejects_nested_static_directory_aliases_before_canonicalizing_outputs(self):
+        from sources import load_config, resolve_source
+
+        for target in ('static/main', 'relay'):
+            with self.subTest(target=target), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory).resolve()
+                for name in ('static', 'storage', 'healthy'):
+                    (root / name).mkdir()
+                for alias, destination in (('static/main', '../storage'), ('relay', 'static/main'), ('cdn', target)):
+                    (root / alias).symlink_to(Path(destination), target_is_directory=True)
+                self.assertTrue((root / 'cdn').samefile(root / 'storage'))
+                links = {root / name: (root / name).readlink() for name in ('static/main', 'relay', 'cdn')}
+                configs = [{'name': name, 'purpose': 'block', 'no_resolve': 'keep',
+                            'sources': ['static/main/source.list'], 'whitelist': ['static/main/white.list']}
+                           for name in ('healthy', 'cdn')]
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                previous = {root / group / name: b'old complete\r\n\x00' + name.encode('ascii')
+                            for group in ('healthy', 'storage') for name in NAMES}
+                previous.update({root / 'storage/source.list': b'DOMAIN,blocked.example.org\r\nDOMAIN,safe.example.org\r\n',
+                                 root / 'storage/white.list': b'\xef\xbb\xbf# maintained\r\nDOMAIN,safe.example.org\r\n'})
+                for path, data in previous.items():
+                    path.write_bytes(data)
+                previous[root / 'rulesets.json'] = (root / 'rulesets.json').read_bytes()
+                self.assertEqual(load_config(root), configs)
+                self.assertEqual(resolve_source(root, 'static/main/white.list'), root / 'storage/white.list')
+                with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                    generate(root, lambda url: self.fail(url))
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                for alias, destination in links.items():
+                    self.assertTrue(alias.is_symlink())
+                    self.assertEqual(alias.readlink(), destination)
+                self.assertFalse((root / '.tmp').exists())
+
+    def test_publish_rejects_nested_static_staging_aliases_before_any_publication(self):
+        for target in ('static/main', 'relay'):
+            with self.subTest(target=target), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory).resolve()
+                for name in ('static', 'storage'):
+                    (root / name).mkdir()
+                for alias, destination in (('static/main', '../storage'), ('relay', 'static/main'), ('.tmp', target)):
+                    (root / alias).symlink_to(Path(destination), target_is_directory=True)
+                self.assertTrue((root / '.tmp').samefile(root / 'storage'))
+                links = {root / name: (root / name).readlink() for name in ('static/main', 'relay', '.tmp')}
+                healthy, new = root / 'healthy.txt', root / 'new-group/fin.txt'
+                previous = {root / 'storage/white.list': b'\xef\xbb\xbf# maintained\r\nDOMAIN,safe.example.org\r\n',
+                            healthy: b'old healthy\r\n\x00'}
+                for path, data in previous.items():
+                    path.write_bytes(data)
+                with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                    publish({new: 'new group\n', healthy: 'new healthy\n'}, root=root)
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                self.assertEqual(set((root / 'storage').iterdir()), {root / 'storage/white.list'})
+                for alias, destination in links.items():
+                    self.assertTrue(alias.is_symlink())
+                    self.assertEqual(alias.readlink(), destination)
+                self.assertFalse(new.parent.exists())
+
+    def test_nested_non_static_aliases_keep_editable_static_inputs_and_canonical_dependencies(self):
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = Path(directory).resolve()
+            root = fixture / 'root'
+            root.mkdir()
+            root_alias = fixture / 'root-alias'
+            root_alias.symlink_to(root, target_is_directory=True)
+            for name in ('static', 'storage', 'products', 'cache'):
+                (root / name).mkdir()
+            for alias, target in (('static/main', '../storage'), ('relay', 'products'),
+                                  ('cdn', 'relay'), ('cache-link', 'cache'), ('.tmp', 'cache-link')):
+                (root / alias).symlink_to(Path(target), target_is_directory=True)
+            links = {path: path.readlink() for path in
+                     (root_alias, *(root / name for name in ('static/main', 'relay', 'cdn', 'cache-link', '.tmp')))}
+            configs = [{'name': group, 'purpose': 'block', 'no_resolve': 'keep', 'sources': [source],
+                        'whitelist': ['static/main/white.list']}
+                       for group, source in (('cdn', 'static/main/source.list'), ('child', 'cdn/fin.txt'))]
+            for domain, prefix, newline in (('first.example.org', b'', b'\n'),
+                                             ('edited.example.org', b'\xef\xbb\xbf# manual edit\r\n', b'\r\n')):
+                with self.subTest(domain=domain):
+                    (root / 'storage/source.list').write_bytes(prefix + b'DOMAIN,' + domain.encode('ascii') +
+                                                             newline + b'DOMAIN,safe.example.org' + newline)
+                    (root / 'storage/white.list').write_bytes(prefix + b'DOMAIN,safe.example.org' + newline)
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    inputs = {path: path.read_bytes() for path in
+                              (root / 'storage/source.list', root / 'storage/white.list')}
+                    outputs = generate(root_alias, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), {root / group / name
+                                                   for group in ('products', 'child') for name in NAMES})
+                    for group, physical in (('cdn', 'products'), ('child', 'child')):
+                        self.assertEqual(outputs[root / physical / 'fin.txt'],
+                                         f'# {group} rules: 1\nDOMAIN,{domain}\n')
+                    publish(outputs, root=root_alias)
+                    published = {path: path.read_bytes() for path in outputs}
+                    self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                    (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    disk = generate(root_alias, lambda url: self.fail(url))
+                    self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent == root / 'child'})
+                    publish(disk, root=root_alias)
+                    self.assertEqual({path: path.read_bytes() for path in published}, published)
+                    self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+                    self.assertEqual(list((root / 'cache').iterdir()), [])
+                    for alias, target in links.items():
+                        self.assertTrue(alias.is_symlink())
+                        self.assertEqual(alias.readlink(), target)
+
+    def test_publish_rejects_static_file_symlink_before_replacing_any_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            (root / 'static').mkdir()
+            (root / 'storage').mkdir()
+            target = root / 'storage/original.list'
+            healthy = root / 'healthy.txt'
+            previous = {target: b'\xef\xbb\xbf# maintained\r\nDOMAIN,safe.example.org\r\n',
+                        healthy: b'old healthy\r\n\x00'}
+            for path, data in previous.items():
+                path.write_bytes(data)
+            alias = root / 'static/white.list'
+            os.symlink(target, alias)
+            original_link = alias.readlink()
+            new = root / 'new-group/fin.txt'
+            with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                publish({new: 'new group\n', healthy: 'new healthy\n',
+                         alias: 'DOMAIN,replaced.example.org\n'}, root=root)
+            self.assertTrue(alias.is_symlink())
+            self.assertEqual(alias.readlink(), original_link)
+            self.assertEqual(alias.read_bytes(), previous[target])
+            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+            self.assertFalse(new.parent.exists())
+            self.assertFalse((root / '.tmp').exists())
+
+    def test_generate_rejects_static_file_symlinks_before_canonicalizing_outputs(self):
+        from sources import load_config
+
+        for group in ('static', 'cdn'):
+            with self.subTest(group=group), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory).resolve()
+                for name in ('static', 'storage', 'healthy'):
+                    (root / name).mkdir()
+                if group == 'cdn':
+                    os.symlink(root / 'static', root / 'cdn', target_is_directory=True)
+                    original_group_link = (root / 'cdn').readlink()
+                configs = [{'name': name, 'purpose': 'block', 'no_resolve': 'keep',
+                            'sources': ['static/source.list'], 'whitelist': ['static/white.list']}
+                           for name in ('healthy', group)]
+                (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                (root / 'static/source.list').write_bytes(b'DOMAIN,blocked.example.org\r\nDOMAIN,safe.example.org\r\n')
+                (root / 'static/white.list').write_bytes(b'\xef\xbb\xbf# maintained\r\nDOMAIN,safe.example.org\r\n')
+                previous = {root / name / filename: b'old complete\r\n\x00' + filename.encode('ascii')
+                            for name in ('healthy', 'storage') for filename in NAMES}
+                for path, data in previous.items():
+                    path.write_bytes(data)
+                links = {}
+                for filename in NAMES:
+                    alias = root / 'static' / filename
+                    os.symlink(root / 'storage' / filename, alias)
+                    links[alias] = alias.readlink()
+                previous.update({path: path.read_bytes() for path in
+                                 (root / 'rulesets.json', root / 'static/source.list', root / 'static/white.list')})
+                self.assertEqual(load_config(root), configs)
+                with self.assertRaisesRegex(ValueError, 'Output path targets static'):
+                    generate(root, lambda url: self.fail(url))
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                for alias, target in links.items():
+                    self.assertTrue(alias.is_symlink())
+                    self.assertEqual(alias.readlink(), target)
+                    self.assertEqual(alias.read_bytes(), previous[root / 'storage' / alias.name])
+                if group == 'cdn':
+                    self.assertTrue((root / 'cdn').is_symlink())
+                    self.assertEqual((root / 'cdn').readlink(), original_group_link)
+                    self.assertTrue((root / 'cdn').samefile(root / 'static'))
+                self.assertFalse((root / '.tmp').exists())
+
+    def test_publish_rejects_protected_staging_aliases_before_any_publication(self):
+        for destination, message in (('static', 'Output path targets static'),
+                                     ('outside', 'Output path escapes root')):
+            with self.subTest(destination=destination), tempfile.TemporaryDirectory() as directory:
+                fixture = Path(directory).resolve()
+                root = fixture / 'root'
+                root.mkdir()
+                for name in ('static', 'healthy'):
+                    (root / name).mkdir()
+                storage = root / 'static' if destination == 'static' else fixture / 'outside'
+                storage.mkdir(exist_ok=True)
+                previous = {root / 'healthy' / name: b'old complete\r\n\x00' + name.encode('ascii') for name in NAMES}
+                previous[storage / 'white.list'] = b'\xef\xbb\xbf# maintained\r\nDOMAIN,safe.example.org\r\n'
+                for path, data in previous.items():
+                    path.write_bytes(data)
+                staging = root / '.tmp'
+                os.symlink(storage, staging, target_is_directory=True)
+                original_link = staging.readlink()
+                new = root / 'new-group/fin.txt'
+                outputs = {new: 'new group\n', **{root / 'healthy' / name: 'new product\n' for name in NAMES}}
+                with self.assertRaisesRegex(ValueError, message):
+                    publish(outputs, root=root)
+                self.assertEqual({path: path.read_bytes() for path in previous}, previous)
+                self.assertEqual(set(storage.iterdir()), {storage / 'white.list'})
+                self.assertTrue(staging.is_symlink())
+                self.assertEqual(staging.readlink(), original_link)
+                self.assertFalse(new.parent.exists())
+
     def test_publish_rejects_static_directory_symlink_logical_and_physical_paths(self):
         for target in ('static/white.list', 'owned-inputs/white.list'):
             with self.subTest(target=target), tempfile.TemporaryDirectory() as directory:
@@ -6540,16 +6861,8 @@ class StaticAliasPublishTests(unittest.TestCase):
             previous.update({path: path.read_bytes() for path in
                              (root / 'rulesets.json', root / 'input.list', storage / 'white.list')})
             self.assertEqual(load_config(root), configs)
-            outputs = generate(root, lambda url: self.fail(url))
-            self.assertEqual(set(outputs), {root / group / name
-                                           for group in ('healthy', 'owned-inputs') for name in NAMES})
-            self.assertEqual(outputs[root / 'healthy/fin.txt'],
-                             '# healthy rules: 1\nDOMAIN,blocked.example.org\n')
-            self.assertEqual(outputs[storage / 'fin.txt'],
-                             '# cdn rules: 1\nDOMAIN,blocked.example.org\n')
-            self.assertEqual({path: path.read_bytes() for path in previous}, previous)
             with self.assertRaisesRegex(ValueError, 'Output path targets static'):
-                publish(outputs, root=root)
+                publish(generate(root, lambda url: self.fail(url)), root=root)
             self.assertEqual({path: path.read_bytes() for path in previous}, previous)
             self.assertFalse((root / '.tmp').exists())
             for alias in ('static', 'cdn'):
@@ -6594,11 +6907,53 @@ class StaticAliasPublishTests(unittest.TestCase):
                     self.assertTrue((root / 'static').is_symlink())
                     self.assertTrue((root / 'static').samefile(storage))
 
-    def test_non_static_directory_and_file_aliases_publish_without_creating_static(self):
+    def test_static_file_symlink_inputs_follow_manual_edits_without_changing_links(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
-            for group in ('products', 'archive'):
+            for name in ('static', 'storage'):
+                (root / name).mkdir()
+            links = {}
+            for filename in ('source.list', 'white.list'):
+                alias = root / 'static' / filename
+                os.symlink(root / 'storage' / filename, alias)
+                links[alias] = alias.readlink()
+            (root / 'rulesets.json').write_text(json.dumps([{
+                'name': 'sample', 'purpose': 'block', 'no_resolve': 'keep',
+                'sources': ['static/source.list'], 'whitelist': ['static/white.list']}]), encoding='utf-8')
+            for domain, prefix, newline in (('first.example.org', b'', b'\n'),
+                                             ('edited.example.org', b'\xef\xbb\xbf# manual edit\r\n', b'\r\n')):
+                with self.subTest(domain=domain):
+                    (root / 'storage/source.list').write_bytes(prefix + b'DOMAIN,' + domain.encode('ascii') +
+                                                             newline + b'DOMAIN,safe.example.org' + newline)
+                    (root / 'storage/white.list').write_bytes(prefix + b'DOMAIN,safe.example.org' + newline)
+                    before = {path: path.read_bytes() for path in
+                              (root / 'rulesets.json', root / 'storage/source.list', root / 'storage/white.list')}
+                    outputs = generate(root, lambda url: self.fail(url))
+                    self.assertEqual(set(outputs), {root / 'sample' / name for name in NAMES})
+                    self.assertEqual(outputs[root / 'sample/fin.txt'],
+                                     f'# sample rules: 1\nDOMAIN,{domain}\n')
+                    self.assertIn('@@|safe.example.org|\n', outputs[root / 'sample/fin-adb.txt'])
+                    publish(outputs, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in outputs},
+                                     {path: text.encode('utf-8') for path, text in outputs.items()})
+                    self.assertEqual({path: path.read_bytes() for path in before}, before)
+                    for alias, target in links.items():
+                        self.assertTrue(alias.is_symlink())
+                        self.assertEqual(alias.readlink(), target)
+                        self.assertEqual(alias.read_bytes(), before[root / 'storage' / alias.name])
+
+    def test_non_static_root_staging_directory_and_file_aliases_publish_without_creating_static(self):
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = Path(directory).resolve()
+            root = fixture / 'root'
+            root.mkdir()
+            root_alias = fixture / 'root-alias'
+            os.symlink(root, root_alias, target_is_directory=True)
+            for group in ('products', 'archive', 'cache'):
                 (root / group).mkdir()
+            staging = root / '.tmp'
+            os.symlink(root / 'cache', staging, target_is_directory=True)
+            original_links = {path: path.readlink() for path in (root_alias, staging)}
             (root / 'cdn').symlink_to(root / 'products', target_is_directory=True)
             physical = root / 'archive/fin.txt'
             physical.write_bytes(b'old product\r\n\x00')
@@ -6609,11 +6964,15 @@ class StaticAliasPublishTests(unittest.TestCase):
                 'sources': ['input.list'], 'whitelist': []}]), encoding='utf-8')
             inputs = {path: path.read_bytes() for path in (root / 'input.list', root / 'rulesets.json')}
             self.assertFalse((root / 'static').exists())
-            outputs = generate(root, lambda url: self.fail(url))
+            outputs = generate(root_alias, lambda url: self.fail(url))
             self.assertEqual(set(outputs), {physical} | {root / 'products' / name for name in NAMES[1:]})
             self.assertEqual(outputs[physical], '# cdn rules: 1\nDOMAIN,ads.example.org\n')
             self.assertEqual(physical.read_bytes(), b'old product\r\n\x00')
-            publish(outputs, root=root)
+            publish(outputs, root=root_alias)
+            self.assertEqual(list((root / 'cache').iterdir()), [])
+            for alias, target in original_links.items():
+                self.assertTrue(alias.is_symlink())
+                self.assertEqual(alias.readlink(), target)
             self.assertEqual({path: path.read_bytes() for path in outputs},
                              {path: text.encode('utf-8') for path, text in outputs.items()})
             self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
