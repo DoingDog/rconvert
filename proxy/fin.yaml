@@ -1,4 +1,4 @@
-# proxy rules: 7048
+# proxy rules: 7051
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,tv.apple.com"
@@ -403,6 +403,7 @@ payload:
   - "DOMAIN-SUFFIX,mcaf.ee"
   - "DOMAIN-SUFFIX,mega.io"
   - "DOMAIN-SUFFIX,mega.nz"
+  - "DOMAIN-SUFFIX,meta.ai"
   - "DOMAIN-SUFFIX,mihk.hk"
   - "DOMAIN-SUFFIX,mij.rip"
   - "DOMAIN-SUFFIX,mit.edu"
@@ -2539,6 +2540,7 @@ payload:
   - "DOMAIN-SUFFIX,4shared.com"
   - "DOMAIN-SUFFIX,5aimiku.com"
   - "DOMAIN-SUFFIX,6parker.com"
+  - "DOMAIN-SUFFIX,7x24hrs.com"
   - "DOMAIN-SUFFIX,91dasai.com"
   - "DOMAIN-SUFFIX,9to5mac.com"
   - "DOMAIN-SUFFIX,aamacau.com"
@@ -3783,6 +3785,7 @@ payload:
   - "DOMAIN-SUFFIX,melon365.com"
   - "DOMAIN-SUFFIX,meltoday.com"
   - "DOMAIN-SUFFIX,mercatox.com"
+  - "DOMAIN-SUFFIX,metaaivm.com"
   - "DOMAIN-SUFFIX,metacafe.com"
   - "DOMAIN-SUFFIX,metro.taipei"
   - "DOMAIN-SUFFIX,metrolife.ca"

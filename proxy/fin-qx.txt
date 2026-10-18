@@ -1,4 +1,4 @@
-# proxy rules: 7056
+# proxy rules: 7059
 HOST,ip.cn,LIST
 HOST,tv.apple.com,LIST
 HOST,api.waqi.info,LIST
@@ -402,6 +402,7 @@ HOST-SUFFIX,mash.to,LIST
 HOST-SUFFIX,mcaf.ee,LIST
 HOST-SUFFIX,mega.io,LIST
 HOST-SUFFIX,mega.nz,LIST
+HOST-SUFFIX,meta.ai,LIST
 HOST-SUFFIX,mihk.hk,LIST
 HOST-SUFFIX,mij.rip,LIST
 HOST-SUFFIX,mit.edu,LIST
@@ -2538,6 +2539,7 @@ HOST-SUFFIX,3d-game.com,LIST
 HOST-SUFFIX,4shared.com,LIST
 HOST-SUFFIX,5aimiku.com,LIST
 HOST-SUFFIX,6parker.com,LIST
+HOST-SUFFIX,7x24hrs.com,LIST
 HOST-SUFFIX,91dasai.com,LIST
 HOST-SUFFIX,9to5mac.com,LIST
 HOST-SUFFIX,aamacau.com,LIST
@@ -3782,6 +3784,7 @@ HOST-SUFFIX,megalodon.jp,LIST
 HOST-SUFFIX,melon365.com,LIST
 HOST-SUFFIX,meltoday.com,LIST
 HOST-SUFFIX,mercatox.com,LIST
+HOST-SUFFIX,metaaivm.com,LIST
 HOST-SUFFIX,metacafe.com,LIST
 HOST-SUFFIX,metro.taipei,LIST
 HOST-SUFFIX,metrolife.ca,LIST
