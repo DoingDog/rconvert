@@ -1,4 +1,4 @@
-# cdn rules: 4777
+# cdn rules: 4781
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -735,6 +735,7 @@ HOST,cdn.parsely.com,LIST
 HOST,cdn.perfops.net,LIST
 HOST,cdn.pixabay.com,LIST
 HOST,cdn.plus500.com,LIST
+HOST,cdn.priv.center,LIST
 HOST,cdn.privacy.com,LIST
 HOST,cdn.quadpay.com,LIST
 HOST,cdn.readmoo.com,LIST
@@ -2032,6 +2033,7 @@ HOST,thumbs.onlyfans.com,LIST
 HOST,thumbs2.sendvid.com,LIST
 HOST,tile2.intervals.icu,LIST
 HOST,tiles.mapillary.com,LIST
+HOST,tiles.onemap.gov.sg,LIST
 HOST,tileserver.b10s.net,LIST
 HOST,time.cloudflare.com,LIST
 HOST,tuf-repo.github.com,LIST
@@ -2415,6 +2417,7 @@ HOST,images.en.aptoide.com,LIST
 HOST,images.everyplate.com,LIST
 HOST,images.findagrave.com,LIST
 HOST,images.icon-icons.com,LIST
+HOST,images.macworld.co.uk,LIST
 HOST,img.foresightnews.pro,LIST
 HOST,imgs.search.brave.com,LIST
 HOST,imgs.socialinsider.io,LIST
@@ -3307,6 +3310,7 @@ HOST,cdn.designerapp.osi.office.net,LIST
 HOST,cdn.quickemailverification.com,LIST
 HOST,cdn.rex.contents.rakuten.co.jp,LIST
 HOST,config.extension.grammarly.com,LIST
+HOST,customer-first-focus.b-cdn.net,LIST
 HOST,dev.visualwebsiteoptimizer.com,LIST
 HOST,edgeassetservice.azureedge.net,LIST
 HOST,explorer-api.walletconnect.com,LIST

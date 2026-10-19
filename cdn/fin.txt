@@ -1,4 +1,4 @@
-# cdn rules: 4777
+# cdn rules: 4781
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -735,6 +735,7 @@ DOMAIN,cdn.parsely.com
 DOMAIN,cdn.perfops.net
 DOMAIN,cdn.pixabay.com
 DOMAIN,cdn.plus500.com
+DOMAIN,cdn.priv.center
 DOMAIN,cdn.privacy.com
 DOMAIN,cdn.quadpay.com
 DOMAIN,cdn.readmoo.com
@@ -2032,6 +2033,7 @@ DOMAIN,thumbs.onlyfans.com
 DOMAIN,thumbs2.sendvid.com
 DOMAIN,tile2.intervals.icu
 DOMAIN,tiles.mapillary.com
+DOMAIN,tiles.onemap.gov.sg
 DOMAIN,tileserver.b10s.net
 DOMAIN,time.cloudflare.com
 DOMAIN,tuf-repo.github.com
@@ -2415,6 +2417,7 @@ DOMAIN,images.en.aptoide.com
 DOMAIN,images.everyplate.com
 DOMAIN,images.findagrave.com
 DOMAIN,images.icon-icons.com
+DOMAIN,images.macworld.co.uk
 DOMAIN,img.foresightnews.pro
 DOMAIN,imgs.search.brave.com
 DOMAIN,imgs.socialinsider.io
@@ -3307,6 +3310,7 @@ DOMAIN,cdn.designerapp.osi.office.net
 DOMAIN,cdn.quickemailverification.com
 DOMAIN,cdn.rex.contents.rakuten.co.jp
 DOMAIN,config.extension.grammarly.com
+DOMAIN,customer-first-focus.b-cdn.net
 DOMAIN,dev.visualwebsiteoptimizer.com
 DOMAIN,edgeassetservice.azureedge.net
 DOMAIN,explorer-api.walletconnect.com
