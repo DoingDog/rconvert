@@ -26,7 +26,7 @@ class Rule:
             object.__setattr__(self, "value", value.lower() if value.isascii() else value)
 
 
-_DOMAIN = re.compile(r"(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\Z", re.I)
+_DOMAIN = re.compile(r"(?=.{1,253}$)(?:[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9_])?\.)+[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9_])?\Z", re.I)
 _PORTS = {"SRC-PORT", "DEST-PORT", "DST-PORT", "IN-PORT"}
 _PROCESS = {"PROCESS-NAME", "PROCESS-PATH", "PROCESS-NAME-WILDCARD",
             "PROCESS-PATH-WILDCARD", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX",
@@ -240,6 +240,22 @@ _REGEXP2_WORD_BOUNDARIES = (
 )
 
 
+def _scan_regex_options(value: str, index: int, extended: bool,
+                        explicit_capture: bool = False) -> tuple[int, str, bool, bool] | None:
+    header = re.match(r"\(\?([imnsxduIMNSXDU+-]+)([):])", value[index:])
+    if header is None:
+        return None
+    enabled = True
+    for option in header[1].lower():
+        if option in '+-':
+            enabled = option == '+'
+        elif option == 'x':
+            extended = enabled
+        elif option == 'n':
+            explicit_capture = enabled
+    return index + len(header[0]), header[2], extended, explicit_capture
+
+
 def _delimiters(line: str, *, native_fields: bool = False,
                 groups: dict[int, int] | None = None,
                 commas: dict[int, list[int]] | None = None,
@@ -346,12 +362,11 @@ def _delimiters(line: str, *, native_fields: bool = False,
             class_first = True
         elif char == '(' and (literal_depth is None or literal_depth > 0):
             if regex_depth is not None:
-                flags = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?([):])", line[index:])
-                if flags and (flags[1] or flags[2]):
-                    if flags[3] == ':':
+                flags = _scan_regex_options(line, index, extended)
+                if flags is not None:
+                    if flags[1] == ':':
                         stack.append(('(', index, extended))
-                    extended = (extended or 'x' in flags[1]) and not (flags[2] and 'x' in flags[2])
-                    index += len(flags[0])
+                    index, _, extended, _ = flags
                     continue
                 stack.append(('(', index, extended))
             else:
@@ -519,7 +534,10 @@ def _source_parts(line: str) -> tuple[list[str], int]:
     return [head.strip(), value.strip()], len(line)
 
 
-def _valid_domain(kind: str, value: str) -> bool:
+def _valid_domain(kind: str, value: str, *, domain_source: str = "surge") -> bool:
+    if kind == "DOMAIN-WILDCARD" and domain_source == "mihomo":
+        return bool(value) and not re.search(
+            r"[\x00-\x08\x0a-\x1f\x7f-\x9f\ud800-\udfff\u2028\u2029\ufffe\uffff]", value)
     value = value.removesuffix('.')
     try:
         ipaddress.ip_address(value)
@@ -537,7 +555,7 @@ def _valid_domain(kind: str, value: str) -> bool:
 
 
 def _valid_deep_regex(probe: str) -> bool:
-    # 逐层验证普通组，再以空组原子替换已验证内容，保留父组的量词与分支语法。
+    # 逐层验证 scanner 转换后的完整组，再以空组原子替换，保留父组的量词与分支语法。
     groups, escaped, in_class, class_first = [[]], False, False, False
     class_start = skip_until = 0
     for index, char in enumerate(probe):
@@ -568,15 +586,20 @@ def _valid_deep_regex(probe: str) -> bool:
                 groups[-1].append('(?#)')
                 skip_until = index + 4
                 continue
+            header = '('
             if probe[index + 1:index + 2] == '?':
-                return False
-            groups.append([])
+                match = re.match(r'\(\?(?:[:=!>]|P<g[0-9]+>)', probe[index:])
+                if match is None:
+                    return False
+                header = match[0]
+                skip_until = index + len(header)
+            groups.append([header])
             continue
         elif char == ')':
             if len(groups) == 1:
                 return False
             try:
-                re.compile(''.join(groups.pop()))
+                re.compile(''.join(groups.pop()) + ')')
             except (re.error, OverflowError, RecursionError):
                 return False
             groups[-1].append('(?:)')
@@ -611,6 +634,16 @@ def _capture_number(digits: str) -> int | None:
     return int(digits)
 
 
+def _hex_codepoint(digits: str) -> int | None:
+    if not re.fullmatch(r'[0-9a-fA-F]+', digits):
+        return None
+    digits = digits.lstrip('0') or '0'
+    if len(digits) > 6:
+        return None
+    codepoint = int(digits, 16)
+    return codepoint if codepoint <= 0x10FFFF else None
+
+
 def _valid_regex(kind: str, value: str) -> bool:
     if not value:
         return False
@@ -620,7 +653,7 @@ def _valid_regex(kind: str, value: str) -> bool:
     class_start, class_probe, classes = 0, 0, []
     extended_stack, conditionals, references = [], [], []
     captures, explicit_capture, capture_slots = 0, False, {0}
-    conditional_head = after_options = False
+    conditional_head = missing_operand = False
     quantifier_probe = 0
     while index < len(value) and kind != "URL-REGEX":
         char = value[index]
@@ -634,7 +667,7 @@ def _valid_regex(kind: str, value: str) -> bool:
         if char == "\\":
             if index + 1 == len(value):
                 return False
-            quantified = after_options = False
+            quantified = missing_operand = False
             escape = value[index + 1]
             if in_class:
                 class_first = class_hyphen = False
@@ -682,10 +715,10 @@ def _valid_regex(kind: str, value: str) -> bool:
                 end = value.find("}", index + 3)
                 if end < 0:
                     return False
-                digits = value[index + 3:end]
-                if not re.fullmatch(r"[0-9a-fA-F]{1,6}", digits) or int(digits, 16) > 0x10ffff:
+                codepoint = _hex_codepoint(value[index + 3:end])
+                if codepoint is None:
                     return False
-                probe.append(re.escape(chr(int(digits, 16))))
+                probe.append(re.escape(chr(codepoint)))
                 if in_class:
                     class_atom, range_from_literal = "literal", False
                 index = end + 1
@@ -746,28 +779,36 @@ def _valid_regex(kind: str, value: str) -> bool:
         if not in_class and char == "{":
             count = re.match(r"\{[0-9]+(?:,[0-9]*)?\}", value[index:])
             if count is not None:
-                if after_options:
+                if missing_operand:
+                    return False
+                lower, separator, upper = count[0][1:-1].partition(',')
+                minimum = _capture_number(lower)
+                maximum = _capture_number(upper) if upper else None
+                if minimum is None or upper and (maximum is None or minimum > maximum):
                     return False
                 quantifier_probe = len(probe)
-                probe.append(count[0])
+                canonical = str(minimum)
+                if separator:
+                    canonical += ',' + (str(maximum) if upper else '')
+                probe.append('{' + canonical + '}')
                 index += len(count[0])
                 quantified = True
                 continue
-        if not in_class and (char == "+" and quantified or after_options and char in "*+?"):
+        if not in_class and (char == "+" and quantified or missing_operand and char in "*+?"):
             return False
         if not in_class and char == '?' and quantified:
             # regexp2 在量词与 lazy modifier 之间允许 comment 和 x-mode 空白。
             probe[quantifier_probe] += '?'
             index += 1
             continue
-        after_options = False
+        missing_operand = False
         quantified = not in_class and char in "*+?"
         if quantified:
             quantifier_probe = len(probe)
         if not in_class and char == "(":
             if value.startswith(('(?(?=', '(?(?!', '(?(?<=', '(?(?<!'), index):
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0])
+                conditionals.append([len(extended_stack), 0, True])
                 probe.append('(?:')
                 index += 2
                 continue
@@ -776,7 +817,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                 if numeric and (value[end:end + 1] != ')' or _capture_number(key) is None):
                     return False
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0])
+                conditionals.append([len(extended_stack), 0, False])
                 probe.append('(?:')
                 if key and value[end:end + 1] == ')':
                     # 条件头不分配捕获槽，引用在完整捕获集合建立后验证。
@@ -787,6 +828,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                     if head.startswith(('(?#', "(?'")) or (head.startswith('(?<') and head[3:4] not in {'=', '!'}):
                         return False
                     conditional_head = True
+                    conditionals[-1][2] = True
                     index += 2
                 continue
             if conditional_head:
@@ -795,21 +837,19 @@ def _valid_regex(kind: str, value: str) -> bool:
                 probe.append('(?:')
                 index += 1
                 continue
-            flags = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?\)", value[index:])
-            if flags is not None and (flags[1] or flags[2]):
-                extended = (extended or "x" in flags[1]) and not (flags[2] and "x" in flags[2])
-                # comment marker 保留词法边界；global options 不提供量词对象。
-                probe.append('(?#)')
-                after_options = True
-                index += len(flags[0])
+            flags = _scan_regex_options(value, index, extended, explicit_capture)
+            if flags is not None:
+                if flags[1] == ':':
+                    extended_stack.append((extended, explicit_capture))
+                    probe.append('(?:')
+                else:
+                    # comment marker 保留词法边界；global options 不提供量词对象。
+                    probe.append('(?#)')
+                    missing_operand = True
+                index, _, extended, explicit_capture = flags
                 continue
-            scoped = re.match(r"\(\?([imsx]*)(?:-([imsx]+))?:", value[index:])
-            if scoped is not None and (scoped[1] or scoped[2]):
-                extended_stack.append((extended, explicit_capture))
-                extended = (extended or "x" in scoped[1]) and not (scoped[2] and "x" in scoped[2])
-                probe.append(scoped[0])
-                index += len(scoped[0])
-                continue
+            if re.match(r"\(\?[A-Za-z+-]", value[index:]):
+                return False
             extended_stack.append((extended, explicit_capture))
             if value[index + 1:index + 2] != '?':
                 if explicit_capture:
@@ -850,8 +890,13 @@ def _valid_regex(kind: str, value: str) -> bool:
                 class_atom, range_from_literal = None, False
         elif char == ")" and not in_class and extended_stack:
             extended, explicit_capture = extended_stack.pop()
-            if conditionals and len(extended_stack) < conditionals[-1][0]:
-                conditionals.pop()
+            if conditionals:
+                if len(extended_stack) < conditionals[-1][0]:
+                    conditionals.pop()
+                elif len(extended_stack) == conditionals[-1][0] and conditionals[-1][2]:
+                    # regexp2 的条件表达式结束后没有量词对象；comment 和 x-mode 空白保持此边界。
+                    missing_operand = True
+                    conditionals[-1][2] = False
         elif in_class:
             class_hyphen = char == '-' and not class_first
             if char != '^' or index != class_start + 1:
@@ -869,15 +914,6 @@ def _valid_regex(kind: str, value: str) -> bool:
                     class_atom = None
             elif char != "^" or index != class_start + 1:
                 class_atom, range_from_literal = "literal", False
-        elif char == "(" and not in_class and value.startswith("(?P", index):
-            return False
-        elif char == "(" and not in_class and re.match(r"\(\?[aLu](?:\)|:)", value[index:]):
-            return False
-        elif char == "(" and not in_class and value.startswith("(?n:", index):
-            explicit_capture = True
-            probe.append("(?:")
-            index += 4
-            continue
         elif char == "(" and not in_class and value.startswith(("(?<", "(?'"), index):
             marker = value[index + 2]
             if marker == "<" and value[index + 3:index + 4] in {"=", "!"}:
@@ -915,7 +951,7 @@ def _valid_regex(kind: str, value: str) -> bool:
             conditionals[-1][1] += 1
             if conditionals[-1][1] > 1:
                 return False
-        probe.append(char)
+        probe.append(r'\{' if char == '{' and not in_class else char)
         index += 1
     if in_class or classes:
         return False
@@ -947,6 +983,12 @@ def _valid_regex(kind: str, value: str) -> bool:
     except RecursionError:
         return kind != "URL-REGEX" and _valid_deep_regex(''.join(probe))
     except (re.error, OverflowError):
+        return False
+    except ValueError as exc:
+        if kind != 'URL-REGEX' or not re.fullmatch(
+                r'Exceeds the limit \([0-9]+ digits\) for integer string conversion: value has '
+                r'[0-9]+ digits; use sys\.set_int_max_str_digits\(\) to increase the limit', str(exc)):
+            raise
         return False
     return True
 
@@ -985,50 +1027,86 @@ def _valid_name_list(value: str) -> bool:
     return all(part.strip(_GO_WHITESPACE) for part in value.split('/'))
 
 
-def _valid_unsigned_ranges(value: str, bits: int, maximum: int, *, allow_empty: bool = True) -> bool:
+def _unsigned_ranges(value: str, bits: int, maximum: int, *, allow_empty: bool = True) -> list[tuple[int, int]] | None:
     value = value.strip(_GO_WHITESPACE)
     if value in {'', '*'}:
-        return allow_empty
+        return [] if allow_empty else None
     parts = value.replace(',', '/').split('/')
     if len(parts) > 28:
-        return False
+        return None
+    ranges = []
     for part in parts:
         if not part:
             continue
         part = part.strip(_GO_WHITESPACE)
         endpoints = part.split('-') if part else ['0']
         if len(endpoints) > 2:
-            return False
+            return None
+        numbers = []
         for endpoint in endpoints:
             endpoint = endpoint.strip('[ ]')
             number = endpoint.lstrip('0') or '0'
             if (not endpoint.isascii() or not endpoint.isdecimal() or len(number) > 20
-                    or int(number) > 18446744073709551615
-                    or int(number) % (1 << bits) > maximum):
-                return False
-    return allow_empty or any(parts)
+                    or int(number) > 18446744073709551615):
+                return None
+            number = int(number) % (1 << bits)
+            if number > maximum:
+                return None
+            numbers.append(number)
+        ranges.append((min(numbers), max(numbers)))
+    return ranges if allow_empty or ranges else None
+
+
+def _valid_unsigned_ranges(value: str, bits: int, maximum: int, *, allow_empty: bool = True) -> bool:
+    return _unsigned_ranges(value, bits, maximum, allow_empty=allow_empty) is not None
+
+
+def _normalize_port(value: str, native_fields: bool) -> str | None:
+    if not native_fields:
+        return value if _valid_port(value) else None
+    ranges = _unsigned_ranges(value, 16, 65535, allow_empty=False)
+    if ranges is None:
+        return None
+    return '/'.join(str(start) if start == end else f'{start}-{end}' for start, end in ranges)
+
+
+def _reject_ip_scope(kind: str, value: str, native_fields: bool = False) -> None:
+    if '%' not in value:
+        return
+    if kind in _LOGICAL:
+        _condition_kinds(kind, value, native_fields, reject_ip_scope=True)
+    elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP", "IP-SUFFIX", "SRC-IP-SUFFIX"}:
+        raise ValueError(f"IPv6 scope is not supported: {value}")
+
+
+def _normalize_ip_suffix(value: str) -> str | None:
+    address, separator, prefix = value.rpartition('/')
+    if not separator or not re.fullmatch(r'[0-9]+', prefix) or '%' in address:
+        return None
+    prefix = prefix.lstrip('0') or '0'
+    if len(prefix) > 3:
+        return None
+    try:
+        interface = ipaddress.ip_interface(address + '/' + prefix)
+    except ValueError:
+        return None
+    return f'{interface.ip}/{interface.network.prefixlen}'
 
 
 def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
     if kind in {"IP-ASN", "SRC-IP-ASN"}:
-        if kind == 'IP-ASN' and not native_fields:
-            if value.upper() == 'UNKNOWN':
+        if not native_fields:
+            if kind == 'IP-ASN' and value.upper() == 'UNKNOWN':
                 return True
-            if value.startswith('AS'):
-                value = value[2:]
+            value = value.removeprefix('AS')
         number = value.lstrip('0') or '0'
         return (value.isascii() and value.isdecimal() and len(number) <= 10
                 and int(number) <= 4294967295)
     if kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
-        address, separator, prefix = value.rpartition('/')
-        if not separator or not re.fullmatch(r'[0-9]+', prefix) or '%' in address:
-            return False
-        try:
-            ipaddress.ip_interface(value)
-            return True
-        except ValueError:
-            return False
+        return _normalize_ip_suffix(value) is not None
     if kind == "SRC-IP":
+        if '%' in value:
+            return False
         try:
             (ipaddress.ip_network(value, strict=False) if '/' in value
              else ipaddress.ip_address(value))
@@ -1210,9 +1288,12 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             pending.extend(reversed(children))
             continue
         if kind in {"DOMAIN", "DOMAIN-SUFFIX", "DOMAIN-WILDCARD"}:
-            if not (_valid_domain(kind, checked) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
+            if not (_valid_domain(kind, checked, domain_source=domain_source)
+                    or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", checked)):
                 return None
         elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
+            if '%' in checked:
+                return None
             try:
                 network = ipaddress.ip_network(checked, strict=False)
                 if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
@@ -1224,7 +1305,8 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
             except ValueError:
                 return None
         elif kind in _PORTS:
-            if not _valid_port(value):
+            value = _normalize_port(checked, native_fields)
+            if value is None:
                 return None
             if '/' in value:
                 port_kind = "DST-PORT" if kind == "DEST-PORT" else kind
@@ -1232,11 +1314,15 @@ def _normalize_condition(expression: str, ignored_no_resolve: list[str] | None =
                 continue
             if value.startswith(('<', '>')):
                 value = _port_comparison(value)
+        elif kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            value = _normalize_ip_suffix(checked)
+            if value is None:
+                return None
         elif kind in _SIMPLE:
             if not _valid_simple(kind, checked, native_fields or kind == 'DOMAIN-KEYWORD' and domain_source == 'mihomo'):
                 return None
-            if kind == 'IP-ASN' and not native_fields and checked.startswith('AS'):
-                value = str(int(checked[2:].lstrip('0') or '0'))
+            if kind in {'IP-ASN', 'SRC-IP-ASN'} and not native_fields and checked.upper() != 'UNKNOWN':
+                value = checked.removeprefix('AS').lstrip('0') or '0'
         elif kind in _REGEX:
             if not _valid_regex(kind, checked):
                 return None
@@ -1286,7 +1372,9 @@ def _apply_no_resolve(rule: Rule, mode: str) -> Rule:
             Rule(rule.kind, value, options, rule.allow, rule.literal_process, rule.native_fields, rule.domain_source))
 
 
-def _condition_kinds(kind: str, value: str, native_fields: bool = False) -> set[str]:
+def _condition_kinds(kind: str, value: str, native_fields: bool = False, *,
+                     reject_ip_scope: bool = False) -> set[str]:
+    kind = kind.upper()
     if kind not in _LOGICAL:
         return {kind}
     expression = f"({kind},{value})"
@@ -1297,11 +1385,13 @@ def _condition_kinds(kind: str, value: str, native_fields: bool = False) -> set[
     while pending:
         begin, end = pending.pop()
         comma = expression.find(',', begin + 1, end - 1)
-        kind = expression[begin + 1:comma].strip(trim)
-        if native_fields:
-            kind = kind.upper()
+        kind = expression[begin + 1:comma].strip(trim).upper()
         kinds.add(kind)
         if kind not in _LOGICAL:
+            if reject_ip_scope:
+                fields = _fields(expression[begin + 1:end - 1], native_fields=native_fields)
+                if len(fields) >= 2:
+                    _reject_ip_scope(kind, fields[1] if native_fields else _field_value(fields[1]))
             continue
         payload = expression[comma + 1:end - 1]
         start = comma + 1 + len(payload) - len(payload.lstrip(trim))
@@ -1428,14 +1518,14 @@ def _without_comment(line: str) -> str:
 
 
 def _has_literal_field(line: str, native_fields: bool = False) -> bool:
-    head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+),''', line, re.I)
+    head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+) *,''', line, re.I)
     if head is None:
         return False
     kind = head[1].upper()
-    literal = _REGEX | ({'DOMAIN-KEYWORD', 'IN-USER', 'IN-NAME', 'REMATCH-NAME', 'PROCESS-NAME', 'PROCESS-PATH',
+    literal = _REGEX | ({'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD', 'IN-USER', 'IN-NAME', 'REMATCH-NAME', 'PROCESS-NAME', 'PROCESS-PATH',
                          'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'} if native_fields else set())
     return kind in literal or kind in _LOGICAL and bool(re.search(
-        r"\(\s*(?:" + '|'.join(sorted(literal)) + '),', line, re.I
+        r"\(\s*(?:" + '|'.join(sorted(literal)) + ') *,', line, re.I
     ))
 
 
@@ -1543,7 +1633,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
         domain_source = "surge"
         abp = re.fullmatch(r"(?:@@)?\|\|([^|^/$]+)\^", line)
         bare_network = None
-        if '/' in line and ',' not in line:
+        if '/' in line and ',' not in line and '%' not in line:
             try:
                 bare_network = ipaddress.ip_network(line, strict=False)
             except ValueError:
@@ -1632,6 +1722,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             continue
         if kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR"}:
             try:
+                if '%' in value:
+                    raise ValueError("IPv6 scope is not supported")
                 network = ipaddress.ip_network(value, strict=False)
                 if (kind == "IP-CIDR6" or source_kind == "IP-CIDR6") and network.version != 6:
                     if not yaml_rule:
@@ -1643,9 +1735,11 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
                 warnings.append(f"line {number}: invalid CIDR {value}")
                 continue
         elif kind in _PORTS:
-            if not _valid_port(value):
+            port = _normalize_port(value, yaml_rule)
+            if port is None:
                 warnings.append(f"line {number}: invalid port {value}")
                 continue
+            value = port
             if '/' in value:
                 port_kind = "DST-PORT" if kind == "DEST-PORT" else kind
                 value = '(' + ','.join(f"({port_kind},{part})" for part in value.split('/')) + ')'
@@ -1654,16 +1748,24 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
                 value = _port_comparison(value)
         elif kind == "SRC-IP":
             try:
+                if '%' in value:
+                    raise ValueError("IPv6 scope is not supported")
                 value = str(ipaddress.ip_address(value))
             except ValueError:
                 warnings.append(f"line {number}: invalid IP address {value}")
                 continue
+        elif kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            suffix = _normalize_ip_suffix(value)
+            if suffix is None:
+                warnings.append(f"line {number}: invalid {kind} {value}")
+                continue
+            value = suffix
         elif kind in _SIMPLE:
             if not _valid_simple(kind, value, yaml_rule):
                 warnings.append(f"line {number}: invalid {kind} {value}")
                 continue
-            if kind == 'IP-ASN' and not yaml_rule and value.startswith('AS'):
-                value = str(int(value[2:].lstrip('0') or '0'))
+            if kind in {'IP-ASN', 'SRC-IP-ASN'} and not yaml_rule and value.upper() != 'UNKNOWN':
+                value = value.removeprefix('AS').lstrip('0') or '0'
         elif kind in _PROCESS:
             if (not value or kind in {'IN-NAME', 'REMATCH-NAME'} and not _valid_name_list(value)
                     or not yaml_rule and (any(char in value for char in '\r\n') or (
@@ -1692,7 +1794,8 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             warnings.extend(f"line {number}: unsupported no-resolve for {child_kind}"
                             for child_kind in ignored_no_resolve)
             value = normalized
-        elif not (_valid_domain(kind, value) or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
+        elif not (_valid_domain(kind, value, domain_source=domain_source)
+                  or kind == "DOMAIN" and _valid_domain("DOMAIN-SUFFIX", value)):
             warnings.append(f"line {number}: invalid domain {value}")
             continue
         if action and not ignore_policy and not (purpose == "block" and action in _BLOCK_ACTIONS or
@@ -1732,11 +1835,13 @@ def _domain_comparison_value(kind: str, value: str, source: str) -> str:
 
 
 def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Rule]:
-    domain_groups, typed = {}, set()
+    domain_groups, typed, regexes = {}, set(), set()
     surge_literals = {'DOMAIN': set(), 'DOMAIN-SUFFIX': set()}
+    surge_keywords, surge_wildcards = set(), set()
     empty = (set(), set(), set(), set())
     networks = {"src": set(), "dst": set()}
     for entry in whitelist:
+        _reject_ip_scope(entry.kind, entry.value, entry.native_fields)
         exact, suffixes, keywords, wildcards = domain_groups.setdefault(
             entry.domain_source, (set(), set(), set(), set()))
         value = _domain_comparison_value(entry.kind, entry.value, entry.domain_source)
@@ -1744,6 +1849,11 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                 and entry.value.isascii() and not value.endswith('.')
                 and _valid_domain('DOMAIN-SUFFIX', value)):
             surge_literals[entry.kind].add(value)
+        if entry.domain_source == 'surge' and entry.value.isascii():
+            if entry.kind == 'DOMAIN-KEYWORD':
+                surge_keywords.add(value)
+            elif entry.kind == 'DOMAIN-WILDCARD' and not any(char in value for char in '[]'):
+                surge_wildcards.add(value)
         if entry.kind == "DOMAIN":
             exact.add(value)
         elif entry.kind == "DOMAIN-SUFFIX":
@@ -1752,6 +1862,8 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
             keywords.add(value)
         elif entry.kind == "DOMAIN-WILDCARD":
             wildcards.add(value)
+        elif entry.kind == "DOMAIN-REGEX":
+            regexes.add(entry.value)
         elif entry.kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
             direction = "src" if entry.kind.startswith("SRC-") else "dst"
             networks[direction].add(ipaddress.ip_network(entry.value, strict=False))
@@ -1761,11 +1873,12 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
     wildcard_patterns = {
         source: [''.join('[[]' if char == '[' else '[]]' if char == ']' else char
                          for char in pattern).encode('utf-8') if source == "mihomo" else pattern
-                 for pattern in group[3] if source == "mihomo" or '[' not in pattern]
+                 for pattern in group[3] if source in {"surge", "mihomo"} or '[' not in pattern]
         for source, group in domain_groups.items()
     }
     kept = []
     for rule in rules:
+        _reject_ip_scope(rule.kind, rule.value, rule.native_fields)
         if rule.allow:
             kept.append(rule)
             continue
@@ -1789,6 +1902,8 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                        any(keyword in segment for keyword in keywords
                            for segment in re.split(r"\*|\?" if rule.domain_source == "mihomo"
                                                    else r"\*|\?|\[[a-z0-9-]+\]", value)))
+        elif kind == "DOMAIN-REGEX":
+            covered = rule.value in regexes
         elif kind in {"IP-CIDR", "IP-CIDR6", "SRC-IP-CIDR", "SRC-IP"}:
             direction = "src" if kind.startswith("SRC-") else "dst"
             covered = False
@@ -1809,6 +1924,19 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                 and not value.endswith('.') and _valid_domain('DOMAIN-SUFFIX', value)):
             covered = (_has_parent(value, surge_literals['DOMAIN-SUFFIX']) or
                        kind == 'DOMAIN' and value in surge_literals['DOMAIN'])
+        if (not covered and rule.domain_source == 'mihomo' and rule.value.isascii()
+                and kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}):
+            # 必要字面部分不能只靠 Host 的末尾根点命中 keyword。
+            literal = (value.rstrip('*') if kind == 'DOMAIN-WILDCARD' else value).removesuffix('.')
+            segments = re.split(r'\*|\?', literal) if kind == 'DOMAIN-WILDCARD' else (literal,)
+            covered = any(keyword and keyword in segment for keyword in surge_keywords for segment in segments)
+            if not covered:
+                if (kind == 'DOMAIN' or kind == 'DOMAIN-WILDCARD' and not any(char in value for char in '*?')):
+                    covered = (_valid_domain('DOMAIN-SUFFIX', value) and
+                               any(fnmatchcase(value.removesuffix('.'), pattern) for pattern in surge_wildcards))
+                elif kind == 'DOMAIN-WILDCARD' and not any(char in value for char in '?[]'):
+                    # 非点字面结尾不命中根点 Host；尾星号须能吸收被 Surge 忽略的根点。
+                    covered = value in surge_wildcards and not value.rstrip('*').endswith('.')
         if not covered:
             kept.append(rule)
     return kept
@@ -1827,6 +1955,21 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
     suffixes, keywords = {}, {}
     for rule in sorted(set(rules), key=lambda rule: (rule.kind, rule.value, rule.options, rule.allow,
                                                     rule.literal_process, rule.native_fields, rule.domain_source)):
+        _reject_ip_scope(rule.kind, rule.value, rule.native_fields)
+        value = rule.value
+        if rule.kind in {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            value = _normalize_ip_suffix(value)
+            if value is None:
+                raise ValueError(f"invalid {rule.kind} {rule.value}")
+        elif rule.kind in _LOGICAL and 'IP-SUFFIX' in value.upper() and _condition_kinds(
+                rule.kind, value, rule.native_fields) & {"IP-SUFFIX", "SRC-IP-SUFFIX"}:
+            value = _normalize_logic(rule.kind, value, native_fields=rule.native_fields,
+                                     domain_source=rule.domain_source)
+            if value is None:
+                raise ValueError(f"invalid logical expression {rule.value}")
+        if value != rule.value:
+            rule = Rule(rule.kind, value, rule.options, rule.allow, rule.literal_process,
+                        rule.native_fields, rule.domain_source)
         group = (rule.allow, rule.options, rule.literal_process, rule.native_fields, rule.domain_source)
         value = (_domain_comparison_value(rule.kind, rule.value, rule.domain_source)
                  if rule.kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} else rule.value)

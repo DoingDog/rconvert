@@ -3,14 +3,15 @@ import unittest
 
 from formats import render
 from rules import Rule, parse
+from tests.test_formats import expected_domain
 
 
-SURGE_SUFFIX = 'DOMAIN-SUFFIX,example.com'
-SURGE_EXACT = 'DOMAIN,example.com'
+SURGE_SUFFIX = expected_domain('DOMAIN-SUFFIX', 'example.com')
+SURGE_EXACT = expected_domain('DOMAIN', 'example.com')
 
 
 class YamlCoverageTests(unittest.TestCase):
-    def test_public_render_deduplicates_shared_native_suffix(self):
+    def test_public_render_preserves_surge_suffix_and_native_literal(self):
         surge, surge_warnings = parse('DOMAIN-SUFFIX,example.com\n', purpose='proxy')
         native, native_warnings = parse('payload:\n  - DOMAIN-SUFFIX,example.com\n', purpose='proxy')
         self.assertEqual((surge_warnings, native_warnings), ([], []))
@@ -18,14 +19,14 @@ class YamlCoverageTests(unittest.TestCase):
         output, skipped = render('fixture', surge + native, purpose='proxy', no_resolve='keep')
 
         self.assertEqual(output['fin.yaml'],
-                         '# fixture rules: 1\npayload:\n  - ' + json.dumps(SURGE_SUFFIX) + '\n')
+                         '# fixture rules: 2\npayload:\n  - ' + json.dumps(SURGE_SUFFIX) + '\n  - "DOMAIN-SUFFIX,example.com"\n')
         self.assertEqual(output['fin.txt'], '# fixture rules: 1\nDOMAIN-SUFFIX,example.com\n')
         self.assertEqual(output['fin-qx.txt'], '# fixture rules: 1\nHOST-SUFFIX,example.com,LIST\n')
         self.assertEqual(output['fin-surge-ds.txt'], '# fixture rules: 1\n.example.com\n')
         self.assertEqual(output['fin-surge.txt'], '# fixture rules: 0\n')
         self.assertFalse(any(key.startswith('fin.yaml:') for key in skipped))
 
-    def test_public_render_deduplicates_shared_native_exact(self):
+    def test_public_render_preserves_surge_exact_and_native_literal(self):
         surge, surge_warnings = parse('DOMAIN,example.com\n', purpose='proxy')
         native, native_warnings = parse('payload:\n  - DOMAIN,example.com\n', purpose='proxy')
         self.assertEqual((surge_warnings, native_warnings), ([], []))
@@ -33,7 +34,7 @@ class YamlCoverageTests(unittest.TestCase):
         output, _ = render('fixture', surge + native, purpose='proxy', no_resolve='keep')
 
         self.assertEqual(output['fin.yaml'],
-                         '# fixture rules: 1\npayload:\n  - ' + json.dumps(SURGE_EXACT) + '\n')
+                         '# fixture rules: 2\npayload:\n  - "DOMAIN,example.com"\n  - ' + json.dumps(SURGE_EXACT) + '\n')
 
     def test_surge_suffix_preserves_native_exact_and_child_suffix(self):
         surge, surge_warnings = parse('DOMAIN-SUFFIX,example.com\n', purpose='proxy')
@@ -48,18 +49,17 @@ class YamlCoverageTests(unittest.TestCase):
 
         self.assertEqual(output['fin.yaml'],
                          '# fixture rules: 5\npayload:\n  - "DOMAIN,EXAMPLE.COM"\n'
-                         '  - "DOMAIN,child.example.com"\n  - "DOMAIN-SUFFIX,example.com"\n'
+                         '  - "DOMAIN,child.example.com"\n  - ' + json.dumps(SURGE_SUFFIX) + '\n'
                          '  - "DOMAIN-SUFFIX,child.example.com"\n'
                          '  - "DOMAIN-SUFFIX,grand.child.example.com"\n')
         self.assertEqual(output['fin-surge-ds.txt'],
-                         '# fixture rules: 5\nEXAMPLE.COM\n.example.com\nchild.example.com\n'
-                         '.child.example.com\n.grand.child.example.com\n')
+                         '# fixture rules: 1\n.example.com\n')
 
     def test_surge_and_qx_literals_preserve_distinct_payloads(self):
         for kind, qx_text, expected in (
-                ('DOMAIN', 'HOST,example.com,PROXY\n', [SURGE_EXACT]),
+                ('DOMAIN', 'HOST,example.com,PROXY\n', ['DOMAIN,example.com', SURGE_EXACT]),
                 ('DOMAIN-SUFFIX', 'HOST,example.com,PROXY\nHOST-SUFFIX,child.example.com,PROXY\n',
-                 [SURGE_EXACT, SURGE_SUFFIX, 'DOMAIN-SUFFIX,child.example.com'])):
+                 ['DOMAIN,example.com', SURGE_SUFFIX, 'DOMAIN-SUFFIX,child.example.com'])):
             with self.subTest(kind=kind):
                 surge, surge_warnings = parse(kind + ',example.com\n', purpose='proxy')
                 qx, qx_warnings = parse(qx_text, purpose='proxy')
@@ -84,8 +84,8 @@ class YamlCoverageTests(unittest.TestCase):
 
     def test_single_label_domains_use_existing_public_validation(self):
         for kind, expected in (
-                ('DOMAIN', ['DOMAIN,com']),
-                ('DOMAIN-SUFFIX', ['DOMAIN,com', 'DOMAIN-SUFFIX,com'])):
+                ('DOMAIN', ['DOMAIN,com', expected_domain('DOMAIN', 'com')]),
+                ('DOMAIN-SUFFIX', ['DOMAIN,com', expected_domain('DOMAIN-SUFFIX', 'com')])):
             with self.subTest(kind=kind):
                 surge, surge_warnings = parse(kind + ',com\n', purpose='proxy')
                 native, native_warnings = parse('payload:\n  - DOMAIN,com\n', purpose='proxy')
@@ -112,7 +112,7 @@ class YamlCoverageTests(unittest.TestCase):
                 self.assert_yaml_payloads(
                     [Rule('DOMAIN-SUFFIX', 'example.com', broad_options),
                      Rule('DOMAIN', 'example.com', literal_options, domain_source='qx')],
-                    [SURGE_EXACT, SURGE_SUFFIX],
+                    ['DOMAIN,example.com', SURGE_SUFFIX],
                 )
 
     def test_unsupported_options_and_allow_preserve_neighbors(self):
@@ -124,10 +124,11 @@ class YamlCoverageTests(unittest.TestCase):
                     output, skipped = self.assert_yaml_payloads(
                         [Rule('DOMAIN-SUFFIX', 'example.com', **attributes),
                          Rule('DOMAIN', 'example.com', domain_source=source)],
-                        ['DOMAIN,example.com'], purpose='block',
+                        [] if attributes == {'allow': True} else ['DOMAIN,example.com'], purpose='block',
                     )
                     self.assertEqual(skipped['fin.yaml:DOMAIN-SUFFIX'], 1)
                     if attributes == {'allow': True}:
+                        self.assertEqual(skipped['fin.yaml:DOMAIN:whitelist-covered'], 1)
                         self.assertIn('@@||example.com^\n', output['fin-adb.txt'])
         output, skipped = self.assert_yaml_payloads(
             [Rule('DOMAIN-SUFFIX', 'example.com'),
@@ -135,7 +136,8 @@ class YamlCoverageTests(unittest.TestCase):
             [SURGE_SUFFIX], purpose='block',
         )
         self.assertEqual(skipped['fin.yaml:DOMAIN'], 1)
-        self.assertIn('@@|example.com|\n', output['fin-adb.txt'])
+        self.assertNotIn('@@|example.com|\n', output['fin-adb.txt'])
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN'], 1)
 
     def test_no_resolve_mode_is_applied_before_emission(self):
         rules = [Rule('DOMAIN-SUFFIX', 'example.com', ('no-resolve',)),
@@ -144,18 +146,18 @@ class YamlCoverageTests(unittest.TestCase):
         for mode, expected in (
                 ('keep', ['DOMAIN,example.com', 'IP-CIDR,192.0.2.0/24']),
                 ('add', ['DOMAIN,example.com', 'IP-CIDR,192.0.2.0/24,no-resolve']),
-                ('strip', [SURGE_EXACT, SURGE_SUFFIX, 'IP-CIDR,192.0.2.0/24'])):
+                ('strip', ['DOMAIN,example.com', SURGE_SUFFIX, 'IP-CIDR,192.0.2.0/24'])):
             with self.subTest(mode=mode):
                 _, skipped = self.assert_yaml_payloads(rules, expected, no_resolve=mode)
                 self.assertEqual(skipped.get('fin.yaml:DOMAIN-SUFFIX', 0), int(mode != 'strip'))
         self.assert_yaml_payloads(
             [Rule('DOMAIN-SUFFIX', 'example.com'),
              Rule('DOMAIN', 'example.com', ('no-resolve',), domain_source='mihomo')],
-            [SURGE_EXACT, SURGE_SUFFIX], no_resolve='strip',
+            ['DOMAIN,example.com', SURGE_SUFFIX], no_resolve='strip',
         )
 
     def test_native_domains_preserve_distinct_rules(self):
-        child_suffix = 'DOMAIN-SUFFIX,child.example.com'
+        child_suffix = expected_domain('DOMAIN-SUFFIX', 'child.example.com')
         cases = (
             ([Rule('DOMAIN', 'example.com'),
               Rule('DOMAIN-SUFFIX', 'example.com', domain_source='mihomo')],
@@ -261,38 +263,37 @@ class YamlCoverageTests(unittest.TestCase):
                  Rule('DOMAIN', 'example.com', domain_source='qx'),
                  Rule('DOMAIN-SUFFIX', 'grand.example.com', domain_source='qx')]
         output, skipped = self.assert_yaml_payloads(
-            rules, [SURGE_EXACT, 'DOMAIN,child.example.com', SURGE_SUFFIX,
+            rules, ['DOMAIN,example.com', 'DOMAIN,child.example.com', SURGE_SUFFIX,
                     'DOMAIN-SUFFIX,child.example.com', 'DOMAIN-SUFFIX,grand.example.com'], purpose='block')
         expected = {
-            'fin.txt': ['DOMAIN,example.com', 'DOMAIN,child.example.com',
-                        'DOMAIN-SUFFIX,example.com', 'DOMAIN-SUFFIX,child.example.com',
+            'fin.txt': ['DOMAIN,example.com', 'DOMAIN-SUFFIX,example.com',
                         'DOMAIN-SUFFIX,grand.example.com'],
             'fin-qx.txt': ['HOST,example.com,LIST', 'HOST,child.example.com,LIST',
                            'HOST-SUFFIX,example.com,LIST', 'HOST-SUFFIX,child.example.com,LIST',
                            'HOST-SUFFIX,grand.example.com,LIST'],
-            'fin-surge-ds.txt': ['example.com', '.example.com', 'child.example.com',
-                                 '.child.example.com', '.grand.example.com'],
+            'fin-surge-ds.txt': ['example.com', '.example.com', '.grand.example.com'],
             'fin-surge.txt': [],
         }
         for name, body in expected.items():
             with self.subTest(name=name):
                 self.assertEqual(output[name], '# fixture rules: ' + str(len(body)) + '\n'
                                  + ''.join(line + '\n' for line in body))
-        self.assertEqual(output['fin-adb.txt'].splitlines()[6], '! Total count: 5')
+        self.assertEqual(output['fin-adb.txt'].splitlines()[6], '! Total count: 3')
         self.assertCountEqual(output['fin-adb.txt'].splitlines()[7:],
-                              ['||example.com^', '||child.example.com^', '||grand.example.com^',
-                               '0.0.0.0 example.com', '0.0.0.0 child.example.com'])
+                              ['||example.com^', '||grand.example.com^', '0.0.0.0 example.com'])
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN'], 1)
+        self.assertEqual(skipped['fin-adb.txt:DOMAIN-SUFFIX'], 1)
         self.assertFalse(any(key.startswith('fin.yaml:') for key in skipped))
 
     def test_whitelist_stays_separate_from_rendered_yaml(self):
         surge = Rule('DOMAIN-SUFFIX', 'example.com')
         self.assert_yaml_payloads([surge], [SURGE_SUFFIX])
 
-        output, _ = render('separate', [Rule('DOMAIN', 'example.com', domain_source='mihomo')],
-                           whitelist=[surge], purpose='block', no_resolve='keep')
+        output, skipped = render('separate', [Rule('DOMAIN', 'example.com', domain_source='mihomo')],
+                                 whitelist=[surge], purpose='block', no_resolve='keep')
 
-        self.assertEqual(output['fin.yaml'],
-                         '# separate rules: 1\npayload:\n  - "DOMAIN,example.com"\n')
+        self.assertEqual(output['fin.yaml'], '# separate rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN:whitelist-covered'], 1)
         self.assertIn('@@||example.com^\n', output['fin-adb.txt'])
 
 

@@ -13,7 +13,16 @@ render = partial(render_configured, purpose="block", no_resolve="add")
 
 
 def expected_domain(kind, value):
-    return kind + ',' + value
+    paired = ''.join(f'[{char}{char.upper()}]' if 'a' <= char <= 'z' else re.escape(char) for char in value)
+    if kind == 'DOMAIN':
+        return r'DOMAIN-REGEX,(?-i:\A' + paired + r'\.?\z)'
+    return (r'DOMAIN-REGEX,(?-i:(?:\A|\.)' + re.escape(value) + r'\z|'
+            r'\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
+            r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*' + paired + r'\.?\z)')
+
+
+def expected_paired_dns(value, *, exception=False):
+    return ('@@' if exception else '') + r'/(?-i:\A' + re.escape(value) + r'\z)/'
 
 
 def expected_process(value):
@@ -23,8 +32,10 @@ def expected_process(value):
     return kind + ",(?-i:\\A" + escaped + end + ")"
 
 
-def native_arity_products(group, matchers, purpose):
+def native_arity_products(group, matchers, purpose, *, native=True):
     yaml = ["  - " + json.dumps(matcher) + "\n" for matcher in matchers]
+    domain = bool(matchers)
+    route = domain and not native
     dns = ('[Adblock Plus 2.0]\n'
            f'! Title: {group}\n'
            '! Homepage: https://github.com/DoingDog/rconvert\n'
@@ -32,14 +43,14 @@ def native_arity_products(group, matchers, purpose):
            '! License: Inherits upstream licenses\n'
            '! Version: 202601021104\n')
     return {
-        'fin.txt': f'# {group} rules: 1\nDOMAIN,keep.example.com\n',
-        'fin-qx.txt': f'# {group} rules: 1\nHOST,keep.example.com,LIST\n',
+        'fin.txt': f'# {group} rules: {int(route)}\n' + ('DOMAIN,keep.example.com\n' if route else ''),
+        'fin-qx.txt': f'# {group} rules: {int(domain)}\n' + ('HOST,keep.example.com,LIST\n' if domain else ''),
         'fin.yaml': f'# {group} rules: {len(matchers)}\npayload:\n' +
                     ''.join(yaml),
-        'fin-adb.txt': dns + ('! Total count: 1\n0.0.0.0 keep.example.com\n' if purpose == 'block' else
+        'fin-adb.txt': dns + (f'! Total count: {int(route)}\n' + ('0.0.0.0 keep.example.com\n' if route else '') if purpose == 'block' else
                             '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'),
         'fin-surge.txt': f'# {group} rules: 0\n',
-        'fin-surge-ds.txt': f'# {group} rules: 1\nkeep.example.com\n',
+        'fin-surge-ds.txt': f'# {group} rules: {int(route)}\n' + ('keep.example.com\n' if route else ''),
     }
 
 
@@ -60,19 +71,20 @@ class NativeArityFormatTests(unittest.TestCase):
                             clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
                             out, skipped = render_configured('arity', normalize([native, Rule('DOMAIN', 'keep.example.com')]),
                                                              purpose=purpose, no_resolve=mode)
-                        expected = native_arity_products('arity', [matcher, 'DOMAIN,keep.example.com'], purpose)
+                        projected_matcher = matcher.replace('DOMAIN,x.example.com', expected_domain('DOMAIN', 'x.example.com'))
+                        expected = native_arity_products('arity', [projected_matcher, expected_domain('DOMAIN', 'keep.example.com')], purpose, native=False)
                         # 按产物类型排序，AND 在 DOMAIN 前，NOT/OR 在 DOMAIN 后。
                         if kind != 'AND':
-                            expected = native_arity_products('arity', ['DOMAIN,keep.example.com', matcher], purpose)
+                            expected = native_arity_products('arity', [expected_domain('DOMAIN', 'keep.example.com'), projected_matcher], purpose, native=False)
                         self.assertEqual(out, expected)
                         expected_skips = {f'{name}:{kind}': 1 for name in
                                           ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')}
                         if purpose != 'block':
                             expected_skips['fin-adb.txt:DOMAIN'] = 1
                         self.assertEqual(skipped, expected_skips)
-                        projected = Rule(kind, value, native_fields=True,
-                                         domain_source='mihomo' if '(DOMAIN,' in value else 'surge')
-                        neighbor = Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')
+                        projected_value = value.replace('DOMAIN,x.example.com', expected_domain('DOMAIN', 'x.example.com'))
+                        projected = Rule(kind, projected_value, native_fields=True, domain_source='surge')
+                        neighbor = Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2])
                         self.assertEqual(parse(out['fin.yaml'], purpose=purpose),
                                          ([neighbor, projected] if kind != 'AND' else [projected, neighbor], []))
 
@@ -88,7 +100,7 @@ class NativeArityFormatTests(unittest.TestCase):
                                 clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
                                 out, skipped = render_configured('arity', [native, Rule('DOMAIN', 'keep.example.com')],
                                                                  purpose=purpose, no_resolve=mode)
-                            self.assertEqual(out, native_arity_products('arity', ['DOMAIN,keep.example.com'], purpose))
+                            self.assertEqual(out, native_arity_products('arity', [expected_domain('DOMAIN', 'keep.example.com')], purpose, native=False))
                             expected_skips = {f'{name}:{kind}': 1 for name in out}
                             if purpose != 'block':
                                 expected_skips['fin-adb.txt:DOMAIN'] = 1
@@ -175,6 +187,10 @@ NATIVE_KEYWORD_SOURCE = '''payload:
 '''
 
 
+DNS_BYTE_TOKEN = r'''(?:[^\\]|\\[. '@;()"\\]|\\[0-9]{3})'''
+DNS_CHINESE_KEYWORD = r'/(?s-i:\A' + DNS_BYTE_TOKEN + r'*\\228\\184\\173\\230\\150\\135' + DNS_BYTE_TOKEN + r'*\z)/'
+
+
 def native_keyword_expected(group, purpose, mode):
     flag = ',no-resolve' if mode != 'strip' else ''
     conjunction = ('AND,((DOMAIN-KEYWORD,中文),(IP-CIDR,192.0.2.0/24' + flag +
@@ -183,7 +199,7 @@ def native_keyword_expected(group, purpose, mode):
     alternative = 'OR,((DOMAIN-KEYWORD,中文),(NETWORK,udp))'
     ip = 'IP-CIDR,203.0.113.0/24' + flag
     surge_conjunction = conjunction.replace('SRC-IP-CIDR,', 'SRC-IP,')
-    surge = [surge_conjunction, 'DOMAIN,keep.example.com', 'DOMAIN-KEYWORD,中文', negative,
+    surge = [surge_conjunction, 'DOMAIN-KEYWORD,中文', negative,
              'OR,((DOMAIN-KEYWORD,中文),(PROTOCOL,UDP))', ip, 'SRC-IP,198.51.100.0/24']
     bodies = {'fin.txt': surge,
               'fin-qx.txt': ['HOST,keep.example.com,LIST', 'HOST-KEYWORD,中文,LIST',
@@ -191,13 +207,13 @@ def native_keyword_expected(group, purpose, mode):
               'fin.yaml': ['  - "' + line + '"' for line in
                            [conjunction, 'DOMAIN,keep.example.com', 'DOMAIN-KEYWORD,中文', negative,
                             alternative, ip, 'SRC-IP-CIDR,198.51.100.0/24']],
-              'fin-surge.txt': [surge[0], *surge[2:]], 'fin-surge-ds.txt': ['keep.example.com']}
+              'fin-surge.txt': surge, 'fin-surge-ds.txt': []}
     expected = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
                 ''.join(line + '\n' for line in body) for name, body in bodies.items()}
     expected['fin-adb.txt'] = (
         f'[Adblock Plus 2.0]\n! Title: {group}\n! Homepage: https://github.com/DoingDog/rconvert\n'
         '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
-        ('! Total count: 2\n/(?s-i:\\A.*中文.*\\z)/\n0.0.0.0 keep.example.com\n' if purpose == 'block' else
+        ('! Total count: 1\n' + DNS_CHINESE_KEYWORD + '\n' if purpose == 'block' else
          '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
     return expected
 
@@ -205,10 +221,10 @@ def native_keyword_expected(group, purpose, mode):
 def native_keyword_skips(purpose):
     skipped = {f'{name}:{kind}': 1 for name in ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')
                for kind in ('AND', 'NOT', 'OR', 'SRC-IP-CIDR')}
-    skipped.update({'fin-adb.txt:IP-CIDR': 1, 'fin-surge-ds.txt:IP-CIDR': 1,
-                    'fin-surge-ds.txt:DOMAIN-KEYWORD': 1})
+    skipped.update({'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1,
+                    'fin-adb.txt:IP-CIDR': 1, 'fin-surge-ds.txt:IP-CIDR': 1, 'fin-surge-ds.txt:DOMAIN-KEYWORD': 1})
     if purpose != 'block':
-        skipped.update({'fin-adb.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN-KEYWORD': 1})
+        skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
     return skipped
 
 
@@ -234,7 +250,7 @@ class DomainSetSingleLabelFormatTests(unittest.TestCase):
                         self.assertEqual(out["fin.yaml"], '# parent rules: 1\npayload:\n  - ' +
                                          json.dumps(expected_domain("DOMAIN", label)) + '\n')
                         self.assertEqual(parse(out["fin.yaml"], purpose=purpose),
-                                         ([Rule("DOMAIN", label, domain_source='mihomo')], []))
+                                         ([Rule("DOMAIN-REGEX", expected_domain("DOMAIN", label).partition(',')[2])], []))
                         dns = out["fin-adb.txt"].splitlines()
                         self.assertRegex(dns[5], r"^! Version: [0-9]{12}$")
                         datetime.strptime(dns[5].removeprefix("! Version: "), "%Y%m%d%H%M")
@@ -247,17 +263,16 @@ class DomainSetSingleLabelFormatTests(unittest.TestCase):
 
 
 class NativeProjectionFormatTests(unittest.TestCase):
-    def test_ordinary_ascii_exact_suffix_projection_reimports_native_domains(self):
+    def test_ordinary_ascii_exact_suffix_projection_reimports_raw_regex(self):
         from rules import parse
 
-        expected = {'DOMAIN': 'DOMAIN,keep.example.org',
-                    'DOMAIN-SUFFIX': 'DOMAIN-SUFFIX,keep.example.org'}
+        expected = {kind: expected_domain(kind, 'keep.example.org') for kind in ('DOMAIN', 'DOMAIN-SUFFIX')}
         for kind, payload in expected.items():
             original = Rule(kind, 'keep.example.org')
             output, _ = render_configured('public', [original], purpose='proxy', no_resolve='keep')
             self.assertEqual(json.loads(output['fin.yaml'].splitlines()[2][4:]), payload)
             self.assertEqual(parse(output['fin.yaml'], purpose='proxy'),
-                             ([Rule(kind, 'keep.example.org', domain_source='mihomo')], []))
+                             ([Rule('DOMAIN-REGEX', payload.partition(',')[2])], []))
 
     def test_equal_native_payloads_are_deduplicated_before_counting(self):
         from rules import parse
@@ -311,26 +326,29 @@ class NativeKeywordFormatTests(unittest.TestCase):
                         out, skipped = render_configured('literal', native, purpose=purpose, no_resolve=mode)
                         yaml = ''.join('  - ' + json.dumps(rule.kind + ',' + rule.value, ensure_ascii=False) + '\n'
                                        for rule in native)
-                        dns = sorted(['0.0.0.0 keep.example.com'] +
-                                     ([] if '/' in value else ['/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/']),
-                                     key=lambda line: (len(line), line)) if purpose == 'block' else []
+                        prefix_literal = {'中文': r'\\228\\184\\173\\230\\150\\135',
+                                          '中文 #1': r'\\228\\184\\173\\230\\150\\135\\\ \#1',
+                                          '中文 ;1': r'\\228\\184\\173\\230\\150\\135\\\ \\;1'}
+                        suffix_literal = {'\\': r'\\\\', '\\\\': r'\\\\\\\\', '\\\\\\': r'\\\\\\\\\\\\',
+                                          '(': r'\\\(', ')': r'\\\)', '(1)': r'\\\(1\\\)'}
+                        dns = ([r'/(?s-i:\A' + DNS_BYTE_TOKEN + '*' + prefix_literal[prefix] + suffix_literal[suffix] +
+                                DNS_BYTE_TOKEN + r'*\z)/'] if purpose == 'block' and '/' not in value else [])
                         expected = {
-                            'fin.txt': '# literal rules: 2\nDOMAIN,keep.example.com\nDOMAIN-KEYWORD,' + field + '\n',
+                            'fin.txt': '# literal rules: 1\nDOMAIN-KEYWORD,' + field + '\n',
                             'fin-qx.txt': '# literal rules: 2\nHOST,keep.example.com,LIST\nHOST-KEYWORD,' + value + ',LIST\n',
                             'fin.yaml': '# literal rules: 2\npayload:\n' + yaml,
                             'fin-surge.txt': '# literal rules: 1\nDOMAIN-KEYWORD,' + field + '\n',
-                            'fin-surge-ds.txt': '# literal rules: 1\nkeep.example.com\n',
+                            'fin-surge-ds.txt': '# literal rules: 0\n',
                             'fin-adb.txt': '[Adblock Plus 2.0]\n! Title: literal\n'
                                 '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
                                 '! License: Inherits upstream licenses\n! Version: 202610061200\n' +
                                 f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
                                 ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''),
                         }
-                        expected_skips = {'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
+                        expected_skips = {'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1,
+                                          'fin-adb.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
                         if purpose != 'block' or '/' in value:
                             expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
-                        if purpose != 'block':
-                            expected_skips['fin-adb.txt:DOMAIN'] = 1
                         self.assertEqual(out, expected)
                         self.assertEqual(skipped, expected_skips)
                         self.assertEqual(parse(out['fin.yaml'], purpose=purpose), (native, []))
@@ -338,9 +356,9 @@ class NativeKeywordFormatTests(unittest.TestCase):
                               Rule('DOMAIN-KEYWORD', value, domain_source='qx')]
                         self.assertEqual(parse(out['fin-qx.txt'], purpose=purpose), (qx, []))
                         self.assertEqual(parse_whitelist(out['fin-qx.txt']), qx)
-                        ordinary = [Rule('DOMAIN', 'keep.example.com'), Rule('DOMAIN-KEYWORD', value)]
+                        ordinary = [Rule('DOMAIN-KEYWORD', value)]
                         self.assertEqual(parse(out['fin.txt'], purpose=purpose), (ordinary, []))
-                        self.assertEqual(parse(out['fin-surge.txt'], purpose=purpose), ([ordinary[1]], []))
+                        self.assertEqual(parse(out['fin-surge.txt'], purpose=purpose), (ordinary, []))
 
     def test_keyword_markers_keep_six_texts_native_logic_and_complete_qx_reimport(self):
         from rules import parse, parse_whitelist
@@ -366,17 +384,22 @@ class NativeKeywordFormatTests(unittest.TestCase):
                                   Rule('SRC-IP-CIDR', '198.51.100.0/24')]
                         expected = {}
                         for name, text in native_keyword_expected('keyword', purpose, mode).items():
-                            replacement = re.escape(value) if name == 'fin-adb.txt' else value
                             if name in ('fin.txt', 'fin-surge.txt'):
                                 text = text.replace('DOMAIN-KEYWORD,中文', "DOMAIN-KEYWORD,'" + value + "'")
-                            else:
-                                text = text.replace('中文', replacement)
+                            elif name != 'fin-adb.txt':
+                                text = text.replace('中文', value)
                             expected[name] = text
                         expected_skips = native_keyword_skips(purpose)
-                        if purpose == 'block' and '/' in value:
-                            expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
-                                '/(?s-i:\\A.*' + re.escape(value) + '.*\\z)/\n', '').replace('! Total count: 2\n', '! Total count: 1\n')
-                            expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                        if purpose == 'block':
+                            tail = {'中文 #1': r'\\\ \#1', '中文 ;1': r'\\\ \\;1'}.get(value)
+                            if tail is None:
+                                expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                                    '! Total count: 1\n' + DNS_CHINESE_KEYWORD + '\n', '! Total count: 0\n')
+                                expected_skips['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                            else:
+                                expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                                    DNS_CHINESE_KEYWORD, r'/(?s-i:\A' + DNS_BYTE_TOKEN +
+                                    r'*\\228\\184\\173\\230\\150\\135' + tail + DNS_BYTE_TOKEN + r'*\z)/')
                         self.assertEqual(outputs, expected)
                         self.assertEqual(skipped, expected_skips)
                         self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), (native, []))
@@ -387,7 +410,7 @@ class NativeKeywordFormatTests(unittest.TestCase):
                                          [qx[0], qx[1], Rule('IP-CIDR', '203.0.113.0/24')])
                         quoted = "'" + value + "'"
                         ordinary = [Rule('AND', conjunction.replace(value, quoted).replace('SRC-IP-CIDR,', 'SRC-IP,')),
-                                    Rule('DOMAIN', 'keep.example.com'), Rule('DOMAIN-KEYWORD', value),
+                                    Rule('DOMAIN-KEYWORD', value),
                                     Rule('NOT', '((DOMAIN-KEYWORD,' + quoted + '))'),
                                     Rule('OR', '((DOMAIN-KEYWORD,' + quoted + '),(PROTOCOL,UDP))'),
                                     native[-2], native[-1]]
@@ -406,8 +429,13 @@ class NativeKeywordFormatTests(unittest.TestCase):
                     with self.subTest(value=value, purpose=purpose, mode=mode), patch('formats.datetime') as clock:
                         clock.now.return_value = datetime(2026, 10, 6, 12, tzinfo=timezone.utc)
                         outputs, skipped = render_configured('keyword', parsed, purpose=purpose, no_resolve=mode)
-                        expected = {name: text.replace('中文', re.escape(value) if name == 'fin-adb.txt' else value)
+                        expected = {name: text if name == 'fin-adb.txt' else text.replace('中文', value)
                                     for name, text in native_keyword_expected('keyword', purpose, mode).items()}
+                        literal = {'中文': r'\\228\\184\\173\\230\\150\\135',
+                                   '中文123': r'\\228\\184\\173\\230\\150\\135123',
+                                   '123#1': r'123\#1', '123': '123'}[value]
+                        expected['fin-adb.txt'] = expected['fin-adb.txt'].replace(
+                            DNS_CHINESE_KEYWORD, r'/(?s-i:\A' + DNS_BYTE_TOKEN + '*' + literal + DNS_BYTE_TOKEN + r'*\z)/')
                         self.assertEqual(outputs, expected)
                         self.assertEqual(skipped, native_keyword_skips(purpose))
                         flag = ',no-resolve' if mode != 'strip' else ''
@@ -421,7 +449,7 @@ class NativeKeywordFormatTests(unittest.TestCase):
                                   Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',) if flag else ()),
                                   Rule('SRC-IP-CIDR', '198.51.100.0/24')]
                         self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), (native, []))
-                        ordinary = [Rule('AND', conjunction.replace('SRC-IP-CIDR,', 'SRC-IP,')), Rule('DOMAIN', 'keep.example.com'),
+                        ordinary = [Rule('AND', conjunction.replace('SRC-IP-CIDR,', 'SRC-IP,')),
                                     Rule('DOMAIN-KEYWORD', value), Rule('NOT', '((DOMAIN-KEYWORD,' + value + '))'),
                                     Rule('OR', '((DOMAIN-KEYWORD,' + value + '),(PROTOCOL,UDP))'),
                                     native[-2], native[-1]]
@@ -461,7 +489,7 @@ class NativeKeywordFormatTests(unittest.TestCase):
                 expected['fin-adb.txt'] = (
                     '[Adblock Plus 2.0]\n! Title: keyword\n! Homepage: https://github.com/DoingDog/rconvert\n'
                     '! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n' +
-                    ('! Total count: 1\n@@/(?s-i:\\A.*中文.*\\z)/\n' if purpose == 'block' else
+                    ('! Total count: 1\n@@' + DNS_CHINESE_KEYWORD + '\n' if purpose == 'block' else
                      '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
                 self.assertEqual(allowed, expected)
                 self.assertEqual(whitelisted, expected)
@@ -512,7 +540,7 @@ def constructor_expected(group, purpose, mode):
     surge = ["DOMAIN,neighbor.example.com", "IN-PORT,0-65535", negative, "SRC-PORT,0-80", *geo, *asn, cidr]
     qx = ["HOST,neighbor.example.com,LIST", *[line.replace(",no-resolve", "") + ",LIST" +
           (",no-resolve" if line.endswith(",no-resolve") else "") for line in geo + asn + [cidr]]]
-    yaml = ["AND,((IN-TYPE,HTTP / SOCKS),(DSCP,0-63))", "DOMAIN,neighbor.example.com", "DSCP,0-63",
+    yaml = ["AND,((IN-TYPE,HTTP / SOCKS),(DSCP,0-63))", expected_domain("DOMAIN", "neighbor.example.com"), "DSCP,0-63",
             "GEOSITE,geolocation-!cn", "IN-NAME,<Foo>/A", "IN-PORT,0-65535", "IN-TYPE,HTTP / SOCKS",
             "IN-USER,alice bob / <Alice>", negative, "PROCESS-NAME,<Foo>", "PROCESS-NAME-WILDCARD,*<Foo>*",
             "PROCESS-PATH,/tmp/<Foo>", "PROCESS-PATH-WILDCARD,/tmp/*<Foo>*", "REMATCH-NAME,<Foo>/B",
@@ -654,7 +682,8 @@ class DnsExactHostsFormatTests(unittest.TestCase):
                     header = f"# exact rules: {count}\n"
                     self.assertEqual(out["fin.txt"], header + "".join(f"DOMAIN,{value}\n" for value in ordered))
                     self.assertEqual(out["fin-qx.txt"], header + "".join(f"HOST,{value},LIST\n" for value in ordered))
-                    self.assertEqual(out["fin.yaml"], header + "payload:\n" + "".join(f'  - "DOMAIN,{value}"\n' for value in ordered))
+                    yaml = sorted(("  - " + json.dumps(expected_domain("DOMAIN", value)) for value in ordered), key=lambda line: (len(line), line))
+                    self.assertEqual(out["fin.yaml"], header + "payload:\n" + "".join(line + "\n" for line in yaml))
                     self.assertEqual(out["fin-surge-ds.txt"], header + "".join(value + "\n" for value in ordered))
                     self.assertEqual(out["fin-surge.txt"], "# exact rules: 0\n")
                     dns = out["fin-adb.txt"].splitlines()
@@ -684,10 +713,12 @@ class DnsExactHostsFormatTests(unittest.TestCase):
                             whitelist.append(Rule("DOMAIN", value))
                         out, skipped = render_configured("exact", selected, purpose="block", no_resolve=mode,
                                                          whitelist=whitelist)
+                        # ads.example.org/ads.example.org. 的 source 决定不同，DNS 缺 root 证书。
                         expected = [f"@@|{value}|", f"0.0.0.0 {value}", "||broad.example.org^", "/^.*track.*$/",
-                                    r"/^api\-.*\.example\.org$/", "/^ads[.]example[.]org$/"]
+                                    r"/^api\-.*\.example\.org$/"]
                         self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                         ["! Total count: 6"] + sorted(expected, key=lambda line: (not line.startswith("@@"), len(line), line)))
+                                         ["! Total count: 5"] + sorted(expected, key=lambda line: (not line.startswith("@@"), len(line), line)))
+                        self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 1)
                         self.assertNotIn("fin-adb.txt:DOMAIN", skipped)
                         self.assertEqual(skipped.get("fin-surge-ds.txt:DOMAIN-REGEX"), 1)
                         if allow:
@@ -842,6 +873,7 @@ class ProcessRendererCompletionTests(unittest.TestCase):
 import json, sys, time
 from rules import parse, normalize
 from formats import render
+from tests.test_formats import expected_domain
 limit = sys.getrecursionlimit()
 for depth in (600, 1000):
     for long in (False, True):
@@ -863,6 +895,8 @@ for depth in (600, 1000):
                     if flag:
                         expected = expected.replace('IP-CIDR,203.0.113.0/24)', 'IP-CIDR,203.0.113.0/24,no-resolve)')
 
+                    if not native and not long:
+                        expected = expected.replace('DOMAIN,x.example.com', expected_domain('DOMAIN', 'x.example.com'))
                     actual = json.loads(out['fin.yaml'].splitlines()[2][4:])
                     assert actual == expected and actual.count('no-resolve') == int(flag)
                     for target in ('fin.txt', 'fin-surge.txt'):
@@ -1013,9 +1047,11 @@ class ProcessRendererReviewFixTests(unittest.TestCase):
                           matcher + ",PROXY\nDOMAIN,keep.example.com,PROXY")
                 with self.subTest(native=native, depth=depth):
                     out, skipped = self.outputs(source)
-                    self.assertEqual(set(self.yaml_body(out)), {matcher, "DOMAIN,keep.example.com"})
-                    allowed = depth <= 10
-                    self.assertEqual(set(out["fin.txt"].splitlines()[1:]), {"DOMAIN,keep.example.com"} | ({matcher} if allowed else set()))
+                    expected_matcher = matcher if native else matcher.replace("DOMAIN,deep.example.com", expected_domain("DOMAIN", "deep.example.com"))
+                    expected_neighbor = "DOMAIN,keep.example.com" if native else expected_domain("DOMAIN", "keep.example.com")
+                    self.assertEqual(set(self.yaml_body(out)), {expected_matcher, expected_neighbor})
+                    allowed = depth <= 10 and not native
+                    self.assertEqual(set(out["fin.txt"].splitlines()[1:]), (set() if native else {"DOMAIN,keep.example.com"}) | ({matcher} if allowed else set()))
                     self.assertEqual(out["fin-surge.txt"], f"# group rules: {int(allowed)}\n" + (matcher + "\n" if allowed else ""))
                     for name in ("fin.txt", "fin-surge.txt"):
                         self.assertEqual(skipped.get(f"{name}:NOT", 0), int(not allowed))
@@ -1173,34 +1209,32 @@ class NativeDnsByteFormatTests(unittest.TestCase):
             parsed, messages = parse(source, purpose='block')
             self.assertEqual(messages, [])
             self.assertEqual(parsed[0].value, pattern)
+            # 保留原 byte 见证；此处只验完整 native 输入的目标局部拒绝。
             white = parse_whitelist(source)
             for caller in ('block', 'allow', 'whitelist'):
-                with self.subTest(pattern=pattern, caller=caller):
+                with self.subTest(pattern=pattern, positive=positive, negative=negative, caller=caller):
                     out, skipped = render_configured('bytes', normalize(parsed) if caller == 'block' else
                         [replace(parsed[0], allow=True)] if caller == 'allow' else [],
                         purpose='block', no_resolve='keep', whitelist=white if caller == 'whitelist' else ())
                     body = out['fin-adb.txt'].splitlines()[7:]
-                    self.assertEqual(len(body), 1)
-                    self.assertEqual(body[0].startswith('@@'), caller != 'block')
-                    matcher = dns_regex(body[0])
-                    for host in positive:
-                        self.assertIsNotNone(matcher.fullmatch(host), host)
-                    for host in (*negative, positive[0].upper()):
-                        self.assertIsNone(matcher.fullmatch(host), host)
-                    self.assertNotIn('fin-adb.txt:DOMAIN-WILDCARD', skipped)
+                    self.assertEqual(body, [])
+                    self.assertEqual(skipped['fin-adb.txt:DOMAIN-WILDCARD'], 1)
+                    if caller == 'block':
+                        self.assertIn('DOMAIN-WILDCARD,' + pattern,
+                                      [json.loads(row[4:]) for row in out['fin.yaml'].splitlines()[2:]])
             if pattern == 'api-?.example.org':
                 hosts, warnings = parse('payload:\n  - DOMAIN,api-a.example.org\n  - DOMAIN,api-ı.example.org', purpose='block')
                 self.assertEqual(warnings, [])
                 kept = normalize(exclude_covered(hosts, white))
                 self.assertEqual([rule.value for rule in kept], ['api-ı.example.org'])
                 out, _ = render_configured('bytes', kept, purpose='block', no_resolve='keep', whitelist=white)
-                self.assertIn('0.0.0.0 api-ı.example.org', out['fin-adb.txt'].splitlines()[7:])
+                self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
                 for source_text in ('DOMAIN-WILDCARD,' + pattern, 'HOST-WILDCARD,' + pattern):
                     ordinary, warnings = parse(source_text, purpose='block')
                     self.assertEqual(warnings, [])
                     outputs, _ = render_configured('bytes', normalize(ordinary), purpose='block', no_resolve='keep')
                     self.assertIsNotNone(dns_regex(outputs['fin-adb.txt'].splitlines()[7]).fullmatch('api-ı.example.org'))
-                    self.assertNotEqual(outputs['fin-adb.txt'].splitlines()[7], body[0].removeprefix('@@'))
+                    self.assertEqual(len(outputs['fin-adb.txt'].splitlines()[7:]), 1)
 
     def test_native_keyword_constructor_and_strict_flags_share_three_callers(self):
         from dataclasses import replace
@@ -1218,13 +1252,18 @@ class NativeDnsByteFormatTests(unittest.TestCase):
                     out, skipped = render_configured('keyword', normalize(parsed) if caller == 'block' else
                         [replace(parsed[0], allow=True)] if caller == 'allow' else [], purpose='block',
                         no_resolve='keep', whitelist=parse_whitelist(source) if caller == 'whitelist' else ())
-                    line = out['fin-adb.txt'].splitlines()[7]
-                    matcher = dns_regex(line)
-                    self.assertIsNotNone(matcher.fullmatch(positive))
-                    self.assertIsNone(matcher.fullmatch(negative))
-                    self.assertIsNone(matcher.fullmatch(positive.upper()))
-                    self.assertNotIn('fin-adb.txt:DOMAIN-KEYWORD', skipped)
-                    self.assertEqual(line.startswith('@@'), caller != 'block')
+                    rows = out['fin-adb.txt'].splitlines()[7:]
+                    if value != 'ſ':
+                        self.assertEqual(rows, [])
+                        self.assertEqual(skipped['fin-adb.txt:DOMAIN-KEYWORD'], 1)
+                    else:
+                        expected = ('@@' if caller != 'block' else '') + r'/(?s-i:\A' + DNS_BYTE_TOKEN + r'*\\197\\191' + DNS_BYTE_TOKEN + r'*\z)/'
+                        self.assertEqual(rows, [expected])
+                        matcher = dns_regex(expected)
+                        self.assertIsNotNone(matcher.fullmatch(r'cdn.\197\191.example.org'))
+                        self.assertIsNone(matcher.fullmatch(negative))
+                        self.assertIsNone(matcher.fullmatch(positive.upper()))
+                        self.assertNotIn('fin-adb.txt:DOMAIN-KEYWORD', skipped)
 
 
 class DomainProvenanceFormatTests(unittest.TestCase):
@@ -1246,6 +1285,67 @@ class DomainProvenanceFormatTests(unittest.TestCase):
             count_line = lines[6] if name == "fin-adb.txt" else lines[0]
             self.assertEqual(count_line, f"! Total count: {len(lines[header:])}" if name == "fin-adb.txt"
                              else f"# group rules: {len(lines[header:])}", name)
+
+    def test_surge_wildcard_cannot_use_host_root_dot_as_required_body(self):
+        cases = (('*.*', r'^.*\..*(?<!\.)\.?$', 'localhost.', 'a.b.'),
+                 ('*.123.*', r'^.*\.123\..*(?<!\.)\.?$', 'cdn.123.', 'cdn.123.x.'),
+                 ('*.123?', r'^.*\.123.(?<!\.)\.?$', 'cdn.123.', 'cdn.123x.'),
+                 ('*.com.*', r'^.*\.com\..*(?<!\.)\.?$', 'example.com.', 'example.com.x.'))
+        for pattern, expected, negative, positive in cases:
+            with self.subTest(pattern=pattern):
+                out, skipped = self.outputs('DOMAIN-WILDCARD,' + pattern + ',REJECT')
+                kind, _, regex = json.loads(out['fin.yaml'].splitlines()[2][4:]).partition(',')
+                self.assertEqual((kind, regex), ('DOMAIN-REGEX', expected))
+                # Python re 仅核查这些已核实语法的 ASCII 见证。
+                for host in (negative, negative.removesuffix('.'), negative.upper()):
+                    self.assertIsNone(re.search(regex, host, re.I), host)
+                for host in (positive, positive.removesuffix('.'), positive.upper()):
+                    self.assertIsNotNone(re.search(regex, host, re.I), host)
+                self.assertEqual(out['fin.txt'], '# group rules: 1\nDOMAIN-WILDCARD,' + pattern + '\n')
+                self.assertEqual(out['fin-surge.txt'], out['fin.txt'])
+                self.assertEqual(out['fin-qx.txt'], '# group rules: 1\nHOST-WILDCARD,' + pattern + ',LIST\n')
+                self.assertEqual(skipped, {'fin-surge-ds.txt:DOMAIN-WILDCARD': 1})
+                self.assert_counts(out)
+
+    def test_root_dot_body_fix_preserves_supported_terminal_class_scope(self):
+        cases = (('*.[12]', r'^.*\.[12]\.?$', 'cdn.1.'),
+                 ('*.[12]*', r'^.*\.[12].*\.?$', 'cdn.1.'),
+                 ('*.[-0]', r'^.*\.[-0]\.?$', 'cdn.0.'),
+                 ('*.[a-z]', r'^.*\.[a-z]\.?$', 'cdn.a.'),
+                 ('*.[0-z]', r'^.*\.[0-z]\.?$', 'cdn.a.'))
+        for pattern, regex, positive in cases:
+            with self.subTest(pattern=pattern):
+                out, skipped = self.outputs('DOMAIN-WILDCARD,' + pattern)
+                self.assertEqual(json.loads(out['fin.yaml'].splitlines()[2][4:]), 'DOMAIN-REGEX,' + regex)
+                self.assertIsNone(re.search(regex, 'cdn.', re.I))
+                self.assertIsNotNone(re.search(regex, positive, re.I))
+                self.assertIsNotNone(re.search(regex, positive.removesuffix('.'), re.I))
+                self.assertEqual(out['fin-adb.txt'].splitlines()[7:], ['/' + regex.removesuffix(r'\.?$') + '$/'])
+                self.assertEqual(skipped, {name + ':DOMAIN-WILDCARD': 1 for name in
+                                          ('fin-qx.txt', 'fin-surge-ds.txt')})
+                self.assert_counts(out)
+
+    def test_root_dot_body_fix_preserves_native_qx_and_dns_wildcards(self):
+        cases = (('*.*', r'/^.*\..*$/'),
+                 ('*.123.*', r'/^.*\.123\..*$/'),
+                 ('*.123?', r'/^.*\.123.$/'),
+                 ('*.com.*', r'/^.*\.com\..*$/'))
+        for pattern, dns in cases:
+            with self.subTest(pattern=pattern):
+                surge, _ = self.outputs('DOMAIN-WILDCARD,' + pattern)
+                self.assertEqual(surge['fin-adb.txt'].splitlines()[7:], [dns])
+                matcher = 'DOMAIN-WILDCARD,' + pattern
+                native, skipped = self.outputs('payload:\n  - ' + json.dumps(matcher))
+                self.assertEqual(native['fin.yaml'], '# group rules: 1\npayload:\n  - ' + json.dumps(matcher) + '\n')
+                self.assertEqual(native['fin-adb.txt'].splitlines()[7:], [])
+                self.assertEqual(skipped, {name + ':DOMAIN-WILDCARD': 1 for name in
+                                          ('fin.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
+                qx, skipped = self.outputs('HOST-WILDCARD,' + pattern + ',REJECT')
+                self.assertEqual(qx['fin.yaml'], native['fin.yaml'])
+                self.assertEqual(qx['fin-adb.txt'].splitlines()[7:], [dns])
+                self.assertEqual(skipped, {'fin-surge-ds.txt:DOMAIN-WILDCARD': 1})
+                self.assert_counts(native)
+                self.assert_counts(qx)
 
     def test_native_brackets_stay_literal_and_surge_class_matches_only_digits(self):
         value = "api-[0-9].example.com"
@@ -1290,7 +1390,7 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                     self.assertEqual([json.loads(line[4:]) for line in native["fin.yaml"].splitlines()[2:]],
                                      [f"{kind},{value}"])
                     self.assertEqual(native_skipped, {f"{name}:{kind}": 1 for name in
-                                                      ("fin.txt", "fin-surge.txt", "fin-surge-ds.txt")})
+                                                      ("fin.txt", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")})
                     self.assert_counts(native)
 
     def test_dns_native_literal_class_skips_block_allow_and_whitelist(self):
@@ -1313,11 +1413,14 @@ class DomainProvenanceFormatTests(unittest.TestCase):
                        "payload:\n  - DOMAIN-WILDCARD,api-*.example.com",
                        "payload:\n  - DOMAIN-KEYWORD,ads"):
             out, skipped = self.outputs(source)
-            expression = dns_regex(out["fin-adb.txt"].splitlines()[7])
-            self.assertIsNotNone(expression.search("API-7.EXAMPLE.COM".lower()) if "ads" not in source
-                                 else expression.search("CDN.ADS.EXAMPLE.COM".lower()))
-            self.assertIsNone(expression.search("outside.example.org"))
-            self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
+            if source.startswith('payload:'):
+                self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
+                self.assertEqual(skipped['fin-adb.txt:' + ('DOMAIN-KEYWORD' if 'KEYWORD' in source else 'DOMAIN-WILDCARD')], 1)
+            else:
+                expression = dns_regex(out["fin-adb.txt"].splitlines()[7])
+                self.assertIsNotNone(expression.search("API-7.EXAMPLE.COM".lower()))
+                self.assertIsNone(expression.search("outside.example.org"))
+                self.assertNotIn("fin-adb.txt:DOMAIN-WILDCARD", skipped)
 
     def test_logical_domain_provenance_skips_whole_target_with_flags_intact(self):
         for operator in ("AND", "OR", "NOT"):
@@ -1353,9 +1456,14 @@ class DomainProvenanceFormatTests(unittest.TestCase):
             with self.subTest(mode=mode):
                 out, skipped = render_configured("group", [Rule("DOMAIN", "keep.example.org")],
                                                  purpose="block", no_resolve=mode, whitelist=whitelist)
-                self.assertEqual(set(out["fin-adb.txt"].splitlines()[7:]),
-                                 {"0.0.0.0 keep.example.org", "@@/ad/", r"@@/^api\-.*\.example\.com\.?$/",
-                                  r"@@/^api\-[0-9]\.example\.com\.?$/"})
+                rows = out["fin-adb.txt"].splitlines()[7:]
+                self.assertIn('0.0.0.0 keep.example.org', rows)
+                exceptions = [dns_regex(row) for row in rows if row.startswith('@@')]
+                self.assertEqual(len(exceptions), 3)
+                for host in ('ad.example.org', 'api-xyz.example.com', 'api-7.example.com'):
+                    self.assertTrue(any(matcher.search(host) for matcher in exceptions), host)
+                for host in ('keep.example.org', r'\097\100.example.org'):
+                    self.assertFalse(any(matcher.search(host) for matcher in exceptions), host)
                 self.assertEqual(skipped, {"fin-adb.txt:DOMAIN-REGEX": 2})
                 self.assert_counts(out)
                 for name in ("fin.txt", "fin-surge.txt", "fin.yaml", "fin-qx.txt", "fin-surge-ds.txt"):
@@ -1571,7 +1679,7 @@ class BoundedRegexTailFormatTests(unittest.TestCase):
         neighbor = Rule('DOMAIN', 'keep.example.com', domain_source=neighbor_source)
         payload = 'DOMAIN,keep.example.com' if neighbor_source == 'mihomo' else expected_domain('DOMAIN', 'keep.example.com')
         ordered = sorted([*cases, (neighbor, payload)], key=lambda pair: (pair[1].partition(',')[0], len(json.dumps(pair[1])), pair[1]))
-        out = native_arity_products(group, ['DOMAIN,keep.example.com'], purpose)
+        out = native_arity_products(group, [payload], purpose, native=neighbor_source == 'mihomo')
         out['fin.yaml'] = f'# {group} rules: {len(ordered)}\npayload:\n' + ''.join(
             '  - ' + json.dumps(payload) + '\n'
             for rule, payload in ordered)
@@ -1610,7 +1718,7 @@ class BoundedRegexTailFormatTests(unittest.TestCase):
                             self.assertEqual(warnings, [])
                             self.assertEqual(set(restored),
                                              {Rule(operator, projected, native_fields=True),
-                                              Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')})
+                                              Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2])})
 
     def test_ip_siblings_transform_without_changing_the_literal_process_tail(self):
         from rules import parse
@@ -1641,7 +1749,7 @@ class BoundedRegexTailFormatTests(unittest.TestCase):
                             self.assertEqual(skipped, omissions)
                             self.assertEqual(set(parse(out['fin.yaml'], purpose=purpose)[0]),
                                              {Rule(operator, wanted, native_fields=True),
-                                              Rule('DOMAIN', 'keep.example.com', domain_source='mihomo')})
+                                              Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'keep.example.com').partition(',')[2])})
 
 
     def test_equal_logical_payloads_use_one_native_rule(self):
@@ -1762,8 +1870,7 @@ class RegexValidatorFormatTests(unittest.TestCase):
                                              ([parsed[1], parsed[0]], []) if valid and not logical else (parsed, []))
                             expected_skips = {name + ':' + ('AND' if logical else kind): 1 for name in
                                               ('fin.txt', 'fin-qx.txt', 'fin-adb.txt', 'fin-surge.txt', 'fin-surge-ds.txt')} if valid else {}
-                            if purpose != 'block':
-                                expected_skips['fin-adb.txt:DOMAIN'] = 1
+                            expected_skips.update({'fin.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1})
                             self.assertEqual(skipped, expected_skips)
                             self.assertEqual(len(messages), int(not valid))
 
@@ -1815,7 +1922,15 @@ class DnsDeepRegexFormatTests(unittest.TestCase):
         from rules import exclude_covered, normalize, parse, parse_whitelist
 
         value = '^' + prefix * depth + atom + suffix * depth + '$'
-        dns_value = '^' + dns_prefix * depth + atom + suffix * depth + '$'
+        # 原 strict End 输入缺 root 证书；audit.* 的无上界尾集合独立保留。
+        dns_supported = dns_supported and atom == 'audit.*' and prefix == '('
+        dns_value = None
+        if dns_supported:
+            safe, safe_skips = render_configured('deep', [Rule('DOMAIN-REGEX', '^audit.*$')],
+                                                purpose='block', no_resolve='keep')
+            self.assertNotIn('fin-adb.txt:DOMAIN-REGEX', safe_skips)
+            dns_value = safe['fin-adb.txt'].splitlines()[7][1:-1]
+            self.assertIsNotNone(dns_regex('/' + dns_value + '/').search('audit.example.test'))
         rule = Rule('DOMAIN-REGEX', value)
         if parse_source:
             for source in ('payload:\n  - DOMAIN-REGEX,' + value,
@@ -1849,6 +1964,12 @@ class DnsDeepRegexFormatTests(unittest.TestCase):
                         self.assertEqual(tuple(out), ('fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-adb.txt',
                                                       'fin-surge.txt', 'fin-surge-ds.txt'))
                         self.assertEqual(out, expected)
+                        if dns:
+                            matcher = dns_regex(out['fin-adb.txt'].splitlines()[7])
+                            for host in ('audit.example.test', 'audit', r'aud\196\176t.example.test'):
+                                self.assertIsNotNone(matcher.search(host), host)
+                            for host in ('x.audit.example.test', 'aud.example.test', r'aud\196\177t.example.test'):
+                                self.assertIsNone(matcher.search(host), host)
                         expected_skips = {name + ':DOMAIN-REGEX': 1 for name in
                                           ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')} if caller != 'whitelist' else {}
                         if caller == 'allow':
@@ -1923,7 +2044,7 @@ class FormatTests(unittest.TestCase):
         self.assertIn("HOST,api-v2.example.org,LIST\n", out["fin-qx.txt"])
         self.assertIn(r"DOMAIN-REGEX,^api\-.*\.example\.org\.?$",
                       [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
-        self.assertIn('  - "DOMAIN,api-v2.example.org"\n', out["fin.yaml"])
+        self.assertIn(('  - "' + expected_domain('DOMAIN', 'api-v2.example.org').replace(chr(92), chr(92) * 2) + '"\n'), out["fin.yaml"])
 
     def test_surge_character_class_wildcard_is_converted_for_mihomo_but_not_qx(self):
         out, skipped = render("a3", [Rule("DOMAIN-WILDCARD", "api-[0-9].example.com")])
@@ -1961,68 +2082,50 @@ class FormatTests(unittest.TestCase):
         value = r"^api[0-9]\.example\.com$"
         out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                      Rule("DOMAIN-REGEX", value, allow=True)])
-        self.assertEqual(out["fin-adb.txt"].splitlines()[7:],
-                         [f"@@/{value}/", f"/{value}/"])
-        self.assertEqual(json.loads(out["fin.yaml"].splitlines()[2][4:]),
-                         f"DOMAIN-REGEX,{value}")
-        self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+        self.assertEqual(out["fin-adb.txt"].splitlines()[7:], [])
+        self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
         expression = re.compile(value)
         self.assertIsNotNone(expression.fullmatch("api7.example.com"))
         self.assertIsNone(expression.fullmatch("apia.example.com"))
 
     def test_go_portable_domain_regex_emits_literal_dns_block_and_allow(self):
         cases = (
-            (r"^ads\.example\.com\z", r"/^ads\.example\.com\z/", r"@@/^ads\.example\.com\z/"),
-            (r"^api\d\.example\.com$", r"/^api\p{Nd}\.example\.com$/", r"@@/^api\p{Nd}\.example\.com$/"),
-            (r"^(?:ads|track)\.example\.com$", r"/^(?:ads|track)\.example\.com$/", r"@@/^(?:ads|track)\.example\.com$/"),
-            (r"^(?<name>ads)\.example\.com$", r"/^(?<name>ads)\.example\.com$/", r"@@/^(?<name>ads)\.example\.com$/"),
+            r"^ads\.example\.com\z",
+            r"^api\d\.example\.com$",
+            r"^(?:ads|track)\.example\.com$",
+            r"^(?<name>ads)\.example\.com$",
         )
-        for value, block, allow in cases:
+        for value in cases:
             with self.subTest(value=value):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                 ["! Total count: 2", allow, block])
-                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+                                 ["! Total count: 0"])
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_adguard_portable_capture_flags_and_property_emit_block_and_allow(self):
-        cases = (
-            (r"^(?<n>ad)(?<n>s)\.example\.com$",
-             r"/^(?<n>ad)(?<n>s)\.example\.com$/",
-             r"@@/^(?<n>ad)(?<n>s)\.example\.com$/"),
-            (r"^(?i:ads)\.example\.com$",
-             r"/^(?i:ads)\.example\.com$/",
-             r"@@/^(?i:ads)\.example\.com$/"),
-            (r"^\p{L}+\.example\.com$",
-             r"/^\p{L}+\.example\.com$/",
-             r"@@/^\p{L}+\.example\.com$/"),
-        )
-        for value, block, allow in cases:
+        cases = (r"^(?<n>ad)(?<n>s)\.example\.com$", r"^(?i:ads)\.example\.com$", r"^\p{L}+\.example\.com$")
+        for value in cases:
             with self.subTest(value=value):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                 ["! Total count: 2", allow, block])
-                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+                                 ["! Total count: 0"])
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_regexp2_zero_padded_repetition_keeps_its_count_in_dns(self):
-        cases = (
-            (r"^a{01}\.example\.com$", r"/^a{1}\.example\.com$/",
-             r"@@/^a{1}\.example\.com$/"),
-            (r"^a{00,01}\.example\.com$", r"/^a{0,1}\.example\.com$/",
-             r"@@/^a{0,1}\.example\.com$/"),
-            (r"^a{0001,}\.example\.com$", r"/^a{1,}\.example\.com$/",
-             r"@@/^a{1,}\.example\.com$/"),
-        )
-        for value, block, allow in cases:
+        cases = (r"^a{01}\.example\.com$", r"^a{00,01}\.example\.com$", r"^a{0001,}\.example\.com$")
+        for value in cases:
             with self.subTest(value=value):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                                 ["! Total count: 2", allow, block])
-                self.assertIn(f"DOMAIN-REGEX,{value}",
-                              [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
-                self.assertNotIn("fin-adb.txt:DOMAIN-REGEX", skipped)
+                                 ["! Total count: 0"])
+                self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+                self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
+                self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_go_invalid_property_range_stays_out_of_dns(self):
         value = r"^[a-\p{L}]+\.example\.com$"
@@ -2030,12 +2133,12 @@ class FormatTests(unittest.TestCase):
                                      Rule("DOMAIN-REGEX", value, allow=True)])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
-        self.assertIn(f"DOMAIN-REGEX,{value}",
-                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+        self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
 
     def test_go_valid_property_class_followed_by_literal_hyphen_emits_dns(self):
         value = r"^[\p{L}-a]+\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def _assert_domain_regex_dns(self, value, dns_value):
         from rules import parse
@@ -2047,9 +2150,10 @@ class FormatTests(unittest.TestCase):
         expected_dns = (["! Total count: 0"] if dns_value is None else
                         ["! Total count: 2", f"@@/{dns_value}/", f"/{dns_value}/"])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], expected_dns)
-        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - ' +
-                         json.dumps(f"DOMAIN-REGEX,{value}", ensure_ascii=False) + "\n")
-        expected_skipped = {"fin.yaml:DOMAIN-REGEX": 1}
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 0\npayload:\n')
+        expected_skipped = {"fin.yaml:DOMAIN-REGEX": 1,
+                            "fin.yaml:DOMAIN-REGEX:whitelist-covered": 1,
+                            "whitelist-covered:DOMAIN-REGEX": 1}
         for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt", "fin-surge-ds.txt"):
             self.assertEqual(out[name], "# a3 rules: 0\n")
             expected_skipped[f"{name}:DOMAIN-REGEX"] = 2
@@ -2076,26 +2180,26 @@ class FormatTests(unittest.TestCase):
         self._assert_domain_regex_dns(r"^[a-z-[aeiou]]+\.example\.com$", None)
 
     def test_unicode_decimal_digit_atom_is_translated_for_dns(self):
-        self._assert_domain_regex_dns(r"^\d+\.example\.com$", r"^\p{Nd}+\.example\.com$")
+        self._assert_domain_regex_dns(r"^\d+\.example\.com$", None)
 
     def test_unicode_decimal_digit_class_combination_stays_out_of_dns(self):
         self._assert_domain_regex_dns(r"^[a\d]+\.example\.com$", None)
 
     def test_literal_backslash_digit_is_not_translated_for_dns(self):
         value = r"^\\d\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_character_class_literal_braces_are_not_rewritten_as_quantifiers(self):
         value = r"^[a{01}]+\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_absolute_anchors_are_preserved_for_dns(self):
         value = r"\Aads\.example\.com\z"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_braced_hex_atom_is_preserved_for_dns(self):
         value = r"^\x{61}ds\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unproved_nonascii_hex_casefold_stays_out_of_dns(self):
         self._assert_domain_regex_dns(r"^\x{130}\.example\.com$", None)
@@ -2103,11 +2207,11 @@ class FormatTests(unittest.TestCase):
     def test_nested_counted_repetition_respects_go_combined_limit(self):
         self._assert_domain_regex_dns(r"^(?:\w{500}){3}\.example\.com$", None)
         self._assert_domain_regex_dns(r"^(?:\w{500}){2}\.example\.com$",
-                                      r"^(?:[\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]{500}){2}\.example\.com$")
+                                      None)
         value = r"^(?:a{500}){0,1}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
         value = r"^(?:(?:a{500}){0}){3}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_zero_minimum_unbounded_repeat_preserves_inner_go_budget(self):
         for atom in (r"\d{500}", "a{500}", "a{0500}"):
@@ -2122,48 +2226,42 @@ class FormatTests(unittest.TestCase):
                 self._assert_domain_regex_dns(value, None)
 
     def test_zero_minimum_repeat_keeps_valid_go_boundaries(self):
-        for repeat, normalized in (("{0,}", "{0,}"), ("{00,}", "{0,}"),
-                                   ("*", "*"), ("+", "+"), ("?", "?"),
-                                   ("{1,}", "{1,}"), ("{0001,}", "{1,}"),
-                                   ("{0,1}", "{0,1}"), ("{00,01}", "{0,1}")):
+        for repeat in ("{0,}", "{00,}", "*", "+", "?", "{1,}", "{0001,}", "{0,1}", "{00,01}"):
             value = rf"^(?:(?:a{{500}}|b){repeat}){{2}}\.example\.com$"
-            dns_value = rf"^(?:(?:a{{500}}|b){normalized}){{2}}\.example\.com$"
             with self.subTest(value=value):
-                self._assert_domain_regex_dns(value, dns_value)
-        for repeat, normalized in (("{0}", "{0}"), ("{0,0}", "{0,0}"),
-                                   ("{00}", "{0}"), ("{00,00}", "{0,0}")):
+                self._assert_domain_regex_dns(value, None)
+        for repeat in ("{0}", "{0,0}", "{00}", "{00,00}"):
             value = rf"^(?:(?:a{{500}}){repeat}|b){{3}}\.example\.com$"
-            dns_value = rf"^(?:(?:a{{500}}){normalized}|b){{3}}\.example\.com$"
             with self.subTest(value=value):
-                self._assert_domain_regex_dns(value, dns_value)
+                self._assert_domain_regex_dns(value, None)
         value = r"^(?:(?:\d{0500}|b){00,}){02}\.example\.com$"
-        self._assert_domain_regex_dns(value, r"^(?:(?:\p{Nd}{500}|b){0,}){2}\.example\.com$")
+        self._assert_domain_regex_dns(value, None)
         value = r"^(?:(?:a{250}|b){0,2}){2}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unicode_nd_property_is_preserved_for_dns(self):
         value = r"^\p{Nd}\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unicode_nondigit_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^ad\Dtrack\.example\.com$",
-                                      r"^ad\P{Nd}track\.example\.com$")
+                                      None)
 
     def test_unicode_word_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^\w+\.example\.com$",
-                                      r"^[\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]+\.example\.com$")
+                                      None)
 
     def test_unicode_nonword_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^ad\Wtrack\.example\.com$",
-                                      r"^ad[^\p{L}\p{Mn}\p{Nd}\p{Pc}\x{200C}\x{200D}]track\.example\.com$")
+                                      None)
 
     def test_unicode_space_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^ads\s?\.example\.com$",
-                                      r"^ads[\x09-\x0D\x{85}\p{Z}]?\.example\.com$")
+                                      None)
 
     def test_unicode_nonspace_atom_is_translated_for_dns(self):
         self._assert_domain_regex_dns(r"^\S+\.example\.com$",
-                                      r"^[^\x09-\x0D\x{85}\p{Z}]+\.example\.com$")
+                                      None)
 
     def test_unproved_unicode_class_combinations_stay_out_of_dns(self):
         for atom in (r"\d", r"\D", r"\w", r"\W", r"\s", r"\S", r"\p{Nd}"):
@@ -2182,10 +2280,10 @@ class FormatTests(unittest.TestCase):
         for atom in ("d", "D", "w", "W", "s", "S", "b", "p{Nd}", "x{61}", "A", "z"):
             value = rf"^\\{atom}\.example\.com$"
             with self.subTest(value=value):
-                self._assert_domain_regex_dns(value, value)
-        self._assert_domain_regex_dns(r"^\\\d\.example\.com$", r"^\\\p{Nd}\.example\.com$")
+                self._assert_domain_regex_dns(value, None)
+        self._assert_domain_regex_dns(r"^\\\d\.example\.com$", None)
         value = r"^[a\\d]+\.example\.com$"
-        self._assert_domain_regex_dns(value, value)
+        self._assert_domain_regex_dns(value, None)
 
     def test_unsupported_regex_constructs_keep_yaml_and_dns_skip_counts(self):
         for value in (r"^ads/track\.example\.com$", r"^ads\/track\.example\.com$",
@@ -2200,8 +2298,8 @@ class FormatTests(unittest.TestCase):
                                      Rule("DOMAIN-REGEX", value, allow=True)])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
         self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
-        self.assertIn(f"DOMAIN-REGEX,{value}",
-                      [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+        self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+        self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
 
     def test_regexp2_only_domain_regex_stays_out_of_dns(self):
         for value in (r"^(ads)\1\.example\.com$", r"^ads(?=track)\.example\.com$",
@@ -2210,8 +2308,8 @@ class FormatTests(unittest.TestCase):
                 out, skipped = render("a3", [Rule("DOMAIN-REGEX", value),
                                              Rule("DOMAIN-REGEX", value, allow=True)])
                 self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
-                self.assertIn(f"DOMAIN-REGEX,{value}",
-                              [json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]])
+                self.assertEqual(out['fin.yaml'], '# a3 rules: 0\npayload:\n')
+                self.assertEqual(skipped['fin.yaml:DOMAIN-REGEX:whitelist-covered'], 1)
                 self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], 2)
 
     def test_client_accepted_regexp2_rules_keep_go_portable_property_in_dns(self):
@@ -2226,10 +2324,8 @@ class FormatTests(unittest.TestCase):
         self.assertEqual({json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]},
                          {f"DOMAIN-REGEX,{value}" for value in values} |
                          {"PROCESS-NAME-REGEX,^[(?P]$"})
-        self.assertEqual(out["fin-adb.txt"].splitlines()[6:],
-                         ["! Total count: 2", r"/^\p{L}+\.example\.com$/",
-                          r"/^\x{61}ds\.example\.com$/"])
-        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], len(values) - 2)
+        self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
+        self.assertEqual(skipped["fin-adb.txt:DOMAIN-REGEX"], len(values))
         self.assertEqual(skipped["fin-adb.txt:PROCESS-NAME-REGEX"], 1)
 
     def test_six_files_are_ordered_and_count_actual_lines(self):
@@ -2260,7 +2356,10 @@ class FormatTests(unittest.TestCase):
         expected = {
             "fin.txt": "# a3 rules: 7\nDOMAIN,a.org\nDOMAIN,z.org\nDOMAIN,long.example.org\nDOMAIN-KEYWORD,ad\nDOMAIN-SUFFIX,b.org\nDOMAIN-SUFFIX,q.org\nPROTOCOL,UDP\n",
             "fin-qx.txt": "# a3 rules: 6\nHOST,a.org,LIST\nHOST,z.org,LIST\nHOST,long.example.org,LIST\nHOST-KEYWORD,ad,LIST\nHOST-SUFFIX,b.org,LIST\nHOST-SUFFIX,q.org,LIST\n",
-            "fin.yaml": '# a3 rules: 7\npayload:\n  - "DOMAIN,a.org"\n  - "DOMAIN,z.org"\n  - "DOMAIN,long.example.org"\n  - "DOMAIN-REGEX,ad"\n  - "DOMAIN-SUFFIX,b.org"\n  - "DOMAIN-SUFFIX,q.org"\n  - "NETWORK,udp"\n',
+            "fin.yaml": '# a3 rules: 7\npayload:\n' + ''.join('  - ' + json.dumps(payload) + '\n' for payload in (
+                'DOMAIN-REGEX,ad', expected_domain('DOMAIN', 'a.org'), expected_domain('DOMAIN', 'z.org'),
+                expected_domain('DOMAIN', 'long.example.org'), expected_domain('DOMAIN-SUFFIX', 'b.org'),
+                expected_domain('DOMAIN-SUFFIX', 'q.org'), 'NETWORK,udp')),
             "fin-surge.txt": "# a3 rules: 2\nDOMAIN-KEYWORD,ad\nPROTOCOL,UDP\n",
             "fin-surge-ds.txt": "# a3 rules: 5\na.org\nz.org\n.b.org\n.q.org\nlong.example.org\n",
         }
@@ -2283,7 +2382,7 @@ class FormatTests(unittest.TestCase):
             "IP-CIDR,192.0.2.0/24,LIST,no-resolve", "IP6-CIDR,2001:db8::/32,LIST,no-resolve",
         ])
         self.assertEqual(out["fin.yaml"].splitlines()[2:], [
-            '  - "DOMAIN,a.org"', '  - "NETWORK,udp"', '  - "GEOIP,CN,no-resolve"',
+            ('  - "' + expected_domain('DOMAIN', 'a.org').replace(chr(92), chr(92) * 2) + '"'), '  - "NETWORK,udp"', '  - "GEOIP,CN,no-resolve"',
             '  - "IP-ASN,64500,no-resolve"', '  - "IP-CIDR,192.0.2.0/24,no-resolve"',
             '  - "SRC-IP-CIDR,192.0.2.0/24"', '  - "IP-CIDR,2001:db8::/32,no-resolve"',
             '  - "SRC-IP-CIDR,2001:db8::/32"',
@@ -2319,7 +2418,7 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("a3", [Rule("DOMAIN", "exact.example.com")])
         self.assertIn("DOMAIN,exact.example.com\n", out["fin.txt"])
         self.assertIn("HOST,exact.example.com,LIST\n", out["fin-qx.txt"])
-        self.assertIn('  - "DOMAIN,exact.example.com"\n', out["fin.yaml"])
+        self.assertIn(('  - "' + expected_domain('DOMAIN', 'exact.example.com').replace(chr(92), chr(92) * 2) + '"\n'), out["fin.yaml"])
         self.assertIn("\nexact.example.com\n", out["fin-surge-ds.txt"])
         self.assertNotIn("exact.example.com", out["fin-surge.txt"])
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "0.0.0.0 exact.example.com"])
@@ -2329,7 +2428,7 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("a3", [Rule("DOMAIN-SUFFIX", "ads.example.com")])
         self.assertIn("DOMAIN-SUFFIX,ads.example.com\n", out["fin.txt"])
         self.assertIn("HOST-SUFFIX,ads.example.com,LIST\n", out["fin-qx.txt"])
-        self.assertIn('  - "DOMAIN-SUFFIX,ads.example.com"\n', out["fin.yaml"])
+        self.assertIn(('  - "' + expected_domain('DOMAIN-SUFFIX', 'ads.example.com').replace(chr(92), chr(92) * 2) + '"\n'), out["fin.yaml"])
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 1\n.ads.example.com\n")
         self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 1", "||ads.example.com^"])
@@ -2470,6 +2569,7 @@ class FormatTests(unittest.TestCase):
                 self.assertEqual(messages, [])
                 self.assertEqual(len(parsed), 1)
                 out, skipped = render("cdn", parsed, purpose="proxy", no_resolve="keep")
+                expected = expected.replace("DOMAIN,a.example.com", expected_domain("DOMAIN", "a.example.com"))
                 self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - ' + json.dumps(expected) + '\n')
                 self.assertEqual(out["fin.txt"], "# cdn rules: 0\n")
                 self.assertEqual(out["fin-surge.txt"], "# cdn rules: 0\n")
@@ -2488,7 +2588,7 @@ class FormatTests(unittest.TestCase):
                  expected_process(path) if "*" not in path else None),
                 (f"AND,((PROCESS-NAME,{path}),(DOMAIN,a.example.com)),PROXY",
                  f"AND,((PROCESS-NAME,{path}),(DOMAIN,a.example.com))",
-                 f"AND,(({expected_process(path)}),(DOMAIN,a.example.com))" if "*" not in path else None),
+                 f"AND,(({expected_process(path)}),({expected_domain('DOMAIN', 'a.example.com')}))" if "*" not in path else None),
             ):
                 with self.subTest(source=source):
                     parsed, messages = parse(source, purpose="proxy")
@@ -2785,7 +2885,7 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(messages, [])
         out, _ = render("cdn", parsed)
         self.assertIn("NOT,((DOMAIN,cdn.example.com))\n", out["fin.txt"])
-        self.assertIn('"NOT,((DOMAIN,cdn.example.com))"', out["fin.yaml"])
+        self.assertIn(('"NOT,((' + expected_domain('DOMAIN', 'cdn.example.com').replace(chr(92), chr(92) * 2) + '))"'), out["fin.yaml"])
 
     def test_logical_rules_keep_parentheses_only_with_compatible_children(self):
         values = {
@@ -2797,7 +2897,10 @@ class FormatTests(unittest.TestCase):
             Rule("AND", "((RULE-SET,another-provider),(DOMAIN,ad.example.com))"),
         ])
         for kind, value in values.items():
-            self.assertIn(f'  - "{kind},{value}"\n', out["fin.yaml"])
+            projected = value.replace("DOMAIN,ads.example.com", expected_domain("DOMAIN", "ads.example.com")).replace(
+                "DOMAIN-SUFFIX,other.example.com", expected_domain("DOMAIN-SUFFIX", "other.example.com")).replace(
+                "DOMAIN,safe.example.com", expected_domain("DOMAIN", "safe.example.com"))
+            self.assertIn("  - " + json.dumps(kind + "," + projected) + "\n", out["fin.yaml"])
             self.assertEqual(skipped[f"fin-qx.txt:{kind}"], 1 if kind != "AND" else 2)
         self.assertIn("OR," + values["OR"] + "\n", out["fin.txt"])
         self.assertIn("NOT," + values["NOT"] + "\n", out["fin-surge.txt"])
@@ -2811,7 +2914,7 @@ class FormatTests(unittest.TestCase):
         expected = "# a3 rules: 1\nAND,((PROTOCOL,UDP),(DOMAIN,a.example.com))\n"
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
-        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((NETWORK,udp),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin.yaml"], ('# a3 rules: 1\npayload:\n  - "AND,((NETWORK,udp),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"\n'))
         self.assertEqual(out["fin-qx.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-adb.txt"].splitlines()[6:], ["! Total count: 0"])
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
@@ -2823,7 +2926,7 @@ class FormatTests(unittest.TestCase):
         out, skipped = render("a3", [Rule("AND", "((DEST-PORT,443),(DOMAIN,a.example.com))")])
         self.assertEqual(out["fin.txt"], "# a3 rules: 1\nAND,((DEST-PORT,443),(DOMAIN,a.example.com))\n")
         self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
-        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((DST-PORT,443),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin.yaml"], ('# a3 rules: 1\npayload:\n  - "AND,((DST-PORT,443),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"\n'))
         self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_logical_source_ip_and_protocol_aliases_keep_match_direction(self):
@@ -2846,8 +2949,8 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(messages, [])
         out, skipped = render("a3", parsed, no_resolve="add")
         self.assertEqual(out["fin.yaml"].splitlines()[2:], [
-            '  - "AND,((SRC-IP-CIDR,192.0.2.0/24),(DOMAIN,a.example.com))"',
-            '  - "AND,((SRC-IP-CIDR,2001:db8::/32),(DOMAIN,a.example.com))"',
+            ('  - "AND,((SRC-IP-CIDR,192.0.2.0/24),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"'),
+            ('  - "AND,((SRC-IP-CIDR,2001:db8::/32),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"'),
         ])
         self.assertEqual(out["fin.txt"], out["fin-surge.txt"])
         self.assertIn("AND,((SRC-IP,192.0.2.0/24),(DOMAIN,a.example.com))\n", out["fin.txt"])
@@ -2866,7 +2969,7 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                         [f"AND,(({expected_process('Foo,Bar')}),(DOMAIN,a.example.com))"])
+                         [f"AND,(({expected_process('Foo,Bar')}),({expected_domain('DOMAIN', 'a.example.com')}))"])
         self.assertEqual(out["fin-surge-ds.txt"], "# cdn rules: 0\n")
         self.assertNotIn("fin.yaml:AND", skipped)
 
@@ -2890,11 +2993,11 @@ class FormatTests(unittest.TestCase):
         self.assertEqual(messages, [])
         out, skipped = render("a3", parsed, no_resolve="keep")
         self.assertEqual(out["fin.yaml"],
-                         '# a3 rules: 1\npayload:\n  - "AND,((DOMAIN-REGEX,^ads,[0-9]+[.]example$),(DOMAIN,a.example.com))"\n')
+                         ('# a3 rules: 1\npayload:\n  - "AND,((DOMAIN-REGEX,^ads,[0-9]+[.]example$),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"\n'))
         round_trip, warnings = parse(out["fin.yaml"], purpose="block")
         self.assertEqual(warnings, [])
         self.assertEqual(round_trip, [Rule('AND', '((DOMAIN-REGEX,^ads,[0-9]+[.]example$),(' +
-                         expected_domain('DOMAIN', 'a.example.com') + '))', native_fields=True, domain_source='mihomo')])
+                         expected_domain('DOMAIN', 'a.example.com') + '))', native_fields=True)])
         self.assertNotIn("fin.yaml:AND", skipped)
 
     def test_logical_no_resolve_add_strip_keep_changes_only_destination_ip_leaves(self):
@@ -2921,7 +3024,7 @@ class FormatTests(unittest.TestCase):
         expected = "AND,((OR,((SRC-IP,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(DOMAIN,a.example.com))"
         self.assertEqual(out["fin.txt"], f"# a3 rules: 1\n{expected}\n")
         self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
-        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((OR,((SRC-IP-CIDR,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin.yaml"], ('# a3 rules: 1\npayload:\n  - "AND,((OR,((SRC-IP-CIDR,192.0.2.0/24),(NOT,((IP-ASN,64500))))),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"\n'))
         self.assertNotIn("no-resolve", out["fin.txt"])
         self.assertNotIn("fin.txt:AND", skipped)
 
@@ -2943,14 +3046,14 @@ class FormatTests(unittest.TestCase):
         out, _ = render("a3", [source], no_resolve="add")
         self.assertEqual(out["fin.txt"], "# a3 rules: 1\nAND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,a.example.com))\n")
         self.assertEqual(out["fin-surge.txt"], out["fin.txt"])
-        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((IP-CIDR,192.0.2.0/24,no-resolve),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin.yaml"], ('# a3 rules: 1\npayload:\n  - "AND,((IP-CIDR,192.0.2.0/24,no-resolve),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"\n'))
 
     def test_unsupported_source_ip_child_skips_whole_surge_rule(self):
         source = Rule("AND", "((SRC-GEOIP,CN),(DOMAIN,a.example.com))")
         out, skipped = render("a3", [source])
         self.assertEqual(out["fin.txt"], "# a3 rules: 0\n")
         self.assertEqual(out["fin-surge.txt"], "# a3 rules: 0\n")
-        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - "AND,((SRC-GEOIP,CN),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin.yaml"], ('# a3 rules: 1\npayload:\n  - "AND,((SRC-GEOIP,CN),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"\n'))
         self.assertEqual(out["fin-surge-ds.txt"], "# a3 rules: 0\n")
         self.assertEqual(skipped["fin.txt:AND"], 1)
         self.assertEqual(skipped["fin-surge.txt:AND"], 1)
@@ -2961,7 +3064,7 @@ class FormatTests(unittest.TestCase):
         expected = "# cdn rules: 0\n"
         self.assertEqual(out["fin.txt"], expected)
         self.assertEqual(out["fin-surge.txt"], expected)
-        self.assertEqual(out["fin.yaml"], '# cdn rules: 1\npayload:\n  - "AND,((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(DOMAIN,a.example.com))"\n')
+        self.assertEqual(out["fin.yaml"], ('# cdn rules: 1\npayload:\n  - "AND,((PROCESS-PATH-WILDCARD,/Applications/Foo*/bin),(' + expected_domain('DOMAIN', 'a.example.com').replace(chr(92), chr(92) * 2) + '))"\n'))
         self.assertEqual(skipped["fin.txt:AND"], 1)
 
     def test_surge_translates_nested_source_cidr_and_destination_port(self):
@@ -2986,7 +3089,7 @@ class FormatTests(unittest.TestCase):
         value = "((IP-CIDR,2001:db8::/32),(DOMAIN,ads.example.com))"
         out, _ = render("a3", [Rule("OR", value)])
         self.assertIn("OR,((IP-CIDR6,2001:db8::/32,no-resolve),(DOMAIN,ads.example.com))\n", out["fin.txt"])
-        self.assertIn('  - "OR,((IP-CIDR6,2001:db8::/32,no-resolve),(DOMAIN,ads.example.com))"\n', out["fin.yaml"])
+        self.assertIn(('  - "OR,((IP-CIDR6,2001:db8::/32,no-resolve),(' + expected_domain('DOMAIN', 'ads.example.com').replace(chr(92), chr(92) * 2) + '))"\n'), out["fin.yaml"])
 
     def test_mihomo_ipv6_cidr_inside_nested_logic_uses_ipv6_matcher(self):
         from rules import parse
@@ -2998,7 +3101,8 @@ class FormatTests(unittest.TestCase):
 
         out, _ = render("a3", parsed)
         expected = "AND,((OR,((IP-CIDR6,2001:db8::/32,no-resolve),(IP-CIDR,192.0.2.0/24,no-resolve))),(DOMAIN,ads.example.com))"
-        self.assertEqual(out["fin.yaml"], f'# a3 rules: 1\npayload:\n  - "{expected}"\n')
+        yaml_expected = expected.replace("DOMAIN,ads.example.com", expected_domain("DOMAIN", "ads.example.com"))
+        self.assertEqual(out["fin.yaml"], '# a3 rules: 1\npayload:\n  - ' + json.dumps(yaml_expected) + "\n")
         self.assertEqual(out["fin.txt"], f"# a3 rules: 1\n{expected}\n")
         self.assertEqual(out["fin-surge.txt"], f"# a3 rules: 1\n{expected}\n")
 
@@ -3006,6 +3110,7 @@ class FormatTests(unittest.TestCase):
         expression = r"((DOMAIN-REGEX,^[a)b]\.example$),(DOMAIN,ads.example))"
         out, skipped = render("a3", [Rule("AND", expression)])
         expected = r"AND,((DOMAIN-REGEX,^[a\x{29}b]\.example$),(DOMAIN,ads.example))"
+        expected = expected.replace("DOMAIN,ads.example", expected_domain("DOMAIN", "ads.example"))
         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]], [expected])
         from rules import parse
         self.assertEqual(parse(out["fin.yaml"], purpose="block")[1], [])
@@ -3019,7 +3124,8 @@ class FormatTests(unittest.TestCase):
         ], purpose="direct", no_resolve="strip")
         self.assertEqual(out["fin.txt"], f"# dirt rules: 1\nOR,{safe}\n")
         self.assertEqual(out["fin-surge.txt"], f"# dirt rules: 1\nOR,{safe}\n")
-        self.assertEqual(out["fin.yaml"], f'# dirt rules: 1\npayload:\n  - "OR,{safe}"\n')
+        projected = f"(({expected_domain('DOMAIN', 'a.org')}),({expected_domain('DOMAIN', 'b.org')}))"
+        self.assertEqual(out["fin.yaml"], '# dirt rules: 1\npayload:\n  - ' + json.dumps("OR," + projected) + "\n")
         self.assertEqual(skipped["fin.txt:AND"], 1)
         self.assertEqual(skipped["fin.yaml:AND"], 1)
 
@@ -3031,7 +3137,8 @@ class FormatTests(unittest.TestCase):
         ], purpose="direct", no_resolve="strip")
         self.assertEqual(out["fin.txt"], f"# dirt rules: 1\nOR,{valid}\n")
         self.assertEqual(out["fin-surge.txt"], f"# dirt rules: 1\nOR,{valid}\n")
-        self.assertEqual(out["fin.yaml"], f'# dirt rules: 1\npayload:\n  - "OR,{valid}"\n')
+        projected = f"(({expected_domain('DOMAIN', 'a.org')}),({expected_domain('DOMAIN', 'b.org')}))"
+        self.assertEqual(out["fin.yaml"], '# dirt rules: 1\npayload:\n  - ' + json.dumps("OR," + projected) + "\n")
         self.assertEqual(skipped["fin.txt:AND"], 1)
         self.assertEqual(skipped["fin.yaml:AND"], 1)
 
@@ -3064,7 +3171,7 @@ class FormatTests(unittest.TestCase):
         value = "((DOMAIN-WILDCARD,api-[0-9].example.com),(DOMAIN,ads.example.com))"
         out, skipped = render("a3", [Rule("AND", value)])
         self.assertEqual([json.loads(line[4:]) for line in out["fin.yaml"].splitlines()[2:]],
-                         [r"AND,((DOMAIN-REGEX,^api\-[0-9]\.example\.com\.?$),(DOMAIN,ads.example.com))"])
+                         [('AND,((DOMAIN-REGEX,^api\\-[0-9]\\.example\\.com\\.?$),(' + expected_domain('DOMAIN', 'ads.example.com') + '))')])
         self.assertIn("AND," + value + "\n", out["fin.txt"])
         self.assertNotIn("fin.yaml:AND", skipped)
 
@@ -3220,13 +3327,14 @@ class NativeProjectionCollisionFormatTests(unittest.TestCase):
         native = Rule('DOMAIN', 'keep.example.org', domain_source='mihomo')
         originals = [domain, process, process_regex, *qx, native]
         output, _ = render_configured('public', originals * 2, purpose='proxy', no_resolve='keep')
-        self.assertEqual(output['fin.yaml'].splitlines()[0], '# public rules: 2')
+        self.assertEqual(output['fin.yaml'].splitlines()[0], '# public rules: 3')
         self.assertEqual({json.loads(line[4:]) for line in output['fin.yaml'].splitlines()[2:]},
-                         {expected_domain('DOMAIN', domain.value), expected_process(process.value)})
+                         {'DOMAIN,keep.example.org', expected_domain('DOMAIN', domain.value), expected_process(process.value)})
         parsed, messages = parse(output['fin.yaml'], purpose='proxy')
         self.assertEqual(messages, [])
-        self.assertEqual(set(parsed), {native, process_regex})
-        self.assertEqual(len(parsed), 2)
+        self.assertEqual(set(parsed), {native, process_regex,
+                                     Rule('DOMAIN-REGEX', expected_domain('DOMAIN', domain.value).partition(',')[2])})
+        self.assertEqual(len(parsed), 3)
         repeated, _ = render_configured('public', parsed * 2, purpose='proxy', no_resolve='keep')
         self.assertEqual(repeated['fin.yaml'], output['fin.yaml'])
 

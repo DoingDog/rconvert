@@ -27,7 +27,9 @@ class _HttpsOnlyRedirect(request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         if urlsplit(newurl).scheme != "https":
             raise ValueError(f"HTTPS redirect required: {newurl}")
-        return super().redirect_request(req, fp, code, msg, headers, newurl)
+        accepted = super().redirect_request(req, fp, code, msg, headers, newurl)
+        fp.close()
+        return accepted
 
 
 def fetch_https(url: str) -> bytes:
@@ -47,7 +49,7 @@ def fetch_https(url: str) -> bytes:
             expected = getattr(response, "headers", {}).get("Content-Length")
             if expected is not None and len(data) != int(expected):
                 raise ValueError(f"Incomplete source {url}: {len(data)} of {expected} bytes")
-            if getattr(response, "headers", {}).get("Content-Encoding", "").lower() == "gzip":
+            if getattr(response, "headers", {}).get("Content-Encoding", "").strip(' \t').lower() in ("gzip", "x-gzip"):
                 try:
                     with gzip.GzipFile(fileobj=BytesIO(data)) as stream:
                         data = stream.read(MAX_BYTES + 1)
@@ -62,13 +64,38 @@ def fetch_https(url: str) -> bytes:
         raise RuntimeError(f"Failed to fetch {url}: {exc}") from exc
 
 
+def _output_path(root: Path, path: Path) -> Path:
+    paths = (path.parent.resolve() / path.name, path.resolve())
+    if any(not candidate.is_relative_to(root) for candidate in paths):
+        raise ValueError("Output path escapes root")
+    protected = (root / "static", (root / "static").resolve())
+    pending = [path]
+    checked = set()
+    while pending:
+        candidate = pending.pop()
+        if candidate.name == "..":
+            candidate = candidate.resolve()
+        if candidate in checked:
+            continue
+        checked.add(candidate)
+        location = candidate.parent.resolve() / candidate.name
+        if any(location.is_relative_to(directory) for directory in protected):
+            raise ValueError("Output path targets static")
+        if candidate.is_symlink():
+            pending.append(location.parent / candidate.readlink())
+        if candidate.parent != candidate:
+            pending.append(candidate.parent)
+    if any(paths[1].is_relative_to(directory) for directory in protected):
+        raise ValueError("Output path targets static")
+    return paths[1]
+
+
 def publish(outputs: dict[Path, str], *, root: Path | None = None) -> None:
     root = Path(__file__).resolve().parent if root is None else root.resolve()
-    if any(not path.resolve().is_relative_to(root) for path in outputs):
-        raise ValueError("Output path escapes root")
-    if any(path.resolve().is_relative_to(root / "static") for path in outputs):
-        raise ValueError("Output path targets static")
+    for path in outputs:
+        _output_path(root, path)
     staging = root / ".tmp"
+    _output_path(root, staging)
     staging.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(dir=staging) as directory:
         staged = []
@@ -110,7 +137,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     for config in configs:
         for name in FILES:
             path = root / config["name"] / name
-            resolved = path.resolve()
+            resolved = _output_path(root, path)
             if resolved in paths:
                 raise ValueError(f"Output path collision: {paths[resolved]} and {path}"
                                  f" resolve to {resolved}")
@@ -275,14 +302,17 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             continue
         allowed = [rule for rule in rules if rule.allow]
         rules = exclude_covered(rules, whitelist + allowed)
-        rules = [_apply_no_resolve(rule, no_resolve) for rule in rules]
-        rendered, skipped = render(group, normalize(rules), purpose=purpose,
+        rules = normalize(_apply_no_resolve(rule, no_resolve) for rule in rules)
+        rendered, skipped = render(group, rules, purpose=purpose,
                                    whitelist=whitelist, no_resolve="keep",
                                    title=config.get("title", group))
+        non_allow_count = sum(not rule.allow for rule in rules)
+        covered_count = sum(count for key, count in skipped.items() if key.startswith('whitelist-covered:'))
         if (not any(rendered[name].splitlines()[1:] for name in ("fin.txt", "fin-qx.txt", "fin-surge.txt"))
                 and len(rendered["fin.yaml"].splitlines()) <= 2
                 and (unusable_source or rules and not (
-                    purpose == "block" and not any(not rule.allow for rule in rules)
+                    0 < non_allow_count == covered_count
+                    or purpose == "block" and not non_allow_count
                     and any(line.startswith("@@") for line in rendered["fin-adb.txt"].splitlines()[7:])))):
             print(f"{group}: no routable rules; frozen", file=sys.stderr)
             freeze(group)

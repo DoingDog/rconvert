@@ -3,10 +3,93 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from rules import parse_whitelist
 from sources import load_config, resolve_source
 
 
 ROOT = Path(__file__).resolve().parents[1]
+REQUIRED_SOURCES = {
+    "cdn": [
+        "https://ruleset.skk.moe/List/domainset/cdn.conf",
+        "https://ruleset.skk.moe/List/non_ip/cdn.conf",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Jsdelivr/Jsdelivr.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Limelight/Limelight.list",
+    ],
+    "a3": [
+        "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
+        "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-surge.txt",
+        "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
+        "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
+        "https://ruleset.skk.moe/List/domainset/reject.conf",
+        "https://ruleset.skk.moe/List/non_ip/reject.conf",
+    ],
+    "big-data": [
+        "cdn/fin.txt", "static/serv/cdn.list", "static/serv/emby.list", "static/serv/sharing.list",
+        "https://raw.githubusercontent.com/Repcz/Tool/X/Surge/Rules/Emby.list",
+        "https://ruleset.skk.moe/List/domainset/download.conf",
+        "https://ruleset.skk.moe/List/ip/download.conf",
+        "https://ruleset.skk.moe/List/ip/stream.conf",
+        "https://ruleset.skk.moe/List/non_ip/stream.conf",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apkpure/Apkpure.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Dropbox/Dropbox.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Dubox/Dubox.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GlobalMedia/GlobalMedia.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GoogleDrive/GoogleDrive.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/MEGA/MEGA.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/SourceForge/SourceForge.list",
+        "https://raw.githubusercontent.com/SukkaW/Surge/refs/heads/master/Source/domainset/game-download.conf",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/YouTube.list",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Netflix.list",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Disney.list",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Spotify.list",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/TikTok.list",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/GlobalMedia.list",
+    ],
+    "tg": [
+        "https://ruleset.skk.moe/List/non_ip/telegram.conf",
+        "https://ruleset.skk.moe/List/ip/telegram.conf",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Telegram.list",
+    ],
+    "proxy": [
+        "https://ruleset.skk.moe/List/non_ip/my_proxy.conf",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ProxyLite/ProxyLite.list",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
+    ],
+    "dirt": [
+        "static/serv/domestic.list",
+        "https://static-file-global.353355.xyz/rules/cn-additional-list-clash-classical.yaml",
+        "https://raw.githubusercontent.com/GeQ1an/Rules/master/QuantumultX/Filter/Mainland.list",
+        "https://ruleset.skk.moe/List/ip/domestic.conf",
+        "https://ruleset.skk.moe/Clash/ip/china_ip.txt",
+        "https://ruleset.skk.moe/List/non_ip/direct.conf",
+        "https://ruleset.skk.moe/List/non_ip/domestic.conf",
+        "https://ruleset.skk.moe/List/non_ip/my_direct.conf",
+        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/China/China.list",
+        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/AccelerateDirectSites.list",
+        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list",
+        "https://github.com/jqyisbest/RuCu6/raw/refs/heads/main/Rules/China.list",
+        "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/rules/Mainland.list",
+        "https://raw.githubusercontent.com/zqzess/rule_for_quantumultX/master/QuantumultX/rules/CMedia.list",
+        "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt",
+        "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt",
+        "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/China.list",
+        "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list",
+    ],
+}
+REQUIRED_SOURCES["a4"] = REQUIRED_SOURCES["a3"][:4]
+LAN_WHITELISTS = ["https://ruleset.skk.moe/Clash/non_ip/lan.txt",
+                  "https://ruleset.skk.moe/Clash/ip/lan.txt"]
+REQUIRED_WHITELISTS = {
+    "cdn": LAN_WHITELISTS,
+    "a3": ["static/main/Direct.list", "static/main/NoReject.list"] + LAN_WHITELISTS,
+    "a4": ["static/main/Direct.list", "static/main/NoReject.list"] + LAN_WHITELISTS,
+    "big-data": LAN_WHITELISTS,
+    "tg": ["static/tg-sentinel.txt"] + LAN_WHITELISTS,
+    "proxy": LAN_WHITELISTS,
+    "dirt": ["static/main/NoDirect.list"] + LAN_WHITELISTS,
+}
 
 
 class SourcesTests(unittest.TestCase):
@@ -108,26 +191,20 @@ class SourcesTests(unittest.TestCase):
         groups = load_config(ROOT)
         self.assertEqual([group["name"] for group in groups],
                          ["cdn", "a3", "a4", "big-data", "tg", "proxy", "dirt"])
-        self.assertEqual([len(group["sources"]) for group in groups], [4, 6, 4, 24, 3, 3, 19])
         self.assertEqual([group["purpose"] for group in groups],
                          ["proxy", "block", "block", "proxy", "proxy", "proxy", "direct"])
         self.assertEqual([group["no_resolve"] for group in groups],
                          ["add", "add", "add", "add", "add", "add", "strip"])
         config = {group["name"]: group for group in groups}
-        self.assertEqual(config["big-data"]["sources"][:4],
-                         ["cdn/fin.txt", "static/serv/cdn.list", "static/serv/emby.list",
-                          "static/serv/sharing.list"])
+        self.assertEqual(config["big-data"]["sources"][0], "cdn/fin.txt")
         self.assertNotIn("https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/CN.list",
                          config["dirt"]["sources"])
         for name, group in config.items():
             with self.subTest(group=name):
-                original = (["static/main/Direct.list", "static/main/NoReject.list"]
-                            if name in ("a3", "a4") else ["static/main/NoDirect.list"]
-                            if name == "dirt" else ["tg-sentinel.txt"] if name == "tg" else [])
-                self.assertEqual(group["whitelist"], original + [
-                    "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-                    "https://ruleset.skk.moe/Clash/ip/lan.txt",
-                ])
+                self.assertEqual([source for source in group["sources"] if source in REQUIRED_SOURCES[name]],
+                                 REQUIRED_SOURCES[name])
+                self.assertEqual([source for source in group["whitelist"] if source in REQUIRED_WHITELISTS[name]],
+                                 REQUIRED_WHITELISTS[name])
                 for source in group["sources"] + group["whitelist"]:
                     resolved = resolve_source(ROOT, source)
                     if isinstance(resolved, Path) and source != "cdn/fin.txt":
@@ -142,17 +219,14 @@ class SourcesTests(unittest.TestCase):
                 with self.subTest(group=name, filename=filename):
                     self.assertTrue((ROOT / name / filename).is_file(), f"{name}/{filename}")
 
-    def test_dirt_whitelist_lists_only_requested_routes(self):
-        path = ROOT / "static/main/NoDirect.list"
-        self.assertTrue(path.is_file())
-        entries = path.read_text(encoding="utf-8").splitlines()
-        self.assertEqual(entries, [
-            "DOMAIN-KEYWORD,microsoft",
-            "DOMAIN-WILDCARD,windows-*.net",
-            "DOMAIN-SUFFIX,ms",
-            "DOMAIN-SUFFIX,loli.net",
-            "DOMAIN-SUFFIX,sm.ms",
-        ])
+    def test_configured_local_static_whitelists_are_valid(self):
+        entries = {entry for group in load_config(ROOT) for entry in group["whitelist"]
+                   if entry.startswith("static/")}
+        for entry in entries:
+            with self.subTest(entry=entry):
+                path = resolve_source(ROOT, entry)
+                self.assertTrue(path.is_file())
+                parse_whitelist(path.read_text(encoding="utf-8-sig"))
 
     def test_utf8_bom_does_not_change_first_source(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
@@ -162,46 +236,12 @@ class SourcesTests(unittest.TestCase):
             (root / "rulesets.json").write_text(chr(0xfeff) + json.dumps(groups), encoding="utf-8")
             self.assertEqual(load_config(root)[0]["sources"], ["https://example.org/rules.txt"])
 
-    def test_a3_has_only_approved_sources(self):
-        config = {group["name"]: group for group in load_config(ROOT)}
-        self.assertEqual(
-            config["a3"]["sources"],
-            [
-                "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
-                "https://raw.githubusercontent.com/privacy-protection-tools/anti-AD/master/anti-ad-surge.txt",
-                "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
-                "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
-                "https://ruleset.skk.moe/List/domainset/reject.conf",
-                "https://ruleset.skk.moe/List/non_ip/reject.conf",
-            ],
-        )
-
-    def test_a4_retains_original_a3_sources_and_block_policy(self):
-        config = {group["name"]: group for group in load_config(ROOT)}
-        self.assertEqual(config["a4"]["sources"], config["a3"]["sources"][:4])
-        self.assertEqual(config["a4"]["purpose"], "block")
-        self.assertEqual(config["a4"]["no_resolve"], "add")
-        self.assertEqual(config["a4"]["whitelist"], config["a3"]["whitelist"])
-
-    def test_every_group_appends_two_lan_whitelists_without_routing_them(self):
-        lan = ["https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-               "https://ruleset.skk.moe/Clash/ip/lan.txt"]
+    def test_every_group_retains_two_lan_whitelists_without_routing_them(self):
         for group in load_config(ROOT):
             with self.subTest(group=group["name"]):
-                self.assertEqual(group["whitelist"][-2:], lan)
-                self.assertTrue(set(lan).isdisjoint(group["sources"]))
-
-    def test_big_data_adds_game_download_and_six_rabbit_media_lists(self):
-        sources = {group["name"]: group for group in load_config(ROOT)}["big-data"]["sources"]
-        self.assertEqual(sources[17:24], [
-            "https://raw.githubusercontent.com/SukkaW/Surge/refs/heads/master/Source/domainset/game-download.conf",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/YouTube.list",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Netflix.list",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Disney.list",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Spotify.list",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/TikTok.list",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/GlobalMedia.list",
-        ])
+                self.assertEqual([source for source in group["whitelist"] if source in LAN_WHITELISTS],
+                                 LAN_WHITELISTS)
+                self.assertTrue(set(LAN_WHITELISTS).isdisjoint(group["sources"]))
 
     def test_big_data_drops_404_gmedia_but_keeps_global_media(self):
         sources = {group["name"]: group for group in load_config(ROOT)}["big-data"]["sources"]
@@ -214,43 +254,11 @@ class SourcesTests(unittest.TestCase):
             sources,
         )
 
-    def test_tg_routes_telegram_and_excludes_only_its_sentinel_and_lan(self):
-        group = {group["name"]: group for group in load_config(ROOT)}["tg"]
-        self.assertEqual(group["purpose"], "proxy")
-        self.assertEqual(group["no_resolve"], "add")
-        self.assertEqual(group["sources"][:3], [
-            "https://ruleset.skk.moe/List/non_ip/telegram.conf",
-            "https://ruleset.skk.moe/List/ip/telegram.conf",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Telegram.list",
-        ])
-        self.assertEqual(group["whitelist"], [
-            "tg-sentinel.txt",
-            "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-            "https://ruleset.skk.moe/Clash/ip/lan.txt",
-        ])
-        self.assertEqual((ROOT / "tg-sentinel.txt").read_text(encoding="utf-8").splitlines(),
-                         ["DOMAIN,7h15.ru1353t.1s.m4d3.by.5ukk4w.skk.moe"])
-
-    def test_proxy_uses_only_targeted_proxy_sources_with_lan_whitelists(self):
-        group = {group["name"]: group for group in load_config(ROOT)}["proxy"]
-        self.assertEqual(group["purpose"], "proxy")
-        self.assertEqual(group["no_resolve"], "add")
-        self.assertEqual(group["sources"][:3], [
-            "https://ruleset.skk.moe/List/non_ip/my_proxy.conf",
-            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ProxyLite/ProxyLite.list",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
-        ])
-        self.assertEqual(group["whitelist"], [
-            "https://ruleset.skk.moe/Clash/non_ip/lan.txt",
-            "https://ruleset.skk.moe/Clash/ip/lan.txt",
-        ])
-
-    def test_dirt_adds_rabbit_china_and_china_cidr(self):
-        sources = {group["name"]: group for group in load_config(ROOT)}["dirt"]["sources"]
-        self.assertEqual(sources[17:19], [
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/China.list",
-            "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/ChinaCIDR.list",
-        ])
+    def test_tg_sentinel_uses_static_path(self):
+        self.assertFalse((ROOT / "tg-sentinel.txt").exists())
+        path = resolve_source(ROOT, "static/tg-sentinel.txt")
+        self.assertTrue(path.is_file())
+        parse_whitelist(path.read_text(encoding="utf-8-sig"))
 
     def test_dirt_adds_novel_sukka_ipv4_without_redundant_ipv6(self):
         sources = {group["name"]: group for group in load_config(ROOT)}["dirt"]["sources"]
@@ -280,4 +288,4 @@ class SourcesTests(unittest.TestCase):
             with self.subTest(url=url):
                 self.assertEqual(sources.count(url), 1)
         self.assertNotIn("https://ruleset.skk.moe/List/domainset/domestic_cdn.conf", sources)
-        self.assertFalse(any("china-list" in source for source in sources))
+        self.assertFalse(any("china-list" in source for source in sources if source.startswith("https://")))

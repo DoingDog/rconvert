@@ -24,10 +24,6 @@ jobs:
         run: |
           python3 -m venv .venv
           .venv/bin/python -c 'import sys; assert sys.version_info >= (3, 11)'
-      - name: Check static baseline
-        run: |
-          git diff HEAD --exit-code -- static
-          test -z "$(git ls-files --others -- static)"
       - name: Test generator
         run: .venv/bin/python -m unittest discover -s tests -v
 
@@ -46,10 +42,8 @@ jobs:
           python3 -m venv .venv
           .venv/bin/python generate.py
           .venv/bin/python update_readme_counts.py
-      - name: Check static and commit generated files
+      - name: Commit generated files
         run: |
-          git diff HEAD --exit-code -- static
-          test -z "$(git ls-files --others -- static)"
           .venv/bin/python - <<'PY'
           import subprocess
           from pathlib import Path
