@@ -5295,7 +5295,7 @@ class GenerateTests(unittest.TestCase):
                         with contextlib.redirect_stderr(io.StringIO()):
                             outputs = generate(root, fetch)
                         after = datetime.now().astimezone()
-                        self._assert_r25_publication(root, outputs, previous, [("cdn", False), ("dependent", False)], purpose, mode, before, after)
+                        self._assert_r25_publication(root, outputs, previous, [("cdn", False), ("dependent", False)], purpose, mode, before, after, raw_groups=("dependent",))
 
     def test_missing_local_whitelist_still_aborts_when_source_is_404(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
