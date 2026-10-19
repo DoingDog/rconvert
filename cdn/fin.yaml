@@ -1,4 +1,4 @@
-# cdn rules: 4783
+# cdn rules: 4789
 payload:
   - "DOMAIN-REGEX,99avcdn"
   - "DOMAIN-REGEX,dsn\\.algolia\\.net"
@@ -933,6 +933,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:\\A[hH][iI][mM][eE][kK][oO]\\.[iI][wW][aA][rR][aA]\\.[tT][vV]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[iI][cC][oO][nN][sS]\\.[lL][lL][aA][mM][aA][oO]\\.[fF][iI]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[iI][mM][aA][gG][eE][sS]\\.[dD][mM][cC][aA]\\.[cC][oO][mM]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:\\A[iI][mM][aA][gG][eE][sS]\\.[hH][iI][gG][gG][sS]\\.[aA][iI]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[iI][mM][aA][gG][eE][sS]\\.[kK][iI][cC][kK]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[iI][mM][aA][gG][eE][sS]\\.[pP][lL][uU][tT][oO]\\.[tT][vV]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[iI][mM][aA][gG][eE][sS]\\.[vV][uU][dD][uU]\\.[cC][oO][mM]\\.?\\z)"
@@ -1343,6 +1344,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:\\A[tT][iI][lL][eE][sS]3\\.[pP][lL][aA][nN][eE][tT]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[tT][oO][wW][nN][sS][qQ][uU][aA][rR][eE]\\.[mM][eE][dD][iI][aA]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[vV]2\\.[lL][iI][sS][tT][eE][nN][lL][oO][oO][pP]\\.[cC][oO][mM]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:\\A[vV][cC][cC]\\-[aA][sS][sS][eE][tT][sS]\\.8[xX]8\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[wW]2\\.[iI][nN][fF][lL][uU][xX][dD][aA][tT][aA]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[wW][aA]1\\.[aA][nN][iI][nN][oO][aA][pP][pP][sS]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[cC][dD][nN]\\.[cC][dD][sS]\\.[dD][mM][mM]\\.[cC][oO]\\.[jJ][pP]\\.?\\z)"
@@ -2082,6 +2084,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:\\A[mM][eE][dD][iI][aA]\\.[kK][aA][rR][oO][uU][sS][eE][lL][lL]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[mM][eE][dD][iI][aA]\\.[nN][eE][wW][yY][oO][rR][kK][eE][rR]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[mM][eE][dD][iI][aA]\\.[sS][hH][oO][pP][iI][mM][iI][nN][dD]\\.[cC][oO][mM]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:\\A[mM][eE][dD][iI][aA]\\.[tT][rR][eE][kK][bB][iI][kK][eE][sS]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[pP][eE][rR][fF]\\-[nN][aA]1\\.[hH][sS][fF][oO][rR][mM][sS]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[pP][iI][cC][sS]\\.[sS][eE][rR][vV][iI][pP][oO][rR][nN][oO]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[pP][rR][eE][vV][iI][eE][wW]\\.[xX][gG][rR][oO][oO][vV][yY]\\.[cC][oO][mM]\\.?\\z)"
@@ -2359,6 +2362,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:\\A[sS][bB][lL]\\.[oO][nN][fF][aA][sS][tT][sS][pP][rR][iI][nN][gG]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[sS][eE][lL][lL][oO][nN]\\.[sS][hH][iI][pP][rR][oO][cC][kK][eE][tT]\\.[iI][nN]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[sS][iI][lL][oO][hH]\\-[nN][sS]1\\.[pP][lL][uU][tT][oO][tT][vV]\\.[nN][eE][tT]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:\\A[sS][lL]3\\-[cC][dD][nN]\\.[kK][aA][rR][oO][uU][sS][eE][lL][lL]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[sS][nN][iI][pP][pP][eE][tT]\\.[gG][rR][oO][wW][sS][uU][mM][oO]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[sS][tT][aA][tT][iI][cC][sS]\\.[sS][iI][mM][pP][sS][hH][uU][bB]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[sS][tT][aA][tT][iI][cC]\\-1\\.[bB][iI][tT][cC][hH][uU][tT][eE]\\.[cC][oO][mM]\\.?\\z)"
@@ -2431,6 +2435,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:\\A[cC][dD][nN]2\\.[dD][oO][wW][nN][dD][eE][tT][eE][cC][tT][oO][rR]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[cC][dD][nN]2\\.[uU][nN][rR][eE][aA][lL][eE][nN][gG][iI][nN][eE]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[cC][dD][nN]3\\.[uU][nN][rR][eE][aA][lL][eE][nN][gG][iI][nN][eE]\\.[cC][oO][mM]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:\\A[fF][rR][oO][nN][tT][eE][nN][dD]2\\.[lL][oO][cC][aA][lL][lL][yY]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[hH][uU][bB][sS][pP][oO][tT][oO][nN][wW][eE][bB][fF][lL][oO][wW]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[lL][oO][gG]\\-[cC][oO][lL][lL][eE][cC][tT][oO][rR]\\.17[aA][pP][pP]\\.[cC][oO]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[sS][pP][eE][eE][dD][mM][eE][dD][iI][aA]2\\.[jJ][fF][rR][oO][gG]\\.[cC][oO][mM]\\.?\\z)"
@@ -2667,6 +2672,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:\\A[mM][eE][dD][iI][aA]\\-[cC][dD][nN]\\.[cC][oO][mM][fF][yY]\\.[sS][oO][cC][iI][aA][lL]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[mM][eE][dD][iI][aA]\\-[cC][dD][nN]\\.[rR][oO][lL][lL][cC][aA][lL][lL]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[mM][eE][gG][aA][pP][xX]\\-[aA][sS][sS][eE][tT][sS]\\.[dD][cC][aA][rR][dD]\\.[tT][wW]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:\\A[mM][wW][eE][bB]\\-[cC][dD][nN]\\.[kK][aA][rR][oO][uU][sS][eE][lL][lL]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[pP][aA][rR][tT][sS]\\.[bB][lL][oO][gG]\\.[lL][iI][vV][eE][dD][oO][oO][rR]\\.[jJ][pP]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[pP][kK][gG]\\-[cC][dD][nN]\\.[jJ][eE][tT][bB][rR][aA][iI][nN][sS]\\.[tT][eE][aA][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:\\A[pP][pP]\\-[sS][tT][aA][tT][iI][cC]\\.[mM][oO][nN][oO][tT][yY][pP][eE]\\.[cC][oO][mM]\\.?\\z)"

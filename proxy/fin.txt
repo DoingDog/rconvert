@@ -1,4 +1,4 @@
-# proxy rules: 7056
+# proxy rules: 7059
 DOMAIN,ip.cn
 DOMAIN,tv.apple.com
 DOMAIN,api.waqi.info
@@ -402,6 +402,7 @@ DOMAIN-SUFFIX,mash.to
 DOMAIN-SUFFIX,mcaf.ee
 DOMAIN-SUFFIX,mega.io
 DOMAIN-SUFFIX,mega.nz
+DOMAIN-SUFFIX,meta.ai
 DOMAIN-SUFFIX,mihk.hk
 DOMAIN-SUFFIX,mij.rip
 DOMAIN-SUFFIX,mit.edu
@@ -2538,6 +2539,7 @@ DOMAIN-SUFFIX,3d-game.com
 DOMAIN-SUFFIX,4shared.com
 DOMAIN-SUFFIX,5aimiku.com
 DOMAIN-SUFFIX,6parker.com
+DOMAIN-SUFFIX,7x24hrs.com
 DOMAIN-SUFFIX,91dasai.com
 DOMAIN-SUFFIX,9to5mac.com
 DOMAIN-SUFFIX,aamacau.com
@@ -3782,6 +3784,7 @@ DOMAIN-SUFFIX,megalodon.jp
 DOMAIN-SUFFIX,melon365.com
 DOMAIN-SUFFIX,meltoday.com
 DOMAIN-SUFFIX,mercatox.com
+DOMAIN-SUFFIX,metaaivm.com
 DOMAIN-SUFFIX,metacafe.com
 DOMAIN-SUFFIX,metro.taipei
 DOMAIN-SUFFIX,metrolife.ca

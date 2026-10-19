@@ -1,4 +1,4 @@
-# big-data rules: 8340
+# big-data rules: 8351
 .aws
 .x.ai
 .db.tt
@@ -1789,6 +1789,7 @@ us.123rf.com
 .bytedapm.com
 .c4assets.com
 .callhulu.com
+.capcutapi.us
 .carlos.trade
 .cartocdn.com
 .cbsradio.com
@@ -2339,6 +2340,7 @@ xenia.sote.hu
 .bitgetimg.com
 .bnbstatic.com
 .byspotify.com
+.capcutapi.com
 .cbsivideo.com
 .cbssports.com
 .cbsstatic.com
@@ -3452,6 +3454,7 @@ icons.llamao.fi
 image.gyutto.jp
 image.status.io
 images.dmca.com
+images.higgs.ai
 images.kick.com
 images.vudu.com
 img.177pica.com
@@ -4810,6 +4813,7 @@ static.tumblr.com
 static.vinted.com
 static.vocadb.net
 static.zaobao.com
+status.claude.com
 status.openai.com
 stbff.newfold.com
 storage.ko-fi.com
@@ -5347,6 +5351,7 @@ upload.teftera.com
 uploads.guim.co.uk
 uploads.linear.app
 v2uploads.zopim.io
+vcc-assets.8x8.com
 vector.hereapi.com
 video3.mingpao.com
 videos.elephas.app
@@ -5670,6 +5675,7 @@ download.osmand.net
 download.sketch.com
 download.umbrel.com
 download01.logi.com
+downloads.claude.ai
 downloads.x-wrt.com
 downloads.xrite.com
 error.rakuten.co.jp
@@ -5732,6 +5738,7 @@ media.glassdoor.com
 media.karousell.com
 media.newyorker.com
 media.shopimind.com
+media.trekbikes.com
 medium-media.vgm.io
 merlin.fit.vutbr.cz
 mirror-cdn.xtom.com
@@ -5806,6 +5813,7 @@ public.saasexch.com
 pubmirror.plutex.de
 qmod.quotemedia.com
 release.runcloud.io
+releases.claude.com
 releases.openai.com
 replicate.npmjs.com
 repo.extreme-ix.org
@@ -6565,6 +6573,7 @@ files.scamadviser.com
 files.writefreely.org
 font-public.canva.com
 front-resource.fs.com
+frontend2.locally.com
 gimp.ip-connect.vn.ua
 gitpkg-fork.vercel.sh
 i.creativecommons.org
@@ -6666,6 +6675,7 @@ sequoia.cdn-apple.com
 services.linkfire.com
 sig.grumpybumpers.com
 siloh-ns1.plutotv.net
+sl3-cdn.karousell.com
 speedmedia2.jfrog.com
 st3.depositphotos.com
 start-page.buffer.com
@@ -6973,6 +6983,7 @@ mirror2.infomaniak.com
 mirrors.pidginhost.com
 mirrors.usinternet.com
 moderate.cleantalk.org
+mweb-cdn.karousell.com
 newassets.hcaptcha.com
 opensource.nchc.org.tw
 packages-cf.termux.dev

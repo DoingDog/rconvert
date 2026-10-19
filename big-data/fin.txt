@@ -1,4 +1,4 @@
-# big-data rules: 10566
+# big-data rules: 10577
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -1109,6 +1109,7 @@ DOMAIN,icons.llamao.fi
 DOMAIN,image.gyutto.jp
 DOMAIN,image.status.io
 DOMAIN,images.dmca.com
+DOMAIN,images.higgs.ai
 DOMAIN,images.kick.com
 DOMAIN,images.vudu.com
 DOMAIN,img.177pica.com
@@ -2019,6 +2020,7 @@ DOMAIN,static.tumblr.com
 DOMAIN,static.vinted.com
 DOMAIN,static.vocadb.net
 DOMAIN,static.zaobao.com
+DOMAIN,status.claude.com
 DOMAIN,status.openai.com
 DOMAIN,stbff.newfold.com
 DOMAIN,storage.ko-fi.com
@@ -2406,6 +2408,7 @@ DOMAIN,upload.teftera.com
 DOMAIN,uploads.guim.co.uk
 DOMAIN,uploads.linear.app
 DOMAIN,v2uploads.zopim.io
+DOMAIN,vcc-assets.8x8.com
 DOMAIN,vector.hereapi.com
 DOMAIN,video3.mingpao.com
 DOMAIN,videos.elephas.app
@@ -2594,6 +2597,7 @@ DOMAIN,download.osmand.net
 DOMAIN,download.sketch.com
 DOMAIN,download.umbrel.com
 DOMAIN,download01.logi.com
+DOMAIN,downloads.claude.ai
 DOMAIN,downloads.x-wrt.com
 DOMAIN,downloads.xrite.com
 DOMAIN,error.rakuten.co.jp
@@ -2656,6 +2660,7 @@ DOMAIN,media.glassdoor.com
 DOMAIN,media.karousell.com
 DOMAIN,media.newyorker.com
 DOMAIN,media.shopimind.com
+DOMAIN,media.trekbikes.com
 DOMAIN,medium-media.vgm.io
 DOMAIN,merlin.fit.vutbr.cz
 DOMAIN,mirror-cdn.xtom.com
@@ -2730,6 +2735,7 @@ DOMAIN,public.saasexch.com
 DOMAIN,pubmirror.plutex.de
 DOMAIN,qmod.quotemedia.com
 DOMAIN,release.runcloud.io
+DOMAIN,releases.claude.com
 DOMAIN,releases.openai.com
 DOMAIN,replicate.npmjs.com
 DOMAIN,repo.extreme-ix.org
@@ -3302,6 +3308,7 @@ DOMAIN,files.scamadviser.com
 DOMAIN,files.writefreely.org
 DOMAIN,font-public.canva.com
 DOMAIN,front-resource.fs.com
+DOMAIN,frontend2.locally.com
 DOMAIN,gimp.ip-connect.vn.ua
 DOMAIN,gitpkg-fork.vercel.sh
 DOMAIN,i.creativecommons.org
@@ -3403,6 +3410,7 @@ DOMAIN,sequoia.cdn-apple.com
 DOMAIN,services.linkfire.com
 DOMAIN,sig.grumpybumpers.com
 DOMAIN,siloh-ns1.plutotv.net
+DOMAIN,sl3-cdn.karousell.com
 DOMAIN,speedmedia2.jfrog.com
 DOMAIN,st3.depositphotos.com
 DOMAIN,start-page.buffer.com
@@ -3633,6 +3641,7 @@ DOMAIN,mirror2.infomaniak.com
 DOMAIN,mirrors.pidginhost.com
 DOMAIN,mirrors.usinternet.com
 DOMAIN,moderate.cleantalk.org
+DOMAIN,mweb-cdn.karousell.com
 DOMAIN,newassets.hcaptcha.com
 DOMAIN,opensource.nchc.org.tw
 DOMAIN,packages-cf.termux.dev
@@ -6162,6 +6171,7 @@ DOMAIN-SUFFIX,bunnycdn.com
 DOMAIN-SUFFIX,bytedapm.com
 DOMAIN-SUFFIX,c4assets.com
 DOMAIN-SUFFIX,callhulu.com
+DOMAIN-SUFFIX,capcutapi.us
 DOMAIN-SUFFIX,carlos.trade
 DOMAIN-SUFFIX,cartocdn.com
 DOMAIN-SUFFIX,cbsradio.com
@@ -6481,6 +6491,7 @@ DOMAIN-SUFFIX,bigcontent.io
 DOMAIN-SUFFIX,bitgetimg.com
 DOMAIN-SUFFIX,bnbstatic.com
 DOMAIN-SUFFIX,byspotify.com
+DOMAIN-SUFFIX,capcutapi.com
 DOMAIN-SUFFIX,cbsivideo.com
 DOMAIN-SUFFIX,cbssports.com
 DOMAIN-SUFFIX,cbsstatic.com

@@ -1,4 +1,4 @@
-# cdn rules: 4781
+# cdn rules: 4787
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -820,6 +820,7 @@ DOMAIN,icons.llamao.fi
 DOMAIN,image.gyutto.jp
 DOMAIN,image.status.io
 DOMAIN,images.dmca.com
+DOMAIN,images.higgs.ai
 DOMAIN,images.kick.com
 DOMAIN,images.pluto.tv
 DOMAIN,images.vudu.com
@@ -1749,6 +1750,7 @@ DOMAIN,upload.teftera.com
 DOMAIN,uploads.guim.co.uk
 DOMAIN,uploads.linear.app
 DOMAIN,v2uploads.zopim.io
+DOMAIN,vcc-assets.8x8.com
 DOMAIN,vector.hereapi.com
 DOMAIN,video3.mingpao.com
 DOMAIN,videos.elephas.app
@@ -1953,6 +1955,7 @@ DOMAIN,media.glassdoor.com
 DOMAIN,media.karousell.com
 DOMAIN,media.newyorker.com
 DOMAIN,media.shopimind.com
+DOMAIN,media.trekbikes.com
 DOMAIN,medium-media.vgm.io
 DOMAIN,mstdn-s3.o3o.studio
 DOMAIN,openseauserdata.com
@@ -2402,6 +2405,7 @@ DOMAIN,files.scamadviser.com
 DOMAIN,files.writefreely.org
 DOMAIN,font-public.canva.com
 DOMAIN,front-resource.fs.com
+DOMAIN,frontend2.locally.com
 DOMAIN,gitpkg-fork.vercel.sh
 DOMAIN,i.creativecommons.org
 DOMAIN,icms-image.slatic.net
@@ -2463,6 +2467,7 @@ DOMAIN,sequoia.cdn-apple.com
 DOMAIN,services.linkfire.com
 DOMAIN,sig.grumpybumpers.com
 DOMAIN,siloh-ns1.plutotv.net
+DOMAIN,sl3-cdn.karousell.com
 DOMAIN,speedmedia2.jfrog.com
 DOMAIN,st3.depositphotos.com
 DOMAIN,start-page.buffer.com
@@ -2629,6 +2634,7 @@ DOMAIN,media.infosec.exchange
 DOMAIN,media.steampowered.com
 DOMAIN,megapx-assets.dcard.tw
 DOMAIN,moderate.cleantalk.org
+DOMAIN,mweb-cdn.karousell.com
 DOMAIN,newassets.hcaptcha.com
 DOMAIN,nodeassets.nbcnews.com
 DOMAIN,parts.blog.livedoor.jp

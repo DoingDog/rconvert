@@ -1,4 +1,4 @@
-# proxy rules: 7048
+# proxy rules: 7051
 payload:
   - "DOMAIN-REGEX,1drv"
   - "DOMAIN-REGEX,avtb"
@@ -455,6 +455,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)mcaf\\.ee\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][cC][aA][fF]\\.[eE][eE]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)mega\\.io\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][gG][aA]\\.[iI][oO]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)mega\\.nz\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][gG][aA]\\.[nN][zZ]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)meta\\.ai\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][tT][aA]\\.[aA][iI]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)mihk\\.hk\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][iI][hH][kK]\\.[hH][kK]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)mij\\.rip\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][iI][jJ]\\.[rR][iI][pP]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)mit\\.edu\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][iI][tT]\\.[eE][dD][uU]\\.?\\z)"
@@ -1700,6 +1701,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)zyxel\\.com\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[zZ][yY][xX][eE][lL]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)141tube\\.com\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*141[tT][uU][bB][eE]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)177pic\\.info\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*177[pP][iI][cC]\\.[iI][nN][fF][oO]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)7x24hrs\\.com\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*7[xX]24[hH][rR][sS]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)abc\\.pp\\.ru\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[aA][bB][cC]\\.[pP][pP]\\.[rR][uU]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)aol\\.co\\.uk\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[aA][oO][lL]\\.[cC][oO]\\.[uU][kK]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)bbc\\.co\\.uk\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[bB][bB][cC]\\.[cC][oO]\\.[uU][kK]\\.?\\z)"
@@ -3762,6 +3764,7 @@ payload:
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)megalodon\\.jp\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][gG][aA][lL][oO][dD][oO][nN]\\.[jJ][pP]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)meltoday\\.com\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][lL][tT][oO][dD][aA][yY]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)mercatox\\.com\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][rR][cC][aA][tT][oO][xX]\\.[cC][oO][mM]\\.?\\z)"
+  - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)metaaivm\\.com\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][tT][aA][aA][iI][vV][mM]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)metacafe\\.com\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][tT][aA][cC][aA][fF][eE]\\.[cC][oO][mM]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)metro\\.taipei\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][tT][rR][oO]\\.[tT][aA][iI][pP][eE][iI]\\.?\\z)"
   - "DOMAIN-REGEX,(?-i:(?:\\A|\\.)metrolife\\.ca\\z|\\A(?=[A-Za-z0-9_.-]{1,253}\\.?\\z)(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\\.)*[mM][eE][tT][rR][oO][lL][iI][fF][eE]\\.[cC][aA]\\.?\\z)"

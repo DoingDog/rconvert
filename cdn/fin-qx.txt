@@ -1,4 +1,4 @@
-# cdn rules: 4781
+# cdn rules: 4787
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -820,6 +820,7 @@ HOST,icons.llamao.fi,LIST
 HOST,image.gyutto.jp,LIST
 HOST,image.status.io,LIST
 HOST,images.dmca.com,LIST
+HOST,images.higgs.ai,LIST
 HOST,images.kick.com,LIST
 HOST,images.pluto.tv,LIST
 HOST,images.vudu.com,LIST
@@ -1749,6 +1750,7 @@ HOST,upload.teftera.com,LIST
 HOST,uploads.guim.co.uk,LIST
 HOST,uploads.linear.app,LIST
 HOST,v2uploads.zopim.io,LIST
+HOST,vcc-assets.8x8.com,LIST
 HOST,vector.hereapi.com,LIST
 HOST,video3.mingpao.com,LIST
 HOST,videos.elephas.app,LIST
@@ -1953,6 +1955,7 @@ HOST,media.glassdoor.com,LIST
 HOST,media.karousell.com,LIST
 HOST,media.newyorker.com,LIST
 HOST,media.shopimind.com,LIST
+HOST,media.trekbikes.com,LIST
 HOST,medium-media.vgm.io,LIST
 HOST,mstdn-s3.o3o.studio,LIST
 HOST,openseauserdata.com,LIST
@@ -2402,6 +2405,7 @@ HOST,files.scamadviser.com,LIST
 HOST,files.writefreely.org,LIST
 HOST,font-public.canva.com,LIST
 HOST,front-resource.fs.com,LIST
+HOST,frontend2.locally.com,LIST
 HOST,gitpkg-fork.vercel.sh,LIST
 HOST,i.creativecommons.org,LIST
 HOST,icms-image.slatic.net,LIST
@@ -2463,6 +2467,7 @@ HOST,sequoia.cdn-apple.com,LIST
 HOST,services.linkfire.com,LIST
 HOST,sig.grumpybumpers.com,LIST
 HOST,siloh-ns1.plutotv.net,LIST
+HOST,sl3-cdn.karousell.com,LIST
 HOST,speedmedia2.jfrog.com,LIST
 HOST,st3.depositphotos.com,LIST
 HOST,start-page.buffer.com,LIST
@@ -2629,6 +2634,7 @@ HOST,media.infosec.exchange,LIST
 HOST,media.steampowered.com,LIST
 HOST,megapx-assets.dcard.tw,LIST
 HOST,moderate.cleantalk.org,LIST
+HOST,mweb-cdn.karousell.com,LIST
 HOST,newassets.hcaptcha.com,LIST
 HOST,nodeassets.nbcnews.com,LIST
 HOST,parts.blog.livedoor.jp,LIST
