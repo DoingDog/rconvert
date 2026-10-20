@@ -19,7 +19,7 @@ class YamlCoverageTests(unittest.TestCase):
         output, skipped = render('fixture', surge + native, purpose='proxy', no_resolve='keep')
 
         self.assertEqual(output['fin.yaml'],
-                         '# fixture rules: 2\npayload:\n  - ' + json.dumps(SURGE_SUFFIX) + '\n  - "DOMAIN-SUFFIX,example.com"\n')
+                         '# fixture rules: 1\npayload:\n  - "DOMAIN-SUFFIX,example.com"\n')
         self.assertEqual(output['fin.txt'], '# fixture rules: 1\nDOMAIN-SUFFIX,example.com\n')
         self.assertEqual(output['fin-qx.txt'], '# fixture rules: 1\nHOST-SUFFIX,example.com,LIST\n')
         self.assertEqual(output['fin-surge-ds.txt'], '# fixture rules: 1\n.example.com\n')
@@ -34,7 +34,7 @@ class YamlCoverageTests(unittest.TestCase):
         output, _ = render('fixture', surge + native, purpose='proxy', no_resolve='keep')
 
         self.assertEqual(output['fin.yaml'],
-                         '# fixture rules: 2\npayload:\n  - "DOMAIN,example.com"\n  - ' + json.dumps(SURGE_EXACT) + '\n')
+                         '# fixture rules: 1\npayload:\n  - "DOMAIN,example.com"\n')
 
     def test_surge_suffix_preserves_native_exact_and_child_suffix(self):
         surge, surge_warnings = parse('DOMAIN-SUFFIX,example.com\n', purpose='proxy')
@@ -57,7 +57,7 @@ class YamlCoverageTests(unittest.TestCase):
 
     def test_surge_and_qx_literals_preserve_distinct_payloads(self):
         for kind, qx_text, expected in (
-                ('DOMAIN', 'HOST,example.com,PROXY\n', ['DOMAIN,example.com', SURGE_EXACT]),
+                ('DOMAIN', 'HOST,example.com,PROXY\n', ['DOMAIN,example.com']),
                 ('DOMAIN-SUFFIX', 'HOST,example.com,PROXY\nHOST-SUFFIX,child.example.com,PROXY\n',
                  ['DOMAIN,example.com', SURGE_SUFFIX, 'DOMAIN-SUFFIX,child.example.com'])):
             with self.subTest(kind=kind):
@@ -84,7 +84,7 @@ class YamlCoverageTests(unittest.TestCase):
 
     def test_single_label_domains_use_existing_public_validation(self):
         for kind, expected in (
-                ('DOMAIN', ['DOMAIN,com', expected_domain('DOMAIN', 'com')]),
+                ('DOMAIN', ['DOMAIN,com']),
                 ('DOMAIN-SUFFIX', ['DOMAIN,com', expected_domain('DOMAIN-SUFFIX', 'com')])):
             with self.subTest(kind=kind):
                 surge, surge_warnings = parse(kind + ',com\n', purpose='proxy')

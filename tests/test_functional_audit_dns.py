@@ -541,7 +541,9 @@ class RawRegexPresentationTests(unittest.TestCase):
                         self.assertIsNotNone(matcher.search(host), host)
                     for host in misses:
                         self.assertIsNone(matcher.search(host), host)
-        partial = expected_domain('DOMAIN-SUFFIX', 'test').partition(',')[2]
+        partial = (r'(?-i:(?:\A|\.)test\z|\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
+                   r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*'
+                   r'[tT][eE][sS][tT]\.?\z)')
         for value in (partial, r'(?-i:a)', r'(?i:k\.test\z)'):
             out, skipped = render('dns', [Rule('DOMAIN-REGEX', value)], purpose='block', no_resolve='keep')
             self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
@@ -949,8 +951,7 @@ class DnsDomainConsumerTests(unittest.TestCase):
                                         self.assertEqual({key: count for key, count in skipped.items() if key.startswith(name + ':')},
                                                          {key: count for key, count in reference_skipped.items() if key.startswith(name + ':')})
                                 self.assertEqual(parse(out['fin.yaml'], purpose=purpose),
-                                                 ([Rule('DOMAIN-REGEX', expected_domain(kind, value).partition(',')[2]) if source == 'surge' else
-                                                   Rule(kind, value, domain_source='mihomo')], []))
+                                                 ([Rule(kind, value, domain_source='mihomo')], []))
                                 expected = '||' + value + '^' if kind == 'DOMAIN-SUFFIX' else (
                                     r'/(?s-i:\A' + value.replace('-', r'\-').replace('.', r'\.') + r'\z)/')
                                 self.assertEqual(out['fin-adb.txt'].splitlines()[7:],
@@ -1164,18 +1165,13 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                             yaml += suffix_rows
                             if native:
                                 yaml += wildcard_rows
-                            if not native:
-                                expected_logic = expected_logic.replace(leaf, expected_domain('DOMAIN', 'exact_core.example.org'))
-                                domain_rows = [expected_domain(*row.split(',', 1)) for row in domain_rows]
-                                suffix_rows = [expected_domain(*row.split(',', 1)) for row in suffix_rows]
-                                yaml = [expected_logic, *sorted([*domain_rows, *suffix_rows, *wildcard_rows], key=lambda row: (len(json.dumps(row)), row))]
                             yaml += ['IP-CIDR,203.0.113.0/24' + flag, 'SRC-IP-CIDR,198.51.100.0/24']
                             white_dns = []
                             if not native and purpose == 'block':
                                 white_regex = r'^white\-.\.example\.org\.?$'
                                 white_output, white_skips = render('white-control', [], purpose='block', no_resolve='keep',
                                                                    whitelist=[Rule('DOMAIN-REGEX', white_regex),
-                                                                              Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'white_core.example.org').partition(',')[2])])
+                                                                              Rule('DOMAIN', 'white_core.example.org', domain_source='mihomo')])
                                 self.assertNotIn('fin-adb.txt:DOMAIN-REGEX', white_skips)
                                 white_dns = white_output['fin-adb.txt'].splitlines()[7:]
                             dns = [r'/(?s-i:\A.*\z)/'] if native else [
@@ -1190,14 +1186,12 @@ assert (sys.get_int_max_str_digits(), sys.getrecursionlimit()) == before
                                                   for rule in restored], yaml)
                                 body = dns + (['@@||allow.example.org^'] if group == 'source' else []) if purpose == 'block' else []
                                 if not native and group == 'child' and purpose == 'block':
-                                    controls = [Rule('DOMAIN-REGEX', value) for value in
-                                                (expected_domain('DOMAIN', 'exact_core.example.org').partition(',')[2],
-                                                 expected_domain('DOMAIN', 'neighbor.example.org').partition(',')[2],
-                                                 r'^ad_core\-.\.example\.org\.?$')]
+                                    controls = [Rule('DOMAIN-REGEX', r'^ad_core\-.\.example\.org\.?$')]
                                     actual, counts = render('child-control', controls, purpose='block', no_resolve='keep')
                                     self.assertNotIn('fin-adb.txt:DOMAIN-REGEX', counts)
                                     body = [*white_dns, *actual['fin-adb.txt'].splitlines()[7:]]
-                                    self.assertIn('child fin-adb.txt:DOMAIN-REGEX: 7\n', diagnostic.getvalue())
+                                    self.assertIn('child fin-adb.txt:DOMAIN: 3\n', diagnostic.getvalue())
+                                    self.assertIn('child fin-adb.txt:DOMAIN-SUFFIX: 7\n', diagnostic.getvalue())
                                 body.sort(key=lambda row: (not row.startswith('@@'), len(row), row))
                                 self.assertEqual(output[root / group / 'fin-adb.txt'].splitlines()[7:], body if purpose == 'block' else
                                                  ['! No AdBlock rules for non-advertising group.'])
@@ -1944,9 +1938,7 @@ class DnsRegexConsumerTests(unittest.TestCase):
                             matchers = ['DOMAIN-REGEX,' + value for value in values]
                             ordered = sorted(matchers, key=lambda row: (len(json.dumps(row, ensure_ascii=False)), row))
                             for group in ('white', 'source', 'child'):
-                                yaml = ([expected_logic, 'DOMAIN,neighbor.example.test', *blockers] if native else
-                                        [expected_logic, *sorted([expected_domain('DOMAIN', 'neighbor.example.test'), *blockers],
-                                                                key=lambda row: (len(json.dumps(row, ensure_ascii=False)), row))]) if group == 'source' else ordered
+                                yaml = [expected_logic, 'DOMAIN,neighbor.example.test', *blockers] if group == 'source' else ordered
                                 self.assertEqual(output[root / group / 'fin.yaml'], f'# {group} rules: {len(yaml)}\npayload:\n' +
                                                  ''.join('  - ' + json.dumps(row, ensure_ascii=False) + '\n' for row in yaml))
                                 restored, warnings = parse(output[root / group / 'fin.yaml'], purpose=purpose)
@@ -2275,9 +2267,7 @@ class DnsRegexConsumerTests(unittest.TestCase):
                             expected_logic = f'AND,((DOMAIN-REGEX,{values[0]}),(IP-CIDR,192.0.2.0/24{flag}),(SRC-IP-CIDR,198.51.100.0/24))'
                             ordered = sorted(['DOMAIN-REGEX,' + item for item in values], key=lambda row: (len(row), row))
                             for group in ('white', 'source', 'child'):
-                                yaml = ([expected_logic, 'DOMAIN,neighbor.example.test', 'DOMAIN-REGEX,' + blocker] if native else
-                                        [expected_logic, *sorted([expected_domain('DOMAIN', 'neighbor.example.test'), 'DOMAIN-REGEX,' + blocker],
-                                                                key=lambda row: (len(json.dumps(row, ensure_ascii=False)), row))]) if group == 'source' else ordered
+                                yaml = [expected_logic, 'DOMAIN,neighbor.example.test', 'DOMAIN-REGEX,' + blocker] if group == 'source' else ordered
                                 self.assertEqual(output[root / group / 'fin.yaml'], f'# {group} rules: {len(yaml)}\npayload:\n' +
                                                  ''.join('  - ' + json.dumps(row) + '\n' for row in yaml))
                                 restored, warnings = parse(output[root / group / 'fin.yaml'], purpose=purpose)
@@ -2554,9 +2544,7 @@ class DnsRegexConsumerTests(unittest.TestCase):
                             expected_logic = f'AND,((DOMAIN-REGEX,{values[0]}),(IP-CIDR,192.0.2.0/24{flag}),(SRC-IP-CIDR,198.51.100.0/24))'
                             ordered = sorted(['DOMAIN-REGEX,' + value for value in values], key=lambda row: (len(row), row))
                             for group in ('white', 'source', 'child'):
-                                yaml = ([expected_logic, 'DOMAIN,neighbor.example.test', 'DOMAIN-REGEX,' + blocker] if native else
-                                        [expected_logic, *sorted([expected_domain('DOMAIN', 'neighbor.example.test'), 'DOMAIN-REGEX,' + blocker],
-                                                                key=lambda row: (len(json.dumps(row, ensure_ascii=False)), row))]) if group == 'source' else ordered
+                                yaml = [expected_logic, 'DOMAIN,neighbor.example.test', 'DOMAIN-REGEX,' + blocker] if group == 'source' else ordered
                                 self.assertEqual(output[root / group / 'fin.yaml'], f'# {group} rules: {len(yaml)}\npayload:\n' +
                                                  ''.join('  - ' + json.dumps(row) + '\n' for row in yaml))
                                 restored, warnings = parse(output[root / group / 'fin.yaml'], purpose=purpose)
@@ -2936,14 +2924,13 @@ class DnsRegexConsumerTests(unittest.TestCase):
                             self.assertNotIn('invalid', diagnostic.getvalue())
                             self.assertNotIn('frozen', diagnostic.getvalue())
                             for group in ('source', 'child'):
-                                yaml_matchers = ([expected_logic] + (['DOMAIN,neighbor.example.test'] if native else []) +
-                                                 sorted(['DOMAIN-REGEX,' + value for value in values] +
-                                                        ([] if native else [expected_domain('DOMAIN', 'neighbor.example.test')]),
+                                yaml_matchers = ([expected_logic, 'DOMAIN,neighbor.example.test'] +
+                                                 sorted(['DOMAIN-REGEX,' + value for value in values],
                                                         key=lambda row: (len(json.dumps(row)), row)) +
                                                  ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP-CIDR,198.51.100.0/24'])
                                 body = {'fin.txt': (['DOMAIN,neighbor.example.test'] if not native and group == 'source' else []) +
                                                    ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,198.51.100.0/24'],
-                                        'fin-qx.txt': (['HOST,neighbor.example.test,LIST'] if native or group == 'source' else []) +
+                                        'fin-qx.txt': ['HOST,neighbor.example.test,LIST'] +
                                                       ['IP-CIDR,192.0.2.0/24,LIST' + flag],
                                         'fin.yaml': ['  - ' + json.dumps(matcher) for matcher in yaml_matchers],
                                         'fin-surge.txt': ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,198.51.100.0/24'],
@@ -2951,15 +2938,14 @@ class DnsRegexConsumerTests(unittest.TestCase):
                                 for name, rows in body.items():
                                     expected = f'# {group} rules: {len(rows)}\n' + ('payload:\n' if name == 'fin.yaml' else '')
                                     self.assertEqual(outputs[root / group / name], expected + ''.join(row + '\n' for row in rows))
-                                dns = (([('0.0.0.0 neighbor.example.test' if group == 'source' else r'/(?-i:\Aneighbor\.example\.test\z)/')] if not native else [])
-                                       if purpose == 'block' else [])
+                                dns = ['0.0.0.0 neighbor.example.test'] if purpose == 'block' and not native and group == 'source' else []
                                 if purpose == 'block' and group == 'source':
                                     dns.append('@@||allow.example.test^')
                                 dns.sort(key=lambda row: (not row.startswith('@@'), len(row), row))
                                 self.assertEqual(outputs[root / group / 'fin-adb.txt'].splitlines()[7:],
                                                  dns if purpose == 'block' else ['! No AdBlock rules for non-advertising group.'])
                                 self.assertEqual(outputs[root / group / 'fin-adb.txt'].splitlines()[6], '! Total count: ' + str(len(dns)))
-                                self.assertIn(f'{group} fin-adb.txt:DOMAIN-REGEX: ' + str(12 if purpose == 'block' else 6 + int(not native and group == 'child')), diagnostic.getvalue())
+                                self.assertIn(f'{group} fin-adb.txt:DOMAIN-REGEX: ' + str(12 if purpose == 'block' else 6), diagnostic.getvalue())
                                 restored, messages = parse(outputs[root / group / 'fin.yaml'], purpose=purpose)
                                 self.assertEqual(messages, [])
                                 self.assertEqual([rule.kind + ',' + rule.value + (',no-resolve' if rule.options else '') for rule in restored], yaml_matchers)
@@ -3034,7 +3020,7 @@ class DnsRegexConsumerTests(unittest.TestCase):
                                     '  - ' + json.dumps(matcher) + '\n' for matcher in yaml)
                                 self.assertEqual(output[root / group / 'fin.yaml'], expected_yaml)
                                 self.assertEqual(parse(output[root / group / 'fin.yaml'], purpose=purpose),
-                                                 ([Rule('DOMAIN-REGEX', expected_domain('DOMAIN', 'neighbor.example.test').partition(',')[2])]
+                                                 ([Rule('DOMAIN', 'neighbor.example.test', domain_source='mihomo')]
                                                   if group == 'source' else [Rule('DOMAIN-REGEX', row.partition(',')[2]) for row in ordered], []))
                                 for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
                                     body = (['DOMAIN,neighbor.example.test'] if name == 'fin.txt' else
@@ -3125,14 +3111,14 @@ class DnsRegexConsumerTests(unittest.TestCase):
                             raw_regex = ['DOMAIN-REGEX,' + value for value in values]
                             for group in ('source', 'child'):
                                 domains = (['covered.example.com'] if not native else []) + ['neighbor.example.com']
-                                yaml_matchers = ([expected_logic] + (['DOMAIN,neighbor.example.com'] if native else []) +
-                                                 sorted(raw_regex + ([] if native else [expected_domain('DOMAIN', domain) for domain in domains]),
-                                                        key=lambda matcher: (len(json.dumps(matcher)), matcher)) +
+                                yaml_matchers = ([expected_logic, 'DOMAIN,neighbor.example.com'] +
+                                                 sorted(raw_regex, key=lambda matcher: (len(json.dumps(matcher)), matcher)) +
                                                  ['PROCESS-NAME-REGEX,' + values[0], 'PROCESS-PATH-REGEX,' + values[1],
                                                   'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP-CIDR,198.51.100.0/24'])
                                 body = {'fin.txt': (['DOMAIN,' + domain for domain in domains] if not native and group == 'source' else []) +
                                                   ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,198.51.100.0/24'],
-                                        'fin-qx.txt': (['HOST,' + domain + ',LIST' for domain in domains] if native or group == 'source' else []) +
+                                        'fin-qx.txt': ['HOST,' + domain + ',LIST' for domain in
+                                                       (domains if group == 'source' else ['neighbor.example.com'])] +
                                                      ['IP-CIDR,192.0.2.0/24,LIST' + flag],
                                         'fin.yaml': ['  - ' + json.dumps(matcher) for matcher in yaml_matchers],
                                         'fin-surge.txt': ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,198.51.100.0/24'],
@@ -3141,8 +3127,7 @@ class DnsRegexConsumerTests(unittest.TestCase):
                                     expected = f'# {group} rules: {len(rows)}\n' + ('payload:\n' if name == 'fin.yaml' else '')
                                     self.assertEqual(outputs[root / group / name], expected + ''.join(row + '\n' for row in rows))
                                 dns = (['/' + value + '/' for value in dns_values] +
-                                       ([('0.0.0.0 ' + domain if group == 'source' else r'/(?-i:\A' + domain.replace('.', r'\.') + r'\z)/') for domain in domains] if not native else []) +
-                                       []
+                                       (['0.0.0.0 ' + domain for domain in domains] if not native and group == 'source' else [])
                                        if purpose == 'block' else [])
                                 if purpose == 'block' and group == 'source':
                                     dns.append('@@||allow.example.net^')
@@ -3159,8 +3144,8 @@ class DnsRegexConsumerTests(unittest.TestCase):
                                 self.assertEqual([rule.kind + ',' + rule.value + (',no-resolve' if rule.options else '') for rule in restored],
                                                  yaml_matchers)
                                 for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
-                                    self.assertIn(f'{group} {name}:DOMAIN-REGEX: {4 + 2 * int(not native and group == "child")}', diagnostic.getvalue())
-                                raw_skip = (5 if purpose == 'block' else 4) + (0 if purpose == 'block' else 2) * int(not native and group == 'child')
+                                    self.assertIn(f'{group} {name}:DOMAIN-REGEX: {4}', diagnostic.getvalue())
+                                raw_skip = 5 if purpose == 'block' else 4
                                 if raw_skip:
                                     self.assertIn(f'{group} fin-adb.txt:DOMAIN-REGEX: {raw_skip}', diagnostic.getvalue())
                                 else:
@@ -3272,14 +3257,9 @@ class DnsRegexConsumerTests(unittest.TestCase):
             self.assertIn('child fin-adb.txt:DOMAIN-REGEX: 1\n', stderr.getvalue())
             for group in ('parent', 'child'):
                 rows = out[root / group / 'fin-adb.txt'].splitlines()[7:]
-                self.assertEqual(len(rows), 1)
-                if group == 'parent':
-                    self.assertEqual(rows, ['0.0.0.0 neighbor.example.com'])
-                else:
-                    from tests.test_formats import dns_regex
-                    matcher = dns_regex(rows[0])
-                    self.assertIsNotNone(matcher.search('neighbor.example.com'))
-                    self.assertIsNone(matcher.search('xneighbor.example.com'))
+                self.assertEqual(rows, ['0.0.0.0 neighbor.example.com'] if group == 'parent' else [])
+                if group == 'child':
+                    self.assertIn('child fin-adb.txt:DOMAIN: 1\n', stderr.getvalue())
             publish(out, root=root)
             self.assertEqual({path: path.read_bytes() for path in out},
                              {path: text.encode('utf-8') for path, text in out.items()})

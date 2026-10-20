@@ -121,9 +121,9 @@ class ReadmeTests(unittest.TestCase):
             with self.subTest(term=term):
                 self.assertIn(term, readme)
 
-    def test_readme_explains_finite_domain_profiles_and_actual_bytes_reimport(self):
+    def test_readme_explains_native_domains_and_actual_bytes_reimport(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        for term in ("ASCII hostname", "paired class", "(?-i:...)", "ASCII-only", "legacy",
+        for term in ("Mihomo 原生", "相同最终规则行", "不转换成 regex", "ASCII-only", "legacy",
                      "Go Unicode 15.0.0", "presentation", "Unicode／IDNA", "实际文件 bytes",
                      "disk-only", "cdn/fin.txt", "DOMAIN-REGEX", "完整结构证书", "raw FQDN",
                      "UDP", "A/IN", "未运行客户端", "本地空来源或空白名单"):

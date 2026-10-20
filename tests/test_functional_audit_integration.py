@@ -10,7 +10,7 @@ from unittest.mock import patch
 from formats import FILES
 from generate import generate, publish
 from sources import load_config, resolve_source
-from tests.test_formats import expected_domain, expected_paired_dns
+from tests.test_formats import expected_domain
 
 
 class GeneratedDomainBytesIntegrationTests(unittest.TestCase):
@@ -125,10 +125,10 @@ class GeneratedDomainBytesIntegrationTests(unittest.TestCase):
                         }
                         source_bodies = {name: list(rows) for name, rows in ordinary.items()}
                         if raw:
-                            source_bodies = {name: ordinary[name] if name == 'fin.yaml' else [] for name in FILES}
-                            source_bodies['fin-adb.txt'] = [expected_paired_dns('a.test')]
+                            source_bodies = {name: ordinary[name] if name in {'fin.yaml', 'fin-qx.txt'} else [] for name in FILES}
                         filtered_bodies = {name: [] for name in FILES}
-                        filtered_bodies['fin-adb.txt'] = [expected_paired_dns('a.test')] if raw else ['@@||test^']
+                        if not raw:
+                            filtered_bodies['fin-adb.txt'] = ['@@||test^']
                         white_bodies = {
                             'fin.txt': ['DOMAIN-SUFFIX,test'], 'fin-qx.txt': ['HOST-SUFFIX,test,LIST'],
                             'fin.yaml': [expected_domain('DOMAIN-SUFFIX', 'test')], 'fin-adb.txt': ['||test^'],
@@ -141,13 +141,11 @@ class GeneratedDomainBytesIntegrationTests(unittest.TestCase):
                             diagnostics.update({'parent fin-adb.txt:DOMAIN': 1, 'parent fin-adb.txt:DOMAIN-SUFFIX': 1,
                                                 'white fin-adb.txt:DOMAIN-SUFFIX': 1})
                         if raw:
-                            for group in ('source-child', 'filtered'):
-                                diagnostics.update({group + ' ' + name + ':DOMAIN-REGEX': 2 for name in
-                                                    ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt')})
-                            diagnostics.update({'filtered fin.yaml:DOMAIN-REGEX:whitelist-covered': 2,
-                                                'filtered whitelist-covered:DOMAIN-REGEX': 2,
-                                                'source-child fin-adb.txt:DOMAIN-REGEX': 1 if purpose == 'block' else 2,
-                                                'filtered fin-adb.txt:DOMAIN-REGEX': 2})
+                            diagnostics.update({'source-child ' + name + ':' + kind: 1
+                                                for name in ('fin.txt', 'fin-adb.txt', 'fin-surge-ds.txt')
+                                                for kind in ('DOMAIN', 'DOMAIN-SUFFIX')})
+                            if purpose == 'block':
+                                diagnostics['filtered fin-adb.txt:DOMAIN-SUFFIX'] = 1
                         elif purpose != 'block':
                             diagnostics.update({'source-child fin-adb.txt:DOMAIN': 1, 'source-child fin-adb.txt:DOMAIN-SUFFIX': 1})
 

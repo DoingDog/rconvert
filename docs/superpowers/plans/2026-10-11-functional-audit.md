@@ -12,6 +12,12 @@ historical_baseline: 32236187e11d4fbc1f01245989798e6246ac42c6
 
 # 功能全面审查修复实施计划
 
+## 当前域名输出要求（2026-10-20）
+
+普通来源和 Surge 的 `DOMAIN`／`DOMAIN-SUFFIX` 在 Mihomo classical 输出中直接使用原生规则，接受 Mihomo 原生 case／root 行为，并按最终标量去重。Rule 来源身份继续用于其他目标及 DNS；真实 raw regex、必要 keyword／wildcard 转换和其余已完成修复保持。
+
+下文 U5D1、KTD6 及 S1 中要求 ordinary paired-class／双 arm suffix 的步骤保留为历史实施记录，当前执行服从本节和规格的同日期要求。真实 raw paired 输入的严格结构证书和有限覆盖判断仍需验证，不从生成文件恢复旧来源。验收使用公开 parse／render 的失败回归、原完整 suite、同一封存输入与固定时间的真实 generate／publish、全部 42 份输出及独立规格／正确性审查；固定快照产物只用于验证。
+
 ## Goal Capsule
 
 **目标：**七组六格式、白名单、HTTPS 来源及生产更新按已确认语义工作。原 22 项任务和 V6 static alias、V4 wildcard 根点两个 fix 已完整提交；当前在 fe96/tree `916ce25ddc10fddcc2a7b4acfc5af01263fc032f` 上完成规格 U5D1-U5D4，再完成新候选 U5 和真实 Ubuntu U6。static 的合法内容和状态不受固定断言限制。

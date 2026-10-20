@@ -66,21 +66,8 @@ def _surge_value(value: str, *, source_regex: bool = False, quote_parentheses: b
 
 
 def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tuple[str, str | None]:
-    if kind in DOMAIN_SET_TYPES:
-        if source == 'mihomo' and supported is SURGE_TYPES:
-            return kind, None
-        if source == 'surge' and supported is MIHOMO_TYPES and value.isascii():
-            literal = value.lower().removesuffix('.')
-            if literal.endswith('.') or not _valid_domain('DOMAIN-SUFFIX', literal):
-                return kind, value
-            value = literal
-            paired = ''.join('[' + char + char.upper() + ']' if 'a' <= char <= 'z' else re.escape(char)
-                             for char in value)
-            if kind == 'DOMAIN':
-                return 'DOMAIN-REGEX', r'(?-i:\A' + paired + r'\.?\z)'
-            return 'DOMAIN-REGEX', (r'(?-i:(?:\A|\.)' + re.escape(value) + r'\z|'
-                                    r'\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
-                                    r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*' + paired + r'\.?\z)')
+    if kind in DOMAIN_SET_TYPES and source == 'mihomo' and supported is SURGE_TYPES:
+        return kind, None
     if kind not in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
         return kind, value
     if supported is SURGE_TYPES:
@@ -1353,9 +1340,16 @@ def _paired_domain(rule: Rule) -> tuple[str, str] | None:
         return None
     literal = literal.replace(r'\.', '.').replace(r'\-', '-')
     if (literal.isascii() and literal == literal.lower() and not literal.endswith('.') and
-            _valid_domain('DOMAIN-SUFFIX', literal) and
-            _domain_value(kind, literal, 'surge', MIHOMO_TYPES) == ('DOMAIN-REGEX', value)):
-        return kind, literal
+            _valid_domain('DOMAIN-SUFFIX', literal)):
+        # raw regex 的结构证书独立于普通域名的输出类型，并严格核对完整模板。
+        paired = ''.join('[' + char + char.upper() + ']' if 'a' <= char <= 'z' else re.escape(char)
+                         for char in literal)
+        expected = (r'(?-i:\A' + paired + r'\.?\z)' if kind == 'DOMAIN' else
+                    r'(?-i:(?:\A|\.)' + re.escape(literal) + r'\z|'
+                    r'\A(?=[A-Za-z0-9_.-]{1,253}\.?\z)'
+                    r'(?:[A-Za-z0-9_](?:[A-Za-z0-9_-]{0,61}[A-Za-z0-9_])?\.)*' + paired + r'\.?\z)')
+        if value == expected:
+            return kind, literal
     return None
 
 
@@ -1504,6 +1498,11 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     _has_parent(paired[1], suffixes) or
                     any(keyword and keyword in paired[1] for keyword in keywords) or
                     paired[0] == 'DOMAIN' and any(fnmatchcase(paired[1], pattern) for pattern in wildcards))}
+            if wildcards:
+                kept = {matcher for matcher in kept if not (
+                        matcher.kind == 'DOMAIN' and matcher.value.isascii() and not matcher.value.endswith('.') and
+                        _valid_domain('DOMAIN-SUFFIX', matcher.value) and
+                        any(fnmatchcase(matcher.value, pattern) for pattern in wildcards))}
         for name in names:
             remaining[name], identities[name] = kept, identical
     complete = set()
