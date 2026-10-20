@@ -1,4 +1,4 @@
-# big-data rules: 10558
+# big-data rules: 10559
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -1510,6 +1510,7 @@ HOST,media2.giphy.com,LIST
 HOST,media3.giphy.com,LIST
 HOST,media4.giphy.com,LIST
 HOST,meteorclient.com,LIST
+HOST,metrics.manus.im,LIST
 HOST,mirror.01link.hk,LIST
 HOST,mirror.aut.ac.nz,LIST
 HOST,mirror.bgp.rodeo,LIST
@@ -2736,7 +2737,6 @@ HOST,pubmirror.plutex.de,LIST
 HOST,qmod.quotemedia.com,LIST
 HOST,release.runcloud.io,LIST
 HOST,releases.claude.com,LIST
-HOST,releases.openai.com,LIST
 HOST,replicate.npmjs.com,LIST
 HOST,repo.extreme-ix.org,LIST
 HOST,rum-cdn.perfops.net,LIST
@@ -3900,6 +3900,7 @@ HOST,scripts.dailymail.co.uk,LIST
 HOST,server.arcgisonline.com,LIST
 HOST,static-assets.juksy.com,LIST
 HOST,static-images.remax.com,LIST
+HOST,static-page.tp-link.com,LIST
 HOST,static.chrome-stats.com,LIST
 HOST,static.fastboostcdn.com,LIST
 HOST,static.filestackapi.com,LIST

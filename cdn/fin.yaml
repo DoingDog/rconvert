@@ -1,4 +1,4 @@
-# cdn rules: 4787
+# cdn rules: 4789
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -1123,6 +1123,7 @@ payload:
   - "DOMAIN,media3.giphy.com"
   - "DOMAIN,media4.giphy.com"
   - "DOMAIN,meteorclient.com"
+  - "DOMAIN,metrics.manus.im"
   - "DOMAIN,ocsp.godaddy.com"
   - "DOMAIN,ocsp.sectigo.com"
   - "DOMAIN,origin.picgo.net"
@@ -2827,6 +2828,7 @@ payload:
   - "DOMAIN,server.arcgisonline.com"
   - "DOMAIN,static-assets.juksy.com"
   - "DOMAIN,static-images.remax.com"
+  - "DOMAIN,static-page.tp-link.com"
   - "DOMAIN,static.chrome-stats.com"
   - "DOMAIN,static.fastboostcdn.com"
   - "DOMAIN,static.filestackapi.com"

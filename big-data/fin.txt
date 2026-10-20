@@ -1,4 +1,4 @@
-# big-data rules: 10577
+# big-data rules: 10578
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -1510,6 +1510,7 @@ DOMAIN,media2.giphy.com
 DOMAIN,media3.giphy.com
 DOMAIN,media4.giphy.com
 DOMAIN,meteorclient.com
+DOMAIN,metrics.manus.im
 DOMAIN,mirror.01link.hk
 DOMAIN,mirror.aut.ac.nz
 DOMAIN,mirror.bgp.rodeo
@@ -2736,7 +2737,6 @@ DOMAIN,pubmirror.plutex.de
 DOMAIN,qmod.quotemedia.com
 DOMAIN,release.runcloud.io
 DOMAIN,releases.claude.com
-DOMAIN,releases.openai.com
 DOMAIN,replicate.npmjs.com
 DOMAIN,repo.extreme-ix.org
 DOMAIN,rum-cdn.perfops.net
@@ -3900,6 +3900,7 @@ DOMAIN,scripts.dailymail.co.uk
 DOMAIN,server.arcgisonline.com
 DOMAIN,static-assets.juksy.com
 DOMAIN,static-images.remax.com
+DOMAIN,static-page.tp-link.com
 DOMAIN,static.chrome-stats.com
 DOMAIN,static.fastboostcdn.com
 DOMAIN,static.filestackapi.com

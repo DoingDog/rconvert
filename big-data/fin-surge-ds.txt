@@ -1,4 +1,4 @@
-# big-data rules: 8351
+# big-data rules: 8352
 .aws
 .x.ai
 .db.tt
@@ -4077,6 +4077,7 @@ media2.giphy.com
 media3.giphy.com
 media4.giphy.com
 meteorclient.com
+metrics.manus.im
 mirror.01link.hk
 mirror.aut.ac.nz
 mirror.bgp.rodeo
@@ -5814,7 +5815,6 @@ pubmirror.plutex.de
 qmod.quotemedia.com
 release.runcloud.io
 releases.claude.com
-releases.openai.com
 replicate.npmjs.com
 repo.extreme-ix.org
 rum-cdn.perfops.net
@@ -7304,6 +7304,7 @@ scripts.dailymail.co.uk
 server.arcgisonline.com
 static-assets.juksy.com
 static-images.remax.com
+static-page.tp-link.com
 static.chrome-stats.com
 static.fastboostcdn.com
 static.filestackapi.com

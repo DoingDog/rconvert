@@ -1,4 +1,4 @@
-# cdn rules: 4787
+# cdn rules: 4789
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -1122,6 +1122,7 @@ HOST,media2.giphy.com,LIST
 HOST,media3.giphy.com,LIST
 HOST,media4.giphy.com,LIST
 HOST,meteorclient.com,LIST
+HOST,metrics.manus.im,LIST
 HOST,ocsp.godaddy.com,LIST
 HOST,ocsp.sectigo.com,LIST
 HOST,origin.picgo.net,LIST
@@ -2826,6 +2827,7 @@ HOST,scripts.dailymail.co.uk,LIST
 HOST,server.arcgisonline.com,LIST
 HOST,static-assets.juksy.com,LIST
 HOST,static-images.remax.com,LIST
+HOST,static-page.tp-link.com,LIST
 HOST,static.chrome-stats.com,LIST
 HOST,static.fastboostcdn.com,LIST
 HOST,static.filestackapi.com,LIST
