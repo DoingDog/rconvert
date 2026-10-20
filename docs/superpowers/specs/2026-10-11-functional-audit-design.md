@@ -1,5 +1,11 @@
 # 功能全面审查的修复设计
 
+## 当前域名输出要求（2026-10-20）
+
+普通来源和 Surge 的 `DOMAIN`／`DOMAIN-SUFFIX` 在 Mihomo classical 输出中使用同名原生规则，接受 Mihomo 原生 case／root 行为；按最终标量去重，保留其他目标和 DNS 使用的 Rule 来源身份。真实 raw regex 原文、必要 keyword／wildcard 转换、native 输入、IP／logical／no_resolve 和 DNS 结构证书及限制保持。
+
+下文 U5D1 及相关 S1 的 ordinary paired-class／双 arm suffix 构造是历史实施记录，已由本节替代，不再要求普通域名生成 regex。U5D3／U5D4 对输入中真实严格 paired 模板的 DNS 证书及有限覆盖判断继续适用，模板再编码验证独立于普通域名输出。历史基准、验收记录和未属于本次修改的边界保留。
+
 ## 目标与完成边界
 
 交付范围为基准 `32236187e11d4fbc1f01245989798e6246ac42c6` 上确认的 21 项缺陷修复及 C2 文件迁移，共 22 项任务：R1-R14、F1-F4、N1-N2、C1-C2，以及本规格 U5D1-U5D4 的后续域名投影修复。交付包含解析、白名单覆盖、目标转换、HTTPS 读取和生产工作流的完整修复、逐项 TDD、独立整体验证及远程 Ubuntu 验收。

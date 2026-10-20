@@ -49,9 +49,9 @@
 
 `fin-adb.txt` 的每行上限为 65,536 UTF-8 bytes，计入结尾 LF、例外前缀 `@@`、regex 包装 `/.../` 及标题和其他文件头内容；恰好达到上限的行保留。规则或例外超限只跳过该条 DNS 输出，其他五种格式继续按各自支持范围转换。标题或其他文件头超限抛出 `ValueError`，在发布前终止本轮并保留全部旧产物。
 
-生成的 `fin.yaml` 仅包含原生 YAML 规则。普通 Surge 的 ASCII 精确域名会转换为显式关闭忽略大小写（`(?-i:...)`）、使用 paired class 的 `DOMAIN-REGEX`，支持合法 ASCII hostname 的大小写及单个末尾根点；后缀转换同时保留原生后缀的 legacy 分支，并增加有长度和 label 边界的 ASCII 分支。后缀的非 ASCII prefix 仍遵守 legacy 分支，不承诺完整 Surge Unicode／IDNA 等价。
+生成的 `fin.yaml` 使用 Mihomo classical 原生规则。普通来源和 Surge 的 `DOMAIN`／`DOMAIN-SUFFIX` 直接保留类型和规范化后的 payload，采用 Mihomo 原生的大小写及末尾根点匹配行为；这两种域名规则不转换成 regex，也不承诺与 Surge 跨来源全域等价。不同来源生成的相同最终规则行只保留一份。真实 `DOMAIN-REGEX` 保留 matcher，必要的 keyword／wildcard 转换继续保留。
 
-重新导入只读取实际文件 bytes，按 Mihomo 原生语义解析已输出的 matcher，普通 YAML 注释被忽略；转换前的 Rule 类型和来源信息不通过文件恢复。生成的 raw `DOMAIN-REGEX` 不会反向恢复为 Surge 精确域名或后缀，在 Surge／Quantumult X 按实际类型 unsupported；AdGuard DNS 重新检查完整结构证书。paired exact 可保留其 ASCII-only 谓词，含根点敏感 legacy 分支的 paired suffix 不输出 DNS。在相同来源格式上下文中，相同 bytes 作为用户输入、同轮生成依赖或非空磁盘依赖时，取得相同的目标支持子集。
+重新导入只读取实际文件 bytes，按 Mihomo 原生语义解析已输出的 matcher，普通 YAML 注释被忽略；转换前的 Rule 类型和来源信息不通过文件恢复。raw `DOMAIN-REGEX` 不会反向恢复为 Surge 精确域名或后缀，在 Surge／Quantumult X 按实际类型 unsupported；AdGuard DNS 重新检查完整结构证书。已有 raw paired exact 可保留其 ASCII-only 谓词，含根点敏感 legacy 分支的 raw paired suffix 不输出 DNS。在相同来源格式上下文中，相同 bytes 作为用户输入、同轮生成依赖或非空磁盘依赖时，取得相同的目标支持子集。
 
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
@@ -76,9 +76,9 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 
 所有规则组均使用 Sukka 的 [非 IP LAN 白名单](https://ruleset.skk.moe/Clash/non_ip/lan.txt) 和 [IP LAN 白名单](https://ruleset.skk.moe/Clash/ip/lan.txt)；`a4` 与 `a3` 的白名单相同。`tg` 还使用 `static/` 中的 [`tg-sentinel.txt`](static/tg-sentinel.txt)，即使远端 LAN 白名单不可用，也排除上游的非 Telegram 哨兵。
 
-白名单使用域名精确、后缀、keyword、wildcard、`DOMAIN-REGEX` 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。raw `DOMAIN-REGEX` 保留 matcher 原文完全相同的覆盖；另对生成器的严格 paired 模板证明有限的完整包含关系，不推断任意 regex 等价。paired suffix white 不能删除仍匹配 Kelvin sign `K` 的 canonical regex，来源覆盖或单个 Host 命中均不能代替实际目标的完整包含证明。
+白名单使用域名精确、后缀、keyword、wildcard、`DOMAIN-REGEX` 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。raw `DOMAIN-REGEX` 保留 matcher 原文完全相同的覆盖；另对已有 raw paired 严格模板保留有限的完整包含关系，不推断任意 regex 等价。raw paired suffix white 不能删除仍匹配 Kelvin sign `K` 的 canonical regex，来源覆盖或单个 Host 命中均不能代替实际目标的完整包含证明。
 
-过滤分别核查来源匹配范围和各路由目标实际生成的 matcher。跨来源删除只使用匹配范围不变或属于原白名单已证明子集的目标投影；Mihomo native 与 QX 未证明等价的 Unicode、大小写、末尾根点及 byte／字符匹配差别按原来源保留。输入中的 allow 规则按 `no_resolve` 处理及移除受支持接口参数后的实际 matcher 参与路由白名单，外部白名单仍遵守原 options 限制。
+过滤分别核查来源匹配范围和各路由目标实际生成的 matcher。来源层保留 Mihomo native 与 QX 未证明等价的 Unicode、大小写、末尾根点及 byte／字符匹配差别；Mihomo 路由层按实际输出的原生域名 matcher 和已证明的覆盖关系过滤。其他转换只使用匹配范围不变或属于原白名单已证明子集的目标投影。输入中的 allow 规则按 `no_resolve` 处理及移除受支持接口参数后的实际 matcher 参与路由白名单，外部白名单仍遵守原 options 限制。
 
 对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，普通 Surge 精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。DNS 的 block、allow 和外部白名单使用相同的 case／root 安全判定：native exact／suffix 不输出 DNS，keyword／wildcard 只保留已证明可表达的子集，native `*` 仍支持。所有 raw `DOMAIN-REGEX` 均须取得完整结构证书，未知子结构或不可恢复的大小写／根点区别只计该目标 unsupported。
 

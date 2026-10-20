@@ -554,7 +554,7 @@ class SurgeClassWhitelistAuditTests(unittest.TestCase):
                                 'fin-surge.txt': [surge_ip, source_ip],
                                 'fin-surge-ds.txt': ['cdn-z.example.com', 'neighbor.example.org'] if group == 'source' else [],
                                 'fin-qx.txt': ['HOST,cdn-z.example.com,LIST', 'HOST,neighbor.example.org,LIST',
-                                               'IP-CIDR,192.0.2.0/24,LIST' + option] if group == 'source' else ['IP-CIDR,192.0.2.0/24,LIST' + option],
+                                               'IP-CIDR,192.0.2.0/24,LIST' + option],
                                 'fin.yaml': ['  - ' + json.dumps(expected_domain('DOMAIN', 'cdn-z.example.com')),
                                              '  - ' + json.dumps(expected_domain('DOMAIN', 'neighbor.example.org')),
                                              '  - ' + json.dumps(surge_ip), '  - "SRC-IP-CIDR,198.51.100.0/24"'],
@@ -565,8 +565,7 @@ class SurgeClassWhitelistAuditTests(unittest.TestCase):
                                                  ''.join(line + '\n' for line in body))
                             dns_body = ([*(['@@||allow.example.org^'] if group == 'source' else []),
                                          r'@@/^cdn\-[ab]\.example\.com$/',
-                                         *(['0.0.0.0 cdn-z.example.com', '0.0.0.0 neighbor.example.org'] if group == 'source' else
-                                           [r'/(?-i:\Acdn\-z\.example\.com\z)/', r'/(?-i:\Aneighbor\.example\.org\z)/'])] if purpose == 'block' else [])
+                                         *(['0.0.0.0 cdn-z.example.com', '0.0.0.0 neighbor.example.org'] if group == 'source' else [])] if purpose == 'block' else [])
                             dns = outputs[root / group / 'fin-adb.txt'].splitlines()
                             self.assertEqual(dns[6], f'! Total count: {len(dns_body)}')
                             self.assertEqual(dns[7:], dns_body if purpose == 'block' else
@@ -832,11 +831,10 @@ class CrossSourceCoverageAuditTests(unittest.TestCase):
                             self.assertEqual(warnings, [])
                             self.assertEqual(len(repeated), 1)
                             self.assertEqual(repeated[0].domain_source,
-                                             'mihomo' if native_source else 'surge')
+                                             'mihomo' if native_source or 'DOMAIN,' in value else 'surge')
                             expected = value.replace(',no-resolve)', ')') if mode == 'strip' else value
                             if not native_source:
-                                expected = expected.replace('DOMAIN-KEYWORD,microsoft', 'DOMAIN-REGEX,microsoft').replace(
-                                    'DOMAIN,neighbor.example.org', expected_domain('DOMAIN', 'neighbor.example.org'))
+                                expected = expected.replace('DOMAIN-KEYWORD,microsoft', 'DOMAIN-REGEX,microsoft')
                             self.assertEqual(repeated[0].value, expected)
                             self.assertNotIn('fin.yaml:' + operator, skipped)
         self.assertEqual(exclude_covered([Rule('DOMAIN-REGEX', '^microsoft$')],
