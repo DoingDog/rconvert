@@ -80,7 +80,7 @@ execution: code
 4. 完成相关和完整测试后，按规格复审范围与边界，删除本次冗余内容，修正发现的问题并重跑受影响检查。
 5. 确认只有授权路径改变后，独立英文提交本项修复。
 
-**Execution note：**测试按行为纵向完成 red -> green；基准失败核验只在测试进程载入基准源码，不回退工作文件，不使用 mock 客户端。
+**Execution note：**测试按行为纵向完成 red -> green；保留接手时已有的最小测试，在未修改的生产实现真实确认 red 后进行最小修复。后续行为逐项在操作系统临时目录的隔离基准 snapshot 中使用相同新增测试确认失败或正确对照，再运行当前实现；snapshot 的生产 Python 文件来自 Git 基准，不回退或覆盖 worktree，不使用 mock 客户端。
 
 **Test Scenarios：**
 
@@ -102,12 +102,12 @@ execution: code
 
 | 步骤 | 核查 |
 |---|---|
-| 基线与范围 | HEAD 为指定基准、工作目录清洁、唯一 normalize 生产调用方及相关现有测试已阅读 |
+| 基线与范围 | 生产基准为 `4c1f29d`，接手 HEAD `6716b51` 已含规格与计划提交；index 与生产 diff 为空，已有未跟踪最小测试保留；核查唯一 normalize 生产调用方及相关现有测试 |
 | 最小 red | Linux 执行新增单测，确认失败于有效长 keyword 正文缺失 |
 | 最小 green | 最小资格条件后相同测试通过 |
 | 各验收行为 | 按行为追加；在基准模块验证失败或正确对照通过，再在当前模块验证通过 |
 | 相关回归 | 新测试、test_rules、test_formats、test_generate、functional audit projection/DNS 和 coverage 等相关模块通过 |
-| 完整测试 | Linux Python 执行 `-m unittest discover -s tests -v`，保留真实命令、退出码、终态；Linux 临时 fixture 不使用 Windows skip 替代验收 |
+| 完整测试 | 在 Linux `/tmp` 中以 Git archive 加当前授权文件建立完整 snapshot，Linux Python 使用 unittest discovery（`discover -s tests -v`）执行；保留真实命令、退出码、终态及 snapshot 与 worktree 的文件一致性，不使用 Windows skip 替代验收 |
 | 审查与简化 | 逐项核 R1-R8、生产 diff、测试 seam/expected、全部分组、循环依赖及输入不变 |
 | 提交检查 | `git diff --check` 通过，仅授权路径暂存和提交，不 push、不 merge |
 
