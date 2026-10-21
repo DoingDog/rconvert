@@ -2,9 +2,9 @@
 
 ## 目标与范围
 
-在基线 `4c1f29d55e47f939b96cf87a5284f947938191ed` 上修复四项已确认的路由字段问题。公开规则保留原 matcher；目标不能保真表达时，仅跳过该目标并使用现有 unsupported 诊断。生成文件作为来源或白名单时，继续读取实际 bytes。
+在基线 `4c1f29d55e47f939b96cf87a5284f947938191ed` 上修复四项已确认的路由字段问题及 DNS escaped-hyphen 字符类投影。公开规则保留原 matcher；目标不能保真表达时，仅跳过该目标并使用现有 unsupported 诊断。生成文件作为来源或白名单时，继续读取实际 bytes。
 
-生产修改限于 `formats.py` 的 process、Mihomo scalar／logical、QX 投影及路由白名单入口，不修改 DNS class 证明器。测试新增于 `tests/test_routing_field_regressions.py`；既有测试只精确更新 `tests/test_generate.py::SourceFieldContinuationGenerateTests.test_literal_user_agent_and_url_regex_survive_six_products_and_disk_dependency` 的相关 QX body、count 和 unsupported 预期，其余来源、模式、Surge 依赖、发布和旧文件检查保留。README 只更新相关支持说明，规则数量区保持。`rules.py`、`generate.py`、配置、static、生产产物和公共接口不变。
+生产修改限于 `formats.py` 的 process、Mihomo scalar／logical、QX 投影、路由白名单入口和 DNS class 扫描／范围归约。测试新增于 `tests/test_routing_field_regressions.py` 和 `tests/test_dns_hyphen_regressions.py`；既有测试只精确更新 `tests/test_generate.py::SourceFieldContinuationGenerateTests.test_literal_user_agent_and_url_regex_survive_six_products_and_disk_dependency` 的相关 QX body、count 和 unsupported 预期，其余来源、模式、Surge 依赖、发布和旧文件检查保留。README 只更新相关支持说明，规则数量区保持。`rules.py`、`generate.py`、配置、static、生产产物和公共接口不变。
 
 唯一交付目标为 GitHub Actions Ubuntu。允许使用已有 Debian WSL 执行 Linux Python 测试；不启动客户端、Go 程序或 listener，不增加依赖、配置、fallback、隐藏 Rule 缓存或输出格式。
 
@@ -65,6 +65,18 @@ native wildcard 输入形状闭合由另一任务处理；本任务保留已支�
 
 保留 balanced `12(3)`／`foo(bar)`、顶层合法 `foo(`、普通 PROCESS-NAME 已 hex 编码的括号、regex 既有保护和 native ignored-tail 帮助平衡结构的正例。AND／OR／NOT、嵌套、多错误叶子、IP 方向及 no-resolve 保持，诊断按原顶层类型计一次。
 
+## R5. DNS escaped-hyphen 的来源 token 身份
+
+固定 regexp2 `3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` 的 `scanCharSet` 遇到来源 class 的 `\-` 时立即加入 singleton hyphen 并 continue；它不结束 pending range，也不作为紧随 raw `-` 的 range 起点。现有 DNS reducer 无法证明这些组合时，仅拒绝该条 DNS 投影。
+
+在 `_dns_regex(..., encoded=False)` 扫描中记录 escaped hyphen 的位置；当 range 归约准备把它作为起点或终点时返回既有 `None`。`encoded=True` 扫描的是 Go 目标 regex，保持原有语义。不能整类禁止 `\-`，不能将其与 `\x{2D}` 同化，不修改来源 validator、公共 Rule 或其他目标。
+
+四个基本反例为 `[!-\-9]x`、`[^!-\-9]x`、`[\--9]x`、`[^\--9]x`。对普通 ASCII hostname `0x.test`，固定来源真值依次为 true、false、false、true，修复前 DNS 依次为 false、true、true、false。来源真值依据固定源码，不执行客户端，不用 Python re 解释原始来源 regex。
+
+覆盖普通 quoted 和 native YAML 两个来源、正／否定类、property 混合、中性／scoped 分组、重复 escaped hyphen，及 block、公共 allow、真实外部 whitelist 三个消费者。每个被拒绝的消费项精确增加一次 `fin-adb.txt:DOMAIN-REGEX`，没有残留正文；fin.yaml 保留原 matcher。真实 generate／publish、同轮及 disk fin.yaml source／white 均读取实际 bytes，输入和旧文件保护保持。
+
+保留 `[-a]`、`[a-]`、`[\-a]`、`[a\-]`、`[\-a-c]`、`[--0]`、`[!-\x{2D}a]`、`[\x{2D}-a]` 及已证明 property 控制的现有支持。大小写、根点、Unicode 数据、量词／高度、compiled-size、65,536-byte 包括 LF／@@ 的预算不变。
+
 ## 诊断与发布验收
 
 1. 六文件 header 仅统计实际正文，Surge 完整文件和拆分文件一致；顺序与重复输入不改变结果。
@@ -79,4 +91,6 @@ native wildcard 输入形状闭合由另一任务处理；本任务保留已支�
 
 固定 QX `af6fb594233ec4a3ec6d4ccb3601e9c36b75ea2d` 的官方样例只提供已知三字段格式，现有审计未取得这些特殊字段的官方编码依据。本修复只承诺目标局部 unsupported 和转换器依赖安全，不承诺未知闭源字段语义。
 
-不修改已排除的 Mihomo DOMAIN-SUFFIX 大小写、GEOIP,LAN、手工顶层 SRC-IP/CIDR；Go／Python 名称空白差异及 DNS escaped-hyphen 仍待独立确认。
+DNS 依据已固定 regexp2 的 `syntax/parser.go:1442-1631`、Mihomo `NewDomainRegex` 和 DNS 的 Go regexp 消费路径。来源推导及公开输出反例已由三个只读审查分别确认；不据此扩大未知 Unicode 范围支持。
+
+不修改已排除的 Mihomo DOMAIN-SUFFIX 大小写、GEOIP,LAN、手工顶层 SRC-IP/CIDR；Go／Python 名称空白差异仍待独立确认。

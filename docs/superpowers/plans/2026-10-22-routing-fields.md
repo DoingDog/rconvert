@@ -12,10 +12,10 @@ origin: docs/superpowers/specs/2026-10-22-routing-fields-design.md
 
 ## Goal Capsule
 
-- 目标：合法输入不会因这四项字段转换改变 matcher、扩大生成白名单或使后续生成依赖失败。
-- 方法：复用目标转换及 unsupported 分支，具体规则以规格 R1-R4 为准。
+- 目标：合法输入不会因四项路由字段转换及 DNS escaped-hyphen 投影改变 matcher、扩大生成白名单或使后续生成依赖失败。
+- 方法：复用目标转换及 unsupported 分支，具体规则以规格 R1-R5 为准。
 - 执行范围：单个独立 worktree 连续实施和提交；不 push，不合并主分支，不运行客户端。
-- 完成条件：四项各自经失败测试、最小修复、相关回归和审查后提交，最终完整 Linux suite 通过。
+- 完成条件：五项各自经失败测试、最小修复、相关回归和审查后提交，最终完整 Linux suite 通过。
 
 ---
 
@@ -35,13 +35,14 @@ origin: docs/superpowers/specs/2026-10-22-routing-fields-design.md
 - R2. 遵守规格 R2 的最终有效 payload comma 检查，以及相同的 Mihomo white 可用性判断。
 - R3. 遵守规格 R3 的 QX 文本／white 共享检查，保留已有 HOST-KEYWORD 字面 backslash／marker 能力。
 - R4. 遵守规格 R4 的逐叶 native 括号检查，包含跨叶子抵消和非法前缀。
-- R5. 保持规格的公开接口、六目标、诊断、真实 bytes 依赖和发布边界。
+- R5. 遵守规格 R5 的来源 escaped-hyphen 身份及 DNS 目标局部 unsupported，保留安全 class 控制与 encoded Go 语义。
+- R6. 保持规格的公开接口、六目标、诊断、真实 bytes 依赖和发布边界。
 
 ### Scope Boundaries
 
-生产修改仅 `formats.py` 的路由字段相关函数。新增测试仅 `tests/test_routing_field_regressions.py`。既有 `tests/test_generate.py` 只改已确认的 USER-AGENT QX 预期；其余测试不改。文档仅本规格、本计划和 README 相关字段说明，规则数量区保留。
+生产修改仅 `formats.py` 的路由字段函数和既有 DNS class 扫描／范围归约。新增测试仅 `tests/test_routing_field_regressions.py`、`tests/test_dns_hyphen_regressions.py`。既有 `tests/test_generate.py` 只改已确认的 USER-AGENT QX 预期；其余测试不改。文档仅本规格、本计划和 README 相关支持说明，规则数量区保留。
 
-不新增依赖、配置或公共类型，不改 DNS class 证明器、rules／generate 算法、static、生产产物。待独立确认的名称空白与 DNS escaped-hyphen 不进入当前实施。native wildcard 的输入闭合归另一任务，本任务保留既有 native `*` 输出。
+不新增依赖、配置或公共类型，不改 rules／generate 算法、static、生产产物。待独立确认的名称空白不进入当前实施。native wildcard 的输入闭合归另一任务，本任务保留既有 native `*` 输出。
 
 ---
 
@@ -53,6 +54,7 @@ origin: docs/superpowers/specs/2026-10-22-routing-fields-design.md
 - KTD2. 在 `_mihomo_rule` 及 `_logical_value` 的最终有效 payload 处实现 R2，并让 `_route_whitelist` 在使用原白名单之前确认投影成功。
 - KTD3. 把现有 QX 字段限制与 R3 新边界合并为同一个小型目标判定，由输出及 white 复用，不重新 parse 输出构造 matcher。
 - KTD4. 在 logical nonregex 叶子恢复 native ignored-tail 后复用 `_delimiters(native_fields=True)` 实现 R4，检查每个 payload 的所有前缀及最终平衡。
+- KTD5. 在现有 DNS class scanner 记录 encoded=False 的 escaped-hyphen 原子位置，只在 reducer 将其当 range 端点时返回 None；不改 encoded=True 的 Go 目标语义。
 
 ### High-Level Technical Design
 
@@ -71,7 +73,9 @@ flowchart TB
 
 ### Sequencing
 
-先提交规格和计划。U1、U2、U3、U4 修改同一文件，按此顺序连续执行；不并行编辑。每个单位在本项测试失败后才实现，完成相关回归、规格审查、简化和复审后单独英文提交。全部完成后执行 U5。
+保留现有文档提交，先提交本次 R5 规格与计划增补。U1-U5 修改同一文件，按此顺序连续执行；不并行编辑。每个单位在本项测试失败后才实现，完成相关回归、规格审查、简化和复审后单独英文提交。全部完成后执行 U6。
+
+恢复入口已有 U1 的两行实现、README 说明及新测试，保持原样。停止线程没有提供可核查 red 输出时，以 Git 基线文件和同一测试在操作系统临时目录构造隔离 snapshot，真实运行得到 red；当前 worktree 不回退、不覆盖现有实现，再在当前实现运行同一测试得到 green。其余新增行为仍逐个 red -> green，不先批量写测试。EnterWorktree 若受工具会话限制不能切换，所有读写和 Git 命令显式指定本 worktree 的绝对路径，禁止编辑主仓库。
 
 ### Assumptions
 
@@ -130,9 +134,21 @@ flowchart TB
   4. 真实 parent／child fin.yaml 同轮及 disk-only 依赖无失败，IP 方向与 no-resolve 不变，按顶层 operator 计一次。
 - **Verification：**逐叶字面预期和完整结构回读均通过；既有 ignored-tail 两组正例及深层 logical 测试保持。
 
-### U5. 完整复审与交付
+### U5. DNS escaped-hyphen
 
-- **Goal：**验证 R1-R5 的联合行为；依赖 U1-U4。
+- **Goal：**完成 R5，使用 KTD5；依赖 U4。
+- **Files：**`formats.py`、`tests/test_dns_hyphen_regressions.py`、`README.md`。
+- **Approach：**先以 `[!-\-9]x` 的 DNS 目标错误输出确认 red，保留 escaped-hyphen 身份后对参与 range 的原子局部返回 None；再为 escaped 起点及否定／property 组合执行逐项回归。
+- **Test scenarios：**
+  1. `[!-\-9]x`、`[^!-\-9]x`、`[\--9]x`、`[^\--9]x`，普通 quoted／native 两来源均保留公共值和 fin.yaml，只跳过 DNS。
+  2. block、公共 allow、真实 parse_whitelist 三个消费者精确一次 unsupported；scoped／中性组、重复 escaped hyphen 及 property 包装不产生错误正文。
+  3. `[-a]`、`[a-]`、`[\-a]`、`[a\-]`、`[\-a-c]`、`[--0]`、hex hyphen 两组及 property 控制继续有正确 DNS 匹配；encoded Go 目标扫描不受来源标记影响。
+  4. 三种用途／no_resolve、真实 generate／publish、同轮和 disk fin.yaml source／white 使用真实非空 bytes，输入和旧文件保护保持。
+- **Verification：**新测试、既有 class/property／DNS／来源 hyphen 测试通过；不改来源 validator、预算或其他五目标。
+
+### U6. 完整复审与交付
+
+- **Goal：**验证 R1-R6 的联合行为；依赖 U1-U5。
 - **Files：**只检查上述变更范围，必要修正限于所属任务。
 - **Approach：**执行完整 Linux unittest；按规格逐项核对文本、white、依赖、计数、冻结、排序、输入和发布边界；审查共享判定没有重复实现或多余抽象。
 - **Verification：**完整 suite 终态成功、diff 检查通过、仅授权文件改变，所有提交均在当前 worktree。最终返回真实 red／green、suite 命令和结果、commit、路径及未检查范围，不写额外报告文件。
@@ -151,8 +167,8 @@ Linux 执行器使用已有 Debian WSL 的 `python3 -I -B`，显式加入当前 
 
 ## Definition of Done
 
-- 四项规格的正反例均有公开接口测试，且逐行为 red -> green 证据可回查。
+- 五项规格的正反例均有公开接口测试，且逐行为 red -> green 证据可回查。
 - 全部新测试、相关测试与完整 Linux suite 通过，未降低严格生成校验或新增 skip。
 - README 描述最终支持边界，规则数量区及非任务文件保持。
 - 无未使用实现、撤销方案、额外依赖或未清理的本次实验代码；临时 fixture 自动清理。
-- 规格先提交，四项修复分别英文提交；工作区干净，返回 base／head／branch 及全部提交。
+- 规格先提交，五项修复分别英文提交；工作区干净，返回 base／head／branch 及全部提交。
