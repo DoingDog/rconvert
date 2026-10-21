@@ -1,4 +1,4 @@
-# cdn rules: 4789
+# cdn rules: 4791
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -4229,6 +4229,7 @@ HOST-SUFFIX,striiiipst.com,LIST
 HOST-SUFFIX,targetimg1.com,LIST
 HOST-SUFFIX,teraboxcdn.com,LIST
 HOST-SUFFIX,torproject.org,LIST
+HOST-SUFFIX,trvl-media.com,LIST
 HOST-SUFFIX,typography.com,LIST
 HOST-SUFFIX,ungrounded.net,LIST
 HOST-SUFFIX,vanillicon.com,LIST
@@ -4467,6 +4468,7 @@ HOST-SUFFIX,static.flickr.com,LIST
 HOST-SUFFIX,static.mega.co.nz,LIST
 HOST-SUFFIX,steemitimages.com,LIST
 HOST-SUFFIX,transcend-cdn.com,LIST
+HOST-SUFFIX,travel-assets.com,LIST
 HOST-SUFFIX,videodelivery.net,LIST
 HOST-SUFFIX,walmartimages.com,LIST
 HOST-SUFFIX,website-files.com,LIST

@@ -1,4 +1,4 @@
-# cdn rules: 4789
+# cdn rules: 4791
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -4290,6 +4290,7 @@ payload:
   - "DOMAIN-SUFFIX,targetimg1.com"
   - "DOMAIN-SUFFIX,teraboxcdn.com"
   - "DOMAIN-SUFFIX,torproject.org"
+  - "DOMAIN-SUFFIX,trvl-media.com"
   - "DOMAIN-SUFFIX,typography.com"
   - "DOMAIN-SUFFIX,ungrounded.net"
   - "DOMAIN-SUFFIX,vanillicon.com"
@@ -4528,6 +4529,7 @@ payload:
   - "DOMAIN-SUFFIX,static.mega.co.nz"
   - "DOMAIN-SUFFIX,steemitimages.com"
   - "DOMAIN-SUFFIX,transcend-cdn.com"
+  - "DOMAIN-SUFFIX,travel-assets.com"
   - "DOMAIN-SUFFIX,videodelivery.net"
   - "DOMAIN-SUFFIX,walmartimages.com"
   - "DOMAIN-SUFFIX,website-files.com"

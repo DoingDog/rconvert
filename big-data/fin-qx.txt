@@ -1,4 +1,4 @@
-# big-data rules: 10559
+# big-data rules: 10561
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -7028,6 +7028,7 @@ HOST-SUFFIX,tik-tokapi.com,LIST
 HOST-SUFFIX,timestalks.com,LIST
 HOST-SUFFIX,tinyupload.com,LIST
 HOST-SUFFIX,torproject.org,LIST
+HOST-SUFFIX,trvl-media.com,LIST
 HOST-SUFFIX,turbobit.cloud,LIST
 HOST-SUFFIX,tvmedia.net.au,LIST
 HOST-SUFFIX,typography.com,LIST
@@ -7692,6 +7693,7 @@ HOST-SUFFIX,theclasshroom.com,LIST
 HOST-SUFFIX,thisispolaris.com,LIST
 HOST-SUFFIX,tlauncherrepo.com,LIST
 HOST-SUFFIX,transcend-cdn.com,LIST
+HOST-SUFFIX,travel-assets.com,LIST
 HOST-SUFFIX,tvlicensing.co.uk,LIST
 HOST-SUFFIX,ubuntu.csg.uzh.ch,LIST
 HOST-SUFFIX,ubuntu.nautile.nc,LIST

@@ -1,4 +1,4 @@
-# cdn rules: 4789
+# cdn rules: 4791
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -4229,6 +4229,7 @@ DOMAIN-SUFFIX,striiiipst.com
 DOMAIN-SUFFIX,targetimg1.com
 DOMAIN-SUFFIX,teraboxcdn.com
 DOMAIN-SUFFIX,torproject.org
+DOMAIN-SUFFIX,trvl-media.com
 DOMAIN-SUFFIX,typography.com
 DOMAIN-SUFFIX,ungrounded.net
 DOMAIN-SUFFIX,vanillicon.com
@@ -4467,6 +4468,7 @@ DOMAIN-SUFFIX,static.flickr.com
 DOMAIN-SUFFIX,static.mega.co.nz
 DOMAIN-SUFFIX,steemitimages.com
 DOMAIN-SUFFIX,transcend-cdn.com
+DOMAIN-SUFFIX,travel-assets.com
 DOMAIN-SUFFIX,videodelivery.net
 DOMAIN-SUFFIX,walmartimages.com
 DOMAIN-SUFFIX,website-files.com
