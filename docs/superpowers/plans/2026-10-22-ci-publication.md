@@ -90,3 +90,11 @@
 - 每次拒绝均核查发生在 HTTPS fetch 和文件替换前，手工 bytes、index、tracked diff、HEAD 和远端不变。另验证不存在的允许输出可首次生成和发布；复用既有集合外 tracked/untracked/static 保留回归，确认它们不阻塞、不改写、不进入提交。
 - 完成相关真实 Git 回归、规格与简化复审，再在 Debian WSL 的 Linux `/tmp` 可信完整快照运行 `python3 -B -m unittest discover -s tests -v`，不改既有 timeout/skip，记录真实终态。核查受控差异仅有本轮四个文件后英文提交，不 amend、push 或合并 main。
 - 清理本次临时文件，返回原目录，保留 worktree 及本轮提交供主会话合并；列明 red/green、完整 Linux 结果、修改文件和未检查/未清理项。
+
+### 9. Ubuntu generic ref 拒绝断言
+
+- 本轮基准为 `118f0ded6da2e1f8b5e1a1b46ade44abbdb53838`。GitHub run `39763336400` attempt 1、test job `119772643196` 在 Ubuntu 24.04.5、Git 2.55.0 运行 1363 tests，1520.936 秒后仅 `test_generic_ref_failure_with_main_advance_is_not_an_old_value_race` 失败，errors 0、skipped 10。已保存的完整日志第 1678–1688 行记录旧断言要求 `(failed to update ref)`，真实 porcelain 为 `!\tHEAD:refs/heads/main\t[remote rejected] (reference already exists)`；公开入口已抛出 `CalledProcessError`，退出码 1 断言已通过。以此为实际 red，不伪造额外失败。
+- 规格的 push 错误分类及验收矩阵已要求 generic remote rejected 即使 main 前进也保留失败，无需修改规格或生产行为。仅将该例的 stdout 断言改为稳定的 `!\tHEAD:refs/heads/main\t[remote rejected]`，保留 `File exists` stderr、远端 tip 等于 writer 提交及不含 superseded 的原断言，不增加 Git 模拟、诊断文案枚举、parser 或抽象。
+- 核查同一真实 Git 用例和全部 CI publication 相关回归。记录本地 Linux Git 的实际版本及结果；本地 green 不代表 Ubuntu Git 2.55.0 已通过，该版本由主会话正常合并、push 后的 Actions 验证。
+- 必要改动英文提交后，将最终 exact commit 用 `git archive` 导出到 Linux `/tmp`，以 `python3 -I -B` 显式加入可信快照 root，运行全部实际收集的 tests。保存唯一测试身份、counts、failures/errors/skips、耗时、exit、完整日志和逐路径 mode/blob/SHA256 前后清单，不改 8 秒 timeout、2 MiB 阈值或原有 10 个 Windows-only skip。
+- 核查相对本轮基准仅本计划与该测试文件变化，五个生产模块、其他源码、static、配置、42 个产物和 README counts 全部不变；完成规格、范围及简化复审、`git diff --check` 和 clean 检查。复用证据只存本 worktree 已忽略的 `.tmp/ubuntu-git-rejection-verification`，清理本轮 OS 临时快照，保留 worktree 与提交供主会话合并，不 push 或修改 main。

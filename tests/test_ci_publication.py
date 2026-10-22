@@ -416,7 +416,7 @@ class CiPublicationTests(unittest.TestCase):
         with self.assertRaises(subprocess.CalledProcessError) as raised:
             self.run_update()
         self.assertEqual(raised.exception.returncode, 1)
-        self.assertIn("[remote rejected] (failed to update ref)", raised.exception.stdout)
+        self.assertIn("!\tHEAD:refs/heads/main\t[remote rejected]", raised.exception.stdout)
         self.assertIn("File exists", raised.exception.stderr)
         self.assertEqual(self.tip(), advanced)
         self.assertNotIn("superseded", self.stdout.getvalue())
