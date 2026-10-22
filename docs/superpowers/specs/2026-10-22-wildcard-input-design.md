@@ -4,7 +4,9 @@
 
 基准为 `4c1f29d55e47f939b96cf87a5284f947938191ed`。修复普通 `DOMAIN-WILDCARD`／`HOST-WILDCARD` 把合法 pattern 当作 hostname 验证的问题，使已经输出的安全 wildcard 能按实际文件 bytes 重新导入。`DOMAIN`、`DOMAIN-SUFFIX`、hosts、裸域名和 DOMAIN-SET 的 hostname 校验保持。
 
-生产修改仅限 `rules.py` 的 `_valid_domain` wildcard 分支。新测试为 `tests/test_wildcard_dependency_regressions.py`；旧测试只更新 `tests/test_functional_audit_coverage.py` 的普通 pattern 拒绝断言，以及 `tests/test_functional_audit_projection.py` 的普通无点 wildcard 拒绝断言。实现不修改 normalize、formats、generate、README、配置、static 或已有 timeout，不增加依赖、生成专用入口、隐藏 Rule 缓存或来源 sidecar。目标执行环境为 Ubuntu Actions，验收在现有 Debian WSL 执行，测试 fixture 使用 Linux `/tmp`。不运行或下载执行客户端。
+wildcard 生产修改限于 `rules.py` 的 `_valid_domain` wildcard 分支，以及 `formats.py` 普通 `DOMAIN-WILDCARD` 的 DNS 投影与必要的既有 `_wildcard_regex` 连接和预算。新测试为 `tests/test_wildcard_dependency_regressions.py` 和普通 DNS 投影测试；旧测试仅更新 `tests/test_functional_audit_coverage.py`、`tests/test_functional_audit_projection.py` 已授权的普通 pattern 拒绝断言，以及 `tests/test_functional_audit_dns.py` 原 1011–1017 行的同类预期。README 仅补充 wildcard／DNS 支持说明，不修改 QX 字段段、Actions 或计数。
+
+不修改 normalize、共享 QX helper、process／Mihomo／QX 字段 guard、logical、`_dns_regex` escaped-hyphen、配置、static 或已有 timeout。不增加依赖、生成专用入口、隐藏 Rule 缓存、来源 sidecar 或通用 parser／decoder。目标执行环境为 Ubuntu Actions，验收在现有 Debian WSL 的 Linux `/tmp` 可信完整 Git snapshot 执行；不在 `/mnt/c` 执行重型 suite。不开展网络安全扫描或修复，不处理 Mihomo suffix 大小写，不运行任何客户端，不调查 Windows 本机或多平台适配。
 
 ## 已核查的行为与调用方
 
@@ -35,9 +37,13 @@ wildcard 是非空、安全 scalar pattern，不继承 hostname 的点号、labe
 
 安全 `*`、`*123*` 等经三个文本文件和 YAML 重新导入，普通 Surge wildcard 必要时继续转 Mihomo regex。Surge 字面引号输入／输出必须闭合。Surge full 与 split 保持一致，DOMAIN-SET 不承载 wildcard。含目标不支持叶子的 logical 继续整条 skip。
 
-parser 的 pattern 合法性不构成其他目标的全域可表达性证书。新接受的引号、反斜杠、括号和非 ASCII literal 会到达 `_wildcard_regex`，普通 DNS builder 现有直写 regex 不具备 native presentation encoder 的保证。该格式层安全投影归 routing owner；本分支不改 formats，不以 parser 全局拒绝合法 Surge pattern 代替目标局部限制，也不把该部分现有输出作为已经证明的 DNS 等价。
+parser 的 pattern 合法性不构成其他目标的全域可表达性证书。普通 DNS 仅扩展已有 ASCII hostname literal 字符集及既有 Surge 字符类：`a-z`／`A-Z`、数字、underscore、hyphen、点和 `*`／`?`，不再要求含点或 hostname 长度。普通 `*ads*`、`*`、`a?`、`a??` 分别输出已知 body `/^.*ads.*$/`、`/^.*$/`、`/^a.$/`、`/^a..$/`，用 ASCII Host 见证核查匹配结果。Surge `[ab]` 保持可用，QX 未证明的 class 和 native literal `[]` 保持各自目标局部限制。
 
-QX 字面引号和 comment marker 的字段承载修复也归 routing owner。此分支只验证 QX 已有可安全承载的 pattern，不重复或伪造该实现；特殊 QX 字段及上述新输入的 DNS 安全性必须在 routing 完成后的集成中核验。既有 Unicode／DNS raw regex 证书、native case／root／byte guards 仍作为本分支回归保护。
+新接受的单引号、双引号、反斜杠、括号、空白、其他标点及非 ASCII literal，缺少普通来源与 DNS presentation 全域等价证据时，仅计该条 DNS unsupported，保留公共 Rule 和其他可表达目标。固定 miekg presentation 会对部分 literal 添加反斜杠或 decimal bytes，不能直接使用原 anchored regex，也不能把 Surge `?` 的字符语义替换为 native byte token。`*<ads>*` 保持普通 DNS 负例。普通 `DOMAIN-KEYWORD` 的特殊 Host 行为没有确认，本任务保持其现有 DNS 行为；native wildcard 的 byte／presentation encoder、case／root／bracket guards 和已证特殊 literal 支持保持。
+
+DNS 最终每行上限为 65,536 UTF-8 bytes，含 LF、`@@` 和 `/.../`。恰好上限保留，增加一个 byte 仅跳过该 DNS 规则并计数；长 pattern 必须在分配扩展 DNS regex 之前使用有依据的早期预算或既有预算 helper，不先构造无界字符串。block、allow、external whitelist 使用同一普通 DNS 支持判定和预算。
+
+QX 字面引号和 comment marker 的字段承载修复归另一任务。此分支仅验证 QX 已有可安全承载的 pattern，不修改、重复或伪造该实现。既有 Unicode／DNS raw regex 证书、native case／root／byte guards 仍作为回归保护。可合并已完成 H commit `fe34c69abe6695af86c796da003400d68ee7e12d`，保留其全部历史和 production 逻辑，仅将其新建 root plan 移至既有 `docs/superpowers/plans/`；最终完整 suite 同时验证两项修改。
 
 ## 验收
 
@@ -45,5 +51,6 @@ QX 字面引号和 comment marker 的字段承载修复也归 routing owner。�
 2. 同一 scalar 的 source 与 white、单条与混合邻居、三种 purpose × 三种 no_resolve、三个文本及 YAML 产物均用公开入口检查，记录准确 matcher／来源及 warning。
 3. logical source 覆盖 AND、OR、NOT 和嵌套，逐目标检查完整表达式、目的／来源 IP 方向和选项；logical 不新增 white 能力。
 4. 真实 generate／publish 覆盖同轮与磁盘 source／white，比较相同实际 bytes 下子组全部六产物及诊断；发布前旧文件不变、发布后 bytes 等于返回文本，static fixture 不变。保留损坏 white、严格 disk 空文件、generated logical white 拒绝、冻结及事务回滚的既有完整 suite 保护。
-5. 保留普通字符类有效／非法语法、native literal bracket、byte／字符和根点反例、未知 Unicode white 不跨来源删除、DNS raw regex 无证书 skip。运行所有相关模块及完整 Linux suite，不修改旧 timeout。
-6. 检查 diff 仅含拥有文件，完成规格和简化复审，使用英语提交。最终分别列明本分支结果、格式协作未核范围和环境限制，不冒称已在 GitHub runner 或客户端运行。
+5. 普通 DNS 正例和未证明 literal 的局部 skip 均覆盖 block／allow／external whitelist，核查字面 body、ASCII 见证、skip 计数及三种 purpose × 三种 no_resolve。验证 65,536 bytes 的恰好边界、一个 byte 超限和大 pattern，不修改任何旧 timeout。
+6. 保留普通字符类有效／非法语法、native literal bracket、byte／字符和根点反例、未知 Unicode white 不跨来源删除、DNS raw regex 无证书 skip。相关模块和完整 Linux suite 均实际等待退出并记录结果。snapshot 包含所有受控文件及本任务新测试，逐文件核对 SHA-256，保留实际日志；suite 失败继续修正授权范围内的原因，不能更改 timeout 或 skip 掩盖。
+7. 检查 diff 仅含拥有文件及已授权 H 合并，完成规格和简化复审，使用英语提交。最终列明 path／branch／base／head、commits、逐行为 red／green、完整 suite 终态及日志、协作未核范围、未清理项和环境限制，不冒称已在 GitHub runner 或客户端运行。保留干净 worktree 和 branch 供集成，不 push 或合并 main。

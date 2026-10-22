@@ -1,35 +1,41 @@
 # wildcard 输入实施计划
 
-规格：`docs/superpowers/specs/2026-10-22-wildcard-input-design.md`。工作树为 `.claude/worktrees/wf_dcf70dde-e2b-1`，基准 `4c1f29d55e47f939b96cf87a5284f947938191ed`。每个行为依次添加测试、核实基准失败、执行共享修复后的成功验证；不一次写完全部测试。首次共享修复覆盖的后续行为无需再增加生产分支，其 red 以同一测试对未修改基准模块的执行记录证明。
+规格：`docs/superpowers/specs/2026-10-22-wildcard-input-design.md`。工作树为 `.claude/worktrees/wf_dcf70dde-e2b-1`，branch 为 `worktree-wf_dcf70dde-e2b-1`，任务基准为 `4c1f29d55e47f939b96cf87a5284f947938191ed`，接手 HEAD 为 `df12eb1ad31f7b6cfca9bbe53107b41f172f0c7d`。保存的 parser 实现和 11 项新测试保留，在独立 OS 临时 Git 基准 snapshot 重做必要 red，不覆盖 worktree 中的内容。所有变更限于规格列明的 mutation boundary。
 
-## 1. 核查与规格提交
+## 1. 核查、复现和文档提交
 
-- 核实 cwd、Git worktree、branch、HEAD 和初始 clean 状态，阅读实际函数、全部调用、关联既有测试、README、四份历史 spec 及对应三视角 checks。
-- 记录公共 seams、fixtures／配置／输出影响和 owner 边界，写入完整设计和本计划。
-- 核查：只有当前 worktree 被修改；spec／plan 无遗漏的支持边界，`git diff --check`；先正常英语提交这两份文档。
+- 核实 HEAD、branch、status、index 和全部 diff，读取已有测试、全部 validator／converter 调用及生成发布消费者；保护已保存改动，不 reset、stash 或在 main 编辑。
+- 基于真实基准构造 Linux `/tmp` Git snapshot，加入当前新测试，实际复现 universal wildcard、Surge quoted literal 和磁盘混合 source／white 丢失。
+- 补全 spec 的修改归属、普通 DNS 证据前置条件、完整验收及协作边界，再写本计划；仅提交这两份文档，英语消息。
+- 核查：基准失败来自普通 hostname 限制，原文件 bytes 未被替换；`git diff --check`，文档准确覆盖共享输入与六目标消费者。
 
-## 2. scalar pattern 的第一条 red／green
+## 2. 保存 parser 行为的 red／green 和定向提交
 
-- 新增实际 native parse -> normalize -> render -> 三文本 bytes／YAML -> parse／parse_whitelist 回读测试，先以 universal `*` 复现。
-- 核查 red：三个文本各出现 `invalid domain *`，YAML 控制路径成功。
-- 最小 green：仅在 `_valid_domain` 中统一 wildcard 的安全 scalar 检查，并为非 native 保留既有 class 语法；DOMAIN／SUFFIX 路径保持。扩展同一行为的数据到 dotless、多点、长 pattern 和 quoted literal，逐项在基准证实失败并在当前树通过。
-- 核查：规则原文、来源和无 warning；Surge full/split 相同、DSET 无 wildcard；只精确更新两处已授权的旧普通 wildcard 拒绝预期。
+- 逐项核查已保存测试：scalar `*`／dotless／多点／长 pattern、Surge quoted literal、AND／OR／NOT／嵌套、三种 purpose × 三种 no_resolve、来源 IP 方向。
+- 在基准 snapshot 执行每类 proof，在当前完整 snapshot 执行同一 proof；后续行为不新增生产分支，保持共享 `_valid_domain` 修复。
+- 验证 exact／suffix／hosts／bare hostname 校验、普通 class／native literal bracket、非法控制／结构、case／root／byte guards、allow 与 external white；仅保留两个已授权旧拒绝断言修改。
+- 真实 generate／publish 覆盖三文本及 YAML、同轮／disk source／white、单条／混合、全部六产物实际 bytes、Surge full／split／DSET 分区、输入不变及发布前旧产物保护；mock 仅时间，不 mock parser、render、generate、publish。
+- 核查：11 项新测试和相关既有 parser／projection／coverage 模块全部通过，再以明确英语消息提交已验证的 parser 实现、两个旧断言和新测试。
 
-## 3. logical、来源和目标边界
+## 3. 普通 wildcard DNS 的逐行为修复
 
-- 添加 AND／OR／NOT／嵌套 source 的真实生成输出回读，检查三 purpose × 三 no_resolve；覆盖有／无初始目的 IP 标志与来源 IP。
-- 添加普通类有效／非法、native literal bracket、非空和不安全 scalar、hostname 校验不变、byte／字符及 case／root 反例。核查 source／external white／allow 保留和目标局部计数；不增加 logical white。
-- 核查：新行为在基准 red、当前 green；所有 parser／wildcard regex／Mihomo／DNS／white 消费者在各自已证明范围仍符合规格。特殊 QX 字段和新 literal 的 DNS 安全编码交给既定 routing 集成，不改 formats。
+- 首个行为先更新原 DNS 测试 1011–1017 hunk：`*ads*`／`*`／`a?`／`a??` 使用已知 body 和 ASCII 见证，`*<ads>*` 仍 skip；核查 skip 计数，保留同方法三种 bracket 来源差别。
+- 接着单独添加未证明 ordinary literal 的公开入口测试，包括引号、括号、反斜杠、非 ASCII 和其他非旧 literal 字符。运行并记录 red 后，最小修改 ordinary wildcard DNS 分支，按原已证 ASCII literal／class 范围局部拒绝新形状；不改普通 keyword 或 native encoder，不把字符 `?` 替换为 byte token。
+- 再添加长 pattern 的恰好 65,536 bytes、增加一个 byte 和大 pattern 测试，覆盖 block／allow／external white；先 red，再用有依据的早期预算与 `_dns_join` 限制扩展分配。只修改必要 `_wildcard_regex` 预算连接，不增加通用框架。
+- 覆盖三 purpose × 三 no_resolve，目标局部 skip 不影响其他可表达格式；真实普通 source／white generate／publish 检查 DNS bytes、诊断、static 不变及旧文件保护。
+- 核查：每个新增行为先出现预期失败，再当前 green；全部普通／native DNS、projection、coverage、readback 相关测试通过。README 仅补充已验证的 wildcard／DNS 支持范围，英语提交该完整单元。
 
-## 4. 实际生成依赖与发布
+## 4. H 集成及文档归位
 
-- 添加三文本和 YAML 的 source／white、同轮／disk、单条／混合邻居矩阵，覆盖三 purpose × 三 no_resolve。
-- fixture 使用系统临时目录；真实 generate／publish；fetch 不允许网络。仅固定时间以比较全部六产物。
-- 核查 red：基准同轮依赖失败或 disk 混合遗漏；green：无 invalid-domain warning，wildcard 不丢失，子组全部六文件与相同 disk bytes 结果及诊断相同。旧产物在 publish 前保持、随后实际 bytes 与输出相同，static 不变。
-- 添加非法 white／generated logical white 的发布前保护，以及只靠有效 wildcard 清空的合法空结果；冻结和事务回滚复用完整 suite 的既有验收。
+- 核查 `fe34c69abe6695af86c796da003400d68ee7e12d` 的实际历史及 diff，确认与已提交 W hunk 不重叠后正常 merge 到 W branch，保留 H 全部 commits，不改变 H production 逻辑。
+- 核实 H 的 root `plans/2026-10-22-chunked-ows.md` 确属该任务新建文件，保留内容并移至既有 `docs/superpowers/plans/`，精确更新实际引用；不删除用户原有目录。
+- 核查：H 的 10 项新测试和 transport 回归通过，W 相关测试仍通过；无冲突、无未授权 production 改动，文档归位用英语提交。
 
-## 5. 规格、简化复审与交付
+## 5. 规格、简化复审和完整交付
 
-- 逐条核对 spec 验收、原完整 checks、实际 diff 和全部调用；删除本次新增的重复或无用实现，不改无关区域。
-- 核查：相关模块通过；完整 Debian Linux `unittest discover -s tests -v` 通过，无旧 timeout 修改；`git diff --check`，修改列表只含授权文件，static／配置／其他测试无改动。
-- 修正发现并重跑受影响检查，复审后正常英语提交实现与测试。记录 commit／HEAD、red／green／Linux suite 的实际结果，列明格式协作未核范围、未运行客户端／远端 Actions，以及任何未清理材料。不 push、不 merge、不清理其他 worktree。
+- 逐条核对 spec、所有授权调用和实际 diff，检查新增逻辑是否复用现有 helper、是否存在冗余或未经请求的支持扩展；发现问题在本 worktree 修正、定向测试并复审。
+- 用标准库 tarfile 与 git archive 构造当前完整 Linux `/tmp` 可信 snapshot，包含所有受控文件与新测试并逐文件核验 SHA-256；保存 manifest 身份和日志，在 snapshot 内一次前台等待完整 `python3 -B -m unittest discover -s tests -v` 的真实退出。保留既有 timeout 和 skip，不在 `/mnt/c` 跑重型 suite。
+- 首次旧 `/mnt/c` suite 的 10 个断言失败和 12 个 timeout error 是已记录失败，不能计为通过；新 snapshot 的终态是本轮完整验证依据。不调查或修复本机系统。
+- 核查：完整 suite 无失败或错误，`git diff --check`，修改列表仅含授权 W 路径和 H 历史，全部英文 commits；最终 HEAD 与已验证内容 hash 一致。
+- 仅在逐个确认归属后清理本任务遗留 fixture 和无须保留的 snapshot；保留日志等交付证据，不能泛删或删除用户原有内容。返回原目录，保留干净 worktree 和 branch 供主会话集成，不 push、不 merge main。
+- 最终返回 path／branch／base／head、commits、全部变更、逐行为 red／green、完整 suite 实际终态和日志、审查／简化结果、未检查／未清理项与风险，不在运行中请求主会话恢复。
