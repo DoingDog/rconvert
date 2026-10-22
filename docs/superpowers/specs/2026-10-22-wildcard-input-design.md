@@ -31,7 +31,7 @@ wildcard 是非空、安全 scalar pattern，不继承 hostname 的点号、labe
 
 普通来源仍仅接受既有 `[a-z0-9-]+` 形状的字符类，大小写接受规则保持；裸 `[`／`]`、空类、否定类及未知类语法继续拒绝。已有 source 可保留、目标 converter 不支持的 range 继续按原目标局部 skip。native `[]` 始终为字面，不套用普通类验证。
 
-`Rule` 的普通 ASCII lower 与单尾点规范化、native 原文、`domain_source`、`native_fields`、allow、目的 IP 的 `add`／`strip`／`keep`、来源 IP 不加 `no-resolve` 全部保留。GEOIP LAN 与手工 SRC-IP CIDR 排除不纳入修改。
+`Rule` 的普通 ASCII lower 与单尾点规范化、native 原文、`domain_source`、`native_fields`、allow、目的 IP 的 `add`／`strip`／`keep`、来源 IP 不加 `no-resolve` 全部保留。普通 wildcard 继续拒绝多个末尾根点：既有 `Rule` 每次只移除一个尾点，多尾点会让实际文本重复导入时改变 pattern，`..` 还会输出被普通入口拒绝的 `.`。该限制只在 ordinary pattern 校验保持，内部多点与 native 原文不变。GEOIP LAN 与手工 SRC-IP CIDR 排除不纳入修改。
 
 ## 目标与协作边界
 

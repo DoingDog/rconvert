@@ -33,7 +33,7 @@
 
 ## 5. 规格、简化复审和完整交付
 
-- 逐条核对 spec、所有授权调用和实际 diff，检查新增逻辑是否复用现有 helper、是否存在冗余或未经请求的支持扩展；发现问题在本 worktree 修正、定向测试并复审。
+- 逐条核对 spec、所有授权调用和实际 diff，检查新增逻辑是否复用现有 helper、是否存在冗余或未经请求的支持扩展；发现问题在本 worktree 修正、定向测试并复审。审查已复现 ordinary `..`、`*..` 和 `*123..` 在 `Rule` 单尾点规范化后不能稳定回读，须在 `_valid_domain` 保持原先的多尾点拒绝，补 scalar／logical／white 和发布前旧 bytes 保护的 red／green；不修改 normalize 或 native 语义。
 - 用标准库 tarfile 与 git archive 构造当前完整 Linux `/tmp` 可信 snapshot，包含所有受控文件与新测试并逐文件核验 SHA-256；保存 manifest 身份和日志，在 snapshot 内一次前台等待完整 `python3 -B -m unittest discover -s tests -v` 的真实退出。保留既有 timeout 和 skip，不在 `/mnt/c` 跑重型 suite。
 - 首次旧 `/mnt/c` suite 的 10 个断言失败和 12 个 timeout error 是已记录失败，不能计为通过；新 snapshot 的终态是本轮完整验证依据。不调查或修复本机系统。
 - 核查：完整 suite 无失败或错误，`git diff --check`，修改列表仅含授权 W 路径和 H 历史，全部英文 commits；最终 HEAD 与已验证内容 hash 一致。
