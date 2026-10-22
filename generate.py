@@ -64,11 +64,31 @@ def fetch_https(url: str) -> bytes:
         raise RuntimeError(f"Failed to fetch {url}: {exc}") from exc
 
 
-def _output_path(root: Path, path: Path) -> Path:
+def _static_paths(root: Path) -> tuple[set[Path], set[Path]]:
+    protected = {root / "static", (root / "static").resolve()}
+    files = set()
+    pending = [root / "static"]
+    checked = set()
+    while pending:
+        candidate = pending.pop()
+        if candidate.is_dir():
+            directory = candidate.resolve()
+            if candidate.is_symlink():
+                protected.add(directory)
+            if directory in checked:
+                continue
+            checked.add(directory)
+            pending.extend(directory.iterdir())
+        elif candidate.is_symlink():
+            files.add(candidate.resolve())
+    return protected, files
+
+
+def _output_path(root: Path, path: Path, protected: tuple[set[Path], set[Path]]) -> Path:
+    directories, files = protected
     paths = (path.parent.resolve() / path.name, path.resolve())
     if any(not candidate.is_relative_to(root) for candidate in paths):
         raise ValueError("Output path escapes root")
-    protected = (root / "static", (root / "static").resolve())
     pending = [path]
     checked = set()
     while pending:
@@ -79,23 +99,24 @@ def _output_path(root: Path, path: Path) -> Path:
             continue
         checked.add(candidate)
         location = candidate.parent.resolve() / candidate.name
-        if any(location.is_relative_to(directory) for directory in protected):
+        if location in files or any(location.is_relative_to(directory) for directory in directories):
             raise ValueError("Output path targets static")
         if candidate.is_symlink():
             pending.append(location.parent / candidate.readlink())
         if candidate.parent != candidate:
             pending.append(candidate.parent)
-    if any(paths[1].is_relative_to(directory) for directory in protected):
+    if paths[1] in files or any(paths[1].is_relative_to(directory) for directory in directories):
         raise ValueError("Output path targets static")
     return paths[1]
 
 
 def publish(outputs: dict[Path, str], *, root: Path | None = None) -> None:
     root = Path(__file__).resolve().parent if root is None else root.resolve()
+    protected = _static_paths(root)
     for path in outputs:
-        _output_path(root, path)
+        _output_path(root, path, protected)
     staging = root / ".tmp"
-    _output_path(root, staging)
+    _output_path(root, staging, protected)
     staging.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(dir=staging) as directory:
         staged = []
@@ -133,11 +154,12 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     from rules import _apply_no_resolve, exclude_covered, normalize, parse, parse_whitelist
 
     configs = load_config(root)
+    protected = _static_paths(root)
     paths = {}
     for config in configs:
         for name in FILES:
             path = root / config["name"] / name
-            resolved = _output_path(root, path)
+            resolved = _output_path(root, path, protected)
             if resolved in paths:
                 raise ValueError(f"Output path collision: {paths[resolved]} and {path}"
                                  f" resolve to {resolved}")
