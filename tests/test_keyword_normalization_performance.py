@@ -104,6 +104,25 @@ class KeywordNormalizationPerformanceTests(unittest.TestCase):
                     assert normalize(iter(parsed[::-1] + parsed)) == expected
                 ''', mixed)
 
+    def test_varied_keyword_lengths_finish_within_existing_bound(self):
+        self.run_bounded(r'''
+            from rules import Rule, normalize
+
+            shorts = [Rule('DOMAIN-KEYWORD', f'{number:06d}') for number in range(240000)]
+            longs = [Rule('DOMAIN-KEYWORD', '000000' + '8' * length) for length in range(1, 4001)]
+            assert normalize(iter(shorts + longs)) == shorts
+        ''')
+
+    def test_keyword_prefix_matches_with_varied_lengths_finish_within_existing_bound(self):
+        self.run_bounded(r'''
+            from rules import Rule, normalize
+
+            shorts = [Rule('DOMAIN-KEYWORD', f'{number:06d}') for number in range(30000)]
+            longs = [Rule('DOMAIN-KEYWORD', 'z' * length) for length in range(7, 8007)]
+            for order in (shorts + longs, longs + shorts, longs[::-1] + shorts[::-1]):
+                assert normalize(iter(order)) == [*shorts, longs[0]]
+        ''')
+
     def test_comparison_key_lengths_original_values_and_identity_groups_are_preserved(self):
         self.run_bounded(r'''
             from dataclasses import replace

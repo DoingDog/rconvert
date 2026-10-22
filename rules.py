@@ -2042,17 +2042,19 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 continue
         # 短 keyword 必须保留长 keyword 在其他目标已有的投影能力。
         if kind == 'DOMAIN-KEYWORD':
+            lengths = keyword_lengths[group]
+            lengths = lengths[:bisect_right(lengths, len(value) - 1)]
             ordinary = (_ordinary_field_supported(kind, rule.value) and
                         _surge_keyword_source_supported(rule.value, rule.domain_source))
             qx = _qx_field_supported(kind, rule.value)
             mihomo = _mihomo_domain_field_supported(kind, rule.value, rule.domain_source)
-            if any((short_rule := keywords[group].get(short)) is not None and
+            if lengths and any((short_rule := keywords[group].get(short)) is not None and
                    (not ordinary or _ordinary_field_supported(kind, short_rule.value) and
                     _surge_keyword_source_supported(short_rule.value, rule.domain_source)) and
                    (not qx or _qx_field_supported(kind, short_rule.value)) and
                    (not mihomo or _mihomo_domain_field_supported(kind, short_rule.value, rule.domain_source))
-                   for length in keyword_lengths[group] if length < len(value)
-                   for start in range(len(value) - length + 1)
+                   for start in range(len(value) - lengths[0] + 1)
+                   for length in lengths[:bisect_right(lengths, len(value) - start)]
                    if (rule.domain_source != 'mihomo' or value.endswith('.') or value[start + length - 1] != '.') and
                    (short := value[start:start + length])):
                 continue
