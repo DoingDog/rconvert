@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -30,13 +31,21 @@ def _superseded(root: Path, tested_sha: str) -> bool:
     return False
 
 
-def _push_race(push: subprocess.CompletedProcess) -> bool:
+def _push_race(push: subprocess.CompletedProcess, tested_sha: str) -> bool:
     statuses = [line.split("\t") for line in push.stdout.splitlines() if "\t" in line]
-    return len(statuses) == 1 and statuses[0] in [
-        ["!", "HEAD:refs/heads/main", "[rejected] (fetch first)"],
-        ["!", "HEAD:refs/heads/main", "[rejected] (non-fast-forward)"],
-        ["!", "HEAD:refs/heads/main", "[remote rejected] (non-fast-forward)"],
-    ]
+    if len(statuses) != 1 or len(statuses[0]) != 3 or statuses[0][:2] != ["!", "HEAD:refs/heads/main"]:
+        return False
+    summary = statuses[0][2]
+    if summary in ("[rejected] (fetch first)", "[rejected] (non-fast-forward)",
+                   "[remote rejected] (non-fast-forward)"):
+        return True
+    if summary not in ("[remote rejected] (failed to update ref)",
+                       "[remote rejected] (incorrect old value provided)"):
+        return False
+    mismatch = re.search(
+        r"^remote: error: cannot lock ref 'refs/heads/main': is at ([0-9a-f]{40}) but expected "
+        + re.escape(tested_sha) + r"[ \t]*$", push.stderr, re.MULTILINE)
+    return mismatch is not None and mismatch[1] != tested_sha
 
 
 def update(root: Path, tested_sha: str) -> str:
@@ -64,7 +73,7 @@ def update(root: Path, tested_sha: str) -> str:
          "commit", "-m", "Update generated rules")
     push = _git(root, "push", "--porcelain", "origin", "HEAD:refs/heads/main", check=False)
     if push.returncode:
-        if _push_race(push) and _superseded(root, tested_sha):
+        if _push_race(push, tested_sha) and _superseded(root, tested_sha):
             return "superseded"
         push.check_returncode()
     return "published"

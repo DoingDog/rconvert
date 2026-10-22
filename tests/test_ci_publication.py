@@ -210,6 +210,19 @@ class CiPublicationTests(unittest.TestCase):
         self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), self.base)
         self.assertNotIn("new.example", self.git(self.origin, "show", "main:fixture-1/fin.txt").stdout)
 
+    def test_ref_advance_after_advertisement_requires_exact_old_value_evidence(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-push", self.push_writer())
+        self.assertEqual(self.run_update(), "superseded")
+        self.assertEqual(self.tip(), advanced)
+        self.assertRegex(self.stdout.getvalue(),
+                         r"!\tHEAD:refs/heads/main\t\[remote rejected\] "
+                         r"\((failed to update ref|incorrect old value provided)\)")
+        self.assertIn(f"cannot lock ref 'refs/heads/main': is at {advanced} but expected {self.base}",
+                      self.stderr.getvalue())
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), self.base)
+        self.assertNotIn("new.example", self.git(self.origin, "show", "main:fixture-1/fin.txt").stdout)
+
     def test_head_must_equal_the_tested_event_sha(self):
         with self.assertRaisesRegex(ValueError, "HEAD.*tested"):
             self.run_update(sha="0" * 40)
