@@ -722,8 +722,9 @@ def _valid_regex(kind: str, value: str) -> bool:
                     class_atom, range_from_literal = "literal", False
                 index = end + 1
                 continue
-            if not in_class and escape in "Gz":
-                probe.append(r"\A" if escape == "G" else r"\Z")
+            if not in_class and escape in 'AGZzbB':
+                anchor = r'\A' if escape == 'G' else r'\Z' if escape == 'z' else value[index:index + 2]
+                probe.append(f'(?:{anchor})')
             elif not in_class and value.startswith((r"\k<", r"\k'", r"\<", r"\'"), index):
                 offset = 3 if escape == 'k' else 2
                 closing = ">" if value[index + offset - 1] == "<" else "'"
@@ -950,7 +951,11 @@ def _valid_regex(kind: str, value: str) -> bool:
             conditionals[-1][1] += 1
             if conditionals[-1][1] > 1:
                 return False
-        probe.append(r'\{' if char == '{' and not in_class else char)
+        if not in_class and char in '^$':
+            # 非捕获组使 Python probe 接受 regexp2 的 anchor 量词，不分配捕获槽。
+            probe.append(f'(?:{char})')
+        else:
+            probe.append(r'\{' if char == '{' and not in_class else char)
         index += 1
     if in_class or classes:
         return False
