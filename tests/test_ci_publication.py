@@ -63,10 +63,10 @@ class CiPublicationTests(unittest.TestCase):
         self.stdout = io.StringIO()
         self.stderr = io.StringIO()
 
-    def git(self, root, *args, check=True):
+    def git(self, root, *args):
         result = subprocess.run(["git", *args], cwd=root, text=True, capture_output=True,
                                 env={**os.environ, "LC_ALL": "C", "LANG": "C"})
-        if check and result.returncode:
+        if result.returncode:
             self.fail(f"git {args}: {result.stdout}\n{result.stderr}")
         return result
 
@@ -133,8 +133,10 @@ class CiPublicationTests(unittest.TestCase):
         self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
 
     def test_same_sha_runs_are_strictly_serial_and_second_run_does_not_generate(self):
-        self.assertEqual(self.run_update(), "published")
+        self.assertEqual(self.run_update(data=OLD), "published")
         published = self.tip()
+        self.assertEqual(set(self.git(self.runner, "show", "--format=", "--name-only").stdout.splitlines()),
+                         {f"fixture-{index}/fin-adb.txt" for index in range(7)})
         second = self.clone("second", detached=True)
         self.assertEqual(self.run_update(root=second, fetch=lambda url: self.fail("stale fetch")),
                          "superseded")
@@ -167,6 +169,25 @@ class CiPublicationTests(unittest.TestCase):
             self.run_update()
         self.assertEqual(self.git(self.runner, "diff", "--cached", "--binary").stdout, before)
         self.assertEqual(self.git(self.runner, "diff", "--name-only").stdout, "")
+        self.assertEqual(self.tip(), self.base)
+
+    def test_existing_readme_edits_are_preserved_before_generation(self):
+        readme = self.runner / "README.md"
+        readme.write_bytes(readme.read_bytes() + b"unrelated manual paragraph\n")
+        before = self.git(self.runner, "diff", "--binary").stdout
+        with self.assertRaisesRegex(ValueError, "existing.*publication paths"):
+            self.run_update()
+        self.assertEqual(self.git(self.runner, "diff", "--binary").stdout, before)
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        self.assertEqual(self.tip(), self.base)
+
+    def test_existing_generated_file_edits_are_not_overwritten(self):
+        (self.runner / "fixture-1/fin-adb.txt").write_bytes(b"manual output\n")
+        before = self.git(self.runner, "diff", "--binary").stdout
+        with self.assertRaisesRegex(ValueError, "existing.*publication paths"):
+            self.run_update()
+        self.assertEqual(self.git(self.runner, "diff", "--binary").stdout, before)
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
         self.assertEqual(self.tip(), self.base)
 
     def test_unchanged_generation_creates_no_commit(self):
@@ -211,6 +232,27 @@ class CiPublicationTests(unittest.TestCase):
                          r"!\tHEAD:refs/heads/main\t\[rejected\] \((fetch first|non-fast-forward)\)")
         self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), self.base)
         self.assertNotIn("new.example", self.git(self.origin, "show", "main:fixture-1/fin.txt").stdout)
+
+    def test_known_remote_commit_uses_non_fast_forward_status(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-commit", self.push_writer() + "\n" + shlex.join(
+            ["git", "fetch", "-q", "origin", "refs/heads/main"]))
+        self.assertEqual(self.run_update(), "superseded")
+        self.assertEqual(self.tip(), advanced)
+        self.assertIn("!\tHEAD:refs/heads/main\t[rejected] (non-fast-forward)", self.stdout.getvalue())
+
+    def test_multiple_ref_statuses_are_not_classified_as_a_single_main_race(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-commit", self.push_writer())
+        self.git(self.runner, "tag", "-a", "fixture-extra", "-m", "Extra fixture tag")
+        self.git(self.runner, "config", "push.followTags", "true")
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 1)
+        self.assertIn("!\tHEAD:refs/heads/main\t[rejected] (fetch first)", raised.exception.stdout)
+        self.assertIn("refs/tags/fixture-extra", raised.exception.stdout)
+        self.assertEqual(self.tip(), advanced)
+        self.assertNotIn("superseded", self.stdout.getvalue())
 
     def test_ref_advance_after_advertisement_requires_exact_old_value_evidence(self):
         advanced = self.prepare_advance()

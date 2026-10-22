@@ -36,8 +36,7 @@ def _push_race(push: subprocess.CompletedProcess, tested_sha: str) -> bool:
     if len(statuses) != 1 or len(statuses[0]) != 3 or statuses[0][:2] != ["!", "HEAD:refs/heads/main"]:
         return False
     summary = statuses[0][2]
-    if summary in ("[rejected] (fetch first)", "[rejected] (non-fast-forward)",
-                   "[remote rejected] (non-fast-forward)"):
+    if summary in ("[rejected] (fetch first)", "[rejected] (non-fast-forward)"):
         return True
     if summary not in ("[remote rejected] (failed to update ref)",
                        "[remote rejected] (incorrect old value provided)"):
@@ -56,12 +55,14 @@ def update(root: Path, tested_sha: str) -> str:
         return "superseded"
     if _git(root, "diff", "--cached", "--name-only").stdout:
         raise ValueError("Refusing to publish with existing staged changes")
+    paths = [str(Path(group["name"]) / name) for group in load_config(root) for name in FILES] + ["README.md"]
+    if _git(root, "diff", "--name-only", "--", *paths).stdout:
+        raise ValueError("Refusing to overwrite existing changes in publication paths")
     publish(generate(root, fetch_https), root=root)
     update_counts(root)
     if _superseded(root, tested_sha):
         return "superseded"
-    paths = [str(Path(group["name"]) / name) for group in load_config(root) for name in FILES]
-    _git(root, "add", "--", *paths, "README.md")
+    _git(root, "add", "--", *paths)
     diff = _git(root, "diff", "--cached", "--quiet", check=False)
     if diff.returncode == 0:
         print("unchanged: no generated changes to publish")
