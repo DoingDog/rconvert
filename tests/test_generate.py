@@ -3406,10 +3406,10 @@ class SourceFieldContinuationGenerateTests(unittest.TestCase):
         surge = ("URL-REGEX,'^https://media.example.org/item #1$'\n"
                  "USER-AGENT,'Client #1'\nUSER-AGENT,'Client ;1'\nUSER-AGENT,'Client //1'\n")
         bodies = {"fin.txt": surge, "fin-surge.txt": surge,
-                  "fin-qx.txt": "USER-AGENT,Client #1,LIST\nUSER-AGENT,Client ;1,LIST\nUSER-AGENT,Client //1,LIST\n",
+                  "fin-qx.txt": "",
                   "fin.yaml": "payload:\n", "fin-surge-ds.txt": ""}
         skips = {"fin-adb.txt:URL-REGEX": 1, "fin-adb.txt:USER-AGENT": 3,
-                 "fin-qx.txt:URL-REGEX": 1, "fin-surge-ds.txt:URL-REGEX": 1,
+                 "fin-qx.txt:URL-REGEX": 1, "fin-qx.txt:USER-AGENT": 3, "fin-surge-ds.txt:URL-REGEX": 1,
                  "fin-surge-ds.txt:USER-AGENT": 3, "fin.yaml:URL-REGEX": 1,
                  "fin.yaml:USER-AGENT": 3}
         for mode in ("keep", "add", "strip"):
@@ -3436,7 +3436,7 @@ class SourceFieldContinuationGenerateTests(unittest.TestCase):
                             f"{group} {key}: {count}" for group in groups for key, count in sorted(skips.items())])
                         for group in groups:
                             for name, body in bodies.items():
-                                count = 4 if name in ("fin.txt", "fin-surge.txt") else 3 if name == "fin-qx.txt" else 0
+                                count = 4 if name in ("fin.txt", "fin-surge.txt") else 0
                                 self.assertEqual(outputs[root / group / name], f"# {group} rules: {count}\n" + body)
                             for name in ("fin.txt", "fin-surge.txt"):
                                 parsed, messages = parse(outputs[root / group / name], purpose="proxy")
