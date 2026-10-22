@@ -61,6 +61,8 @@ Mihomo 的有效非 regex matcher 含字面逗号时，只跳过该目标的完�
 
 Quantumult X 字段以字面单／双引号开头，或首尾含会被读取器裁剪的空白时，仅跳过该 QX 投影；这包括 keyword、native wildcard 和 USER-AGENT。USER-AGENT 的奇数个尾反斜杠、空白后紧接 `#`／`;`／`//` 同样按目标 unsupported。内部引号、内部空白、USER-AGENT 偶数尾反斜杠，以及 HOST-KEYWORD 已有字面反斜杠和 marker 读取保持。输出与白名单投影共用判定，不改写 matcher 或放宽生成依赖校验。
 
+Surge／Quantumult X 的最终字段若会被普通读取器判为 HTML markup，或非 regex process、USER-AGENT、DEVICE-NAME 及 wildcard 字段含该读取器不接受的角括号，仅跳过对应目标；Surge logical 任一叶子不支持时跳过整条。`DOMAIN-KEYWORD,<123>` 和 URL-REGEX 的既有字面字段读取保持，native 原格式支持与来源 HTML 检查不变。
+
 Mihomo native 的 `DOMAIN`／`DOMAIN-SUFFIX` 以及 `DOMAIN-KEYWORD,123.`、`DOMAIN-WILDCARD,*.*` 等末尾根点敏感规则无法保真转换到 Surge 时，只跳过对应 Surge 输出，包括 DOMAIN-SET；Mihomo 输出保留这些原生域名 matcher。逻辑规则任一叶子无法表达时，跳过该目标的整条 `AND`／`OR`／`NOT`。case／root 判定针对关闭 sniffer、没有 hosts alias 或提前改写的 VLESS TCP raw FQDN，不能用其他入口会清理 Host 的行为替代。
 
 普通混合来源中的裸 regex 可能同时表示完整 matcher、策略或尾注释。例如 `DOMAIN-REGEX,^a{b$,My Proxy # note}c$|^foo$` 给出 `ambiguous unquoted regex comma or policy` warning，并保留后续合法行。用字段引号明确所需范围：

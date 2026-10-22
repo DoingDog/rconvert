@@ -21,6 +21,128 @@ class TargetFieldTests(unittest.TestCase):
         return [json.loads(line[4:]) for line in outputs['fin.yaml'].split('\n')[2:-1]]
 
 
+class OrdinaryTargetFieldsTests(TargetFieldTests):
+    def test_native_keyword_markup_is_not_emitted_to_ordinary_readers(self):
+        rules = self.parsed('payload:\n  - DOMAIN-KEYWORD,<tag>')
+        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+        self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 0\n')
+        self.assertEqual(diagnostics['fin-qx.txt:DOMAIN-KEYWORD'], 1)
+        self.assertEqual(self.yaml_body(outputs), ['DOMAIN-KEYWORD,<tag>'])
+
+    def test_native_user_agent_angle_literal_is_not_emitted_to_ordinary_readers(self):
+        rules = self.parsed('payload:\n  - USER-AGENT,<123>')
+        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+        self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n')
+        self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 0\n')
+        self.assertEqual(diagnostics['fin.txt:USER-AGENT'], 1)
+        self.assertEqual(diagnostics['fin-qx.txt:USER-AGENT'], 1)
+
+    def test_native_wildcard_numeric_angle_literal_is_not_ordinary_domain(self):
+        rules = self.parsed('payload:\n  - DOMAIN-WILDCARD,*<123>*')
+        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+        for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt'):
+            self.assertEqual(outputs[name], '# fields rules: 0\n')
+            self.assertEqual(diagnostics[name + ':DOMAIN-WILDCARD'], 1)
+        self.assertEqual(self.yaml_body(outputs), ['DOMAIN-WILDCARD,*<123>*'])
+
+    def test_markup_process_and_literal_controls_matrix(self):
+        cases = [('DOMAIN-KEYWORD', '<tag>'), ('DOMAIN-KEYWORD', '<!--123-->'),
+                 ('DOMAIN-WILDCARD', '*<123>*'), ('DOMAIN-WILDCARD', '*<tag>*'),
+                 ('USER-AGENT', '<123>'), ('DEVICE-NAME', '<123>'),
+                 ('PROCESS-NAME', '<123>'), ('PROCESS-NAME-WILDCARD', '<123>'),
+                 ('PROCESS-PATH', '/123/<123>'), ('PROCESS-PATH-WILDCARD', '/123/<123>')]
+        for kind, value in cases:
+            leaf = kind + ',' + value
+            expressions = [leaf, f'AND,(({leaf}),(DOMAIN-KEYWORD,123))',
+                           f'OR,(({leaf}),(DOMAIN-KEYWORD,123))', f'NOT,(({leaf}))',
+                           f'NOT,((AND,(({leaf}),(DOMAIN-KEYWORD,123))))']
+            for expression in expressions:
+                rules = self.parsed('payload:\n  - ' + json.dumps(expression))
+                for purpose in ('block', 'direct', 'proxy'):
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(expression=expression, purpose=purpose, mode=mode):
+                            outputs, diagnostics = render('fields', rules, purpose=purpose, no_resolve=mode)
+                            for name in ('fin.txt', 'fin-surge.txt', 'fin-qx.txt'):
+                                self.assertEqual(outputs[name], '# fields rules: 0\n')
+                                self.assertEqual(diagnostics[name + ':' + rules[0].kind], 1)
+                            if kind not in ('USER-AGENT', 'DEVICE-NAME'):
+                                self.assertEqual(self.yaml_body(outputs), [expression])
+                            self.assertEqual(rules[0].value, expression.partition(',')[2])
+        for kind in ('USER-AGENT', 'DEVICE-NAME'):
+            expression = f'AND,(({kind},<tag>),(DOMAIN-KEYWORD,123))'
+            outputs, diagnostics = render('fields', self.parsed('payload:\n  - ' + json.dumps(expression)),
+                                          purpose='proxy', no_resolve='keep')
+            self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n')
+            self.assertEqual(diagnostics['fin.txt:AND'], 1)
+        for source in ('DOMAIN-KEYWORD,<123>', 'HOST-KEYWORD,<123>,LIST', 'payload:\n  - DOMAIN-KEYWORD,<123>'):
+            outputs, _ = render('fields', self.parsed(source), purpose='proxy', no_resolve='keep')
+            self.assertEqual(outputs['fin.txt'], '# fields rules: 1\nDOMAIN-KEYWORD,<123>\n')
+            self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 1\nHOST-KEYWORD,<123>,LIST\n')
+            for name in ('fin.txt', 'fin-qx.txt', 'fin.yaml'):
+                self.assertEqual(self.parsed(outputs[name])[0].value, '<123>')
+        for source in ('DOMAIN-KEYWORD,<tag>', 'USER-AGENT,<123>', 'DEVICE-NAME,<123>',
+                       'payload:\n  - USER-AGENT,<tag>', 'payload:\n  - DEVICE-NAME,<tag>'):
+            rules, messages = parse(source, purpose='proxy')
+            self.assertEqual(rules, [])
+            self.assertTrue(messages)
+        outputs, _ = render('fields', self.parsed('URL-REGEX,<tag>'), purpose='proxy', no_resolve='keep')
+        self.assertEqual(outputs['fin.txt'], '# fields rules: 1\nURL-REGEX,<tag>\n')
+        self.assertEqual(self.parsed(outputs['fin.txt'])[0].value, '<tag>')
+        white = Rule('DOMAIN-KEYWORD', '<!--123-->', domain_source='mihomo')
+        blocker = Rule('DOMAIN-KEYWORD', '9<!--123-->8', domain_source='mihomo')
+        outputs, diagnostics = render('fields', [blocker, replace(white, allow=True)], whitelist=[white],
+                                      purpose='block', no_resolve='keep')
+        self.assertNotIn('fin.txt:DOMAIN-KEYWORD:whitelist-covered', diagnostics)
+        self.assertNotIn('fin-qx.txt:DOMAIN-KEYWORD:whitelist-covered', diagnostics)
+
+    def test_actual_generated_ordinary_sources_and_whitelists_remain_readable(self):
+        source = ('payload:\n  - DOMAIN-KEYWORD,<tag>\n  - DOMAIN-KEYWORD,<!--123-->\n'
+                  '  - DOMAIN-WILDCARD,*<123>*\n  - USER-AGENT,<123>\n  - DEVICE-NAME,<123>\n'
+                  '  - PROCESS-NAME,<123>\n  - PROCESS-PATH,/123/<123>\n'
+                  '  - AND,((PROCESS-NAME,<123>),(DOMAIN-KEYWORD,123))\n'
+                  'DOMAIN,white.neighbor.test\n')
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'input.yaml').write_text(source, encoding='utf-8')
+                    (root / 'block.list').write_text('DOMAIN,keep.example.org\n', encoding='utf-8')
+                    configs = [dict(name='parent', purpose=purpose, no_resolve=mode, sources=['input.yaml'], whitelist=[])]
+                    for suffix, filename in (('surge', 'fin.txt'), ('qx', 'fin-qx.txt')):
+                        configs += [dict(name='source-' + suffix, purpose=purpose, no_resolve=mode,
+                                         sources=['parent/' + filename], whitelist=[]),
+                                    dict(name='white-' + suffix, purpose=purpose, no_resolve=mode,
+                                         sources=['block.list'], whitelist=['parent/' + filename])]
+                    config = root / 'rulesets.json'
+                    config.write_text(json.dumps(configs), encoding='utf-8')
+                    old = {}
+                    for item in configs:
+                        (root / item['name']).mkdir()
+                        for name in FILES:
+                            path = root / item['name'] / name
+                            old[path] = b'old product\r\n'
+                            path.write_bytes(old[path])
+                    with contextlib.redirect_stderr(io.StringIO()) as logs:
+                        outputs = generate(root, self.fail)
+                    self.assertEqual(len(outputs), 30)
+                    self.assertEqual({path: path.read_bytes() for path in old}, old)
+                    for name, expected in (('fin.txt', 'DOMAIN,white.neighbor.test'),
+                                           ('fin-qx.txt', 'HOST,white.neighbor.test,LIST')):
+                        self.assertEqual(outputs[root / 'parent' / name], '# parent rules: 1\n' + expected + '\n')
+                    self.assertNotIn(': line ', logs.getvalue())
+                    publish(outputs, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in outputs},
+                                     {path: text.encode('utf-8') for path, text in outputs.items()})
+                    config.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        disk = generate(root, self.fail)
+                    for item in configs[1:]:
+                        for name in ('fin.txt', 'fin-qx.txt', 'fin.yaml'):
+                            path = root / item['name'] / name
+                            self.assertEqual(disk[path], outputs[path])
+                    self.assertEqual((root / 'input.yaml').read_text(encoding='utf-8'), source)
+
+
 class MihomoDomainSpaceTests(TargetFieldTests):
     def test_qx_literal_space_keyword_is_mihomo_unsupported(self):
         rules = self.parsed("HOST-KEYWORD,' 123 ',LIST")

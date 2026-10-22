@@ -1517,6 +1517,14 @@ def _without_comment(line: str) -> str:
     return line[:end].rstrip()
 
 
+_HTML_MARKUP = re.compile(r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", re.I)
+
+
+def _ordinary_field_supported(kind: str, value: str) -> bool:
+    return kind in _REGEX or (_HTML_MARKUP.search(value) is None and
+                              not (kind in _PROCESS | {'DOMAIN-WILDCARD'} and any(char in value for char in '<>')))
+
+
 def _has_literal_field(line: str, native_fields: bool = False) -> bool:
     head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+) *,''', line, re.I)
     if head is None:
@@ -1602,9 +1610,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             continue
         if line is None:
             continue
-        if not _has_literal_field(line, yaml_rule) and re.search(
-            r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", line, re.I
-        ):
+        if not _has_literal_field(line, yaml_rule) and _HTML_MARKUP.search(line):
             warnings.append(f"line {number}: HTML markup")
             continue
         if number in html_lines:

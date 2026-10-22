@@ -11,7 +11,7 @@ from bisect import bisect_right
 from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
                    _field_value, _fields, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
-                   _valid_name_list, _valid_regex, exclude_covered)
+                   _ordinary_field_supported, _valid_name_list, _valid_regex, exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -177,7 +177,7 @@ _LINE_UNSAFE = re.compile(r"[\x00-\x08\x0a-\x1f\x7f-\x9f\u2028\u2029\ufffe\uffff
 
 
 def _qx_field_supported(kind: str, value: str) -> bool:
-    return (kind in QX_TYPES and ',' not in value and
+    return (kind in QX_TYPES and _ordinary_field_supported(kind, value) and ',' not in value and
             value == value.strip() and not value.startswith(("'", '"')) and
             not (kind == 'USER-AGENT' and ((len(value) - len(value.rstrip('\\'))) % 2 or
                                           re.search(r'\s(?:[#;]|//)', value))) and
@@ -263,7 +263,7 @@ def _logical_value(value: str, operator: str, supported: set[str],
         if payload is None:
             return None
         if supported is SURGE_TYPES:
-            if _LINE_UNSAFE.search(payload):
+            if _LINE_UNSAFE.search(payload) or not _ordinary_field_supported(kind, payload):
                 return None
             if kind == 'NETWORK' and payload.upper() in {'TCP', 'UDP'}:
                 kind, payload = 'PROTOCOL', payload.upper()
@@ -1410,7 +1410,7 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             elif source == 'mihomo' and kind in {'GEOIP', 'IP-ASN'} and value.upper() == 'UNKNOWN':
                 continue
             kind = SURGE_ALIASES.get(kind, kind)
-            if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None:
+            if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None and _ordinary_field_supported(kind, value):
                 selected.append(Rule(kind, value, domain_source='surge'))
         else:
             if not _qx_field_supported(kind, value) or _LINE_UNSAFE.search(value) is not None:
@@ -1475,7 +1475,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                                           rule.native_fields, rule.domain_source) if logical else
                            _surge_value(surge_payload, source_regex=kind == "URL-REGEX")
                            if surge_payload is not None else None)
-            if surge_kind in SURGE_TYPES and surge_value is not None and line_safe:
+            if (surge_kind in SURGE_TYPES and surge_value is not None and line_safe and
+                    (logical or _ordinary_field_supported(surge_kind, surge_payload))):
                 if kind == "IP-CIDR" and ":" in value:
                     surge_kind = "IP-CIDR6"
                 surge_line = f"{surge_kind},{surge_value}"
