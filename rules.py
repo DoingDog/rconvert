@@ -1525,6 +1525,14 @@ def _ordinary_field_supported(kind: str, value: str) -> bool:
                               not (kind in _PROCESS | {'DOMAIN-WILDCARD'} and any(char in value for char in '<>')))
 
 
+def _qx_field_supported(kind: str, value: str) -> bool:
+    return (kind in _QX_INTERFACE_KINDS and _ordinary_field_supported(kind, value) and ',' not in value and
+            value == value.strip() and not value.startswith(("'", '"')) and
+            not (kind in {'USER-AGENT', 'DOMAIN-WILDCARD'} and (
+                (len(value) - len(value.rstrip('\\'))) % 2 or re.search(r'\s(?:[#;]|//)', value))) and
+            not (kind == 'DOMAIN-WILDCARD' and any(char in value for char in '[]')))
+
+
 def _has_literal_field(line: str, native_fields: bool = False) -> bool:
     head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+) *,''', line, re.I)
     if head is None:

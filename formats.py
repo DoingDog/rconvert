@@ -11,7 +11,7 @@ from bisect import bisect_right
 from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
                    _field_value, _fields, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
-                   _ordinary_field_supported, _valid_name_list, _valid_regex, exclude_covered)
+                   _ordinary_field_supported, _qx_field_supported, _valid_name_list, _valid_regex, exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -174,14 +174,6 @@ def _yaml_value(value: str) -> str:
 
 
 _LINE_UNSAFE = re.compile(r"[\x00-\x08\x0a-\x1f\x7f-\x9f\u2028\u2029\ufffe\uffff]")
-
-
-def _qx_field_supported(kind: str, value: str) -> bool:
-    return (kind in QX_TYPES and _ordinary_field_supported(kind, value) and ',' not in value and
-            value == value.strip() and not value.startswith(("'", '"')) and
-            not (kind == 'USER-AGENT' and ((len(value) - len(value.rstrip('\\'))) % 2 or
-                                          re.search(r'\s(?:[#;]|//)', value))) and
-            not (kind == 'DOMAIN-WILDCARD' and any(char in value for char in '[]')))
 
 
 def _logical_regex_value(value: str, *, logical: bool = True) -> str | None:
