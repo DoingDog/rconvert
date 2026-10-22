@@ -1542,7 +1542,7 @@ def _qx_field_supported(kind: str, value: str) -> bool:
         return False
     if kind == 'DOMAIN-WILDCARD':
         try:
-            list(_delimiters('HOST-WILDCARD,' + value + ',LIST'))
+            list(_delimiters('HOST-WILDCARD,' + value))
         except ValueError:
             return False
     return True

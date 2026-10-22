@@ -30,7 +30,7 @@
 ### 十二根因与联合行为
 
 - R4. 以公开调用验证 static 后代 alias 输入保留、DOMAIN-SET alias 格式上下文和 white cache、keyword 多目标去重、Mihomo process 边缘 space、nonregex 逗号、QX 字段承载、Mihomo logical 逐叶括号、DNS escaped-hyphen 来源语义、wildcard 普通回读闭合、Go 名称 whitespace、chunked ASCII OWS、CI fixed-tested-SHA／superseded 及已有 untracked／ignored 内容保留。
-- R5. 新 wildcard pattern 经 ordinary／Surge／QX／YAML 实际 bytes 回读；marker、奇数尾反斜杠、引号、括号、非 ASCII 和 markup 按目标局部支持。scalar／logical、source／white、同轮／disk-only、三个 purpose／三个 no_resolve、source-IP 方向及 static／旧产物保留同时成立。
+- R5. 新 wildcard pattern 经 ordinary／Surge／QX／YAML 实际 bytes 回读；marker、奇数尾反斜杠、引号、括号、非 ASCII 和 markup 按目标局部支持。scalar／logical、source／white、同轮／disk-only、三个 purpose／三个 no_resolve、source-IP 方向及 static／旧产物保留同时成立。QX allow／white 的超长 wildcard 继续满足已有内存预算回归；共享字段 lexer 不为已排除逗号和奇数尾反斜杠的 payload 复制策略尾字段。
 - R6. 短 keyword 在某目标 unsupported 时不能删除该目标可表达的长项。实际 Rule Unicode 原值、native ignored-tail、root-dot、allow／options／来源身份、逆序和一次性 iterable 保持。普通安全包含仍归约，外部原始 white 与生成 parent white 使用各自真实流程。
 
 ### 最终代码验证

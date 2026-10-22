@@ -82,7 +82,7 @@ flowchart TB
 - scalar／logical、source／white、同轮／disk-only，三个 purpose／no_resolve、source-IP 方向、static／旧产物保护。
 - keyword 短项 unsupported 与长项能力联动，Unicode 原值、ignored-tail、root-dot、allow／options／来源身份和逆序保持；安全包含仍归约。
 
-先读取现有测试，联合缺口才补最小回归。任何新确认问题必须具体 red -> 最小修复 -> green，相关规格和所有调用方同步，禁止放宽原断言或 strict readback。
+先读取现有测试，联合缺口才补最小回归。任何新确认问题必须具体 red -> 最小修复 -> green，相关规格和所有调用方同步，禁止放宽原断言或 strict readback。已有 `test_oversized_dns_does_not_allocate_the_expanded_regex` 同时检查 QX allow／white 的超长 pattern；联合字段 lexer 必须在保持括号／引号判定的同时通过该内存预算断言。
 
 完成条件：联合场景真实通过，无新失败，必要修正及回归英文提交。
 
