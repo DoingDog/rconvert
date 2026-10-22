@@ -56,7 +56,8 @@ def update(root: Path, tested_sha: str) -> str:
     if _git(root, "diff", "--cached", "--name-only").stdout:
         raise ValueError("Refusing to publish with existing staged changes")
     paths = [str(Path(group["name"]) / name) for group in load_config(root) for name in FILES] + ["README.md"]
-    if _git(root, "diff", "--name-only", "--", *paths).stdout:
+    if (_git(root, "diff", "--name-only", "--", *paths).stdout
+            or _git(root, "ls-files", "--others", "--", *paths).stdout):
         raise ValueError("Refusing to overwrite existing changes in publication paths")
     publish(generate(root, fetch_https), root=root)
     update_counts(root)

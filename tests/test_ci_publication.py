@@ -190,6 +190,80 @@ class CiPublicationTests(unittest.TestCase):
         self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
         self.assertEqual(self.tip(), self.base)
 
+    def test_existing_untracked_generated_file_is_preserved_before_generation(self):
+        name = "fixture-1/fin-adb.txt"
+        self.git(self.runner, "rm", "--cached", name)
+        self.git(self.runner, "commit", "-qm", "Untrack fixture output")
+        self.git(self.runner, "push", "-q", "origin", "HEAD:refs/heads/main")
+        event = self.tip()
+        (self.runner / name).write_bytes(b"manual output\n")
+        self.assertEqual(self.git(self.runner, "ls-files", "--others", "--", name).stdout, name + "\n")
+        self.assertEqual(self.git(self.runner, "diff", "--name-only").stdout, "")
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        with self.assertRaisesRegex(ValueError, "existing.*publication paths"):
+            self.run_update(sha=event, fetch=lambda url: self.fail("untracked output triggered fetch"))
+        self.assertEqual((self.runner / name).read_bytes(), b"manual output\n")
+        self.assertEqual(self.git(self.runner, "diff", "--name-only").stdout, "")
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), event)
+        self.assertEqual(self.tip(), event)
+
+    def test_new_configured_group_preserves_existing_untracked_output(self):
+        config = self.runner / "rulesets.json"
+        groups = json.loads(config.read_text(encoding="utf-8"))
+        groups.append({**groups[1], "name": "fixture-new"})
+        config.write_text(json.dumps(groups), encoding="utf-8")
+        self.git(self.runner, "add", "rulesets.json")
+        self.git(self.runner, "commit", "-qm", "Configure new fixture group")
+        self.git(self.runner, "push", "-q", "origin", "HEAD:refs/heads/main")
+        event = self.tip()
+        output = self.runner / "fixture-new/fin-adb.txt"
+        output.parent.mkdir()
+        output.write_bytes(b"manual new group output\n")
+        self.assertEqual(self.git(self.runner, "ls-files", "--others").stdout, "fixture-new/fin-adb.txt\n")
+        self.assertEqual(self.git(self.runner, "diff", "--name-only").stdout, "")
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        with self.assertRaisesRegex(ValueError, "existing.*publication paths"):
+            self.run_update(sha=event, fetch=lambda url: self.fail("new group output triggered fetch"))
+        self.assertEqual(output.read_bytes(), b"manual new group output\n")
+        self.assertEqual(self.git(self.runner, "diff", "--name-only").stdout, "")
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), event)
+        self.assertEqual(self.tip(), event)
+
+    def test_existing_ignored_output_is_preserved_before_generation(self):
+        name = "fixture-1/fin-adb.txt"
+        self.git(self.runner, "rm", "--cached", name)
+        ignored = self.runner / ".gitignore"
+        ignored.write_text(ignored.read_text(encoding="utf-8") + name + "\n", encoding="utf-8")
+        self.git(self.runner, "add", ".gitignore")
+        self.git(self.runner, "commit", "-qm", "Ignore untracked fixture output")
+        self.git(self.runner, "push", "-q", "origin", "HEAD:refs/heads/main")
+        event = self.tip()
+        (self.runner / name).write_bytes(b"manual ignored output\n")
+        self.assertEqual(self.git(self.runner, "check-ignore", "--", name).stdout, name + "\n")
+        self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
+        with self.assertRaisesRegex(ValueError, "existing.*publication paths"):
+            self.run_update(sha=event, fetch=lambda url: self.fail("ignored output triggered fetch"))
+        self.assertEqual((self.runner / name).read_bytes(), b"manual ignored output\n")
+        self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), event)
+        self.assertEqual(self.tip(), event)
+
+    def test_missing_untracked_output_can_be_generated_and_published(self):
+        name = "fixture-1/fin-adb.txt"
+        self.git(self.runner, "rm", name)
+        self.git(self.runner, "commit", "-qm", "Remove fixture output")
+        self.git(self.runner, "push", "-q", "origin", "HEAD:refs/heads/main")
+        event = self.tip()
+        self.assertFalse((self.runner / name).exists())
+        self.assertEqual(self.run_update(sha=event), "published")
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), event)
+        output = (self.runner / name).read_bytes()
+        self.assertIn(b"new.example", output)
+        self.assertEqual(self.git(self.origin, "show", f"main:{name}").stdout.encode(), output)
+        self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
+
     def test_unchanged_generation_creates_no_commit(self):
         self.assertEqual(self.run_update(data=OLD, moment=START), "unchanged")
         self.assertEqual(self.tip(), self.base)
