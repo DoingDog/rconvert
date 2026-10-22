@@ -1993,10 +1993,12 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 candidate = candidate.partition('.')[2]
             if candidate:
                 continue
+        # 末尾点 native keyword 不能覆盖其他目标仍可表达的长 keyword。
         if kind == 'DOMAIN-KEYWORD' and any(value[start:stop] in keywords[group]
                                            for start in range(len(value))
                                            for stop in range(start + 1, len(value) + 1)
-                                           if stop - start < len(value)):
+                                           if stop - start < len(value) and
+                                           (rule.domain_source != 'mihomo' or value.endswith('.') or value[stop - 1] != '.')):
             continue
         kept.append(rule)
     networks = {}
