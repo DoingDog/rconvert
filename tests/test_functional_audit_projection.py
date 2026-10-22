@@ -462,9 +462,6 @@ class SurgeRootDotProjectionTests(unittest.TestCase):
                 text = matcher if source == 'surge' else matcher.replace('DOMAIN-', 'HOST-', 1) + ',REJECT'
                 parsed, messages = parse(text, purpose='block')
                 kind, _, value = matcher.partition(',')
-                if value == '*??123*':
-                    self.assertEqual((parsed, messages), ([], ['line 1: invalid domain *??123*']))
-                    continue
                 self.assertEqual((parsed, messages), ([Rule(kind, value, domain_source=source)], []))
                 for purpose in ('block', 'direct', 'proxy'):
                     for mode in ('add', 'strip', 'keep'):

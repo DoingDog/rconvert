@@ -1123,8 +1123,9 @@ class NativeWildcardBoundaryAuditTests(unittest.TestCase):
             for pattern in ('*ads*', '*', 'a?', '[ab]', 'a..ads', '-ads.example', 'ads-.example', 'x' * 5000):
                 with self.subTest(source=source, pattern=pattern):
                     parsed, messages = parse(source + pattern, purpose='block')
-                    self.assertEqual(parsed, [])
-                    self.assertEqual(len(messages), 1)
+                    self.assertEqual(parsed, [Rule('DOMAIN-WILDCARD', pattern,
+                                                   domain_source='surge' if source == 'DOMAIN-WILDCARD,' else 'qx')])
+                    self.assertEqual(messages, [])
 
     def test_native_logical_raw_quotes_order_ip_direction_and_no_resolve_survive(self):
         for pattern in ('*ads*', '*', 'a?', '[ab]', '"a?"', "'a?'", '*<ads>*', 'a(ads)', 'é?'):
