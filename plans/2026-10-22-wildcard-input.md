@@ -2,6 +2,16 @@
 
 规格：`docs/superpowers/specs/2026-10-22-wildcard-input-design.md`。工作树为 `.claude/worktrees/wf_dcf70dde-e2b-1`，branch 为 `worktree-wf_dcf70dde-e2b-1`，任务基准为 `4c1f29d55e47f939b96cf87a5284f947938191ed`，接手 HEAD 为 `df12eb1ad31f7b6cfca9bbe53107b41f172f0c7d`。保存的 parser 实现和 11 项新测试保留，在独立 OS 临时 Git 基准 snapshot 重做必要 red，不覆盖 worktree 中的内容。所有变更限于规格列明的 mutation boundary。
 
+## QX wildcard 回读补齐执行计划
+
+本轮基准为 `8e4aa6e108cb41248bc46ad6e6b86ecf982edf38`，worktree 为 `.claude/worktrees/wf_57ebabdc-143-1`，branch 为 `worktree-wf_57ebabdc-143-1`。在本 worktree 正常 merge 基准，保留历史；既有计划保持本路径，不新建同名计划。以下步骤补齐原有回读要求，后续章节保留已有实施记录。
+
+1. 读取 `_valid_domain`、`_qx_field_supported` 全部调用、普通 parser 边界、normalize、目标 white、render 和 generate／publish 及既有 W 测试。核查：本轮生产 hunk 仅属 QX wildcard 普通 pattern 检查，角括号 owner 的 target-field 文档／测试不修改；只提交本规格与计划，英语消息。
+2. 在 `tests/test_qx_wildcard_domain_regressions.py` 添加一个公开 native `*..` 投影 proof，在 Linux `/tmp` 基准 snapshot 观察 QX 错误输出的 red；在 wildcard 分支复用 `_valid_domain('DOMAIN-WILDCARD', value)`，同一 proof green。核查：精确 QX header／diagnostics、YAML 原值和邻居，保留既有 delimiter 输入及内存阈值。
+3. 逐边界补齐普通拒绝、合法 wildcard 实际 UTF-8 QX bytes、同轮 source／white、先发布 parent 的 disk-only 非空 source／white 和直接 native white 对照；每个必要边界用未修改的基准生产 snapshot 单独观察 red，在当前实现验证 green，不为这些路径新增生产分支。核查：期望来自已知字面输出，真实 `publish(generate(...))`、发布前旧两组六产物不变、发布后 bytes 相等、static 输入不变，QX 缺失的 native matcher 不恢复。
+4. 运行相关 wildcard／target-field／rules／formats／generate 回归及原内存测试，核查规格、调用方和最少实现，必要修正后复审；仅提交 `rules.py`、本轮新测试与必要的本轮规格／计划修正，英语消息。核查：不改普通输入、normalize、HTML／class／marker／oddslash／括号限制、42 份既有产物、配置或 static。
+5. 最终 commit 后用 Git archive 构造完整 Linux `/tmp` 可信 snapshot，以 `python3 -I -B` 显式添加可信 root 执行全部 unittest；核查 path／mode／blob／SHA-256 manifest 前后相同，记录 exact tests／failures／errors／skips／耗时／exit 和日志。证据保留在本 worktree 已忽略的 `.tmp/qx-wildcard-readback-verification`，OS 临时目录结束后清理；不改 timeout／skip／2 MiB 阈值、不运行客户端或上游程序、不调查本机系统。最终核查 `git diff --check` 与 clean，完整回报并保留 worktree／branch 供主会话合并，不 push、不合并 main。
+
 ## 1. 核查、复现和文档提交
 
 - 核实 HEAD、branch、status、index 和全部 diff，读取已有测试、全部 validator／converter 调用及生成发布消费者；保护已保存改动，不 reset、stash 或在 main 编辑。
