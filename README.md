@@ -55,6 +55,8 @@
 
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
+native provider 的 `GEOIP`／`SRC-GEOIP` 支持 `private`、`telegram`、`cloudflare` 等命名类别及首个 `!` 取反，原 payload 保留在 Mihomo 输出中。这些类别及取反语义要求客户端启用 `geodata-mode: true` 并具有相应 dat 类别；转换器不读取数据库，也不承诺默认 mmdb 模式具有同样语义。普通显式 GEOIP 语法保持原范围；Surge／Quantumult X 仍只接受各自已有的 country／LAN／UNKNOWN 等能力，命名类别或取反叶子使对应目标的整条 logical 跳过。
+
 `DOMAIN-WILDCARD`／`HOST-WILDCARD` 按 pattern 校验，接受 `*`、`*123*`、多点和超过 hostname 长度的安全 pattern。普通 Surge 字段引用保护的字面字符可重新读取，生成的 Surge／Quantumult X 安全文本及 Mihomo YAML 可按实际 bytes 供同轮或磁盘 source／白名单使用。精确域名、后缀、hosts、裸域名和 DOMAIN-SET 保持原有 hostname 校验；wildcard 不写入 DOMAIN-SET。
 
 Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。普通 `PROCESS-NAME` 的精确字面值保留现有 hex regex 转换；其余原样输出的进程名称、路径及 wildcard matcher，以及最终 raw 域名 matcher 首尾含 ASCII space 时，只跳过 Mihomo 输出或所在完整逻辑规则。内部空格、HTAB 和非 ASCII 空白保留各自已有支持。
