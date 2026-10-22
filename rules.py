@@ -2009,6 +2009,8 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
             suffixes.setdefault(group, set()).add(value)
         elif rule.kind == 'DOMAIN-KEYWORD':
             keywords.setdefault(group, {}).setdefault(value, rule)
+    keyword_lengths = {group: sorted({len(key) for key in entries if key})
+                       for group, entries in keywords.items()}
     kept = []
     for (kind, value, group), rule in unique.items():
         if kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'}:
@@ -2035,11 +2037,10 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                     _surge_keyword_source_supported(short_rule.value, rule.domain_source)) and
                    (not qx or _qx_field_supported(kind, short_rule.value)) and
                    (not mihomo or _mihomo_domain_field_supported(kind, short_rule.value, rule.domain_source))
-                   for start in range(len(value))
-                   for stop in range(start + 1, len(value) + 1)
-                   if stop - start < len(value) and
-                   (rule.domain_source != 'mihomo' or value.endswith('.') or value[stop - 1] != '.') and
-                   (short := value[start:stop])):
+                   for length in keyword_lengths[group] if length < len(value)
+                   for start in range(len(value) - length + 1)
+                   if (rule.domain_source != 'mihomo' or value.endswith('.') or value[start + length - 1] != '.') and
+                   (short := value[start:start + length])):
                 continue
         kept.append(rule)
     networks = {}
