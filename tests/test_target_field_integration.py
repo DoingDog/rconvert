@@ -4,11 +4,13 @@ import json
 import tempfile
 import unittest
 from dataclasses import replace
+from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 from formats import FILES, render
 from generate import generate, publish
-from rules import Rule, normalize, parse
+from rules import Rule, normalize, parse, parse_whitelist
 
 
 class TargetFieldTests(unittest.TestCase):
@@ -371,7 +373,8 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
             outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
             self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n')
             self.assertEqual(diagnostics['fin.txt:AND'], 1)
-        source = 'AND,((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))\nDOMAIN,keep.example.org\n'
+        source = ('AND,((DOMAIN-WILDCARD,*<123>*),(PROTOCOL,TCP))\n'
+                  'AND,((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))\nDOMAIN,keep.example.org\n')
         for purpose in ('block', 'direct', 'proxy'):
             for mode in ('add', 'strip', 'keep'):
                 with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
@@ -385,7 +388,7 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
                         outputs = generate(root, self.fail)
                     self.assertEqual(len(outputs), 12)
                     for group in ('parent', 'child'):
-                        self.assertEqual(outputs[root / group / 'fin.txt'], f'# {group} rules: 2\n' + source)
+                        self.assertEqual(outputs[root / group / 'fin.txt'], f'# {group} rules: 3\n' + source)
                     publish(outputs, root=root)
                     config.write_text(json.dumps(configs[1:]), encoding='utf-8')
                     with contextlib.redirect_stderr(io.StringIO()):
@@ -433,17 +436,149 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
         self.assertEqual(diagnostics['fin.txt:USER-AGENT'], 1)
         self.assertEqual(diagnostics['fin-qx.txt:USER-AGENT'], 1)
 
-    def test_native_wildcard_numeric_angle_literal_is_not_ordinary_domain(self):
-        rules = self.parsed('payload:\n  - DOMAIN-WILDCARD,*<123>*')
-        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
-        for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt'):
-            self.assertEqual(outputs[name], '# fields rules: 0\n')
-            self.assertEqual(diagnostics[name + ':DOMAIN-WILDCARD'], 1)
-        self.assertEqual(self.yaml_body(outputs), ['DOMAIN-WILDCARD,*<123>*'])
+    def test_numeric_angle_wildcard_survives_ordinary_targets(self):
+        cases = (('*<123>*', r'^.*<123>.*\.?$'), ('*<123', r'^.*<123\.?$'),
+                 ('*123>*', r'^.*123>.*\.?$'))
+        for value, regex in cases:
+            for source, text in (('surge', 'DOMAIN-WILDCARD,' + value),
+                                 ('qx', 'HOST-WILDCARD,' + value + ',LIST'),
+                                 ('mihomo', 'payload:\n  - DOMAIN-WILDCARD,' + value)):
+                rules = self.parsed(text)
+                self.assertEqual(rules, [Rule('DOMAIN-WILDCARD', value, domain_source=source)])
+                self.assertEqual(normalize(iter(rules[::-1] + rules)), rules)
+                for purpose in ('block', 'direct', 'proxy'):
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(value=value, source=source, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                            outputs, diagnostics = render('fields', rules, purpose=purpose, no_resolve=mode)
+                            for name, output in outputs.items():
+                                path = Path(directory) / name
+                                path.write_bytes(output.encode('utf-8'))
+                                self.assertEqual(path.read_bytes(), output.encode('utf-8'))
+                            for name, target in (('fin.txt', 'surge'), ('fin-surge.txt', 'surge'),
+                                                 ('fin-qx.txt', 'qx'), ('fin.yaml', 'mihomo')):
+                                supported = not (source == 'mihomo' and not value.endswith('*') and target == 'surge')
+                                expected = [Rule('DOMAIN-REGEX', regex)] if source == 'surge' and target == 'mihomo' else [
+                                    Rule('DOMAIN-WILDCARD', value, domain_source=target)]
+                                if not supported:
+                                    expected = []
+                                actual = (Path(directory) / name).read_bytes().decode('utf-8')
+                                self.assertEqual(parse(actual, purpose=purpose), (expected, []))
+                                if supported:
+                                    self.assertEqual(parse_whitelist(actual), expected)
+                                self.assertEqual(diagnostics.get(name + ':DOMAIN-WILDCARD', 0), int(not supported))
+                                if target != 'mihomo':
+                                    line = 'HOST-WILDCARD,' + value + ',LIST' if target == 'qx' else 'DOMAIN-WILDCARD,' + value
+                                    self.assertEqual(actual, '# fields rules: ' + ('1\n' + line + '\n' if supported else '0\n'))
+                            self.assertEqual(outputs['fin-surge-ds.txt'], '# fields rules: 0\n')
+                            if source != 'mihomo':
+                                self.assertEqual(diagnostics['fin-adb.txt:DOMAIN-WILDCARD'], 1)
+                                self.assertEqual(outputs['fin-adb.txt'].splitlines()[7:], [] if purpose == 'block' else
+                                                 ['! No AdBlock rules for non-advertising group.'])
+
+    def test_numeric_angle_wildcard_logical_preserves_protocol_and_ip_direction(self):
+        expressions = ('AND,((DOMAIN-WILDCARD,*<123>*),(NETWORK,tcp))',
+                       'OR,((DOMAIN-WILDCARD,*<123>*),(IP-CIDR,192.0.2.0/24,no-resolve),(SRC-IP-CIDR,198.51.100.0/24))',
+                       'NOT,((DOMAIN-WILDCARD,*<123>*))',
+                       'AND,((NOT,((DOMAIN-WILDCARD,*<123>*))),(OR,((NETWORK,tcp),(SRC-IP-CIDR,198.51.100.0/24))))')
+        for expression in expressions:
+            for text in (expression, 'payload:\n  - ' + json.dumps(expression)):
+                rules = self.parsed(text)
+                for purpose in ('block', 'direct', 'proxy'):
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(expression=expression, text=text, purpose=purpose, mode=mode):
+                            outputs, diagnostics = render('fields', rules, purpose=purpose, no_resolve=mode)
+                            expected = expression.replace('NETWORK,tcp', 'PROTOCOL,TCP').replace('SRC-IP-CIDR,', 'SRC-IP,')
+                            if mode == 'strip':
+                                expected = expected.replace(',no-resolve', '')
+                            self.assertEqual(outputs['fin.txt'], '# fields rules: 1\n' + expected + '\n')
+                            self.assertEqual(outputs['fin-surge.txt'], outputs['fin.txt'])
+                            for name in ('fin.txt', 'fin-surge.txt', 'fin.yaml'):
+                                actual = self.parsed(outputs[name].encode('utf-8').decode('utf-8'), purpose)
+                                self.assertEqual(len(actual), 1)
+                                self.assertNotIn('198.51.100.0/24,no-resolve', actual[0].value)
+                                repeated, _ = render('fields', actual, purpose=purpose, no_resolve='keep')
+                                self.assertEqual(repeated[name], outputs[name])
+                            self.assertEqual(diagnostics, {name + ':' + rules[0].kind: 1 for name in
+                                                           ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')})
+
+    def test_numeric_angle_wildcard_generated_sources_and_whitelists_keep_actual_bytes(self):
+        source = b'DOMAIN-WILDCARD,*<123>*\nDOMAIN,keep.example.org\n'
+        for filename in ('fin.txt', 'fin-surge.txt', 'fin-qx.txt'):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(filename=filename, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        (root / 'static').mkdir()
+                        (root / 'static/pattern.list').write_bytes(source)
+                        (root / 'static/ip.list').write_bytes(b'IP-CIDR,192.0.2.0/24,no-resolve\nSRC-IP-CIDR,198.51.100.0/24\n')
+                        (root / 'static/consumer.list').write_bytes(b'DOMAIN-WILDCARD,*<123>*\nDOMAIN,survivor.example.org\n')
+                        inputs = {path: path.read_bytes() for path in (root / 'static').iterdir()}
+                        configs = [dict(name='parent', purpose=purpose, no_resolve=mode,
+                                        sources=['static/pattern.list', 'static/ip.list'], whitelist=[]),
+                                   dict(name='source', purpose=purpose, no_resolve=mode, sources=['parent/' + filename], whitelist=[]),
+                                   dict(name='white', purpose=purpose, no_resolve=mode,
+                                        sources=['static/consumer.list'], whitelist=['parent/' + filename]),
+                                   dict(name='external', purpose=purpose, no_resolve=mode,
+                                        sources=['static/consumer.list'], whitelist=['static/pattern.list'])]
+                        config = root / 'rulesets.json'
+                        config.write_text(json.dumps(configs), encoding='utf-8')
+                        old = {}
+                        for item in configs:
+                            (root / item['name']).mkdir()
+                            for name in FILES:
+                                path = root / item['name'] / name
+                                old[path] = b'previous complete output\x00\xff\r\n'
+                                path.write_bytes(old[path])
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as logs:
+                            clock.now.return_value = datetime(2026, 10, 22, tzinfo=timezone.utc)
+                            outputs = generate(root, self.fail)
+                            self.assertEqual(set(outputs), set(old))
+                            self.assertEqual({path: path.read_bytes() for path in old}, old)
+                            for group in ('parent', 'source'):
+                                for name in ('fin.txt', 'fin-surge.txt', 'fin-qx.txt'):
+                                    actual = self.parsed(outputs[root / group / name], purpose)
+                                    self.assertIn('*<123>*', [rule.value for rule in actual if rule.kind == 'DOMAIN-WILDCARD'])
+                                full = outputs[root / group / 'fin.txt']
+                                self.assertEqual('DOMAIN,keep.example.org\n' in full,
+                                                 group == 'parent' or filename != 'fin-surge.txt')
+                                self.assertEqual('SRC-IP,198.51.100.0/24\n' in full,
+                                                 group == 'parent' or filename != 'fin-qx.txt')
+                                self.assertNotIn('198.51.100.0/24,no-resolve', full)
+                                self.assertEqual('192.0.2.0/24,no-resolve' in full, mode != 'strip')
+                            for group in ('white', 'external'):
+                                surge = ('2\nDOMAIN,survivor.example.org\nDOMAIN-WILDCARD,*<123>*\n'
+                                         if group == 'white' and filename == 'fin-qx.txt' else
+                                         '1\nDOMAIN,survivor.example.org\n')
+                                self.assertEqual(outputs[root / group / 'fin.txt'], '# ' + group + ' rules: ' + surge)
+                                self.assertEqual(outputs[root / group / 'fin-qx.txt'], '# ' + group + ' rules: 1\nHOST,survivor.example.org,LIST\n')
+                            self.assertNotIn(': line ', logs.getvalue())
+                            self.assertNotIn('frozen', logs.getvalue())
+                            publish(outputs, root=root)
+                            published = {path: path.read_bytes() for path in outputs}
+                            self.assertEqual(published, {path: text.encode('utf-8') for path, text in outputs.items()})
+                            for group in ('parent', 'source'):
+                                for name in ('fin.txt', 'fin-surge.txt', 'fin-qx.txt', 'fin.yaml'):
+                                    text = (root / group / name).read_bytes().decode('utf-8')
+                                    self.assertEqual(parse(text, purpose=purpose)[1], [])
+                                    self.assertTrue(parse_whitelist(text))
+                            config.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                            logs.truncate(0)
+                            logs.seek(0)
+                            disk = generate(root, self.fail)
+                            self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name != 'parent'})
+                            self.assertNotIn(': line ', logs.getvalue())
+                            self.assertNotIn('frozen', logs.getvalue())
+                            publish(disk, root=root)
+                            self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+        rules = self.parsed(source.decode('utf-8'))
+        outputs, _ = render('allow', [*rules, replace(rules[0], allow=True)], purpose='block', no_resolve='keep')
+        self.assertEqual(outputs['fin.txt'], '# allow rules: 1\nDOMAIN,keep.example.org\n')
+        self.assertEqual(outputs['fin-qx.txt'], '# allow rules: 1\nHOST,keep.example.org,LIST\n')
 
     def test_markup_process_and_literal_controls_matrix(self):
         cases = [('DOMAIN-KEYWORD', '<tag>'), ('DOMAIN-KEYWORD', '<!--123-->'),
-                 ('DOMAIN-WILDCARD', '*<123>*'), ('DOMAIN-WILDCARD', '*<tag>*'),
+                 ('DOMAIN-WILDCARD', '*<tag>*'),
                  ('USER-AGENT', '<123>'), ('DEVICE-NAME', '<123>'),
                  ('PROCESS-NAME', '<123>'), ('PROCESS-NAME-WILDCARD', '<123>'),
                  ('PROCESS-PATH', '/123/<123>'), ('PROCESS-PATH-WILDCARD', '/123/<123>')]
@@ -522,9 +657,9 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
                         outputs = generate(root, self.fail)
                     self.assertEqual(len(outputs), 30)
                     self.assertEqual({path: path.read_bytes() for path in old}, old)
-                    for name, expected in (('fin.txt', 'DOMAIN,white.neighbor.test'),
-                                           ('fin-qx.txt', 'HOST,white.neighbor.test,LIST')):
-                        self.assertEqual(outputs[root / 'parent' / name], '# parent rules: 1\n' + expected + '\n')
+                    for name, expected in (('fin.txt', 'DOMAIN,white.neighbor.test\nDOMAIN-WILDCARD,*<123>*'),
+                                           ('fin-qx.txt', 'HOST,white.neighbor.test,LIST\nHOST-WILDCARD,*<123>*,LIST')):
+                        self.assertEqual(outputs[root / 'parent' / name], '# parent rules: 2\n' + expected + '\n')
                     self.assertNotIn(': line ', logs.getvalue())
                     publish(outputs, root=root)
                     self.assertEqual({path: path.read_bytes() for path in outputs},

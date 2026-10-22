@@ -61,7 +61,7 @@ Surge scalar、Surge logical 叶子和 QX 字段只输出其普通读取器可�
 
 联合修复以固定提交 `8e4aa6e108cb41248bc46ad6e6b86ecf982edf38` 为基准，正常合并并保留已完成组件和 QX policy-tail 内存修复的全部历史。普通 Surge／QX 和 native payload 接受的 `*<123>*`、`*<123`、`*123>*` 保留原值，normalize、Surge scalar／logical、QX scalar 和普通 route whitelist 不得因单独的角括号拒绝这些值。
 
-生产修改仅从 `_ordinary_field_supported` 移除 `DOMAIN-WILDCARD` 的整体角括号拒绝特例。`_PROCESS` 的非 regex 角括号限制、HTML markup 检查和 regex／literal keyword 例外保持。`*<tag>*` 等真实 markup 仍按现有普通读取器规则处理；不修改 wildcard validator、parser、DNS 支持集合或 QX class／marker／奇数尾反斜杠保护。普通角括号 literal 的 DNS 投影仍 unsupported，logical 不新增 QX／DNS／generated whitelist 能力。
+生产修改仅从 `_ordinary_field_supported` 移除 `DOMAIN-WILDCARD` 的整体角括号拒绝特例。native -> Surge 既有的末尾星号和 root 资格条件保持，例如 native `*<123` 仍局部 unsupported。`_PROCESS` 的非 regex 角括号限制、HTML markup 检查和 regex／literal keyword 例外保持。`*<tag>*` 等真实 markup 仍按现有普通读取器规则处理；不修改 wildcard validator、parser、DNS 支持集合或 QX class／marker／奇数尾反斜杠保护。普通角括号 literal 的 DNS 投影仍 unsupported，logical 不新增 QX／DNS／generated whitelist 能力。
 
 复用 `tests/test_target_field_integration.py`，修正把合法 numeric-angle wildcard 当作负例的断言。一个公开 scalar 测试先 red，最小实现后同测试 green，再覆盖三个 pattern 的普通 Surge／QX／native 来源、三种 purpose × 三种 no_resolve、真实 UTF-8 bytes 的 parse／parse_whitelist、logical 完整输出和顶层 skip 计数，以及目的／来源 IP 邻居。真实本地 source、white、同轮和非空 disk-only 依赖分别核查 matcher 保留及覆盖删除，发布前旧 bytes、全部六产物发布 bytes 和 static 输入保持。仅复用实际转换与读取，不测试内部 guard 或模拟转换结果。
 
