@@ -344,6 +344,38 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
                     self.assertEqual(disk[root / 'child' / 'fin.txt'], outputs[root / 'child' / 'fin.txt'])
                     self.assertEqual((root / 'input.list').read_text(encoding='utf-8'), source)
 
+    def test_logical_literal_exception_cannot_come_from_dropped_native_tail(self):
+        source = 'payload:\n  - "AND,((DOMAIN-KEYWORD,<!--123-->(,)(URL-REGEX,.*)),(DOMAIN-KEYWORD,123))"'
+        rules = self.parsed(source)
+        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+        self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n')
+        self.assertEqual(diagnostics['fin.txt:AND'], 1)
+        self.assertEqual(self.yaml_body(outputs), [rules[0].kind + ',' + rules[0].value])
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    original = source + '\nDOMAIN,keep.example.org\n'
+                    (root / 'input.yaml').write_text(original, encoding='utf-8')
+                    configs = [dict(name='parent', purpose=purpose, no_resolve=mode, sources=['input.yaml'], whitelist=[]),
+                               dict(name='child', purpose=purpose, no_resolve=mode, sources=['parent/fin.txt'], whitelist=[]),
+                               dict(name='white', purpose=purpose, no_resolve=mode, sources=['parent/fin.txt'], whitelist=['parent/fin.txt'])]
+                    config = root / 'rulesets.json'
+                    config.write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as logs:
+                        outputs = generate(root, self.fail)
+                    self.assertEqual(len(outputs), 18)
+                    self.assertEqual(outputs[root / 'parent' / 'fin.txt'], '# parent rules: 1\nDOMAIN,keep.example.org\n')
+                    self.assertEqual(outputs[root / 'white' / 'fin.txt'], '# white rules: 0\n')
+                    self.assertNotIn(': line ', logs.getvalue())
+                    publish(outputs, root=root)
+                    config.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        disk = generate(root, self.fail)
+                    for group in ('child', 'white'):
+                        self.assertEqual(disk[root / group / 'fin.txt'], outputs[root / group / 'fin.txt'])
+                    self.assertEqual((root / 'input.yaml').read_text(encoding='utf-8'), original)
+
     def test_native_user_agent_angle_literal_is_not_emitted_to_ordinary_readers(self):
         rules = self.parsed('payload:\n  - USER-AGENT,<123>')
         outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')

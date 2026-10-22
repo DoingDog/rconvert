@@ -38,7 +38,7 @@
 - 再单独确认 USER-AGENT `<123>` Surge／QX red -> 补已有非 regex process 角括号限制 -> green。
 - 扩展 keyword `<!--123-->`／`<123>` 控制、DEVICE-NAME、四种 process、实际可达 logical／嵌套、URL-REGEX 正例、target-local diagnostics、公共 Rule、route white。
 - 核查：source／white 同轮依赖不因输出坏行中止；真实发布及非空磁盘读回；来源 HTML 拒绝和 strict generated whitelist 不变。
-- 复审确认带 URL-REGEX 的 logical 享有普通读取器的整行 literal-field 例外后，用 red -> 共享既有例外判定 -> green 保留该支持，验证嵌套及真实生成 source。
+- 复审确认带 URL-REGEX 的 logical 享有普通读取器的整行 literal-field 例外后，用 red -> 共享既有例外判定 -> green 保留该支持，验证嵌套及真实生成 source。例外依据最终投影文本，补充 native ignored-tail 的伪 regex 内容反例和实际 source／white 依赖。
 
 ### U4. QX wildcard 字段边界
 

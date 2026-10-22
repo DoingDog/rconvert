@@ -203,7 +203,6 @@ def _logical_value(value: str, operator: str, supported: set[str],
     except ValueError:
         return None
     pending, edits = [(0, len(expression), 0)], []
-    literal_field = _has_literal_field(expression[1:-1]) if supported is SURGE_TYPES else False
     trim = ' ' if native_fields else None
     while pending:
         begin, end, depth = pending.pop()
@@ -256,7 +255,7 @@ def _logical_value(value: str, operator: str, supported: set[str],
         if payload is None:
             return None
         if supported is SURGE_TYPES:
-            if _LINE_UNSAFE.search(payload) or not _ordinary_field_supported(kind, payload, literal_field=literal_field):
+            if _LINE_UNSAFE.search(payload) or not _ordinary_field_supported(kind, payload, literal_field=True):
                 return None
             if kind == 'NETWORK' and payload.upper() in {'TCP', 'UDP'}:
                 kind, payload = 'PROTOCOL', payload.upper()
@@ -302,7 +301,11 @@ def _logical_value(value: str, operator: str, supported: set[str],
         parts.extend((expression[cursor:start], text))
         cursor = stop
     parts.append(expression[cursor:])
-    return ''.join(parts)[len(operator) + 2:-1]
+    projected = ''.join(parts)[1:-1]
+    if supported is SURGE_TYPES and not _ordinary_field_supported(
+            operator, projected, literal_field=_has_literal_field(projected)):
+        return None
+    return projected[len(operator) + 1:]
 
 
 def _wildcard_regex(value: str) -> str | None:
