@@ -10,23 +10,27 @@ class WorkflowScheduleTests(unittest.TestCase):
     def test_push_main_builds_the_same_commit_it_tests(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         self.assertIn("  push:\n    branches: [main]\n", workflow)
-        self.assertIn("          ref: ${{ github.sha }}", workflow)
+        self.assertEqual(workflow.count("          ref: ${{ github.sha }}"), 2)
         self.assertNotIn("          ref: main", workflow)
 
-    def test_update_refreshes_readme_counts_after_generation_and_stages_it(self):
+    def test_update_calls_the_behavior_tested_publication_entry_point(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
-        self.assertLess(workflow.index(".venv/bin/python generate.py"),
-                        workflow.index(".venv/bin/python update_readme_counts.py"))
-        self.assertLess(workflow.index(".venv/bin/python update_readme_counts.py"),
-                        workflow.index("git add -- README.md"))
-        self.assertLess(workflow.index("git add -- README.md"),
-                        workflow.index("if ! git diff --cached --quiet"))
+        self.assertIn("          .venv/bin/python update.py\n", workflow)
+        self.assertNotIn(".venv/bin/python generate.py", workflow)
+        self.assertNotIn("git add", workflow)
+        self.assertNotIn("--force", workflow)
+        self.assertNotIn("rebase", workflow)
 
-    def test_update_stages_only_configured_generated_files(self):
+    def test_update_retains_needs_main_and_readonly_pr_boundaries(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
-        self.assertIn("from sources import load_config", workflow)
-        self.assertIn("for group in load_config(Path('.')) for name in FILES", workflow)
-        self.assertNotIn("for group in a1 a2 a3 cdn big-data dirt", workflow)
+        readonly, update = workflow.split("  update:\n", 1)
+        self.assertIn("  pull_request:\n", readonly)
+        self.assertIn("permissions:\n  contents: read\n", readonly)
+        self.assertNotIn("contents: write", readonly)
+        self.assertIn("    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'\n", update)
+        self.assertIn("    needs: test\n", update)
+        self.assertIn("    permissions:\n      contents: write\n", update)
+        self.assertIn("  group: rules-${{ github.ref }}\n  cancel-in-progress: false\n", readonly)
 
     def test_workflow_allows_edited_and_untracked_static_inputs(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")

@@ -107,7 +107,7 @@ Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源及白�
 
 日志包含来源行号与转换诊断。`<file>:<kind>` 表示该目标 unsupported；`<file>:<kind>:whitelist-covered` 表示目标 matcher 被白名单覆盖后的合法删除；`whitelist-covered:<kind>` 仅在一条规范规则至少有一个有效路由投影且全部有效路由投影均被覆盖时计一次，完全 unsupported 的规则不计完整覆盖。`fin-qx.txt:<kind>:interface-option` 只统计实际输出且移除了接口参数的 QX 规则。公开 `render` 返回 `(outputs, diagnostics)`，诊断仍为计数字典。
 
-GitHub Actions 的 PR job 只运行离线测试；向 `main` 推送后先测试再更新，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，仅暂存配置所列规则组的六种生成文件和 `README.md`，不强推。
+GitHub Actions 的 PR job 以只读权限运行离线测试；向 `main` 推送后先测试同一事件 SHA，再由 `update.py` 生成并发布，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行。入口在生成前和提交前读取远端 `main`；事件 SHA 已被替代时记录 `superseded` 并跳过旧运行，推送窗口中明确的非快进或引用旧值竞争也须成功复核远端后才能跳过。`superseded` 不表示新 SHA 已测试或发布。发布仅暂存配置所列规则组的六种生成文件和 `README.md`，不强推；读取失败、权限、网络、服务端策略拒绝及无法确认的推送错误继续报错。
 
 ## 上游与许可
 
