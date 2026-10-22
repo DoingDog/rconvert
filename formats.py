@@ -66,6 +66,9 @@ def _surge_value(value: str, *, source_regex: bool = False, quote_parentheses: b
 
 
 def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tuple[str, str | None]:
+    if (supported is MIHOMO_TYPES and kind in DOMAIN_SET_TYPES | {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}
+            and not (source == 'surge' and kind not in DOMAIN_SET_TYPES) and value != value.strip(' ')):
+        return kind, None
     if kind in DOMAIN_SET_TYPES and source == 'mihomo' and supported is SURGE_TYPES:
         return kind, None
     if kind not in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:

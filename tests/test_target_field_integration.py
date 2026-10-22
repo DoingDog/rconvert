@@ -21,6 +21,88 @@ class TargetFieldTests(unittest.TestCase):
         return [json.loads(line[4:]) for line in outputs['fin.yaml'].split('\n')[2:-1]]
 
 
+class MihomoDomainSpaceTests(TargetFieldTests):
+    def test_qx_literal_space_keyword_is_mihomo_unsupported(self):
+        rules = self.parsed("HOST-KEYWORD,' 123 ',LIST")
+        self.assertEqual(rules[0].value, ' 123 ')
+        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+        self.assertEqual(self.yaml_body(outputs), [])
+        self.assertEqual(diagnostics['fin.yaml:DOMAIN-KEYWORD'], 1)
+        self.assertEqual(rules[0].value, ' 123 ')
+
+    def test_raw_domain_spaces_scalar_and_logical_are_target_local(self):
+        for kind, base in (('DOMAIN', '123.test'), ('DOMAIN-SUFFIX', '123.test'),
+                           ('DOMAIN-KEYWORD', '123'), ('DOMAIN-WILDCARD', '*123*')):
+            for value in (' ' + base, base + ' ', ' ' + base + ' '):
+                for source in ('mihomo', 'qx'):
+                    rules = [Rule(kind, value, domain_source=source)]
+                    leaf = kind + ',"' + value + '"'
+                    rules += [Rule(operator, expression, domain_source=source) for operator, expression in
+                              (('AND', f'(({leaf}),(NETWORK,tcp))'), ('OR', f'(({leaf}),(NETWORK,udp))'),
+                               ('NOT', f'(({leaf}))'), ('NOT', f'((AND,(({leaf}),(NOT,(({leaf}))))))'))]
+                    for rule in rules:
+                        for purpose in ('block', 'direct', 'proxy'):
+                            for mode in ('add', 'strip', 'keep'):
+                                with self.subTest(kind=kind, value=value, source=source, top=rule.kind,
+                                                  purpose=purpose, mode=mode):
+                                    outputs, diagnostics = render('fields', [rule], purpose=purpose, no_resolve=mode)
+                                    self.assertEqual(self.yaml_body(outputs), [])
+                                    self.assertEqual(diagnostics['fin.yaml:' + rule.kind], 1)
+        for value in ('1 23', '\t123', '123\t', '\xa0123', '123 '):
+            rule = Rule('DOMAIN-KEYWORD', value, domain_source='qx')
+            outputs, diagnostics = render('fields', [rule], purpose='proxy', no_resolve='keep')
+            self.assertEqual(self.yaml_body(outputs), ['DOMAIN-KEYWORD,' + value])
+            self.assertNotIn('fin.yaml:DOMAIN-KEYWORD', diagnostics)
+            self.assertEqual(self.parsed(outputs['fin.yaml'])[0].value, value)
+        for source, expected in (("DOMAIN-KEYWORD,' 123 '", r'DOMAIN-REGEX,\ 123\ (?:)'),
+                                 ("AND,((DOMAIN-KEYWORD,' 123 '),(NETWORK,tcp))", r'AND,((DOMAIN-REGEX,\ 123\ (?:)),(NETWORK,tcp))')):
+            outputs, _ = render('fields', self.parsed(source), purpose='proxy', no_resolve='keep')
+            self.assertEqual(self.yaml_body(outputs), [expected])
+        native = self.parsed('payload:\n  - "DOMAIN-KEYWORD, 123 "')
+        self.assertEqual(native[0].value, '123')
+
+    def test_generated_mihomo_white_does_not_trim_keyword(self):
+        for value in (' 123', '123 ', ' 123 '):
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(value=value, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        source = f"HOST-KEYWORD,'{value}',LIST\nHOST,white.neighbor.test,LIST\n"
+                        (root / 'white.list').write_text(source, encoding='utf-8')
+                        (root / 'input.yaml').write_text('payload:\n  - DOMAIN-KEYWORD,123x\n  - DOMAIN,keep.example.org\n', encoding='utf-8')
+                        configs = [dict(name='parent', purpose=purpose, no_resolve=mode, sources=['white.list'], whitelist=[]),
+                                   dict(name='child', purpose=purpose, no_resolve=mode, sources=['input.yaml'], whitelist=['parent/fin.yaml']),
+                                   dict(name='direct', purpose=purpose, no_resolve=mode, sources=['input.yaml'], whitelist=['white.list']),
+                                   dict(name='source', purpose=purpose, no_resolve=mode, sources=['parent/fin.yaml'], whitelist=[])]
+                        config = root / 'rulesets.json'
+                        config.write_text(json.dumps(configs), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()) as logs:
+                            outputs = generate(root, self.fail)
+                        self.assertEqual(len(outputs), 24)
+                        self.assertEqual(outputs[root / 'parent' / 'fin.yaml'],
+                                         '# parent rules: 1\npayload:\n  - "DOMAIN,white.neighbor.test"\n')
+                        for group in ('child', 'direct'):
+                            self.assertIn('"DOMAIN-KEYWORD,123x"', outputs[root / group / 'fin.yaml'])
+                        self.assertNotIn(': line ', logs.getvalue())
+                        self.assertNotIn('whitelist-covered', logs.getvalue())
+                        publish(outputs, root=root)
+                        self.assertEqual({path: path.read_bytes() for path in outputs},
+                                         {path: text.encode('utf-8') for path, text in outputs.items()})
+                        config.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()):
+                            disk = generate(root, self.fail)
+                        for group in ('child', 'direct', 'source'):
+                            self.assertEqual(disk[root / group / 'fin.yaml'], outputs[root / group / 'fin.yaml'])
+                        self.assertEqual((root / 'white.list').read_text(encoding='utf-8'), source)
+        blocker = Rule('DOMAIN-KEYWORD', '123x', domain_source='mihomo')
+        for source in ('mihomo', 'qx'):
+            white = Rule('DOMAIN-KEYWORD', ' 123 ', domain_source=source)
+            outputs, diagnostics = render('fields', [blocker, replace(white, allow=True)], whitelist=[white],
+                                          purpose='block', no_resolve='keep')
+            self.assertEqual(self.yaml_body(outputs), ['DOMAIN-KEYWORD,123x'])
+            self.assertNotIn('fin.yaml:DOMAIN-KEYWORD:whitelist-covered', diagnostics)
+
+
 class GoNameFieldsTests(TargetFieldTests):
     def test_ordinary_logical_preserves_go_nonempty_control_name(self):
         rules = self.parsed("AND,((IN-NAME,'\x1c'),(NETWORK,tcp))")

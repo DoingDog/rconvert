@@ -55,7 +55,7 @@
 
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
-Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。普通 `PROCESS-NAME` 的精确字面值保留现有 hex regex 转换；其余原样输出的进程名称、路径及 wildcard matcher 首尾含 ASCII space 时，只跳过 Mihomo 输出或所在完整逻辑规则。内部空格、HTAB 和非 ASCII 空白保留各自已有支持。
+Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。普通 `PROCESS-NAME` 的精确字面值保留现有 hex regex 转换；其余原样输出的进程名称、路径及 wildcard matcher，以及最终 raw 域名 matcher 首尾含 ASCII space 时，只跳过 Mihomo 输出或所在完整逻辑规则。内部空格、HTAB 和非 ASCII 空白保留各自已有支持。
 
 Mihomo 的有效非 regex matcher 含字面逗号时，只跳过该目标的完整规则；外层 YAML 引号不提供内部字段转义。`IN-NAME`、`IN-USER`、`REMATCH-NAME` 保留原有 `/` 名称列表及各段 Go TrimSpace 语义，scalar 和 logical 均将 U+001C..U+001F 保留为非空名称。UID／DSCP 先按原有规则将逗号列表转换成 `/`；原生 regex 的重连字段与 logical 的结构尾字段保留。logical 的每个非 regex 叶子必须在所有前缀及结尾保持括号平衡，无法表达时跳过整条目标规则；平衡的字面括号和顶层合法单边括号保持支持。
 
