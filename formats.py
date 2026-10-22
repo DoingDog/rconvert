@@ -174,7 +174,7 @@ _LINE_UNSAFE = re.compile(r"[\x00-\x08\x0a-\x1f\x7f-\x9f\u2028\u2029\ufffe\uffff
 
 
 def _qx_field_supported(kind: str, value: str) -> bool:
-    return (kind in QX_TYPES and _LINE_UNSAFE.search(value) is None and ',' not in value and
+    return (kind in QX_TYPES and ',' not in value and
             value == value.strip() and not value.startswith(("'", '"')) and
             not (kind == 'USER-AGENT' and ((len(value) - len(value.rstrip('\\'))) % 2 or
                                           re.search(r'\s(?:[#;]|//)', value))) and
@@ -1343,7 +1343,7 @@ def _mihomo_rule(rule: Rule) -> Rule | None:
     if kind == 'PROTOCOL' and value.upper() in {'TCP', 'UDP'}:
         mihomo_kind, payload = 'NETWORK', value.lower()
     if (mihomo_kind not in MIHOMO_TYPES or payload is None or
-            mihomo_kind not in _REGEX | LOGICAL and ',' in payload):
+            ',' in payload and mihomo_kind not in _REGEX and mihomo_kind not in LOGICAL):
         return None
     return Rule(mihomo_kind, payload, options, False, rule.literal_process, True, 'mihomo')
 
@@ -1382,6 +1382,8 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             continue
         source, kind, value = entry.domain_source, entry.kind, entry.value
         if target == 'mihomo':
+            if kind in domain_types and (source not in {'surge', 'mihomo'} or source == 'surge' and not value.isascii()):
+                continue
             projected = _mihomo_rule(Rule(kind, value, entry.options, literal_process=entry.literal_process,
                                           native_fields=entry.native_fields, domain_source=source))
             if projected is None:
@@ -1389,8 +1391,6 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             # 已证明的 Surge 子集保留来源，另比较真正转换后的 raw regex。
             if source == 'surge' and (kind not in domain_types or value.isascii()):
                 selected.append(entry)
-            if kind in domain_types and (source not in {'surge', 'mihomo'} or source == 'surge' and not value.isascii()):
-                continue
             # 最后必要 token 不能用 Host 根点满足；保留原 white 的单向覆盖判断。
             if source == 'surge' and kind == 'DOMAIN-WILDCARD' and value.rstrip('*').endswith(('.', '?')):
                 continue
@@ -1409,7 +1409,7 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None:
                 selected.append(Rule(kind, value, domain_source='surge'))
         else:
-            if not _qx_field_supported(kind, value):
+            if not _qx_field_supported(kind, value) or _LINE_UNSAFE.search(value) is not None:
                 continue
             # QX 只复用来源层已有保护，以及未改变 payload 的相同 matcher。
             if source in {'surge', 'qx'}:
@@ -1456,7 +1456,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     matcher = Rule(surge_kind, value, (), False, rule.literal_process, rule.native_fields, 'surge')
                     for name in ("fin.txt", "fin-surge.txt"):
                         routed[name] = (f"{surge_kind},{value},no-resolve", matcher)
-                if _qx_field_supported(kind, value):
+                if line_safe and _qx_field_supported(kind, value):
                     qx_kind = "IP6-CIDR" if kind == "IP-CIDR" and ":" in value else QX_TYPES[kind]
                     routed["fin-qx.txt"] = (f"{qx_kind},{value},LIST,no-resolve", Rule(kind, value, (), False, rule.literal_process, rule.native_fields, 'qx'))
         else:
@@ -1482,7 +1482,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     routed["fin-surge-ds.txt"] = (("." if surge_kind == "DOMAIN-SUFFIX" else "") + surge_payload, matcher)
                 else:
                     routed["fin-surge.txt"] = (surge_line, matcher)
-            if _qx_field_supported(kind, value):
+            if line_safe and _qx_field_supported(kind, value):
                 qx_kind = QX_TYPES[kind]
                 if kind == "IP-CIDR" and ":" in value:
                     qx_kind = "IP6-CIDR"
