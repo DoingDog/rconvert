@@ -1520,8 +1520,8 @@ def _without_comment(line: str) -> str:
 _HTML_MARKUP = re.compile(r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", re.I)
 
 
-def _ordinary_field_supported(kind: str, value: str) -> bool:
-    return kind in _REGEX or (_HTML_MARKUP.search(value) is None and
+def _ordinary_field_supported(kind: str, value: str, *, literal_field: bool = False) -> bool:
+    return kind in _REGEX or ((literal_field or _HTML_MARKUP.search(value) is None) and
                               not (kind in _PROCESS | {'DOMAIN-WILDCARD'} and any(char in value for char in '<>')))
 
 

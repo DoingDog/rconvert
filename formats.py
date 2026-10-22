@@ -10,7 +10,7 @@ from bisect import bisect_right
 
 from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
-                   _field_value, _fields, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
+                   _field_value, _fields, _has_literal_field, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
                    _mihomo_domain_field_supported, _ordinary_field_supported, _qx_field_supported,
                    _valid_name_list, _valid_regex, exclude_covered)
 
@@ -203,6 +203,7 @@ def _logical_value(value: str, operator: str, supported: set[str],
     except ValueError:
         return None
     pending, edits = [(0, len(expression), 0)], []
+    literal_field = _has_literal_field(expression[1:-1]) if supported is SURGE_TYPES else False
     trim = ' ' if native_fields else None
     while pending:
         begin, end, depth = pending.pop()
@@ -255,7 +256,7 @@ def _logical_value(value: str, operator: str, supported: set[str],
         if payload is None:
             return None
         if supported is SURGE_TYPES:
-            if _LINE_UNSAFE.search(payload) or not _ordinary_field_supported(kind, payload):
+            if _LINE_UNSAFE.search(payload) or not _ordinary_field_supported(kind, payload, literal_field=literal_field):
                 return None
             if kind == 'NETWORK' and payload.upper() in {'TCP', 'UDP'}:
                 kind, payload = 'PROTOCOL', payload.upper()

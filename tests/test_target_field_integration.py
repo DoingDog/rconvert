@@ -293,6 +293,57 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
         self.assertEqual(diagnostics['fin-qx.txt:DOMAIN-KEYWORD'], 1)
         self.assertEqual(self.yaml_body(outputs), ['DOMAIN-KEYWORD,<tag>'])
 
+    def test_logical_regex_literal_exception_keeps_readable_keyword_markup(self):
+        source = 'AND,((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))'
+        rules = self.parsed(source)
+        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+        self.assertEqual(outputs['fin.txt'], '# fields rules: 1\n' + source + '\n')
+        self.assertEqual(outputs['fin-surge.txt'], outputs['fin.txt'])
+        self.assertNotIn('fin.txt:AND', diagnostics)
+        self.assertEqual(self.parsed(outputs['fin.txt']), rules)
+
+    def test_logical_literal_exception_matrix_and_generated_sources(self):
+        for operator, value in (('AND', '((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))'),
+                                ('OR', '((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))'),
+                                ('NOT', '((AND,((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))))')):
+            expression = operator + ',' + value
+            for source in (expression, 'payload:\n  - ' + json.dumps(expression)):
+                rules = self.parsed(source)
+                for purpose in ('block', 'direct', 'proxy'):
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(expression=expression, source=source, purpose=purpose, mode=mode):
+                            outputs, diagnostics = render('fields', rules, purpose=purpose, no_resolve=mode)
+                            self.assertEqual(outputs['fin.txt'], '# fields rules: 1\n' + expression + '\n')
+                            self.assertEqual(self.parsed(outputs['fin.txt'])[0].value, value)
+                            self.assertNotIn('fin.txt:' + operator, diagnostics)
+        for kind in ('USER-AGENT', 'DEVICE-NAME', 'PROCESS-NAME'):
+            source = f'AND,(({kind},<123>),(URL-REGEX,.*))'
+            rules = self.parsed('payload:\n  - ' + json.dumps(source))
+            outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+            self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n')
+            self.assertEqual(diagnostics['fin.txt:AND'], 1)
+        source = 'AND,((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))\nDOMAIN,keep.example.org\n'
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'input.list').write_text(source, encoding='utf-8')
+                    configs = [dict(name='parent', purpose=purpose, no_resolve=mode, sources=['input.list'], whitelist=[]),
+                               dict(name='child', purpose=purpose, no_resolve=mode, sources=['parent/fin.txt'], whitelist=[])]
+                    config = root / 'rulesets.json'
+                    config.write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        outputs = generate(root, self.fail)
+                    self.assertEqual(len(outputs), 12)
+                    for group in ('parent', 'child'):
+                        self.assertEqual(outputs[root / group / 'fin.txt'], f'# {group} rules: 2\n' + source)
+                    publish(outputs, root=root)
+                    config.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        disk = generate(root, self.fail)
+                    self.assertEqual(disk[root / 'child' / 'fin.txt'], outputs[root / 'child' / 'fin.txt'])
+                    self.assertEqual((root / 'input.list').read_text(encoding='utf-8'), source)
+
     def test_native_user_agent_angle_literal_is_not_emitted_to_ordinary_readers(self):
         rules = self.parsed('payload:\n  - USER-AGENT,<123>')
         outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')

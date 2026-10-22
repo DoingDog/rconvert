@@ -42,7 +42,7 @@
 
 Surge scalar、Surge logical 叶子和 QX 字段只输出其普通读取器可接受的最终字段。复用现有 HTML markup 条件及非 regex process 类角括号限制；与 route whitelist 共享，不能发布后依靠生成依赖发现错误。
 
-保留 `DOMAIN-KEYWORD,<123>`、`URL-REGEX` 的 literal-field 例外、native 原格式合法字段以及其他目标支持。native `USER-AGENT,<tag>`／`DEVICE-NAME,<tag>` scalar 不能通过当前 HTML 检查，相关扩展仅验证公共 Rule 或实际可达 native logical 组合。wildcard 的一般形状与 DNS 投影由独立 wildcard 任务及之后的联合任务负责，本任务不改 `_valid_domain` 或推断未知 Host 行为。
+保留 `DOMAIN-KEYWORD,<123>`、`URL-REGEX` 的 literal-field 例外、native 原格式合法字段以及其他目标支持。Surge logical 的 HTML 检查沿用普通读取器的整行 literal-field 例外；含受支持 regex 叶子时仍保留可回读的 keyword markup，非 regex process 类角括号限制继续逐叶检查。native `USER-AGENT,<tag>`／`DEVICE-NAME,<tag>` scalar 不能通过当前 HTML 检查，相关扩展仅验证公共 Rule 或实际可达 native logical 组合。wildcard 的一般形状与 DNS 投影由独立 wildcard 任务及之后的联合任务负责，本任务不改 `_valid_domain` 或推断未知 Host 行为。
 
 ### R4. QX 字段边界
 
