@@ -57,7 +57,7 @@ Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无�
 
 Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。普通 `PROCESS-NAME` 的精确字面值保留现有 hex regex 转换；其余原样输出的进程名称、路径及 wildcard matcher 首尾含 ASCII space 时，只跳过 Mihomo 输出或所在完整逻辑规则。内部空格、HTAB 和非 ASCII 空白保留各自已有支持。
 
-Mihomo 的有效非 regex matcher 含字面逗号时，只跳过该目标的完整规则；外层 YAML 引号不提供内部字段转义。`IN-NAME`、`IN-USER`、`REMATCH-NAME` 保留原有 `/` 名称列表及各段 Go TrimSpace 语义。UID／DSCP 先按原有规则将逗号列表转换成 `/`；原生 regex 的重连字段与 logical 的结构尾字段保留。
+Mihomo 的有效非 regex matcher 含字面逗号时，只跳过该目标的完整规则；外层 YAML 引号不提供内部字段转义。`IN-NAME`、`IN-USER`、`REMATCH-NAME` 保留原有 `/` 名称列表及各段 Go TrimSpace 语义。UID／DSCP 先按原有规则将逗号列表转换成 `/`；原生 regex 的重连字段与 logical 的结构尾字段保留。logical 的每个非 regex 叶子必须在所有前缀及结尾保持括号平衡，无法表达时跳过整条目标规则；平衡的字面括号和顶层合法单边括号保持支持。
 
 Quantumult X 字段以字面单／双引号开头，或首尾含会被读取器裁剪的空白时，仅跳过该 QX 投影；这包括 keyword、native wildcard 和 USER-AGENT。USER-AGENT 的奇数个尾反斜杠、空白后紧接 `#`／`;`／`//` 同样按目标 unsupported。内部引号、内部空白、USER-AGENT 偶数尾反斜杠，以及 HOST-KEYWORD 已有字面反斜杠和 marker 读取保持。输出与白名单投影共用判定，不改写 matcher 或放宽生成依赖校验。
 

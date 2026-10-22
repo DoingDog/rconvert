@@ -288,6 +288,11 @@ def _logical_value(value: str, operator: str, supported: set[str],
                 return None
             if native_fields and kind not in _REGEX and options and any(char in payload for char in '()'):
                 payload += ',' + ','.join(options)
+            if kind not in _REGEX:
+                try:
+                    list(_delimiters(payload, native_fields=True))
+                except ValueError:
+                    return None
         if kind == 'IP-CIDR' and ':' in payload:
             kind = 'IP-CIDR6'
         if kind not in supported:

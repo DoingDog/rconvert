@@ -406,3 +406,92 @@ class QxFieldTests(RoutingFieldTests):
                             disk = generate(root, self.fail)
                         self.assertEqual(disk[root / 'child' / 'fin-qx.txt'], outputs[root / 'child' / 'fin-qx.txt'])
                         self.assertEqual((root / 'white.yaml').read_text(encoding='utf-8'), source)
+
+
+class MihomoLogicalParenthesesTests(RoutingFieldTests):
+    def test_balanced_total_cannot_hide_unsafe_leaf_parentheses(self):
+        for source in ('AND,((IN-NAME,"12(3"),(IN-USER,"45)6")),PROXY',
+                       'AND,((IN-NAME,"12)3("),(NETWORK,tcp)),PROXY'):
+            with self.subTest(source=source):
+                rules = self.parsed(source)
+                outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+                self.assertEqual(self.yaml_body(outputs), [])
+                self.assertEqual(diagnostics['fin.yaml:AND'], 1)
+                self.assertFalse(any('whitelist-covered' in key for key in diagnostics))
+
+    def test_each_nonregex_leaf_requires_balanced_prefixes(self):
+        for kind in ('IN-NAME', 'IN-USER', 'REMATCH-NAME', 'PROCESS-PATH',
+                     'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'):
+            for value in ('12(3', '12)3', '12)3('):
+                leaf = f'{kind},"{value}"'
+                for operator, source in (('AND', f'AND,(({leaf}),(NETWORK,tcp))'),
+                                         ('OR', f'OR,(({leaf}),(NETWORK,udp))'),
+                                         ('NOT', f'NOT,(({leaf}))'),
+                                         ('NOT', f'NOT,((AND,(({leaf}),({leaf}),(SRC-IP-CIDR,192.0.2.0/24))))')):
+                    for purpose in ('block', 'direct', 'proxy'):
+                        for mode in ('add', 'strip', 'keep'):
+                            with self.subTest(kind=kind, value=value, operator=operator, purpose=purpose, mode=mode):
+                                rules = self.parsed(source, purpose)
+                                outputs, diagnostics = render('fields', rules, purpose=purpose, no_resolve=mode)
+                                self.assertEqual(self.yaml_body(outputs), [])
+                                self.assertEqual(diagnostics['fin.yaml:' + operator], 1)
+                                self.assertFalse(any('whitelist-covered' in key for key in diagnostics))
+
+    def test_balanced_payload_top_level_and_hex_process_keep_support(self):
+        for kind in ('IN-NAME', 'IN-USER', 'REMATCH-NAME', 'PROCESS-PATH',
+                     'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'):
+            for value in ('12(3', '12)3(', '12(3)'):
+                rules = self.parsed(f'{kind},"{value}"')
+                outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+                self.assertEqual(self.yaml_body(outputs), [kind + ',' + value])
+                self.assertNotIn('fin.yaml:' + kind, diagnostics)
+            rules = self.parsed(f'AND,(({kind},"12(3)"),(NETWORK,tcp))')
+            outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+            self.assertEqual(self.yaml_body(outputs), [f'AND,(({kind},12(3)),(NETWORK,tcp))'])
+            reparsed, warnings = parse(outputs['fin.yaml'], purpose='proxy')
+            self.assertEqual(warnings, [])
+            repeated, _ = render('fields', reparsed, purpose='proxy', no_resolve='keep')
+            self.assertEqual(repeated['fin.yaml'], outputs['fin.yaml'])
+        rules = self.parsed('NOT,((PROCESS-NAME,"12)3("))')
+        outputs, _ = render('fields', rules, purpose='proxy', no_resolve='keep')
+        self.assertEqual(self.yaml_body(outputs), [r'NOT,((PROCESS-NAME-REGEX,(?-i:\A\x{31}\x{32}\x{29}\x{33}\x{28}\z)))'])
+        source = ('AND,((IN-NAME,"12(3)"),(SRC-IP-CIDR,192.0.2.0/24),'
+                  '(IP-CIDR,198.51.100.0/24,no-resolve))')
+        for mode in ('add', 'strip', 'keep'):
+            rules = self.parsed(source)
+            outputs, _ = render('fields', rules, purpose='proxy', no_resolve=mode)
+            flag = ',no-resolve' if mode != 'strip' else ''
+            self.assertEqual(self.yaml_body(outputs), ['AND,((IN-NAME,12(3)),(SRC-IP-CIDR,192.0.2.0/24),'
+                                                       f'(IP-CIDR,198.51.100.0/24{flag}))'])
+
+    def test_generated_yaml_and_disk_dependencies_never_lose_logical_conditions(self):
+        source = ('AND,((IN-NAME,"12(3"),(IN-USER,"45)6"))\n'
+                  'NOT,((PROCESS-PATH,"/123/(456"))\n'
+                  'OR,((PROCESS-NAME-WILDCARD,"12)3("),(NETWORK,tcp))\n'
+                  'AND,((IN-NAME,"12(3)"),(NETWORK,tcp))\n'
+                  'IN-USER,"45(6"\nDOMAIN,keep.example.org\n')
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode, 'sources': sources,
+                                'whitelist': []} for group, sources in
+                               (('parent', ['input.list']), ('child', ['parent/fin.yaml']))]
+                    (root / 'input.list').write_text(source, encoding='utf-8')
+                    (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as logs:
+                        outputs = generate(root, self.fail)
+                    self.assertEqual(len(outputs), 12)
+                    for group in ('parent', 'child'):
+                        self.assertEqual(outputs[root / group / 'fin.yaml'], f'# {group} rules: 3\npayload:\n'
+                                         '  - "AND,((IN-NAME,12(3)),(NETWORK,tcp))"\n'
+                                         '  - "DOMAIN,keep.example.org"\n  - "IN-USER,45(6"\n')
+                    for operator in ('AND', 'OR', 'NOT'):
+                        self.assertIn(f'parent fin.yaml:{operator}: 1', logs.getvalue())
+                    self.assertNotIn(': line ', logs.getvalue())
+                    publish(outputs, root=root)
+                    (root / 'rulesets.json').write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        disk = generate(root, self.fail)
+                    self.assertEqual(disk[root / 'child' / 'fin.yaml'], outputs[root / 'child' / 'fin.yaml'])
+                    self.assertEqual((root / 'input.list').read_text(encoding='utf-8'), source)
