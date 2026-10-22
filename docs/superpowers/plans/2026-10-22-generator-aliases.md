@@ -129,7 +129,7 @@ flowchart TD
 3. 增加同轮和 disk-only whitelist，含显式 entry 的反斜杠和大小写形式。对五处 parser 调用逐处检查格式参数，不遗漏生成 whitelist 正文校验及逐行诊断。
 4. 加入相同物理 whitelist 被不同上下文 entry 引用的 red，按 KTD3 分离缓存。检查普通 entry 的单标签仍拒绝，两种 entry 顺序均符合 R9。
 5. 将单标签扩至 localhost／x／123，交叉 block／direct／proxy、add／strip／keep、source／whitelist、saved-output.list／fin.yaml。检查六产物的字面正文及完整发布，disk-only 与同轮一致。
-6. 加入多标签、suffix、IPv4 样式实际 bytes 对照，核 DOMAIN-SET 的裸 IP 重新解析结果。验证实际生成 YAML／ADB 等格式优先于物理 fin-surge-ds.txt 名称；保留 resolved 文件名识别、URL basename 边界及无上下文裸单标签拒绝。
+6. 加入多标签、suffix、IPv4 样式合法域名 `01.2.3.4`／`256.1.1.1` 的实际 bytes 对照，核真正 IP `192.0.2.1` 仍被域名校验拒绝。验证实际生成 YAML／ADB 等格式优先于物理 fin-surge-ds.txt 名称；保留 resolved 文件名识别、URL basename 边界及无上下文裸单标签拒绝。
 7. 运行六格式 alias、前向依赖、冻结、空 disk-only、生成正文严格校验、碰撞、路径边界、回滚和 bytes integration。规格复审逐处追踪调用方，再检查重复代码／缓存键／未使用内容。
 8. 最终完整 suite、必要修正与复审、diff 检查后英文提交 U2。核工作区干净，返回全部提交及实际测试终态，不 push／merge 或清理其他 worktree。
 

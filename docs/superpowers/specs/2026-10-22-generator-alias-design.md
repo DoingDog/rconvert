@@ -30,7 +30,7 @@
 - R5. 同轮生成路径优先使用 `paths` 映射中的实际生成文件格式，包括通过逻辑别名或 canonical 目标引用。物理目标名为 `saved-output.list`、`fin.yaml` 或 `fin-surge-ds.txt` 时均不能覆盖真实生成格式。
 - R6. 非生成本地路径继续识别 resolved 文件名，并保留配置 entry 显式 `fin-surge-ds.txt` 的上下文；本地 entry 按既有约定支持反斜杠。移除 parent 配置后的非空 disk-only source 和 whitelist 均能读取同一 DOMAIN-SET bytes。
 - R7. HTTPS 仍只按现有 URL path basename 解码后判断，不以 query、host、尾斜杠或编码路径分隔符扩大识别。逻辑和物理文件名均无 DOMAIN-SET 上下文的普通裸单标签仍拒绝。
-- R8. localhost、x、123 单标签 exact、多标签 exact、前导点 suffix 和 IPv4 样式对照保留实际 bytes 语义。IPv4 样式正文仍按既有 bare IP 语义重新解析，不恢复隐藏的上游 DOMAIN Rule；同轮与磁盘取得相同结果。
+- R8. localhost、x、123 单标签 exact、多标签 exact、前导点 suffix 和 IPv4 样式的合法域名对照（如 `01.2.3.4`、`256.1.1.1`）保留实际 bytes 语义。真正的 IP 地址 `192.0.2.1` 仍按既有域名校验拒绝，不恢复隐藏的上游 DOMAIN Rule；同轮与磁盘取得相同结果。
 - R9. 本地 whitelist 的解析结果按实际来源上下文复用，两个不同 entry 指向同一文件时，普通 entry 不能继承另一个 entry 的 DOMAIN-SET 权限，顺序不影响该边界。
 
 ### 保留行为与执行条件
