@@ -6,7 +6,7 @@
 
 wildcard 生产修改限于 `rules.py` 的 `_valid_domain` wildcard 分支，以及 `formats.py` 普通 `DOMAIN-WILDCARD` 的 DNS 投影与必要的既有 `_wildcard_regex` 连接和预算。新测试为 `tests/test_wildcard_dependency_regressions.py` 和普通 DNS 投影测试；旧测试仅更新 `tests/test_functional_audit_coverage.py`、`tests/test_functional_audit_projection.py` 已授权的普通 pattern 拒绝断言，以及 `tests/test_functional_audit_dns.py` 原 1011–1017 行的同类预期。README 仅补充 wildcard／DNS 支持说明，不修改 QX 字段段、Actions 或计数。
 
-不修改 normalize、process／Mihomo 字段 guard、logical、`_dns_regex` escaped-hyphen、配置、static 或已有 timeout。共享 QX helper 仅按下节的原有回读要求补齐 wildcard 普通 pattern 合法性检查。不增加依赖、生成专用入口、隐藏 Rule 缓存、来源 sidecar 或通用 parser／decoder。目标执行环境为 Ubuntu Actions，验收在现有 Debian WSL 的 Linux `/tmp` 可信完整 Git snapshot 执行；不在 `/mnt/c` 执行重型 suite。不开展网络安全扫描或修复，不处理 Mihomo suffix 大小写，不运行任何客户端，不调查 Windows 本机或多平台适配。
+不修改 normalize、process／Mihomo 字段 guard、logical、`_dns_regex` escaped-hyphen、配置、static 或已有 timeout。共享 QX helper 仅按「QX wildcard 原有回读要求补齐」一节补齐 wildcard 普通 pattern 合法性检查。不增加依赖、生成专用入口、隐藏 Rule 缓存、来源 sidecar 或通用 parser／decoder。目标执行环境为 Ubuntu Actions，验收在现有 Debian WSL 的 Linux `/tmp` 可信完整 Git snapshot 执行；不在 `/mnt/c` 执行重型 suite。不开展网络安全扫描或修复，不处理 Mihomo suffix 大小写，不运行任何客户端，不调查 Windows 本机或多平台适配。
 
 ## 已核查的行为与调用方
 
@@ -51,7 +51,7 @@ QX 字面引号和 comment marker 的字段承载修复归另一任务。此分�
 
 生产修改仅在 `rules.py` 的 `_qx_field_supported` wildcard 分支复用现有 validator，不复制多尾点判断、不放宽普通输入、不改 normalize 或使用 metadata 修补读回。保持基准已移除 `,LIST` 的 delimiter 检查，不新增大字符串副本。HTML、class、marker、oddslash 和括号限制保持；角括号字段修复及 target-field 文档／测试归独立 owner，本任务不修改。
 
-新增小型公开回归位于 `tests/test_qx_wildcard_domain_regressions.py`，复用现有 fixture／helper：
+本轮公开验证使用 `tests/test_qx_wildcard_domain_regressions.py` 的小型新增回归，以及既有 wildcard 回读、DNS 和生成依赖测试，复用现有 fixture／helper：
 
 - 多尾点 native pattern 的 QX 局部 skip、准确 diagnostics、YAML 原值和邻居；普通 scalar／white 仍拒绝。正常 `*`、`*123*`、`1..2*` 从实际 UTF-8 QX bytes 重新导入。
 - parent 含 native `*..` 与普通 `DOMAIN,neighbor.example.org`；child 以 `parent/fin-qx.txt` 为同轮 source 或 white 时正常生成发布。先单独发布 parent 再移除 parent 配置的非空 disk-only source／white 同样成功，不产生 invalid domain、Unadaptable rule、Invalid whitelist 或冻结。
