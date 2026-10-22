@@ -4,7 +4,7 @@
 
 基线 `4c1f29d55e47f939b96cf87a5284f947938191ed`。仅在任务独立 worktree 编码，主仓库和其他 worktree 不修改。规格为 `docs/superpowers/specs/2026-10-22-ci-publication-design.md`，其中 `update(root, tested_sha)` 与 CLI 是本次要求的公共测试边界。
 
-完成条件：下列行为逐条经历 red -> 最小 green，相关回归通过，完整 Linux suite 获得真实终态；全部差异完成规格、安全及简化审查并正常英文提交。所有测试远端均为 OS 临时 bare Git，不 push 真实 GitHub。
+完成条件：下列行为逐条经历 red -> 最小 green，相关回归通过，完整 Linux suite 获得真实终态；全部差异完成规格、文件保留及简化审查并正常英文提交。所有测试远端均为 OS 临时 bare Git，不 push 真实 GitHub。
 
 ## 影响范围
 
@@ -80,3 +80,13 @@
 - 在 Linux 文件系统 OS 临时目录创建可信本工作树快照，运行 `python3 -B -m unittest discover -s tests -v`；记录解释器、Git、真实命令、测试数、skips、失败或成功终态。不提高 timeout，不弱化测试。
 - 核查全部实际 diff、逐项规格覆盖及简化：删除本次冗余实现/无用 import，不修改其他任务拥有的文件。修正后重跑受影响检查及必要完整 suite，英文提交。
 - 清理本次临时目录；未清理项如实记录。返回绝对 worktree 路径、branch/base/head、各 commit、文件、red/green/完整 suite、分类证据、审查结果及未检查风险。worktree 保留供主会话合并，不提前删除未合入提交。
+
+### 8. 允许路径中的既有 untracked 文件
+
+- 复审修正基准为 `c029dd464fbd2310931ba19408fa079f56757940`；保留已有十二个提交。本轮只改 `update.py`、`tests/test_ci_publication.py` 及本规格/计划。README 的 Actions 段已有精确暂存说明，无需更改；不修改 Windows 换行或 Git 文案测试，不修改 push 错误分类。
+- 先更新规格中的文件保留要求，再提交本计划。完成条件限定正常业务功能、文件保留、规格及测试，不开展网络安全扫描、修复、客户端或多平台适配。
+- 从公开 `update(root, tested_sha)` 入口逐项测试。首例使用真实提交使旧配置的产物从 index 移除，确认 HEAD 等于远端及测试 SHA、index 和 tracked diff 为空，留下手工 bytes；先观察 red，再用现有允许路径集合和成熟 Git 命令增加生成前检查，单例 green 后才增加下一例。
+- 独立验证新增并提交的配置组已有手工产物时拒绝，以及被 Git 忽略的允许目标仍被识别；已有实现能通过的例子记录为回归。不得用 `--exclude-standard` 漏掉 ignored 目标，不复制整个测试矩阵，不 mock Git 成功、生成器或文件发布。
+- 每次拒绝均核查发生在 HTTPS fetch 和文件替换前，手工 bytes、index、tracked diff、HEAD 和远端不变。另验证不存在的允许输出可首次生成和发布；复用既有集合外 tracked/untracked/static 保留回归，确认它们不阻塞、不改写、不进入提交。
+- 完成相关真实 Git 回归、规格与简化复审，再在 Debian WSL 的 Linux `/tmp` 可信完整快照运行 `python3 -B -m unittest discover -s tests -v`，不改既有 timeout/skip，记录真实终态。核查受控差异仅有本轮四个文件后英文提交，不 amend、push 或合并 main。
+- 清理本次临时文件，返回原目录，保留 worktree 及本轮提交供主会话合并；列明 red/green、完整 Linux 结果、修改文件和未检查/未清理项。

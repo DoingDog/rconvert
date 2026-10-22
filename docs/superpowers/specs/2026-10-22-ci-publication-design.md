@@ -15,7 +15,7 @@
 ## 发布顺序与安全边界
 
 1. 核对 `HEAD` 完全等于 `tested_sha`，否则失败；不切换或更新源码。成功执行 `git ls-remote --exit-code origin refs/heads/main`，要求唯一 main 引用。读取失败或缺失分支失败。若 tip 不等于 A，明确输出 superseded，并在生成、写文件和暂存前结束。这仅表示旧运行跳过。
-2. 当前 tip 仍为 A 时，检查 index 没有既有暂存内容。已有暂存改动则失败并完整保留，防止把外部改动带入 bot 提交。配置允许路径若已有 tracked 未提交修改，也在生成前失败并保留，防止覆盖手工产物或把 README 其他段落的既有修改带入提交。允许集合外的未暂存 tracked/untracked 内容不作为失败条件，不删除或暂存。
+2. 当前 tip 仍为 A 时，检查 index 没有既有暂存内容。已有暂存改动则失败并完整保留，防止把外部改动带入 bot 提交。配置允许路径若已有 tracked 未提交修改或实际存在的 untracked 文件（包括被 Git 忽略的文件），也在 HTTPS fetch、生成和文件替换前失败并保留 bytes、index、HEAD 及远端引用，防止覆盖手工产物或把 README 其他段落的既有修改带入提交。不存在的允许目标可首次生成；此规则同样适用于新增配置组。允许集合外的未暂存 tracked/untracked 内容不作为失败条件，不删除或暂存。
 3. 复用 `publish(generate(root, fetch_https), root=root)`，随后调用 README 数量更新。使用 `load_config(root)` 的实际组名与 `formats.FILES` 构造精确的相对路径，再加 `README.md`。当前配置为 42 个产物加 README；数量随配置变化，不硬编码组名，不暂存目录、static 或源码。
 4. 提交前再次成功读取远端 main。不同于 A 时输出 superseded 并跳过暂存、提交和推送；已生成的工作区文件保留，不 reset、clean 或丢弃已有内容。
 5. 精确 `git add -- <允许路径>` 后执行 `git diff --cached --quiet`。退出 0 返回 unchanged，退出 1 继续，其他退出值失败并保留诊断。以 `github-actions[bot]` 和既有 bot 邮箱正常提交英文 `Update generated rules`；身份只通过本次命令的 `-c` 设置。commit/hook/signing 失败传播，不绕过。
@@ -48,6 +48,7 @@ Git 子进程固定 `LC_ALL=C`、`LANG=C`，不修改全局或仓库配置。所
 - 正常发布：父提交 A，bot 身份/英文消息正确，七组六文件与 README 真实更新，普通 push。
 - 无变化：固定时钟/bytes，返回 unchanged，无新提交。
 - 精确暂存：使用自建七组名称；仅配置六文件与 README 入提交，无关源码、static、额外输出、tracked/untracked 保持原状；既有暂存内容失败且不动。
+- 允许目标的既有文件保留：配置保留但从 index 移除的产物、新增配置组的手工产物及被 Git 忽略的目标均在 HTTPS fetch 和替换前拒绝，bytes、index、HEAD 和远端引用不变；不存在的允许目标仍能首次生成并发布，集合外 untracked 不阻塞、不改写、不入提交。
 - commit hook 拒绝、服务端 policy 拒绝、transport/权限失败：失败；policy/transport 与 main 前进同时发生仍失败。
 - old-value 状态不能仅凭 generic remote rejected 识别；竞争后的远端确认失败仍失败。
 - cached diff 的非 0/1 错误失败，不把它当作有变更。
