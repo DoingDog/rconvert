@@ -538,7 +538,7 @@ def _valid_domain(kind: str, value: str, *, domain_source: str = "surge") -> boo
     if kind == "DOMAIN-WILDCARD":
         if domain_source != "mihomo":
             value = re.sub(r"\[[a-z0-9-]+\]", "x", value.removesuffix('.'), flags=re.I)
-            if '[' in value or ']' in value:
+            if value.endswith('.') or '[' in value or ']' in value:
                 return False
         return bool(value) and not re.search(
             r"[\x00-\x08\x0a-\x1f\x7f-\x9f\ud800-\udfff\u2028\u2029\ufffe\uffff]", value)

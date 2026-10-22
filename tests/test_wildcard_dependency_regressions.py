@@ -138,6 +138,25 @@ class WildcardReadbackTests(unittest.TestCase):
                     self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org')])
                     self.assertTrue(messages)
 
+    def test_repeated_root_dots_remain_invalid_for_ordinary_patterns_only(self):
+        for pattern in ('..', '*..', '*123..', 'a...'):
+            for source in ('surge', 'qx'):
+                scalar = 'DOMAIN-WILDCARD,' + pattern if source == 'surge' else 'HOST-WILDCARD,' + pattern + ',LIST'
+                for text in (scalar, 'NOT,((DOMAIN-WILDCARD,' + pattern + '))'):
+                    with self.subTest(pattern=pattern, source=source, text=text):
+                        parsed, messages = parse(text + '\nDOMAIN,neighbor.example.org', purpose='block')
+                        self.assertEqual(parsed, [Rule('DOMAIN', 'neighbor.example.org')])
+                        self.assertEqual(len(messages), 1)
+                        with self.assertRaises(ValueError):
+                            parse_whitelist(text)
+            native, messages = parse('payload:\n  - ' + json.dumps('DOMAIN-WILDCARD,' + pattern), purpose='block')
+            self.assertEqual((native, messages), ([Rule('DOMAIN-WILDCARD', pattern, domain_source='mihomo')], []))
+        for pattern in ('*', '*123*', '1..2*'):
+            parsed, messages = parse('DOMAIN-WILDCARD,' + pattern + '.', purpose='block')
+            self.assertEqual((parsed, messages), ([Rule('DOMAIN-WILDCARD', pattern)], []))
+            out, _ = render('root', parsed, purpose='block', no_resolve='keep')
+            self.assertEqual(parse(out['fin.txt'], purpose='block'), (parsed, []))
+
     def test_native_brackets_and_byte_root_case_guards_remain_target_local(self):
         for value in ('[12]*', 'api-[0-9].example.org'):
             ordinary, messages = parse('DOMAIN-WILDCARD,' + value, purpose='block')
@@ -341,7 +360,7 @@ class WildcardGeneratedDependencyTests(unittest.TestCase):
             with self.subTest(invalid_scalar=invalid), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 (root / 'source.list').write_text('DOMAIN,protected.example.org', encoding='utf-8')
-                (root / 'white.list').write_text('DOMAIN-WILDCARD,[', encoding='utf-8')
+                (root / 'white.list').write_text('DOMAIN-WILDCARD,..', encoding='utf-8')
                 (root / 'native.yaml').write_text('payload:\n  - "NOT,((DOMAIN-WILDCARD,*))"', encoding='utf-8')
                 parent = dict(name='parent', purpose='block', no_resolve='keep', sources=['native.yaml'], whitelist=[])
                 child = dict(name='child', purpose='block', no_resolve='keep', sources=['source.list'],
