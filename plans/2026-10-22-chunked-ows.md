@@ -44,11 +44,15 @@
 
 检查：固定时刻下六文件 bytes、诊断、URL 缓存、static 不变；六种产物分别经过同轮 source／white 和发布后的非空 disk-only source／white。含不支持 whitelist 类型时比较原有严格拒绝，不扩大其支持。合法空同轮依赖及 disk-only 严格拒绝、404 冻结和无效 remote white 区别保留。
 
+执行中核实：block 的精确 DNS 例外 `@@|domain|` 会触发现有普通读取器的 invalid rule，属于现有产物重导入边界。六格式成功依赖 fixture 使用已支持的 suffix white 及其 `@@||domain^` 例外；本任务不修改该 parser。primary matrix 仍保留精确远端白名单的真实六文件输出比较。
+
 ### 6. 规格审查、简化和最终提交
 
 逐条核对规格验收与测试覆盖；检查新增分支只处理 ASCII OWS 的单一 chunked token。检查是否有重复 parser、fallback、多余 helper、未使用 import 或无关改动，发现问题即修正并复审。
 
 检查：Windows／Debian 真实 TLS 当前实现通过；相关 transport／generate 回归通过；完整 Linux `unittest discover -s tests -v` 通过，不改任何旧 timeout；`git diff --check`；核四文件所有权后英文提交。返回 base／head／commits、RED／GREEN／完整 suite 证据及未检查范围，保留待主 workflow 接收的 worktree 和分支。
+
+完整 Linux 验收使用 `/tmp` 中逐文件核对 SHA-256 的当前 worktree 副本，复制全部受控文件及新增回归文件，不复制 `.git` 或旧临时目录。这样既有以仓库目录为临时目录 parent 的测试也在 Linux 文件系统执行，case-distinct 检查可实际运行。执行前后核对全部副本与原 worktree 文件 bytes，并清理本次副本；不修改既有测试、timeout 或系统设置。
 
 ## 验证命令
 
