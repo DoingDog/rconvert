@@ -55,6 +55,8 @@
 
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
+`DOMAIN-WILDCARD`／`HOST-WILDCARD` 按 pattern 校验，接受 `*`、`*123*`、多点和超过 hostname 长度的安全 pattern。普通 Surge 字段引用保护的字面字符可重新读取，生成的 Surge／Quantumult X 安全文本及 Mihomo YAML 可按实际 bytes 供同轮或磁盘 source／白名单使用。精确域名、后缀、hosts、裸域名和 DOMAIN-SET 保持原有 hostname 校验；wildcard 不写入 DOMAIN-SET。
+
 Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。
 
 Mihomo native 的 `DOMAIN`／`DOMAIN-SUFFIX` 以及 `DOMAIN-KEYWORD,123.`、`DOMAIN-WILDCARD,*.*` 等末尾根点敏感规则无法保真转换到 Surge 时，只跳过对应 Surge 输出，包括 DOMAIN-SET；Mihomo 输出保留这些原生域名 matcher。逻辑规则任一叶子无法表达时，跳过该目标的整条 `AND`／`OR`／`NOT`。case／root 判定针对关闭 sniffer、没有 hosts alias 或提前改写的 VLESS TCP raw FQDN，不能用其他入口会清理 Host 的行为替代。
@@ -81,6 +83,8 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 过滤分别核查来源匹配范围和各路由目标实际生成的 matcher。来源层保留 Mihomo native 与 QX 未证明等价的 Unicode、大小写、末尾根点及 byte／字符匹配差别；Mihomo 路由层按实际输出的原生域名 matcher 和已证明的覆盖关系过滤。其他转换只使用匹配范围不变或属于原白名单已证明子集的目标投影。输入中的 allow 规则按 `no_resolve` 处理及移除受支持接口参数后的实际 matcher 参与路由白名单，外部白名单仍遵守原 options 限制。
 
 对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，普通 Surge 精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。DNS 的 block、allow 和外部白名单使用相同的 case／root 安全判定：native exact／suffix 不输出 DNS，keyword／wildcard 只保留已证明可表达的子集，native `*` 仍支持。所有 raw `DOMAIN-REGEX` 均须取得完整结构证书，未知子结构或不可恢复的大小写／根点区别只计该目标 unsupported。
+
+普通 wildcard 的 DNS 投影支持已证明的 ASCII 字母、数字、underscore、hyphen、点、`*`／`?` 和 Surge 字符类，不要求含点；例如 `*ads*`、`*`、`a?` 分别输出 `/^.*ads.*$/`、`/^.*$/`、`/^a.$/`。普通来源的引号、括号、反斜杠、非 ASCII 等未证明 literal 只跳过 DNS 并计数，其他可表达目标继续输出；block、allow 和外部白名单使用相同判定。native wildcard 保留现有 byte／presentation、case／root 和 bracket 支持边界。
 
 DNS 证明范围为普通 UDP、单个 A/IN question 的过滤链；目标编码处理 presentation bytes，并使用固定 Go Unicode 15.0.0 的来源 rune 集合，不把 Python 的 Unicode 版本当作来源真值。该范围不承诺未知闭源 Unicode／IDNA 或 Quantumult X 全域等价。本次核验依据固定源码及 Python 公开转换／发布测试，未运行客户端。Surge、Quantumult X 与 Mihomo 输出不能表达部分放行，需在规则集之前放置显式放行规则。去重仅在能证明覆盖时删除规则，不能因 wildcard 不受目标格式支持就用它删除其他类型。
 
