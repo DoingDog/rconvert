@@ -276,7 +276,7 @@ def _logical_value(value: str, operator: str, supported: set[str],
                 payload = _logical_regex_value(payload)
                 if payload is None:
                     return None
-            if kind.startswith('PROCESS-') and ',' in payload and not kind.endswith('-REGEX'):
+            if kind not in _REGEX and ',' in payload:
                 return None
             if native_fields and kind not in _REGEX and options and any(char in payload for char in '()'):
                 payload += ',' + ','.join(options)
@@ -1324,7 +1324,7 @@ def _mihomo_rule(rule: Rule) -> Rule | None:
     if kind == 'PROTOCOL' and value.upper() in {'TCP', 'UDP'}:
         mihomo_kind, payload = 'NETWORK', value.lower()
     if (mihomo_kind not in MIHOMO_TYPES or payload is None or
-            mihomo_kind.startswith('PROCESS-') and ',' in payload and not mihomo_kind.endswith('-REGEX')):
+            mihomo_kind not in _REGEX | LOGICAL and ',' in payload):
         return None
     return Rule(mihomo_kind, payload, options, False, rule.literal_process, True, 'mihomo')
 
@@ -1363,6 +1363,10 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             continue
         source, kind, value = entry.domain_source, entry.kind, entry.value
         if target == 'mihomo':
+            projected = _mihomo_rule(Rule(kind, value, entry.options, literal_process=entry.literal_process,
+                                          native_fields=entry.native_fields, domain_source=source))
+            if projected is None:
+                continue
             # 已证明的 Surge 子集保留来源，另比较真正转换后的 raw regex。
             if source == 'surge' and (kind not in domain_types or value.isascii()):
                 selected.append(entry)
@@ -1371,10 +1375,7 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             # 最后必要 token 不能用 Host 根点满足；保留原 white 的单向覆盖判断。
             if source == 'surge' and kind == 'DOMAIN-WILDCARD' and value.rstrip('*').endswith(('.', '?')):
                 continue
-            projected = _mihomo_rule(Rule(kind, value, entry.options, literal_process=entry.literal_process,
-                                          native_fields=entry.native_fields, domain_source=source))
-            if projected is not None:
-                selected.append(projected)
+            selected.append(projected)
         elif target == 'surge':
             # native white 的根点与 case 区别不能随 Surge 投影扩大。
             if source != 'surge' and kind in domain_types:
