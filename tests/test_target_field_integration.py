@@ -98,6 +98,47 @@ class KeywordTargetContainmentTests(TargetFieldTests):
         self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n')
         self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 0\n')
 
+    def test_field_capabilities_use_original_unicode_keyword_values(self):
+        for source in ('surge', 'qx', 'mihomo'):
+            pair = [Rule('DOMAIN-KEYWORD', value, domain_source=source) for value in ('<İ>', '(?<İ>)')]
+            for order in (pair, pair[::-1], pair + pair):
+                self.assertEqual(set(normalize(iter(order))), set(pair))
+            outputs, diagnostics = render('fields', normalize(iter(pair)), purpose='proxy', no_resolve='keep')
+            self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n' if source == 'mihomo' else
+                             '# fields rules: 1\nDOMAIN-KEYWORD,(?<İ>)\n')
+            self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 1\nHOST-KEYWORD,(?<İ>),LIST\n')
+            self.assertEqual(diagnostics['fin-qx.txt:DOMAIN-KEYWORD'], 1)
+
+    def test_generated_unicode_keyword_capabilities_survive_actual_bytes(self):
+        source = 'payload:\n  - DOMAIN-KEYWORD,<İ>\n  - DOMAIN-KEYWORD,(?<İ>)\nDOMAIN,white.neighbor.test\n'
+        for purpose in ('block', 'direct', 'proxy'):
+            for mode in ('add', 'strip', 'keep'):
+                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    (root / 'white.yaml').write_text(source, encoding='utf-8')
+                    (root / 'input.list').write_text('HOST-KEYWORD,(?<İ>),LIST\nDOMAIN,keep.example.org\n', encoding='utf-8')
+                    configs = [dict(name='parent', purpose=purpose, no_resolve=mode, sources=['white.yaml'], whitelist=[]),
+                               dict(name='source', purpose=purpose, no_resolve=mode, sources=['parent/fin-qx.txt'], whitelist=[]),
+                               dict(name='child', purpose=purpose, no_resolve=mode, sources=['input.list'], whitelist=['parent/fin-qx.txt'])]
+                    config = root / 'rulesets.json'
+                    config.write_text(json.dumps(configs), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()) as logs:
+                        outputs = generate(root, self.fail)
+                    self.assertEqual(len(outputs), 18)
+                    for group in ('parent', 'source'):
+                        self.assertIn('HOST-KEYWORD,(?<İ>),LIST\n', outputs[root / group / 'fin-qx.txt'])
+                    self.assertEqual(outputs[root / 'child' / 'fin-qx.txt'], '# child rules: 1\nHOST,keep.example.org,LIST\n')
+                    self.assertNotIn(': line ', logs.getvalue())
+                    publish(outputs, root=root)
+                    self.assertEqual({path: path.read_bytes() for path in outputs},
+                                     {path: text.encode('utf-8') for path, text in outputs.items()})
+                    config.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                    with contextlib.redirect_stderr(io.StringIO()):
+                        disk = generate(root, self.fail)
+                    for group in ('source', 'child'):
+                        self.assertEqual(disk[root / group / 'fin-qx.txt'], outputs[root / group / 'fin-qx.txt'])
+                    self.assertEqual((root / 'white.yaml').read_text(encoding='utf-8'), source)
+
     def test_qx_boundary_containment_keeps_actual_projection_for_all_sources(self):
         values = ["'123", '"123', '\t123', '123\t', '\xa0123', '123\xa0', ' 123', '123 ']
         for source in ('surge', 'qx', 'mihomo'):

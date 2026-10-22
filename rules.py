@@ -2007,7 +2007,7 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
         if rule.kind == 'DOMAIN-SUFFIX':
             suffixes.setdefault(group, set()).add(value)
         elif rule.kind == 'DOMAIN-KEYWORD':
-            keywords.setdefault(group, set()).add(value)
+            keywords.setdefault(group, {}).setdefault(value, rule)
     kept = []
     for (kind, value, group), rule in unique.items():
         if kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'}:
@@ -2025,15 +2025,15 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 continue
         # 短 keyword 必须保留长 keyword 在其他目标已有的投影能力。
         if kind == 'DOMAIN-KEYWORD':
-            ordinary = (_ordinary_field_supported(kind, value) and
-                        _surge_keyword_source_supported(value, rule.domain_source))
-            qx = _qx_field_supported(kind, value)
-            mihomo = _mihomo_domain_field_supported(kind, value, rule.domain_source)
-            if any(short in keywords[group] and
-                   (not ordinary or _ordinary_field_supported(kind, short) and
-                    _surge_keyword_source_supported(short, rule.domain_source)) and
-                   (not qx or _qx_field_supported(kind, short)) and
-                   (not mihomo or _mihomo_domain_field_supported(kind, short, rule.domain_source))
+            ordinary = (_ordinary_field_supported(kind, rule.value) and
+                        _surge_keyword_source_supported(rule.value, rule.domain_source))
+            qx = _qx_field_supported(kind, rule.value)
+            mihomo = _mihomo_domain_field_supported(kind, rule.value, rule.domain_source)
+            if any((short_rule := keywords[group].get(short)) is not None and
+                   (not ordinary or _ordinary_field_supported(kind, short_rule.value) and
+                    _surge_keyword_source_supported(short_rule.value, rule.domain_source)) and
+                   (not qx or _qx_field_supported(kind, short_rule.value)) and
+                   (not mihomo or _mihomo_domain_field_supported(kind, short_rule.value, rule.domain_source))
                    for start in range(len(value))
                    for stop in range(start + 1, len(value) + 1)
                    if stop - start < len(value) and

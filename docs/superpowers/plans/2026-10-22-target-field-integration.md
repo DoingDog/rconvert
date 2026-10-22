@@ -52,7 +52,7 @@
 
 - 依赖 U4；文件 `rules.py` normalize、新测试、README。
 - 短 `'123`／长 `9'1238` native QX 丢失 red -> 复用同一 QX 字段能力补删除资格 -> green。
-- 检查本次普通字段／Mihomo raw 边界的包含非单调性；仅有实际反例时补资格，不能复制 guard 或建立通用投影框架。
+- 检查本次普通字段／Mihomo raw 边界的包含非单调性；仅有实际反例时补资格，不能复制 guard 或建立通用投影框架。能力检查使用对应 Rule 原值，验证 `<İ>`／`(?<İ>)` 的 Unicode lowercase 展开反例和真实生成 bytes；来源相关投影限制与 renderer 共用。
 - 核查单双引号、ASCII（ordinary）／HTAB／NBSP／U+2003 边缘嵌入长项、三来源、root-dot 原有资格、安全短项归约、allow／options／来源身份组、逆序／重复／一次性 iterable。
 - 实际外部 white 与生成 QX parent white 对照；source、allow、预先 normalize 的 white、三 purpose／no_resolve、publish 后 bytes 及 disk-only 重读。
 

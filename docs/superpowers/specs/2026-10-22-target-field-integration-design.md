@@ -52,7 +52,7 @@ Surge scalar、Surge logical 叶子和 QX 字段只输出其普通读取器可�
 
 ### R5. 尊重目标支持的 keyword 包含去重
 
-仅当短 keyword 保留长 keyword 的已支持目标能力时，才允许包含归约。保持 native root-dot 资格条件；补齐 QX 起始引号／边缘空白等非单调限制，并考虑本次普通读取及 raw Mihomo 字段边界。共享已核实的字段判定，避免 normalize 与 renderer 分歧。
+仅当短 keyword 保留长 keyword 的已支持目标能力时，才允许包含归约。保持 native root-dot 资格条件；补齐 QX 起始引号／边缘空白等非单调限制，并考虑本次普通读取及 raw Mihomo 字段边界。共享已核实的字段判定，避免 normalize 与 renderer 分歧。字段能力使用实际保留的 `Rule.value`，包含比较仍使用既有来源比较值；Unicode lowercase 展开不能改变 HTML 或最终字段支持的判定。
 
 保持来源、allow、options、literal_process、native_fields 身份分组；ordinary／native／QX，反序、重复及一次性 iterable 均确定。`123`／`91238`、普通来源 `123.`／`123.45` 继续正确归约；不关闭全部 keyword 去重。block、公开 allow、预先 normalize 的 white 及生成父白名单都保留可表达长项。外部原始 whitelist 当前不自动 normalize，使用其真实流程作对照。
 
