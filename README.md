@@ -84,7 +84,7 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 
 过滤分别核查来源匹配范围和各路由目标实际生成的 matcher。来源层保留 Mihomo native 与 QX 未证明等价的 Unicode、大小写、末尾根点及 byte／字符匹配差别；Mihomo 路由层按实际输出的原生域名 matcher 和已证明的覆盖关系过滤。其他转换只使用匹配范围不变或属于原白名单已证明子集的目标投影。输入中的 allow 规则按 `no_resolve` 处理及移除受支持接口参数后的实际 matcher 参与路由白名单，外部白名单仍遵守原 options 限制。
 
-对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，普通 Surge 精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。DNS 的 block、allow 和外部白名单使用相同的 case／root 安全判定：native exact／suffix 不输出 DNS，keyword／wildcard 只保留已证明可表达的子集，native `*` 仍支持。所有 raw `DOMAIN-REGEX` 均须取得完整结构证书，未知子结构或不可恢复的大小写／根点区别只计该目标 unsupported。
+对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，普通 Surge 精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。DNS 的 block、allow 和外部白名单使用相同的 case／root 安全判定：native exact／suffix 不输出 DNS，keyword／wildcard 只保留已证明可表达的子集，native `*` 仍支持。所有 raw `DOMAIN-REGEX` 均须取得完整结构证书，未知子结构或不可恢复的大小写／根点区别只计该目标 unsupported。来源字符类中的 `\-` 被用于当前 range 归约的起点或终点时，仅跳过该 DNS 投影，block、allow 和外部白名单共用此判定；独立字面 hyphen、已支持的普通范围及数值 `\x{2D}` 保持原有语义。
 
 DNS 证明范围为普通 UDP、单个 A/IN question 的过滤链；目标编码处理 presentation bytes，并使用固定 Go Unicode 15.0.0 的来源 rune 集合，不把 Python 的 Unicode 版本当作来源真值。该范围不承诺未知闭源 Unicode／IDNA 或 Quantumult X 全域等价。本次核验依据固定源码及 Python 公开转换／发布测试，未运行客户端。Surge、Quantumult X 与 Mihomo 输出不能表达部分放行，需在规则集之前放置显式放行规则。去重仅在能证明覆盖时删除规则，不能因 wildcard 不受目标格式支持就用它删除其他类型。
 

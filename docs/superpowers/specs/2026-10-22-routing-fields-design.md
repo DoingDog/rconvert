@@ -18,7 +18,7 @@
 | `render` | 六文件文本、标题数量、目标过滤及现有诊断 | 客户端执行 |
 | `generate`、`publish` | 同轮与磁盘 source／white bytes、冻结及旧文件保护、输入不变 | 生产上游全量下载或远程 Actions 执行 |
 
-受影响的共享调用为 `_process_value -> _mihomo_rule / _logical_value / render`、`_logical_value -> _mihomo_rule / render`、`_mihomo_rule -> render / _route_whitelist` 和 `_route_whitelist -> render`。QX 文本和 QX white 必须消费同一个字段可表达性判定。复用 `_delimiters` 的 native 扫描检查括号结构，不新增 parser。
+受影响的共享调用为 `_process_value -> _mihomo_rule / _logical_value / render`、`_logical_value -> _mihomo_rule / render`、`_mihomo_rule -> render / _route_whitelist` 和 `_route_whitelist -> render`。QX 文本和 QX white 必须消费同一个字段可表达性判定。复用 `_delimiters` 的 native 扫描检查括号结构，不新增 parser。DNS block、allow 和外部 white 共用 `_dns_pattern -> _dns_body -> _dns_regex`，来源扫描和 encoded Go 目标复核的区别保持。
 
 无新增 fixtures 文件、配置键、exports 或公共返回值。集成 fixture 使用操作系统临时目录，由测试构造本地来源、白名单、配置和旧产物；fetch 回调仅用于断言不会访问网络，不模拟转换或客户端。
 

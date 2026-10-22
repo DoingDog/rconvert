@@ -1127,6 +1127,9 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
             elif escape not in r"\.*+?{}()[]|^$-Az" and not (encoded and escape in ' #&~') or in_class and escape in "Az":
                 return None
             if in_class:
+                # regexp2 的 \- 独立加入集合，不参与 pending range。
+                if not encoded and escape == '-':
+                    class_escaped_hyphens.add(len(class_atoms))
                 class_atoms.append(ord(escape))
             elif not encoded:
                 if escape in 'Az':
@@ -1152,6 +1155,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
             class_probe = len(translated)
             class_properties = set()
             class_atoms = []
+            class_escaped_hyphens = set()
         elif char == "]" and in_class and index > class_start + 1 + (
                 value[class_start + 1:class_start + 2] == "^"):
             in_class = False
@@ -1173,6 +1177,8 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
                 start = 45 if start == '-' else start
                 if (point + 2 < len(class_atoms) and class_atoms[point + 1] == '-' and
                         class_atoms[point + 2] is not None):
+                    if point in class_escaped_hyphens or point + 2 in class_escaped_hyphens:
+                        return None
                     end = class_atoms[point + 2]
                     end = 45 if end == '-' else end
                     if start > end:

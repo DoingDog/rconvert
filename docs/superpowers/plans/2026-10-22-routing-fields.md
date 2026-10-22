@@ -23,11 +23,11 @@ origin: docs/superpowers/specs/2026-10-22-routing-fields-design.md
 
 ### Summary
 
-修复 Mihomo process ASCII-space、非重连 payload comma、QX 字段回读和 Mihomo logical literal 括号。保持公共 matcher，无法保真表达时按目标跳过。
+修复 Mihomo process ASCII-space、非重连 payload comma、QX 字段回读、Mihomo logical literal 括号及 DNS escaped-hyphen。保持公共 matcher，无法保真表达时按目标跳过。
 
 ### Problem Frame
 
-当前 renderer 可输出被 Mihomo 裁剪或截断的 matcher，普通 quoted logical 叶子还可变成不同的条件结构。QX 特殊字段可在生成依赖中产生 warning，或被回读为更宽的 whitelist。
+当前 renderer 可输出被 Mihomo 裁剪或截断的 matcher，普通 quoted logical 叶子还可变成不同的条件结构。QX 特殊字段可在生成依赖中产生 warning，或被回读为更宽的 whitelist。DNS 字符类扫描丢失 escaped-hyphen 身份时，range 归约可改变 block 及例外的匹配范围。
 
 ### Requirements
 
