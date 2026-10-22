@@ -159,6 +159,8 @@ def _process_value(kind: str, value: str, supported: set[str], literal_process: 
         literal = "".join(r"\x{" + f"{ord(char):X}" + "}" for char in value)
         end = "" if value.startswith("/") and value.endswith("/") else r"\z"
         return kind, r"(?-i:\A" + literal + end + ")"
+    if value != value.strip(' '):
+        return kind, None
     return kind, value
 
 

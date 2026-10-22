@@ -55,7 +55,7 @@
 
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
-Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。
+Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。普通 `PROCESS-NAME` 的精确字面值保留现有 hex regex 转换；其余原样输出的进程名称、路径及 wildcard matcher 首尾含 ASCII space 时，只跳过 Mihomo 输出或所在完整逻辑规则。内部空格、HTAB 和非 ASCII 空白保留各自已有支持。
 
 Mihomo native 的 `DOMAIN`／`DOMAIN-SUFFIX` 以及 `DOMAIN-KEYWORD,123.`、`DOMAIN-WILDCARD,*.*` 等末尾根点敏感规则无法保真转换到 Surge 时，只跳过对应 Surge 输出，包括 DOMAIN-SET；Mihomo 输出保留这些原生域名 matcher。逻辑规则任一叶子无法表达时，跳过该目标的整条 `AND`／`OR`／`NOT`。case／root 判定针对关闭 sniffer、没有 hosts alias 或提前改写的 VLESS TCP raw FQDN，不能用其他入口会清理 Host 的行为替代。
 
