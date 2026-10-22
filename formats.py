@@ -1389,7 +1389,7 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             if projected is None:
                 continue
             # 已证明的 Surge 子集保留来源，另比较真正转换后的 raw regex。
-            if source == 'surge' and (kind not in domain_types or value.isascii()):
+            if source == 'surge':
                 selected.append(entry)
             # 最后必要 token 不能用 Host 根点满足；保留原 white 的单向覆盖判断。
             if source == 'surge' and kind == 'DOMAIN-WILDCARD' and value.rstrip('*').endswith(('.', '?')):
