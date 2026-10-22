@@ -1116,7 +1116,8 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
         return (value.upper() == 'LAN' or kind == 'GEOIP' and not native_fields and value.upper() == 'UNKNOWN'
                 or bool(re.fullmatch(r"[a-z]{2}", value, re.I)))
     if kind == "GEOSITE":
-        return bool(re.fullmatch(r"[a-z0-9_!-]+(?:@[a-z0-9_-]+)?", value, re.I))
+        list_name = value.strip(' ').removeprefix('!').partition('@')[0].strip(_GO_WHITESPACE)
+        return bool(re.fullmatch(r"[a-z0-9_!-]+", list_name, re.I))
     if kind in {"UID", "DSCP"}:
         return bool(value.strip(' ')) and _valid_unsigned_ranges(
             value, 8 if kind == 'DSCP' else 32,
