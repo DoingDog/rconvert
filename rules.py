@@ -1589,6 +1589,8 @@ def _source_records(text: str):
                 raise ValueError('invalid YAML payload')
             else:
                 in_payload = False
+                if re.match(r"(?:0\.0\.0\.0|127\.0\.0\.1|::1?)[ \t]", line):
+                    line = line.partition('#')[0].rstrip()
                 parts, end = _source_parts(line)
                 line = line[:end].rstrip()
             yield line, yaml_rule, parts, None
