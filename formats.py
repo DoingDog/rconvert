@@ -173,6 +173,14 @@ def _yaml_value(value: str) -> str:
 _LINE_UNSAFE = re.compile(r"[\x00-\x08\x0a-\x1f\x7f-\x9f\u2028\u2029\ufffe\uffff]")
 
 
+def _qx_field_supported(kind: str, value: str) -> bool:
+    return (kind in QX_TYPES and _LINE_UNSAFE.search(value) is None and ',' not in value and
+            value == value.strip() and not value.startswith(("'", '"')) and
+            not (kind == 'USER-AGENT' and ((len(value) - len(value.rstrip('\\'))) % 2 or
+                                          re.search(r'\s(?:[#;]|//)', value))) and
+            not (kind == 'DOMAIN-WILDCARD' and any(char in value for char in '[]')))
+
+
 def _logical_regex_value(value: str, *, logical: bool = True) -> str | None:
     # 复用 lexer 编码会被字段 trim 的字面逗号；逻辑内同时保护字面括号。
     prefix = '(DOMAIN-REGEX,(?:)'
@@ -1390,6 +1398,8 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None:
                 selected.append(Rule(kind, value, domain_source='surge'))
         else:
+            if not _qx_field_supported(kind, value):
+                continue
             # QX 只复用来源层已有保护，以及未改变 payload 的相同 matcher。
             if source in {'surge', 'qx'}:
                 if kind not in domain_types or value.isascii():
@@ -1435,7 +1445,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     matcher = Rule(surge_kind, value, (), False, rule.literal_process, rule.native_fields, 'surge')
                     for name in ("fin.txt", "fin-surge.txt"):
                         routed[name] = (f"{surge_kind},{value},no-resolve", matcher)
-                if kind in QX_TYPES:
+                if _qx_field_supported(kind, value):
                     qx_kind = "IP6-CIDR" if kind == "IP-CIDR" and ":" in value else QX_TYPES[kind]
                     routed["fin-qx.txt"] = (f"{qx_kind},{value},LIST,no-resolve", Rule(kind, value, (), False, rule.literal_process, rule.native_fields, 'qx'))
         else:
@@ -1461,9 +1471,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     routed["fin-surge-ds.txt"] = (("." if surge_kind == "DOMAIN-SUFFIX" else "") + surge_payload, matcher)
                 else:
                     routed["fin-surge.txt"] = (surge_line, matcher)
-            if line_safe and kind in QX_TYPES and "," not in value and not (
-                kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")
-            ):
+            if _qx_field_supported(kind, value):
                 qx_kind = QX_TYPES[kind]
                 if kind == "IP-CIDR" and ":" in value:
                     qx_kind = "IP6-CIDR"
