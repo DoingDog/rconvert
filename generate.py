@@ -43,6 +43,9 @@ def fetch_https(url: str) -> bytes:
                 raise ValueError(f"HTTPS redirect required: {url}")
             if getattr(response, "status", 200) != 200:
                 raise ValueError(f"Unexpected HTTP status {response.status}: {url}")
+            if getattr(response, "headers", {}).get("Transfer-Encoding", "").strip(' \t').lower() == "chunked":
+                response.chunked = True
+                response.chunk_left = None
             data = response.read(MAX_BYTES + 1)
             if len(data) > MAX_BYTES:
                 raise ValueError(f"Source exceeds size limit: {url}")
