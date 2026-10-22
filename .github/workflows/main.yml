@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
       - name: Set up Python
         run: |
           python3 -m venv .venv
@@ -37,25 +39,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
-      - name: Generate rules and update README counts
+      - name: Generate and publish current rules
         run: |
           python3 -m venv .venv
-          .venv/bin/python generate.py
-          .venv/bin/python update_readme_counts.py
-      - name: Commit generated files
-        run: |
-          .venv/bin/python - <<'PY'
-          import subprocess
-          from pathlib import Path
-          from formats import FILES
-          from sources import load_config
-          paths = [str(Path(group['name']) / name) for group in load_config(Path('.')) for name in FILES]
-          subprocess.run(['git', 'add', '--', *paths], check=True)
-          PY
-          git add -- README.md
-          if ! git diff --cached --quiet; then
-            git -c user.name='github-actions[bot]' \
-              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
-              commit -m 'Update generated rules'
-            git push origin HEAD:main
-          fi
+          .venv/bin/python update.py

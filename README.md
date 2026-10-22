@@ -7,12 +7,12 @@
 <!-- RULE_COUNTS_START -->
 | 格式 | `cdn` | `a3` | `a4` | `big-data` | `tg` | `proxy` | `dirt` |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `fin.txt` | 4787 | 225693 | 224468 | 10577 | 27 | 7059 | 14285 |
-| `fin-qx.txt` | 4787 | 225690 | 224468 | 10558 | 27 | 7059 | 56720 |
-| `fin.yaml` | 4787 | 225691 | 224467 | 10524 | 27 | 7051 | 56695 |
-| `fin-adb.txt` | 0 | 225946 | 224765 | 0 | 0 | 0 | 0 |
-| `fin-surge.txt` | 80 | 310 | 121 | 2226 | 13 | 138 | 10104 |
-| `fin-surge-ds.txt` | 4707 | 225383 | 224347 | 8351 | 14 | 6921 | 4181 |
+| `fin.txt` | 4791 | 227463 | 226223 | 10580 | 27 | 7059 | 14289 |
+| `fin-qx.txt` | 4791 | 227460 | 226223 | 10561 | 27 | 7059 | 56724 |
+| `fin.yaml` | 4791 | 227461 | 226222 | 10527 | 27 | 7051 | 56699 |
+| `fin-adb.txt` | 0 | 227716 | 226520 | 0 | 0 | 0 | 0 |
+| `fin-surge.txt` | 80 | 310 | 121 | 2226 | 13 | 138 | 10108 |
+| `fin-surge-ds.txt` | 4711 | 227153 | 226102 | 8354 | 14 | 6921 | 4181 |
 <!-- RULE_COUNTS_END -->
 
 使用 Python 3.11+ 标准库将上游规则合并、按匹配范围去重，生成 Surge、Quantumult X、Mihomo 和 AdGuard DNS 规则。构建不会下载或执行外部代码、客户端或二进制程序。`a3` 使用 `static/main/Direct.list` 和 `static/main/NoReject.list` 作为白名单，`dirt` 使用 `static/main/NoDirect.list` 作为白名单。`static/` 可增删条目、重排、添加注释、使用 UTF-8 BOM／CRLF 或新增本地文件；构建读取当轮内容并保持输入不变。
@@ -55,7 +55,15 @@
 
 Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
 
-Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。
+`DOMAIN-WILDCARD`／`HOST-WILDCARD` 按 pattern 校验，接受 `*`、`*123*`、多点和超过 hostname 长度的安全 pattern。普通 Surge 字段引用保护的字面字符可重新读取，生成的 Surge／Quantumult X 安全文本及 Mihomo YAML 可按实际 bytes 供同轮或磁盘 source／白名单使用。精确域名、后缀、hosts、裸域名和 DOMAIN-SET 保持原有 hostname 校验；wildcard 不写入 DOMAIN-SET。
+
+Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 Surge 来源的同名规则按 glob 转换；字面进程名含通配符时，Surge 产物只跳过该条规则或所在逻辑规则，并计入跳过统计。普通 `PROCESS-NAME` 的精确字面值保留现有 hex regex 转换；其余原样输出的进程名称、路径及 wildcard matcher，以及最终 raw 域名 matcher 首尾含 ASCII space 时，只跳过 Mihomo 输出或所在完整逻辑规则。内部空格、HTAB 和非 ASCII 空白保留各自已有支持。
+
+Mihomo 的有效非 regex matcher 含字面逗号时，只跳过该目标的完整规则；外层 YAML 引号不提供内部字段转义。`IN-NAME`、`IN-USER`、`REMATCH-NAME` 保留原有 `/` 名称列表及各段 Go TrimSpace 语义，scalar 和 logical 均将 U+001C..U+001F 保留为非空名称。UID／DSCP 先按原有规则将逗号列表转换成 `/`；原生 regex 的重连字段与 logical 的结构尾字段保留。logical 的每个非 regex 叶子必须在所有前缀及结尾保持括号平衡，无法表达时跳过整条目标规则；平衡的字面括号和顶层合法单边括号保持支持。
+
+Quantumult X 字段以字面单／双引号开头，或首尾含会被读取器裁剪的空白时，仅跳过该 QX 投影；这包括 keyword、native wildcard 和 USER-AGENT。USER-AGENT 与 wildcard 的奇数个尾反斜杠、空白后紧接 `#`／`;`／`//`，以及 QX wildcard 读取器无法保持平衡的字面括号，同样按目标 unsupported。内部引号、内部空白、USER-AGENT 偶数尾反斜杠，以及 HOST-KEYWORD 已有字面反斜杠和 marker 读取保持。输出与白名单投影共用判定，不改写 matcher 或放宽生成依赖校验。
+
+Surge／Quantumult X 的最终字段若会被普通读取器判为 HTML markup，或非 regex process、USER-AGENT、DEVICE-NAME 字段含该读取器不接受的角括号，仅跳过对应目标；Surge logical 任一叶子不支持时跳过整条。`DOMAIN-KEYWORD,<123>`、`DOMAIN-WILDCARD,*<123>*`、URL-REGEX 的既有字面字段读取，以及 logical 含 regex 叶子时原有的整行 literal-field 例外保持，native 原格式支持与来源 HTML 检查不变。
 
 Mihomo native 的 `DOMAIN`／`DOMAIN-SUFFIX` 以及 `DOMAIN-KEYWORD,123.`、`DOMAIN-WILDCARD,*.*` 等末尾根点敏感规则无法保真转换到 Surge 时，只跳过对应 Surge 输出，包括 DOMAIN-SET；Mihomo 输出保留这些原生域名 matcher。逻辑规则任一叶子无法表达时，跳过该目标的整条 `AND`／`OR`／`NOT`。case／root 判定针对关闭 sniffer、没有 hosts alias 或提前改写的 VLESS TCP raw FQDN，不能用其他入口会清理 Host 的行为替代。
 
@@ -78,9 +86,13 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 
 白名单使用域名精确、后缀、keyword、wildcard、`DOMAIN-REGEX` 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。raw `DOMAIN-REGEX` 保留 matcher 原文完全相同的覆盖；另对已有 raw paired 严格模板保留有限的完整包含关系，不推断任意 regex 等价。raw paired suffix white 不能删除仍匹配 Kelvin sign `K` 的 canonical regex，来源覆盖或单个 Host 命中均不能代替实际目标的完整包含证明。
 
+keyword 包含去重同时保留各目标的字段能力：短项因起始引号、边缘空白、普通 markup 读取限制或 native 末尾根点而不能替代长项时，长项继续保留；正常可证明的包含归约和来源／allow／options 身份分组不变。
+
 过滤分别核查来源匹配范围和各路由目标实际生成的 matcher。来源层保留 Mihomo native 与 QX 未证明等价的 Unicode、大小写、末尾根点及 byte／字符匹配差别；Mihomo 路由层按实际输出的原生域名 matcher 和已证明的覆盖关系过滤。其他转换只使用匹配范围不变或属于原白名单已证明子集的目标投影。输入中的 allow 规则按 `no_resolve` 处理及移除受支持接口参数后的实际 matcher 参与路由白名单，外部白名单仍遵守原 options 限制。
 
-对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，普通 Surge 精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。DNS 的 block、allow 和外部白名单使用相同的 case／root 安全判定：native exact／suffix 不输出 DNS，keyword／wildcard 只保留已证明可表达的子集，native `*` 仍支持。所有 raw `DOMAIN-REGEX` 均须取得完整结构证书，未知子结构或不可恢复的大小写／根点区别只计该目标 unsupported。
+对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，普通 Surge 精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。DNS 的 block、allow 和外部白名单使用相同的 case／root 安全判定：native exact／suffix 不输出 DNS，keyword／wildcard 只保留已证明可表达的子集，native `*` 仍支持。所有 raw `DOMAIN-REGEX` 均须取得完整结构证书，未知子结构或不可恢复的大小写／根点区别只计该目标 unsupported。来源字符类中的 `\-` 被用于当前 range 归约的起点或终点时，仅跳过该 DNS 投影，block、allow 和外部白名单共用此判定；独立字面 hyphen、已支持的普通范围及数值 `\x{2D}` 保持原有语义。
+
+普通 wildcard 的 DNS 投影支持已证明的 ASCII 字母、数字、underscore、hyphen、点、`*`／`?` 和 Surge 字符类，不要求含点；例如 `*ads*`、`*`、`a?` 分别输出 `/^.*ads.*$/`、`/^.*$/`、`/^a.$/`。普通来源的引号、括号、反斜杠、非 ASCII 等未证明 literal 只跳过 DNS 并计数，其他可表达目标继续输出；block、allow 和外部白名单使用相同判定。native wildcard 保留现有 byte／presentation、case／root 和 bracket 支持边界。
 
 DNS 证明范围为普通 UDP、单个 A/IN question 的过滤链；目标编码处理 presentation bytes，并使用固定 Go Unicode 15.0.0 的来源 rune 集合，不把 Python 的 Unicode 版本当作来源真值。该范围不承诺未知闭源 Unicode／IDNA 或 Quantumult X 全域等价。本次核验依据固定源码及 Python 公开转换／发布测试，未运行客户端。Surge、Quantumult X 与 Mihomo 输出不能表达部分放行，需在规则集之前放置显式放行规则。去重仅在能证明覆盖时删除规则，不能因 wildcard 不受目标格式支持就用它删除其他类型。
 
@@ -103,7 +115,7 @@ Windows 将 `.venv/bin/python` 换成 `.venv/Scripts/python.exe`。来源及白�
 
 日志包含来源行号与转换诊断。`<file>:<kind>` 表示该目标 unsupported；`<file>:<kind>:whitelist-covered` 表示目标 matcher 被白名单覆盖后的合法删除；`whitelist-covered:<kind>` 仅在一条规范规则至少有一个有效路由投影且全部有效路由投影均被覆盖时计一次，完全 unsupported 的规则不计完整覆盖。`fin-qx.txt:<kind>:interface-option` 只统计实际输出且移除了接口参数的 QX 规则。公开 `render` 返回 `(outputs, diagnostics)`，诊断仍为计数字典。
 
-GitHub Actions 的 PR job 只运行离线测试；向 `main` 推送后先测试再更新，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行，仅暂存配置所列规则组的六种生成文件和 `README.md`，不强推。
+GitHub Actions 的 PR job 以只读权限运行离线测试；向 `main` 推送后先测试同一事件 SHA，再由 `update.py` 生成并发布，定时更新每天北京时间 00:00 执行，定时和手动更新仅在 `main` 分支运行。入口在生成前和提交前读取远端 `main`；事件 SHA 已被替代时记录 `superseded` 并跳过旧运行，推送窗口中明确的非快进或引用旧值竞争也须成功复核远端后才能跳过。`superseded` 不表示新 SHA 已测试或发布。发布仅暂存配置所列规则组的六种生成文件和 `README.md`，不强推；读取失败、权限、网络、服务端策略拒绝及无法确认的推送错误继续报错。
 
 ## 上游与许可
 

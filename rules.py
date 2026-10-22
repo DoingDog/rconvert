@@ -535,7 +535,11 @@ def _source_parts(line: str) -> tuple[list[str], int]:
 
 
 def _valid_domain(kind: str, value: str, *, domain_source: str = "surge") -> bool:
-    if kind == "DOMAIN-WILDCARD" and domain_source == "mihomo":
+    if kind == "DOMAIN-WILDCARD":
+        if domain_source != "mihomo":
+            value = re.sub(r"\[[a-z0-9-]+\]", "x", value.removesuffix('.'), flags=re.I)
+            if value.endswith('.') or '[' in value or ']' in value:
+                return False
         return bool(value) and not re.search(
             r"[\x00-\x08\x0a-\x1f\x7f-\x9f\ud800-\udfff\u2028\u2029\ufffe\uffff]", value)
     value = value.removesuffix('.')
@@ -544,11 +548,6 @@ def _valid_domain(kind: str, value: str, *, domain_source: str = "surge") -> boo
         return False
     except ValueError:
         pass
-    if kind == "DOMAIN-WILDCARD":
-        value = re.sub(r"\[[a-z0-9-]+\]", "x", value, flags=re.I)
-        if '[' in value or ']' in value:
-            return False
-        value = value.replace('*', 'x').replace('?', 'x')
     if kind == "DOMAIN-SUFFIX" and '.' not in value:
         return bool(_DOMAIN.fullmatch('x.' + value))
     return bool(_DOMAIN.fullmatch(value))
@@ -1517,6 +1516,38 @@ def _without_comment(line: str) -> str:
     return line[:end].rstrip()
 
 
+_HTML_MARKUP = re.compile(r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", re.I)
+
+
+def _ordinary_field_supported(kind: str, value: str, *, literal_field: bool = False) -> bool:
+    return kind in _REGEX or ((literal_field or _HTML_MARKUP.search(value) is None) and
+                              not (kind in _PROCESS and any(char in value for char in '<>')))
+
+
+def _surge_keyword_source_supported(value: str, source: str) -> bool:
+    return source != 'mihomo' or not (re.search(r'[a-z]', value, re.I) or value.endswith('.'))
+
+
+def _mihomo_domain_field_supported(kind: str, value: str, source: str) -> bool:
+    return (kind not in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} or
+            source == 'surge' and kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} or value == value.strip(' '))
+
+
+def _qx_field_supported(kind: str, value: str) -> bool:
+    if not (kind in _QX_INTERFACE_KINDS and _ordinary_field_supported(kind, value) and ',' not in value and
+            value == value.strip() and not value.startswith(("'", '"')) and
+            not (kind in {'USER-AGENT', 'DOMAIN-WILDCARD'} and (
+                (len(value) - len(value.rstrip('\\'))) % 2 or re.search(r'\s(?:[#;]|//)', value))) and
+            not (kind == 'DOMAIN-WILDCARD' and any(char in value for char in '[]'))):
+        return False
+    if kind == 'DOMAIN-WILDCARD':
+        try:
+            list(_delimiters('HOST-WILDCARD,' + value))
+        except ValueError:
+            return False
+    return True
+
+
 def _has_literal_field(line: str, native_fields: bool = False) -> bool:
     head = re.match(r'''^\s*(?:-\s+['"]?)?([a-z-]+) *,''', line, re.I)
     if head is None:
@@ -1602,9 +1633,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             continue
         if line is None:
             continue
-        if not _has_literal_field(line, yaml_rule) and re.search(
-            r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!doctype\b|!--)", line, re.I
-        ):
+        if not _has_literal_field(line, yaml_rule) and _HTML_MARKUP.search(line):
             warnings.append(f"line {number}: HTML markup")
             continue
         if number in html_lines:
@@ -1977,7 +2006,7 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
         if rule.kind == 'DOMAIN-SUFFIX':
             suffixes.setdefault(group, set()).add(value)
         elif rule.kind == 'DOMAIN-KEYWORD':
-            keywords.setdefault(group, set()).add(value)
+            keywords.setdefault(group, {}).setdefault(value, rule)
     kept = []
     for (kind, value, group), rule in unique.items():
         if kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'}:
@@ -1993,11 +2022,23 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 candidate = candidate.partition('.')[2]
             if candidate:
                 continue
-        if kind == 'DOMAIN-KEYWORD' and any(value[start:stop] in keywords[group]
-                                           for start in range(len(value))
-                                           for stop in range(start + 1, len(value) + 1)
-                                           if stop - start < len(value)):
-            continue
+        # 短 keyword 必须保留长 keyword 在其他目标已有的投影能力。
+        if kind == 'DOMAIN-KEYWORD':
+            ordinary = (_ordinary_field_supported(kind, rule.value) and
+                        _surge_keyword_source_supported(rule.value, rule.domain_source))
+            qx = _qx_field_supported(kind, rule.value)
+            mihomo = _mihomo_domain_field_supported(kind, rule.value, rule.domain_source)
+            if any((short_rule := keywords[group].get(short)) is not None and
+                   (not ordinary or _ordinary_field_supported(kind, short_rule.value) and
+                    _surge_keyword_source_supported(short_rule.value, rule.domain_source)) and
+                   (not qx or _qx_field_supported(kind, short_rule.value)) and
+                   (not mihomo or _mihomo_domain_field_supported(kind, short_rule.value, rule.domain_source))
+                   for start in range(len(value))
+                   for stop in range(start + 1, len(value) + 1)
+                   if stop - start < len(value) and
+                   (rule.domain_source != 'mihomo' or value.endswith('.') or value[stop - 1] != '.') and
+                   (short := value[start:stop])):
+                continue
         kept.append(rule)
     networks = {}
     others = []

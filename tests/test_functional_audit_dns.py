@@ -1008,13 +1008,25 @@ class DnsDomainConsumerTests(unittest.TestCase):
                                      [('@@' if caller != 'block' else '') + expected] if source == 'surge' else [])
                     self.assertEqual(skipped.get('fin-adb.txt:DOMAIN-WILDCARD', 0), int(source != 'surge'))
                     self.assertEqual(rule.domain_source, source)
+        from tests.test_formats import dns_regex
+
+        cases = (('*ads*', '/^.*ads.*$/', 'xads.example', 'ad.example'),
+                 ('*', '/^.*$/', 'anything.example', None),
+                 ('a?', '/^a.$/', 'ab', 'abc'), ('a??', '/^a..$/', 'abc', 'ab'))
         for source in ('surge', 'qx'):
-            for pattern in ('*ads*', '*', 'a?', 'a??', '*<ads>*'):
+            for pattern, body, match, miss in cases:
                 with self.subTest(source=source, pattern=pattern):
                     out, skipped = render('dns', [Rule('DOMAIN-WILDCARD', pattern, domain_source=source)],
                                           purpose='block', no_resolve='keep')
-                    self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
-                    self.assertEqual(skipped['fin-adb.txt:DOMAIN-WILDCARD'], 1)
+                    self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [body])
+                    self.assertNotIn('fin-adb.txt:DOMAIN-WILDCARD', skipped)
+                    self.assertIsNotNone(dns_regex(body).fullmatch(match))
+                    if miss is not None:
+                        self.assertIsNone(dns_regex(body).fullmatch(miss))
+            out, skipped = render('dns', [Rule('DOMAIN-WILDCARD', '*<ads>*', domain_source=source)],
+                                  purpose='block', no_resolve='keep')
+            self.assertEqual(out['fin-adb.txt'].splitlines()[7:], [])
+            self.assertEqual(skipped['fin-adb.txt:DOMAIN-WILDCARD'], 1)
 
     def test_new_exact_regex_and_single_label_native_budgets_include_wrapper_exception_and_lf(self):
         for caller in ('block', 'allow', 'whitelist'):

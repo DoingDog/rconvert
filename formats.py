@@ -10,8 +10,9 @@ from bisect import bisect_right
 
 from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
-                   _field_value, _fields, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
-                   _valid_regex, exclude_covered)
+                   _field_value, _fields, _has_literal_field, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
+                   _mihomo_domain_field_supported, _ordinary_field_supported, _qx_field_supported,
+                   _surge_keyword_source_supported, _valid_name_list, _valid_regex, exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -66,15 +67,16 @@ def _surge_value(value: str, *, source_regex: bool = False, quote_parentheses: b
 
 
 def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tuple[str, str | None]:
+    if supported is MIHOMO_TYPES and not _mihomo_domain_field_supported(kind, value, source):
+        return kind, None
     if kind in DOMAIN_SET_TYPES and source == 'mihomo' and supported is SURGE_TYPES:
         return kind, None
     if kind not in {"DOMAIN-KEYWORD", "DOMAIN-WILDCARD"}:
         return kind, value
     if supported is SURGE_TYPES:
         if source == "mihomo":
-            if (re.search(r"[a-z]", value, re.I) or
-                    kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]") or
-                    kind == "DOMAIN-KEYWORD" and value.endswith(".")):
+            if (kind == 'DOMAIN-KEYWORD' and not _surge_keyword_source_supported(value, source) or
+                    kind == 'DOMAIN-WILDCARD' and (re.search(r'[a-z]', value, re.I) or any(c in value for c in '[]'))):
                 return kind, None
             if kind == "DOMAIN-WILDCARD":
                 # 尾星号仅在最后必要 token 为非点字面字符时吸收 hostname 根点。
@@ -159,6 +161,8 @@ def _process_value(kind: str, value: str, supported: set[str], literal_process: 
         literal = "".join(r"\x{" + f"{ord(char):X}" + "}" for char in value)
         end = "" if value.startswith("/") and value.endswith("/") else r"\z"
         return kind, r"(?-i:\A" + literal + end + ")"
+    if value != value.strip(' '):
+        return kind, None
     return kind, value
 
 
@@ -238,7 +242,8 @@ def _logical_value(value: str, operator: str, supported: set[str],
             return None
         if not native_fields:
             payload = _field_value(payload)
-        if not payload.strip(' ' if kind in {'UID', 'DSCP'} else trim):
+        if (not _valid_name_list(payload) if kind in {'IN-NAME', 'IN-USER', 'REMATCH-NAME'}
+                else not payload.strip(' ' if kind in {'UID', 'DSCP'} else trim)):
             return None
         if kind in {'UID', 'DSCP'}:
             payload = payload.replace(',', '/')
@@ -249,7 +254,7 @@ def _logical_value(value: str, operator: str, supported: set[str],
         if payload is None:
             return None
         if supported is SURGE_TYPES:
-            if _LINE_UNSAFE.search(payload):
+            if _LINE_UNSAFE.search(payload) or not _ordinary_field_supported(kind, payload, literal_field=True):
                 return None
             if kind == 'NETWORK' and payload.upper() in {'TCP', 'UDP'}:
                 kind, payload = 'PROTOCOL', payload.upper()
@@ -274,10 +279,15 @@ def _logical_value(value: str, operator: str, supported: set[str],
                 payload = _logical_regex_value(payload)
                 if payload is None:
                     return None
-            if kind.startswith('PROCESS-') and ',' in payload and not kind.endswith('-REGEX'):
+            if kind not in _REGEX and ',' in payload:
                 return None
             if native_fields and kind not in _REGEX and options and any(char in payload for char in '()'):
                 payload += ',' + ','.join(options)
+            if kind not in _REGEX:
+                try:
+                    list(_delimiters(payload, native_fields=True))
+                except ValueError:
+                    return None
         if kind == 'IP-CIDR' and ':' in payload:
             kind = 'IP-CIDR6'
         if kind not in supported:
@@ -290,7 +300,11 @@ def _logical_value(value: str, operator: str, supported: set[str],
         parts.extend((expression[cursor:start], text))
         cursor = stop
     parts.append(expression[cursor:])
-    return ''.join(parts)[len(operator) + 2:-1]
+    projected = ''.join(parts)[1:-1]
+    if supported is SURGE_TYPES and not _ordinary_field_supported(
+            operator, projected, literal_field=_has_literal_field(projected)):
+        return None
+    return projected[len(operator) + 1:]
 
 
 def _wildcard_regex(value: str) -> str | None:
@@ -392,10 +406,13 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
     if rule.kind == "DOMAIN-KEYWORD":
         return _dns_join(('/^.*', _dns_literal(rule.value, budget), '.*$/'), budget)
     if rule.kind == "DOMAIN-WILDCARD":
-        if rule.domain_source != "surge" and any(char in rule.value for char in "[]"):
+        # 普通来源只保留既有 ASCII literal；其他字符的 presentation 等价性未证明。
+        if (len(rule.value) + 4 > budget or
+                re.search(r'[^a-zA-Z0-9_.?*\[\]-]', rule.value) or
+                rule.domain_source != "surge" and any(char in rule.value for char in "[]")):
             return None
         pattern = _wildcard_regex(rule.value)
-        return f"/{pattern}/" if pattern is not None else None
+        return _dns_join(('/', pattern, '/'), budget)
     if rule.kind == "DOMAIN-REGEX":
         return _dns_regex(rule.value, budget)
     return None
@@ -1112,6 +1129,9 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
             elif escape not in r"\.*+?{}()[]|^$-Az" and not (encoded and escape in ' #&~') or in_class and escape in "Az":
                 return None
             if in_class:
+                # regexp2 的 \- 独立加入集合，不参与 pending range。
+                if not encoded and escape == '-':
+                    class_escaped_hyphens.add(len(class_atoms))
                 class_atoms.append(ord(escape))
             elif not encoded:
                 if escape in 'Az':
@@ -1137,6 +1157,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
             class_probe = len(translated)
             class_properties = set()
             class_atoms = []
+            class_escaped_hyphens = set()
         elif char == "]" and in_class and index > class_start + 1 + (
                 value[class_start + 1:class_start + 2] == "^"):
             in_class = False
@@ -1158,6 +1179,8 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
                 start = 45 if start == '-' else start
                 if (point + 2 < len(class_atoms) and class_atoms[point + 1] == '-' and
                         class_atoms[point + 2] is not None):
+                    if point in class_escaped_hyphens or point + 2 in class_escaped_hyphens:
+                        return None
                     end = class_atoms[point + 2]
                     end = 45 if end == '-' else end
                     if start > end:
@@ -1322,7 +1345,7 @@ def _mihomo_rule(rule: Rule) -> Rule | None:
     if kind == 'PROTOCOL' and value.upper() in {'TCP', 'UDP'}:
         mihomo_kind, payload = 'NETWORK', value.lower()
     if (mihomo_kind not in MIHOMO_TYPES or payload is None or
-            mihomo_kind.startswith('PROCESS-') and ',' in payload and not mihomo_kind.endswith('-REGEX')):
+            ',' in payload and mihomo_kind not in _REGEX and mihomo_kind not in LOGICAL):
         return None
     return Rule(mihomo_kind, payload, options, False, rule.literal_process, True, 'mihomo')
 
@@ -1361,18 +1384,19 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             continue
         source, kind, value = entry.domain_source, entry.kind, entry.value
         if target == 'mihomo':
-            # 已证明的 Surge 子集保留来源，另比较真正转换后的 raw regex。
-            if source == 'surge' and (kind not in domain_types or value.isascii()):
-                selected.append(entry)
             if kind in domain_types and (source not in {'surge', 'mihomo'} or source == 'surge' and not value.isascii()):
-                continue
-            # 最后必要 token 不能用 Host 根点满足；保留原 white 的单向覆盖判断。
-            if source == 'surge' and kind == 'DOMAIN-WILDCARD' and value.rstrip('*').endswith(('.', '?')):
                 continue
             projected = _mihomo_rule(Rule(kind, value, entry.options, literal_process=entry.literal_process,
                                           native_fields=entry.native_fields, domain_source=source))
-            if projected is not None:
-                selected.append(projected)
+            if projected is None:
+                continue
+            # 已证明的 Surge 子集保留来源，另比较真正转换后的 raw regex。
+            if source == 'surge':
+                selected.append(entry)
+            # 最后必要 token 不能用 Host 根点满足；保留原 white 的单向覆盖判断。
+            if source == 'surge' and kind == 'DOMAIN-WILDCARD' and value.rstrip('*').endswith(('.', '?')):
+                continue
+            selected.append(projected)
         elif target == 'surge':
             # native white 的根点与 case 区别不能随 Surge 投影扩大。
             if source != 'surge' and kind in domain_types:
@@ -1384,9 +1408,11 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             elif source == 'mihomo' and kind in {'GEOIP', 'IP-ASN'} and value.upper() == 'UNKNOWN':
                 continue
             kind = SURGE_ALIASES.get(kind, kind)
-            if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None:
+            if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None and _ordinary_field_supported(kind, value):
                 selected.append(Rule(kind, value, domain_source='surge'))
         else:
+            if not _qx_field_supported(kind, value) or _LINE_UNSAFE.search(value) is not None:
+                continue
             # QX 只复用来源层已有保护，以及未改变 payload 的相同 matcher。
             if source in {'surge', 'qx'}:
                 if kind not in domain_types or value.isascii():
@@ -1432,7 +1458,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     matcher = Rule(surge_kind, value, (), False, rule.literal_process, rule.native_fields, 'surge')
                     for name in ("fin.txt", "fin-surge.txt"):
                         routed[name] = (f"{surge_kind},{value},no-resolve", matcher)
-                if kind in QX_TYPES:
+                if line_safe and _qx_field_supported(kind, value):
                     qx_kind = "IP6-CIDR" if kind == "IP-CIDR" and ":" in value else QX_TYPES[kind]
                     routed["fin-qx.txt"] = (f"{qx_kind},{value},LIST,no-resolve", Rule(kind, value, (), False, rule.literal_process, rule.native_fields, 'qx'))
         else:
@@ -1447,7 +1473,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                                           rule.native_fields, rule.domain_source) if logical else
                            _surge_value(surge_payload, source_regex=kind == "URL-REGEX")
                            if surge_payload is not None else None)
-            if surge_kind in SURGE_TYPES and surge_value is not None and line_safe:
+            if (surge_kind in SURGE_TYPES and surge_value is not None and line_safe and
+                    (logical or _ordinary_field_supported(surge_kind, surge_payload))):
                 if kind == "IP-CIDR" and ":" in value:
                     surge_kind = "IP-CIDR6"
                 surge_line = f"{surge_kind},{surge_value}"
@@ -1458,9 +1485,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     routed["fin-surge-ds.txt"] = (("." if surge_kind == "DOMAIN-SUFFIX" else "") + surge_payload, matcher)
                 else:
                     routed["fin-surge.txt"] = (surge_line, matcher)
-            if line_safe and kind in QX_TYPES and "," not in value and not (
-                kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]")
-            ):
+            if line_safe and _qx_field_supported(kind, value):
                 qx_kind = QX_TYPES[kind]
                 if kind == "IP-CIDR" and ":" in value:
                     qx_kind = "IP6-CIDR"

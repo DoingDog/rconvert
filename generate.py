@@ -43,6 +43,9 @@ def fetch_https(url: str) -> bytes:
                 raise ValueError(f"HTTPS redirect required: {url}")
             if getattr(response, "status", 200) != 200:
                 raise ValueError(f"Unexpected HTTP status {response.status}: {url}")
+            if getattr(response, "headers", {}).get("Transfer-Encoding", "").strip(' \t').lower() == "chunked":
+                response.chunked = True
+                response.chunk_left = None
             data = response.read(MAX_BYTES + 1)
             if len(data) > MAX_BYTES:
                 raise ValueError(f"Source exceeds size limit: {url}")
@@ -64,11 +67,31 @@ def fetch_https(url: str) -> bytes:
         raise RuntimeError(f"Failed to fetch {url}: {exc}") from exc
 
 
-def _output_path(root: Path, path: Path) -> Path:
+def _static_paths(root: Path) -> tuple[set[Path], set[Path]]:
+    protected = {root / "static", (root / "static").resolve()}
+    files = set()
+    pending = [root / "static"]
+    checked = set()
+    while pending:
+        candidate = pending.pop()
+        if candidate.is_dir():
+            directory = candidate.resolve()
+            if candidate.is_symlink():
+                protected.add(directory)
+            if directory in checked:
+                continue
+            checked.add(directory)
+            pending.extend(directory.iterdir())
+        elif candidate.is_symlink():
+            files.add(candidate.resolve())
+    return protected, files
+
+
+def _output_path(root: Path, path: Path, protected: tuple[set[Path], set[Path]]) -> Path:
+    directories, files = protected
     paths = (path.parent.resolve() / path.name, path.resolve())
     if any(not candidate.is_relative_to(root) for candidate in paths):
         raise ValueError("Output path escapes root")
-    protected = (root / "static", (root / "static").resolve())
     pending = [path]
     checked = set()
     while pending:
@@ -79,23 +102,24 @@ def _output_path(root: Path, path: Path) -> Path:
             continue
         checked.add(candidate)
         location = candidate.parent.resolve() / candidate.name
-        if any(location.is_relative_to(directory) for directory in protected):
+        if location in files or any(location.is_relative_to(directory) for directory in directories):
             raise ValueError("Output path targets static")
         if candidate.is_symlink():
             pending.append(location.parent / candidate.readlink())
         if candidate.parent != candidate:
             pending.append(candidate.parent)
-    if any(paths[1].is_relative_to(directory) for directory in protected):
+    if paths[1] in files or any(paths[1].is_relative_to(directory) for directory in directories):
         raise ValueError("Output path targets static")
     return paths[1]
 
 
 def publish(outputs: dict[Path, str], *, root: Path | None = None) -> None:
     root = Path(__file__).resolve().parent if root is None else root.resolve()
+    protected = _static_paths(root)
     for path in outputs:
-        _output_path(root, path)
+        _output_path(root, path, protected)
     staging = root / ".tmp"
-    _output_path(root, staging)
+    _output_path(root, staging, protected)
     staging.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(dir=staging) as directory:
         staged = []
@@ -133,11 +157,12 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
     from rules import _apply_no_resolve, exclude_covered, normalize, parse, parse_whitelist
 
     configs = load_config(root)
+    protected = _static_paths(root)
     paths = {}
     for config in configs:
         for name in FILES:
             path = root / config["name"] / name
-            resolved = _output_path(root, path)
+            resolved = _output_path(root, path, protected)
             if resolved in paths:
                 raise ValueError(f"Output path collision: {paths[resolved]} and {path}"
                                  f" resolve to {resolved}")
@@ -207,19 +232,23 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
         return next((message for message in messages
                      if int(message.partition(":")[0].removeprefix("line ")) > header), None)
 
-    def is_domain_set(source: str | Path) -> bool:
+    def is_domain_set(source: str | Path, entry: str) -> bool:
         if isinstance(source, Path):
-            return source.name.lower() == "fin-surge-ds.txt"
+            if source in paths:
+                return paths[source].name.lower() == "fin-surge-ds.txt"
+            return (source.name.lower() == "fin-surge-ds.txt" or
+                    Path(entry.replace("\\", "/")).name.lower() == "fin-surge-ds.txt")
         return unquote(posixpath.basename(urlsplit(source).path)).lower() == "fin-surge-ds.txt"
 
     local_whitelists = {}
     for config in configs:
         for entry in config["whitelist"]:
             source = resolve_source(root, entry)
-            if isinstance(source, Path) and source not in generated and source not in local_whitelists:
+            key = source, is_domain_set(source, entry)
+            if isinstance(source, Path) and source not in generated and key not in local_whitelists:
                 text = read(source)
                 try:
-                    local_whitelists[source] = parse_whitelist(text, domain_set=is_domain_set(source))
+                    local_whitelists[key] = parse_whitelist(text, domain_set=key[1])
                 except ValueError as exc:
                     raise ValueError(f"Invalid whitelist {source}: {exc}") from exc
 
@@ -239,7 +268,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
             if text is None:
                 unusable_source = True
                 continue
-            parsed, source_warnings = parse(text, purpose=purpose, domain_set=is_domain_set(source))
+            parsed, source_warnings = parse(text, purpose=purpose, domain_set=is_domain_set(source, entry))
             for warning in source_warnings[:5]:
                 print(f"{source}: {warning}", file=sys.stderr)
             if len(source_warnings) > 5:
@@ -263,8 +292,9 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
         whitelist = []
         for entry in config["whitelist"]:
             source = resolve_source(root, entry)
-            if source in local_whitelists:
-                whitelist.extend(local_whitelists[source])
+            key = source, is_domain_set(source, entry)
+            if key in local_whitelists:
+                whitelist.extend(local_whitelists[key])
                 continue
             text = read(source)
             if text is None:
@@ -275,16 +305,16 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 if not body:
                     continue
                 parsed_whitelist, messages = parse(text, purpose="block", ignore_policy=True,
-                                                   domain_set=is_domain_set(source))
+                                                   domain_set=is_domain_set(source, entry))
                 if warning := body_warning(messages, header):
                     raise ValueError(f"Invalid whitelist {source}: {warning}")
             try:
-                selected = parse_whitelist(text, domain_set=is_domain_set(source))
+                selected = parse_whitelist(text, domain_set=is_domain_set(source, entry))
                 if generated_whitelist and len(selected) != len(parsed_whitelist):
                     for number, line in enumerate(body, header + 1):
                         snippet = ("payload:\n" if paths[source] == paths[source].with_name("fin.yaml") else "") + line
                         try:
-                            supported = parse_whitelist(snippet, domain_set=is_domain_set(source))
+                            supported = parse_whitelist(snippet, domain_set=is_domain_set(source, entry))
                         except ValueError:
                             supported = []
                         if not supported:
