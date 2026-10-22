@@ -73,6 +73,7 @@ class CiPublicationTests(unittest.TestCase):
         self.git(root, "config", "user.name", "Fixture Writer")
         self.git(root, "config", "user.email", "fixture@example.org")
         if detached:
+            self.git(root, "fetch", "-q", "--depth", "1", "origin", self.base)
             self.git(root, "checkout", "-q", "--detach", self.base)
         return root
 
@@ -114,6 +115,43 @@ class CiPublicationTests(unittest.TestCase):
         self.assertTrue(readme.startswith("prefix\n<!-- RULE_COUNTS_START -->\n"))
         self.assertTrue(readme.endswith("<!-- RULE_COUNTS_END -->\nsuffix\n"))
         self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
+
+    def test_same_sha_runs_are_strictly_serial_and_second_run_does_not_generate(self):
+        self.assertEqual(self.run_update(), "published")
+        published = self.tip()
+        second = self.clone("second", detached=True)
+        self.assertEqual(self.run_update(root=second, fetch=lambda url: self.fail("stale fetch")),
+                         "superseded")
+        self.assertEqual(self.tip(), published)
+        self.assertEqual(self.git(second, "rev-parse", "HEAD").stdout.strip(), self.base)
+        self.assertIn(b"! Version: 202610220800\n", (second / "fixture-1/fin-adb.txt").read_bytes())
+        self.assertEqual(self.git(second, "status", "--porcelain").stdout, "")
+
+    def test_publication_preserves_unrelated_tracked_and_untracked_changes(self):
+        unrelated = {"source.py": b"edited = True\n", "static/input.list": OLD + b"# edited\n",
+                     "static/new.list": b"DOMAIN,local.example\n", "unexpected.py": b"extra = True\n",
+                     "fixture-0/unconfigured.txt": b"manual output\n"}
+        for name, data in unrelated.items():
+            (self.runner / name).write_bytes(data)
+        self.assertEqual(self.run_update(), "published")
+        committed = set(self.git(self.runner, "show", "--format=", "--name-only").stdout.splitlines())
+        self.assertTrue(committed.isdisjoint(unrelated))
+        for name, data in unrelated.items():
+            self.assertEqual((self.runner / name).read_bytes(), data)
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        self.assertIn(" M source.py", self.git(self.runner, "status", "--porcelain").stdout)
+        self.assertEqual(self.git(self.origin, "show", "main:source.py").stdout, "original = True\n")
+        self.assertEqual(self.git(self.origin, "show", "main:static/input.list").stdout.encode(), OLD)
+
+    def test_existing_staged_changes_are_preserved_and_not_published(self):
+        (self.runner / "source.py").write_text("staged = True\n", encoding="utf-8")
+        self.git(self.runner, "add", "source.py")
+        before = self.git(self.runner, "diff", "--cached", "--binary").stdout
+        with self.assertRaisesRegex(ValueError, "staged"):
+            self.run_update()
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--binary").stdout, before)
+        self.assertEqual(self.git(self.runner, "diff", "--name-only").stdout, "")
+        self.assertEqual(self.tip(), self.base)
 
     def test_unchanged_generation_creates_no_commit(self):
         self.assertEqual(self.run_update(data=OLD, moment=START), "unchanged")

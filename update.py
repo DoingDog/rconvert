@@ -36,6 +36,8 @@ def update(root: Path, tested_sha: str) -> str:
         raise ValueError("HEAD does not match the tested event SHA")
     if _superseded(root, tested_sha):
         return "superseded"
+    if _git(root, "diff", "--cached", "--name-only").stdout:
+        raise ValueError("Refusing to publish with existing staged changes")
     publish(generate(root, fetch_https), root=root)
     update_counts(root)
     paths = [str(Path(group["name"]) / name) for group in load_config(root) for name in FILES]
