@@ -30,6 +30,15 @@ def _superseded(root: Path, tested_sha: str) -> bool:
     return False
 
 
+def _push_race(push: subprocess.CompletedProcess) -> bool:
+    statuses = [line.split("\t") for line in push.stdout.splitlines() if "\t" in line]
+    return len(statuses) == 1 and statuses[0] in [
+        ["!", "HEAD:refs/heads/main", "[rejected] (fetch first)"],
+        ["!", "HEAD:refs/heads/main", "[rejected] (non-fast-forward)"],
+        ["!", "HEAD:refs/heads/main", "[remote rejected] (non-fast-forward)"],
+    ]
+
+
 def update(root: Path, tested_sha: str) -> str:
     root = root.resolve()
     if _git(root, "rev-parse", "HEAD").stdout.strip() != tested_sha:
@@ -53,5 +62,9 @@ def update(root: Path, tested_sha: str) -> str:
     _git(root, "-c", "user.name=github-actions[bot]",
          "-c", "user.email=41898282+github-actions[bot]@users.noreply.github.com",
          "commit", "-m", "Update generated rules")
-    _git(root, "push", "--porcelain", "origin", "HEAD:refs/heads/main")
+    push = _git(root, "push", "--porcelain", "origin", "HEAD:refs/heads/main", check=False)
+    if push.returncode:
+        if _push_race(push) and _superseded(root, tested_sha):
+            return "superseded"
+        push.check_returncode()
     return "published"

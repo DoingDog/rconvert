@@ -1,6 +1,7 @@
 import io
 import json
 import os
+import shlex
 import subprocess
 import tempfile
 import unittest
@@ -77,12 +78,25 @@ class CiPublicationTests(unittest.TestCase):
             self.git(root, "checkout", "-q", "--detach", self.base)
         return root
 
-    def advance(self):
+    def prepare_advance(self):
         (self.writer / "source.py").write_text("advanced = True\n", encoding="utf-8")
         self.git(self.writer, "add", "source.py")
         self.git(self.writer, "commit", "-qm", "Advance source")
-        self.git(self.writer, "push", "-q", "origin", "HEAD:refs/heads/main")
         return self.git(self.writer, "rev-parse", "HEAD").stdout.strip()
+
+    def advance(self):
+        advanced = self.prepare_advance()
+        self.git(self.writer, "push", "-q", "origin", "HEAD:refs/heads/main")
+        return advanced
+
+    def hook(self, root, name, body):
+        git_dir = Path(self.git(root, "rev-parse", "--absolute-git-dir").stdout.strip())
+        path = git_dir / "hooks" / name
+        path.write_text("#!/bin/sh\nset -eu\n" + body + "\n", encoding="utf-8")
+        path.chmod(0o755)
+
+    def push_writer(self):
+        return shlex.join(["git", "-C", str(self.writer), "push", "-q", "origin", "HEAD:refs/heads/main"])
 
     def tip(self):
         return self.git(self.origin, "rev-parse", "refs/heads/main").stdout.strip()
@@ -185,6 +199,16 @@ class CiPublicationTests(unittest.TestCase):
         self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
         self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
         self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_advance_after_last_check_is_confirmed_from_non_fast_forward_status(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-commit", self.push_writer())
+        self.assertEqual(self.run_update(), "superseded")
+        self.assertEqual(self.tip(), advanced)
+        self.assertRegex(self.stdout.getvalue(),
+                         r"!\tHEAD:refs/heads/main\t\[rejected\] \((fetch first|non-fast-forward)\)")
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), self.base)
+        self.assertNotIn("new.example", self.git(self.origin, "show", "main:fixture-1/fin.txt").stdout)
 
     def test_head_must_equal_the_tested_event_sha(self):
         with self.assertRaisesRegex(ValueError, "HEAD.*tested"):
