@@ -535,7 +535,11 @@ def _source_parts(line: str) -> tuple[list[str], int]:
 
 
 def _valid_domain(kind: str, value: str, *, domain_source: str = "surge") -> bool:
-    if kind == "DOMAIN-WILDCARD" and domain_source == "mihomo":
+    if kind == "DOMAIN-WILDCARD":
+        if domain_source != "mihomo":
+            value = re.sub(r"\[[a-z0-9-]+\]", "x", value.removesuffix('.'), flags=re.I)
+            if value.endswith('.') or '[' in value or ']' in value:
+                return False
         return bool(value) and not re.search(
             r"[\x00-\x08\x0a-\x1f\x7f-\x9f\ud800-\udfff\u2028\u2029\ufffe\uffff]", value)
     value = value.removesuffix('.')
@@ -544,11 +548,6 @@ def _valid_domain(kind: str, value: str, *, domain_source: str = "surge") -> boo
         return False
     except ValueError:
         pass
-    if kind == "DOMAIN-WILDCARD":
-        value = re.sub(r"\[[a-z0-9-]+\]", "x", value, flags=re.I)
-        if '[' in value or ']' in value:
-            return False
-        value = value.replace('*', 'x').replace('?', 'x')
     if kind == "DOMAIN-SUFFIX" and '.' not in value:
         return bool(_DOMAIN.fullmatch('x.' + value))
     return bool(_DOMAIN.fullmatch(value))
