@@ -12,7 +12,7 @@ from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
                    _field_value, _fields, _has_literal_field, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
                    _mihomo_domain_field_supported, _ordinary_field_supported, _qx_field_supported,
-                   _surge_keyword_source_supported, _valid_name_list, _valid_regex, exclude_covered)
+                   _surge_keyword_source_supported, _valid_name_list, _valid_regex, _valid_simple, exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -254,6 +254,8 @@ def _logical_value(value: str, operator: str, supported: set[str],
         if payload is None:
             return None
         if supported is SURGE_TYPES:
+            if kind == 'GEOIP' and not _valid_simple(kind, payload):
+                return None
             if _LINE_UNSAFE.search(payload) or not _ordinary_field_supported(kind, payload, literal_field=True):
                 return None
             if kind == 'NETWORK' and payload.upper() in {'TCP', 'UDP'}:
@@ -1408,7 +1410,8 @@ def _route_whitelist(whitelist: list[Rule], target: str) -> tuple[list[Rule], se
             elif source == 'mihomo' and kind in {'GEOIP', 'IP-ASN'} and value.upper() == 'UNKNOWN':
                 continue
             kind = SURGE_ALIASES.get(kind, kind)
-            if kind in SURGE_TYPES and _LINE_UNSAFE.search(value) is None and _ordinary_field_supported(kind, value):
+            if (kind in SURGE_TYPES and (kind != 'GEOIP' or _valid_simple(kind, value))
+                    and _LINE_UNSAFE.search(value) is None and _ordinary_field_supported(kind, value)):
                 selected.append(Rule(kind, value, domain_source='surge'))
         else:
             if not _qx_field_supported(kind, value) or _LINE_UNSAFE.search(value) is not None:
@@ -1453,7 +1456,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     emitted.add("fin-adb.txt")
         elif rule.options:
             if rule.options == ("no-resolve",) and kind in NO_RESOLVE_TYPES:
-                if kind in SURGE_TYPES:
+                if kind in SURGE_TYPES and (kind != 'GEOIP' or _valid_simple(kind, value)):
                     surge_kind = "IP-CIDR6" if kind == "IP-CIDR" and ":" in value else kind
                     matcher = Rule(surge_kind, value, (), False, rule.literal_process, rule.native_fields, 'surge')
                     for name in ("fin.txt", "fin-surge.txt"):
@@ -1474,6 +1477,7 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                            _surge_value(surge_payload, source_regex=kind == "URL-REGEX")
                            if surge_payload is not None else None)
             if (surge_kind in SURGE_TYPES and surge_value is not None and line_safe and
+                    (kind != 'GEOIP' or _valid_simple(kind, value)) and
                     (logical or _ordinary_field_supported(surge_kind, surge_payload))):
                 if kind == "IP-CIDR" and ":" in value:
                     surge_kind = "IP-CIDR6"

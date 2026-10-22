@@ -1113,7 +1113,9 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
         except ValueError:
             return False
     if kind in {"GEOIP", "SRC-GEOIP"}:
-        return (value.upper() == 'LAN' or kind == 'GEOIP' and not native_fields and value.upper() == 'UNKNOWN'
+        if native_fields:
+            return bool(value.removeprefix('!')) and value.upper() != 'UNKNOWN'
+        return (value.upper() == 'LAN' or kind == 'GEOIP' and value.upper() == 'UNKNOWN'
                 or bool(re.fullmatch(r"[a-z]{2}", value, re.I)))
     if kind == "GEOSITE":
         list_name = value.strip(' ').removeprefix('!').partition('@')[0].strip(_GO_WHITESPACE)
@@ -1535,6 +1537,8 @@ def _mihomo_domain_field_supported(kind: str, value: str, source: str) -> bool:
 
 
 def _qx_field_supported(kind: str, value: str) -> bool:
+    if kind == 'GEOIP' and not _valid_simple(kind, value):
+        return False
     if not (kind in _QX_INTERFACE_KINDS and _ordinary_field_supported(kind, value) and ',' not in value and
             value == value.strip() and not value.startswith(("'", '"')) and
             not (kind in {'USER-AGENT', 'DOMAIN-WILDCARD'} and (
@@ -1900,7 +1904,8 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
             direction = "src" if entry.kind.startswith("SRC-") else "dst"
             networks[direction].add(ipaddress.ip_network(entry.value, strict=False))
         elif entry.kind in {"IP-ASN", "GEOIP", "IP-SUFFIX", "SRC-IP-ASN", "SRC-GEOIP", "SRC-IP-SUFFIX"}:
-            typed.add((entry.kind, entry.value.upper()))
+            typed.add((entry.kind, entry.value if entry.kind in {'GEOIP', 'SRC-GEOIP'}
+                       and not entry.value.isascii() else entry.value.upper()))
     # native wildcard 按 UTF-8 byte 匹配，方括号是字面内容。
     wildcard_patterns = {
         source: [''.join('[[]' if char == '[' else '[]]' if char == ']' else char
@@ -1949,7 +1954,8 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
                         break
                     network = network.supernet()
         else:
-            covered = (kind, value.upper()) in typed
+            covered = (kind, rule.value if kind in {'GEOIP', 'SRC-GEOIP'}
+                       and not rule.value.isascii() else value.upper()) in typed
         # 较窄的 ASCII native literal 可被 Surge 覆盖；保留根点和未知 matcher 的来源差别。
         if (not covered and rule.domain_source in {'mihomo', 'qx'}
                 and kind in {'DOMAIN', 'DOMAIN-SUFFIX'} and rule.value.isascii()
