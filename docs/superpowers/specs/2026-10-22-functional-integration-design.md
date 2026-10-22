@@ -1,55 +1,56 @@
-# 已完成功能组件集成设计
+# 最终功能集成与本地验收设计
 
-## 目标与基准
+## 目标与固定输入
 
-将已完成的生成路径、wildcard／HTTP 和 CI 发布组件整合到独立分支，核查它们共同使用的读取、转换及发布接口。保留最新生产规则及 README 数量，供后续字段联动任务合并。
+在独立 worktree 中整合全部已确认功能修正，验证共同使用的读取、转换、去重和发布接口，并用真实上游 bytes 生成、验收七组共 42 个文件。本阶段不修改 main，不 push，不触发远程 Actions。
 
-初始基准为 `4c1f29d55e47f939b96cf87a5284f947938191ed`。本轮仅合并下列固定提交，使用正常 merge 保留各自历史。
+初始基准为 `4c1f29d55e47f939b96cf87a5284f947938191ed`。正常 merge 以下两个固定 head，保留全部历史。
 
-| 输入 | 固定提交 | 内容 |
+| 输入 | 固定提交 | 包含内容 |
 | --- | --- | --- |
-| 生产更新 | `d9d2a0bab2fe7e2d2938967c28607f7caebb0564` | 包含 `966282ff34a9fb95e11aaaebd0886077f9dc0d1e`，仅生成文件及 README 数量 |
-| 生成路径 | `bd58d31daad7de73618776c81d3502e6616497ae` | static 后代 alias 预检、DOMAIN-SET 来源上下文及 whitelist 缓存区分 |
-| wildcard／HTTP | `94617628ba6b83d7cd44e8930f94f9dfee6b8280` | wildcard 输入、DNS 局部投影及预算，包含 HTTP `fe34c69abe6695af86c796da003400d68ee7e12d` 历史 |
-| CI 发布 | `c6b1ec0a041ff89072eaa52b40e84cf92f96e6a9` | `update.py`、Actions 同 SHA 与 superseded 判定、已有文件保留 |
+| 部分集成 | `a66e7814caacbfb87f63979d497ff1e094c13c6d` | 生产 `d9d2a0bab2fe7e2d2938967c28607f7caebb0564`、生成路径 `bd58d31daad7de73618776c81d3502e6616497ae`、wildcard `94617628ba6b83d7cd44e8930f94f9dfee6b8280`、HTTP `fe34c69abe6695af86c796da003400d68ee7e12d`、CI `c6b1ec0a041ff89072eaa52b40e84cf92f96e6a9` |
+| 字段联动 | `badfbfb60b7b55e95ab6f72a260088695f3c6afc` | keyword `6ff16a9bdbbf2c29530a6d5f51c5ff7f497459ed`、routing `30968e03c2acdc0f50dcbb42345284ed361fdc10`、Go 名称空白、QX 字段边界、markup、raw Mihomo 字段和目标能力去重 |
 
-## 已核查的调用与文件范围
+生产基准包含 bot 提交 `966282ff34a9fb95e11aaaebd0886077f9dc0d1e`。工作分支中的 42 个受控产物及 README 数量保留该生产基准；真实新产物仅写入独立验收副本。
 
-已从固定提交读取各组件规格、计划、生产差异及公开回归，核查 `generate`／`publish`／`fetch_https`、`resolve_source`／`load_config`、`parse`／`parse_whitelist`、`normalize`／`exclude_covered`、`render` 及 wildcard／DNS 消费者、`update` 和 README 数量更新。
+## 调用与修改范围
 
-生成路径和 HTTP 修改分别位于 `generate.py` 的路径／依赖部分与 fetch 部分；wildcard 修改位于 `rules.py` 和 `formats.py`；CI 使用上述真实接口，不复制生成逻辑。README 的计数、wildcard／DNS 和 Actions 段各有独立来源。公开签名、配置、六产物名称、static 输入和依赖保持。
+核查 `generate`／`publish`／`fetch_https`、`resolve_source`／`load_config`、`parse`／`parse_whitelist`、`normalize`／`exclude_covered`、`render`、`update` 和 README 数量更新。扩大后的 `_valid_domain` wildcard 校验与共享字段能力判定必须并存；ordinary DNS 和 escaped-hyphen 处理、raw／markup／QX／logical 投影必须同时保留。
 
-本轮新增文档仅为本规格及 `docs/superpowers/plans/2026-10-22-functional-integration.md`。合并范围包括组件已有文档、五个新测试模块、三个既有功能测试的小范围预期修改、workflow 结构测试，以及固定生产更新。只有公开接口测试复现的真实集成缺陷可追加最小修正及对应测试。
+本阶段直接修改这两份集成文档；必要的联合回归使用已有公开测试和 helper。只有已观察到失败的真实集成缺陷才追加最小实现修正。公开签名、配置、六产物名称、static、依赖和既有严格读取规则保持。
 
 ## Requirements
 
-### 历史与生产内容
+### 历史与范围
 
-- R1. 四个固定输入均成为最终 HEAD 的祖先，保留两个 bot 提交；不使用 reset、stash、force push 或整文件选边解决冲突。
-- R2. 最终配置列出的全部 42 个生产规则文件，其 mode／blob 与固定生产更新完全相同；README 计数区也与该提交相同，同时保留组件 wildcard／DNS 和 Actions 段。
-- R3. 合并后的生产实现只能来自固定组件或本轮先复现再修正的集成缺陷；不新增配置、依赖、parser、Rule 缓存或无关重构。
+- R1. 两个固定 head、其组件提交和两个 bot 提交均成为最终 HEAD 祖先。正常 merge，逐 hunk 解决必要冲突，不整文件选边，不 reset、stash、force push 或跳过 hooks／signing。
+- R2. 42 个受控产物的 mode／blob 及 README 计数区与 `d9d2a0b` 相同；各格式说明、wildcard／DNS／字段及 Actions 说明全部保留。初始 main、其他 worktree、用户 `.claude/` 和现有改动不变。
+- R3. 实现只来自固定组件及本轮已复现的最小修正。不得增加 parser、Rule 缓存、provenance sidecar、配置、依赖或推测性功能；不得关闭全部 keyword 包含去重或放宽 strict generated readback／HTML 检测。
 
-### 正常功能验收
+### 十二根因与联合行为
 
-- R4. 运行公开接口回归，确认单标签 DOMAIN-SET alias 的同轮／disk source／white、格式优先级、whitelist 上下文区分及已有 static symlink 输入 bytes 保持。
-- R5. 确认 native wildcard 经 Surge／Quantumult X 实际生成 bytes 回读，safe pattern 保留，未证明 literal 只跳过 DNS；普通 DNS 预算、native 来源边界及原有 no_resolve 行为保持。
-- R6. 确认 chunked ASCII OWS 的正常 source／remote white 与 canonical 输出一致；截断时整轮旧产物和 static bytes 保持，继续使用真实标准库 HTTPResponse 解码。
-- R7. 确认 CI 的正常发布、无变化、superseded、tracked／untracked／ignored 已存允许路径及无关文件保留。测试使用真实临时 bare origin、runner 和 writer，不 mock Git 成功、生成器或 publish。
+- R4. 以公开调用验证 static 后代 alias 输入保留、DOMAIN-SET alias 格式上下文和 white cache、keyword 多目标去重、Mihomo process 边缘 space、nonregex 逗号、QX 字段承载、Mihomo logical 逐叶括号、DNS escaped-hyphen 来源语义、wildcard 普通回读闭合、Go 名称 whitespace、chunked ASCII OWS、CI fixed-tested-SHA／superseded 及已有 untracked／ignored 内容保留。
+- R5. 新 wildcard pattern 经 ordinary／Surge／QX／YAML 实际 bytes 回读；marker、奇数尾反斜杠、引号、括号、非 ASCII 和 markup 按目标局部支持。scalar／logical、source／white、同轮／disk-only、三个 purpose／三个 no_resolve、source-IP 方向及 static／旧产物保留同时成立。
+- R6. 短 keyword 在某目标 unsupported 时不能删除该目标可表达的长项。实际 Rule Unicode 原值、native ignored-tail、root-dot、allow／options／来源身份、逆序和一次性 iterable 保持。普通安全包含仍归约，外部原始 white 与生成 parent white 使用各自真实流程。
 
-### 验证与交付
+### 最终代码验证
 
-- R8. 使用最终提交的完整 git archive，经标准库 tarfile 解包到 Debian WSL 的 Linux `/tmp` 独立 snapshot；逐文件核对路径、mode、Git blob 和 SHA-256，并在测试前后确认受控 bytes 相同。
-- R9. 先运行已有新模块和相关 suite，再完整运行 Linux unittest discovery，实际等待退出。不修改既有 timeout、skip 或异常处理掩盖失败；保留已有十个 Windows-only skip。
-- R10. 完成规格与简化复审、diff 范围及历史检查，提交必要修改，保留 clean 集成分支及已忽略的 `.tmp/integration-verification` 日志／manifest，清理仅本轮创建的 OS 临时 fixture／snapshot。
+- R7. 使用最终提交完整 git archive，以标准库 tarfile 解包到 Debian WSL Linux `/tmp` 新目录。记录 commit、tree、所有受控路径／mode／Git blob／SHA-256；测试前后全部相同。Python 使用 `-I -B` 并显式加入可信 root，不在 `/mnt/c` 运行重型 suite。
+- R8. 实际完成相关联合回归和完整离线 unittest discovery，无 failure／error；保留十个既有 Windows-only skips，不修改 timeout 或 skip。代码或测试变化后重新验证最终提交，不将旧组件日志算作最终树证据。
+
+### 真实来源与产物
+
+- R9. 从最终 `rulesets.json` 枚举全部远程角色，以最终 `fetch_https` 真实 HTTPS 读取每个唯一 URL。每份数据置于独立新空目录，保存 URL、bytes、SHA-256、全部角色、公共 parser 结果及 warnings。代码／脚本和下载目录分开，Python `-I`，不执行下载内容或客户端。已有 fetch cache 仅固定本轮真实获取的 bytes，不作替代来源。
+- R10. 用同批固定 bytes、最终 `generate`／`publish` 在独立可信代码副本生成 42 个原始 LF 文件并更新副本 README 数量，static 前后 hash 相同。保留全部生成诊断；受控生产文件不变。
+- R11. 实际运行既有 `accept_artifacts.py`，可信 `--root` 与独立 `--artifact-root` 分离，baseline 为 `d9d2a0b` 原始 blobs 的验收 JSON。完整检查路径／count／UTF-8 LF／排序／重复／no-resolve／Surge split／DNS 每行 65,536 bytes／单文件 100 MiB／README。不预处理 CRLF。以相同上游 bytes 在固定生产代码生成对照，逐组／格式解释数量及大小差异，不用任意比例判断。
+- R12. 完成规格、功能／回归、简化复审及必要修正。最终受控改动全部英文提交，`git diff --check` 通过且工作区 clean；保存已忽略 `.tmp/final-verification/` 的脚本、原始来源、日志、manifest 和验收 JSON，清理本轮无需保留的 OS 临时目录。
 
 ## 验证依据
 
-复用 `tests/test_generator_alias_regressions.py`、`tests/test_wildcard_dependency_regressions.py`、`tests/test_ordinary_wildcard_dns.py`、`tests/test_chunked_ows_regressions.py`、`tests/test_ci_publication.py` 和 `tests/test_workflow.py`。相关回归覆盖生成／字节依赖、static maintenance／migration、transport、来源及 README 数量。上述测试在合并树上使用共享生产实现，不另建重复矩阵或测试抽象。
+复用 alias、wildcard dependency、ordinary wildcard DNS、chunked OWS、CI、keyword、routing、target field 及既有 generate／rules／formats／YAML／static／transport／README 公开测试。联合缺口才新增小型回归，不复制已有矩阵。新问题先具体 red，再最小修复及 green，随后完整回归和产物重验。
 
-若出现真实集成问题，先在公开入口添加能失败的最小回归，再修改唯一根因，重跑受影响测试及最终完整 suite。只允许隔离真实网络和时间边界；所有 fixture 写 Linux 临时目录，不写生产目录。
+真实构建复用 `load_config`、`resolve_source`、`fetch_https`、`parse`、`parse_whitelist`、`generate`、`publish` 和 README update，不另写 HTTP 或规则 parser。测试 fixture 使用 OS 临时机制；需复用的证据保存在已忽略工作目录，运行解释器的 cwd 始终为可信代码或脚本目录。
 
-## 范围限制与后续依赖
+## 范围限制
 
-字段联动分支仍在运行，本轮不读取或合并它，不把当前集成称为最终全部功能验收。待其完成并纳入最终树后，再进行真实全上游生成和 42 产物验收。
-
-本轮不 fetch 真实全上游、不触发 GitHub、不 push、不合并 main、不清理其他 worktree／分支。不开展网络安全扫描、修复或加固，不运行客户端，不做 Windows／多平台适配，不调查本机系统，不处理已知 Mihomo suffix 大小写，也不批量改写 suffix regex。
+不启动客户端，不进行网络安全扫描或修复，不做本机／多平台适配，不调查本机已知系统问题，不处理 Mihomo YAML DOMAIN-SUFFIX 大小写，不增加批量 regex suffix 改写。不重新开启未确认的手工 SRC-IP canonical、GEOIP LAN 或普通 keyword 特殊 Host 结论。闭源运行语义不由转换器公开 bytes 测试推断。main 合并、push、远程 Actions 和远端产物验收由后续阶段执行。

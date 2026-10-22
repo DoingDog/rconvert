@@ -1,5 +1,5 @@
 ---
-title: 已完成功能组件集成 - Plan
+title: 最终功能集成与本地验收 - Plan
 type: chore
 date: 2026-10-22
 artifact_contract: ce-unified-plan/v1
@@ -9,153 +9,123 @@ origin: docs/superpowers/specs/2026-10-22-functional-integration-design.md
 baseline: 4c1f29d55e47f939b96cf87a5284f947938191ed
 ---
 
-# 已完成功能组件集成 - Plan
+# 最终功能集成与本地验收 - Plan
 
 ## Goal Capsule
 
-- **目标：**生成、转换及本地发布在共同使用时保持各组件已完成的公开行为，并保留最新生产规则供后续字段联动任务接入。
-- **方法：**固定输入、正常 merge、复用已有公开回归和完整 Linux snapshot 验证，采用 KTD1-KTD3。
-- **依据：**[集成规格](../specs/2026-10-22-functional-integration-design.md)、各固定组件规格及实际代码。
-- **执行：**当前独立 worktree 连续完成文档、合并、必要修正、回归、复审及英文提交；不向真实远端发布。
-- **停止条件：**存在必须改变授权范围或需要用户决定的冲突时报告具体事实；可在本轮解决的集成问题自行完成。
-
----
+- **目标：**在同一已提交树验证全部十二根因修正、字段能力与扩大 wildcard 的联合行为，真实读取全部上游，生成并验收 42 个产物。
+- **依据：**[最终集成规格](../specs/2026-10-22-functional-integration-design.md) R1-R12，以及两个固定输入中的组件规格和公开实现。
+- **执行：**唯一写入者在独立 worktree 连续完成合并、必要 TDD 修正、完整 Linux 测试、真实构建、产物验收、复审及英文提交；无待做本地步骤转交。
+- **边界：**不修改 main、不 push、不触发 Actions；不运行客户端、不开展网络安全工作、不改 timeout／skip、不调查本机系统。
 
 ## Product Contract
 
-### Summary
+整合 `a66e7814caacbfb87f63979d497ff1e094c13c6d` 与 `badfbfb60b7b55e95ab6f72a260088695f3c6afc`，保留全部历史、各格式说明及 `d9d2a0b` 生产文件和 README 数量。新产物仅写隔离副本，正式生产生成留给后续远程 update。
 
-整合规格中的四个固定输入，保持生产文件与固定 bot 更新一致，完成跨组件公开接口及完整 Linux 回归。
-
-### Problem Frame
-
-三个功能组件共享生成、读取和文件发布接口。它们分别验证通过仍需在同一提交树上确认组合行为；同时，初始基准之后已有两次生产规则更新。
-
-### Requirements
-
-规格 R1-R10 为产品要求，本计划不改变其含义。
-
-| 要求 | 实施归属 | 验收依据 |
+| 要求 | 单元 | 核查依据 |
 | --- | --- | --- |
-| R1 | U1 | 固定 SHA、正常 merge、祖先可达性及 merge parents |
-| R2 | U1、U3 | 42 个产物 mode／blob、README 计数及功能段 |
-| R3 | U1、U2、U3 | 组件并集与最终 diff、必要修正的失败回归 |
-| R4 | U2 | alias、static 及生成依赖公开测试 |
-| R5 | U2 | wildcard 回读、DNS 局部 skip 和预算测试 |
-| R6 | U2 | OWS source／white 及截断保护测试 |
-| R7 | U2 | 真实临时 Git 发布及已有文件保留测试 |
-| R8-R9 | U2、U3 | 最终提交 snapshot、manifest、完整 Linux 测试终态 |
-| R10 | U3 | 规格／简化复审、clean 分支及临时内容清理 |
-
-### Scope Boundaries
-
-本轮直接新增两份集成文档，合并固定组件所有已提交文件。只有复现的集成缺陷才允许在对应生产文件和测试中追加最小修正。不重写正常组件，不增加重复测试矩阵或抽象。
-
-字段联动分支以及最终完整树的真实上游生成、42 产物验收属于后续依赖。本轮不执行规格末节列出的远程操作、客户端、系统适配或网络安全工作。
-
----
+| R1-R3 | U1、U5 | 固定 SHA 祖先、merge parents、hunk 及生产 mode／blob、README 计数、范围差异 |
+| R4-R6 | U2 | 十二根因公开回归、实际 bytes 联合检查与已有 helper |
+| R7-R8 | U3 | 最终 commit／tree／archive、逐文件 manifest、完整 Linux suite 终态 |
+| R9-R10 | U4 | 全部真实 URL／角色／bytes／hash／parser warnings、真实 generate／publish、static hash |
+| R11 | U4 | 42 文件验收 JSON、固定生产 baseline、同输入生成差异 |
+| R12 | U5 | 规格／功能／简化复审、最终 clean、证据和清理记录 |
 
 ## Planning Contract
 
 ### Key Technical Decisions
 
-- KTD1. **以固定提交合并。**先提交本规格和计划，再合并固定生产更新及三个组件，保留所有历史；冲突逐 hunk 读取双方意图并保留兼容内容。对应 R1-R3。
-- KTD2. **优先复用已有公开回归。**新模块已包含所需接口与真实文件／Git helper，运行同一合并树即可验证组合；只有缺陷需要新增测试。对应 R4-R7。
-- KTD3. **从最终提交验证 Linux snapshot。**以 git archive 和标准库解包，结合 Git 对象及逐文件 hash 证明测试树身份；日志保留在已忽略目录。对应 R8-R10。
+- KTD1. 正常 merge 两个固定 head，逐 hunk 保留兼容内容。rules 的 pattern validator 与字段能力／normalize，以及 formats 的 ordinary DNS 与 raw／markup／QX／logical helper 均保留。
+- KTD2. 先运行已有公开回归，仅为未覆盖的联合行为增加必要小型测试；真实问题先 red，再最小修复，不引入新 parser、缓存、sidecar 或重复能力框架。
+- KTD3. 最终测试从完整 Git archive 在 Linux `/tmp` 执行，Python `-I -B` 显式导入可信 root。manifest 证明测试前后受控内容一致；证据独立保存，不在下载目录运行解释器。
+- KTD4. 真实 fetch 每个唯一 URL，按角色用公共 parser 记录全部 warnings。固定本轮 bytes 后复用给最终代码及生产基准，不重新抓取造成输入差异。
+- KTD5. 复用现有产物验收脚本，不复制格式解析。最终与生产代码都实际 generate／publish，更新各自 README；以原始 LF 文件验收并解释所有组／格式的明显 delta。
 
 ### High-Level Technical Design
 
 ```mermaid
 flowchart TB
-    A[固定生产更新] --> E[正常 merge 的集成树]
-    B[生成路径组件] --> E
-    C[wildcard 与 HTTP 组件] --> E
-    D[CI 发布组件] --> E
-    E --> F[公开接口相关回归]
-    F --> G[最终提交与 Linux snapshot]
-    G --> H[完整 suite 与逐文件核对]
-    H --> I[clean 集成分支供后续字段合并]
+    A[部分集成固定 head] --> C[完整合并树]
+    B[字段联动固定 head] --> C
+    C --> D[公开联合回归及必要 TDD]
+    D --> E[最终提交与 Git archive]
+    E --> F[Linux 完整离线测试及 manifest]
+    E --> G[真实 HTTPS 来源快照]
+    G --> H[最终代码真实生成与发布]
+    G --> I[固定生产代码同输入生成]
+    H --> J[42 文件原始 bytes 验收与差异解释]
+    I --> J
+    F --> K[clean 本地交付]
+    J --> K
 ```
 
 ### Assumptions
 
-固定组件提交已经完成各自 TDD，当前 worktree 初始干净。已有 Debian WSL 和 Linux Python 可运行测试；实际版本和命令记录到验证日志。组件仍需在共同提交树上执行本计划的验收。
-
----
+固定输入已分别完成 TDD，仍须共同验证。Debian WSL、Linux Python 和本地 Git 对象可用。生产 sources 以最终配置为准，预期 56 个唯一 URL、72 次角色引用，实际不符时记录实际数量。网络读取失败保留真实结果，不用旧缓存、mock 或 partial 结果代替。
 
 ## Implementation Units
 
 ### U1. Fixed-history integration
 
-**目标：**满足 R1-R3。**依赖：**集成规格和本计划已复审并英文提交。
+1. 记录本 worktree／branch／base／status 和 main 初始 SHA；读取两个固定输入 spec／plan／实际 diff。核查没有既有 dirty 文件碰撞。
+2. 正常 merge 两个 head，逐 hunk 处理必要冲突。核查全部组件及 bot 祖先，42 生产文件 mode／blob 和 README 计数区与 d9d 一致，所有格式说明并存。
+3. 更新本规格及计划覆盖最终全部验收，英文提交。唯一写入面为本 worktree；其他 worktree 仅按固定提交读取。
 
-**文件：**`generate.py`、`rules.py`、`formats.py`、`update.py`、`.github/workflows/main.yml`、`README.md`、各固定输入中的测试、文档和生产产物。
+完成条件：R1-R3 的历史和范围成立，无未解决冲突，无生产重新生成。
 
-**步骤与核查：**
+### U2. Public joint regression
 
-1. 固定 `origin/main` 的完整 SHA，确认初始身份、clean index／工作区及四个输入对象。核查生产更新仅含产物和 README 数量，组件改动与其规格一致。
-2. 依次正常合并生产更新、生成路径、wildcard／HTTP、CI 固定 head，使用英语 merge 消息。出现冲突时逐 hunk 核查 source commit，不整文件选边。
-3. 核查所有固定 head 及两个 bot 提交成为祖先；最终 42 个产物与固定生产更新的 mode／blob 一致，README 数量和组件说明均保留。
+依赖 U1。运行 alias／wildcard／DNS／HTTP／CI／keyword／routing／target-field 及相关公开测试；核查实际调用路径。
 
-**测试场景：**合并不重新生成生产目录，`generate.py` 的 fetch 与 alias 部分并存，README 计数／DNS／Actions 独立变更均保留。
+- 十二根因各有最终树的实际测试，不仅依赖祖先存在。
+- 扩大 wildcard 的 marker、奇数尾 slash、引号、括号、非 ASCII、markup、class／native 区别和 DNS 局部预算，经 ordinary／Surge／QX／YAML bytes 读取。
+- scalar／logical、source／white、同轮／disk-only，三个 purpose／no_resolve、source-IP 方向、static／旧产物保护。
+- keyword 短项 unsupported 与长项能力联动，Unicode 原值、ignored-tail、root-dot、allow／options／来源身份和逆序保持；安全包含仍归约。
 
-**完成条件：**无未解决冲突，无额外生产修改，所有输入历史及产物身份符合要求。
+先读取现有测试，联合缺口才补最小回归。任何新确认问题必须具体 red -> 最小修复 -> green，相关规格和所有调用方同步，禁止放宽原断言或 strict readback。
 
-### U2. Public cross-component regression
+完成条件：联合场景真实通过，无新失败，必要修正及回归英文提交。
 
-**目标：**满足 R3-R7、R9。**依赖：**U1。
+### U3. Exact final Linux snapshot
 
-**文件：**运行 `tests/test_generator_alias_regressions.py`、`tests/test_wildcard_dependency_regressions.py`、`tests/test_ordinary_wildcard_dns.py`、`tests/test_chunked_ows_regressions.py`、`tests/test_ci_publication.py`、`tests/test_workflow.py`，以及相关生成／transport／static／来源／README suite。
+依赖 U2。对提交完整 archive，标准库 tarfile 提取到 Linux `/tmp` 新空目录，记录每个受控路径、mode、blob、bytes 和 SHA-256。使用 `python3 -I -B`，显式加入可信 root 后完整 unittest discovery。调用给足前台 timeout，后台仅等待通知，不主动轮询。
 
-**步骤与核查：**
+核查完整终态、failure／error／skip 原因及前后 manifest 相同；十个 Windows-only skips 保持，8 秒 timeout 不变。代码或测试改动后重新构造 archive 并重跑最终树。日志、manifest、命令及解释器保留在 `.tmp/final-verification/`。
 
-1. 在 Linux `/tmp` 的当前提交 snapshot 执行上述模块及相关 suite，保留命令、解释器、实际测试结果和日志。核查现有 helper 使用真实路径、bytes、HTTPResponse 及临时 Git，不 mock 内部成功。
-2. 逐项核查下列公开场景已有测试实际执行；只在存在缺口或复现缺陷时补最小测试。新缺陷先取得失败证据，再修复根因并重跑相关模块。
-3. 对必要修正逐条规格审查及简化，确认无额外功能、配置、依赖、parser、Rule 缓存或重复实现，英文提交。
+完成条件：R7-R8，最终提交完整 Linux suite 无失败／错误，测试内容与最终 Git 身份关系准确。
 
-**测试场景：**
+### U4. Real source build and artifact acceptance
 
-- 单标签 DOMAIN-SET alias 同轮及 disk source／white，显式 entry 与实际生成格式优先，static symlink 输入 bytes 保持。
-- native wildcard 通过 Surge／QX bytes 回读，safe pattern 与 DNS 未证明 literal 局部 skip、65,536 bytes 行预算保持。
-- ASCII OWS chunked source／white 正常输出与 canonical 相同；截断保留所有旧文件及 static bytes。
-- CI 正常发布、unchanged、superseded，已有 tracked／untracked／ignored 允许目标拒绝覆盖，无关文件保持。
+依赖 U2，使用已固定提交的可信代码，可与 U3 独立运行。
 
-**完成条件：**要求场景全部在合并树运行且无新增失败，不修改 timeout／skip 或吞掉错误。
+1. 枚举最终配置全部远程角色，最终 `fetch_https` 真实读取每个 URL。每个原始响应创建独立新空目录，记录 URL、bytes、SHA-256、角色、解析规则和 warnings；下载目录与可信脚本／代码隔离，使用 Python `-I`。
+2. 从 archive 建立隔离可信代码副本，真实 `generate`／`publish` 使用本批固定 bytes，更新该副本 README counts。记录全部 diagnostics，42 文件原始 LF bytes 和 static 前后 manifest；不改工作分支生产产物。
+3. 从 d9d 原始 blobs 建立 baseline artifact root，实际执行现有 `accept_artifacts.py` 得到 baseline JSON。对新产物以最终可信 root 和独立 artifact root 执行验收，检查所有既有要求。
+4. 在固定 d9d 生产代码用同批 bytes 真实生成 42 文件并验收，逐组／格式比较 count、bytes 和行集合，区分上游变化与本次修正。不能用任意比例判断正常，不转换 CRLF。
 
-### U3. Final commit verification and handoff
+完成条件：全部真实来源成功，角色／warnings 完整；42 文件验收 passed，baseline 及同输入差异有依据，static bytes 保持。
 
-**目标：**满足 R1-R3、R8-R10。**依赖：**U2。
+### U5. Review, final state, and return
 
-**文件：**最终受控树及已忽略的 `.tmp/integration-verification`；仅必要修正可形成新提交。
+依赖 U1-U4。规格 R1-R12 逐项核对，功能／回归、范围和简化复审，修正所有本轮确认问题；不添加无关优化。若实现或测试改变，重做最终提交完整 suite 及产物验收。若仅文档改变，准确列明受测提交、最终提交及未变源码／测试／产物 blob 关系。
 
-**步骤与核查：**
+核查 `git diff --check`、clean、所有 merge parents、生产文件和 main 初始 SHA。保存本轮必要证据，清理无需保留的 OS 临时副本，保留所有其他任务内容和本分支供外层合并。返回全部修改文件、commit／tree、各项结果与证据路径、真实 fetch／warnings、42 计数大小和 delta、static hash、TDD 和复审结果及限制。
 
-1. 核最终 diff 属于固定组件、生产更新、两份集成文档和已复现修正，复审规格 R1-R10。确认提交身份与 clean 工作区。
-2. 对最终提交重新构造完整 git archive，标准库解包到独立 Linux `/tmp`。manifest 记录每个受控路径、mode、Git blob、SHA-256；核 archive、snapshot 与最终 commit 一致。
-3. 在同一 snapshot 前台等待完整 unittest discovery 退出。保存完整日志、退出码、测试数及每个 skip 原因；失败时修正授权范围原因并重跑最终树，不用部分通过代替终态。
-4. 测试后重核全部受控 hash、42 个生产 blob 和 README 数量，清理本轮 snapshot 及 OS 临时 fixtures，保留证据目录。保持 clean 集成分支，返回原目录，不删除本分支或其他任务内容。
-
-**完成条件：**最终提交完整 Linux suite 无失败或错误，仅保留既有十个 Windows-only skip；manifest 身份准确，所有临时清理及未覆盖项如实返回。
-
----
+完成条件：本地验收无待做步骤；不进行 main merge、push 或远程 Actions。
 
 ## Verification Contract
 
 | 检查 | 方法 | 必需结果 |
 | --- | --- | --- |
-| 身份与范围 | branch／HEAD／status、固定对象及差异 | 只写当前独立 worktree |
-| 历史 | 固定 head、bot SHA 的祖先检查与 merge parents | 全部历史可达，无替换历史 |
-| 生产文件 | 配置组 × `formats.FILES` 的 Git mode／blob 比较 | 42 个文件与固定生产更新一致 |
-| README | 计数区 bytes 与 wildcard／DNS／Actions 段比较 | 数量及说明各自保留 |
-| 相关回归 | 六个新模块与生成、transport、static、来源、README suite | 所需公开场景通过 |
-| 完整回归 | Linux `python3 -B -m unittest discover -s tests -v` | 真实终态无失败／错误，skip 原因明确 |
-| snapshot 身份 | git archive、标准库 tarfile、Git blob／SHA-256 manifest | 测试前后受控内容等于最终提交 |
-| 交付 | `git diff --check`、规格／简化复审、status、临时清理 | clean 分支、日志和 manifest 可复核 |
-
----
+| 历史／生产 | ancestry、merge parents、mode／blob／README 计数比较 | 固定输入可达，42 受控文件保持 d9d |
+| 联合行为 | 已有公开测试及必要小型回归 | 十二根因和 wildcard／字段／keyword 组合通过 |
+| 完整离线测试 | 最终提交 Linux archive、Python `-I -B` | 无 failure／error，仅十个既有 Windows-only skips |
+| 测试树身份 | 所有受控文件的 Git blob／mode／SHA-256 | 前后相同，源码与最终提交关系准确 |
+| 真实来源 | 最终 fetch_https、独立空目录、公共 parse／white | 全 URL 成功，bytes／角色／warnings 可复用 |
+| 真实生成 | generate／publish／README update、static hash | 42 原始 LF 产物，static 不变 |
+| 产物验收 | 现有 acceptance 脚本、d9d baseline／同输入生成 | 全项 passed，逐组／格式差异可解释 |
+| 本地交付 | 规格／功能／简化复审、diff check／clean／main SHA | 修改全部提交，证据保留，main 未变 |
 
 ## Definition of Done
 
-四个固定 head 和两个 bot 提交在最终历史中，生产 42 文件及 README 计数保持；公开接口与最终完整 Linux suite 有实际通过终态。没有字段联动未完成内容、无关重构或试验代码进入本分支。
-
-最终交付列明 worktree／branch／base／head、文档和 merge／修正提交、冲突依据、测试终态及 manifest 位置。真实全上游生成、GitHub 发布与字段联动验收明确留待最终完整树，不冒称本轮已完成。
+两个固定 head 的历史完整、十二根因公开回归和实际 bytes 联动通过；最终完整 Linux suite、全部真实上游构建及 42 文件验收均有终态证据。42 受控生产文件及 README 数量保持 d9d，static 输入保持。最终 clean 分支和证据可供外层执行 main 合并、普通 push 及远程 Actions 验收，不将这些后续远程操作记为本阶段完成。
