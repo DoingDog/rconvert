@@ -90,6 +90,14 @@ class KeywordTargetContainmentTests(TargetFieldTests):
                         for group in ('source', 'child', 'direct'):
                             self.assertEqual(disk[root / group / target], outputs[root / group / target])
 
+    def test_native_letters_do_not_invent_an_ordinary_projection_during_reduction(self):
+        rules = self.parsed('payload:\n  - DOMAIN-KEYWORD,<tag>\n  - ' + json.dumps('DOMAIN-KEYWORD,(?<tag>)\t'))
+        self.assertEqual(normalize(iter(rules)), rules[:1])
+        outputs, _ = render('fields', normalize(iter(rules)), purpose='proxy', no_resolve='keep')
+        self.assertEqual(self.yaml_body(outputs), ['DOMAIN-KEYWORD,<tag>'])
+        self.assertEqual(outputs['fin.txt'], '# fields rules: 0\n')
+        self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 0\n')
+
     def test_qx_boundary_containment_keeps_actual_projection_for_all_sources(self):
         values = ["'123", '"123', '\t123', '123\t', '\xa0123', '123\xa0', ' 123', '123 ']
         for source in ('surge', 'qx', 'mihomo'):

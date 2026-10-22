@@ -1525,6 +1525,10 @@ def _ordinary_field_supported(kind: str, value: str, *, literal_field: bool = Fa
                               not ((kind in _PROCESS or kind == 'DOMAIN-WILDCARD') and any(char in value for char in '<>')))
 
 
+def _surge_keyword_source_supported(value: str, source: str) -> bool:
+    return source != 'mihomo' or not (re.search(r'[a-z]', value, re.I) or value.endswith('.'))
+
+
 def _mihomo_domain_field_supported(kind: str, value: str, source: str) -> bool:
     return (kind not in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} or
             source == 'surge' and kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} or value == value.strip(' '))
@@ -2021,11 +2025,13 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 continue
         # 短 keyword 必须保留长 keyword 在其他目标已有的投影能力。
         if kind == 'DOMAIN-KEYWORD':
-            ordinary = _ordinary_field_supported(kind, value)
+            ordinary = (_ordinary_field_supported(kind, value) and
+                        _surge_keyword_source_supported(value, rule.domain_source))
             qx = _qx_field_supported(kind, value)
             mihomo = _mihomo_domain_field_supported(kind, value, rule.domain_source)
             if any(short in keywords[group] and
-                   (not ordinary or _ordinary_field_supported(kind, short)) and
+                   (not ordinary or _ordinary_field_supported(kind, short) and
+                    _surge_keyword_source_supported(short, rule.domain_source)) and
                    (not qx or _qx_field_supported(kind, short)) and
                    (not mihomo or _mihomo_domain_field_supported(kind, short, rule.domain_source))
                    for start in range(len(value))

@@ -12,7 +12,7 @@ from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
                    _field_value, _fields, _has_literal_field, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
                    _mihomo_domain_field_supported, _ordinary_field_supported, _qx_field_supported,
-                   _valid_name_list, _valid_regex, exclude_covered)
+                   _surge_keyword_source_supported, _valid_name_list, _valid_regex, exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -75,9 +75,8 @@ def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tu
         return kind, value
     if supported is SURGE_TYPES:
         if source == "mihomo":
-            if (re.search(r"[a-z]", value, re.I) or
-                    kind == "DOMAIN-WILDCARD" and any(c in value for c in "[]") or
-                    kind == "DOMAIN-KEYWORD" and value.endswith(".")):
+            if (kind == 'DOMAIN-KEYWORD' and not _surge_keyword_source_supported(value, source) or
+                    kind == 'DOMAIN-WILDCARD' and (re.search(r'[a-z]', value, re.I) or any(c in value for c in '[]'))):
                 return kind, None
             if kind == "DOMAIN-WILDCARD":
                 # 尾星号仅在最后必要 token 为非点字面字符时吸收 hostname 根点。
