@@ -345,13 +345,14 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
         self.assertEqual(self.yaml_body(outputs), ['DOMAIN-KEYWORD,<tag>'])
 
     def test_logical_regex_literal_exception_keeps_readable_keyword_markup(self):
-        source = 'AND,((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))'
-        rules = self.parsed(source)
-        outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
-        self.assertEqual(outputs['fin.txt'], '# fields rules: 1\n' + source + '\n')
-        self.assertEqual(outputs['fin-surge.txt'], outputs['fin.txt'])
-        self.assertNotIn('fin.txt:AND', diagnostics)
-        self.assertEqual(self.parsed(outputs['fin.txt']), rules)
+        for leaf in ('DOMAIN-KEYWORD,<!--123-->', 'DOMAIN-WILDCARD,*<tag>*'):
+            source = 'AND,((' + leaf + '),(URL-REGEX,.*))'
+            rules = self.parsed(source)
+            outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+            self.assertEqual(outputs['fin.txt'], '# fields rules: 1\n' + source + '\n')
+            self.assertEqual(outputs['fin-surge.txt'], outputs['fin.txt'])
+            self.assertNotIn('fin.txt:AND', diagnostics)
+            self.assertEqual(self.parsed(outputs['fin.txt']), rules)
 
     def test_logical_literal_exception_matrix_and_generated_sources(self):
         for operator, value in (('AND', '((DOMAIN-KEYWORD,<!--123-->),(URL-REGEX,.*))'),
@@ -611,7 +612,9 @@ class OrdinaryTargetFieldsTests(TargetFieldTests):
             self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 1\nHOST-KEYWORD,<123>,LIST\n')
             for name in ('fin.txt', 'fin-qx.txt', 'fin.yaml'):
                 self.assertEqual(self.parsed(outputs[name])[0].value, '<123>')
-        for source in ('DOMAIN-KEYWORD,<tag>', 'USER-AGENT,<123>', 'DEVICE-NAME,<123>',
+        for source in ('DOMAIN-KEYWORD,<tag>', 'DOMAIN-WILDCARD,*<tag>*', 'HOST-WILDCARD,*<tag>*,LIST',
+                       'USER-AGENT,<123>', 'DEVICE-NAME,<123>', 'PROCESS-NAME,<123>',
+                       'PROCESS-NAME-WILDCARD,<123>', 'PROCESS-PATH,/123/<123>', 'PROCESS-PATH-WILDCARD,/123/<123>',
                        'payload:\n  - USER-AGENT,<tag>', 'payload:\n  - DEVICE-NAME,<tag>'):
             rules, messages = parse(source, purpose='proxy')
             self.assertEqual(rules, [])
