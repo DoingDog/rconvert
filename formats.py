@@ -243,7 +243,7 @@ def _logical_value(value: str, operator: str, supported: set[str],
         if not native_fields:
             payload = _field_value(payload)
         if (not _valid_name_list(payload) if kind in {'IN-NAME', 'IN-USER', 'REMATCH-NAME'}
-                else not payload.strip(' ' if kind in {'UID', 'DSCP'} else trim)):
+                else not (payload.strip(' ') if kind in {'UID', 'DSCP'} else payload)):
             return None
         if kind in {'UID', 'DSCP'}:
             payload = payload.replace(',', '/')
