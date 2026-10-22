@@ -15,7 +15,7 @@
 ## 发布顺序与安全边界
 
 1. 核对 `HEAD` 完全等于 `tested_sha`，否则失败；不切换或更新源码。成功执行 `git ls-remote --exit-code origin refs/heads/main`，要求唯一 main 引用。读取失败或缺失分支失败。若 tip 不等于 A，明确输出 superseded，并在生成、写文件和暂存前结束。这仅表示旧运行跳过。
-2. 当前 tip 仍为 A 时，检查 index 没有既有暂存内容。已有暂存改动则失败并完整保留，防止把外部改动带入 bot 提交。无关的未暂存 tracked/untracked 内容不作为失败条件，不删除或暂存。
+2. 当前 tip 仍为 A 时，检查 index 没有既有暂存内容。已有暂存改动则失败并完整保留，防止把外部改动带入 bot 提交。配置允许路径若已有 tracked 未提交修改，也在生成前失败并保留，防止覆盖手工产物或把 README 其他段落的既有修改带入提交。允许集合外的未暂存 tracked/untracked 内容不作为失败条件，不删除或暂存。
 3. 复用 `publish(generate(root, fetch_https), root=root)`，随后调用 README 数量更新。使用 `load_config(root)` 的实际组名与 `formats.FILES` 构造精确的相对路径，再加 `README.md`。当前配置为 42 个产物加 README；数量随配置变化，不硬编码组名，不暂存目录、static 或源码。
 4. 提交前再次成功读取远端 main。不同于 A 时输出 superseded 并跳过暂存、提交和推送；已生成的工作区文件保留，不 reset、clean 或丢弃已有内容。
 5. 精确 `git add -- <允许路径>` 后执行 `git diff --cached --quiet`。退出 0 返回 unchanged，退出 1 继续，其他退出值失败并保留诊断。以 `github-actions[bot]` 和既有 bot 邮箱正常提交英文 `Update generated rules`；身份只通过本次命令的 `-c` 设置。commit/hook/signing 失败传播，不绕过。
@@ -29,7 +29,7 @@ Git 子进程固定 `LC_ALL=C`、`LANG=C`，不修改全局或仓库配置。所
 
 | 实际状态 | 进一步证据 | 结果 |
 | --- | --- | --- |
-| `[rejected] (fetch first)` 或明确的 `non-fast-forward` 拒绝 | 再次成功读取 main，tip 不等于 A | superseded |
+| `[rejected] (fetch first)` 或 `[rejected] (non-fast-forward)` | 再次成功读取 main，tip 不等于 A | superseded |
 | `[remote rejected] (failed to update ref)` 或 `(incorrect old value provided)` | stderr 有 main 的精确 `cannot lock ref` old-value mismatch，expected 为 A、actual 不等于 A；再读 main 成功且不等于 A | superseded |
 | 同样的竞争状态，但 main 仍为 A | 无 A 被替代的证据 | 保留 push 非零 |
 | 认证、权限、服务端 policy/hook、transport、未知 remote rejected | 即使 main 同时前进也不转换 | 保留 push 非零及原诊断 |
