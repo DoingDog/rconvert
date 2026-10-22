@@ -223,6 +223,140 @@ class CiPublicationTests(unittest.TestCase):
         self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), self.base)
         self.assertNotIn("new.example", self.git(self.origin, "show", "main:fixture-1/fin.txt").stdout)
 
+    def test_commit_hook_rejection_remains_a_failure(self):
+        self.hook(self.runner, "pre-commit", "echo 'commit policy denied' >&2\nexit 1")
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 1)
+        self.assertIn("commit", raised.exception.cmd)
+        self.assertIn("commit policy denied", self.stderr.getvalue())
+        self.assertEqual(self.tip(), self.base)
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_remote_policy_rejection_remains_a_failure(self):
+        self.hook(self.origin, "pre-receive", "echo 'publication policy denied' >&2\nexit 1")
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 1)
+        self.assertIn("[remote rejected] (pre-receive hook declined)", raised.exception.stdout)
+        self.assertIn("publication policy denied", raised.exception.stderr)
+        self.assertEqual(self.tip(), self.base)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_transport_failure_remains_a_failure(self):
+        self.git(self.runner, "remote", "set-url", "--push", "origin", str(self.directory / "missing.git"))
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 128)
+        self.assertIn("push", raised.exception.cmd)
+        self.assertIn("does not appear to be a git repository", raised.exception.stderr)
+        self.assertEqual(self.tip(), self.base)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_policy_rejection_is_not_hidden_when_main_also_advances(self):
+        advanced = self.prepare_advance()
+        self.git(self.writer, "push", "-q", "origin", "HEAD:refs/heads/prepared")
+        self.hook(self.origin, "pre-receive",
+                  "unset GIT_QUARANTINE_PATH GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES\n"
+                  f"git update-ref refs/heads/main {advanced} {self.base}\n"
+                  "echo 'publication policy denied' >&2\nexit 1")
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 1)
+        self.assertIn("[remote rejected] (pre-receive hook declined)", raised.exception.stdout)
+        self.assertIn("publication policy denied", raised.exception.stderr)
+        self.assertEqual(self.tip(), advanced)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_transport_failure_is_not_hidden_when_main_also_advances(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-commit", self.push_writer())
+        self.git(self.runner, "remote", "set-url", "--push", "origin", str(self.directory / "missing.git"))
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 128)
+        self.assertIn("does not appear to be a git repository", raised.exception.stderr)
+        self.assertEqual(self.tip(), advanced)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_cached_diff_error_is_not_treated_as_changes(self):
+        index = self.runner / ".git/index"
+        self.hook(self.runner, "post-index-change", f"printf 'corrupt index' > {shlex.quote(str(index))}")
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 128)
+        self.assertEqual(raised.exception.cmd[-3:], ["diff", "--cached", "--quiet"])
+        self.assertIn("index file", raised.exception.stderr)
+        self.assertEqual(self.tip(), self.base)
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
+
+    def test_generic_ref_failure_with_main_advance_is_not_an_old_value_race(self):
+        advanced = self.prepare_advance()
+        lock = self.origin / "refs/heads/main.lock"
+        self.hook(self.runner, "pre-push", self.push_writer() + f"\n: > {shlex.quote(str(lock))}")
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 1)
+        self.assertIn("[remote rejected] (failed to update ref)", raised.exception.stdout)
+        self.assertIn("File exists", raised.exception.stderr)
+        self.assertEqual(self.tip(), advanced)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_remote_confirmation_failure_keeps_race_and_read_diagnostics(self):
+        advanced = self.prepare_advance()
+        missing = self.directory / "missing.git"
+        self.hook(self.runner, "pre-push", self.push_writer() + "\n" + shlex.join(
+            ["git", "remote", "set-url", "origin", str(missing)]))
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 128)
+        self.assertIn("ls-remote", raised.exception.cmd)
+        self.assertIn("[remote rejected]", self.stdout.getvalue())
+        self.assertIn(f"is at {advanced} but expected {self.base}", self.stderr.getvalue())
+        self.assertIn("does not appear to be a git repository", self.stderr.getvalue())
+        self.assertEqual(self.tip(), advanced)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_non_fast_forward_without_a_replacement_tip_remains_failure(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-commit", self.push_writer())
+        self.hook(self.runner, "pre-push", shlex.join(
+            ["git", "--git-dir", str(self.origin), "update-ref", "refs/heads/main", self.base, advanced]))
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 1)
+        self.assertIn("[rejected] (fetch first)", raised.exception.stdout)
+        self.assertEqual(self.tip(), self.base)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_permission_denied_receiver_is_not_hidden_by_main_advance(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-commit", self.push_writer())
+        receiver = self.directory / "receive-denied"
+        receiver.write_text("#!/bin/sh\necho 'fatal: permission denied for CI publisher' >&2\nexit 1\n",
+                            encoding="utf-8")
+        receiver.chmod(0o755)
+        self.git(self.runner, "config", "remote.origin.receivepack", shlex.quote(str(receiver)))
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 128)
+        self.assertIn("permission denied for CI publisher", raised.exception.stderr)
+        self.assertEqual(self.tip(), advanced)
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_missing_main_during_race_confirmation_remains_failure(self):
+        advanced = self.prepare_advance()
+        self.hook(self.runner, "pre-commit", self.push_writer())
+        self.hook(self.runner, "pre-push", shlex.join(
+            ["git", "--git-dir", str(self.origin), "update-ref", "-d", "refs/heads/main", advanced]))
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update()
+        self.assertEqual(raised.exception.returncode, 2)
+        self.assertIn("ls-remote", raised.exception.cmd)
+        self.assertIn("[rejected] (fetch first)", self.stdout.getvalue())
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
     def test_head_must_equal_the_tested_event_sha(self):
         with self.assertRaisesRegex(ValueError, "HEAD.*tested"):
             self.run_update(sha="0" * 40)
