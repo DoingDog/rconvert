@@ -11,7 +11,7 @@ from bisect import bisect_right
 from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
                    _field_value, _fields, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
-                   _valid_regex, exclude_covered)
+                   _valid_name_list, _valid_regex, exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -248,7 +248,8 @@ def _logical_value(value: str, operator: str, supported: set[str],
             return None
         if not native_fields:
             payload = _field_value(payload)
-        if not payload.strip(' ' if kind in {'UID', 'DSCP'} else trim):
+        if (not _valid_name_list(payload) if kind in {'IN-NAME', 'IN-USER', 'REMATCH-NAME'}
+                else not payload.strip(' ' if kind in {'UID', 'DSCP'} else trim)):
             return None
         if kind in {'UID', 'DSCP'}:
             payload = payload.replace(',', '/')
