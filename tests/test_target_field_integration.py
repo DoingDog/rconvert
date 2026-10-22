@@ -8,7 +8,7 @@ from pathlib import Path
 
 from formats import FILES, render
 from generate import generate, publish
-from rules import Rule, normalize, parse, parse_whitelist
+from rules import Rule, normalize, parse
 
 
 class TargetFieldTests(unittest.TestCase):
@@ -193,6 +193,14 @@ class KeywordTargetContainmentTests(TargetFieldTests):
 
 
 class QxWildcardFieldsTests(TargetFieldTests):
+    def test_qx_wildcard_unbalanced_parentheses_are_target_unsupported(self):
+        for value in ('*123(*', '*123)*', '*123)4(*'):
+            rules = self.parsed('payload:\n  - ' + json.dumps('DOMAIN-WILDCARD,' + value))
+            outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
+            self.assertEqual(outputs['fin-qx.txt'], '# fields rules: 0\n')
+            self.assertEqual(diagnostics['fin-qx.txt:DOMAIN-WILDCARD'], 1)
+            self.assertEqual(self.yaml_body(outputs), ['DOMAIN-WILDCARD,' + value])
+
     def test_whitespace_marker_wildcard_is_not_truncated_by_qx(self):
         rules = self.parsed('payload:\n  - "DOMAIN-WILDCARD,*.123.test #tag"')
         outputs, diagnostics = render('fields', rules, purpose='proxy', no_resolve='keep')
@@ -211,6 +219,7 @@ class QxWildcardFieldsTests(TargetFieldTests):
         values = ['*.123.test' + whitespace + marker + 'tag' for whitespace in (' ', '\t', '\xa0')
                   for marker in ('#', ';', '//')]
         values += ['*.123.test' + '\\' * count for count in (1, 3)]
+        values += ['*.123.test(*', '*.123.test)*', '*.123.test)4(*']
         for value in values:
             rules = self.parsed('payload:\n  - ' + json.dumps('DOMAIN-WILDCARD,' + value))
             for purpose in ('block', 'direct', 'proxy'):
@@ -241,6 +250,7 @@ class QxWildcardFieldsTests(TargetFieldTests):
     def test_generated_qx_source_and_white_never_truncate_wildcards(self):
         values = ['*.123.test ' + marker + 'tag' for marker in ('#', ';', '//')]
         values += ['*.123.test' + '\\' * n for n in (1, 3)]
+        values += ['*.123.test(*', '*.123.test)*', '*.123.test)4(*']
         source = 'payload:\n' + ''.join('  - ' + json.dumps('DOMAIN-WILDCARD,' + value) + '\n' for value in values)
         source += 'DOMAIN,white.neighbor.test\n'
         for purpose in ('block', 'direct', 'proxy'):

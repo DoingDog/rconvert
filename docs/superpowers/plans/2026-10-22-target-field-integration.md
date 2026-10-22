@@ -44,7 +44,8 @@
 - 依赖 U3；将现有 QX guard 移到 `rules.py` 明确远离 `_valid_domain` 的位置，formats 直接 import，共享给输出／white。
 - 一个 native quoted wildcard 空白后 marker red -> 扩展现有 USER-AGENT 条件到 wildcard -> green。
 - 奇数尾反斜杠单独 red -> 最小 green（若同一已确认条件覆盖，记录该测试在 U3 基线的真实 red，不回退工作区）。
-- 核查三 marker、ASCII space／HTAB／NBSP、keyword literal 正例、USER-AGENT 偶数反斜杠、interface-option 精确计数、公共 allow／white、实际 source／white 同轮和 disk 依赖。一般 wildcard validator 与 DNS 联动留给指定联合任务。
+- 核查三 marker、ASCII space／HTAB／NBSP、keyword literal 正例、USER-AGENT 偶数反斜杠、interface-option 精确计数、公共 allow／white、实际 source／white 同轮和 disk 依赖。
+- 复审确认 `*123(*`／`*123)*`／`*123)4(*` 的 QX lexer 括号错误后，逐行为 red -> 最小共享 lexer guard -> green。一般 wildcard validator 与 DNS 联动留给指定联合任务。
 
 ### U5. Keyword 目标能力去重
 

@@ -46,7 +46,7 @@ Surge scalar、Surge logical 叶子和 QX 字段只输出其普通读取器可�
 
 ### R4. QX 字段边界
 
-`DOMAIN-WILDCARD` 与 USER-AGENT 共用已确认的空白后 marker、奇数尾反斜杠保护。保留 HOST-KEYWORD 专用字面读取，内部引号、内部空白、keyword marker／一至三个尾反斜杠以及 USER-AGENT 偶数尾反斜杠正例。没有 QX 引用编码依据时局部 unsupported。
+`DOMAIN-WILDCARD` 与 USER-AGENT 共用已确认的空白后 marker、奇数尾反斜杠保护。QX wildcard 的普通 lexer 遇到不平衡字面括号也会拒绝输出；复用该 lexer 判定目标 unsupported，不改变另一任务负责的 wildcard 形状验证。保留 HOST-KEYWORD 专用字面读取，内部引号、内部空白、keyword marker／一至三个尾反斜杠以及 USER-AGENT 偶数尾反斜杠正例。没有 QX 引用编码依据时局部 unsupported。
 
 共享 QX guard 放在 `rules.py` 的非 validator 区域，供 renderer／white／normalize 使用；`rules.py` 不 import `formats.py`，不复制两套能力条件。
 

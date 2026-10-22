@@ -1531,11 +1531,18 @@ def _mihomo_domain_field_supported(kind: str, value: str, source: str) -> bool:
 
 
 def _qx_field_supported(kind: str, value: str) -> bool:
-    return (kind in _QX_INTERFACE_KINDS and _ordinary_field_supported(kind, value) and ',' not in value and
+    if not (kind in _QX_INTERFACE_KINDS and _ordinary_field_supported(kind, value) and ',' not in value and
             value == value.strip() and not value.startswith(("'", '"')) and
             not (kind in {'USER-AGENT', 'DOMAIN-WILDCARD'} and (
                 (len(value) - len(value.rstrip('\\'))) % 2 or re.search(r'\s(?:[#;]|//)', value))) and
-            not (kind == 'DOMAIN-WILDCARD' and any(char in value for char in '[]')))
+            not (kind == 'DOMAIN-WILDCARD' and any(char in value for char in '[]'))):
+        return False
+    if kind == 'DOMAIN-WILDCARD':
+        try:
+            list(_delimiters('HOST-WILDCARD,' + value + ',LIST'))
+        except ValueError:
+            return False
+    return True
 
 
 def _has_literal_field(line: str, native_fields: bool = False) -> bool:
@@ -2020,11 +2027,12 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
             if any(short in keywords[group] and
                    (not ordinary or _ordinary_field_supported(kind, short)) and
                    (not qx or _qx_field_supported(kind, short)) and
-                   (not mihomo or _mihomo_domain_field_supported(kind, short, rule.domain_source)) and
-                   (rule.domain_source != 'mihomo' or value.endswith('.') or not short.endswith('.'))
+                   (not mihomo or _mihomo_domain_field_supported(kind, short, rule.domain_source))
                    for start in range(len(value))
                    for stop in range(start + 1, len(value) + 1)
-                   if stop - start < len(value) and (short := value[start:stop])):
+                   if stop - start < len(value) and
+                   (rule.domain_source != 'mihomo' or value.endswith('.') or value[stop - 1] != '.') and
+                   (short := value[start:stop])):
                 continue
         kept.append(rule)
     networks = {}

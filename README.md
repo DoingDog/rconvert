@@ -59,7 +59,7 @@ Mihomo provider 中的 `PROCESS-NAME` 把 `*`、`?` 视为字面字符，普通 
 
 Mihomo 的有效非 regex matcher 含字面逗号时，只跳过该目标的完整规则；外层 YAML 引号不提供内部字段转义。`IN-NAME`、`IN-USER`、`REMATCH-NAME` 保留原有 `/` 名称列表及各段 Go TrimSpace 语义，scalar 和 logical 均将 U+001C..U+001F 保留为非空名称。UID／DSCP 先按原有规则将逗号列表转换成 `/`；原生 regex 的重连字段与 logical 的结构尾字段保留。logical 的每个非 regex 叶子必须在所有前缀及结尾保持括号平衡，无法表达时跳过整条目标规则；平衡的字面括号和顶层合法单边括号保持支持。
 
-Quantumult X 字段以字面单／双引号开头，或首尾含会被读取器裁剪的空白时，仅跳过该 QX 投影；这包括 keyword、native wildcard 和 USER-AGENT。USER-AGENT 与 wildcard 的奇数个尾反斜杠、空白后紧接 `#`／`;`／`//` 同样按目标 unsupported。内部引号、内部空白、USER-AGENT 偶数尾反斜杠，以及 HOST-KEYWORD 已有字面反斜杠和 marker 读取保持。输出与白名单投影共用判定，不改写 matcher 或放宽生成依赖校验。
+Quantumult X 字段以字面单／双引号开头，或首尾含会被读取器裁剪的空白时，仅跳过该 QX 投影；这包括 keyword、native wildcard 和 USER-AGENT。USER-AGENT 与 wildcard 的奇数个尾反斜杠、空白后紧接 `#`／`;`／`//`，以及 QX wildcard 读取器无法保持平衡的字面括号，同样按目标 unsupported。内部引号、内部空白、USER-AGENT 偶数尾反斜杠，以及 HOST-KEYWORD 已有字面反斜杠和 marker 读取保持。输出与白名单投影共用判定，不改写 matcher 或放宽生成依赖校验。
 
 Surge／Quantumult X 的最终字段若会被普通读取器判为 HTML markup，或非 regex process、USER-AGENT、DEVICE-NAME 及 wildcard 字段含该读取器不接受的角括号，仅跳过对应目标；Surge logical 任一叶子不支持时跳过整条。`DOMAIN-KEYWORD,<123>` 和 URL-REGEX 的既有字面字段读取保持，native 原格式支持与来源 HTML 检查不变。
 
