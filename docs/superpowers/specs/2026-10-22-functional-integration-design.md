@@ -19,7 +19,7 @@
 
 生成路径和 HTTP 修改分别位于 `generate.py` 的路径／依赖部分与 fetch 部分；wildcard 修改位于 `rules.py` 和 `formats.py`；CI 使用上述真实接口，不复制生成逻辑。README 的计数、wildcard／DNS 和 Actions 段各有独立来源。公开签名、配置、六产物名称、static 输入和依赖保持。
 
-本轮新增文档仅为本规格及 `docs/superpowers/plans/2026-10-22-functional-integration.md`。合并范围包括组件已有文档、六个新测试模块、三个既有功能测试的小范围预期修改、workflow 结构测试，以及固定生产更新。只有公开接口测试复现的真实集成缺陷可追加最小修正及对应测试。
+本轮新增文档仅为本规格及 `docs/superpowers/plans/2026-10-22-functional-integration.md`。合并范围包括组件已有文档、五个新测试模块、三个既有功能测试的小范围预期修改、workflow 结构测试，以及固定生产更新。只有公开接口测试复现的真实集成缺陷可追加最小修正及对应测试。
 
 ## Requirements
 
