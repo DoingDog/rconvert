@@ -77,3 +77,7 @@ def update(root: Path, tested_sha: str) -> str:
             return "superseded"
         push.check_returncode()
     return "published"
+
+
+if __name__ == "__main__":
+    update(Path(__file__).resolve().parent, os.environ["GITHUB_SHA"])

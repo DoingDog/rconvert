@@ -2,7 +2,9 @@ import io
 import json
 import os
 import shlex
+import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -356,6 +358,37 @@ class CiPublicationTests(unittest.TestCase):
         self.assertIn("ls-remote", raised.exception.cmd)
         self.assertIn("[rejected] (fetch first)", self.stdout.getvalue())
         self.assertNotIn("superseded", self.stdout.getvalue())
+
+    def test_cli_requires_github_sha_and_uses_its_script_directory(self):
+        groups = json.loads((self.writer / "rulesets.json").read_text(encoding="utf-8"))
+        for group in groups:
+            group["sources"] = ["static/input.list"]
+        (self.writer / "rulesets.json").write_text(json.dumps(groups), encoding="utf-8")
+        (self.writer / "static/input.list").write_bytes(NEW)
+        self.git(self.writer, "add", "rulesets.json", "static/input.list")
+        self.git(self.writer, "commit", "-qm", "Use local fixture sources")
+        self.git(self.writer, "push", "-q", "origin", "HEAD:refs/heads/main")
+        event = self.tip()
+        self.git(self.runner, "fetch", "-q", "--depth", "1", "origin", event)
+        self.git(self.runner, "checkout", "-q", "--detach", event)
+        for name in ("update.py", "generate.py", "formats.py", "rules.py", "sources.py",
+                     "_unicode15.py", "update_readme_counts.py"):
+            shutil.copyfile(Path(__file__).resolve().parents[1] / name, self.runner / name)
+        command = [sys.executable, "-B", str(self.runner / "update.py")]
+        environment = {key: value for key, value in os.environ.items() if key != "GITHUB_SHA"}
+        missing = subprocess.run(command, cwd=self.directory, text=True, capture_output=True, env=environment)
+        self.assertNotEqual(missing.returncode, 0)
+        self.assertIn("GITHUB_SHA", missing.stderr)
+        self.assertEqual(self.tip(), event)
+        result = subprocess.run(command, cwd=self.directory, text=True, capture_output=True,
+                                env={**environment, "GITHUB_SHA": event})
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertNotEqual(self.tip(), event)
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), event)
+        self.assertIn("DOMAIN,new.example\n", self.git(self.origin, "show", "main:fixture-1/fin.txt").stdout)
+        committed = self.git(self.runner, "show", "--format=", "--name-only").stdout
+        self.assertNotIn(".py", committed)
+        self.assertNotIn("static/", committed)
 
     def test_head_must_equal_the_tested_event_sha(self):
         with self.assertRaisesRegex(ValueError, "HEAD.*tested"):
