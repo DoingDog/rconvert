@@ -13,6 +13,7 @@
 | R3 | native keyword `<tag>`／`<!--123-->`、部分非 regex process／USER-AGENT／DEVICE-NAME 的 `<123>` 被写入普通目标后遭公开读取器拒绝 | Surge scalar／logical、QX scalar、route whitelist |
 | R4 | native wildcard 的空白后 `#`／`;`／`//` 在 QX 回读被截短；奇数尾反斜杠吞入 `,LIST` | `_qx_field_supported`，QX output／whitelist |
 | R5 | 起始引号或边缘空白的短 keyword 在 QX unsupported，normalize 仍删除可表达的长 keyword | `rules.normalize`、render、allow、生成父组 |
+| R6 | wildcard pattern 输入支持合并后，普通字段 guard 仍整体拒绝 `<>`，使合法的 `*<123>*`、`*<123`、`*123>*` 从 Surge scalar／logical 和 QX scalar 丢失 | `_ordinary_field_supported`、QX guard、render、route whitelist、生成依赖 |
 
 ## 公共接口与调用方
 
@@ -55,6 +56,14 @@ Surge scalar、Surge logical 叶子和 QX 字段只输出其普通读取器可�
 仅当短 keyword 保留长 keyword 的已支持目标能力时，才允许包含归约。保持 native root-dot 资格条件；补齐 QX 起始引号／边缘空白等非单调限制，并考虑本次普通读取及 raw Mihomo 字段边界。共享已核实的字段判定，避免 normalize 与 renderer 分歧。字段能力使用实际保留的 `Rule.value`，包含比较仍使用既有来源比较值；Unicode lowercase 展开不能改变 HTML 或最终字段支持的判定。
 
 保持来源、allow、options、literal_process、native_fields 身份分组；ordinary／native／QX，反序、重复及一次性 iterable 均确定。`123`／`91238`、普通来源 `123.`／`123.45` 继续正确归约；不关闭全部 keyword 去重。block、公开 allow、预先 normalize 的 white 及生成父白名单都保留可表达长项。外部原始 whitelist 当前不自动 normalize，使用其真实流程作对照。
+
+### R6. 联合 wildcard 角括号字段
+
+联合修复以固定提交 `8e4aa6e108cb41248bc46ad6e6b86ecf982edf38` 为基准，正常合并并保留已完成组件和 QX policy-tail 内存修复的全部历史。普通 Surge／QX 和 native payload 接受的 `*<123>*`、`*<123`、`*123>*` 保留原值，normalize、Surge scalar／logical、QX scalar 和普通 route whitelist 不得因单独的角括号拒绝这些值。
+
+生产修改仅从 `_ordinary_field_supported` 移除 `DOMAIN-WILDCARD` 的整体角括号拒绝特例。`_PROCESS` 的非 regex 角括号限制、HTML markup 检查和 regex／literal keyword 例外保持。`*<tag>*` 等真实 markup 仍按现有普通读取器规则处理；不修改 wildcard validator、parser、DNS 支持集合或 QX class／marker／奇数尾反斜杠保护。普通角括号 literal 的 DNS 投影仍 unsupported，logical 不新增 QX／DNS／generated whitelist 能力。
+
+复用 `tests/test_target_field_integration.py`，修正把合法 numeric-angle wildcard 当作负例的断言。一个公开 scalar 测试先 red，最小实现后同测试 green，再覆盖三个 pattern 的普通 Surge／QX／native 来源、三种 purpose × 三种 no_resolve、真实 UTF-8 bytes 的 parse／parse_whitelist、logical 完整输出和顶层 skip 计数，以及目的／来源 IP 邻居。真实本地 source、white、同轮和非空 disk-only 依赖分别核查 matcher 保留及覆盖删除，发布前旧 bytes、全部六产物发布 bytes 和 static 输入保持。仅复用实际转换与读取，不测试内部 guard 或模拟转换结果。
 
 ## 验收与范围
 

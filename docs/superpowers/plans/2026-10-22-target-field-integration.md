@@ -2,7 +2,7 @@
 
 ## 目标与完成条件
 
-落实 [规格](../specs/2026-10-22-target-field-integration-design.md) R1-R5。保留 Rule 与已支持目标，仅跳过不能保真输出的投影；normalize 不删除其他目标仍需要的长 keyword。所有行为有公开接口 red -> green，真实 generate／publish／bytes 集成通过，完整 Linux suite 通过，授权文件全部提交且工作区干净。
+落实 [规格](../specs/2026-10-22-target-field-integration-design.md) R1-R6。保留 Rule 与已支持目标，仅跳过不能保真输出的投影；normalize 不删除其他目标仍需要的长 keyword。联合 wildcard 修复只移除已合法且可回读的角括号 pattern 的普通目标拒绝。所有行为有公开接口 red -> green，真实 generate／publish／bytes 集成通过，完整 Linux suite 通过，授权文件全部提交且工作区干净。
 
 ## 基线与执行边界
 
@@ -62,6 +62,18 @@
 - 所有新增测试、keyword／routing／YAML／formats／rules／generate 定向回归通过。
 - 提交后的 HEAD 用 `git archive`，标准库 tarfile 解压到已有 Debian WSL Linux `/tmp` 的新临时目录，再用 `python3 -I -B` 执行完整 `unittest discover -s tests -v`；不修改 skip／timeout，不运行生产 generate 或客户端。
 - 检查 `git diff --check`、修改范围、输入／产物 bytes、工作区干净。修正任何本任务问题后重新复审和全量验证。
+
+### U7. 联合 wildcard 角括号字段
+
+- 当前独立工作目录 `.claude/worktrees/wf_6168cb55-586-1`，分支 `worktree-wf_6168cb55-586-1`。初始 clean HEAD `4c1f29d55e47f939b96cf87a5284f947938191ed`，正常合并固定基准 `8e4aa6e108cb41248bc46ad6e6b86ecf982edf38`；所有输入 head 必须为最终提交祖先。只修改本 worktree，不读写其他 owner 的工作文件或验证输出。
+- 依赖已完成的 U1-U6 和 wildcard pattern 输入修复。读取固定基准 diff、共享 guard 的全部调用、实际 parse／logical／white、wildcard／DNS 规格及测试；核查 README 仅在实际支持说明错误时精确修改。
+- 先修正既有 `*<123>*` scalar 负例为公开接口正例并运行 red，确认失败是 header-only 和 unsupported。仅删除 `rules.py` 普通字段 guard 的 `DOMAIN-WILDCARD` 整体角括号特例，再执行相同测试 green；不修改 HTML 或 process 判定。
+- 扩展既有 target-field 测试覆盖 `*<123>*`／`*<123`／`*123>*` 的普通 Surge／QX／native scalar、normalize、三种 purpose × 三种 no_resolve、真实 UTF-8 bytes 的 parse／parse_whitelist。保留真实 HTML、非 regex process／USER-AGENT 的拒绝和 regex／literal keyword 例外；修正仅由旧误判产生的矩阵及混合依赖预期，不增加重复的大矩阵。
+- logical 使用 Surge 普通及 native 的 AND／OR／NOT／嵌套，检查 NETWORK -> PROTOCOL、目的 IP 的 no-resolve 和来源 IP 方向、Surge 完整／拆分文本及实际 bytes 回读；QX／DNS／DOMAIN-SET 整条 skip 仍按顶层计数，generated logical white 继续严格拒绝。
+- source／white 集成使用真实临时 root 和非空 scalar 依赖，覆盖外部 white、公开 allow、生成父组的同轮／disk-only 消费，检查保留 matcher 与正确删除相同 matcher 的不同结果。静态输入及发布前旧六文件不变，发布后全部 bytes 等于返回文本；fetch 回调只在意外网络访问时失败。
+- 运行 target-field、wildcard readback、ordinary／native DNS、routing、keyword、rules、formats 和 generate 相关定向测试；已有 QX class／marker／奇数尾反斜杠、literal 例外、DNS 未证明角括号 literal 和严格空依赖检查复用既有测试。
+- 按 R6 核查调用方、规格和简化，修正至相关测试通过后英文提交。最终精确提交通过 `git archive` 解压到 Linux `/tmp` 的全新目录，以 `python3 -I -B` 显式加入可信 root 执行完整 suite；不在 `/mnt/c` 运行重型测试，不改 timeout／skip／内存阈值。全部受控文件的 Git blob、mode、SHA-256 在测试前后核对，保存日志和 manifest 于本 worktree 已忽略的 `.tmp/wildcard-angle-verification`。
+- 核查 `git diff --check`、提交内容及 clean 状态，生产 42 文件、配置和 static 相对固定基准不变。清理本次 Linux snapshot，保留证据及本 worktree 供外层合并与清理；不 push、不合并 main、不运行客户端、不抓取新上游、不开展网络安全工作。
 
 ## 提交与证据
 
