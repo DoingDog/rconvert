@@ -45,7 +45,7 @@ class CiPublicationTests(unittest.TestCase):
         (seed / "source.py").write_text("original = True\n", encoding="utf-8")
         (seed / ".gitignore").write_text(".tmp/\n", encoding="utf-8")
         with patch("formats.datetime") as clock, redirect_stderr(io.StringIO()):
-            clock.now.return_value = START
+            clock.now.side_effect = lambda zone: START.astimezone(zone)
             publish(generate(seed, lambda url: OLD), root=seed)
         update_counts(seed)
         self.git(seed, "add", ".")
@@ -88,9 +88,38 @@ class CiPublicationTests(unittest.TestCase):
 
     def run_update(self, *, root=None, sha=None, data=NEW, moment=LATER, fetch=None):
         with patch("formats.datetime") as clock, patch("update.fetch_https", side_effect=fetch or (lambda url: data)):
-            clock.now.return_value = moment
+            clock.now.side_effect = lambda zone: moment.astimezone(zone)
             with redirect_stdout(self.stdout), redirect_stderr(self.stderr):
                 return ci.update(root or self.runner, sha or self.base)
+
+    def test_publishes_real_generated_files_and_readme_with_bot_identity(self):
+        self.assertEqual(self.run_update(), "published")
+        published = self.tip()
+        self.assertNotEqual(published, self.base)
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD^").stdout.strip(), self.base)
+        self.assertEqual(self.git(self.runner, "show", "-s", "--format=%an%n%ae%n%s").stdout,
+                         "github-actions[bot]\n"
+                         "41898282+github-actions[bot]@users.noreply.github.com\n"
+                         "Update generated rules\n")
+        paths = set(self.git(self.runner, "show", "--format=", "--name-only", "HEAD").stdout.splitlines())
+        expected = {f"fixture-{index}/{name}" for index in range(7) for name in
+                    ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")}
+        self.assertEqual(paths, expected | {"README.md"})
+        self.assertIn("DOMAIN,new.example\n", self.git(
+            self.origin, "show", "main:fixture-1/fin.txt").stdout)
+        self.assertIn("! Version: 202610220801\n", self.git(
+            self.origin, "show", "main:fixture-1/fin-adb.txt").stdout)
+        readme = self.git(self.origin, "show", "main:README.md").stdout
+        self.assertIn("| `fin.txt` | 4 | 4 | 4 | 4 | 4 | 4 | 4 |", readme)
+        self.assertTrue(readme.startswith("prefix\n<!-- RULE_COUNTS_START -->\n"))
+        self.assertTrue(readme.endswith("<!-- RULE_COUNTS_END -->\nsuffix\n"))
+        self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
+
+    def test_unchanged_generation_creates_no_commit(self):
+        self.assertEqual(self.run_update(data=OLD, moment=START), "unchanged")
+        self.assertEqual(self.tip(), self.base)
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
+        self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
 
     def test_head_must_equal_the_tested_event_sha(self):
         with self.assertRaisesRegex(ValueError, "HEAD.*tested"):
