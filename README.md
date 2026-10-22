@@ -84,6 +84,8 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 
 白名单使用域名精确、后缀、keyword、wildcard、`DOMAIN-REGEX` 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。raw `DOMAIN-REGEX` 保留 matcher 原文完全相同的覆盖；另对已有 raw paired 严格模板保留有限的完整包含关系，不推断任意 regex 等价。raw paired suffix white 不能删除仍匹配 Kelvin sign `K` 的 canonical regex，来源覆盖或单个 Host 命中均不能代替实际目标的完整包含证明。
 
+keyword 包含去重同时保留各目标的字段能力：短项因起始引号、边缘空白、普通 markup 读取限制或 native 末尾根点而不能替代长项时，长项继续保留；正常可证明的包含归约和来源／allow／options 身份分组不变。
+
 过滤分别核查来源匹配范围和各路由目标实际生成的 matcher。来源层保留 Mihomo native 与 QX 未证明等价的 Unicode、大小写、末尾根点及 byte／字符匹配差别；Mihomo 路由层按实际输出的原生域名 matcher 和已证明的覆盖关系过滤。其他转换只使用匹配范围不变或属于原白名单已证明子集的目标投影。输入中的 allow 规则按 `no_resolve` 处理及移除受支持接口参数后的实际 matcher 参与路由白名单，外部白名单仍遵守原 options 限制。
 
 对于 `purpose: block`，`fin-adb.txt` 还输出白名单及可表达的 allow 规则的 `@@` 放行例外，普通 Surge 精确域名采用 `@@|safe.example.com|`；路由目标覆盖过滤保留合法的 DNS 拦截与例外。DNS 的 block、allow 和外部白名单使用相同的 case／root 安全判定：native exact／suffix 不输出 DNS，keyword／wildcard 只保留已证明可表达的子集，native `*` 仍支持。所有 raw `DOMAIN-REGEX` 均须取得完整结构证书，未知子结构或不可恢复的大小写／根点区别只计该目标 unsupported。来源字符类中的 `\-` 被用于当前 range 归约的起点或终点时，仅跳过该 DNS 投影，block、allow 和外部白名单共用此判定；独立字面 hyphen、已支持的普通范围及数值 `\x{2D}` 保持原有语义。

@@ -1525,6 +1525,11 @@ def _ordinary_field_supported(kind: str, value: str) -> bool:
                               not (kind in _PROCESS | {'DOMAIN-WILDCARD'} and any(char in value for char in '<>')))
 
 
+def _mihomo_domain_field_supported(kind: str, value: str, source: str) -> bool:
+    return (kind not in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} or
+            source == 'surge' and kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} or value == value.strip(' '))
+
+
 def _qx_field_supported(kind: str, value: str) -> bool:
     return (kind in _QX_INTERFACE_KINDS and _ordinary_field_supported(kind, value) and ',' not in value and
             value == value.strip() and not value.startswith(("'", '"')) and
@@ -2007,13 +2012,20 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 candidate = candidate.partition('.')[2]
             if candidate:
                 continue
-        # 末尾点 native keyword 不能覆盖其他目标仍可表达的长 keyword。
-        if kind == 'DOMAIN-KEYWORD' and any(value[start:stop] in keywords[group]
-                                           for start in range(len(value))
-                                           for stop in range(start + 1, len(value) + 1)
-                                           if stop - start < len(value) and
-                                           (rule.domain_source != 'mihomo' or value.endswith('.') or value[stop - 1] != '.')):
-            continue
+        # 短 keyword 必须保留长 keyword 在其他目标已有的投影能力。
+        if kind == 'DOMAIN-KEYWORD':
+            ordinary = _ordinary_field_supported(kind, value)
+            qx = _qx_field_supported(kind, value)
+            mihomo = _mihomo_domain_field_supported(kind, value, rule.domain_source)
+            if any(short in keywords[group] and
+                   (not ordinary or _ordinary_field_supported(kind, short)) and
+                   (not qx or _qx_field_supported(kind, short)) and
+                   (not mihomo or _mihomo_domain_field_supported(kind, short, rule.domain_source)) and
+                   (rule.domain_source != 'mihomo' or value.endswith('.') or not short.endswith('.'))
+                   for start in range(len(value))
+                   for stop in range(start + 1, len(value) + 1)
+                   if stop - start < len(value) and (short := value[start:stop])):
+                continue
         kept.append(rule)
     networks = {}
     others = []

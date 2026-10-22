@@ -11,7 +11,8 @@ from bisect import bisect_right
 from _unicode15 import _GO15_LOWER, _GO15_ND, _GO15_NONLETTER_WORD
 from rules import (Rule, NO_RESOLVE_TYPES, _REGEX, _QX_INTERFACE_OPTIONS, _apply_no_resolve, _capture_number, _delimiters,
                    _field_value, _fields, _has_parent, _hex_codepoint, _logical_children, _REGEXP2_WORD_BOUNDARIES, _valid_deep_regex, _valid_domain,
-                   _ordinary_field_supported, _qx_field_supported, _valid_name_list, _valid_regex, exclude_covered)
+                   _mihomo_domain_field_supported, _ordinary_field_supported, _qx_field_supported,
+                   _valid_name_list, _valid_regex, exclude_covered)
 
 
 FILES = ("fin.txt", "fin-qx.txt", "fin.yaml", "fin-adb.txt", "fin-surge.txt", "fin-surge-ds.txt")
@@ -66,8 +67,7 @@ def _surge_value(value: str, *, source_regex: bool = False, quote_parentheses: b
 
 
 def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tuple[str, str | None]:
-    if (supported is MIHOMO_TYPES and kind in DOMAIN_SET_TYPES | {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}
-            and not (source == 'surge' and kind not in DOMAIN_SET_TYPES) and value != value.strip(' ')):
+    if supported is MIHOMO_TYPES and not _mihomo_domain_field_supported(kind, value, source):
         return kind, None
     if kind in DOMAIN_SET_TYPES and source == 'mihomo' and supported is SURGE_TYPES:
         return kind, None
