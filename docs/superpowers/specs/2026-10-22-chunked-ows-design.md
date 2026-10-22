@@ -40,7 +40,7 @@
 
 ## 文件与调用影响
 
-仅修改 `generate.py` 的 `fetch_https` 必要行，新增 `tests/test_chunked_ows_regressions.py`、本规格和 `plans/2026-10-22-chunked-ows.md`。不改共享 imports、后续路径／发布／依赖函数、rules、formats、既有测试、README、生产输入、配置、exports 或 Actions。现有调用方签名与返回值保持。
+仅修改 `generate.py` 的 `fetch_https` 必要行，新增 `tests/test_chunked_ows_regressions.py`、本规格和 `docs/superpowers/plans/2026-10-22-chunked-ows.md`。不改共享 imports、后续路径／发布／依赖函数、rules、formats、既有测试、README、生产输入、配置、exports 或 Actions。现有调用方签名与返回值保持。
 
 永久 fixture 使用 OS 临时目录；Linux 使用 `/tmp`。对照只固定时间这一系统边界，使 ADB header 可比较。真实 TLS 的脚本、证书及私钥仅供本次验证，结束时清理。
 
