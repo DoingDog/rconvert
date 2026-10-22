@@ -392,10 +392,13 @@ def _dns_body(rule: Rule, budget: int) -> str | None:
     if rule.kind == "DOMAIN-KEYWORD":
         return _dns_join(('/^.*', _dns_literal(rule.value, budget), '.*$/'), budget)
     if rule.kind == "DOMAIN-WILDCARD":
-        if rule.domain_source != "surge" and any(char in rule.value for char in "[]"):
+        # 普通来源只保留既有 ASCII literal；其他字符的 presentation 等价性未证明。
+        if (len(rule.value) + 4 > budget or
+                re.search(r'[^a-zA-Z0-9_.?*\[\]-]', rule.value) or
+                rule.domain_source != "surge" and any(char in rule.value for char in "[]")):
             return None
         pattern = _wildcard_regex(rule.value)
-        return f"/{pattern}/" if pattern is not None else None
+        return _dns_join(('/', pattern, '/'), budget)
     if rule.kind == "DOMAIN-REGEX":
         return _dns_regex(rule.value, budget)
     return None
