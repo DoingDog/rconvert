@@ -159,7 +159,7 @@ flowchart TB
 
 测试通过公开接口观察行为，expected 使用规格中已知正确的字面文本或 Rule，不复制内部转换生成 expected，不调用私有函数作为测试入口。
 
-Linux 执行器使用已有 Debian WSL 的 `python3 -I -B`，显式加入当前 worktree 后由 unittest discovery 执行；临时 fixture 使用 Linux `/tmp`。单项先运行所属新测试类，相关回归运行 formats、rules、generate、YAML／projection 测试，最终执行 `unittest discover -s tests -v` 的等价公开 discover。Windows Python 仅用于必要的辅助检查，不把 Windows skip 计作验收。
+Linux 执行器使用已有 Debian WSL 的 `python3 -I -B`，显式加入目标代码目录后由 unittest discovery 执行。单项先运行所属新测试类，相关回归运行 formats、rules、generate、YAML／projection 测试。最终完整 suite 使用当前已提交 HEAD 的 `git archive`，通过标准库 tarfile 解压到 Linux `/tmp` 的新临时目录，再执行 `unittest discover -s tests -v` 的等价公开 discover；这样既有 `TemporaryDirectory(dir=ROOT)` 测试也全部在 Linux `/tmp` 创建 fixture。snapshot 包含全部受控代码、测试、配置、static 和生产文件，不复制其他 worktree 的状态，不修改测试 timeout 或 skip。Windows Python 仅用于必要的辅助检查，不把 Windows skip 计作验收。
 
 每次 red 保留真实失败输出；green 必须包括同一测试和相邻受影响回归。每项提交前检查规格、diff 范围、whitespace、未使用内容及公共接口兼容。
 
