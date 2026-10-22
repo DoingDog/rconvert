@@ -40,6 +40,8 @@ def update(root: Path, tested_sha: str) -> str:
         raise ValueError("Refusing to publish with existing staged changes")
     publish(generate(root, fetch_https), root=root)
     update_counts(root)
+    if _superseded(root, tested_sha):
+        return "superseded"
     paths = [str(Path(group["name"]) / name) for group in load_config(root) for name in FILES]
     _git(root, "add", "--", *paths, "README.md")
     diff = _git(root, "diff", "--cached", "--quiet", check=False)

@@ -159,6 +159,33 @@ class CiPublicationTests(unittest.TestCase):
         self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
         self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
 
+    def test_source_advance_during_generation_skips_staging_and_commit(self):
+        def fetch(url):
+            self.advance()
+            return NEW
+
+        self.assertEqual(self.run_update(fetch=fetch), "superseded")
+        self.assertNotEqual(self.tip(), self.base)
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        self.assertIn(b"DOMAIN,new.example\n", (self.runner / "fixture-1/fin.txt").read_bytes())
+        self.assertEqual(self.git(self.origin, "show", "main:source.py").stdout, "advanced = True\n")
+        self.assertNotIn("new.example", self.git(self.origin, "show", "main:fixture-1/fin.txt").stdout)
+
+    def test_second_remote_read_failure_stops_before_staging(self):
+        def fetch(url):
+            self.git(self.runner, "remote", "set-url", "origin", str(self.directory / "missing.git"))
+            return NEW
+
+        with self.assertRaises(subprocess.CalledProcessError) as raised:
+            self.run_update(fetch=fetch)
+        self.assertEqual(raised.exception.returncode, 128)
+        self.assertIn("ls-remote", raised.exception.cmd)
+        self.assertEqual(self.tip(), self.base)
+        self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
+        self.assertEqual(self.git(self.runner, "diff", "--cached", "--name-only").stdout, "")
+        self.assertNotIn("superseded", self.stdout.getvalue())
+
     def test_head_must_equal_the_tested_event_sha(self):
         with self.assertRaisesRegex(ValueError, "HEAD.*tested"):
             self.run_update(sha="0" * 40)
