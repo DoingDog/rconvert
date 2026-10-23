@@ -41,7 +41,7 @@
 | A，CIDR | `rules.py` 的 `exclude_covered`；新增 `tests/test_cidr_whitelist_union.py` | 不修改其他 helper、formats、旧测试或 README |
 | B，ASN | `rules.py` 的 `_ordinary_field_supported`；`formats.py` 的 Surge noresolve guard；新增 `tests/test_asn_projection_regressions.py`；三份旧测试的准确 padded 投影预期 | 旧测试为 `test_functional_audit_rules.py`、`test_generate.py`、`test_functional_audit_coverage.py`，不改 parser 或生成依赖校验 |
 | C，DNS | `formats.py` 的 `_dns_regex`；新增 `tests/test_dns_alternation_budget.py` | 仅调用内三处 cache、两个 tuple caller 和分支 reset，不修改巨型旧 DNS 测试或 render |
-| D，POSIX-looking class | `rules.py` 的 `_delimiters`／`_valid_regex` class 扫描、capture slot 收集与引用校验及确需的共享短 helper；`tests/test_regexp2_posix_class_regressions.py` | 在原 owner worktree 完成捕获预扫描修正及 Python 3.11 兼容的 deep 调用观察；可复用 `_regexp2_word_char`，不改 `_valid_deep_regex`、DNS 或其他 owner 的位置 |
+| D，POSIX-looking class | `rules.py` 的 `_delimiters`／`_valid_regex` class 扫描、capture slot 收集与引用校验及确需的共享短 helper；`tests/test_regexp2_posix_class_regressions.py` | 在原 owner worktree 完成捕获预扫描修正及 Python 3.11 兼容的 deep 调用观察；仅完整 prefix 矩阵的 child 使用 `cProfile.Profile(builtins=False)`，保留默认 `subcalls`；可复用 `_regexp2_word_char`，不改 `_valid_deep_regex`、DNS 或其他 owner 的位置 |
 | E，hosts | `rules.py` 的 `_source_records`；增补 `tests/test_hosts_comment_regressions.py` | 不修改通用 lexer、其他测试或 hostname validator |
 | 文档 owner | 两份规格计划、README 两处必要行为说明 | 先完成共同文档 commit，五个修复 owner 不改文档 |
 | 集成 owner／主会话 | 合并已完成提交、集成验证及发布证据 | 不代替 owner 完成未完成修复；生产发布沿用 update 的路径范围 |
@@ -153,14 +153,14 @@
 
 **回归场景：**
 
-1. 三种 regexp2 类型、普通裸／单／双引号字段、native payload／rules 的 plain／single／double scalar，depth 0／600／1,000，邻行、warning 行号及实际 YAML matcher 保持。深层子进程使用 Python 3.11 已有的标准库 `cProfile.Profile`，断言其 stats 中存在 `entry.code is rules._valid_deep_regex.__code__` 且 `entry.callcount > 0`，确认真实进入原 deep validator。600／1,000 层各保留原 `timeout=8`、recursionlimit=1000、int_max_str_digits=4300 及前后限制检查；保留声明最低版本和 CI，不增加 skip、fallback 或依赖，不移除调用观察。
+1. 三种 regexp2 类型、普通裸／单／双引号字段、native payload／rules 的 plain／single／double scalar，depth 0／600／1,000，邻行、warning 行号及实际 YAML matcher 保持。深层子进程使用 Python 3.11 已有的标准库 `cProfile.Profile`，断言其 stats 中存在 `entry.code is rules._valid_deep_regex.__code__` 且 `entry.callcount > 0`，确认真实进入原 deep validator。仅 `test_deep_prefix_complete_scalar_forms_render_and_yaml_roundtrip` 的 child 使用 `cProfile.Profile(builtins=False)`，保留 `subcalls` 默认值、每层全部 189 个 scalar／render／YAML 回读组合及原断言，不要求 builtin profile 条目；同文件其他 `Profile()` 保持原样。600／1,000 层各保留原 `timeout=8`、recursionlimit=1000、int_max_str_digits=4300 及前后限制检查；保留声明最低版本和 CI，不增加 skip、fallback 或依赖，不移除调用观察。
 2. 完整 token 含已知／未知／空／数字开头／Unicode word 名、可选 `^`；不按名字展开或新增拒绝。不完整、escaped `[`、非 word 名恢复逐字符处理，内层 `]` 按实际词法决定是否关闭 class。
 3. subtraction 及必须最后出现、pending range、escaped hyphen、首个 literal `]`、外层 negation。至少保护 `^[a-[:alpha:]]$`、`^[a-\-[:alpha:]()]\1$` 及 `^[[:alpha:]-[x]y]$` 的固定真值，不能只用 `class_hyphen` 判断 pending range。新增候选须按预扫描 slot 表拒绝；删除该候选 `(?n)` 后的对照及 `^[a-\-[:alpha:]]$` 均保留，完整扫描继续正确消费 subtraction、首个 literal `]` 和 POSIX-looking token。禁止全拒 subtraction 或按候选文本特征硬编码拒绝。
 4. capture 编号、named backreference、类内数字 escape／量词字面内容、x-mode 的类内 `#` 及类外非法 `\q`、原 anchor 量词和 conditional 保护。普通 logical 沿用现有必要括号编码，native logical 用 balanced `^[[:alpha:](][)]$` 覆盖 AND／OR／NOT；未编码单边括号限制保留，非法叶子整条拒绝。
 5. 明确 `_delimiters` 只对 `DOMAIN-REGEX`／`PROCESS-NAME-REGEX`／`PROCESS-PATH-REGEX` 启用该扫描，合法 `URL-REGEX,^[[:alpha:]()$` 及其 Python validator 不变；不增加其他目标或 PROCESS white 支持，DNS 对 POSIX-looking class 继续 unsupported。
 6. 新候选及合法对照均覆盖公开 scalar／native／ordinary quote、logical、parse_whitelist、直接 Rule render、真实 generate／publish、同轮与非空 disk YAML source／white；核对合法保留、非法拒绝、健康邻居及旧文件保护。用标准 `json.loads` 解码实际 `fin.yaml` 标量并逐字比较原 matcher，再用公开 parse 回读，保留 roundtrip 断言。logical 仍按第 4 项的既有编码／平衡边界测试；两种 PROCESS regex 的 white 按既有不支持边界检查，不将其当作 `DOMAIN-REGEX` white。
 
-**验证与提交：** 新测试、既有 class／subtraction／capture／named-reference／x-mode／deep／URL／regexp2 anchor 及 logical 回归通过，检查原 matcher 未被 probe 覆盖。`cProfile.Profile` 的既有 Linux Python 3.13.5 复审实验在 600／1,000 层分别耗时 2.184／2.840 秒；D 仍须实际验证最终实现的八秒子进程及调用观察，并记录实际运行版本，未实际运行 Python 3.11 不得声称已验证该版本。D 在原 owner worktree 逐根因完成捕获预扫描修正、全部边界、自审修正与规格／功能／简化复审，再运行新 exact tree 的完整 Linux suite，创建英文新 commit，核对 commit tree 与受测 tree 相同并返回 clean SHA／tree／日志／manifest；不 amend、不跳过 hooks 或签名。主会话独立复审确认有效问题均已修正后才合并。
+**验证与提交：** 新测试、既有 class／subtraction／capture／named-reference／x-mode／deep／URL／regexp2 anchor 及 logical 回归通过，检查原 matcher 未被 probe 覆盖。完整 prefix 矩阵的 observer 调整须在共同规格／计划提交后实施：修改前在可信 exact Linux snapshot 运行原完整父方法并保留真实结果，唯一测试修改为该 child 的 `Profile(builtins=False)` 参数，逐字及 AST 核对其他调用、矩阵、断言、原八秒和 1000／4300 限制均未改变。实际通过完整父方法的 600／1,000 层及预先固定的三次串行 1,000 层 child；增强调用数量检查仅放独立证据 runner 的 profile 退出后，受控测试不加脚手架。D 必须记录实际运行版本，未实际运行 Python 3.11 不得声称已验证该版本。D 在原 owner worktree 逐根因完成捕获预扫描修正、全部边界、自审修正与规格／功能／简化复审，再运行新 exact tree 的完整 Linux suite，创建英文新 commit，核对 commit tree 与受测 tree 相同并返回 clean SHA／tree／日志／manifest；不 amend、不跳过 hooks 或签名。主会话独立复审确认有效问题均已修正后才合并。
 
 ### U3.3：hosts 逐 alias 恢复
 
