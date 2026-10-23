@@ -747,6 +747,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
         position = bisect_right(ranges, (point, 0x110000)) - 1
         return position >= 0 and point <= ranges[position][1]
 
+    @cache
     def lower_preimage(ranges):
         removed, added = [], []
         for start, end, stride, delta in _GO15_LOWER:
@@ -826,6 +827,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
                      utf8_interval(bytes([128]) * width, last[1:]))
         return parts
 
+    @cache
     def dns_runes(ranges):
         # D(h) 只含 ASCII presentation；该原子表示空语言，仍可被量词零次跳过。
         if not ranges:
@@ -876,7 +878,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
         nodes = dns_groups[-1][0]
         # 超预算正文只保留证书，完整 source 扫描后仍可能归约为可空或 universal matcher。
         if dns_sizes[-1] + size > budget and nodes:
-            prefix = dns_concat(nodes)
+            prefix = dns_concat(tuple(nodes))
             if prefix is None:
                 return False
             nodes[:] = [prefix]
@@ -895,6 +897,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
     def dns_atom(body, *, dot=False, universal=False, runes=None):
         return body, False, dot, universal, False, False, ('runes', runes, False) if runes is not None else None
 
+    @cache
     def dns_concat(nodes):
         nodes = [part for part in nodes if part != empty]
         if not nodes:
@@ -938,7 +941,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
 
     def dns_group(group):
         nodes, branches = group
-        part = dns_concat(nodes)
+        part = dns_concat(tuple(nodes))
         if part is None:
             return None
         if not branches:
@@ -1015,6 +1018,7 @@ def _dns_regex(value: str, budget: int, *, encoded: bool = False) -> str | None:
                         return None
                     dns_groups[-1][1].append(body)
                     dns_groups[-1][0].clear()
+                    dns_sizes[-1] = 0
                 elif char in '*+?':
                     if index != repeat_end and not dns_repeat(0 if char in '*?' else 1, 1 if char == '?' else None):
                         return None
