@@ -1456,7 +1456,8 @@ def render(group: str, rules: Iterable[Rule], *, purpose: str, no_resolve: str,
                     emitted.add("fin-adb.txt")
         elif rule.options:
             if rule.options == ("no-resolve",) and kind in NO_RESOLVE_TYPES:
-                if kind in SURGE_TYPES and (kind != 'GEOIP' or _valid_simple(kind, value)):
+                if (kind in SURGE_TYPES and (kind != 'GEOIP' or _valid_simple(kind, value)) and
+                        _ordinary_field_supported(kind, value)):
                     surge_kind = "IP-CIDR6" if kind == "IP-CIDR" and ":" in value else kind
                     matcher = Rule(surge_kind, value, (), False, rule.literal_process, rule.native_fields, 'surge')
                     for name in ("fin.txt", "fin-surge.txt"):

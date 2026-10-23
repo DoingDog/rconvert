@@ -2523,12 +2523,12 @@ class DecimalASNAuditTests(unittest.TestCase):
                             dns_body = (['@@||allow.example.org^', '0.0.0.0 neighbor.example.org'] if group == 'parent' else
                                         []) if purpose == 'block' else []
                             expected = {'fin.yaml': f'# {group} rules: 7\npayload:\n' + ''.join('  - ' + json.dumps(line) + '\n' for line in yaml_body),
-                                        'fin.txt': f'# {group} rules: {3 + int(source_neighbor)}\n' +
+                                        'fin.txt': f'# {group} rules: {1 + int(source_neighbor)}\n' +
                                                    ('DOMAIN,neighbor.example.org\n' if source_neighbor else '') +
-                                                   'IP-ASN,00' + flag + '\nIP-ASN,13335' + flag + '\nIP-ASN,0013335' + flag + '\n',
-                                        'fin-qx.txt': f'# {group} rules: 4\nHOST,neighbor.example.org,LIST\n' +
-                                                      'IP-ASN,00,LIST' + flag + '\nIP-ASN,13335,LIST' + flag + '\nIP-ASN,0013335,LIST' + flag + '\n',
-                                        'fin-surge.txt': f'# {group} rules: 3\nIP-ASN,00' + flag + '\nIP-ASN,13335' + flag + '\nIP-ASN,0013335' + flag + '\n',
+                                                   'IP-ASN,13335' + flag + '\n',
+                                        'fin-qx.txt': f'# {group} rules: 2\nHOST,neighbor.example.org,LIST\n' +
+                                                      'IP-ASN,13335,LIST' + flag + '\n',
+                                        'fin-surge.txt': f'# {group} rules: 1\nIP-ASN,13335' + flag + '\n',
                                         'fin-surge-ds.txt': f'# {group} rules: {int(source_neighbor)}\n' + ('neighbor.example.org\n' if source_neighbor else ''),
                                         'fin-adb.txt': '[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
                                                        '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n' +
@@ -2543,6 +2543,8 @@ class DecimalASNAuditTests(unittest.TestCase):
                                               for rule in restored], yaml_body)
                             self.assertIn(f'{group} fin-adb.txt:IP-ASN: 3', diagnostic.getvalue())
                             self.assertIn(f'{group} fin-surge-ds.txt:IP-ASN: 3', diagnostic.getvalue())
+                            for name in ('fin.txt', 'fin-surge.txt', 'fin-qx.txt'):
+                                self.assertIn(f'{group} {name}:IP-ASN: 2', diagnostic.getvalue())
                             self.assertFalse(any(line.startswith(group + ' fin.yaml:IP-ASN') for line in diagnostic.getvalue().splitlines()))
                         self.assertEqual({path: path.read_bytes() for path in old}, old)
                         publish(outputs, root=root)
