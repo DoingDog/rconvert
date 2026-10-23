@@ -129,9 +129,9 @@
 
 ### U3.2：regexp2 POSIX-looking class 边界
 
-**依赖与 owner：** U0 及共同文档提交，owner D；依据规格 R4，与其他四项并行。本轮捕获预扫描边界修正在更新后的共同文档合并后，由 D 在原 owner worktree 连续完成；主会话不代接编码。
+**依赖与 owner：** U0 及共同文档提交，owner D；依据规格 R4，与其他四项并行。D 的 options 前缀状态与 comment 清理已提交为 `b7a5bd56fc9309ff53e67911a29f258f5e520748`。本轮新增数字越界错误传播修正以该提交为产品起点；主会话核对已完成提交、合并更新后的共同文档并协调 D 在原 owner worktree 连续实施，主会话不代接编码。
 
-**修改与复用：** 产品修改限于 `_delimiters`／`_valid_regex` 的 class 扫描、capture slot 收集与引用校验及确需的共享短 helper，两个 scanner 可复用 `_regexp2_word_char`。按固定 regexp2 v1.12.0／`3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` `syntax/parser.go:1538-1590` 的非 RE2、非 pending-range 消费规则识别完整 token；不复用 numeric 模式不同的 `_scan_capture_name`。capture slot 按 `countCaptures`／`scanCharSet(false, true)` 的预扫描边界及 option 作用域收集，完整扫描后仍用该表校验引用；核对 `151-165,304-417,841,1256-1270,1522-1609,1663-1684,1939-1945`，保留两个阶段不同的 subtraction／class 边界。预扫描读取 `scanOptions` 前缀后立即应用状态，即使后面不是 `)` 或 `:`；完整扫描的 `_scan_regex_options` 继续只接受完整合法 header。消费 `(?#...)` 后按 `countCaptures:334-397` 清除 `ignoreNextParen`。本轮新增边界只修改既有 `_regexp2_capture_slots`、`_valid_regex` 必要元数据使用及指定测试文件，已有其他 class／deep 函数保持。固定源码路径及 SHA-256 见规格 R4。probe 使用 `\[` 并保留原完整 class 检查，原 matcher 不变；原 `_valid_deep_regex` 继续消费 probe，不修改该函数、DNS 或其他 owner 位置，不运行外部实现或新增通用 parser。若确需扩大范围，先给出证据并更新共同规格／计划及所有权。
+**修改与复用：** 产品修改限于 `_delimiters`／`_valid_regex` 的 class 扫描、capture slot 收集与引用校验及确需的共享短 helper，两个 scanner 可复用 `_regexp2_word_char`。按固定 regexp2 v1.12.0／`3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` `syntax/parser.go:1538-1590` 的非 RE2、非 pending-range 消费规则识别完整 token；不复用 numeric 模式不同的 `_scan_capture_name`。capture slot 按 `countCaptures`／`scanCharSet(false, true)` 的预扫描边界及 option 作用域收集，完整扫描后仍用该表校验引用；核对 `151-165,304-417,841,1256-1270,1522-1609,1663-1684,1939-1945`，保留两个阶段不同的 subtraction／class 边界。预扫描读取 `scanOptions` 前缀后立即应用状态，即使后面不是 `)` 或 `:`；完整扫描的 `_scan_regex_options` 继续只接受完整合法 header。消费 `(?#...)` 后按 `countCaptures:334-397` 清除 `ignoreNextParen`。本轮新增边界只修改既有 `_regexp2_capture_slots`、`_valid_regex` 必要元数据使用及指定测试文件；helper 须表达 `countCaptures` 实际传播的错误，regexp2 验证路径即使 `references` 为空也须检查该错误，已有其他完整 syntax／class／deep／scanner helper 保持。固定源码路径及 SHA-256 见规格 R4。probe 使用 `\[` 并保留原完整 class 检查，原 matcher 不变；原 `_valid_deep_regex` 继续消费 probe，不修改该函数、DNS 或其他 owner 位置，不运行外部实现或新增通用 parser。若确需扩大范围，先给出证据并更新共同规格／计划及所有权。
 
 **先取得失败证据：** 在 `tests/test_regexp2_posix_class_regressions.py` 经真实公开 parse 断言两个非法 matcher `^[[:alpha:]()]\1$`、`^[[:alpha:]-!]$` 被拒绝，合法 scalar `^[[:alpha:](]$` 保留；基线分别因错误接受／拒绝而判红。新增 `^[a-\-[][:alpha:](?n)]](a)\1$` 的公开入口失败回归，确认实际 matcher 长度 29、仅索引 4／26 为反斜杠，分别组成 `\-`／`\1`，并因误接受而判红；同时记录现有 deep 观察对 Python 3.11 不兼容的证据，导入或 fixture 错误不能作为捕获缺陷的 red。期望来自固定源代码，不以 Python re 的结果充当 regexp2 真值。D 在同一 worktree 完成真实 red -> 最小 green -> 边界 -> 规格／功能／简化审查 -> 修正与复审，既有测试保留。
 
@@ -144,6 +144,12 @@
 | `^[a-\-[][:alpha:](?n(a))]](b)\2$` | 非法，拒绝 |
 | `^[a-\-[][:alpha:](?n(a))]](b)\1$` | 合法，保留，作为 `\2` 的对照 |
 | `^[a-\-[][:alpha:](?n]](a)\1$` | 非法，拒绝，并保持完整 `(?n)` 候选的拒绝结果 |
+
+**新增预扫描错误传播回归：** 在同一指定测试文件为 `^[a-\-[][:alpha:](?<2147483648>)]](a)\1$` 及删除 `\1` 的形式记录真实公开入口 assertion red，再完成最小 green 和全部保护边界。前者实际长度 40，仅零基索引 4／37 为反斜杠；三个 regexp2 kind 的普通 JSON 引号字段均被固定产品 commit `5b8f03cb5e6ad4e72b7ff6467f34679a3e7ccd4a` 误接受并原样写入 YAML，无引用形式也误接受。前一 commit `4cfdb61ba69a031a2da8ab88f2e60dd14c7aa65f` 已有 40 字符候选的相同行为。固定真值、hash 及两份独立复现脚本／结果见规格 R4，不能以导入、fixture 或 Python 整数转换错误作为 red。
+
+1. 完整核对固定 `countCaptures:304-404`：`350-356` 仅在数字 header 首位为 `1` 至 `9` 时调用 `scanDecimal`，`147-148,1639-1651` 的 `math.MaxInt32` 越界错误经 `Parse:159-160`、`regexp.go:58-60` 在完整扫描前传出；与是否有后续引用无关。`scanBackslash(true)`、`scanCharSet(false, true)`、`scanBlank()` 的错误返回值在预扫描调用点被丢弃，不扩大为所有预扫描子函数的错误传播。
+2. 有 `\1` 时原 helper 将 `_capture_number` 的 `None` 当作跳过 slot，得到 `{0,1}`；无 `\1` 时 `references` 为空而不调用 helper。修正须同时覆盖错误元数据及其无引用时的检查；`references` 还包含普通 numeric header。保留预扫描首位 `0` 不调用 `scanDecimal` 的词法分支，不按数字文本特征或 `_capture_number` 的 `None` 一律拒绝 class literal，不新增 parser、依赖、fallback 或 skip。
+3. 逐项测试 R4 数字矩阵：特殊前缀中的 `2147483647` 保留，`2147483648`／5,001 个 `9` 拒绝；`0`、`01`、`02147483648`、5,001 个 `0` 后接 `2147483648` 保留；纯 class literal 的越界及巨长数字仍保留，分别覆盖有／无 `\1`。普通完整 header 保留 signed32 上界，继续拒绝越界、巨长数字、`02147483648` 和 `0`；已存在 slot 的 `^(?<1>a)(?<01>b)\1$` 保留。主候选在三种 regexp2 kind 覆盖有／无引用，其余数字边界通过 `DOMAIN-REGEX` 核对，并沿用下列公开调用链、邻居、warning 与实际 YAML matcher 检查。数字矩阵在 int_max_str_digits=1000／4300 下分别运行，直接构造巨长字符串，保持 recursionlimit=1000、每次原 `timeout=8`、既有测试 ID 和所有原断言。
 
 **回归场景：**
 
