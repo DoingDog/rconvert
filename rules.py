@@ -1528,6 +1528,8 @@ _HTML_MARKUP = re.compile(r"(?<!\(\?)<\s*(?:/?[a-z][\w:-]*(?:\s[^>]*|/?)>|!docty
 
 
 def _ordinary_field_supported(kind: str, value: str, *, literal_field: bool = False) -> bool:
+    if kind == 'IP-ASN' and len(value) > 1 and value.startswith('0'):
+        return False
     return kind in _REGEX or ((literal_field or _HTML_MARKUP.search(value) is None) and
                               not (kind in _PROCESS and any(char in value for char in '<>')))
 

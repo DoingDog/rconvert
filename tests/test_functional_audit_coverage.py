@@ -200,11 +200,10 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                         yaml_lines = ['AND,' + logic, 'DOMAIN,neighbor.example.org', 'DOMAIN-REGEX,' + variant,
                                       asn, ip, 'SRC-IP-CIDR,198.51.100.0/24']
                         bodies = {
-                            'fin.txt': [asn, ip, 'SRC-IP,198.51.100.0/24'],
-                            'fin-qx.txt': ['HOST,neighbor.example.org,LIST', 'IP-ASN,00,LIST' + asn_flag,
-                                           'IP-CIDR,192.0.2.0/24,LIST' + flag],
+                            'fin.txt': [ip, 'SRC-IP,198.51.100.0/24'],
+                            'fin-qx.txt': ['HOST,neighbor.example.org,LIST', 'IP-CIDR,192.0.2.0/24,LIST' + flag],
                             'fin.yaml': ['  - ' + json.dumps(line) for line in yaml_lines],
-                            'fin-surge.txt': [asn, ip, 'SRC-IP,198.51.100.0/24'],
+                            'fin-surge.txt': [ip, 'SRC-IP,198.51.100.0/24'],
                             'fin-surge-ds.txt': [],
                         }
                         expected = {}
@@ -224,7 +223,7 @@ class RawRegexWhitelistAuditTests(unittest.TestCase):
                         self.assertEqual(outputs, expected)
                         skips = {'fin.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1}
                         supported = {'AND': {'fin.yaml'}, 'DOMAIN-REGEX': {'fin.yaml'},
-                                     'IP-ASN': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
+                                     'IP-ASN': {'fin.yaml'},
                                      'IP-CIDR': {'fin.txt', 'fin-qx.txt', 'fin.yaml', 'fin-surge.txt'},
                                      'SRC-IP-CIDR': {'fin.txt', 'fin.yaml', 'fin-surge.txt'}}
                         for kind, names in supported.items():

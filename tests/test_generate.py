@@ -1662,10 +1662,10 @@ class ConstructorGenerateTests(unittest.TestCase):
                     (root / "source.list").write_text(source + "  - IP-ASN,00\nDOMAIN,keep.example.com\n", encoding="utf-8")
                     flag = ",no-resolve" if mode == "add" else ""
                     expected = {
-                        "fin.txt": "# consumer rules: 2\nDOMAIN,keep.example.com\nIP-ASN,00" + flag + "\n",
-                        "fin-qx.txt": "# consumer rules: 2\nHOST,keep.example.com,LIST\nIP-ASN,00,LIST" + flag + "\n",
+                        "fin.txt": "# consumer rules: 1\nDOMAIN,keep.example.com\n",
+                        "fin-qx.txt": "# consumer rules: 1\nHOST,keep.example.com,LIST\n",
                         "fin.yaml": '# consumer rules: 2\npayload:\n  - ' + json.dumps(expected_domain('DOMAIN', 'keep.example.com')) + '\n  - "IP-ASN,00' + flag + '"\n',
-                        "fin-surge.txt": "# consumer rules: 1\nIP-ASN,00" + flag + "\n",
+                        "fin-surge.txt": "# consumer rules: 0\n",
                         "fin-surge-ds.txt": "# consumer rules: 1\nkeep.example.com\n",
                         "fin-adb.txt": ("[Adblock Plus 2.0]\n! Title: consumer\n! Homepage: https://github.com/DoingDog/rconvert\n"
                                         "! Expires: 1 day\n! License: Inherits upstream licenses\n! Version: 202610061200\n" +
@@ -1681,8 +1681,10 @@ class ConstructorGenerateTests(unittest.TestCase):
                             outputs = generate(root, lambda url: self.fail(url))
                         self.assertEqual({path.name: text for path, text in outputs.items() if path.parent.name == "consumer"}, expected)
                         self.assertEqual([line for line in stderr.getvalue().splitlines() if line.startswith("consumer ")],
-                                         ["consumer fin-adb.txt:IP-ASN: 1", "consumer fin-surge-ds.txt:IP-ASN: 1"] if purpose == "block" else
-                                         ["consumer fin-adb.txt:DOMAIN: 1", "consumer fin-adb.txt:IP-ASN: 1", "consumer fin-surge-ds.txt:IP-ASN: 1"])
+                                         ([] if purpose == "block" else ["consumer fin-adb.txt:DOMAIN: 1"]) +
+                                         ["consumer fin-adb.txt:IP-ASN: 1", "consumer fin-qx.txt:IP-ASN: 1",
+                                          "consumer fin-surge-ds.txt:IP-ASN: 1", "consumer fin-surge.txt:IP-ASN: 1",
+                                          "consumer fin.txt:IP-ASN: 1"])
                         publish(outputs)
                         self.assertEqual({path: path.read_bytes() for path in outputs},
                                          {path: value.encode("utf-8") for path, value in outputs.items()})
