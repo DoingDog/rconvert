@@ -18,9 +18,21 @@ from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 KINDS = ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX')
 CASES = ((r'^[[:alpha:](]$', True), (r'^[[:alpha:]-!]$', False),
          (r'^[[:alpha:]()]\1$', False))
+PRESCAN_CASES = ((r'^[a-\-[][:alpha:]]](a)\1$', True),
+                 (r'^[a-\-[][:alpha:](?n)]](a)\1$', False),
+                 (r'^[a-\-[][:alpha:](?n)]](?<word>a)\k<word>$', True))
 
 
 class Regexp2PosixClassTests(unittest.TestCase):
+    def test_capture_slots_follow_prescan_class_boundary(self):
+        value = PRESCAN_CASES[1][0]
+        self.assertEqual(len(value), 29)
+        self.assertEqual([index for index, char in enumerate(value) if char == '\\'], [4, 26])
+        self.assertEqual(
+            parse('DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example', purpose='block'),
+            ([Rule('DOMAIN', 'neighbor.example')], [f'line 1: invalid DOMAIN-REGEX {value}']),
+        )
+
     def test_pending_range_survives_escaped_hyphen_before_subtraction(self):
         valid = r'^[a-\-[:alpha:]]$'
         self.assertEqual(parse('DOMAIN-REGEX,' + valid, purpose='block'),
@@ -54,9 +66,9 @@ class Regexp2PosixClassTests(unittest.TestCase):
             ([Rule('DOMAIN', 'neighbor.example')], [f'line 1: invalid DOMAIN-REGEX {value}']),
         )
 
-    def _check_scalar_matrix(self, depth):
+    def _check_scalar_matrix(self, depth, cases=CASES):
         for kind in KINDS:
-            for atom, valid in CASES:
+            for atom, valid in cases:
                 value = '(?:' * depth + atom + ')' * depth
                 matcher = kind + ',' + value
                 sources = [(f'# scope\n{kind},{field},PROXY\nDOMAIN,neighbor.example,PROXY\n', 2, 'surge')
@@ -82,24 +94,21 @@ class Regexp2PosixClassTests(unittest.TestCase):
     def test_three_kinds_ordinary_quotes_and_native_scalar_forms(self):
         self._check_scalar_matrix(0)
 
+    def test_prescan_slots_across_three_kinds_quotes_and_native_forms(self):
+        self._check_scalar_matrix(0, PRESCAN_CASES)
+
     def test_deep_matrix_consumes_probe_with_original_limits_and_timeout(self):
         script = r'''
+import cProfile
 import sys
 sys.path.insert(0, sys.argv[1])
-from tests.test_regexp2_posix_class_regressions import Regexp2PosixClassTests
+from tests.test_regexp2_posix_class_regressions import CASES, PRESCAN_CASES, Regexp2PosixClassTests
 import rules
 assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
-calls = []
-monitor, tool = sys.monitoring, sys.monitoring.PROFILER_ID
-monitor.use_tool_id(tool, 'posix-deep')
-monitor.register_callback(tool, monitor.events.PY_START, lambda code, offset: calls.append(code.co_name))
-monitor.set_local_events(tool, rules._valid_deep_regex.__code__, monitor.events.PY_START)
-try:
-    Regexp2PosixClassTests()._check_scalar_matrix(int(sys.argv[2]))
-finally:
-    monitor.set_local_events(tool, rules._valid_deep_regex.__code__, 0)
-    monitor.free_tool_id(tool)
-assert calls
+with cProfile.Profile() as profiler:
+    Regexp2PosixClassTests()._check_scalar_matrix(int(sys.argv[2]), CASES + PRESCAN_CASES[:2])
+assert any(entry.code is rules._valid_deep_regex.__code__ and entry.callcount > 0
+           for entry in profiler.getstats())
 assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
 '''
         root = Path(__file__).resolve().parents[1]
@@ -231,10 +240,50 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                     self.assertEqual(parse(operator + ',' + expression, purpose='proxy'),
                                      ([], [f'line 1: invalid logical expression {expression}']))
 
-    def test_white_identity_process_boundary_and_direct_rule_render_keep_matcher(self):
-        value = CASES[0][0]
+    def test_prescan_option_scopes_numbered_and_named_references(self):
+        cases = ((r'^[a-\-[][:alpha:](?n)]](?<7>a)\7$', True),
+                 (r'^[a-\-[][:alpha:](?n)]](?<7>a)\1$', False),
+                 (r'^(?:[a-\-[][:alpha:](?n)]](a))(b)\1$', True),
+                 (r'^(?:[a-\-[][:alpha:](?n)]](a))(b)\2$', False),
+                 (r'^[a-\-[][:alpha:](?x:(?n))]](a)\1$', True),
+                 (r'^[a-\-[][:alpha:](?x)]](a)\1$', True),
+                 (r'^[a-\-[][:alpha:](?x)]]#(a)\1$', False),
+                 (r'^[a-\-[][:alpha:](?n)]](a)\k<missing>$', False),
+                 (r'^[a-\-[][:alpha:](?n)]](?<word>a)\2$', False))
+        self._check_scalar_matrix(0, cases)
+
+    def test_prescan_logical_leaves_keep_native_balance_and_ordinary_encoding(self):
+        for kind in KINDS:
+            for operator in ('AND', 'OR', 'NOT'):
+                for native in (False, True):
+                    for value, accepted in PRESCAN_CASES:
+                        field = value if native else json.dumps(value)
+                        leaf = f'({kind},{field})'
+                        expression = f'({leaf})' if operator == 'NOT' else f'({leaf},(NETWORK,tcp))'
+                        record = operator + ',' + expression
+                        source = ('payload:\n  - ' + json.dumps(record) + '\n  - DOMAIN,neighbor.example\n' if native else
+                                  record + ',PROXY\nDOMAIN,neighbor.example,PROXY\n')
+                        neighbor = Rule('DOMAIN', 'neighbor.example', domain_source='mihomo' if native else 'surge')
+                        expected = ([Rule(operator, expression, native_fields=native)] if accepted else []) + [neighbor]
+                        with self.subTest(kind=kind, operator=operator, native=native, value=value):
+                            parsed, messages = parse(source, purpose='proxy')
+                            self.assertEqual((parsed, messages), (expected, [] if accepted else
+                                             [f'line {2 if native else 1}: invalid logical expression {expression}']))
+                            outputs, _ = render('posix', parsed, purpose='proxy', no_resolve='keep')
+                            encoded = value if native else value.replace('(?n)', r'\x{28}?n\x{29}')
+                            projected_leaf = f'({kind},{encoded})'
+                            projected = f'({projected_leaf})' if operator == 'NOT' else f'({projected_leaf},(NETWORK,tcp))'
+                            self.assertCountEqual([json.loads(row[4:]) for row in outputs['fin.yaml'].splitlines()[2:]],
+                                                  ([operator + ',' + projected] if accepted else []) + ['DOMAIN,neighbor.example'])
+                            restored, messages = parse(outputs['fin.yaml'], purpose='proxy')
+                            self.assertEqual(messages, [])
+                            self.assertCountEqual(restored, ([Rule(operator, projected, native_fields=True)] if accepted else []) +
+                                                  [Rule('DOMAIN', 'neighbor.example', domain_source='mihomo')])
+
+    def _check_white_identity_and_render(self, cases):
+        value = cases[0][0]
         for native in (False, True):
-            records = ['DOMAIN-REGEX,' + item for item, _ in CASES] + ['DOMAIN,neighbor.example']
+            records = ['DOMAIN-REGEX,' + item for item, _ in cases] + ['DOMAIN,neighbor.example']
             source = ('payload:\n' + ''.join('  - ' + json.dumps(item) + '\n' for item in records) if native else
                       '\n'.join(kind + ',' + json.dumps(item) for kind, _, item in
                                 (record.partition(',') for record in records)))
@@ -246,7 +295,7 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
             self.assertEqual(normalize(white + white), [neighbor, Rule('DOMAIN-REGEX', value)])
             self.assertEqual([str(item.message) for item in caught],
                              [f'line {number + int(native)}: invalid DOMAIN-REGEX {invalid}'
-                              for number, (invalid, _) in enumerate(CASES[1:], 2)])
+                              for number, (invalid, _) in enumerate(cases[1:], 2)])
             self.assertEqual(exclude_covered([Rule('DOMAIN-REGEX', value), Rule('DOMAIN', 'other.example')], white),
                              [Rule('DOMAIN', 'other.example')])
         for kind in KINDS:
@@ -266,6 +315,12 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
             self.assertEqual(outputs['fin-adb.txt'].splitlines()[6:], ['! Total count: 0'])
             self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 1 if consumer == 'allow' else 2)
 
+    def test_white_identity_process_boundary_and_direct_rule_render_keep_matcher(self):
+        self._check_white_identity_and_render(CASES)
+
+    def test_prescan_white_identity_and_direct_render_keep_legal_matcher(self):
+        self._check_white_identity_and_render(PRESCAN_CASES[:2])
+
     def _products(self, group, matchers, purpose, neighbor=None):
         route = neighbor == 'surge'
         dns = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n'
@@ -284,15 +339,14 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                                  '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'),
         }
 
-    def test_generate_publish_raw_same_round_disk_yaml_and_cli_use_actual_bytes(self):
-        value = CASES[0][0]
-        logic = r'AND,((DOMAIN-REGEX,^[[:alpha:](][)]$),(NETWORK,tcp))'
+    def _check_generation(self, cases, logic):
+        value = cases[0][0]
         valid = [kind + ',' + value for kind in KINDS]
-        source_rows = [kind + ',' + atom for kind in KINDS for atom, _ in CASES] + [logic]
+        source_rows = [kind + ',' + atom for kind in KINDS for atom, _ in cases] + [logic]
         remote = {'https://example.org/posix.yaml': ('payload:\n' + ''.join(
                     '  - ' + json.dumps(row) + '\n' for row in source_rows)).encode('utf-8'),
                   'https://example.org/white.list': ('\n'.join('DOMAIN-REGEX,' + json.dumps(atom)
-                                                              for atom, _ in CASES) + '\n').encode('utf-8')}
+                                                              for atom, _ in cases) + '\n').encode('utf-8')}
         for purpose in ('block', 'direct', 'proxy'):
             for mode in ('add', 'strip', 'keep'):
                 with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
@@ -326,7 +380,7 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                             outputs = generate(root, remote.__getitem__)
                     self.assertEqual([str(item.message) for item in caught],
                                      [f'line {number}: invalid DOMAIN-REGEX {atom}'
-                                      for number, (atom, _) in enumerate(CASES[1:], 2)])
+                                      for number, (atom, _) in enumerate(cases[1:], 2)])
                     parent_rows = [logic, 'DOMAIN,neighbor.example', *valid]
                     white_rows = [logic, 'DOMAIN,neighbor.example', *valid[1:]]
                     rows = {'parent': parent_rows, 'whiteparent': valid[:1], 'sourcechild': parent_rows,
@@ -336,10 +390,14 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                                     'surge' if group == 'parent' else 'mihomo' if group in
                                     {'sourcechild', 'whitechild', 'rawwhite'} else None).items()}
                     self.assertEqual(outputs, expected)
+                    for group, matchers in rows.items():
+                        yaml = outputs[root / group / 'fin.yaml']
+                        self.assertEqual([json.loads(row[4:]) for row in yaml.splitlines()[2:]], matchers)
+                        self.assertEqual(parse(yaml, purpose=purpose)[1], [])
                     self.assertEqual({path: path.read_bytes() for path in previous}, previous)
                     expected_warnings = [f'https://example.org/posix.yaml: line {number}: invalid {kind} {atom}'
                                          for number, (kind, atom, accepted) in enumerate(
-                                             ((kind, atom, accepted) for kind in KINDS for atom, accepted in CASES), 2)
+                                             ((kind, atom, accepted) for kind in KINDS for atom, accepted in cases), 2)
                                          if not accepted]
                     diagnostics = {}
                     for group, matchers in rows.items():
@@ -358,8 +416,10 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                         if purpose == 'block' and group in {'whitechild', 'rawwhite', 'cleared'}:
                             counts['fin-adb.txt:DOMAIN-REGEX'] = counts.get('fin-adb.txt:DOMAIN-REGEX', 0) + 1
                         diagnostics[group] = ''.join(f'{group} {key}: {count}\n' for key, count in sorted(counts.items()))
-                    self.assertEqual(logs.getvalue(), '\n'.join(expected_warnings[:5] +
-                                     ['https://example.org/posix.yaml: 6 skipped lines; first five shown']) + '\n' +
+                    source_warnings = expected_warnings[:5]
+                    if len(expected_warnings) > 5:
+                        source_warnings += [f'https://example.org/posix.yaml: {len(expected_warnings)} skipped lines; first five shown']
+                    self.assertEqual(logs.getvalue(), '\n'.join(source_warnings) + '\n' +
                                      ''.join(diagnostics[config['name']] for config in configs))
                     self.assertEqual(config_path.read_bytes(), config_bytes)
                     publish(outputs, root=root)
@@ -403,9 +463,16 @@ with patch('formats.datetime') as clock:
                     self.assertEqual({path: path.read_bytes() for path in parents}, parents)
                     self.assertEqual({path: path.read_bytes() for path in static}, static)
 
+    def test_generate_publish_raw_same_round_disk_yaml_and_cli_use_actual_bytes(self):
+        self._check_generation(CASES, r'AND,((DOMAIN-REGEX,^[[:alpha:](][)]$),(NETWORK,tcp))')
+
+    def test_prescan_generate_publish_and_yaml_dependencies_use_actual_matchers(self):
+        self._check_generation(PRESCAN_CASES[:2],
+                               'AND,((DOMAIN-REGEX,' + PRESCAN_CASES[0][0] + '),(NETWORK,tcp))')
+
     def test_invalid_local_source_white_and_disk_yaml_preserve_old_outputs(self):
         for kind in KINDS:
-            for value, _ in CASES[1:]:
+            for value, _ in CASES[1:] + PRESCAN_CASES[1:2]:
                 for role in ('source', 'white', 'disk-source', 'disk-white'):
                     with self.subTest(kind=kind, value=value, role=role), tempfile.TemporaryDirectory() as directory:
                         root = Path(directory)

@@ -663,15 +663,117 @@ def _hex_codepoint(digits: str) -> int | None:
     return codepoint if codepoint <= 0x10FFFF else None
 
 
+def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]]:
+    # regexp2 countCaptures 的 scanOnly 在 pending range 处不递归 subtraction。
+    slots, names, options, classes = {0}, set(), [], []
+    index, captures = 0, 0
+    extended = explicit_capture = ignore_next = False
+    while index < len(value):
+        char = value[index]
+        if char == '\\':
+            escape = value[index + 1:index + 2]
+            end = index + 2
+            if escape in {'p', 'P', 'x'} and value[end:end + 1] == '{':
+                closing = value.find('}', end + 1)
+                end = len(value) if closing < 0 else closing + 1
+            elif escape in {'p', 'P', 'c'}:
+                end += 1
+            elif escape in {'x', 'u'}:
+                end += 2 if escape == 'x' else 4
+            elif not classes and value.startswith((r'\k<', r"\k'", r'\<', r"\'"), index):
+                start = index + (3 if escape == 'k' else 2)
+                key, stop, _ = _scan_capture_name(value, start)
+                closing = '>' if value[start - 1] == '<' else "'"
+                if key and value[stop:stop + 1] == closing:
+                    end = stop + 1
+            elif '0' <= escape <= '9':
+                digits = re.match(r'[0-7]{1,3}' if classes or escape == '0' else r'[0-9]+', value[index + 1:])
+                if digits is not None:
+                    end = index + 1 + len(digits[0])
+            index = end
+            if not classes or escape in 'dDsSwWpP-':
+                if classes:
+                    classes[-1][0] = False
+                continue
+        else:
+            index += 1
+        if classes:
+            first, pending = classes[-1]
+            classes[-1][0] = False
+            if char == ']' and not first:
+                classes.pop()
+                continue
+            if char == '[' and not pending and (end := _scan_posix_class(value, index - 1)) is not None:
+                index = end
+            if pending:
+                classes[-1][1] = False
+            elif value[index:index + 1] == '-' and value[index + 1:index + 2] not in {'', ']'}:
+                classes[-1][1] = True
+                index += 1
+            elif char == '-' and not first and value[index:index + 1] == '[':
+                index += 1
+                classes.append([True, False])
+                if value[index:index + 1] == '^':
+                    index += 1
+            continue
+        if char == '[':
+            classes.append([True, False])
+            if value[index:index + 1] == '^':
+                index += 1
+        elif extended and char == '#':
+            end = value.find('\n', index)
+            index = len(value) if end < 0 else end + 1
+        elif char == ')':
+            if options:
+                extended, explicit_capture = options.pop()
+        elif char == '(':
+            if value.startswith('(?#', index - 1):
+                end = value.find(')', index + 2)
+                index = len(value) if end < 0 else end + 1
+                continue
+            flags = _scan_regex_options(value, index - 1, extended, explicit_capture)
+            if flags is not None:
+                if flags[1] == ':':
+                    options.append((extended, explicit_capture))
+                index, _, extended, explicit_capture = flags
+            else:
+                options.append((extended, explicit_capture))
+                if value.startswith(('?<', "?'"), index):
+                    key, end, numeric = _scan_capture_name(value, index + 2)
+                    if key and not key.startswith('0'):
+                        if numeric:
+                            number = _capture_number(key)
+                            if number is not None:
+                                slots.add(number)
+                        else:
+                            names.add(key)
+                    index = end
+                elif value.startswith('?(', index):
+                    index += 1
+                    ignore_next = True
+                    continue
+                elif value[index:index + 1] != '?' and not explicit_capture and not ignore_next:
+                    captures += 1
+                    slots.add(captures)
+            ignore_next = False
+    slot = captures + 1
+    for _ in names:
+        while slot in slots:
+            slot += 1
+        slots.add(slot)
+        slot += 1
+    return slots, names
+
+
 def _valid_regex(kind: str, value: str) -> bool:
     if not value:
         return False
-    probe, in_class, index, names, quantified = [], False, 0, {}, False
+    probe, in_class, index, quantified = [], False, 0, False
     class_atom, range_from_literal, extended = None, False, False
     class_first = class_hyphen = False
     class_start, class_probe, classes = 0, 0, []
     extended_stack, conditionals, references = [], [], []
-    captures, explicit_capture, capture_slots = 0, False, {0}
+    explicit_capture = False
     conditional_head = missing_operand = False
     quantifier_probe = 0
     while index < len(value) and kind != "URL-REGEX":
@@ -871,12 +973,10 @@ def _valid_regex(kind: str, value: str) -> bool:
             if re.match(r"\(\?[A-Za-z+-]", value[index:]):
                 return False
             extended_stack.append((extended, explicit_capture))
-            if value[index + 1:index + 2] != '?':
-                if explicit_capture:
-                    probe.append('(?:')
-                    index += 1
-                    continue
-                captures += 1
+            if value[index + 1:index + 2] != '?' and explicit_capture:
+                probe.append('(?:')
+                index += 1
+                continue
         if char == "[" and not in_class:
             in_class = class_first = True
             class_start, class_probe = index, len(probe)
@@ -960,18 +1060,14 @@ def _valid_regex(kind: str, value: str) -> bool:
             if not key:
                 probe.append('(?:')
                 continue
+            references.append((key, numeric, 'group', None))
             if numeric:
                 number = _capture_number(key)
                 if number is None or number == 0:
                     return False
-                if key.startswith('0'):
-                    references.append((key, True, 'group', None))
-                else:
-                    capture_slots.add(number)
                 probe.append('(')
                 continue
             alias = f'g{len(probe)}'
-            names[key] = alias
             probe.append(f"(?P<{alias}>")
             continue
         elif char == '|' and not in_class and conditionals and len(extended_stack) == conditionals[-1][0]:
@@ -986,13 +1082,8 @@ def _valid_regex(kind: str, value: str) -> bool:
         index += 1
     if in_class or classes:
         return False
-    capture_slots.update(range(1, captures + 1))
-    slot = captures + 1
-    for _ in names:
-        while slot in capture_slots:
-            slot += 1
-        capture_slots.add(slot)
-        slot += 1
+    if references:
+        capture_slots, names = _regexp2_capture_slots(value)
     for key, numeric, form, position in references:
         if numeric:
             number = _capture_number(key)
