@@ -4,15 +4,17 @@
 
 全面检查规则解析、来源白名单过滤、规范化、各目标投影、生成依赖及发布，复现并修复全部确认存在、可修且不破坏其他功能的问题。重点检查去重顺序与完整性、多客户端格式、`no_resolve` 和上游异常处理。
 
-代码基线为 `ea67234ae739af33fd5f7ecfa197213183eaeb28`，tree 为 `752c5358aa961ed4ce74f80d245e23489426ee5b`。本规格记录当前已确认的 R1、R2；全面 scan／coverage-check 尚未最终结束，Linux 完整测试基线仍由独立任务收集。已有局部复现及固定输入生成结果不代表这两项检查已完成。
+代码基线为 `ea67234ae739af33fd5f7ecfa197213183eaeb28`，tree 为 `752c5358aa961ed4ce74f80d245e23489426ee5b`。全部 scan 与 coverage-check 已完成，139 个受控文件均有检查记录。routing-formats 的空报告已由 coverage-check 补查全部 42 种 scalar、56 个 case、594 个 mode 组合，无剩余文件缺项。本规格包含独立复核后的 R1 至 R5。
 
-产品代码实施须同时满足：全部 scan 与 coverage-check 返回；检查范围逐项覆盖且遗漏已补查；每个候选均已复核并形成明确结论；新增确认问题已经写入本规格及[实施计划](../plans/2026-10-23-functional-completeness.md)。发现新候选时先完成复核及必要的文档更新，再开始或恢复受影响的实施。
+Linux exact archive 基线已完成：WSL Debian Python 3.13.5，1416 tests，0 failures，0 errors，10 个既有 Windows-only skips；unittest 日志耗时 1346.911 秒，外层记录 1347.001 秒。139 个受控文件在测试前后 hash 不变。这些结果只证明初始基线；产品修复和最终 tree 验收尚未完成。
+
+产品实施以包含全部五项要求的共同规格／[计划](../plans/2026-10-23-functional-completeness.md)提交为起点。新候选须完成复核，确认问题及变更范围须写入两份文档，再开始或恢复受影响的实施。
 
 ## 范围与约束
 
-- 当前最小产品修改范围为 `rules.exclude_covered` 的 CIDR 索引、`rules._ordinary_field_supported` 的 ASN 能力判断，以及 `formats.render` 的 Surge `no-resolve` 分支。测试及必要的 README 行为说明随修复更新。
-- 保留公开入口、`Rule` 全部字段、配置键、`formats.FILES`、七组生成顺序及六种输出文件。`sources.py`、`generate.py`、`update.py`、`update_readme_counts.py`、`rulesets.json` 和 CI 配置目前均无已确认的修改需要。
-- 不运行任何规则客户端，包括配置测试模式；外部实现仅阅读固定源码及文档。不开展网络安全扫描或修复，不处理 Windows／多平台适配，不处理已知 Mihomo suffix 大小写，也不批量把 regex 改写为 suffix。
+- 产品修改限定于 `rules.exclude_covered` 的 CIDR 索引、`rules._ordinary_field_supported` 的 ASN 能力判断、`formats.render` 的 Surge `no-resolve` guard、`formats._dns_regex` 的分支预算及调用内片段复用、`rules._delimiters`／`rules._valid_regex` 的 regexp2 class 扫描及确需的共享短 helper、`rules._source_records` 的普通 hosts 分支。对应回归测试随修复更新。
+- 保留公开入口、`Rule` 全部字段、配置键、`formats.FILES`、七组生成顺序及六种输出文件。`sources.py`、`generate.py`、`update.py`、`update_readme_counts.py`、`rulesets.json` 和 CI 配置均无已确认的修改需要。README 仅更新 CIDR white 完整并集与 native padded ASN 的必要行为说明，数量表保持。
+- 不运行任何规则客户端，包括配置测试模式；外部实现仅阅读固定源码及文档。不开展网络安全扫描或修复，不处理 Windows／多平台适配，不处理已知 Mihomo suffix 大小写，不增加批量使用 regex 改写 suffix 规则的流程。
 - `static/` 与用户现有修改保持原样。测试和生成使用独立 fixture root；生产产物由最终发布流程更新。
 
 ## 已核查的数据流及影响位置
@@ -20,7 +22,10 @@
 | 路径 | 当前行为 | 本次影响 |
 | --- | --- | --- |
 | `rules.parse`、`_normalize_condition` | 普通 ASN 去除 `AS` 和前导零；native provider 保留 ASN 字符串。CIDR 校验、方向及 scope 拒绝在此处理 | 保持解析与输入校验 |
-| `rules.parse_whitelist` | 忽略 policy，移除 options／allow 标记，保留适用的 matcher 身份；不合并 CIDR | 原始白名单可直接触发 R1 |
+| `rules._source_records`、`parse` | 普通 hosts 先去 `#` 注释，当前仍进入通用 lexer；后续已有逐 alias validator | R5 使已识别 hosts 直接到逐 alias 校验，其他语法及 HTML／物理行检查保持 |
+| `rules._delimiters`、`_valid_regex` | 普通字段／logical 扫描及 regexp2 validation probe 共用字符类边界要求；deep validator 消费 probe | R4 只修正三种 regexp2 类型的完整 POSIX-looking token 边界，原 matcher 与 URL-REGEX 保持 |
+| `formats._dns_regex` | 三个 DNS 消费者共用分支构造、证书及 source／Go／最终行预算 | R3 重置当前 concat 计数并在单次调用内复用相同编码片段 |
+| `rules.parse_whitelist` | 忽略 policy，移除 options／allow 标记，保留适用的 matcher 身份；不合并 CIDR | R1、R4、R5 同时覆盖真实 white 入口 |
 | `generate.generate` | `exclude_covered(rules, whitelist + allowed)` -> `_apply_no_resolve` -> `normalize` -> `render(..., no_resolve="keep")` | 保持来源过滤先于规范化的顺序 |
 | `rules.normalize` | 按 options、allow、来源等身份分组；已有 `collapse_addresses`；keyword 归约会调用目标能力 helper | 复用标准库方法，keyword 行为不变 |
 | `formats._logical_value` | Surge 每个叶子调用 `_ordinary_field_supported(..., literal_field=True)`；不支持时整条目标 logical 跳过 | 自动取得 R2 判断 |
@@ -39,8 +44,6 @@
 source 为 `IP-CIDR,192.0.2.0/24`，white 为 `IP-CIDR,192.0.2.0/25` 与 `IP-CIDR,192.0.2.128/25` 时，基线保留 source。两个 `/25` 的并集恰好等于 `/24`。white 经独立生成组规范化成 `/24` 后，同一 source 被删除。IPv6、来源方向、公开 render、真实 generate／publish／CLI 均有对应复现。
 
 `exclude_covered` 只保存原始 white 网络，再查询 source 自身及祖先网络，无法命中更具体网络共同构成的父网络。`generate` 在来源过滤之后才规范化剩余规则，因此 caller 并未消除该差异。
-
-本次完整性要求纳入可证明的 CIDR 并集覆盖。其适用行为明确扩展了 `docs/superpowers/specs/2026-09-28-json-whitelist-design.md` 中「某项白名单完全覆盖」的逐项描述；该历史描述不能用于省略本次并集要求。
 
 ### 修正要求
 
@@ -80,6 +83,60 @@ native `payload:`／`rules:` 中的 `IP-ASN,0013335` 当前可进入 Surge scala
 - source／white／allow 的相同 padded 值可按已有身份关系覆盖；padded white 不能通过十进制重写删除 canonical ASN。输出与目标 white 使用同一字段能力边界。
 - 仅含 padded ASN 的 parent 可产生非空 YAML 与合法空 Surge／QX 正文。同轮 child 读取空 `fin.txt` 时正常清空，读取 YAML 时保留原字符串；不得从其他格式补回。移除 parent 配置后，disk-only 空 source／white 仍按原规则拒绝。
 
+## R3：DNS alternation 的分支预算与调用内复用
+
+### 已确认现象与根因
+
+公开 parse 接受 `\w` 和 `\w|\w|\w|\w`，后者却在 DNS block、public allow、真实 `parse_whitelist` 三个消费者中丢失 regex／`@@`，并增加 DNS unsupported。单个 `\w` 的最终 block 行含 LF 为 32,390 bytes，allow／white 为 32,392 bytes；重复分支具有相同布尔匹配集合。`\p{L}`、`\w\w` 及交错重复 `\w|\p{L}` 同样受影响，其他目标仍保留各自原有投影。
+
+`_dns_regex` 在 alternation 结束时清空当前 concat 的 `nodes`，却保留 `dns_sizes[-1]`，使后续分支提前得到无正文证书。分支去重发生在此之后。仅重置计数能修正输出，但仍为每个分支重复编码并分别持有正文，512 轮实验超过原 8 秒限制且内存增长。
+
+### 修正要求与保留边界
+
+1. 在既有 `|` 分支清空 `nodes` 后同步重置 `dns_sizes[-1]`。保持 `dns_choices` 的去重位置；不同分支按最终唯一编码正文及实际包装扣预算，不忽略失败证书，不输出半条规则。
+2. 只给 `_dns_regex` 内的 `lower_preimage`、`dns_runes`、`dns_concat` 添加调用内 `@cache`；`dns_concat` 的两个 caller 传入 `tuple(nodes)`。key 使用原有不可变 interval tuple 或完整七字段证书；单次调用内的 budget 与 empty 固定。相同 atom 和 concat 复用编码正文，避免每个重复分支持有独立展开全文。使用现有 `cache`，不新增 helper、依赖、公共 API、全局 cache 或分支数量阈值。
+3. 缓存不跳过完整输入验证、source／Go 量词与 compiled-size、结构扫描、case／root 证明和最终 UTF-8 行限。不缓存未解析的完整 regex，不扩大未知语法支持，不提高递归或整数长度限制。nullable、空分支及 universal 的原归约保持。
+4. block、public allow 和真实 external white 共用此修复。native、普通 typed 与 quoted 输入分别核对；重复输出须与独立单分支／单轮对照逐字节相同，相同输入的其他五类产物保持原行为。allow 仅使用现有 `Rule.allow` seam，不发明文件 allow 语法。
+5. 真实 source、raw white、同轮与非空 disk YAML source／white 的 generate／publish 均保留可表达的重复 regex／例外，输入及原 source YAML 不变。邻居继续输出；DNS 局部 unsupported 的合法超限或未知结构不改变其他目标及原发布边界。
+6. 单分支及四重复 anchored `a`／`\w` 在最终实际 `@@`、`/.../`、LF 合计恰好 65,536 UTF-8 bytes 时保留，增加一个 byte 时只跳过 DNS。两个不同大分支保留、三个拒绝；4,096 个不同小分支保留、8,192 个按真实预算局部跳过。
+7. 512 轮 `\w`、`\p{L}`、`\w\w`、交错 `\w|\p{L}` 各在一个原 `timeout=8` 子进程中完成三消费者，交错输入实际含 1,024 分支。另用 tracemalloc 分开检查 64／256／512 轮三消费者的分配峰值增长，保留原每新增分支一份完整正文的增长阈值。保留既有高 rune 八秒、wildcard 内存及深层结构 guards；不将有限实验表述为任意 regex 的固定耗时／RSS 保证。
+8. 在 512 个已识别分支后追加未知 header／property／interval、非 ASCII hex、根点敏感分支或超限量词，仍须检查并拒绝；未知项位于 universal／`{0}` 内也不能被复用绕过。600／1,000 层 neutral group、既有 F3／UTF-8／Go 边界均须保留。
+
+调用内复用加 reset 的局部设计已经内存实验验证，产品代码及受控回归尚未实施。实验中的 512 轮四类输入完整进程耗时分别为 1.468、1.244、1.256、2.026 秒；只复用 `lower_preimage`／`dns_runes` 仍会持有重复 concat 正文，完整方案包含 `dns_concat`。实验与原资源反证均保留为审查证据，实施仍须独立 TDD。
+
+## R4：regexp2 POSIX-looking 字符类边界
+
+### 已确认现象与固定语义
+
+`DOMAIN-REGEX`、`PROCESS-NAME-REGEX`、`PROCESS-PATH-REGEX` 的两个 scanner 提前把 POSIX-looking token 内的 `]` 当作外层 class 结束，错误接受 `^[[:alpha:]()]\1$`、`^[[:alpha:]-!]$`，并丢弃合法 scalar `^[[:alpha:](]$`。前者没有 capture 1，后者形成字面 `[` 至 `!` 的逆序 range。非法 matcher 可进入实际父／子 YAML；该现象不等于客户端整份 provider 必然加载失败。
+
+依据为 regexp2 v1.12.0、commit `3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` 的 `syntax/parser.go:1538-1590`。固定 Mihomo 对三种类型只启用 `IgnoreCase`，未启用 RE2。非 RE2 的 `scanCharSet` 消费完整 POSIX-looking token 后，仍把当前 `[` 当作 literal；不按 POSIX 名称展开集合。
+
+### 修正要求与保留边界
+
+1. 仅修改 `_delimiters`／`_valid_regex` 的 class 扫描及确需的共享短 helper。在非转义、非 pending-range 的内部 `[` 处识别完整 `[:`、可选 `^`、零个或多个固定 Go `IsWordChar`、`:]`。空名、未知名、数字开头和 Unicode 名均按同一规则消费；不完整、转义或含非 word 字符的片段恢复原逐字符扫描。可复用 `_regexp2_word_char`，不得误用带 numeric 分支的 `_scan_capture_name`。
+2. 消费完整 token 后外层 class 继续打开，validation probe 用 `\[` 表示原 literal 并继续原 range／capture 检查。原 Rule matcher 不改，输出沿用各目标既有编码，probe 不写入 Rule 或产物；deep validator 继续消费修正后的 probe，不新增 parser。
+3. subtraction 与 pending range 优先于 token 消费，包括 escaped hyphen 保留 pending range 的情况；不能仅凭 `class_hyphen` 决定。合法 subtraction 及必须最后出现的限制、首个 literal `]`、外层 negation、escaped `[` 和不完整 token 的既有边界保持。
+4. `_delimiters` 只对三种 regexp2 类型使用此规则。`URL-REGEX` 的 Python 词法、validator 及合法输入 `URL-REGEX,^[[:alpha:]()$` 保持，不用 regexp2 class 规则改变其字段边界。
+5. capture 编号、named backreference、x-mode／类内 `#`、未知 escape、原 anchor／量词及 600／1,000 层深度继续校验。公开 parse／white、直接 Rule render 和真实 generate／publish／同轮及 disk YAML 依赖均须验证合法保留、非法拒绝及健康邻居。
+6. native logical 保留原有字面括号平衡限制，不要求未编码的单边 `(` matcher 进入 native logical。使用 balanced 合法见证 `^[[:alpha:](][)]$` 验证 AND／OR／NOT；普通 logical 沿用现有必要编码，非法叶子使整条拒绝。DNS 继续 unsupported，不增加 Surge／QX／DNS 支持或 PROCESS white 能力。
+
+## R5：普通 hosts 的逐 alias 恢复
+
+### 已确认现象与根因
+
+输入 `127.0.0.1 good.example bad(,x sibling.example` 后接 `DOMAIN,neighbor.example` 时，当前仅保留 neighbor 并报告整行 `unbalanced delimiters`。期望保留 good、sibling、neighbor，并按该物理行报告 `invalid hosts domain bad(,x`。`bad,'x`、`bad,"x` 同样使整行 lexer 失败。`parse_whitelist`、真实 source／white 及生成依赖继承丢失结果。
+
+`_source_records` 已识别 hosts 并删除首个 `#` 后的注释，却仍无条件调用 `_source_parts`，在到达现有逐 alias validator 前失败。逐 alias 恢复是 `2026-10-23-functional-regressions-design.md:34` 及 `tests/test_rules.py:750-760` 已有要求。
+
+### 修正要求与保留边界
+
+1. 仅调整 `_source_records`：四个原地址 `0.0.0.0`、`127.0.0.1`、`::`、`::1` 后接 SP／HTAB 时，删除首个 `#` 至物理行末并设 `parts = [line]`；仅其他行调用 `_source_parts` 并按 `end` 裁剪。继续使用现有逐 alias hostname validator，不新增 lexer 或扩大地址识别。
+2. 首个 `#` 前全部合法 alias 保留，非法 alias 逐项按原物理行号 warning；后续 alias／物理行继续处理。覆盖四地址、SP／HTAB、BOM、LF／CRLF、非法逗号加括号／引号及多个非法 alias。`;`、`//` 在 hosts alias 中不成为注释，按现有 hostname 校验报告并继续后续合法 alias。
+3. unsupported physical separator 检查仍在前面执行，后续 HTML document／真实 markup 继续拒绝。普通 typed、native provider、regex、ABP、其他地址及非 hosts 分隔保持原行为；注释中的 markup 和不平衡符号不影响合法邻行。
+4. direct／proxy 对已识别 hosts 只给原 `hosts entry is block-only` 诊断；不逐 alias 接受其 hostname。block 与真实 parse_whitelist 保留合法 alias 的身份、顺序、规范化及覆盖关系。
+5. 真实 generate／publish 的 raw source／white、同轮和非空 disk source／white 均核对六格式完整 bytes、DNS 例外及行号。含合法 alias 的输入不能因非法邻项成为全无效来源；真正全无效远端来源仍冻结及传播，健康组继续，本地 source／white 严格失败，旧六文件及 static 保持。白名单混合坏 alias 的既有 warning 容许范围不扩大到其他坏行。
+
 ## 共同的不变条件
 
 来源白名单过滤 -> `no_resolve` -> 规范化 -> 目标投影及目标 white 过滤的顺序保持。`no_resolve` 的 `add`／`strip`／`keep` 只影响适用的目的 IP 规则，不把来源方向变为目的方向。
@@ -90,15 +147,21 @@ native `payload:`／`rules:` 中的 `IP-ASN,0013335` 当前可进入 Surge scala
 
 ## 证据与验收依据
 
-复核报告标识为 R1 的 `wxol2ntbu` 和 R2 的 `w6zj74dcc`。R1 三方均确认现象，其中一方提出历史逐项覆盖规格的差别，本规格已明确本次并集要求。R2 报告须按前述闭源运行限制解释，不能将静态依据写成客户端实测。
+完整 scan／coverage-check 报告为 `woehc102q`；复核报告为 R1 的 `wxol2ntbu`、R2 的 `w6zj74dcc`、R3 的 `w3c6mecwg`、R4／R5 的 `wsfbdcf9c`，均保存在本次会话的 tasks 目录。DNS 以 R3 复核及后续内存设计实验为准。R2 的已确认范围是文件回读差异和固定 Mihomo 字符串匹配差异，闭源客户端运行结果仍未验证。
 
 可复用的本地复现材料在主 checkout 的已忽略 `.tmp/functional-scan-20261023/` 下：
 
 - `cidr-generate-verify-d_0gqrb1/minimal_regression.py` 与 `verify_generation.py` 检查 R1 的真实生成、发布及依赖边界；`cidr-options-counterproof-wrqjq911/` 保存 options、allow 及 QX identical-only 的对照。
 - `asn-refutation-4htk_04c/probe_asn.py`、`asn-independent-036p7h_y/repro_asn.py` 与 `test_projection_contract.py` 保存 R2 的源格式、公开入口及依赖反例。
+- `dns-memo-plan-8243301ff9724759ba7e9b2039fb1011/` 下的 `results/conclusion.json`、`results/manifest.json`、`complete/data/shadow-change.diff` 和 `scripts/probe.py` 保存 R3 的六处局部设计、全部输入输出、命令及资源结果。conclusion 与 manifest 的 SHA-256 分别为 `5bdd550157526e43901e790b9f55164f6a4f1db03f92f41867f7fd22f242a42f`、`51eaaa74345468975ab0a73be150d164e36f00f3f2d5c7d3edd57480001d1371`，本次已核对其值及 manifest 的 3,164 个文件。此证据只批准局部设计实验，不替代产品 TDD 或最终 suite。
+- `posix-source-proof-xykhfxtq/`、`posix-independent-ywt60hh1/`、`posix-independent-xe929lvx/` 保存 R4 的固定源码及 hash、输入矩阵、deep probe、URL／range／capture 对照及真实发布记录。
+- `hosts-counterproof-7yjtb8ee/`、`hosts-independent-uf46t53w/` 保存 R5 的非法 alias、诊断、source／white／发布与冻结对照。
+- `baseline-suite-xwi2l7n0/` 下的 `suite-result.json`、`final-integrity.json`、`logs/unittest-linux.log` 保存完整 Linux 基线、10 个原 skips 及 139 文件完整性证据，旧证据只读保留。
 - `generation-upstreams-wacea8ew/manifest.json` 及 `raw/` 保存 56 个唯一 URL、18,116,304 bytes；83 个配置角色中含 72 个远端角色和 11 个本地／生成角色。body 大小与 SHA-256 已核对。旧 manifest 只有耗时 `seconds`，没有逐 URL 绝对开始时刻，不补造该信息。
 - `generation-gf9t9asj/acceptance-_ky64k6k/fixed-input-results.json` 记录基线固定输入生成 42 个产物、78,317,013 bytes、数量与 README 相同、无冻结及 static／主目录生产输出不变。fmz200 的两条既有 `invalid domain` warning 在 a3／a4 各出现一份。此结果按原报告环境解释，不能作为最终 Linux 或最终代码验收。
 
-最终验收须使用 exact Git archive 在 Linux 原生 `/tmp` 完成完整 unittest，记录基线及最终 SHA／tree、解释器、输入及受控文件 hash。固定上游输入在同一解释器与固定 header 时钟下比较，必要时重放基线；最终两轮 42 文件 bytes 和 diagnostics 必须稳定。逐项检查格式、文件头、数量、排序、去重、Surge 完整文件与拆分文件、noresolve、README、static、单文件小于 100 MiB，以及 DNS 每行含 LF 不超过 65,536 UTF-8 bytes。生产差异逐规则对应确认修复，不使用比例阈值。
+最终验收须使用 exact Git archive 在 Linux 原生 `/tmp` 完成完整 unittest，记录基线及最终 SHA／tree、archive、解释器和文件 manifest。原 139 文件及本次新增受控文件在各自测试前后 hash 不变，保留原 8 秒／内存阈值、recursionlimit 与整数长度限制，不新增 skip。固定上游输入必须在同一 Linux 解释器、相同 static／配置及固定 header 时钟下重放 `ea67234` baseline，再运行最终 tree 两轮；42 文件 bytes 和 diagnostics 必须稳定。mapped IPv6 的解释器表示差别先由同环境重放消除，不要求旧环境的 78,317,013 bytes 固定不变。
 
-远端完成条件为最终推送的代码 main SHA 对应的 Ubuntu test 成功及有效 update 成功，另记录仅更新产物与 README 的实际发布 commit，读取该 commit 的 42 文件 bytes 核验，并确认发布修改路径属于 42 个产物及 README 的 43 路径集合。`superseded` 仅表示旧事件退出，必须继续核查最终 main 的测试和发布。具体执行、分工与验收步骤见实施计划。
+逐项检查格式、文件头、数量、排序、去重、Surge 完整文件与拆分文件、noresolve、README、static、单文件小于 100 MiB，以及 DNS 每行含 LF 不超过 65,536 UTF-8 bytes。ADB 使用其输出语法、`@@`、计数、排序及行限验收，不要求通用 parse 接受全部生成 regex。生产差异逐规则对应 R1 至 R5，不使用比例阈值。
+
+远端完成条件为最终推送的代码 main SHA 对应 Ubuntu test 成功及有效 update 成功。`published` 时记录新增的实际发布 commit，检查其 diff 属于 42 产物及 README 的 43 个允许路径，并从该不可变 commit 核验真实 bytes。`unchanged` 时记录没有新增发布 commit，保留 update 日志，从受测事件 SHA 的不可变快照核验 42 文件、README 及与本轮目标 bytes 一致性，不把代码 commit 当作产物发布 commit 检查 diff。`superseded` 仅表示旧事件退出，继续追踪最终实际代码 SHA 的测试与有效 update，再按真实状态验收。具体执行、分工与清理步骤见实施计划。

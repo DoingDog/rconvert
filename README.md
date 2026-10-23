@@ -53,7 +53,7 @@
 
 重新导入只读取实际文件 bytes，按 Mihomo 原生语义解析已输出的 matcher，普通 YAML 注释被忽略；转换前的 Rule 类型和来源信息不通过文件恢复。raw `DOMAIN-REGEX` 不会反向恢复为 Surge 精确域名或后缀，在 Surge／Quantumult X 按实际类型 unsupported；AdGuard DNS 重新检查完整结构证书。已有 raw paired exact 可保留其 ASCII-only 谓词，含根点敏感 legacy 分支的 raw paired suffix 不输出 DNS。在相同来源格式上下文中，相同 bytes 作为用户输入、同轮生成依赖或非空磁盘依赖时，取得相同的目标支持子集。
 
-Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。
+Mihomo 独立 classical provider 的 `payload:` 和 `rules:` 列表均使用无策略入口，支持单行 plain、single-quoted 和 double-quoted 标量。外层 YAML 引号负责标量解码；解码后的字段按字面逗号分隔，只裁剪字段边缘的 ASCII space。三个原生 regex 类型和逻辑规则将 type 后的全部字段重连为 matcher，内部引号保留为字面内容。完整 Mihomo 配置导入和多行 YAML 标量不在支持范围内，超出单行子集的输入给出行号 warning。native provider 的多字符前导零 `IP-ASN` 在 `fin.yaml` 保留原字符串；Surge／Quantumult X 将对应投影计为 unsupported，Surge 含该叶子的 logical 整条跳过。
 
 native provider 的 `GEOIP`／`SRC-GEOIP` 支持 `private`、`telegram`、`cloudflare` 等命名类别及首个 `!` 取反，原 payload 保留在 Mihomo 输出中。这些类别及取反语义要求客户端启用 `geodata-mode: true` 并具有相应 dat 类别；转换器不读取数据库，也不承诺默认 mmdb 模式具有同样语义。普通显式 GEOIP 语法保持原范围；Surge／Quantumult X 仍只接受各自已有的 country／LAN／UNKNOWN 等能力，命名类别或取反叶子使对应目标的整条 logical 跳过。
 
@@ -86,7 +86,7 @@ DOMAIN-REGEX,'^a{b$',My Proxy # note}c$|^foo$
 
 所有规则组均使用 Sukka 的 [非 IP LAN 白名单](https://ruleset.skk.moe/Clash/non_ip/lan.txt) 和 [IP LAN 白名单](https://ruleset.skk.moe/Clash/ip/lan.txt)；`a4` 与 `a3` 的白名单相同。`tg` 还使用 `static/` 中的 [`tg-sentinel.txt`](static/tg-sentinel.txt)，即使远端 LAN 白名单不可用，也排除上游的非 Telegram 哨兵。
 
-白名单使用域名精确、后缀、keyword、wildcard、`DOMAIN-REGEX` 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。raw `DOMAIN-REGEX` 保留 matcher 原文完全相同的覆盖；另对已有 raw paired 严格模板保留有限的完整包含关系，不推断任意 regex 等价。raw paired suffix white 不能删除仍匹配 Kelvin sign `K` 的 canonical regex，来源覆盖或单个 Host 命中均不能代替实际目标的完整包含证明。
+白名单使用域名精确、后缀、keyword、wildcard、`DOMAIN-REGEX` 及适用的 IP 类规则，忽略 USER-AGENT 和 PROCESS 等类型。只删除与白名单精确相同或匹配集合被其完整覆盖的规则：`DOMAIN,safe.example.com` 不会删除 `DOMAIN-SUFFIX,example.com`；`DOMAIN-SUFFIX,example.com` 可以删除 `DOMAIN,ads.example.com`。CIDR 按同方向、同实际地址族的有效白名单完整并集判定覆盖，部分覆盖保留整条规则。raw `DOMAIN-REGEX` 保留 matcher 原文完全相同的覆盖；另对已有 raw paired 严格模板保留有限的完整包含关系，不推断任意 regex 等价。raw paired suffix white 不能删除仍匹配 Kelvin sign `K` 的 canonical regex，来源覆盖或单个 Host 命中均不能代替实际目标的完整包含证明。
 
 keyword 包含去重同时保留各目标的字段能力：短项因起始引号、边缘空白、普通 markup 读取限制或 native 末尾根点而不能替代长项时，长项继续保留；正常可证明的包含归约和来源／allow／options 身份分组不变。
 
