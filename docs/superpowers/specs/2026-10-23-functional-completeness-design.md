@@ -116,15 +116,25 @@ native `payload:`／`rules:` 中的 `IP-ASN,0013335` 当前可进入 Surge scala
 
 独立公开复核确认 commit `da0b38a5fe76ab7629777cdc17621ec45f210e0f` 在三种类型的普通 quoted 与 native scalar 共六种组合中接受该候选并写入 `fin.yaml`，属于回归。删除 `(?n)` 后的对照及 `^[a-\-[:alpha:]]$` 均须保留，不能通过拒绝全部 pending-range subtraction 消除误接受。
 
+捕获预扫描按固定 `parser.go:369-397,1663-1684` 读取 `scanOptions` 前缀并立即应用 options 状态，即使下一个字符不是 `)` 或 `:`。完整扫描的 `_scan_regex_options` 继续只接受完整合法 header。按 `countCaptures:334-397`，消费 `(?#...)` 后清除 `ignoreNextParen`，使条件头的暂时抑制不延续至后面的真实 capture。固定源码 `posix-source-proof-xykhfxtq/data-regexp2/parser.go` 的 SHA-256 为 `915ca8a3a48179570a0dcdde9ff35ff88afe349b976c42ad418a5a366a6b5605`；以下均为实际 matcher，反斜杠为单个字符。
+
+| 实际 matcher | 固定真值及 capture 依据 |
+| --- | --- |
+| `^[a-\-[][:alpha:](?n)(?-n]](a)\1$` | 合法，`-n` 前缀即时关闭 `n`，`(a)` 登记 slot 1 |
+| `^[a-\-[][:alpha:](?(?#x)]](a)\1$` | 合法，comment 消费后清除 `ignoreNextParen`，`(a)` 登记 slot 1 |
+| `^[a-\-[][:alpha:](?n(a))]](b)\2$` | 非法，`n` 前缀使 `(a)` 不登记，状态恢复后 `(b)` 仅登记 slot 1，`\2` 未定义 |
+| `^[a-\-[][:alpha:](?n(a))]](b)\1$` | 合法，引用 `(b)` 的 slot 1 |
+| `^[a-\-[][:alpha:](?n]](a)\1$` | 非法，`n` 前缀生效后 `(a)` 不登记 slot 1，与完整 `(?n)` 候选的拒绝结果一致 |
+
 ### 修正要求与保留边界
 
 1. 产品修改限于 `_delimiters`／`_valid_regex` 的 class 扫描、capture slot 收集与引用校验及确需的共享短 helper。在非转义、非 pending-range 的内部 `[` 处识别完整 `[:`、可选 `^`、零个或多个固定 Go `IsWordChar`、`:]`。空名、未知名、数字开头和 Unicode 名均按同一规则消费；不完整、转义或含非 word 字符的片段恢复原逐字符扫描。可复用 `_regexp2_word_char`，不得误用带 numeric 分支的 `_scan_capture_name`。
 2. 消费完整 token 后外层 class 继续打开，validation probe 用 `\[` 表示原 literal 并继续原 range／capture 检查。原 Rule matcher 不改，输出沿用各目标既有编码，probe 不写入 Rule 或产物；deep validator 继续消费修正后的 probe，不新增 parser。
-3. 完整扫描中 subtraction 与 pending range 优先于 token 消费，包括 escaped hyphen 保留 pending range 的情况；不能仅凭 `class_hyphen` 决定。合法 subtraction 及必须最后出现的限制、首个 literal `]`、外层 negation、escaped `[` 和不完整 token 的既有边界保持。捕获预扫描须遵循固定 `scanOnly` 的 class 边界及 option 作用域，capture slot／引用校验不得直接沿用完整扫描结果。新增候选须按固定真值拒绝，两个合法对照继续接受；禁止按候选文本特征硬编码拒绝、全拒 subtraction、运行外部实现或新增通用 parser。
+3. 完整扫描中 subtraction 与 pending range 优先于 token 消费，包括 escaped hyphen 保留 pending range 的情况；不能仅凭 `class_hyphen` 决定。合法 subtraction 及必须最后出现的限制、首个 literal `]`、外层 negation、escaped `[` 和不完整 token 的既有边界保持。捕获预扫描须遵循固定 `scanOnly` 的 class 边界及 option 作用域，capture slot／引用校验不得直接沿用完整扫描结果。上述 29 字符候选及上表非法 matcher 须按固定真值拒绝，全部合法对照继续接受。本轮新增预扫描边界的产品修改仅限既有 `_regexp2_capture_slots` 与 `_valid_regex` 必要元数据使用及对应回归测试；已有其他 class／deep 函数保持。禁止按候选文本特征硬编码拒绝、全拒 subtraction、运行外部实现或新增通用 parser。
 4. `_delimiters` 只对三种 regexp2 类型使用此规则。`URL-REGEX` 的 Python 词法、validator 及合法输入 `URL-REGEX,^[[:alpha:]()$` 保持，不用 regexp2 class 规则改变其字段边界。
 5. capture 编号、named backreference、x-mode／类内 `#`、未知 escape、原 anchor／量词及 600／1,000 层深度继续校验。公开 parse／white、直接 Rule render 和真实 generate／publish／同轮及 disk YAML 依赖均须验证合法保留、非法拒绝及健康邻居。
 6. native logical 保留原有字面括号平衡限制，不要求未编码的单边 `(` matcher 进入 native logical。使用 balanced 合法见证 `^[[:alpha:](][)]$` 验证 AND／OR／NOT；普通 logical 沿用现有必要编码，非法叶子使整条拒绝。DNS 继续 unsupported，不增加 Surge／QX／DNS 支持或 PROCESS white 能力。
-7. 深层回归兼容声明的 Python 3.11+ 与现有 CI，使用标准库 `cProfile.Profile`，在原 600／1,000 层子进程内断言存在 `entry.code is rules._valid_deep_regex.__code__` 且 `entry.callcount > 0`。保留实际调用观察、原 `timeout=8`、recursionlimit=1000、int_max_str_digits=4300 及既有测试；不修改 `_valid_deep_regex`，不增加 skip、fallback 或依赖，不提高最低版本或修改 CI。D 必须实际验证最终实现并记录运行版本；未实际运行 Python 3.11 时明确记录该限制。两项修正由 D 在原 owner worktree 连续完成 TDD、边界、规格／功能／简化复审、最终 exact tree 完整 Linux suite 及 clean 英文新提交后才合并；扩大 owner 范围须先说明证据并更新共同规格／计划。
+7. 深层回归兼容声明的 Python 3.11+ 与现有 CI，使用标准库 `cProfile.Profile`，在原 600／1,000 层子进程内断言存在 `entry.code is rules._valid_deep_regex.__code__` 且 `entry.callcount > 0`。保留实际调用观察、原 `timeout=8`、recursionlimit=1000、int_max_str_digits=4300 及既有测试；不修改 `_valid_deep_regex`，不增加 skip、fallback 或依赖，不提高最低版本或修改 CI。D 必须实际验证最终实现并记录运行版本；未实际运行 Python 3.11 时明确记录该限制。D 在原 owner worktree 对每个新增根因分别完成真实 red -> 最小 green -> 全部边界 -> 自审修正与规格／功能／简化复审，再运行新 exact tree 完整 Linux suite 并创建 clean 英文新提交；主会话独立复审确认有效问题均已修正后才合并。扩大 owner 范围须先说明证据并更新共同规格／计划。
 
 ## R5：普通 hosts 的逐 alias 恢复
 

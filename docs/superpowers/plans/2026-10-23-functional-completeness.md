@@ -129,11 +129,21 @@
 
 ### U3.2：regexp2 POSIX-looking class 边界
 
-**依赖与 owner：** U0 及共同文档提交，owner D；依据规格 R4，与其他四项并行。捕获预扫描与深层测试兼容性两项修正在更新后的共同文档合并后，由 D 在原 owner worktree 连续完成；主会话不代接编码。
+**依赖与 owner：** U0 及共同文档提交，owner D；依据规格 R4，与其他四项并行。本轮捕获预扫描边界修正在更新后的共同文档合并后，由 D 在原 owner worktree 连续完成；主会话不代接编码。
 
-**修改与复用：** 产品修改限于 `_delimiters`／`_valid_regex` 的 class 扫描、capture slot 收集与引用校验及确需的共享短 helper，两个 scanner 可复用 `_regexp2_word_char`。按固定 regexp2 v1.12.0／`3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` `syntax/parser.go:1538-1590` 的非 RE2、非 pending-range 消费规则识别完整 token；不复用 numeric 模式不同的 `_scan_capture_name`。capture slot 按 `countCaptures`／`scanCharSet(false, true)` 的预扫描边界及 option 作用域收集，完整扫描后仍用该表校验引用；核对 `151-165,304-417,841,1256-1270,1522-1609,1939-1945`，保留两个阶段不同的 subtraction／class 边界。probe 使用 `\[` 并保留原完整 class 检查，原 matcher 不变；原 `_valid_deep_regex` 继续消费 probe，不修改该函数、DNS 或其他 owner 位置，不运行外部实现或新增通用 parser。若确需扩大范围，先给出证据并更新共同规格／计划及所有权。
+**修改与复用：** 产品修改限于 `_delimiters`／`_valid_regex` 的 class 扫描、capture slot 收集与引用校验及确需的共享短 helper，两个 scanner 可复用 `_regexp2_word_char`。按固定 regexp2 v1.12.0／`3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` `syntax/parser.go:1538-1590` 的非 RE2、非 pending-range 消费规则识别完整 token；不复用 numeric 模式不同的 `_scan_capture_name`。capture slot 按 `countCaptures`／`scanCharSet(false, true)` 的预扫描边界及 option 作用域收集，完整扫描后仍用该表校验引用；核对 `151-165,304-417,841,1256-1270,1522-1609,1663-1684,1939-1945`，保留两个阶段不同的 subtraction／class 边界。预扫描读取 `scanOptions` 前缀后立即应用状态，即使后面不是 `)` 或 `:`；完整扫描的 `_scan_regex_options` 继续只接受完整合法 header。消费 `(?#...)` 后按 `countCaptures:334-397` 清除 `ignoreNextParen`。本轮新增边界只修改既有 `_regexp2_capture_slots`、`_valid_regex` 必要元数据使用及指定测试文件，已有其他 class／deep 函数保持。固定源码路径及 SHA-256 见规格 R4。probe 使用 `\[` 并保留原完整 class 检查，原 matcher 不变；原 `_valid_deep_regex` 继续消费 probe，不修改该函数、DNS 或其他 owner 位置，不运行外部实现或新增通用 parser。若确需扩大范围，先给出证据并更新共同规格／计划及所有权。
 
 **先取得失败证据：** 在 `tests/test_regexp2_posix_class_regressions.py` 经真实公开 parse 断言两个非法 matcher `^[[:alpha:]()]\1$`、`^[[:alpha:]-!]$` 被拒绝，合法 scalar `^[[:alpha:](]$` 保留；基线分别因错误接受／拒绝而判红。新增 `^[a-\-[][:alpha:](?n)]](a)\1$` 的公开入口失败回归，确认实际 matcher 长度 29、仅索引 4／26 为反斜杠，分别组成 `\-`／`\1`，并因误接受而判红；同时记录现有 deep 观察对 Python 3.11 不兼容的证据，导入或 fixture 错误不能作为捕获缺陷的 red。期望来自固定源代码，不以 Python re 的结果充当 regexp2 真值。D 在同一 worktree 完成真实 red -> 最小 green -> 边界 -> 规格／功能／简化审查 -> 修正与复审，既有测试保留。
+
+**新增预扫描回归：** options 前缀状态与 comment 清理两个根因分别取得真实 assertion red，再作最小修正使其 green，随后补齐全部对照。下列均为实际 matcher，反斜杠为单个字符；固定真值及 capture 依据见规格 R4。
+
+| 实际 matcher | 公开入口期望 |
+| --- | --- |
+| `^[a-\-[][:alpha:](?n)(?-n]](a)\1$` | 合法，保留 |
+| `^[a-\-[][:alpha:](?(?#x)]](a)\1$` | 合法，保留 |
+| `^[a-\-[][:alpha:](?n(a))]](b)\2$` | 非法，拒绝 |
+| `^[a-\-[][:alpha:](?n(a))]](b)\1$` | 合法，保留，作为 `\2` 的对照 |
+| `^[a-\-[][:alpha:](?n]](a)\1$` | 非法，拒绝，并保持完整 `(?n)` 候选的拒绝结果 |
 
 **回归场景：**
 
@@ -144,7 +154,7 @@
 5. 明确 `_delimiters` 只对 `DOMAIN-REGEX`／`PROCESS-NAME-REGEX`／`PROCESS-PATH-REGEX` 启用该扫描，合法 `URL-REGEX,^[[:alpha:]()$` 及其 Python validator 不变；不增加其他目标或 PROCESS white 支持，DNS 对 POSIX-looking class 继续 unsupported。
 6. 新候选及合法对照均覆盖公开 scalar／native／ordinary quote、logical、parse_whitelist、直接 Rule render、真实 generate／publish、同轮与非空 disk YAML source／white；核对合法保留、非法拒绝、健康邻居及旧文件保护。用标准 `json.loads` 解码实际 `fin.yaml` 标量并逐字比较原 matcher，再用公开 parse 回读，保留 roundtrip 断言。logical 仍按第 4 项的既有编码／平衡边界测试；两种 PROCESS regex 的 white 按既有不支持边界检查，不将其当作 `DOMAIN-REGEX` white。
 
-**验证与提交：** 新测试、既有 class／subtraction／capture／named-reference／x-mode／deep／URL／regexp2 anchor 及 logical 回归通过，检查原 matcher 未被 probe 覆盖。`cProfile.Profile` 的既有 Linux Python 3.13.5 复审实验在 600／1,000 层分别耗时 2.184／2.840 秒；D 仍须实际验证最终实现的八秒子进程及调用观察，并记录实际运行版本，未实际运行 Python 3.11 不得声称已验证该版本。D 在原 owner worktree 完成两项修正、边界、规格／功能／简化复审及最终 exact tree 的完整 Linux suite 后创建英文新 commit，核对 commit tree 与受测 tree 相同并返回 clean SHA／tree／日志／manifest；不 amend、不跳过 hooks，修正完成后主会话才合并。
+**验证与提交：** 新测试、既有 class／subtraction／capture／named-reference／x-mode／deep／URL／regexp2 anchor 及 logical 回归通过，检查原 matcher 未被 probe 覆盖。`cProfile.Profile` 的既有 Linux Python 3.13.5 复审实验在 600／1,000 层分别耗时 2.184／2.840 秒；D 仍须实际验证最终实现的八秒子进程及调用观察，并记录实际运行版本，未实际运行 Python 3.11 不得声称已验证该版本。D 在原 owner worktree 逐根因完成捕获预扫描修正、全部边界、自审修正与规格／功能／简化复审，再运行新 exact tree 的完整 Linux suite，创建英文新 commit，核对 commit tree 与受测 tree 相同并返回 clean SHA／tree／日志／manifest；不 amend、不跳过 hooks 或签名。主会话独立复审确认有效问题均已修正后才合并。
 
 ### U3.3：hosts 逐 alias 恢复
 
