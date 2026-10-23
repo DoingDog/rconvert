@@ -730,16 +730,13 @@ def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]]:
             if value.startswith('(?#', index - 1):
                 end = value.find(')', index + 2)
                 index = len(value) if end < 0 else end + 1
+                ignore_next = False
                 continue
-            flags = _scan_regex_options(value, index - 1, extended, explicit_capture)
-            if flags is not None:
-                if flags[1] == ':':
-                    options.append((extended, explicit_capture))
-                index, _, extended, explicit_capture = flags
-            else:
-                options.append((extended, explicit_capture))
-                if value.startswith(('?<', "?'"), index):
-                    key, end, numeric = _scan_capture_name(value, index + 2)
+            options.append((extended, explicit_capture))
+            if value[index:index + 1] == '?':
+                index += 1
+                if value[index:index + 1] in {'<', "'"} and index + 1 < len(value):
+                    key, index, numeric = _scan_capture_name(value, index + 1)
                     if key and not key.startswith('0'):
                         if numeric:
                             number = _capture_number(key)
@@ -747,14 +744,29 @@ def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]]:
                                 slots.add(number)
                         else:
                             names.add(key)
-                    index = end
-                elif value.startswith('?(', index):
-                    index += 1
-                    ignore_next = True
-                    continue
-                elif value[index:index + 1] != '?' and not explicit_capture and not ignore_next:
-                    captures += 1
-                    slots.add(captures)
+                else:
+                    # countCaptures 立即应用 options 前缀，不要求完整 header。
+                    enabled = True
+                    while index < len(value):
+                        option = value[index].lower()
+                        if option in '+-':
+                            enabled = option == '+'
+                        elif option not in 'imnsxdu':
+                            break
+                        elif option == 'x':
+                            extended = enabled
+                        elif option == 'n':
+                            explicit_capture = enabled
+                        index += 1
+                    if value[index:index + 1] == ')':
+                        index += 1
+                        options.pop()
+                    elif value[index:index + 1] == '(':
+                        ignore_next = True
+                        continue
+            elif not explicit_capture and not ignore_next:
+                captures += 1
+                slots.add(captures)
             ignore_next = False
     slot = captures + 1
     for _ in names:

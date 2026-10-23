@@ -21,6 +21,11 @@ CASES = ((r'^[[:alpha:](]$', True), (r'^[[:alpha:]-!]$', False),
 PRESCAN_CASES = ((r'^[a-\-[][:alpha:]]](a)\1$', True),
                  (r'^[a-\-[][:alpha:](?n)]](a)\1$', False),
                  (r'^[a-\-[][:alpha:](?n)]](?<word>a)\k<word>$', True))
+PREFIX_CASES = ((r'^[a-\-[][:alpha:](?n)(?-n]](a)\1$', True),
+                (r'^[a-\-[][:alpha:](?(?#x)]](a)\1$', True),
+                (r'^[a-\-[][:alpha:](?n(a))]](b)\2$', False),
+                (r'^[a-\-[][:alpha:](?n(a))]](b)\1$', True),
+                (r'^[a-\-[][:alpha:](?n]](a)\1$', False))
 
 
 class Regexp2PosixClassTests(unittest.TestCase):
@@ -31,6 +36,20 @@ class Regexp2PosixClassTests(unittest.TestCase):
         self.assertEqual(
             parse('DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example', purpose='block'),
             ([Rule('DOMAIN', 'neighbor.example')], [f'line 1: invalid DOMAIN-REGEX {value}']),
+        )
+
+    def test_prescan_applies_options_prefix_before_nonheader_character(self):
+        value = r'^[a-\-[][:alpha:](?n)(?-n]](a)\1$'
+        self.assertEqual(
+            parse('DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example', purpose='block'),
+            ([Rule('DOMAIN-REGEX', value), Rule('DOMAIN', 'neighbor.example')], []),
+        )
+
+    def test_prescan_comment_clears_conditional_capture_suppression(self):
+        value = r'^[a-\-[][:alpha:](?(?#x)]](a)\1$'
+        self.assertEqual(
+            parse('DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example', purpose='block'),
+            ([Rule('DOMAIN-REGEX', value), Rule('DOMAIN', 'neighbor.example')], []),
         )
 
     def test_pending_range_survives_escaped_hyphen_before_subtraction(self):
@@ -107,6 +126,40 @@ import rules
 assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
 with cProfile.Profile() as profiler:
     Regexp2PosixClassTests()._check_scalar_matrix(int(sys.argv[2]), CASES + PRESCAN_CASES[:2])
+assert any(entry.code is rules._valid_deep_regex.__code__ and entry.callcount > 0
+           for entry in profiler.getstats())
+assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
+'''
+        root = Path(__file__).resolve().parents[1]
+        for depth in (600, 1000):
+            with self.subTest(depth=depth):
+                result = subprocess.run([sys.executable, '-I', '-B', '-c', script, str(root), str(depth)],
+                                        cwd=root, capture_output=True, text=True, timeout=8)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_deep_prefix_scopes_keep_capture_slots_and_original_limits(self):
+        script = r'''
+import cProfile
+import json
+import sys
+sys.path.insert(0, sys.argv[1])
+from tests.test_regexp2_posix_class_regressions import KINDS, PREFIX_CASES
+from rules import Rule, parse
+import rules
+assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
+depth = int(sys.argv[2])
+cases = PREFIX_CASES + ((r'^(?:[a-\-[][:alpha:](?n]](a))(b)\1$', True),
+                        (r'^[a-\-[][:alpha:](?n(a))]](?<word>b)\1\k<word>$', True))
+with cProfile.Profile() as profiler:
+    for kind in KINDS:
+        for atom, valid in cases:
+            value = '(?:' * depth + atom + ')' * depth
+            for native in (False, True):
+                source = ('payload:\n  - ' + json.dumps(kind + ',' + value) if native else
+                          kind + ',' + json.dumps(value))
+                parsed, messages = parse(source, purpose='block')
+                assert parsed == ([Rule(kind, value)] if valid else []), (kind, atom, native, parsed)
+                assert messages == ([] if valid else [f'line {2 if native else 1}: invalid {kind} {value}'])
 assert any(entry.code is rules._valid_deep_regex.__code__ and entry.callcount > 0
            for entry in profiler.getstats())
 assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
@@ -252,6 +305,51 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                  (r'^[a-\-[][:alpha:](?n)]](?<word>a)\2$', False))
         self._check_scalar_matrix(0, cases)
 
+    def test_prefix_witnesses_keep_actual_characters_and_all_scalar_forms(self):
+        for (value, _), length, reference in zip(PREFIX_CASES, (33, 32, 32, 32, 28), (30, 29, 29, 29, 25)):
+            self.assertEqual(len(value), length)
+            self.assertEqual([index for index, char in enumerate(value) if char == '\\'], [4, reference])
+            self.assertEqual(value[4:6], r'\-')
+            self.assertIn(value[reference:reference + 2], (r'\1', r'\2'))
+        self._check_scalar_matrix(0, PREFIX_CASES)
+
+    def test_prescan_prefix_stops_signs_case_and_scoped_options(self):
+        prefix = r'^[a-\-[][:alpha:]'
+        headers = (('(?n)(?-n', True), ('(?n)(?-n:', True), ('(?n)(?-nQ', True),
+                   ('(?n)(?-n0', True), ('(?n)(?-n!', True), ('(?n)(?-n.', True),
+                   ('(?n)(?-n#', True), ('(?n)(?-n[', True), (r'(?n)(?-n\(', True),
+                   ('(?n)(?-n)', True), ('(?n)(?)(?-n', True),
+                   ('(?iMnSdUn', False), ('(?IMNSXDU', False), ('(?n)(?+n-n', True),
+                   ('(?n)(?-+n-n', False),
+                   ('(?n)(?-n+n', False), ('(?-n+n-n+n', False),
+                   ('(?nr-n', False), ('(?ne-n', False), ('(?nc-n', False),
+                   ('(?nR-n', False), ('(?nE-n', False), ('(?nC-n', False),
+                   ('(?x#(?n)', False), ('(?x)(?-x', True),
+                   ('(?n:foo)', True), ('(?n:foo', False),
+                   ('(?n)(?-n:foo)', False), ('(?n)(?-n:foo', True))
+        self._check_scalar_matrix(0, tuple((prefix + header + r']](a)\1$', accepted)
+                                           for header, accepted in headers))
+        for header in ('(?c)', '(?r)', '(?e)', '(?n]]'):
+            value = header + r'(a)\1'
+            self.assertEqual(parse('DOMAIN-REGEX,' + json.dumps(value), purpose='block'),
+                             ([], [f'line 1: invalid DOMAIN-REGEX {value}']))
+
+    def test_prescan_stack_comment_reset_and_reference_neighbors(self):
+        cases = ((r'^(?:[a-\-[][:alpha:](?n]](a))(b)\1$', True),
+                 (r'^(?:[a-\-[][:alpha:](?n]](a))(b)\2$', False),
+                 (r'^[a-\-[][:alpha:](?(?#x))]](a)\1$', True),
+                 (r'^[a-\-[][:alpha:](?n)(?(?#x)]](a)\1$', False),
+                 (r'^[a-\-[][:alpha:](?n)(?(?#x)(?-n]](a)\1$', True),
+                 (r'^[a-\-[][:alpha:](?n(a))]](b)\k<1>$', True),
+                 (r'^[a-\-[][:alpha:](?n(a))]](b)\k<2>$', False),
+                 (r'^[a-\-[][:alpha:](?n(a))]](?<word>b)\1\k<word>$', True),
+                 (r'^[a-\-[][:alpha:](?n(a))]](?<word>b)\2$', False),
+                 (r'^[a-\-[][:alpha:](?n(a))]](?<7>b)(?<word>c)\1\7\k<word>$', True),
+                 (r'^[a-\-[][:alpha:](?n(a))]](?<7>b)(?<word>c)\2$', False),
+                 (r'^(?(a)(b)|(c))\2$', True), (r'^(?(a)(b)|(c))\3$', False),
+                 (r'^(?(?=(a))(b)|(c))\3$', True))
+        self._check_scalar_matrix(0, cases)
+
     def test_prescan_logical_leaves_keep_native_balance_and_ordinary_encoding(self):
         for kind in KINDS:
             for operator in ('AND', 'OR', 'NOT'):
@@ -272,6 +370,36 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                             outputs, _ = render('posix', parsed, purpose='proxy', no_resolve='keep')
                             encoded = value if native else value.replace('(?n)', r'\x{28}?n\x{29}')
                             projected_leaf = f'({kind},{encoded})'
+                            projected = f'({projected_leaf})' if operator == 'NOT' else f'({projected_leaf},(NETWORK,tcp))'
+                            self.assertCountEqual([json.loads(row[4:]) for row in outputs['fin.yaml'].splitlines()[2:]],
+                                                  ([operator + ',' + projected] if accepted else []) + ['DOMAIN,neighbor.example'])
+                            restored, messages = parse(outputs['fin.yaml'], purpose='proxy')
+                            self.assertEqual(messages, [])
+                            self.assertCountEqual(restored, ([Rule(operator, projected, native_fields=True)] if accepted else []) +
+                                                  [Rule('DOMAIN', 'neighbor.example', domain_source='mihomo')])
+
+    def test_prefix_logical_leaves_keep_encoding_and_native_balance_limit(self):
+        projections = (r'^[a-\-[][:alpha:]\x{28}?n\x{29}\x{28}?-n]](a)\1$',
+                       r'^[a-\-[][:alpha:]\x{28}?\x{28}?#x\x{29}]](a)\1$', None,
+                       r'^[a-\-[][:alpha:]\x{28}?n\x{28}a\x{29}\x{29}]](b)\1$', None)
+        for kind in KINDS:
+            for operator in ('AND', 'OR', 'NOT'):
+                for native in (False, True):
+                    for index, ((value, valid), encoded) in enumerate(zip(PREFIX_CASES, projections)):
+                        accepted = valid and (not native or index == 3)
+                        leaf = f'({kind},{value if native else json.dumps(value)})'
+                        expression = f'({leaf})' if operator == 'NOT' else f'({leaf},(NETWORK,tcp))'
+                        record = operator + ',' + expression
+                        source = ('payload:\n  - ' + json.dumps(record) + '\n  - DOMAIN,neighbor.example\n' if native else
+                                  record + ',PROXY\nDOMAIN,neighbor.example,PROXY\n')
+                        neighbor = Rule('DOMAIN', 'neighbor.example', domain_source='mihomo' if native else 'surge')
+                        with self.subTest(kind=kind, operator=operator, native=native, value=value):
+                            parsed, messages = parse(source, purpose='proxy')
+                            self.assertEqual((parsed, messages),
+                                             (([Rule(operator, expression, native_fields=native)] if accepted else []) + [neighbor],
+                                              [] if accepted else [f'line {2 if native else 1}: invalid logical expression {expression}']))
+                            outputs, _ = render('posix', parsed, purpose='proxy', no_resolve='keep')
+                            projected_leaf = f'({kind},{value if native else encoded})'
                             projected = f'({projected_leaf})' if operator == 'NOT' else f'({projected_leaf},(NETWORK,tcp))'
                             self.assertCountEqual([json.loads(row[4:]) for row in outputs['fin.yaml'].splitlines()[2:]],
                                                   ([operator + ',' + projected] if accepted else []) + ['DOMAIN,neighbor.example'])
@@ -320,6 +448,13 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
 
     def test_prescan_white_identity_and_direct_render_keep_legal_matcher(self):
         self._check_white_identity_and_render(PRESCAN_CASES[:2])
+
+    def test_prefix_white_and_direct_render_keep_legal_matchers_and_reject_neighbors(self):
+        invalid = tuple(case for case in PREFIX_CASES if not case[1])
+        for case in PREFIX_CASES:
+            if case[1]:
+                with self.subTest(value=case[0]):
+                    self._check_white_identity_and_render((case,) + invalid)
 
     def _products(self, group, matchers, purpose, neighbor=None):
         route = neighbor == 'surge'
@@ -470,9 +605,17 @@ with patch('formats.datetime') as clock:
         self._check_generation(PRESCAN_CASES[:2],
                                'AND,((DOMAIN-REGEX,' + PRESCAN_CASES[0][0] + '),(NETWORK,tcp))')
 
+    def test_prefix_generate_publish_yaml_dependencies_and_cli_keep_actual_matchers(self):
+        invalid = tuple(case for case in PREFIX_CASES if not case[1])
+        for case in PREFIX_CASES:
+            if case[1]:
+                with self.subTest(value=case[0]):
+                    self._check_generation((case,) + invalid,
+                                           r'AND,((DOMAIN-REGEX,^[[:alpha:](][)]$),(NETWORK,tcp))')
+
     def test_invalid_local_source_white_and_disk_yaml_preserve_old_outputs(self):
         for kind in KINDS:
-            for value, _ in CASES[1:] + PRESCAN_CASES[1:2]:
+            for value, _ in CASES[1:] + PRESCAN_CASES[1:2] + tuple(case for case in PREFIX_CASES if not case[1]):
                 for role in ('source', 'white', 'disk-source', 'disk-white'):
                     with self.subTest(kind=kind, value=value, role=role), tempfile.TemporaryDirectory() as directory:
                         root = Path(directory)
