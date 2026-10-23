@@ -1,4 +1,4 @@
-# big-data rules: 10580
+# big-data rules: 10587
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -108,6 +108,7 @@ DOMAIN,npm.jsr.io
 DOMAIN,o.n1mp.org
 DOMAIN,osl.ugr.es
 DOMAIN,p.sda1.dev
+DOMAIN,pic2.99.co
 DOMAIN,pixoraa.cc
 DOMAIN,r.bing.com
 DOMAIN,s3.m.0x.mk
@@ -930,6 +931,7 @@ DOMAIN,api.bintray.com
 DOMAIN,api.weather.com
 DOMAIN,apt.izzysoft.de
 DOMAIN,asset.chase.com
+DOMAIN,assets-v2.99.co
 DOMAIN,assets.about.me
 DOMAIN,assets.bbhub.io
 DOMAIN,assets.canny.io
@@ -937,6 +939,7 @@ DOMAIN,assets.cello.so
 DOMAIN,assets.clibo.tw
 DOMAIN,assets.game8.co
 DOMAIN,assets.goat.com
+DOMAIN,assets.grab.com
 DOMAIN,assets.habr.com
 DOMAIN,assets.jable.tv
 DOMAIN,assets.kagi.com
@@ -2446,6 +2449,7 @@ DOMAIN,artifacts.nixos.org
 DOMAIN,assets-cdn.jable.tv
 DOMAIN,assets-cdn.porn.com
 DOMAIN,assets-docs.dify.ai
+DOMAIN,assets-static.99.co
 DOMAIN,assets-www.xbox.com
 DOMAIN,assets.airbuddy.app
 DOMAIN,assets.apilayer.com
@@ -3896,6 +3900,7 @@ DOMAIN,rsync-linuxsoft.cern.ch
 DOMAIN,s3media.squarespace.com
 DOMAIN,safebrowsing.google.com
 DOMAIN,screenshots.webflow.com
+DOMAIN,scribe-web-sdk.grab.com
 DOMAIN,scripts.dailymail.co.uk
 DOMAIN,server.arcgisonline.com
 DOMAIN,static-assets.juksy.com
@@ -4405,6 +4410,7 @@ DOMAIN,static-production.npmjs.com
 DOMAIN,static-webfonts.myfonts.com
 DOMAIN,static.acm.account.sony.com
 DOMAIN,static.captcha-delivery.com
+DOMAIN,static1.straitstimes.com.sg
 DOMAIN,sts.online.visualstudio.com
 DOMAIN,typescript.visualstudio.com
 DOMAIN,web-static.pages.iheart.com
@@ -8472,6 +8478,7 @@ DOMAIN-WILDCARD,cdn-msp?.jmcomic-zzz.one
 DOMAIN-WILDCARD,video-thumbnail2.fc2.com
 DOMAIN-WILDCARD,rum-ingest.*.signalfx.com
 DOMAIN-WILDCARD,video?-thumbnail?.fc2.com
+DOMAIN-WILDCARD,cf-images.*.prod.boltdns.net
 DOMAIN-WILDCARD,object-storage-*.vexxhost.net
 DOMAIN-WILDCARD,vip-videoprem*-thumbnail?.fc2.com
 DOMAIN-WILDCARD,video-thumbnail?.liaoningmovie.net
