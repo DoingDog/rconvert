@@ -1,4 +1,4 @@
-# big-data rules: 10561
+# big-data rules: 10568
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -108,6 +108,7 @@ HOST,npm.jsr.io,LIST
 HOST,o.n1mp.org,LIST
 HOST,osl.ugr.es,LIST
 HOST,p.sda1.dev,LIST
+HOST,pic2.99.co,LIST
 HOST,pixoraa.cc,LIST
 HOST,r.bing.com,LIST
 HOST,s3.m.0x.mk,LIST
@@ -930,6 +931,7 @@ HOST,api.bintray.com,LIST
 HOST,api.weather.com,LIST
 HOST,apt.izzysoft.de,LIST
 HOST,asset.chase.com,LIST
+HOST,assets-v2.99.co,LIST
 HOST,assets.about.me,LIST
 HOST,assets.bbhub.io,LIST
 HOST,assets.canny.io,LIST
@@ -937,6 +939,7 @@ HOST,assets.cello.so,LIST
 HOST,assets.clibo.tw,LIST
 HOST,assets.game8.co,LIST
 HOST,assets.goat.com,LIST
+HOST,assets.grab.com,LIST
 HOST,assets.habr.com,LIST
 HOST,assets.jable.tv,LIST
 HOST,assets.kagi.com,LIST
@@ -2446,6 +2449,7 @@ HOST,artifacts.nixos.org,LIST
 HOST,assets-cdn.jable.tv,LIST
 HOST,assets-cdn.porn.com,LIST
 HOST,assets-docs.dify.ai,LIST
+HOST,assets-static.99.co,LIST
 HOST,assets-www.xbox.com,LIST
 HOST,assets.airbuddy.app,LIST
 HOST,assets.apilayer.com,LIST
@@ -3896,6 +3900,7 @@ HOST,rsync-linuxsoft.cern.ch,LIST
 HOST,s3media.squarespace.com,LIST
 HOST,safebrowsing.google.com,LIST
 HOST,screenshots.webflow.com,LIST
+HOST,scribe-web-sdk.grab.com,LIST
 HOST,scripts.dailymail.co.uk,LIST
 HOST,server.arcgisonline.com,LIST
 HOST,static-assets.juksy.com,LIST
@@ -4405,6 +4410,7 @@ HOST,static-production.npmjs.com,LIST
 HOST,static-webfonts.myfonts.com,LIST
 HOST,static.acm.account.sony.com,LIST
 HOST,static.captcha-delivery.com,LIST
+HOST,static1.straitstimes.com.sg,LIST
 HOST,sts.online.visualstudio.com,LIST
 HOST,typescript.visualstudio.com,LIST
 HOST,web-static.pages.iheart.com,LIST
@@ -8472,6 +8478,7 @@ HOST-WILDCARD,cdn-msp?.jmcomic-zzz.one,LIST
 HOST-WILDCARD,video-thumbnail2.fc2.com,LIST
 HOST-WILDCARD,rum-ingest.*.signalfx.com,LIST
 HOST-WILDCARD,video?-thumbnail?.fc2.com,LIST
+HOST-WILDCARD,cf-images.*.prod.boltdns.net,LIST
 HOST-WILDCARD,object-storage-*.vexxhost.net,LIST
 HOST-WILDCARD,vip-videoprem*-thumbnail?.fc2.com,LIST
 HOST-WILDCARD,video-thumbnail?.liaoningmovie.net,LIST

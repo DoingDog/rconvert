@@ -1,4 +1,4 @@
-# big-data rules: 2226
+# big-data rules: 2227
 DOMAIN-KEYWORD,1drv
 DOMAIN-KEYWORD,emby.
 DOMAIN-KEYWORD,nivod
@@ -118,6 +118,7 @@ DOMAIN-WILDCARD,cdn-msp?.jmcomic-zzz.one
 DOMAIN-WILDCARD,video-thumbnail2.fc2.com
 DOMAIN-WILDCARD,rum-ingest.*.signalfx.com
 DOMAIN-WILDCARD,video?-thumbnail?.fc2.com
+DOMAIN-WILDCARD,cf-images.*.prod.boltdns.net
 DOMAIN-WILDCARD,object-storage-*.vexxhost.net
 DOMAIN-WILDCARD,vip-videoprem*-thumbnail?.fc2.com
 DOMAIN-WILDCARD,video-thumbnail?.liaoningmovie.net

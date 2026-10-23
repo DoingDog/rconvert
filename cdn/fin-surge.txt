@@ -1,4 +1,4 @@
-# cdn rules: 80
+# cdn rules: 81
 DOMAIN-KEYWORD,99avcdn
 DOMAIN-KEYWORD,dsn.algolia.net
 DOMAIN-KEYWORD,-cdn.eporner.com
@@ -74,6 +74,7 @@ DOMAIN-WILDCARD,cdn-msp?.jmcomic-zzz.one
 DOMAIN-WILDCARD,video-thumbnail2.fc2.com
 DOMAIN-WILDCARD,rum-ingest.*.signalfx.com
 DOMAIN-WILDCARD,video?-thumbnail?.fc2.com
+DOMAIN-WILDCARD,cf-images.*.prod.boltdns.net
 DOMAIN-WILDCARD,object-storage-*.vexxhost.net
 DOMAIN-WILDCARD,vip-videoprem*-thumbnail?.fc2.com
 DOMAIN-WILDCARD,video-thumbnail?.liaoningmovie.net

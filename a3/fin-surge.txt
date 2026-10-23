@@ -1,4 +1,4 @@
-# a3 rules: 310
+# a3 rules: 314
 DOMAIN-KEYWORD,a8cv.
 DOMAIN-KEYWORD,admob
 DOMAIN-KEYWORD,adsby
@@ -239,6 +239,7 @@ URL-REGEX,/igd\.xml
 URL-REGEX,/\d+/sign_d
 URL-REGEX,/\d+/resolve
 USER-AGENT,AVOS*
+IP-CIDR,122.9.13.79/32,no-resolve
 IP-CIDR,122.9.7.134/32,no-resolve
 IP-CIDR,203.107.1.0/24,no-resolve
 IP-CIDR,47.99.42.29/32,no-resolve
@@ -247,6 +248,7 @@ IP-CIDR,106.11.25.31/32,no-resolve
 IP-CIDR,116.63.10.31/32,no-resolve
 IP-CIDR,119.29.29.98/31,no-resolve
 IP-CIDR,122.229.8.47/32,no-resolve
+IP-CIDR,122.9.15.129/32,no-resolve
 IP-CIDR,180.96.2.114/32,no-resolve
 IP-CIDR,39.97.130.51/32,no-resolve
 IP-CIDR,42.81.232.18/32,no-resolve
@@ -277,6 +279,8 @@ IP-CIDR,101.124.19.122/32,no-resolve
 IP-CIDR,101.227.200.11/32,no-resolve
 IP-CIDR,101.227.200.28/32,no-resolve
 IP-CIDR,101.227.97.240/32,no-resolve
+IP-CIDR,101.91.140.124/32,no-resolve
+IP-CIDR,101.91.140.224/32,no-resolve
 IP-CIDR,112.64.218.119/32,no-resolve
 IP-CIDR,112.65.200.117/32,no-resolve
 IP-CIDR,115.236.121.51/32,no-resolve
