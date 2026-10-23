@@ -264,9 +264,9 @@ def _delimiters(line: str, *, native_fields: bool = False,
     # 仅扫描调用者给出的范围；来源策略和注释由 _source_parts 消费。
     stack = []
     start, escaped, quote = 0, False, None
-    regex_depth = literal_depth = None
+    regex_depth = literal_depth = regex_kind = None
     literal_keyword = False
-    class_first = class_hyphen = extended = regex_comment = False
+    class_first = class_hyphen = class_range = extended = regex_comment = False
     index = 0
     while index < len(line):
         char = line[index]
@@ -311,6 +311,8 @@ def _delimiters(line: str, *, native_fields: bool = False,
             if regex_edits is not None and regex_depth is not None and char in '()':
                 regex_edits.append((index - 1, index + 1, r'\x{' + f'{ord(char):X}' + '}'))
             if in_class:
+                # regexp2 的 escaped hyphen 不结束已有 pending range。
+                class_range = regex_kind != 'URL-REGEX' and char == '-' and (class_hyphen or class_range)
                 class_first = class_hyphen = False
             if regex_depth is not None and char == 'c':
                 index += 1
@@ -322,9 +324,15 @@ def _delimiters(line: str, *, native_fields: bool = False,
         elif char in "'\"" and not line[start:index].strip() and regex_depth is None:
             quote = char
         elif in_class:
+            if (char == '[' and not (class_hyphen or class_range) and regex_kind != 'URL-REGEX' and
+                    (end := _scan_posix_class(line, index)) is not None):
+                class_first = False
+                index = end
+                continue
             if regex_edits is not None and char in '()':
                 regex_edits.append((index, index + 1, r'\x{' + f'{ord(char):X}' + '}'))
-            subtraction = char == '[' and class_hyphen
+            subtraction = char == '[' and (class_hyphen or class_range)
+            class_range = False
             class_hyphen = char == '-' and not class_first
             if subtraction:
                 stack.append(('[', index))
@@ -395,6 +403,7 @@ def _delimiters(line: str, *, native_fields: bool = False,
                     following = line[index + 1:].lstrip()
                     if not following.startswith(("'", '"')):
                         regex_depth = len(stack)
+                        regex_kind = kind
                 elif kind in _KINDS and kind not in _LOGICAL:
                     literal_depth = len(stack)
                 elif kind == 'HOST-KEYWORD' and not stack:
@@ -615,6 +624,17 @@ def _valid_deep_regex(probe: str) -> bool:
 
 def _regexp2_word_char(char: str) -> bool:
     return bisect_right(_REGEXP2_WORD_BOUNDARIES, ord(char)) % 2 == 1
+
+
+def _scan_posix_class(value: str, index: int) -> int | None:
+    if not value.startswith('[:', index):
+        return None
+    end = index + 2
+    if value[end:end + 1] == '^':
+        end += 1
+    while end < len(value) and _regexp2_word_char(value[end]):
+        end += 1
+    return end + 2 if value.startswith(':]', end) else None
 
 
 def _scan_capture_name(value: str, start: int) -> tuple[str, int, bool]:
@@ -861,13 +881,20 @@ def _valid_regex(kind: str, value: str) -> bool:
             in_class = class_first = True
             class_start, class_probe = index, len(probe)
             class_atom, range_from_literal = None, False
-        elif char == "[" and in_class and class_hyphen:
+        elif char == "[" and in_class and (class_hyphen or range_from_literal):
             class_hyphen = False
             classes.append((class_start, class_probe))
             probe.pop()
             class_start, class_probe = index, len(probe)
             class_first = True
             class_atom, range_from_literal = None, False
+        elif (char == '[' and in_class and not range_from_literal and
+              (end := _scan_posix_class(value, index)) is not None):
+            probe.append(r'\[')
+            class_first = class_hyphen = False
+            class_atom, range_from_literal = 'literal', False
+            index = end
+            continue
         elif char == "]" and in_class:
             class_hyphen = False
             if class_first:
