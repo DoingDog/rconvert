@@ -34,12 +34,14 @@
 
 共同文档提交确定后，从该同一提交并行创建 A 至 E 的五个独立 worktree，使用可用的带 `[1m]` 后缀模型。各 owner 开始时记录 worktree、branch、HEAD／tree、初始 status 及与共同 base 的关系。不得编辑主 checkout、旧 worktree 或其他任务文件。
 
+五个 owner 和主会话的产物验收准备均只在各自当前活动 worktree 的 `.tmp/functional-scan-20261023/` 下新建独立证据目录，保存新增可信 scripts、logs、manifest、archive 及产物，脚本与输入／结果分开。共享主 checkout 的同名目录及规格列出的旧证据仅只读复用。返回证据绝对路径并保留任务 worktree，由主会话按 U5 先转存核对再清理；跨写入边界已创建的本次空目录只记录绝对路径，受限 owner 不清理。
+
 | owner | 唯一写入范围 | 所有权说明 |
 | --- | --- | --- |
 | A，CIDR | `rules.py` 的 `exclude_covered`；新增 `tests/test_cidr_whitelist_union.py` | 不修改其他 helper、formats、旧测试或 README |
 | B，ASN | `rules.py` 的 `_ordinary_field_supported`；`formats.py` 的 Surge noresolve guard；新增 `tests/test_asn_projection_regressions.py`；三份旧测试的准确 padded 投影预期 | 旧测试为 `test_functional_audit_rules.py`、`test_generate.py`、`test_functional_audit_coverage.py`，不改 parser 或生成依赖校验 |
 | C，DNS | `formats.py` 的 `_dns_regex`；新增 `tests/test_dns_alternation_budget.py` | 仅调用内三处 cache、两个 tuple caller 和分支 reset，不修改巨型旧 DNS 测试或 render |
-| D，POSIX-looking class | `rules.py` 的 `_delimiters`／`_valid_regex` 及确需的共享短 helper；新增 `tests/test_regexp2_posix_class_regressions.py` | 可复用 `_regexp2_word_char`，不改 `_valid_deep_regex`、DNS 或其他 owner 的位置 |
+| D，POSIX-looking class | `rules.py` 的 `_delimiters`／`_valid_regex` class 扫描、capture slot 收集与引用校验及确需的共享短 helper；`tests/test_regexp2_posix_class_regressions.py` | 在原 owner worktree 完成捕获预扫描修正及 Python 3.11 兼容的 deep 调用观察；可复用 `_regexp2_word_char`，不改 `_valid_deep_regex`、DNS 或其他 owner 的位置 |
 | E，hosts | `rules.py` 的 `_source_records`；增补 `tests/test_hosts_comment_regressions.py` | 不修改通用 lexer、其他测试或 hostname validator |
 | 文档 owner | 两份规格计划、README 两处必要行为说明 | 先完成共同文档 commit，五个修复 owner 不改文档 |
 | 集成 owner／主会话 | 合并已完成提交、集成验证及发布证据 | 不代替 owner 完成未完成修复；生产发布沿用 update 的路径范围 |
@@ -127,22 +129,22 @@
 
 ### U3.2：regexp2 POSIX-looking class 边界
 
-**依赖与 owner：** U0 及共同文档提交，owner D；依据规格 R4，与其他四项并行。
+**依赖与 owner：** U0 及共同文档提交，owner D；依据规格 R4，与其他四项并行。捕获预扫描与深层测试兼容性两项修正在更新后的共同文档合并后，由 D 在原 owner worktree 连续完成；主会话不代接编码。
 
-**修改与复用：** 限于 `_delimiters`／`_valid_regex` 的 class 分支及确需的共享短 helper，两个 scanner 可复用 `_regexp2_word_char`。按固定 regexp2 v1.12.0／`3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` `syntax/parser.go:1538-1590` 的非 RE2、非 pending-range 消费规则识别完整 token；不复用 numeric 模式不同的 `_scan_capture_name`。probe 使用 `\[` 并保留原 class／capture 检查，原 matcher 不变；deep validator 消费 probe，无须修改。
+**修改与复用：** 产品修改限于 `_delimiters`／`_valid_regex` 的 class 扫描、capture slot 收集与引用校验及确需的共享短 helper，两个 scanner 可复用 `_regexp2_word_char`。按固定 regexp2 v1.12.0／`3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` `syntax/parser.go:1538-1590` 的非 RE2、非 pending-range 消费规则识别完整 token；不复用 numeric 模式不同的 `_scan_capture_name`。capture slot 按 `countCaptures`／`scanCharSet(false, true)` 的预扫描边界及 option 作用域收集，完整扫描后仍用该表校验引用；核对 `151-165,304-417,841,1256-1270,1522-1609,1939-1945`，保留两个阶段不同的 subtraction／class 边界。probe 使用 `\[` 并保留原完整 class 检查，原 matcher 不变；原 `_valid_deep_regex` 继续消费 probe，不修改该函数、DNS 或其他 owner 位置，不运行外部实现或新增通用 parser。若确需扩大范围，先给出证据并更新共同规格／计划及所有权。
 
-**先取得失败证据：** 新增 `tests/test_regexp2_posix_class_regressions.py`，经真实公开 parse 断言两个非法 matcher `^[[:alpha:]()]\1$`、`^[[:alpha:]-!]$` 被拒绝，合法 scalar `^[[:alpha:](]$` 保留；基线分别因错误接受／拒绝而判红。期望来自固定源代码，不以 Python re 的结果充当 regexp2 真值。
+**先取得失败证据：** 在 `tests/test_regexp2_posix_class_regressions.py` 经真实公开 parse 断言两个非法 matcher `^[[:alpha:]()]\1$`、`^[[:alpha:]-!]$` 被拒绝，合法 scalar `^[[:alpha:](]$` 保留；基线分别因错误接受／拒绝而判红。新增 `^[a-\-[][:alpha:](?n)]](a)\1$` 的公开入口失败回归，确认实际 matcher 长度 29、仅索引 4／26 为反斜杠，分别组成 `\-`／`\1`，并因误接受而判红；同时记录现有 deep 观察对 Python 3.11 不兼容的证据，导入或 fixture 错误不能作为捕获缺陷的 red。期望来自固定源代码，不以 Python re 的结果充当 regexp2 真值。D 在同一 worktree 完成真实 red -> 最小 green -> 边界 -> 规格／功能／简化审查 -> 修正与复审，既有测试保留。
 
 **回归场景：**
 
-1. 三种 regexp2 类型、普通裸／单／双引号字段、native payload／rules 的 plain／single／double scalar，depth 0／600／1,000，邻行、warning 行号及实际 YAML matcher 保持。deep 用例确认进入原 deep validator，限制及原 timeout 不变。
+1. 三种 regexp2 类型、普通裸／单／双引号字段、native payload／rules 的 plain／single／double scalar，depth 0／600／1,000，邻行、warning 行号及实际 YAML matcher 保持。深层子进程使用 Python 3.11 已有的标准库 `cProfile.Profile`，断言其 stats 中存在 `entry.code is rules._valid_deep_regex.__code__` 且 `entry.callcount > 0`，确认真实进入原 deep validator。600／1,000 层各保留原 `timeout=8`、recursionlimit=1000、int_max_str_digits=4300 及前后限制检查；保留声明最低版本和 CI，不增加 skip、fallback 或依赖，不移除调用观察。
 2. 完整 token 含已知／未知／空／数字开头／Unicode word 名、可选 `^`；不按名字展开或新增拒绝。不完整、escaped `[`、非 word 名恢复逐字符处理，内层 `]` 按实际词法决定是否关闭 class。
-3. subtraction 及必须最后出现、pending range、escaped hyphen、首个 literal `]`、外层 negation。至少保护 `^[a-[:alpha:]]$`、`^[a-\-[:alpha:]()]\1$` 及 `^[[:alpha:]-[x]y]$` 的固定真值，不能只用 `class_hyphen` 判断 pending range。
+3. subtraction 及必须最后出现、pending range、escaped hyphen、首个 literal `]`、外层 negation。至少保护 `^[a-[:alpha:]]$`、`^[a-\-[:alpha:]()]\1$` 及 `^[[:alpha:]-[x]y]$` 的固定真值，不能只用 `class_hyphen` 判断 pending range。新增候选须按预扫描 slot 表拒绝；删除该候选 `(?n)` 后的对照及 `^[a-\-[:alpha:]]$` 均保留，完整扫描继续正确消费 subtraction、首个 literal `]` 和 POSIX-looking token。禁止全拒 subtraction 或按候选文本特征硬编码拒绝。
 4. capture 编号、named backreference、类内数字 escape／量词字面内容、x-mode 的类内 `#` 及类外非法 `\q`、原 anchor 量词和 conditional 保护。普通 logical 沿用现有必要括号编码，native logical 用 balanced `^[[:alpha:](][)]$` 覆盖 AND／OR／NOT；未编码单边括号限制保留，非法叶子整条拒绝。
 5. 明确 `_delimiters` 只对 `DOMAIN-REGEX`／`PROCESS-NAME-REGEX`／`PROCESS-PATH-REGEX` 启用该扫描，合法 `URL-REGEX,^[[:alpha:]()$` 及其 Python validator 不变；不增加其他目标或 PROCESS white 支持，DNS 对 POSIX-looking class 继续 unsupported。
-6. parse_whitelist、直接 Rule render、真实 generate／publish、同轮与非空 disk YAML source／white 均核对合法保留、非法拒绝及旧文件保护。两种 PROCESS regex 的 white 按既有不支持边界检查，不将其当作 `DOMAIN-REGEX` white。
+6. 新候选及合法对照均覆盖公开 scalar／native／ordinary quote、logical、parse_whitelist、直接 Rule render、真实 generate／publish、同轮与非空 disk YAML source／white；核对合法保留、非法拒绝、健康邻居及旧文件保护。用标准 `json.loads` 解码实际 `fin.yaml` 标量并逐字比较原 matcher，再用公开 parse 回读，保留 roundtrip 断言。logical 仍按第 4 项的既有编码／平衡边界测试；两种 PROCESS regex 的 white 按既有不支持边界检查，不将其当作 `DOMAIN-REGEX` white。
 
-**验证与提交：** 新测试、既有 class／subtraction／capture／named-reference／x-mode／deep／URL／regexp2 anchor 及 logical 回归通过，检查原 matcher 未被 probe 覆盖；完成规格／功能／简化复审及自己最终 exact archive 完整 Linux suite，英文提交并返回 clean SHA／tree／证据。
+**验证与提交：** 新测试、既有 class／subtraction／capture／named-reference／x-mode／deep／URL／regexp2 anchor 及 logical 回归通过，检查原 matcher 未被 probe 覆盖。`cProfile.Profile` 的既有 Linux Python 3.13.5 复审实验在 600／1,000 层分别耗时 2.184／2.840 秒；D 仍须实际验证最终实现的八秒子进程及调用观察，并记录实际运行版本，未实际运行 Python 3.11 不得声称已验证该版本。D 在原 owner worktree 完成两项修正、边界、规格／功能／简化复审及最终 exact tree 的完整 Linux suite 后创建英文新 commit，核对 commit tree 与受测 tree 相同并返回 clean SHA／tree／日志／manifest；不 amend、不跳过 hooks，修正完成后主会话才合并。
 
 ### U3.3：hosts 逐 alias 恢复
 
@@ -190,7 +192,7 @@ python3 -I -B -c 'import sys, unittest; from pathlib import Path; root = Path(sy
 
 ### 固定输入与差异归因
 
-证据采用规格列出的主 checkout `.tmp/functional-scan-20261023/`，旧目录只读。复用前逐条核对 manifest 的 body hash／bytes、56 URL 与当前配置的对应关系及 83 角色覆盖。每次执行创建新的证据目录，验证脚本在独立 scripts 目录并以 `python -I -B` 加载可信产品 root，结果与输入分开保存。
+固定输入只读复用规格列出的主 checkout `.tmp/functional-scan-20261023/` 中的 56 URL raw body 及旧 manifest。复用前逐条核对 manifest 的 body hash／bytes、56 URL 与当前配置的对应关系及 83 角色覆盖。每次执行按共同写入边界在当前活动 worktree 中新建独立证据目录，验证脚本在独立 scripts 目录并以 `python -I -B` 加载可信产品 root，结果与输入分开保存。
 
 已有 `generation-gf9t9asj/scripts/check_fixed_inputs.py` 可作为公开 generate／publish 验收起点，实际使用前读其内容。它已覆盖 body hash、角色解析、六格式生成、DNS 专用语法、数量、完整／拆分 Surge 及 static；最终验收还须补固定时钟、所有格式排序、单文件大小、两轮稳定性和 README 对照。新增可复用脚本须保存为脚本文件，不把内部算法 mock 成正确答案。
 
@@ -232,7 +234,8 @@ python3 -I -B -c 'import sys, unittest; from pathlib import Path; root = Path(sy
 5. 有效结果为 `published` 时，记录新增的实际产物发布 commit，核对其与受测代码 SHA、远端 tip 的祖先关系。检查该新增 commit 的实际 diff 是配置六文件及 README 共 43 个允许路径的子集，不要求无变化文件出现在 diff；从该不可变 commit 读取七组 42 文件与 README 的真实 bytes。
 6. 有效结果为 `unchanged` 时，明确记录没有新增发布 commit，保留 `unchanged: no generated changes to publish` 日志及本轮生成 bytes 核验依据。从受测事件 SHA 的不可变快照读取 42 文件与 README，核对其与本轮目标及远端已有 bytes 一致。不得把含源码／测试的受测代码 commit 当作产物 commit 检查 43 路径 diff。
 7. 对上述各自确定的不可变 SHA，重新执行 U4 的路径、格式、header、计数、排序、去重、完整／拆分、noresolve、大小、ADB 专用语法及含 LF 行限检查，核对 README／static 与已合并输入。不用最新分支网页或总数摘要替代真实 bytes；若期间被新代码替代，继续追踪并验收最终实际 SHA。
-8. 记录最终代码 SHA／tree、test／update run ID 与结论、published 的实际发布 SHA 或 unchanged 的无新增 commit 状态、42 文件结果及限制。任务成功合并后退出各任务 worktree、返回原工作目录；确认 clean 且无未合并提交，再用正常 Git worktree／branch 命令仅清理本次创建且已无用途的资源，不强删、不清旧 worktree／原有 `.claude/`／其他任务资源。保留需要复用的证据，清理本次无需保留的临时内容；本机清理失败继续交付并列明残留路径，不专门修复系统。
+8. 记录最终代码 SHA／tree、test／update run ID 与结论、published 的实际发布 SHA 或 unchanged 的无新增 commit 状态、42 文件结果及限制。主会话最终用 `ExitWorktree` 返回原工作目录后，按允许边界读取本次各 worktree 的结果，将需要保留的证据复制到主 checkout `.tmp/functional-scan-20261023/` 下本次新建的专用目录，记录源／目标绝对路径及 manifest，逐文件核对 SHA-256 一致。尚未转存或 hash 未核对一致的证据不得随 worktree 删除。
+9. 完成转存核对后，确认本次提交均已合并、各 worktree clean 且无未合并内容，再用正常 Git worktree／branch 命令仅清理本次创建且已无用途的资源，不强删、不清旧 worktree／原有 `.claude/`／其他任务资源。主会话按已记录的绝对路径，对跨写入边界已创建的本次空目录仅用正常 `rmdir` 删除空目录，不删除旧目录。清理本次无需保留的临时内容；本机清理失败继续交付并列明残留路径，不专门修复系统。
 
 ## 完成条件
 

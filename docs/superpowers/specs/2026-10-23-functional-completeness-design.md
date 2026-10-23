@@ -12,7 +12,7 @@ Linux exact archive 基线已完成：WSL Debian Python 3.13.5，1416 tests，0 
 
 ## 范围与约束
 
-- 产品修改限定于 `rules.exclude_covered` 的 CIDR 索引、`rules._ordinary_field_supported` 的 ASN 能力判断、`formats.render` 的 Surge `no-resolve` guard、`formats._dns_regex` 的分支预算及调用内片段复用、`rules._delimiters`／`rules._valid_regex` 的 regexp2 class 扫描及确需的共享短 helper、`rules._source_records` 的普通 hosts 分支。对应回归测试随修复更新。
+- 产品修改限定于 `rules.exclude_covered` 的 CIDR 索引、`rules._ordinary_field_supported` 的 ASN 能力判断、`formats.render` 的 Surge `no-resolve` guard、`formats._dns_regex` 的分支预算及调用内片段复用、`rules._delimiters`／`rules._valid_regex` 的 regexp2 class 扫描、capture slot 收集与引用校验及确需的共享短 helper、`rules._source_records` 的普通 hosts 分支。对应回归测试随修复更新。
 - 保留公开入口、`Rule` 全部字段、配置键、`formats.FILES`、七组生成顺序及六种输出文件。`sources.py`、`generate.py`、`update.py`、`update_readme_counts.py`、`rulesets.json` 和 CI 配置均无已确认的修改需要。README 仅更新 CIDR white 完整并集与 native padded ASN 的必要行为说明，数量表保持。
 - 不运行任何规则客户端，包括配置测试模式；外部实现仅阅读固定源码及文档。不开展网络安全扫描或修复，不处理 Windows／多平台适配，不处理已知 Mihomo suffix 大小写，不增加批量使用 regex 改写 suffix 规则的流程。
 - `static/` 与用户现有修改保持原样。测试和生成使用独立 fixture root；生产产物由最终发布流程更新。
@@ -23,7 +23,7 @@ Linux exact archive 基线已完成：WSL Debian Python 3.13.5，1416 tests，0 
 | --- | --- | --- |
 | `rules.parse`、`_normalize_condition` | 普通 ASN 去除 `AS` 和前导零；native provider 保留 ASN 字符串。CIDR 校验、方向及 scope 拒绝在此处理 | 保持解析与输入校验 |
 | `rules._source_records`、`parse` | 普通 hosts 先去 `#` 注释，当前仍进入通用 lexer；后续已有逐 alias validator | R5 使已识别 hosts 直接到逐 alias 校验，其他语法及 HTML／物理行检查保持 |
-| `rules._delimiters`、`_valid_regex` | 普通字段／logical 扫描及 regexp2 validation probe 共用字符类边界要求；deep validator 消费 probe | R4 只修正三种 regexp2 类型的完整 POSIX-looking token 边界，原 matcher 与 URL-REGEX 保持 |
+| `rules._delimiters`、`_valid_regex` | 普通字段／logical 扫描及 regexp2 validation probe 处理字符类边界；capture slot 须遵循固定预扫描，deep validator 消费 probe | R4 修正三种 regexp2 类型的完整 POSIX-looking token 边界及预扫描 capture slot／引用校验，原 matcher 与 URL-REGEX 保持 |
 | `formats._dns_regex` | 三个 DNS 消费者共用分支构造、证书及 source／Go／最终行预算 | R3 重置当前 concat 计数并在单次调用内复用相同编码片段 |
 | `rules.parse_whitelist` | 忽略 policy，移除 options／allow 标记，保留适用的 matcher 身份；不合并 CIDR | R1、R4、R5 同时覆盖真实 white 入口 |
 | `generate.generate` | `exclude_covered(rules, whitelist + allowed)` -> `_apply_no_resolve` -> `normalize` -> `render(..., no_resolve="keep")` | 保持来源过滤先于规范化的顺序 |
@@ -110,16 +110,21 @@ native `payload:`／`rules:` 中的 `IP-ASN,0013335` 当前可进入 Surge scala
 
 `DOMAIN-REGEX`、`PROCESS-NAME-REGEX`、`PROCESS-PATH-REGEX` 的两个 scanner 提前把 POSIX-looking token 内的 `]` 当作外层 class 结束，错误接受 `^[[:alpha:]()]\1$`、`^[[:alpha:]-!]$`，并丢弃合法 scalar `^[[:alpha:](]$`。前者没有 capture 1，后者形成字面 `[` 至 `!` 的逆序 range。非法 matcher 可进入实际父／子 YAML；该现象不等于客户端整份 provider 必然加载失败。
 
-依据为 regexp2 v1.12.0、commit `3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` 的 `syntax/parser.go:1538-1590`。固定 Mihomo 对三种类型只启用 `IgnoreCase`，未启用 RE2。非 RE2 的 `scanCharSet` 消费完整 POSIX-looking token 后，仍把当前 `[` 当作 literal；不按 POSIX 名称展开集合。
+依据为 regexp2 v1.12.0、commit `3d5df45b703801b3fe51eb3f5c0dd302e8b0d676` 的 `syntax/parser.go:1538-1590`。固定 Mihomo 对三种类型只启用 `IgnoreCase`，未启用 ECMAScript 或 RE2。非 RE2 的 `scanCharSet` 消费完整 POSIX-looking token 后，仍把当前 `[` 当作 literal；不按 POSIX 名称展开集合。
+
+捕获预扫描与完整 class 扫描的差异也是固定语义。`syntax/parser.go:151-165,304-417` 先通过 `countCaptures` 和 `scanCharSet(false, true)` 建立 capture slot 表，再 reset 并完整扫描；reset 不重建 slot 表。候选 `^[a-\-[][:alpha:](?n)]](a)\1$` 长度为 29，只有索引 4、26 两个反斜杠，分别组成 `\-`、`\1`。escaped hyphen 保留 pending range；预扫描不递归 subtraction，在索引 7 的 `]` 结束第一个 class，随后在类外读取 `(?n)`，使 `(a)` 不登记 slot 1。完整扫描递归 subtraction，首个 `]` 为 literal，消费完整 POSIX-looking token 后将 `(?n)` 留在类内；后续 capture node 不补建 slot，`\1` 最终按原 slot 表得到 `ErrUndefinedBackRef`。该真值由固定源码的 `841,1256-1270,1522-1609,1939-1945` 行推导，未运行外部实现。
+
+独立公开复核确认 commit `da0b38a5fe76ab7629777cdc17621ec45f210e0f` 在三种类型的普通 quoted 与 native scalar 共六种组合中接受该候选并写入 `fin.yaml`，属于回归。删除 `(?n)` 后的对照及 `^[a-\-[:alpha:]]$` 均须保留，不能通过拒绝全部 pending-range subtraction 消除误接受。
 
 ### 修正要求与保留边界
 
-1. 仅修改 `_delimiters`／`_valid_regex` 的 class 扫描及确需的共享短 helper。在非转义、非 pending-range 的内部 `[` 处识别完整 `[:`、可选 `^`、零个或多个固定 Go `IsWordChar`、`:]`。空名、未知名、数字开头和 Unicode 名均按同一规则消费；不完整、转义或含非 word 字符的片段恢复原逐字符扫描。可复用 `_regexp2_word_char`，不得误用带 numeric 分支的 `_scan_capture_name`。
+1. 产品修改限于 `_delimiters`／`_valid_regex` 的 class 扫描、capture slot 收集与引用校验及确需的共享短 helper。在非转义、非 pending-range 的内部 `[` 处识别完整 `[:`、可选 `^`、零个或多个固定 Go `IsWordChar`、`:]`。空名、未知名、数字开头和 Unicode 名均按同一规则消费；不完整、转义或含非 word 字符的片段恢复原逐字符扫描。可复用 `_regexp2_word_char`，不得误用带 numeric 分支的 `_scan_capture_name`。
 2. 消费完整 token 后外层 class 继续打开，validation probe 用 `\[` 表示原 literal 并继续原 range／capture 检查。原 Rule matcher 不改，输出沿用各目标既有编码，probe 不写入 Rule 或产物；deep validator 继续消费修正后的 probe，不新增 parser。
-3. subtraction 与 pending range 优先于 token 消费，包括 escaped hyphen 保留 pending range 的情况；不能仅凭 `class_hyphen` 决定。合法 subtraction 及必须最后出现的限制、首个 literal `]`、外层 negation、escaped `[` 和不完整 token 的既有边界保持。
+3. 完整扫描中 subtraction 与 pending range 优先于 token 消费，包括 escaped hyphen 保留 pending range 的情况；不能仅凭 `class_hyphen` 决定。合法 subtraction 及必须最后出现的限制、首个 literal `]`、外层 negation、escaped `[` 和不完整 token 的既有边界保持。捕获预扫描须遵循固定 `scanOnly` 的 class 边界及 option 作用域，capture slot／引用校验不得直接沿用完整扫描结果。新增候选须按固定真值拒绝，两个合法对照继续接受；禁止按候选文本特征硬编码拒绝、全拒 subtraction、运行外部实现或新增通用 parser。
 4. `_delimiters` 只对三种 regexp2 类型使用此规则。`URL-REGEX` 的 Python 词法、validator 及合法输入 `URL-REGEX,^[[:alpha:]()$` 保持，不用 regexp2 class 规则改变其字段边界。
 5. capture 编号、named backreference、x-mode／类内 `#`、未知 escape、原 anchor／量词及 600／1,000 层深度继续校验。公开 parse／white、直接 Rule render 和真实 generate／publish／同轮及 disk YAML 依赖均须验证合法保留、非法拒绝及健康邻居。
 6. native logical 保留原有字面括号平衡限制，不要求未编码的单边 `(` matcher 进入 native logical。使用 balanced 合法见证 `^[[:alpha:](][)]$` 验证 AND／OR／NOT；普通 logical 沿用现有必要编码，非法叶子使整条拒绝。DNS 继续 unsupported，不增加 Surge／QX／DNS 支持或 PROCESS white 能力。
+7. 深层回归兼容声明的 Python 3.11+ 与现有 CI，使用标准库 `cProfile.Profile`，在原 600／1,000 层子进程内断言存在 `entry.code is rules._valid_deep_regex.__code__` 且 `entry.callcount > 0`。保留实际调用观察、原 `timeout=8`、recursionlimit=1000、int_max_str_digits=4300 及既有测试；不修改 `_valid_deep_regex`，不增加 skip、fallback 或依赖，不提高最低版本或修改 CI。D 必须实际验证最终实现并记录运行版本；未实际运行 Python 3.11 时明确记录该限制。两项修正由 D 在原 owner worktree 连续完成 TDD、边界、规格／功能／简化复审、最终 exact tree 完整 Linux suite 及 clean 英文新提交后才合并；扩大 owner 范围须先说明证据并更新共同规格／计划。
 
 ## R5：普通 hosts 的逐 alias 恢复
 
