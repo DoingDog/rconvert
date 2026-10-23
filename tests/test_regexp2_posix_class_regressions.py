@@ -26,9 +26,35 @@ PREFIX_CASES = ((r'^[a-\-[][:alpha:](?n)(?-n]](a)\1$', True),
                 (r'^[a-\-[][:alpha:](?n(a))]](b)\2$', False),
                 (r'^[a-\-[][:alpha:](?n(a))]](b)\1$', True),
                 (r'^[a-\-[][:alpha:](?n]](a)\1$', False))
+NUMERIC_CASES = tuple((r'^[a-\-[][:alpha:](?<' + digits + '>)]](a)' + reference + '$', valid)
+                      for digits, valid in (('2147483647', True), ('2147483648', False), ('9' * 5001, False),
+                                            ('0', True), ('01', True), ('02147483648', True),
+                                            ('0' * 5001 + '2147483648', True))
+                      for reference in ('', r'\1')) + tuple(
+    (r'^[[:alpha:](?<' + digits + '>)](a)' + reference + '$', True)
+    for digits in ('2147483648', '9' * 5001) for reference in ('', r'\1')) + tuple(
+    ('^(?<' + digits + '>)(a)$', valid) for digits, valid in
+    (('2147483647', True), ('2147483648', False), ('9' * 5001, False), ('02147483648', False), ('0', False))) + (
+    (r'^(?<1>a)(?<01>b)\1$', True),)
 
 
 class Regexp2PosixClassTests(unittest.TestCase):
+    def test_prescan_numeric_overflow_rejects_referenced_class_literal(self):
+        value = r'^[a-\-[][:alpha:](?<2147483648>)]](a)\1$'
+        self.assertEqual(len(value), 40)
+        self.assertEqual([index for index, char in enumerate(value) if char == '\\'], [4, 37])
+        self.assertEqual(
+            parse('DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example', purpose='block'),
+            ([Rule('DOMAIN', 'neighbor.example')], [f'line 1: invalid DOMAIN-REGEX {value}']),
+        )
+
+    def test_prescan_numeric_overflow_rejects_unreferenced_class_literal(self):
+        value = r'^[a-\-[][:alpha:](?<2147483648>)]](a)$'
+        self.assertEqual(
+            parse('DOMAIN-REGEX,' + json.dumps(value) + '\nDOMAIN,neighbor.example', purpose='block'),
+            ([Rule('DOMAIN', 'neighbor.example')], [f'line 1: invalid DOMAIN-REGEX {value}']),
+        )
+
     def test_capture_slots_follow_prescan_class_boundary(self):
         value = PRESCAN_CASES[1][0]
         self.assertEqual(len(value), 29)
@@ -85,8 +111,8 @@ class Regexp2PosixClassTests(unittest.TestCase):
             ([Rule('DOMAIN', 'neighbor.example')], [f'line 1: invalid DOMAIN-REGEX {value}']),
         )
 
-    def _check_scalar_matrix(self, depth, cases=CASES):
-        for kind in KINDS:
+    def _check_scalar_matrix(self, depth, cases=CASES, kinds=KINDS):
+        for kind in kinds:
             for atom, valid in cases:
                 value = '(?:' * depth + atom + ')' * depth
                 matcher = kind + ',' + value
@@ -168,6 +194,50 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
         for depth in (600, 1000):
             with self.subTest(depth=depth):
                 result = subprocess.run([sys.executable, '-I', '-B', '-c', script, str(root), str(depth)],
+                                        cwd=root, capture_output=True, text=True, timeout=8)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_deep_prefix_complete_scalar_forms_render_and_yaml_roundtrip(self):
+        script = r'''
+import cProfile
+import sys
+sys.path.insert(0, sys.argv[1])
+from tests.test_regexp2_posix_class_regressions import PREFIX_CASES, Regexp2PosixClassTests
+import rules
+assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
+cases = PREFIX_CASES + ((r'^(?:[a-\-[][:alpha:](?n]](a))(b)\1$', True),
+                        (r'^[a-\-[][:alpha:](?n(a))]](?<word>b)\1\k<word>$', True))
+with cProfile.Profile() as profiler:
+    Regexp2PosixClassTests()._check_scalar_matrix(int(sys.argv[2]), cases)
+assert any(entry.code is rules._valid_deep_regex.__code__ and entry.callcount > 0
+           for entry in profiler.getstats())
+assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
+'''
+        root = Path(__file__).resolve().parents[1]
+        for depth in (600, 1000):
+            with self.subTest(depth=depth):
+                result = subprocess.run([sys.executable, '-I', '-B', '-c', script, str(root), str(depth)],
+                                        cwd=root, capture_output=True, text=True, timeout=8)
+                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_numeric_overflow_across_three_kinds_quotes_and_native_forms(self):
+        self._check_scalar_matrix(0, tuple(case for case in NUMERIC_CASES[:4] if not case[1]))
+
+    def test_numeric_boundaries_preserve_first_digit_and_class_scope_under_integer_limits(self):
+        script = r'''
+import sys
+sys.path.insert(0, sys.argv[1])
+from tests.test_regexp2_posix_class_regressions import NUMERIC_CASES, Regexp2PosixClassTests
+assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
+limit = int(sys.argv[2])
+sys.set_int_max_str_digits(limit)
+Regexp2PosixClassTests()._check_scalar_matrix(0, NUMERIC_CASES, kinds=('DOMAIN-REGEX',))
+assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == limit
+'''
+        root = Path(__file__).resolve().parents[1]
+        for limit in (1000, 4300):
+            with self.subTest(int_max_str_digits=limit):
+                result = subprocess.run([sys.executable, '-I', '-B', '-c', script, str(root), str(limit)],
                                         cwd=root, capture_output=True, text=True, timeout=8)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
@@ -408,6 +478,35 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
                             self.assertCountEqual(restored, ([Rule(operator, projected, native_fields=True)] if accepted else []) +
                                                   [Rule('DOMAIN', 'neighbor.example', domain_source='mihomo')])
 
+    def test_numeric_logical_leaves_keep_class_literals_and_reject_overflow(self):
+        for kind in KINDS:
+            for value, accepted in NUMERIC_CASES:
+                for operator in ('AND', 'OR', 'NOT'):
+                    for native in (False, True):
+                        leaf = f'({kind},{value if native else json.dumps(value)})'
+                        expression = f'({leaf})' if operator == 'NOT' else f'({leaf},(NETWORK,tcp))'
+                        record = operator + ',' + expression
+                        source = ('payload:\n  - ' + json.dumps(record) + '\n  - DOMAIN,neighbor.example\n' if native else
+                                  record + ',PROXY\nDOMAIN,neighbor.example,PROXY\n')
+                        neighbor = Rule('DOMAIN', 'neighbor.example', domain_source='mihomo' if native else 'surge')
+                        with self.subTest(kind=kind, operator=operator, native=native, value=value):
+                            parsed, messages = parse(source, purpose='proxy')
+                            self.assertEqual((parsed, messages),
+                                             (([Rule(operator, expression, native_fields=native)] if accepted else []) + [neighbor],
+                                              [] if accepted else [f'line {2 if native else 1}: invalid logical expression {expression}']))
+                            encoded = value
+                            if not native and value.startswith(('^[a-', '^[[:')):
+                                encoded = value.replace('(?<', r'\x{28}?<').replace('>)', r'>\x{29}')
+                            projected_leaf = f'({kind},{encoded})'
+                            projected = f'({projected_leaf})' if operator == 'NOT' else f'({projected_leaf},(NETWORK,tcp))'
+                            outputs, _ = render('posix', parsed, purpose='proxy', no_resolve='keep')
+                            self.assertCountEqual([json.loads(row[4:]) for row in outputs['fin.yaml'].splitlines()[2:]],
+                                                  ([operator + ',' + projected] if accepted else []) + ['DOMAIN,neighbor.example'])
+                            restored, messages = parse(outputs['fin.yaml'], purpose='proxy')
+                            self.assertEqual(messages, [])
+                            self.assertCountEqual(restored, ([Rule(operator, projected, native_fields=True)] if accepted else []) +
+                                                  [Rule('DOMAIN', 'neighbor.example', domain_source='mihomo')])
+
     def _check_white_identity_and_render(self, cases):
         value = cases[0][0]
         for native in (False, True):
@@ -452,6 +551,13 @@ assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
     def test_prefix_white_and_direct_render_keep_legal_matchers_and_reject_neighbors(self):
         invalid = tuple(case for case in PREFIX_CASES if not case[1])
         for case in PREFIX_CASES:
+            if case[1]:
+                with self.subTest(value=case[0]):
+                    self._check_white_identity_and_render((case,) + invalid)
+
+    def test_numeric_white_and_direct_render_preserve_legal_boundaries(self):
+        invalid = tuple(case for case in NUMERIC_CASES if not case[1])
+        for case in NUMERIC_CASES:
             if case[1]:
                 with self.subTest(value=case[0]):
                     self._check_white_identity_and_render((case,) + invalid)
@@ -613,9 +719,16 @@ with patch('formats.datetime') as clock:
                     self._check_generation((case,) + invalid,
                                            r'AND,((DOMAIN-REGEX,^[[:alpha:](][)]$),(NETWORK,tcp))')
 
+    def test_numeric_generate_publish_yaml_dependencies_and_cli_keep_actual_matchers(self):
+        for reference in ('', r'\1'):
+            cases = tuple((r'^[a-\-[][:alpha:](?<' + digits + '>)]](a)' + reference + '$', accepted)
+                          for digits, accepted in (('2147483647', True), ('2147483648', False), ('9' * 5001, False)))
+            with self.subTest(reference=reference):
+                self._check_generation(cases, r'AND,((DOMAIN-REGEX,^[[:alpha:](][)]$),(NETWORK,tcp))')
+
     def test_invalid_local_source_white_and_disk_yaml_preserve_old_outputs(self):
         for kind in KINDS:
-            for value, _ in CASES[1:] + PRESCAN_CASES[1:2] + tuple(case for case in PREFIX_CASES if not case[1]):
+            for value, _ in CASES[1:] + PRESCAN_CASES[1:2] + tuple(case for case in PREFIX_CASES + NUMERIC_CASES if not case[1]):
                 for role in ('source', 'white', 'disk-source', 'disk-white'):
                     with self.subTest(kind=kind, value=value, role=role), tempfile.TemporaryDirectory() as directory:
                         root = Path(directory)

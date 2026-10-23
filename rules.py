@@ -663,7 +663,7 @@ def _hex_codepoint(digits: str) -> int | None:
     return codepoint if codepoint <= 0x10FFFF else None
 
 
-def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]]:
+def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]] | None:
     # regexp2 countCaptures 的 scanOnly 在 pending range 处不递归 subtraction。
     slots, names, options, classes = {0}, set(), [], []
     index, captures = 0, 0
@@ -740,8 +740,9 @@ def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]]:
                     if key and not key.startswith('0'):
                         if numeric:
                             number = _capture_number(key)
-                            if number is not None:
-                                slots.add(number)
+                            if number is None:
+                                return None
+                            slots.add(number)
                         else:
                             names.add(key)
                 else:
@@ -1094,8 +1095,11 @@ def _valid_regex(kind: str, value: str) -> bool:
         index += 1
     if in_class or classes:
         return False
-    if references:
-        capture_slots, names = _regexp2_capture_slots(value)
+    if kind != "URL-REGEX":
+        captured = _regexp2_capture_slots(value)
+        if captured is None:
+            return False
+        capture_slots, names = captured
     for key, numeric, form, position in references:
         if numeric:
             number = _capture_number(key)
