@@ -1913,6 +1913,11 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
         elif entry.kind in {"IP-ASN", "GEOIP", "IP-SUFFIX", "SRC-IP-ASN", "SRC-GEOIP", "SRC-IP-SUFFIX"}:
             typed.add((entry.kind, entry.value if entry.kind in {'GEOIP', 'SRC-GEOIP'}
                        and not entry.value.isascii() else entry.value.upper()))
+    for direction, group in networks.items():
+        networks[direction] = {
+            network for version in (4, 6)
+            for network in ipaddress.collapse_addresses(item for item in group if item.version == version)
+        }
     # native wildcard 按 UTF-8 byte 匹配，方括号是字面内容。
     wildcard_patterns = {
         source: [''.join('[[]' if char == '[' else '[]]' if char == ']' else char
