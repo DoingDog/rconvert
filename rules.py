@@ -1601,8 +1601,10 @@ def _source_records(text: str):
                 in_payload = False
                 if re.match(r"(?:0\.0\.0\.0|127\.0\.0\.1|::1?)[ \t]", line):
                     line = line.partition('#')[0].rstrip()
-                parts, end = _source_parts(line)
-                line = line[:end].rstrip()
+                    parts = [line]
+                else:
+                    parts, end = _source_parts(line)
+                    line = line[:end].rstrip()
             yield line, yaml_rule, parts, None
         except ValueError as exc:
             yield line, False, None, str(exc)
