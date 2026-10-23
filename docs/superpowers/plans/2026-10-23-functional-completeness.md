@@ -34,6 +34,8 @@
 
 共同文档提交确定后，从该同一提交并行创建 A 至 E 的五个独立 worktree，使用可用的带 `[1m]` 后缀模型。各 owner 开始时记录 worktree、branch、HEAD／tree、初始 status 及与共同 base 的关系。不得编辑主 checkout、旧 worktree 或其他任务文件。
 
+五个 owner 和主会话的产物验收准备均只在各自当前活动 worktree 的 `.tmp/functional-scan-20261023/` 下新建独立证据目录，保存新增可信 scripts、logs、manifest、archive 及产物，脚本与输入／结果分开。共享主 checkout 的同名目录及规格列出的旧证据仅只读复用。返回证据绝对路径并保留任务 worktree，由主会话按 U5 先转存核对再清理；跨写入边界已创建的本次空目录只记录绝对路径，受限 owner 不清理。
+
 | owner | 唯一写入范围 | 所有权说明 |
 | --- | --- | --- |
 | A，CIDR | `rules.py` 的 `exclude_covered`；新增 `tests/test_cidr_whitelist_union.py` | 不修改其他 helper、formats、旧测试或 README |
@@ -190,7 +192,7 @@ python3 -I -B -c 'import sys, unittest; from pathlib import Path; root = Path(sy
 
 ### 固定输入与差异归因
 
-证据采用规格列出的主 checkout `.tmp/functional-scan-20261023/`，旧目录只读。复用前逐条核对 manifest 的 body hash／bytes、56 URL 与当前配置的对应关系及 83 角色覆盖。每次执行创建新的证据目录，验证脚本在独立 scripts 目录并以 `python -I -B` 加载可信产品 root，结果与输入分开保存。
+固定输入只读复用规格列出的主 checkout `.tmp/functional-scan-20261023/` 中的 56 URL raw body 及旧 manifest。复用前逐条核对 manifest 的 body hash／bytes、56 URL 与当前配置的对应关系及 83 角色覆盖。每次执行按共同写入边界在当前活动 worktree 中新建独立证据目录，验证脚本在独立 scripts 目录并以 `python -I -B` 加载可信产品 root，结果与输入分开保存。
 
 已有 `generation-gf9t9asj/scripts/check_fixed_inputs.py` 可作为公开 generate／publish 验收起点，实际使用前读其内容。它已覆盖 body hash、角色解析、六格式生成、DNS 专用语法、数量、完整／拆分 Surge 及 static；最终验收还须补固定时钟、所有格式排序、单文件大小、两轮稳定性和 README 对照。新增可复用脚本须保存为脚本文件，不把内部算法 mock 成正确答案。
 
@@ -232,7 +234,8 @@ python3 -I -B -c 'import sys, unittest; from pathlib import Path; root = Path(sy
 5. 有效结果为 `published` 时，记录新增的实际产物发布 commit，核对其与受测代码 SHA、远端 tip 的祖先关系。检查该新增 commit 的实际 diff 是配置六文件及 README 共 43 个允许路径的子集，不要求无变化文件出现在 diff；从该不可变 commit 读取七组 42 文件与 README 的真实 bytes。
 6. 有效结果为 `unchanged` 时，明确记录没有新增发布 commit，保留 `unchanged: no generated changes to publish` 日志及本轮生成 bytes 核验依据。从受测事件 SHA 的不可变快照读取 42 文件与 README，核对其与本轮目标及远端已有 bytes 一致。不得把含源码／测试的受测代码 commit 当作产物 commit 检查 43 路径 diff。
 7. 对上述各自确定的不可变 SHA，重新执行 U4 的路径、格式、header、计数、排序、去重、完整／拆分、noresolve、大小、ADB 专用语法及含 LF 行限检查，核对 README／static 与已合并输入。不用最新分支网页或总数摘要替代真实 bytes；若期间被新代码替代，继续追踪并验收最终实际 SHA。
-8. 记录最终代码 SHA／tree、test／update run ID 与结论、published 的实际发布 SHA 或 unchanged 的无新增 commit 状态、42 文件结果及限制。任务成功合并后退出各任务 worktree、返回原工作目录；确认 clean 且无未合并提交，再用正常 Git worktree／branch 命令仅清理本次创建且已无用途的资源，不强删、不清旧 worktree／原有 `.claude/`／其他任务资源。保留需要复用的证据，清理本次无需保留的临时内容；本机清理失败继续交付并列明残留路径，不专门修复系统。
+8. 记录最终代码 SHA／tree、test／update run ID 与结论、published 的实际发布 SHA 或 unchanged 的无新增 commit 状态、42 文件结果及限制。主会话最终用 `ExitWorktree` 返回原工作目录后，按允许边界读取本次各 worktree 的结果，将需要保留的证据复制到主 checkout `.tmp/functional-scan-20261023/` 下本次新建的专用目录，记录源／目标绝对路径及 manifest，逐文件核对 SHA-256 一致。尚未转存或 hash 未核对一致的证据不得随 worktree 删除。
+9. 完成转存核对后，确认本次提交均已合并、各 worktree clean 且无未合并内容，再用正常 Git worktree／branch 命令仅清理本次创建且已无用途的资源，不强删、不清旧 worktree／原有 `.claude/`／其他任务资源。主会话按已记录的绝对路径，对跨写入边界已创建的本次空目录仅用正常 `rmdir` 删除空目录，不删除旧目录。清理本次无需保留的临时内容；本机清理失败继续交付并列明残留路径，不专门修复系统。
 
 ## 完成条件
 
