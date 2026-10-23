@@ -207,7 +207,7 @@ import rules
 assert sys.getrecursionlimit() == 1000 and sys.get_int_max_str_digits() == 4300
 cases = PREFIX_CASES + ((r'^(?:[a-\-[][:alpha:](?n]](a))(b)\1$', True),
                         (r'^[a-\-[][:alpha:](?n(a))]](?<word>b)\1\k<word>$', True))
-with cProfile.Profile() as profiler:
+with cProfile.Profile(builtins=False) as profiler:
     Regexp2PosixClassTests()._check_scalar_matrix(int(sys.argv[2]), cases)
 assert any(entry.code is rules._valid_deep_regex.__code__ and entry.callcount > 0
            for entry in profiler.getstats())
