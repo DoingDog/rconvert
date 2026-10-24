@@ -1,4 +1,4 @@
-# big-data rules: 10534
+# big-data rules: 10536
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -1859,6 +1859,7 @@ payload:
   - "DOMAIN,image.civitai.com"
   - "DOMAIN,image.comicbz.com"
   - "DOMAIN,image.freepik.com"
+  - "DOMAIN,image.gameapps.hk"
   - "DOMAIN,image.mgstage.com"
   - "DOMAIN,image.prntscr.com"
   - "DOMAIN,image.xmanhua.net"
@@ -2381,6 +2382,7 @@ payload:
   - "DOMAIN,static.snaptube.in"
   - "DOMAIN,static.srcspot.com"
   - "DOMAIN,static.tp-link.com"
+  - "DOMAIN,static.truemed.com"
   - "DOMAIN,static.uptimia.com"
   - "DOMAIN,static.workday.com"
   - "DOMAIN,static.xgroovy.com"

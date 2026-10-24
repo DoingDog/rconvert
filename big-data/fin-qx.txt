@@ -1,4 +1,4 @@
-# big-data rules: 10568
+# big-data rules: 10570
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -1858,6 +1858,7 @@ HOST,image.ap-mail.org,LIST
 HOST,image.civitai.com,LIST
 HOST,image.comicbz.com,LIST
 HOST,image.freepik.com,LIST
+HOST,image.gameapps.hk,LIST
 HOST,image.mgstage.com,LIST
 HOST,image.prntscr.com,LIST
 HOST,image.xmanhua.net,LIST
@@ -2380,6 +2381,7 @@ HOST,static.semrush.com,LIST
 HOST,static.snaptube.in,LIST
 HOST,static.srcspot.com,LIST
 HOST,static.tp-link.com,LIST
+HOST,static.truemed.com,LIST
 HOST,static.uptimia.com,LIST
 HOST,static.workday.com,LIST
 HOST,static.xgroovy.com,LIST
