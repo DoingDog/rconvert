@@ -38,6 +38,8 @@ _PROCESS_CASE_VARIANTS = re.compile(
 
 
 def _go_lower(value: str) -> str:
+    if value.isascii():
+        return value.lower()
     def lower(match):
         point = ord(match[0])
         position = bisect_right(_GO15_LOWER, (point, 0x110000, 0x110000, 0x110000)) - 1
@@ -574,7 +576,6 @@ def _source_parts(line: str) -> tuple[list[str], int]:
             if token == 'comment':
                 return [head.strip(), line[value_start:index].strip()], index
         return [head.strip(), value.strip()], len(line)
-    # 裸进程和 QX keyword 字段中的 marker 是字面内容；确定尾字段后停止范围扫描。
     process = kind in {'HOST-KEYWORD', 'PROCESS-NAME', 'PROCESS-PATH', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'}
     for token, index in _delimiters(line):
         if token == 'comment' and (not process or kind != 'HOST-KEYWORD' and
@@ -1864,7 +1865,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             warnings.append(f"line {number}: conditional ABP rule")
             continue
         host_parts = re.split(r'[ \t]+', line.strip(' \t'))
-        if host_parts and host_parts[0] in {"0.0.0.0", "127.0.0.1", "::", "::1"}:
+        if host_parts[0] in {"0.0.0.0", "127.0.0.1", "::", "::1"}:
             if purpose != "block":
                 warnings.append(f"line {number}: hosts entry is block-only")
                 continue
@@ -2287,7 +2288,8 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                         _surge_keyword_source_supported(rule.value, rule.domain_source))
             qx = _qx_field_supported(kind, rule.value)
             mihomo = _mihomo_domain_field_supported(kind, rule.value, rule.domain_source)
-            comparison = _domain_comparison_value(kind, rule.value, rule.domain_source)
+            comparison = (_domain_comparison_value(kind, rule.value, rule.domain_source)
+                          if lengths and rule.domain_source != 'mihomo' and not value.isascii() else value)
             if lengths and any((short_rule := keywords[group].get(short)) is not None and
                    (rule.domain_source == 'mihomo' or value.isascii() or
                     _domain_comparison_value(kind, short_rule.value, rule.domain_source) in comparison) and
