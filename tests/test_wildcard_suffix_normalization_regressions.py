@@ -31,7 +31,7 @@ class WildcardSuffixNormalizationTests(unittest.TestCase):
         from dataclasses import replace
 
         patterns = ('*.example.com', 'api-*.example.com', 'api-?.example.com',
-                    'cdn[ab].example.com', 'api.example.com')
+                    'cdn[ab].example.com', 'cdn[AB].example.com', 'api.example.com')
         for source in ('surge', 'qx', 'mihomo'):
             for pattern in patterns:
                 suffix = Rule('DOMAIN-SUFFIX', 'example.com', domain_source=source)
@@ -45,7 +45,8 @@ class WildcardSuffixNormalizationTests(unittest.TestCase):
                     a, b = replace(suffix, **change), replace(wildcard, **change)
                     self.assertEqual(normalize(iter([b, a, b])), [a, b] if source == 'surge' else [a])
                     self.assertEqual(set(normalize(iter([suffix, b]))), {suffix, b})
-        for pattern in ('[z-a].example.com', '[a--b].example.com'):
+        for pattern in ('[z-a].example.com', '[a--b].example.com',
+                        '[İ].example.com', '[İ-J].example.com'):
             parsed, messages = parse('DOMAIN-SUFFIX,example.com\nDOMAIN-WILDCARD,' + pattern,
                                      purpose='block')
             self.assertEqual(messages, [])
