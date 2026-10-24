@@ -944,6 +944,8 @@ class NativeKeywordGenerateTests(unittest.TestCase):
         flag = ',no-resolve' if mode != 'strip' else ''
         public = ([] if only_keyword else [Rule('DOMAIN', 'keep.example.com', domain_source=source)])
         public.append(Rule('DOMAIN-KEYWORD', keyword, domain_source=source))
+        if white and not parent:
+            public.append(Rule('DOMAIN-KEYWORD', value + '9', domain_source=source))
         if not only_keyword:
             public.append(Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',) if flag else ()))
         if not only_keyword and (parent or white):
@@ -958,6 +960,12 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                   'fin-qx.txt': ([] if only_keyword else ['HOST,keep.example.com,LIST']) + ['HOST-KEYWORD,' + keyword + ',LIST'],
                   'fin-surge.txt': ['DOMAIN-KEYWORD,' + field],
                   'fin-surge-ds.txt': [] if only_keyword or parent else ['keep.example.com'], 'fin.yaml': []}
+        if white and not parent:
+            longer = value + '9'
+            longer_field = ("'" + longer + "'" if any(' ' + marker in longer for marker in ('#', ';', '//')) else longer)
+            for name in ('fin.txt', 'fin-surge.txt'):
+                bodies[name].append('DOMAIN-KEYWORD,' + longer_field)
+            bodies['fin-qx.txt'].append('HOST-KEYWORD,' + longer + ',LIST')
         if not only_keyword:
             for name in ('fin.txt', 'fin-surge.txt'):
                 bodies[name].append('IP-CIDR,203.0.113.0/24' + flag)
@@ -982,6 +990,8 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                 dns.append((r'/(?s-i:\A' + DNS_BYTE_TOKEN + r'*\\228\\184\\173\\230\\150\\135' +
                             suffixes[keyword] + DNS_BYTE_TOKEN + r'*\z)/') if parent else
                            '/^.*' + re.escape(keyword) + '.*$/')
+            if white and not parent and '/' not in value:
+                dns.append('/^.*' + re.escape(value + '9') + '.*$/')
             if not only_keyword and not parent:
                 dns.append('0.0.0.0 keep.example.com')
         dns.sort(key=lambda line: (not line.startswith('@@'), len(line), line))
@@ -989,9 +999,10 @@ class NativeKeywordGenerateTests(unittest.TestCase):
             '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n! License: Inherits upstream licenses\n'
             '! Version: ' + version + f'\n! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
             ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''))
-        skipped = {'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
+        keyword_count = 2 if white and not parent else 1
+        skipped = {'fin-surge-ds.txt:DOMAIN-KEYWORD': keyword_count}
         if purpose != 'block' or '/' in keyword:
-            skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+            skipped['fin-adb.txt:DOMAIN-KEYWORD'] = keyword_count
         if not only_keyword:
             if parent:
                 skipped.update({'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1})
@@ -1002,7 +1013,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                 skipped.update({name + ':SRC-IP-CIDR': 1 for name in
                                 ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')})
             if purpose == 'block' and white and not parent and '/' in value:
-                skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 2
         native_public = [Rule(rule.kind, rule.value, rule.options, domain_source=
                          'mihomo' if rule.kind.startswith('DOMAIN') else 'surge') for rule in public]
         return expected, native_public, skipped

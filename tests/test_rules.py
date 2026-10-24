@@ -203,7 +203,7 @@ class NativeKeywordRuleTests(unittest.TestCase):
                             allowed = Rule('DOMAIN-KEYWORD', value, allow=True, domain_source='qx')
                             native = Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')
                             self.assertEqual(rules.exclude_covered([shorter, keyword, longer, allowed, native], [keyword]),
-                                             [shorter, allowed, native])
+                                             [shorter, longer, allowed, native])
                             self.assertEqual(rules.exclude_covered([keyword], [longer]), [keyword])
                 for header in ('payload', 'rules'):
                     text = header + ':\n  - ' + json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False)
@@ -262,7 +262,8 @@ class NativeKeywordRuleTests(unittest.TestCase):
                         allowed = Rule('DOMAIN-KEYWORD', value, allow=True, domain_source='qx')
                         native = Rule('DOMAIN-KEYWORD', value, domain_source='mihomo')
                         self.assertEqual(rules.exclude_covered([short, keyword, longer, allowed, native], [keyword]),
-                                         ([short] if value != '中文' else []) + [allowed, native])
+                                         ([short] if value != '中文' else []) +
+                                         ([longer] if not value.isascii() else []) + [allowed, native])
                         self.assertEqual(normalize([keyword, keyword]), [keyword])
             for header in ('payload', 'rules'):
                 scalar = json.dumps('DOMAIN-KEYWORD,' + value, ensure_ascii=False)
@@ -383,6 +384,7 @@ class NativeKeywordRuleTests(unittest.TestCase):
                     white = rules.parse_whitelist(prefix + value + ',DIRECT')
                 self.assertEqual(messages, [])
                 self.assertEqual(rules.exclude_covered([keyword, longer, neighbor, allowed, native], white),
+                                 ([longer] if source == 'qx' and not value.isascii() else []) +
                                  [neighbor, allowed] + ([] if source == 'surge' and value in ('123#1', '123') else [native]))
                 self.assertEqual(rules.exclude_covered([keyword], [longer]), [keyword])
                 for purpose in ('block', 'direct', 'proxy'):
@@ -4713,7 +4715,7 @@ class NativeWildcardWhitelistTests(unittest.TestCase):
                             for literal in (False, True) for native in (False, True)]
                 matching_count = 2 if source == "mihomo" else 1
                 expected = [rule for rule in original if rule.allow or rule.domain_source != source
-                            or count != matching_count]
+                            or source == 'qx' or count != matching_count]
                 with self.subTest(source=source, count=count):
                     self.assertEqual(rules.exclude_covered(iter(original), iter(whitelist)), expected)
                     self.assertEqual(set(normalize(original + original)), set(original))
@@ -4745,7 +4747,7 @@ class NativeWildcardWhitelistTests(unittest.TestCase):
                     self.assertEqual(set(normalize([wildcard, exact, suffix, child, neighbor, append])),
                                      {suffix, neighbor, append} | ({wildcard} if source == 'surge' else set()))
                     self.assertEqual(rules.exclude_covered([wildcard, exact, child, neighbor, append], [suffix]),
-                                     [neighbor, append])
+                                     ([exact] if source == 'qx' else []) + [neighbor, append])
                     self.assertEqual(rules.exclude_covered([suffix], [wildcard, exact]), [suffix])
 
 

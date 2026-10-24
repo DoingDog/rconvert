@@ -54,6 +54,11 @@ class WildcardSuffixNormalizationTests(unittest.TestCase):
         wildcard = Rule('DOMAIN-WILDCARD', '*.example.com', ('special',))
         self.assertEqual(normalize(iter([wildcard, suffix])), [suffix])
 
+    def test_allow_with_unprojectable_options_keeps_safe_reduction(self):
+        suffix = Rule('DOMAIN-SUFFIX', 'example.com', ('force-cellular',), allow=True)
+        wildcard = Rule('DOMAIN-WILDCARD', '*.example.com', ('force-cellular',), allow=True)
+        self.assertEqual(normalize(iter([wildcard, suffix])), [suffix])
+
     def test_source_white_and_target_allow_have_separate_coverage(self):
         parsed, messages = parse('DOMAIN-SUFFIX,example.com\nDOMAIN-WILDCARD,*.example.com', purpose='block')
         self.assertEqual(messages, [])
