@@ -1317,8 +1317,9 @@ def _logical_children(expression, kind, begin, start, stop, groups, commas):
     wrapped = expression[start:start + 2] == '((' and expression[stop - 2:stop] == '))'
     if commas is not None:
         # 原生范围仍按字面括号计数；叶子的 regex 括号可以跨越字段包装。
-        if kind == "NOT" and not wrapped or groups.get(start) != stop - 1:
+        if groups.get(start) != stop - 1:
             return None
+        wrapped = True
         left, right = start + 1, stop - 1
         if kind != "NOT" and not expression[left:right].strip(' '):
             return [], wrapped
