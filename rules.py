@@ -825,7 +825,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                     index += 2
                     probe.append(r'\x1b')
                 if in_class:
-                    class_atom, range_from_literal = 'literal', False
+                    class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
                 continue
             if escape in "pP":
                 if value.startswith("{", index + 2):
@@ -859,8 +859,17 @@ def _valid_regex(kind: str, value: str) -> bool:
                     return False
                 probe.append(re.escape(chr(codepoint)))
                 if in_class:
-                    class_atom, range_from_literal = "literal", False
+                    class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
                 index = end + 1
+                continue
+            if in_class and escape in 'xu':
+                end = index + (4 if escape == 'x' else 6)
+                digits = value[index + 2:end]
+                if len(digits) != end - index - 2 or _hex_codepoint(digits) is None:
+                    return False
+                probe.append(value[index:end])
+                class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
+                index = end
                 continue
             if not in_class and escape in 'AGZzbB':
                 anchor = r'\A' if escape == 'G' else r'\Z' if escape == 'z' else value[index:index + 2]
@@ -893,7 +902,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                 digits = re.match(r'[0-7]{1,3}', value[index + 1:])[0]
                 probe.append(re.escape(chr(int(digits, 8) & 255)))
                 if in_class:
-                    class_atom, range_from_literal = 'literal', False
+                    class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
                 index += len(digits) + 1
                 continue
             elif _regexp2_word_char(escape) and escape not in 'abfnrtvuxdDsSwWBAZ':
@@ -904,7 +913,8 @@ def _valid_regex(kind: str, value: str) -> bool:
                     continue
                 probe.append(value[index:index + 2])
             if in_class:
-                class_atom, range_from_literal = ("escaped_hyphen" if escape == "-" else "literal"), False
+                class_atom, range_from_literal = ('escaped_hyphen' if escape == '-' else
+                                                  'completed' if range_from_literal else 'literal'), False
             index += 2
             continue
         if extended and not in_class and char in ' \t\n\r\v\f':
@@ -1048,8 +1058,10 @@ def _valid_regex(kind: str, value: str) -> bool:
             class_hyphen = char == '-' and not class_first
             if char != '^' or index != class_start + 1:
                 class_first = False
-            if char == "-":
-                if class_atom in {"class", "escaped_hyphen"}:
+            if char == '-' and range_from_literal:
+                class_atom, range_from_literal, class_hyphen = 'completed', False, False
+            elif char == "-":
+                if class_atom in {"class", "escaped_hyphen", "completed"}:
                     probe.append(r"\-")
                     class_atom, range_from_literal = "literal", False
                     index += 1
@@ -1060,7 +1072,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                     range_from_literal = class_atom == "literal"
                     class_atom = None
             elif char != "^" or index != class_start + 1:
-                class_atom, range_from_literal = "literal", False
+                class_atom, range_from_literal = "completed" if range_from_literal else "literal", False
         elif char == "(" and not in_class and value.startswith(("(?<", "(?'"), index):
             marker = value[index + 2]
             if marker == "<" and value[index + 3:index + 4] in {"=", "!"}:

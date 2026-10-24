@@ -29,6 +29,97 @@ R2_CASES = (('^(?(?=ads)(?i)ads|other)$', False),
             ('^(?(?=ads)(?:(?i)ads)|other)$', True))
 
 
+def check_generated_regex(testcase, valid, invalid):
+    for purpose in ('block', 'direct', 'proxy'):
+        for mode in ('keep', 'add', 'strip'):
+            with testcase.subTest(valid=valid, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                (root / 'static').mkdir()
+                (root / 'static/input.yaml').write_bytes(('﻿payload:\r\n  - ' +
+                    json.dumps('DOMAIN-REGEX,' + valid) + '\r\n').encode('utf-8'))
+                (root / 'static/blocked.list').write_bytes(('DOMAIN-REGEX,' + valid +
+                    '\r\nDOMAIN-REGEX,^other$\r\n').encode('utf-8'))
+                static = {path: path.read_bytes() for path in (root / 'static').iterdir()}
+                configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
+                            'sources': sources, 'whitelist': white} for group, sources, white in (
+                    ('parent', ['static/input.yaml'], []),
+                    ('sourcechild', ['parent/fin.yaml'], []),
+                    ('whitechild', ['static/blocked.list'], ['parent/fin.yaml']),
+                    ('cleared', ['static/input.yaml'], ['parent/fin.yaml']))]
+                config_path = root / 'rulesets.json'
+                config_path.write_text(json.dumps(configs), encoding='utf-8')
+                old = {}
+                for config in configs:
+                    (root / config['name']).mkdir()
+                    for name in FILES:
+                        path = root / config['name'] / name
+                        old[path] = b'old complete\r\n\0' + name.encode('ascii')
+                        path.write_bytes(old[path])
+                with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as logs:
+                    clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                    outputs = generate(root, testcase.fail)
+                testcase.assertEqual({path: path.read_bytes() for path in old}, old)
+                testcase.assertNotIn(': line ', logs.getvalue())
+                testcase.assertNotIn('frozen', logs.getvalue())
+                rows = {'parent': ['DOMAIN-REGEX,' + valid], 'sourcechild': ['DOMAIN-REGEX,' + valid],
+                        'whitechild': ['DOMAIN-REGEX,^other$'], 'cleared': []}
+                for group, matchers in rows.items():
+                    text = outputs[root / group / 'fin.yaml']
+                    testcase.assertEqual(text, f'# {group} rules: {len(matchers)}\npayload:\n' +
+                                     ''.join('  - ' + json.dumps(row) + '\n' for row in matchers))
+                    testcase.assertEqual(parse(text, purpose=purpose),
+                                     ([Rule('DOMAIN-REGEX', row.partition(',')[2]) for row in matchers], []))
+                    for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
+                        testcase.assertEqual(outputs[root / group / name], f'# {group} rules: 0\n')
+                    testcase.assertEqual(outputs[root / group / 'fin-adb.txt'].splitlines()[6:], ['! Total count: 0'] +
+                                     ([] if purpose == 'block' else ['! No AdBlock rules for non-advertising group.']))
+                testcase.assertEqual(len(outputs), 24)
+                publish(outputs, root=root)
+                testcase.assertEqual({path: path.read_bytes() for path in outputs},
+                                 {path: text.encode('utf-8') for path, text in outputs.items()})
+                parent = {root / 'parent' / name: (root / 'parent' / name).read_bytes() for name in FILES}
+                testcase.assertEqual(parse_whitelist((root / 'parent/fin.yaml').read_text(encoding='utf-8')),
+                                 [Rule('DOMAIN-REGEX', valid)])
+                config_path.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as disk_logs:
+                    clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
+                    disk = generate(root, testcase.fail)
+                testcase.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name != 'parent'})
+                testcase.assertNotIn(': line ', disk_logs.getvalue())
+                testcase.assertNotIn('frozen', disk_logs.getvalue())
+                publish(disk, root=root)
+                testcase.assertEqual({path: path.read_bytes() for path in parent}, parent)
+                testcase.assertEqual({path: path.read_bytes() for path in static}, static)
+    for role in ('source', 'white', 'disk-source', 'disk-white', 'remote'):
+        with testcase.subTest(invalid=invalid, role=role), tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / 'static').mkdir()
+            document = ('payload:\n  - ' + json.dumps('DOMAIN-REGEX,' + invalid) + '\n').encode('utf-8')
+            bad = 'disk/fin.yaml' if role.startswith('disk') else 'static/bad.yaml'
+            path = root / bad
+            path.parent.mkdir(exist_ok=True)
+            path.write_bytes((b'# disk rules: 1\n' if role.startswith('disk') else b'') + document)
+            (root / 'static/good.list').write_bytes(b'DOMAIN,keep.example.org\n')
+            config = [{'name': 'child', 'purpose': 'block', 'no_resolve': 'keep',
+                       'sources': ['https://example.org/bad.yaml' if role == 'remote' else
+                                   bad if role.endswith('source') else 'static/good.list'],
+                       'whitelist': [bad] if role.endswith('white') else []}]
+            (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
+            (root / 'child').mkdir()
+            for name in FILES:
+                (root / 'child' / name).write_bytes(b'old complete\r\n\0' + name.encode('ascii'))
+            before = {item: item.read_bytes() for item in root.rglob('*') if item.is_file()}
+            with contextlib.redirect_stderr(io.StringIO()):
+                if role == 'remote':
+                    outputs = generate(root, lambda url: document)
+                    testcase.assertEqual(outputs, {})
+                    publish(outputs, root=root)
+                else:
+                    with testcase.assertRaisesRegex(ValueError, 'No adaptable rules|Invalid whitelist'):
+                        generate(root, testcase.fail)
+            testcase.assertEqual({item: item.read_bytes() for item in before}, before)
+
+
 class Regexp2ConditionalTests(unittest.TestCase):
     def test_noncapture_expression_condition_preserves_matcher(self):
         value = '^(?(?:ads)ads|other)$'
@@ -87,7 +178,7 @@ class Regexp2ConditionalTests(unittest.TestCase):
     def test_condition_header_white_generation_and_nonempty_disk_readback(self):
         for value, _ in R3_CASES[:2]:
             self.assertEqual(parse_whitelist('DOMAIN-REGEX,' + value), [Rule('DOMAIN-REGEX', value)])
-            self._check_generation(value, R3_CASES[4][0])
+            check_generated_regex(self, value, R3_CASES[4][0])
 
     def test_expression_direct_options_reject_matcher_and_keep_neighbor(self):
         value = '^(?(?=ads)(?i)ads|other)$'
@@ -242,96 +333,7 @@ assert sys.getrecursionlimit() == 1000
                                         cwd=root, capture_output=True, text=True, timeout=8)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-    def _check_generation(self, valid, invalid):
-        for purpose in ('block', 'direct', 'proxy'):
-            for mode in ('keep', 'add', 'strip'):
-                with self.subTest(valid=valid, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
-                    root = Path(directory)
-                    (root / 'static').mkdir()
-                    (root / 'static/input.yaml').write_bytes(('﻿payload:\r\n  - ' +
-                        json.dumps('DOMAIN-REGEX,' + valid) + '\r\n').encode('utf-8'))
-                    (root / 'static/blocked.list').write_bytes(('DOMAIN-REGEX,' + valid +
-                        '\r\nDOMAIN-REGEX,^other$\r\n').encode('utf-8'))
-                    static = {path: path.read_bytes() for path in (root / 'static').iterdir()}
-                    configs = [{'name': group, 'purpose': purpose, 'no_resolve': mode,
-                                'sources': sources, 'whitelist': white} for group, sources, white in (
-                        ('parent', ['static/input.yaml'], []),
-                        ('sourcechild', ['parent/fin.yaml'], []),
-                        ('whitechild', ['static/blocked.list'], ['parent/fin.yaml']),
-                        ('cleared', ['static/input.yaml'], ['parent/fin.yaml']))]
-                    config_path = root / 'rulesets.json'
-                    config_path.write_text(json.dumps(configs), encoding='utf-8')
-                    old = {}
-                    for config in configs:
-                        (root / config['name']).mkdir()
-                        for name in FILES:
-                            path = root / config['name'] / name
-                            old[path] = b'old complete\r\n\0' + name.encode('ascii')
-                            path.write_bytes(old[path])
-                    with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as logs:
-                        clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
-                        outputs = generate(root, self.fail)
-                    self.assertEqual({path: path.read_bytes() for path in old}, old)
-                    self.assertNotIn(': line ', logs.getvalue())
-                    self.assertNotIn('frozen', logs.getvalue())
-                    rows = {'parent': ['DOMAIN-REGEX,' + valid], 'sourcechild': ['DOMAIN-REGEX,' + valid],
-                            'whitechild': ['DOMAIN-REGEX,^other$'], 'cleared': []}
-                    for group, matchers in rows.items():
-                        text = outputs[root / group / 'fin.yaml']
-                        self.assertEqual(text, f'# {group} rules: {len(matchers)}\npayload:\n' +
-                                         ''.join('  - ' + json.dumps(row) + '\n' for row in matchers))
-                        self.assertEqual(parse(text, purpose=purpose),
-                                         ([Rule('DOMAIN-REGEX', row.partition(',')[2]) for row in matchers], []))
-                        for name in ('fin.txt', 'fin-qx.txt', 'fin-surge.txt', 'fin-surge-ds.txt'):
-                            self.assertEqual(outputs[root / group / name], f'# {group} rules: 0\n')
-                        self.assertEqual(outputs[root / group / 'fin-adb.txt'].splitlines()[6:], ['! Total count: 0'] +
-                                         ([] if purpose == 'block' else ['! No AdBlock rules for non-advertising group.']))
-                    self.assertEqual(len(outputs), 24)
-                    publish(outputs, root=root)
-                    self.assertEqual({path: path.read_bytes() for path in outputs},
-                                     {path: text.encode('utf-8') for path, text in outputs.items()})
-                    parent = {root / 'parent' / name: (root / 'parent' / name).read_bytes() for name in FILES}
-                    self.assertEqual(parse_whitelist((root / 'parent/fin.yaml').read_text(encoding='utf-8')),
-                                     [Rule('DOMAIN-REGEX', valid)])
-                    config_path.write_text(json.dumps(configs[1:]), encoding='utf-8')
-                    with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as disk_logs:
-                        clock.now.return_value = datetime(2026, 1, 2, 11, 4, tzinfo=timezone.utc)
-                        disk = generate(root, self.fail)
-                    self.assertEqual(disk, {path: text for path, text in outputs.items() if path.parent.name != 'parent'})
-                    self.assertNotIn(': line ', disk_logs.getvalue())
-                    self.assertNotIn('frozen', disk_logs.getvalue())
-                    publish(disk, root=root)
-                    self.assertEqual({path: path.read_bytes() for path in parent}, parent)
-                    self.assertEqual({path: path.read_bytes() for path in static}, static)
-        for role in ('source', 'white', 'disk-source', 'disk-white', 'remote'):
-            with self.subTest(invalid=invalid, role=role), tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                (root / 'static').mkdir()
-                document = ('payload:\n  - ' + json.dumps('DOMAIN-REGEX,' + invalid) + '\n').encode('utf-8')
-                bad = 'disk/fin.yaml' if role.startswith('disk') else 'static/bad.yaml'
-                path = root / bad
-                path.parent.mkdir(exist_ok=True)
-                path.write_bytes((b'# disk rules: 1\n' if role.startswith('disk') else b'') + document)
-                (root / 'static/good.list').write_bytes(b'DOMAIN,keep.example.org\n')
-                config = [{'name': 'child', 'purpose': 'block', 'no_resolve': 'keep',
-                           'sources': ['https://example.org/bad.yaml' if role == 'remote' else
-                                       bad if role.endswith('source') else 'static/good.list'],
-                           'whitelist': [bad] if role.endswith('white') else []}]
-                (root / 'rulesets.json').write_text(json.dumps(config), encoding='utf-8')
-                (root / 'child').mkdir()
-                for name in FILES:
-                    (root / 'child' / name).write_bytes(b'old complete\r\n\0' + name.encode('ascii'))
-                before = {item: item.read_bytes() for item in root.rglob('*') if item.is_file()}
-                with contextlib.redirect_stderr(io.StringIO()):
-                    if role == 'remote':
-                        outputs = generate(root, lambda url: document)
-                        self.assertEqual(outputs, {})
-                        publish(outputs, root=root)
-                    else:
-                        with self.assertRaisesRegex(ValueError, 'No adaptable rules|Invalid whitelist'):
-                            generate(root, self.fail)
-                self.assertEqual({item: item.read_bytes() for item in before}, before)
 
     def test_generate_publish_nonempty_source_white_disk_bytes_and_invalid_freeze(self):
-        self._check_generation(R2_CASES[4][0], R2_CASES[0][0])
+        check_generated_regex(self, R2_CASES[4][0], R2_CASES[0][0])
 
