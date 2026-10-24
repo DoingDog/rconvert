@@ -56,10 +56,32 @@ class WildcardSuffixNormalizationTests(unittest.TestCase):
         wildcard = Rule('DOMAIN-WILDCARD', '*.example.com', ('special',))
         self.assertEqual(normalize(iter([wildcard, suffix])), [suffix])
 
-    def test_allow_with_unprojectable_options_keeps_safe_reduction(self):
-        suffix = Rule('DOMAIN-SUFFIX', 'example.com', ('force-cellular',), allow=True)
-        wildcard = Rule('DOMAIN-WILDCARD', '*.example.com', ('force-cellular',), allow=True)
-        self.assertEqual(normalize(iter([wildcard, suffix])), [suffix])
+    def test_allow_with_interface_options_keeps_target_projection(self):
+        blocker = Rule('DOMAIN-REGEX', r'^.*\.example\.com\.?$')
+        for option in ('force-cellular', 'multi-interface', 'multi-interface-balance',
+                       'via-interface=pdp_ip0', 'via-interface=en1', 'special'):
+            suffix = Rule('DOMAIN-SUFFIX', 'example.com', (option,), allow=True)
+            wildcard = Rule('DOMAIN-WILDCARD', '*.example.com', (option,), allow=True)
+            expected_white = [suffix] if option == 'special' else [suffix, wildcard]
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(option=option, purpose=purpose, mode=mode):
+                        direct, direct_diagnostics = render('allow', [blocker, suffix, wildcard],
+                                                            purpose=purpose, no_resolve=mode)
+                        normalized = normalize(iter([wildcard, blocker, suffix, wildcard]))
+                        outputs, diagnostics = render('allow', normalized, purpose=purpose,
+                                                      no_resolve=mode)
+                        expected = ('# allow rules: 1\npayload:\n'
+                                    '  - "DOMAIN-REGEX,^.*\\\\.example\\\\.com\\\\.?$"\n'
+                                    if option == 'special' else '# allow rules: 0\npayload:\n')
+                        self.assertEqual(direct['fin.yaml'].encode('utf-8'), expected.encode('utf-8'))
+                        self.assertEqual(outputs['fin.yaml'].encode('utf-8'), expected.encode('utf-8'))
+                        covered = 'fin.yaml:DOMAIN-REGEX:whitelist-covered'
+                        self.assertEqual(direct_diagnostics.get(covered, 0), int(option != 'special'))
+                        self.assertEqual(diagnostics.get(covered, 0), int(option != 'special'))
+                        self.assertEqual(normalized, [blocker, *expected_white])
+                        self.assertTrue(all(any(rule is original for rule in normalized)
+                                            for original in expected_white))
 
     def test_source_white_and_target_allow_have_separate_coverage(self):
         parsed, messages = parse('DOMAIN-SUFFIX,example.com\nDOMAIN-WILDCARD,*.example.com', purpose='block')

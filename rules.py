@@ -2240,7 +2240,6 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                 # 普通 wildcard 的可选根点 regex 仍有 suffix 未覆盖的范围，allow 也需要该投影。
                 projection_value = value.lower()
                 if (kind != 'DOMAIN-WILDCARD' or rule.domain_source != 'surge' or
-                        rule.allow and rule.options or
                         any(option not in _QX_INTERFACE_OPTIONS for option in rule.options) or
                         not _valid_domain(kind, projection_value)):
                     continue
