@@ -17,9 +17,11 @@ from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def expected_outputs(group, matcher, purpose):
+def expected_outputs(group, matcher, purpose, surge=None):
     outputs = {name: f'# {group} rules: 0\n' for name in FILES}
     outputs['fin.yaml'] = f'# {group} rules: 1\npayload:\n  - ' + json.dumps(matcher) + '\n'
+    if surge is not None:
+        outputs['fin.txt'] = outputs['fin-surge.txt'] = f'# {group} rules: 1\n' + surge + '\n'
     outputs['fin-adb.txt'] = ('[Adblock Plus 2.0]\n' + f'! Title: {group}\n' +
         '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n'
         '! License: Inherits upstream licenses\n! Version: 202610240000\n! Total count: 0\n' +
@@ -61,6 +63,33 @@ class NativeNotSpaceRegressionTests(unittest.TestCase):
                                     self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose), (parsed, []))
 
     def test_direct_native_rule_render_uses_structural_ranges_without_extra_wrapper(self):
+        templates = (('{}', '{}', '{}'),
+                     ('AND,(({}),(NETWORK,udp))', 'AND,(({}),(NETWORK,udp))', 'AND,(({}),(PROTOCOL,UDP))'),
+                     ('OR,((NETWORK,udp),({}))', 'OR,((NETWORK,udp),({}))', 'OR,((PROTOCOL,UDP),({}))'),
+                     ('NOT,( ({}) )', 'NOT,(({}))', 'NOT,(({}))'))
+        for left, right in ((' ', ' '), (' ', ''), ('', ' '), ('   ', '  ')):
+            raw_not = 'NOT,(' + left + '(NETWORK,tcp)' + right + ')'
+            for raw_template, canonical_template, surge_template in templates:
+                raw = raw_template.format(raw_not)
+                canonical = canonical_template.format('NOT,((NETWORK,tcp))')
+                surge = surge_template.format('NOT,((PROTOCOL,TCP))')
+                rule = Rule(*raw.split(',', 1), native_fields=True)
+                for purpose in ('block', 'direct', 'proxy'):
+                    for mode in ('add', 'strip', 'keep'):
+                        with self.subTest(raw=raw, purpose=purpose, mode=mode), patch('formats.datetime') as clock:
+                            clock.now.return_value = datetime(2026, 10, 24, tzinfo=timezone.utc)
+                            outputs, diagnostics = render('native', [rule], purpose=purpose, no_resolve=mode)
+                            for name in ('fin.txt', 'fin-surge.txt'):
+                                self.assertEqual(outputs[name], '# native rules: 1\n' + surge + '\n')
+                                self.assertEqual(parse(outputs[name], purpose=purpose),
+                                                 ([Rule(*surge.split(',', 1))], []))
+                                self.assertNotIn(name + ':' + rule.kind, diagnostics)
+                            yaml = raw if mode == 'keep' else canonical
+                            self.assertEqual(outputs, expected_outputs('native', yaml, purpose, surge))
+                            self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose),
+                                             ([Rule(*canonical.split(',', 1), native_fields=True)], []))
+                            self.assertEqual(diagnostics, {name + ':' + rule.kind: 1 for name in
+                                                          ('fin-qx.txt', 'fin-surge-ds.txt', 'fin-adb.txt')})
         for value in ('( (DOMAIN,a.test) )', '( (DOMAIN,a.test))', '((DOMAIN,a.test) )'):
             rule = Rule('NOT', value, native_fields=True, domain_source='mihomo')
             for mode in ('add', 'strip', 'keep'):
@@ -71,6 +100,9 @@ class NativeNotSpaceRegressionTests(unittest.TestCase):
                     self.assertNotIn('fin.yaml:NOT', diagnostics)
                     self.assertEqual(parse(outputs['fin.yaml'], purpose='proxy'),
                         ([Rule('NOT', '((DOMAIN,a.test))', native_fields=True, domain_source='mihomo')], []))
+                    for name in ('fin.txt', 'fin-surge.txt'):
+                        self.assertEqual(outputs[name], '# native rules: 0\n')
+                        self.assertEqual(diagnostics[name + ':NOT'], 1)
 
     def test_invalid_native_wrappers_and_non_ascii_structure_keep_neighbor_and_warning_line(self):
         invalid = ('NOT,(DOMAIN,a.test)', 'NOT,()', 'NOT,( )', 'NOT,(())',
@@ -120,51 +152,85 @@ class NativeNotSpaceRegressionTests(unittest.TestCase):
                         reread, warnings = parse(outputs['fin.yaml'], purpose=purpose)
                         self.assertEqual(warnings, [])
                         self.assertEqual(render('native', reread, purpose=purpose, no_resolve=mode)[0]['fin.yaml'], outputs['fin.yaml'])
+        for leaf, surge in (('PROCESS-NAME,123(456)', "PROCESS-NAME,'123(456)'"),
+                            ('DOMAIN-REGEX,^(a|b)\\.test$', None),
+                            ('IP-CIDR,192.0.2.0/24,no-resolve', 'IP-CIDR,192.0.2.0/24,no-resolve'),
+                            ('SRC-IP-CIDR,198.51.100.0/24', 'SRC-IP,198.51.100.0/24')):
+            raw = 'NOT,( (' + leaf + ') )'
+            rule = Rule('NOT', raw[4:], native_fields=True, literal_process=leaf.startswith('PROCESS-'))
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(leaf=leaf, purpose=purpose, mode=mode):
+                        outputs, diagnostics = render('native', [rule], purpose=purpose, no_resolve=mode)
+                        flag_leaf = leaf.removesuffix(',no-resolve') if mode == 'strip' else leaf
+                        yaml = raw if mode == 'keep' else 'NOT,((' + flag_leaf + '))'
+                        self.assertEqual(outputs['fin.yaml'], '# native rules: 1\npayload:\n  - ' + json.dumps(yaml) + '\n')
+                        self.assertEqual(parse(outputs['fin.yaml'], purpose=purpose),
+                                         ([Rule('NOT', '((' + flag_leaf + '))', native_fields=True,
+                                                literal_process=rule.literal_process)], []))
+                        for name in ('fin.txt', 'fin-surge.txt'):
+                            if surge is None:
+                                self.assertEqual(outputs[name], '# native rules: 0\n')
+                                self.assertEqual(diagnostics[name + ':NOT'], 1)
+                            else:
+                                target = surge.removesuffix(',no-resolve') if mode == 'strip' else surge
+                                text = '# native rules: 1\nNOT,((' + target + '))\n'
+                                self.assertEqual(outputs[name], text)
+                                parsed, warnings = parse(text, purpose=purpose)
+                                self.assertEqual(warnings, [])
+                                self.assertEqual(render('native', parsed, purpose=purpose, no_resolve=mode)[0][name], text)
+                                self.assertNotIn(name + ':NOT', diagnostics)
 
     def test_real_single_not_publish_same_round_and_nonempty_disk_dependencies(self):
-        for purpose in ('block', 'direct', 'proxy'):
-            for mode in ('add', 'strip', 'keep'):
-                with self.subTest(purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
-                    root = Path(directory)
-                    (root / 'static').mkdir()
-                    (root / 'static/input.yaml').write_bytes(b'\xef\xbb\xbfrules:\r\n  - "NOT,( (DOMAIN,a.test) )"\r\n')
-                    (root / 'static/white.list').write_bytes(b'IP-CIDR,198.51.100.0/24\r\n')
-                    (root / 'static/marker').write_bytes(b'static\x00\xff')
-                    inputs = {path: path.read_bytes() for path in (root / 'static').iterdir()}
-                    configs = [dict(name=group, purpose=purpose, no_resolve=mode, sources=sources,
-                                    whitelist=['static/white.list']) for group, sources in
-                               (('parent', ['static/input.yaml']), ('child', ['parent/fin.yaml']))]
-                    config = root / 'rulesets.json'
-                    config.write_text(json.dumps(configs), encoding='utf-8')
-                    old = {}
-                    for group in ('parent', 'child'):
-                        (root / group).mkdir()
-                        for name in FILES:
-                            path = root / group / name
-                            old[path] = b'old complete product\x00\xff\r\n'
-                            path.write_bytes(old[path])
-                    expected = {root / group / name: text for group in ('parent', 'child')
-                                for name, text in expected_outputs(group, 'NOT,((DOMAIN,a.test))', purpose).items()}
-                    with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as logs:
-                        clock.now.return_value = datetime(2026, 10, 24, tzinfo=timezone.utc)
-                        outputs = generate(root, self.fail)
-                    self.assertEqual(outputs, expected)
-                    self.assertNotIn('frozen', logs.getvalue())
-                    self.assertEqual({path: path.read_bytes() for path in old}, old)
-                    publish(outputs, root=root)
-                    published = {path: path.read_bytes() for path in outputs}
-                    self.assertEqual(published, {path: text.encode() for path, text in expected.items()})
-                    config.write_text(json.dumps(configs[1:]), encoding='utf-8')
-                    with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
-                        clock.now.return_value = datetime(2026, 10, 24, tzinfo=timezone.utc)
-                        disk = generate(root, self.fail)
-                    self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent.name == 'child'})
-                    publish(disk, root=root)
-                    config.write_text(json.dumps([configs[0], dict(configs[1], whitelist=['parent/fin.yaml'])]), encoding='utf-8')
-                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(ValueError, 'unsupported rule'):
-                        generate(root, self.fail)
-                    self.assertEqual({path: path.read_bytes() for path in published}, published)
-                    self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
+        cases = (('NOT,( (DOMAIN,a.test) )', 'NOT,((DOMAIN,a.test))', None),
+                 ('NOT,( (NETWORK,tcp) )', 'NOT,((NETWORK,tcp))', 'NOT,((PROTOCOL,TCP))'))
+        for raw, canonical, surge in cases:
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('add', 'strip', 'keep'):
+                    with self.subTest(raw=raw, purpose=purpose, mode=mode), tempfile.TemporaryDirectory() as directory:
+                        root = Path(directory)
+                        (root / 'static').mkdir()
+                        (root / 'static/input.yaml').write_bytes(('﻿rules:\r\n  - ' + json.dumps(raw) + '\r\n').encode())
+                        (root / 'static/white.list').write_bytes(b'IP-CIDR,198.51.100.0/24\r\n')
+                        (root / 'static/marker').write_bytes(b'static\x00\xff')
+                        inputs = {path: path.read_bytes() for path in (root / 'static').iterdir()}
+                        configs = [dict(name=group, purpose=purpose, no_resolve=mode, sources=sources,
+                                        whitelist=['static/white.list']) for group, sources in
+                                   (('parent', ['static/input.yaml']), ('child', ['parent/fin.yaml']))]
+                        config = root / 'rulesets.json'
+                        config.write_text(json.dumps(configs), encoding='utf-8')
+                        old = {}
+                        for group in ('parent', 'child'):
+                            (root / group).mkdir()
+                            for name in FILES:
+                                path = root / group / name
+                                old[path] = b'old complete product\x00\xff\r\n'
+                                path.write_bytes(old[path])
+                        expected = {root / group / name: text for group in ('parent', 'child')
+                                    for name, text in expected_outputs(group, canonical, purpose, surge).items()}
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()) as logs:
+                            clock.now.return_value = datetime(2026, 10, 24, tzinfo=timezone.utc)
+                            outputs = generate(root, self.fail)
+                        self.assertEqual(outputs, expected)
+                        self.assertNotIn('frozen', logs.getvalue())
+                        self.assertEqual({path: path.read_bytes() for path in old}, old)
+                        for path, text in outputs.items():
+                            if path.name in ('fin.txt', 'fin-surge.txt', 'fin.yaml'):
+                                self.assertEqual(parse(text, purpose=purpose)[1], [])
+                        publish(outputs, root=root)
+                        published = {path: path.read_bytes() for path in outputs}
+                        self.assertEqual(published, {path: text.encode() for path, text in expected.items()})
+                        config.write_text(json.dumps(configs[1:]), encoding='utf-8')
+                        with patch('formats.datetime') as clock, contextlib.redirect_stderr(io.StringIO()):
+                            clock.now.return_value = datetime(2026, 10, 24, tzinfo=timezone.utc)
+                            disk = generate(root, self.fail)
+                        self.assertEqual(disk, {path: text for path, text in expected.items() if path.parent.name == 'child'})
+                        publish(disk, root=root)
+                        config.write_text(json.dumps([configs[0], dict(configs[1], whitelist=['parent/fin.yaml'])]), encoding='utf-8')
+                        with contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(ValueError, 'unsupported rule'):
+                            generate(root, self.fail)
+                        self.assertEqual({path: path.read_bytes() for path in published}, published)
+                        self.assertEqual({path: path.read_bytes() for path in inputs}, inputs)
 
     def test_deep_spaced_not_is_iterative_and_skips_unsupported_targets_whole(self):
         for depth in (600, 1000):

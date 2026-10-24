@@ -227,6 +227,8 @@ def _logical_value(value: str, operator: str, supported: set[str],
                 return None
             if kind == 'NOT' and not wrapped:
                 edits.extend(((start, start, '('), (stop, stop, ')')))
+            elif kind == 'NOT' and native_fields and supported is SURGE_TYPES:
+                edits.extend(((start + 1, ranges[0][0], ''), (ranges[0][1], stop - 1, '')))
             pending.extend((begin, end, depth + 1) for begin, end in reversed(ranges))
             continue
         try:
