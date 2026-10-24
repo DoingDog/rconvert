@@ -24,6 +24,17 @@ class _UnusableSource(ValueError):
 
 
 class _HttpsOnlyRedirect(request.HTTPRedirectHandler):
+    def https_response(self, req, response):
+        try:
+            while 100 <= response.status < 200 and response.status != 101:
+                response.headers = None
+                response.begin()
+                response.msg = response.reason
+        except BaseException:
+            response.close()
+            raise
+        return response
+
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         if urlsplit(newurl).scheme != "https":
             raise ValueError(f"HTTPS redirect required: {newurl}")
