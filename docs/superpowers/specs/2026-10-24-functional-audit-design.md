@@ -163,7 +163,9 @@ fixture 覆盖 BOM／CRLF、ordinary 字段引用及 native 两种 header／三�
 
 ### R10. 组件与最终 exact tree 的 Linux 验收
 
-每个 owner 连续完成实现、相关回归、规格／功能／简化审查、修正、复审和英文提交，再以最终提交 head 的完整 Git archive 在 Debian 原生 `/tmp` 运行完整 suite 后交付。失败由原 owner 修正并重新提交、重验，不能把未完成步骤转交主会话。主会话仅合并无所有权冲突的已完成提交，集成树另行完整验收。
+每个 owner 在各自获准的独立 worktree 连续完成实现、相关回归、规格／功能／简化审查、修正、复审和英文提交，再以最终提交 head 的完整 Git archive 在 Debian 原生 `/tmp` 运行完整 suite 后交付。失败由原 owner 修正并重新提交、重验，不能把未完成步骤转交主会话。主会话仅合并无所有权冲突的已完成提交，集成树另行完整验收。
+
+已观测到 harness 恢复执行位置固定到 integration、原实现 worktree 被拒绝访问时，保留原 worktree 和已提交实现，由同一 unit 的 owner 在 harness 新授予的独立 recovery worktree 接续。核对 clean 状态和原完整提交 SHA；recovery HEAD 为原提交祖先时正常 fast-forward，从最新 integration 文档 base 建立且分叉仅涉及已确认文档时，正常 merge 原完整实现提交，不 cherry-pick 复制或 reset。记录原提交及恢复后实际完整 HEAD／tree，逐路径核对 mode／blob，证明产品／测试与原提交一致、其他差别仅为已确认的新文档，再连续完成既有 review、必要 TDD 修正、复审、提交及实际最终 HEAD 的完整 suite。不得访问被拒旧路径、手工修改 `.git`、更改权限、叠加未提交内容、重新实现或调查本机；已有 review／focused 结果不能替代恢复后实际 HEAD 的全套。本次执行条款更新不要求其他 owner 重跑已在同一 head 通过的完整 suite。
 
 精确 archive 不叠加未提交文件，使用 Python `-I -B` 并显式加入可信 snapshot root；记录 commit、tree、解释器、Git 版本和全部受控路径 mode／blob／bytes／SHA-256。测试前后清单相同，discovery 包含新测试，无 failure／error，十个既有 skips 保持。最终文件数和测试数按实际记录，不固定为基线 145／1503。任何受控修改均需重新提交并验证新的 exact tree，Debian 记录不冒充实际 Ubuntu。
 
@@ -184,7 +186,7 @@ fixture 覆盖 BOM／CRLF、ordinary 字段引用及 native 两种 header／三�
 
 核对实际 Ubuntu Actions 对事件 SHA 的 `test` 和依赖它的 `update` 终态，记录 run／attempt／job／SHA 与 published／unchanged 结果。`superseded` 需要继续核对替代 SHA。读取实际远端提交的 42 产物及 README，检查 R11 的格式约束、static 保持和限定发布路径；远端实时上游变化与本地固定输入差异分开解释。
 
-仅清理本次已合并、clean、无未合并提交且已无用途的 worktree 和本地分支，先退出任务 worktree 返回原目录。保留用户 `.claude/`、历史 worktree、其他任务分支及所有未保存内容；非阻塞清理失败逐路径记录。
+记录本次全部实现及 recovery worktree／分支，仅清理已合并、clean、无未合并提交且已无用途的项目，先退出任务 worktree 返回原目录。保留用户 `.claude/`、历史 worktree、其他任务分支及所有未保存内容；不为清理访问被拒旧路径或绕过隔离，不能核实的项目保留，非阻塞清理失败逐路径记录。
 
 ### R13. 普通 quoted process 字段后的尾注释
 

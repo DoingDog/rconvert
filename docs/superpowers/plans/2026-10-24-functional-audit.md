@@ -71,7 +71,7 @@ Product Contract 由独立规格承载。这里的引用保留全部行为边界
 
 - KTD1. **六组按共享状态分配所有权。**A 连续负责 comparison／dedup／native byte／ordinary Unicode 投影／native Surge 能力，B 负责 regex scanner，C 负责 SUBNET／native，D 只改 process comment，E 只改 hosts，F 只改 generate HTTP 传输。共享 scanner 由 B 顺序实现，A 迁移 Go15 helper 时同步原 caller；各生产 hunk／新测试独立，E 与 C 的 parse 分支保持分开。
 - KTD2. **同一 owner 按行为完成 vertical TDD。**每个 slice 从一个公开失败用例开始，只修共享根因使该例 green，再逐例加入相邻边界及真实 bytes 联动；完成规格／功能／简化审查、修正、复审和英文提交后才进入下一 slice。R2/R3 是同一 conditional 状态 slice，R4 另行提交。
-- KTD3. **各 owner 完成最终提交 head 的全套后交付。**A、B、C、D、E、F 在各自最终 head 满足规格 R10，返回 clean commit／tree、red／green、相关回归、审查和完整 suite 证据。失败由原 owner 连续处理，主会话不接收待测试或待修正半成品。
+- KTD3. **各 owner 完成最终提交 head 的全套后交付。**A、B、C、D、E、F 在各自最终 head 满足规格 R10，返回 clean commit／tree、red／green、相关回归、审查和完整 suite 证据。未发生隔离恢复失败的 owner 继续原 worktree；发生 R10 所述拒绝时，由同一 unit 的 owner 在新授予的独立 recovery worktree 正常 fast-forward 或 merge 原完整实现提交，核对 tree／逐 blob 身份后连续完成全部剩余步骤，以恢复后的实际最终 HEAD 运行全套。失败仍由该 owner 连续处理，主会话不接收半成品；已有 focused 不代替全套，其他 owner 已在同一 head 通过的全套不因本次执行条款更新重跑。
 - KTD4. **共享修正保留既有目标能力。**R2-R4 只修来源 validator 和验证 probe，保持 DNS 独立证书及 URL-REGEX；R5 不新增目标支持；R6 仅 native 分支；R7 只拒解码后的 native `@@`；R8 连续完成 QX 跨值保护及非 native keyword equality／索引／contains 输出能力，保留 native 原安全归约；R13 只修 quoted process；R14 仅 native wildcard 两侧 byte 比较复用完整 Go15 lower；R15 仅 hosts ASCII trim／split；R16 复用 HTTPResponse.begin；R17 只修两种普通 Unicode 投影和 wildcard 原文 identity，R18 复用同一 case-variant 定义收紧 native Surge 能力。复用现有 caller 和字段读取，不增加 wrapper 或依赖。
 - KTD5. **输入身份与执行身份分开记录。**只读固定 manifest／body，baseline 与最终代码运行在各自可信 archive；下载数据和执行脚本分开，不从下载目录运行解释器。旧抓取 commit／hash 不改写为最终代码 SHA。
 - KTD6. **受控树确定后才做最终验收。**正常合并全部已完成分支和必要文档修正，形成唯一 commit／tree，再执行 R10、R11。测试后发生任何受控修改，重新提交并验证新树；组件和 baseline 日志不能替代最终结果。
@@ -306,8 +306,10 @@ R1-R8、R13-R18 及 DNS 输出完整性补充均有完成的独立终报，既�
 
 **要求：**R9、R10、R12。**依赖：**A／B／C／D／E／F 的最终 clean 交付及覆盖收据核对。**文件：**六组已审查提交、必要 origin／本计划修正。
 
-1. 核对六领域覆盖收据、全部确认要求及候选处置；核对各分支起始 base 和后续文档范围、commit／tree、精确 hunk、clean、逐 slice 提交、red／green、审查与 KTD3 完整 suite。缺失项由原 owner 连续补齐后交付。
-2. 在本次已从 baseline 建立的 `audit-20261024-5bebe430-integration` 分支和同名独立 worktree 正常合并文档 base 及全部完成历史，按实际 hunk 处理必要冲突，不整文件选边。新失败交回原 owner 的 worktree，完成测试、修正、复审、提交与最终 head 全套后重新合并。
+D 的恢复收据记录：原实现提交 `5a25411fab3084c57a3f43affcab126ded477bbe`，tree `5a4b68b13983050e400ea42e5072793205f4026a`，独立 review 已 PASS。fresh finalize 与恢复原代理均被 harness 固定到 integration；`EnterWorktree` 进入原 D 路径因 protected checkout 的 Git identity 无法核实被拒绝，主会话尝试同一路径也被拒绝，未手工修改 Git 元数据或权限。原 D 证据已由完成 workflow 和只读收据取得，不再读写被拒旧路径，不调查本机、不将此恢复交给用户；在新授予的独立 recovery worktree 接续原 unit。恢复尚须取得实际新 HEAD 的完整 suite 结果。
+
+1. 核对六领域覆盖收据、全部确认要求及候选处置；核对各分支起始 base 和后续文档范围、commit／tree、精确 hunk、clean、逐 slice 提交、red／green、审查与 KTD3 完整 suite。发生恢复时，同时记录原提交、新 recovery 路径／分支、恢复前后完整 SHA／tree 与连续历史；仅文档分叉时正常 merge 原完整提交，可 fast-forward 且 clean 时正常 ff，不 cherry-pick 复制或 reset。逐路径 mode／blob 证明产品／测试与原实现提交相同、其余差别仅为已确认新文档；全套日志必须指向恢复后实际完整 HEAD，不能以原实现 SHA 冒充。缺失项由同一 unit 的 owner 在获准独立 worktree 连续补齐后交付。
+2. 在本次已从 baseline 建立的 `audit-20261024-5bebe430-integration` 分支和同名独立 worktree 正常合并文档 base 及全部完成历史，按实际 hunk 处理必要冲突，不整文件选边。新失败交回原 unit 的 owner，在原获准 worktree 或符合 R10 的独立 recovery worktree 连续完成测试、修正、复审、提交与实际最终 HEAD 全套后重新合并，不把未完成步骤转交主会话；最终集成树仍须独立完成 U10。
 3. 联合运行所有新增模块与相关 rules／formats、domain／white、regex／DNS、native／routing、YAML／generate、README／CI 测试。重点核对 A 的非 native equality／contains／ordinary wildcard identity、native byte、两种 Unicode 投影／能力与全部 helper caller，B 的 probe／capture，C 的 native／no_resolve，D 的 comment，E 的 ASCII hosts trim／split，F 的 interim／最终响应／关闭／缓存，以及 source＋white 同轮／磁盘链。
 4. 逐项对照最终规格，清除本次未采用实现、重复 helper、未使用内容和无关改动，完成审查、修正复审及英文提交，固定唯一受控 commit／tree。本轮不要求额外 README 功能段落；计数由 U10 的隔离副本和 U11 发布实际计算。
 
@@ -342,8 +344,8 @@ R1-R8、R13-R18 及 DNS 输出完整性补充均有完成的独立终报，既�
 
 **要求：**R12。**依赖：**U11，或已明确停在本地已验收状态。
 
-1. 将需要复查的 commit／tree、red／green、审查、完整 Linux、固定 bytes 和已执行的远端证据保存到不会随 worktree 删除的本次专用目录。
-2. 用 ancestry／status 证明待清理的本次分支已合并、clean、无未合并提交且无继续使用需求；退出任务 worktree 返回原目录后，用 Git 管理命令清理本次 worktree／branch。
+1. 将需要复查的 commit／tree、red／green、审查、完整 Linux、固定 bytes 和已执行的远端证据保存到不会随 worktree 删除的本次专用目录；清单记录本次全部实现及 recovery worktree／分支、原实现提交与恢复后的完整 HEAD／tree，保留身份核对和连续历史收据。
+2. 用 ancestry／status 证明待清理的本次分支已合并、clean、无未合并提交且无继续使用需求；退出任务 worktree 返回原目录后，用 Git 管理命令清理本次 worktree／branch。不为清理再次访问被拒旧路径或绕过隔离，无法核实的项目保留并列明。
 3. 不清理历史 worktree、其他任务分支、原 `.claude/` 或未保存内容，不强制删除。仅删除本次已无用途的临时目录，已知本机非阻塞失败列明实际残留路径。
 
 **完成标准：**必要证据保留，本次已完成且无用途的目录／分支按权限清理，未执行和未清理项如实交付。
