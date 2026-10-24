@@ -781,6 +781,11 @@ def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]] | None:
 def _valid_regex(kind: str, value: str) -> bool:
     if not value:
         return False
+    if kind != 'URL-REGEX':
+        captured = _regexp2_capture_slots(value)
+        if captured is None:
+            return False
+        capture_slots, names = captured
     probe, in_class, index, quantified = [], False, 0, False
     class_atom, range_from_literal, extended = None, False, False
     class_first = class_hyphen = False
@@ -943,7 +948,7 @@ def _valid_regex(kind: str, value: str) -> bool:
         if not in_class and char == "(":
             if value.startswith(('(?(?=', '(?(?!', '(?(?<=', '(?(?<!'), index):
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0, True])
+                conditionals.append([len(extended_stack), 0, True, True])
                 probe.append('(?:')
                 index += 2
                 continue
@@ -952,10 +957,10 @@ def _valid_regex(kind: str, value: str) -> bool:
                 if numeric and (value[end:end + 1] != ')' or _capture_number(key) is None):
                     return False
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0, False])
+                conditionals.append([len(extended_stack), 0, False, False])
                 probe.append('(?:')
-                if key and value[end:end + 1] == ')':
-                    # 条件头不分配捕获槽，引用在完整捕获集合建立后验证。
+                if key and value[end:end + 1] == ')' and (numeric or key in names):
+                    # 仅完整捕获集合中的名称构成 reference condition。
                     references.append((key, numeric, 'condition', None))
                     index = end + 1
                 else:
@@ -963,7 +968,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                     if head.startswith(('(?#', "(?'")) or (head.startswith('(?<') and head[3:4] not in {'=', '!'}):
                         return False
                     conditional_head = True
-                    conditionals[-1][2] = True
+                    conditionals[-1][2] = conditionals[-1][3] = True
                     index += 2
                 continue
             if conditional_head:
@@ -974,6 +979,8 @@ def _valid_regex(kind: str, value: str) -> bool:
                 continue
             flags = _scan_regex_options(value, index, extended, explicit_capture)
             if flags is not None:
+                if conditionals and conditionals[-1][3] and len(extended_stack) == conditionals[-1][0]:
+                    return False
                 if flags[1] == ':':
                     extended_stack.append((extended, explicit_capture))
                     probe.append('(?:')
@@ -1095,11 +1102,6 @@ def _valid_regex(kind: str, value: str) -> bool:
         index += 1
     if in_class or classes:
         return False
-    if kind != "URL-REGEX":
-        captured = _regexp2_capture_slots(value)
-        if captured is None:
-            return False
-        capture_slots, names = captured
     for key, numeric, form, position in references:
         if numeric:
             number = _capture_number(key)
