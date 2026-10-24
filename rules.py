@@ -1801,7 +1801,7 @@ def _source_records(text: str):
             else:
                 in_payload = False
                 if re.match(r"(?:0\.0\.0\.0|127\.0\.0\.1|::1?)[ \t]", line):
-                    line = line.partition('#')[0].rstrip()
+                    line = line.partition('#')[0].rstrip(' \t')
                     parts = [line]
                 else:
                     parts, end = _source_parts(line)
@@ -1863,7 +1863,7 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
         if line.startswith(('||', '@@||')) and '$' in line:
             warnings.append(f"line {number}: conditional ABP rule")
             continue
-        host_parts = line.split()
+        host_parts = re.split(r'[ \t]+', line.strip(' \t'))
         if host_parts and host_parts[0] in {"0.0.0.0", "127.0.0.1", "::", "::1"}:
             if purpose != "block":
                 warnings.append(f"line {number}: hosts entry is block-only")
