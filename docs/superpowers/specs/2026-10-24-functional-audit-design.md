@@ -44,6 +44,7 @@ R18 另允许精确修改 `tests/test_generate.py` 的 `PublicGeneratedPipelineT
 依据为 `normalize` 当前按固定尾段直接删除 wildcard 的分支、`formats._domain_value` 已有可选根点转换，以及固定 [Mihomo suffix matcher](https://github.com/MetaCubeX/mihomo/blob/3f27ef39f8c96bbfbc8b0b9bb10f5c9ef60149d8/rules/common/domain_suffix.go)和 [regex matcher](https://github.com/MetaCubeX/mihomo/blob/3f27ef39f8c96bbfbc8b0b9bb10f5c9ef60149d8/rules/common/domain_regex.go)。匹配差别由固定源码推导，未运行客户端。
 
 - 只保留实际仍需要独立目标投影的普通 Surge wildcard。native／QX 的原安全归约、无法生成该投影时的安全归约、exact／suffix／keyword 与 CIDR 归约保持。
+- R17 的 raw unique identity 与 suffix candidate 分开处理；candidate 复用既有 `_domain_comparison_value`，不改原 Rule、全局 comparison、普通 source white、QX 非 ASCII guard 或 projection guards。同组 suffix 对 `[İ]`／`[İ-J]`／`[ſ]`／`[ı]` 加大写、混合大小写或小写 tail 的原安全归约保持；`[İ].EXAMPLE.COM` 的六格式正文、count 和 diagnostics 须等于 suffix-only 对照。该已确认回归仅涉及冗余输出和 unsupported diagnostics，未证明客户端漏匹配，不增加需求编号。
 - suffix 继续生成原生 `DOMAIN-SUFFIX`，不改写 payload 或批量转换 regex，不处理已知 suffix 大小写差别。
 - 重复、逆序、一次性 iterable、allow、options、literal_process、native_fields 和 domain_source 的 identity 分组保持。
 - 来源层外部 suffix white 的原覆盖与目标层实际 matcher 过滤分别验证，不把正常 whitelist 删除改成全面保留。公开 allow 和 raw／generated white 继续按各自入口处理。
@@ -171,6 +172,8 @@ D 已在独立 worktree 完成编码、提交及独立 review；同 D-unit 随�
 
 C 的 U6 接续修正使用当前已有效、从 main 分离的独立 worktree `audit-20261024-5bebe430-integration`，由同 C-unit worker 独占专用分支 `audit-20261024-5bebe430-C-current-review`。从 clean 文档 head `7fe72596e88b96ff844dc0e3228ec988d6427143` 建立该分支并正常合并原 C 完整 head `62757b30c109287bc8301500ddb7a63b1ece6a96`，保留最新文档及三个原实现提交；原 integration 分支保持原 tip。该 worker 连续完成文档提交、公开 red／green、编码、相关测试、规格／功能／简化审查、修正复审、英文提交及最终 actual HEAD 的本节完整 suite。交付前主会话不写该 checkout 或 index，不访问被拒旧路径、不另建 worktree、不修改 `.git`、权限或本机；完成后主会话切回原 integration 分支正常合并已验收结果。D 的历史只读方式不限制当前有效独立 worktree 的上述独占编码。新失败仍由原 unit 在有效独立 worktree 完成修正和新 head 重验，禁止在 main 编码或由主会话接收未完成步骤。
 
+C 已完成 actual head `960721a7e7ff5367f7c0444262e8f4242f7b801e` 的审查及完整 suite 并释放 checkout／index。R1／R17 suffix candidate 接续由同 A-unit worker 独占当前有效独立 worktree 的 `audit-20261024-5bebe430-A-tail-current-review` 分支，从该 C head 正常合并原 A 完整历史 `6ce6c7e0d940ed21e76c54d7f4ce5f5b10fdf724`；原 C 分支和原 integration tip 保持。worker 连续完成两份文档提交、公开 red／green、最小修正、相邻及真实 bytes 回归、规格／功能／简化自审、英文提交、独立窄复审与必要修正复审，再对最终 actual head 运行唯一完整 suite 后交付。复用既有 `.tmp/functional-audit-verification-tools` 和 expected-skips，不重跑已完成 selfcheck 或旧 A／C head 全套；Windows 原生 Git 核 source clean，Linux 记录 source／index／mode／bytes 前后严格清单，不向测试导出 `GIT_DIR`／`GIT_WORK_TREE`。交付前主会话只读 Git 对象／证据、写 ignored 进度，不写受控树／index；worker 不访问被拒旧路径、不新建 worktree、不改 `.git`／权限／系统、不切回 integration、不执行 main／push，完整交付后明确释放 checkout／index，由主会话正常集成。
+
 精确 archive 不叠加未提交文件，使用 Python `-I -B` 并显式加入可信 snapshot root；记录 commit、tree、解释器、Git 版本和全部受控路径 mode／blob／bytes／SHA-256。测试前后清单相同，discovery 包含新测试，无 failure／error，十个既有 skips 保持。最终文件数和测试数按实际记录，不固定为基线 145／1503。任何受控修改均需重新提交并验证新的 exact tree，Debian 记录不冒充实际 Ubuntu。
 
 ### R11. 固定生产输入与 42 产物验收
@@ -252,6 +255,7 @@ native source `ẞ.example`／`Ⱥ.example`／`Å.example` 与 native wildcard w
 
 - 只将 `formats._domain_value` 普通 Surge -> Mihomo keyword／wildcard 的两个 Python lower 复用现有共享 `_go_lower`。保留 keyword 尾点 lookahead、wildcard optional-root／boundary、ASCII 和其他来源／目标能力，不批量改 suffix regex 或已知 suffixcase。
 - normalize-local 普通非 ASCII wildcard 的 unique identity 保留原文，不让 `*İ*`／`*i̇*`、`*ΟΣ*`／`*ος*` 在 renderer 前合并；keyword 复用 R8 已有原文代表及双重 contains 保护，不重复实现。不全面替换 `_domain_comparison_value`。
+- raw unique key 不直接作为 suffix candidate；该 candidate 单独复用既有 comparison，保留 R1 无有效投影时的安全归约。`İ*.EXAMPLE.COM`、`*ΟΣ*.EXAMPLE.COM`、`中文*.EXAMPLE.COM`、`[ab]İ*.EXAMPLE.COM` 的有效投影及带匹配 suffix 的 dotted-I／Greek pair 原文身份和不同 regex 均保持，不一律删除非 ASCII wildcard。
 - 保持旧字符类准入；`[İ]`／`[İ-J]` 等原 unsupported class 不因 simple lowercase 新增输出。复用既有 class 验证，不新增 parser。`İ`／`xİ`、中文／ASCII 安全归约、identity、根点和 class 正反例均保持。
 - scalar、AND／OR／NOT、公开 allow、target white、六格式 diagnostics 与实际 generate／publish 验证三 purpose × 三 no_resolve；YAML source 同轮及 publish 后非空 disk-only 回读保留正确 matcher，正／逆序、重复和一次性 iterable 一致。
 - 普通 Surge source white 的 Unicode 完整覆盖依据尚不足，本项不修改普通来源比较／white，不把观察到的目标差别扩成 Go 全局 key 或关闭全部 Unicode 归约。保持原白名单来源语义，target white 按实际投影核查。

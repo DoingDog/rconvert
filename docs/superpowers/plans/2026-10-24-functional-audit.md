@@ -72,6 +72,7 @@ Product Contract 由独立规格承载。这里的引用保留全部行为边界
 - KTD1. **六组按共享状态分配所有权。**A 连续负责 comparison／dedup／native byte／ordinary Unicode 投影／native Surge 能力，B 负责 regex scanner，C 负责 SUBNET／native，D 只改 process comment，E 只改 hosts，F 只改 generate HTTP 传输。共享 scanner 由 B 顺序实现，A 迁移 Go15 helper 时同步原 caller；各生产 hunk／新测试独立，E 与 C 的 parse 分支保持分开。
 - KTD2. **同一 owner 按行为完成 vertical TDD。**每个 slice 从一个公开失败用例开始，只修共享根因使该例 green，再逐例加入相邻边界及真实 bytes 联动；完成规格／功能／简化审查、修正、复审和英文提交后才进入下一 slice。R2/R3 是同一 conditional 状态 slice，R4 另行提交。
 - KTD3. **各 owner 完成最终提交 head 的全套后交付。**A、B、C、D、E、F 在各自最终 head 满足规格 R10，返回 clean commit／tree、red／green、相关回归、审查和完整 suite 证据。D 已完成原提交 `5a25411fab3084c57a3f43affcab126ded477bbe` 的独立 review 及只读 exact-archive 全套验收，收据见 U9，不重复执行。C 的 U6 接续由同 unit worker 在当前有效独立 worktree `audit-20261024-5bebe430-integration` 的专用 `audit-20261024-5bebe430-C-current-review` 分支独占完成编码、测试、审查、修正复审、提交和最终 actual HEAD 全套；原 integration 分支保持原 tip，主会话交付后切回该分支正常合并。其他 owner 继续各自获准 worktree；新失败仍由原 unit 在有效独立编码 worktree 完成，不在 main 编码。D 历史只读验收不限制当前有效独立 worktree 的独占编码；主会话不接收待验收半成品，已有 focused 不代替全套，同一 head 已通过的全套不因执行条款更新重跑。
+  C 已完成 `960721a7e7ff5367f7c0444262e8f4242f7b801e` 的审查／完整 suite 并释放 checkout／index。R1／R17 suffix candidate 接续由同 A-unit worker 独占该有效独立 worktree 的 `audit-20261024-5bebe430-A-tail-current-review` 分支，从该 C head 正常合并原 A `6ce6c7e0d940ed21e76c54d7f4ce5f5b10fdf724`，原 C／integration tip 不动。先提交两份文档，再连续完成公开 red／green、最小修正、相邻／真实 bytes、自审、英文提交和独立窄复审；必要修正／复审仍由同 unit 完成，窄复审 PASS 后只对最终 actual head 运行唯一完整 suite。复用既有 `.tmp/functional-audit-verification-tools`／expected-skips，不重跑 selfcheck 或旧 A／C 全套；Windows Git 核 source clean，Linux 保存 source／index／mode／bytes 前后严格清单，不向测试导出 `GIT_DIR`／`GIT_WORK_TREE`。交付前主会话只读 Git 对象／证据、写 ignored 进度，不写受控树／index；worker 完整交付后明确释放，不自行切回 integration 或执行 main／push，不访问被拒路径或另建 worktree。
 - KTD4. **共享修正保留既有目标能力。**R2-R4 只修来源 validator 和验证 probe，保持 DNS 独立证书及 URL-REGEX；R5 不新增目标支持；R6 仅 native 结构分支及 native NOT Surge 包装空白投影；R7 只拒解码后的 native `@@`；R8 连续完成 QX 跨值保护及非 native keyword equality／索引／contains 输出能力，保留 native 原安全归约；R13 只修 quoted process；R14 仅 native wildcard 两侧 byte 比较复用完整 Go15 lower；R15 仅 hosts ASCII trim／split；R16 复用 HTTPResponse.begin；R17 只修两种普通 Unicode 投影和 wildcard 原文 identity，R18 复用同一 case-variant 定义收紧 native Surge 能力。复用现有 caller 和字段读取，不增加 wrapper 或依赖。
 - KTD5. **输入身份与执行身份分开记录。**只读固定 manifest／body，baseline 与最终代码运行在各自可信 archive；下载数据和执行脚本分开，不从下载目录运行解释器。旧抓取 commit／hash 不改写为最终代码 SHA。
 - KTD6. **受控树确定后才做最终验收。**正常合并全部已完成分支和必要文档修正，形成唯一 commit／tree，再执行 R10、R11。测试后发生任何受控修改，重新提交并验证新树；组件和 baseline 日志不能替代最终结果。
@@ -196,6 +197,7 @@ R1-R8、R13-R18 及 DNS 输出完整性补充均有完成的独立终报，既�
 
 - 同组 `DOMAIN-SUFFIX,example.com` 与 `DOMAIN-WILDCARD,*.example.com` 保留必要 regex；用 `ads.example.com.` 与无根点对照核查，另核查 apex／其他域名。
 - `api-*.example.com`、问号和已支持 class pattern 保留实际投影；无法生成 Mihomo 投影的 pattern 保持安全归约。native／QX 同组对照维持其原结果。
+- R1／R17 接续在既有 class 归约测试加入 `[İ]`／`[İ-J]`／`[ſ]`／`[ı]` 的大写／混合大小写 tail，保留小写对照。最小 `[İ].EXAMPLE.COM` 先观察公开 red，再仅使 wildcard suffix candidate 复用 `_domain_comparison_value(kind, rule.value, rule.domain_source)`，六格式完整 outputs／count／diagnostics 等于独立已知 suffix-only 正文；不从被测实现重算 expected。复用既有 fixture 核三 purpose × 三 mode 的真实 generate／publish 同轮 source／white 与非空 disk-only bytes，不复制大型矩阵。
 - allow／options／literal_process／native_fields／domain_source 不同组不互删，重复／逆序／一次性 iterable 结果稳定。
 - source 层 suffix white、公开 allow、raw 和 generated white 分别检查，target filtering 根据最终 matcher 判断；不把正常白名单删除当作本项修正。
 - 三 purpose × 三 no_resolve，六格式完整正文／diagnostics，真实 generate／publish 的同轮 source＋white 和非空 disk-only，static／旧产物保持。
@@ -313,6 +315,8 @@ D 的历史恢复收据记录：原实现提交 `5a25411fab3084c57a3f43affcab126
 
 C 的 U6 接续由同 unit worker 独占当前有效独立 worktree 的 `audit-20261024-5bebe430-C-current-review` 分支，按 KTD3 完成文档、编码、测试、审查、修正复审、提交和最终 actual HEAD 全套。原 integration 分支保留 `7fe72596e88b96ff844dc0e3228ec988d6427143`；worker 完整交付前主会话不写当前受控树／index、不合并，之后切回原 integration 分支正常合并。该有效 worktree 的独占编码不受 D 历史只读验收方式限制，不再访问旧路径或创建新 worktree。
 
+A 的 R1／R17 suffix candidate 接续按 KTD3 独占 `audit-20261024-5bebe430-A-tail-current-review`；基于已完成 C actual head 正常合并原 A 完整历史，保留原 C 和 integration 分支 tip。A 连续完成本次文档、TDD、实际 bytes、独立窄复审、必要修正复审、英文提交与最终 actual head 完整 suite 后才释放 checkout／index，主会话此前不写受控树／index、不提前集成；不重做 C 或旧 A 已完成全套。该项属于现有 R1／R17 边界，不增加产品要求编号。
+
 1. 核对六领域覆盖收据、全部确认要求及候选处置；核对各分支起始 base 和后续文档范围、commit／tree、精确 hunk、clean、逐 slice 提交、red／green、审查与 KTD3 完整 suite。D 的只读收据须包含原完整 commit／tree、archive 和可信 snapshot 路径、逐路径 mode／blob／bytes／SHA-256、解释器／Git 版本、完整 discovery 与前后相同清单；保留十个既有 skips、全部 timeout 和资源条件。通过时直接交付原 D 实际提交的全套收据，focused／review 不能替代全套，integration 当前 HEAD 不冒充 D 执行身份。
 2. 收齐完成收据后，在本次已从 baseline 建立的 `audit-20261024-5bebe430-integration` 分支和同名独立 worktree 正常合并文档 base 及全部完成历史，按实际 hunk 处理必要冲突，不整文件选边。新失败仍由原 unit 连续处理；需要产品修改时，owner 必须在有效独立编码 worktree 完成测试、修正、复审、提交与实际最终 head 全套后重新交付，无法取得该 worktree 则明确阻塞该修正，不在 main 编码、不将未完成步骤转交主会话；C 当前有效 worktree 的专用分支按前述独占条款执行。最终集成树仍须独立完成 U10。
 3. 联合运行所有新增模块与相关 rules／formats、domain／white、regex／DNS、native／routing、YAML／generate、README／CI 测试。重点核对 A 的非 native equality／contains／ordinary wildcard identity、native byte、两种 Unicode 投影／能力与全部 helper caller，B 的 probe／capture，C 的 native／no_resolve，D 的 comment，E 的 ASCII hosts trim／split，F 的 interim／最终响应／关闭／缓存，以及 source＋white 同轮／磁盘链。
@@ -425,6 +429,7 @@ C 的 U6 接续由同 unit worker 独占当前有效独立 worktree 的 `audit-2
 - `İ`／`ΟΣ`／`ΑΟΣ` 的 keyword、literal／含星号 wildcard，预期 Go15 literal 为 `i`／`οσ`／`αοσ`，final sigma 保持；依据固定 regexp2 parser／runner 和原 Host 路径核查，不用 Python re.I 作为 Unicode 真值。
 - `İ`／`i̇`、`ΟΣ`／`ος` 的普通 wildcard same-key pair 正逆序／重复／一次性 iterable 保留原文；keyword 按 U8 guard，保留 `İ`／`xİ`、中文／ASCII 安全归约与所有 identity 字段。
 - 旧 `[İ]`／`[İ-J]` class unsupported 不变，原可用 ASCII class 及非法 class、keyword 尾点 lookahead、wildcard optional-root／boundary 继续通过；R1 投影可用性判断与实际 renderer 一致。
+- R1／R17 suffix candidate 接续保持 raw unique key、Rule 原文、comparison helper、普通 source white、QX 非 ASCII guard 和现 projection guards。`İ*.EXAMPLE.COM`／`*ΟΣ*.EXAMPLE.COM`／`中文*.EXAMPLE.COM`／`[ab]İ*.EXAMPLE.COM` 有效投影保持；带匹配 suffix 的 dotted-I pair 保留两个原 matcher 及不同 regex，Greek pair／无 suffix／native／ASCII QX／非 ASCII QX／不同 identity／allow／options 和五种 interface option／未知 `special` 复用既有测试补足。已确认影响为冗余正文、count 和 unsupported diagnostics，不增加需求或客户端漏匹配声称。
 - scalar／AND／OR／NOT、公开 allow／target white、三 purpose × 三 no_resolve、六格式与 diagnostics、真实 YAML source 同轮／非空磁盘回读及 generate／publish bytes 保持正确。普通 source white 仍按原语义，不全局改 key 或关闭 Unicode。
 
 **核查：**逐例 red -> green，运行新模块及 U2／U8／U14、keyword projection／performance、wildcard dependency、logical／white、Go15、formats／generate 回归。完成规格／功能／简化审查、修正复审及独立英文提交后连续完成 U18。
