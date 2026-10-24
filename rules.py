@@ -1279,6 +1279,12 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
         prefix, separator, target = value.partition(':')
         if not separator:
             return bool(value) and not any(c in value for c in '<>\r\n')
+        if prefix not in {"SSID", "BSSID", "ROUTER", "TYPE", "MCCMNC"}:
+            try:
+                ipaddress.ip_address(value)
+                return True
+            except ValueError:
+                return _valid_simple("MAC-ADDRESS", value)
         if prefix == "TYPE":
             return target.upper() in {"WIFI", "WIRED", "CELLULAR"}
         if prefix == "ROUTER":
@@ -1311,8 +1317,9 @@ def _logical_children(expression, kind, begin, start, stop, groups, commas):
     wrapped = expression[start:start + 2] == '((' and expression[stop - 2:stop] == '))'
     if commas is not None:
         # 原生范围仍按字面括号计数；叶子的 regex 括号可以跨越字段包装。
-        if kind == "NOT" and not wrapped or groups.get(start) != stop - 1:
+        if groups.get(start) != stop - 1:
             return None
+        wrapped = True
         left, right = start + 1, stop - 1
         if kind != "NOT" and not expression[left:right].strip(' '):
             return [], wrapped
@@ -1784,6 +1791,9 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             warnings.append(f"line {number}: {error}")
             continue
         if line is None:
+            continue
+        if yaml_rule and line.startswith('@@'):
+            warnings.append(f"line {number}: invalid native rule")
             continue
         if not _has_literal_field(line, yaml_rule) and _HTML_MARKUP.search(line):
             warnings.append(f"line {number}: HTML markup")
