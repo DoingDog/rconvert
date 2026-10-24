@@ -1792,6 +1792,9 @@ def parse(text: str, *, purpose: str, ignore_policy: bool = False,
             continue
         if line is None:
             continue
+        if yaml_rule and line.startswith('@@'):
+            warnings.append(f"line {number}: invalid native rule")
+            continue
         if not _has_literal_field(line, yaml_rule) and _HTML_MARKUP.search(line):
             warnings.append(f"line {number}: HTML markup")
             continue
