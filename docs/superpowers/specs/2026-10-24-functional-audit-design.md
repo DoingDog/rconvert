@@ -2,11 +2,11 @@
 
 ## 目标与证据边界
 
-修正 R1-R8、R13-R16 的十二项已确认问题，包括规则归约与 regexp2 校验、SUBNET／native 解析、Unicode 比较与输出能力、quoted process 尾注释、native wildcard byte 覆盖、hosts ASCII 空白及合法 informational HTTP 响应。保持公开转换接口、现有目标能力和严格生成依赖检查。
+修正 R1-R8、R13-R18 的十四项已确认问题，包括规则归约与 regexp2 校验、SUBNET／native 解析、Unicode 比较与目标能力、quoted process 尾注释、native wildcard byte 覆盖、hosts ASCII 空白、合法 informational HTTP 响应及 ordinary／native Unicode 投影边界。保持公开转换接口、现有目标能力和严格生成依赖检查。
 
 初始代码提交为 `00d20710af4ad62805ad63c609c4796711058de8`，tree 为 `b2d7894c9880471dc8b9e3922ba44d88e6c07f27`。该提交的完整 145 文件 Git archive 已在 Debian GNU/Linux 13、Python 3.13.5 的原生 `/tmp` 执行 1503 tests，结果为 0 failures、0 errors、10 个既有 Windows-only skips，耗时 1221.255 秒。该记录只证明基线状态；组件、最终集成树和实际 Ubuntu Actions 均须另行验收。
 
-R1-R8、R13-R16 均已完成公开接口复现与独立复核；R8 的 equal-key／proper-substring DNS 输出完整性补充已按既有要求确认。覆盖闭合终报确认初始基线全部 145 个受控文件及生产源码行段均有阅读归属，包含 30 份历史文档、38 份测试、20 份 static、42 产物、35 项回读和 52 项 CI 测试等收据。阅读覆盖和基线测试已闭合，修复后的组件／集成、固定输入生成及远端验收仍须执行。主会话在最终集成前核对收据及独立结论；独立单元继续并行，尚未确认的候选不计入确定要求。
+R1-R8、R13-R18 均已完成公开接口复现与独立复核；R8 的 equal-key／proper-substring DNS 输出完整性补充已按既有要求确认。覆盖闭合终报确认初始基线全部 145 个受控文件及生产源码行段均有阅读归属，包含 30 份历史文档、38 份测试、20 份 static、42 产物、35 项回读和 52 项 CI 测试等收据。阅读覆盖和基线测试已闭合，修复后的组件／集成、固定输入生成及远端验收仍须执行。主会话在最终集成前核对收据及独立结论；独立单元继续并行，尚未确认的候选不计入确定要求。
 
 已完成复核中，native mixed-format shortcut 的整体禁用建议不采用。R7 的产品依据为 `docs/superpowers/specs/2026-10-11-functional-audit-design.md` U5D2 明确规定 native YAML 的 `@@` 输入拒绝；`tests/test_functional_audit_dns.py` 现有用例只覆盖 `@@DOMAIN`，未覆盖解码后合法 ABP 形状。当前代码和 hosts 回归同时要求保留其他 mixed-format 输入。
 
@@ -14,14 +14,14 @@ R1-R8、R13-R16 均已完成公开接口复现与独立复核；R8 的 equal-key
 
 | owner | 生产修改范围 | 独立回归文件 |
 | --- | --- | --- |
-| A：R1、R8、R14 | `rules.py` 的 normalize／QX comparison／覆盖；native wildcard byte 比较前复用 Go15 lowercase，确需迁移现有 helper 时同步 `formats.py`／`_unicode15.py` caller | `tests/test_wildcard_suffix_normalization_regressions.py`、`tests/test_qx_unicode_comparison_regressions.py`、`tests/test_native_wildcard_width_regressions.py`；旧测试修改仅限下列明确断言及生成期望 |
+| A：R1、R8、R14、R17、R18 | `rules.py` 的已分配归约／覆盖和 `_surge_keyword_source_supported`；`formats._domain_value` 的 ordinary Unicode lowercase／native Surge 能力；复用共享 Go15 helper／case-variant 定义并同步 caller | `tests/test_wildcard_suffix_normalization_regressions.py`、`tests/test_qx_unicode_comparison_regressions.py`、`tests/test_native_wildcard_width_regressions.py`、`tests/test_surge_unicode_projection_regressions.py`、`tests/test_native_unicode_capability_regressions.py`；旧测试仅限下表 |
 | B：R2、R3、R4 | `rules.py` 的 `_valid_regex` conditional 与 class 状态／probe，确需时同一 owner 修改捕获预扫描或 deep 校验 | `tests/test_regexp2_conditional_regressions.py`、`tests/test_regexp2_completed_range_regressions.py` |
 | C：R5、R6、R7 | `rules.py` 的 `_valid_simple` SUBNET 分支、`_logical_children` native 分支、`parse` 解码后 native `@@` 判定 | `tests/test_subnet_legacy_regressions.py`、`tests/test_native_not_space_regressions.py`、`tests/test_native_allow_regressions.py` |
 | D：R13 | `rules.py` 的 `_source_parts` 普通 process 分支，复用 `_literal_fields` | `tests/test_process_comment_regressions.py` |
 | E：R15 | `rules.py` 的 hosts 注释后裁剪及 `host_parts` 分隔，复用既有 hostname validator | `tests/test_hosts_whitespace_regressions.py` |
 | F：R16 | `generate.py` 的 `_HttpsOnlyRedirect`／`fetch_https` informational response 处理，复用标准库 HTTPResponse | `tests/test_informational_response_regressions.py` |
 
-A、B、C 已从共同文档提交 `109ea30f83720178130a1db0c608937eaae86ef8` 的独立 worktree 并行实施，按各自确认范围吸收后续文档提交；D 从包含 R13 的文档提交独立实施，E 从包含 R15 的文档提交独立实施；E 的 hosts hunk 与 C 的 native `@@` hunk 分开，F 从包含 R16 的文档提交独立处理 generate 传输分支。A 连续完成 R1、R8、R14，B 连续完成 conditional 和 class，不并发修改同一 `_valid_regex` 的初始化、group 状态及收尾验证。每个行为完成测试、修正、审查和提交后再进入下一项，覆盖收据在最终集成前核对。A 的旧测试修改限于 R1 原两处 wildcard 期望及 R8 下列已核实范围，其他 owner 只写独立新测试。除直接受已确认语义影响的期望外，ASCII／Surge／native／allow 对照、fixture、timeout 和资源条件不改；新增冲突先交主会话核实。
+A、B、C 已从共同文档提交 `109ea30f83720178130a1db0c608937eaae86ef8` 的独立 worktree 并行实施，按各自确认范围吸收后续文档提交；D 从包含 R13 的文档提交独立实施，E 从包含 R15 的文档提交独立实施；E 的 hosts hunk 与 C 的 native `@@` hunk 分开，F 从包含 R16 的文档提交独立处理 generate 传输分支。A 连续完成 R1、R8、R14、R17、R18，B 连续完成 conditional 和 class，不并发修改同一 `_valid_regex` 的初始化、group 状态及收尾验证。每个行为完成测试、修正、审查和提交后再进入下一项，覆盖收据在最终集成前核对。A 的旧测试修改限于 R1 原两处 wildcard 期望及 R8／R18 下列已核实范围，其他 owner 只写独立新测试。除直接受已确认语义影响的期望外，ASCII／Surge／native／allow 对照、fixture、timeout 和资源条件不改；新增冲突先交主会话核实。
 
 | A 可精确更新的旧测试 | 已确认修改边界 |
 | --- | --- |
@@ -29,6 +29,8 @@ A、B、C 已从共同文档提交 `109ea30f83720178130a1db0c608937eaae86ef8` �
 | `tests/test_rules.py` 的 `_check_complete_qx_literal_fields`、`test_qx_keyword_markers_preserve_complete_fields_and_whitelist_scope`、`test_keyword_whitelist_preserves_literal_range_allow_and_source_identity` | 仅非 ASCII QX white 不再跨值删除 longer；相同原文身份覆盖和其他来源／allow 保持 |
 | `tests/test_rules.py` 的 `NativeWildcardWhitelistTests.test_coverage_preserves_source_flags_and_allow_rules`、`test_normalize_keeps_wildcard_predicates_and_source_groups` | 仅受 QX 非 ASCII candidate 保护影响的来源覆盖期望；保留 ASCII／Surge／Mihomo／flags／allow 对照 |
 | `tests/test_generate.py` 的 `NativeKeywordGenerateTests._qx_marker_products`、`_check_qx_keyword_marker_dependency`，及 white 调用测试 `test_qx_literal_whitelist_preserves_shorter_matcher_same_round_and_disk`、`test_qx_keyword_whitelist_keeps_short_keyword_same_round_and_disk_without_mock` | 同一原 fixture 下，仅更新非 ASCII QX 跨值保留所影响的六格式正文、count、diagnostics 与回读身份；不削弱 source／white、同轮／磁盘、旧产物保护断言 |
+
+R18 另允许精确修改 `tests/test_generate.py` 的 `PublicGeneratedPipelineTests.expected`：只从 parent／child 的 `fin.txt`、`fin-surge.txt` 移除 native `DOMAIN-KEYWORD,ΟΣ` 正文，header 按实际数量计算；各组各增加对应两项 unsupported。YAML identity、QX、DNS Greek bytes、DOMAIN-SET、fixture 和 publish 断言保持。其他旧期望若实际受影响，先由主会话核查，不扩大授权。
 
 `Rule` 七字段、公开 `parse`／`parse_whitelist`／`normalize`／`exclude_covered`／`render`／`generate`／`publish` 的签名、返回形状及导出不变。六个 `formats.FILES` 文件名、配置、依赖、`static/` 和受控生产产物不变。不添加框架、Unicode 表、provenance 字段、目标类型或客户端配置。
 
@@ -130,7 +132,7 @@ native `NOT,( (DOMAIN,a.test) )` 必须接受，并规范化为保留 child list
 
 依据为固定 [Mihomo keyword constructor 与匹配](https://github.com/MetaCubeX/mihomo/blob/88dcbf7f1614a67c3b36b848ee3592dfa92ada36/rules/common/domain_keyword.go#L19-L35)、[wildcard constructor 与匹配](https://github.com/MetaCubeX/mihomo/blob/88dcbf7f1614a67c3b36b848ee3592dfa92ada36/rules/common/domain_wildcard.go#L20-L35)、[Go `strings.ToLower`](https://github.com/golang/go/blob/c293dd49cbe25e1fe8d97d94a5cb618e7b6d831e/src/strings/strings.go#L727-L765)及 [Unicode 15 case table](https://github.com/golang/go/blob/c293dd49cbe25e1fe8d97d94a5cb618e7b6d831e/src/unicode/tables.go#L8753-L8759)。两份独立终报均确认公开 normalize、来源 white 和真实 generate／publish 的规则损失；客户端匹配差别由固定源码推导，未运行客户端。
 
-- 共享 `_domain_comparison_value` 对 QX 非 ASCII keyword／wildcard 返回完整原文，包括其中的 ASCII 字符；Rule 原值不改写。ASCII-only QX、Mihomo 和普通 Surge 原来源比较及 source white 语义保持，R14 明确的 native wildcard byte 比较除外，不增加 Unicode 表、依赖或闭源 QX 全域语义假设。
+- 共享 `_domain_comparison_value` 对 QX 非 ASCII keyword／wildcard 返回完整原文，包括其中的 ASCII 字符；Rule 原值不改写。ASCII-only QX、Mihomo 和普通 Surge 原来源比较及 source white 语义保持，R14 byte 覆盖和 R17 normalize-local wildcard identity 按各自要求处理，不增加 Unicode 表、依赖或闭源 QX 全域语义假设。
 - `normalize` 同时保留不同非 ASCII QX payload 的 unique identity，并限制未证明的 keyword 跨值 contains 归约。`ΑΟΣ`／`ος` 的错误包含须消除；`Σ`／`ΟΣ` 的现有保留须保持。仅改 key 会使 `Σ` 成为 `ΟΣ` 的字面子串并新增误删，不能单独交付该修改。
 - `normalize` 内非 native 的非 ASCII keyword 代表身份及候选索引保留原文，不能在目标能力 guard 前用相同转换 key 丢弃不同原文。对应 contains 候选须同时满足原文字面 substring、旧 source comparison 包含及全部原 target／root guards；QX 继续不作未证明的非 ASCII 跨值归约。保留 Surge `İ`／`xİ`、`中文`／`中文广告`、ASCII 正常归约及现有长度索引和资源限制，不全局改变 Surge 比较或 source white。Mihomo native 的原 comparison key、已证明 contains／root／target guards 和 Greek 期望保持；不将这两个 Surge／QX DNS 预算见证扩大到 native 归约。
 - `exclude_covered` 同时限制涉及非 ASCII QX white 或 candidate 的跨值覆盖，包括 keyword 子串、literal／wildcard 匹配和 suffix／segment 推导。保留同来源、相同 kind、相同原 payload 的身份覆盖；其余未证明关系保留规则。ASCII-only 的现有完整覆盖及 Mihomo／Surge 行为保持，不把 QX 非 ASCII 一律当作可删除白名单。
@@ -141,7 +143,7 @@ native `NOT,( (DOMAIN,a.test) )` 必须接受，并规范化为保留 child list
 
 该补充依据 README 的完整可表达输出、keyword 目标能力要求及 `2026-10-23-functional-regressions-design.md` R6 的合法长值边界。验收同时覆盖 Surge／QX 的 unique 代表、keyword 索引和 contains，block／allow、raw／generated white 的 `@@`、真实 source／同轮／非空磁盘依赖；native DNS 保持 constructor lowercase 后的 presentation bytes 和原安全归约。保留 DNS renderer、65,536 bytes 限值、原 Rule 与来源 white 语义；超限项仍计 unsupported。此处确认受支持输出完整性丢失，未证明正常可达 DNS Host 漏匹配，不单列运行时缺陷。
 
-完成条件：公开 parse -> normalize／exclude_covered -> render 和真实 generate／publish 保留已证明不同的 Mihomo matcher 及上述合法 DNS 行；共享 helper 与两个 caller、normalize 的 equality／索引／contains 均满足边界。身份覆盖、稳定排序、已证明 ASCII 和 Surge Unicode 安全归约及原性能条件继续通过。R8 的旧测试调整仅限范围表列明的非 ASCII QX 跨值删除与生成期望，不改变 fixture 或削弱其他断言。
+完成条件：公开 parse -> normalize／exclude_covered -> render 和真实 generate／publish 保留已证明不同的 Mihomo matcher 及上述合法 DNS 行；共享 helper 与两个 caller、normalize 的 equality／索引／contains 均满足边界。身份覆盖、稳定排序、已证明 ASCII 和 Surge Unicode 安全归约及原性能条件继续通过。R8 的旧测试调整仅限范围表列明的非 ASCII QX 跨值删除与生成期望，不改变 fixture 或削弱其他断言；R18 另有明确的 native Surge 目标能力期望修正。
 
 ### R9. 公开接口与真实 bytes 联动
 
@@ -208,7 +210,7 @@ native source `ẞ.example`／`Ⱥ.example`／`Å.example` 与 native wildcard w
 - 保持 source 分组、allow、native bracket literal、root-dot、ASCII／Greek 覆盖、QX 非 ASCII 保护及 known suffixcase 行为。三组 source／white 的错误 byte 数均保留、正确 byte 数均覆盖，并反向核对两侧转换。
 - 公开 parse／parse_whitelist／exclude_covered／render、真实 generate／publish、source＋white 同轮和非空 disk-only 依赖均覆盖三 purpose × 三 no_resolve；核查六格式正文、诊断、输入／static、旧产物及冻结保护。
 
-完成条件：三组字节宽度反例与正确数量对照均从公开入口和真实 bytes 验证，shared helper 所有 caller 及原 Unicode／process／DNS 回归保持，A 在 U8 后连续完成 U14，再以最终 head 满足 R10。
+完成条件：三组字节宽度反例与正确数量对照均从公开入口和真实 bytes 验证，shared helper 所有 caller 及原 Unicode／process／DNS 回归保持；A 在 U8 后完成 U14，再连续完成 U17／U18，以最终 head 满足 R10。
 
 ### R15. hosts 仅按 ASCII SP／HTAB 分隔和裁剪
 
@@ -234,10 +236,37 @@ native source `ẞ.example`／`Ⱥ.example`／`Å.example` 与 native wildcard w
 - 回归单／多 103、102、与 100 混合、redirect 前后、source／white 同 URL cache、plain／gzip／chunked／组合编码、最终错误／缺最终／截断及资源关闭。复用标准库 HTTP 处理，不手写 HTTP parser，不新增依赖，不改规则／renderer／配置／workflow／API。
 - 真实 generate／publish 检查三 purpose × 三 no_resolve、六格式正文和 diagnostics 与去除 interim 的相同输入对照一致；旧六文件、static、输入及失败前不发布保持。线级 fixture 与本地 TLS 仅用于合法协议功能验证，不开展网络安全工作或本机适配。
 
-完成条件：最小 103 -> 200 公开 red -> green，重复 GET、提示字段污染、错误关闭均有回归；真实生成发布和全部原传输边界通过，F 独立最终 head 满足 R10。重复独立复核若后续返回反证，按实际证据复审，不阻塞已有确认范围实施。
+完成条件：最小 103 -> 200 公开 red -> green，重复 GET、提示字段污染、错误关闭均有回归；真实生成发布和全部原传输边界通过，F 独立最终 head 满足 R10。重复独立复核已完成且确认同一缺陷，未发现反证；既定最小处理范围保持。
+
+### R17. 普通 Surge 的 Unicode keyword／wildcard 保留自身字面命中
+
+普通 `DOMAIN-KEYWORD,İ`／`DOMAIN-KEYWORD,ΟΣ`／`DOMAIN-KEYWORD,ΑΟΣ` 和对应含星号 wildcard 投影为 Mihomo regex 时，须按既有 Go15 simple lowercase 得到 `i`／`οσ`／`αοσ`，保留原字面 Host 的命中。Python full lowercase 的 combining dot／上下文 final sigma 不得改变 matcher；原 final sigma `ος` 继续保持。
+
+[Surge Domain Rules](https://manual.nssurge.com/rules/domain.html)规定 keyword 字面 substring 与 wildcard literal；固定 [Mihomo regex constructor／Match](https://github.com/MetaCubeX/mihomo/blob/88dcbf7f1614a67c3b36b848ee3592dfa92ada36/rules/common/domain_regex.go)使用 regexp2 IgnoreCase 与 RuleHost。完成的独立报告已核对 regexp2 parser／runner 的逐 rune Go lowercase，公开 parse／normalize／render 及真实 YAML 同轮／磁盘依赖均复现。较早回读收据不能排除该 matcher 语义差别；未运行客户端，不以 Python re.I 作为 Unicode oracle。
+
+- 只将 `formats._domain_value` 普通 Surge -> Mihomo keyword／wildcard 的两个 Python lower 复用现有共享 `_go_lower`。保留 keyword 尾点 lookahead、wildcard optional-root／boundary、ASCII 和其他来源／目标能力，不批量改 suffix regex 或已知 suffixcase。
+- normalize-local 普通非 ASCII wildcard 的 unique identity 保留原文，不让 `*İ*`／`*i̇*`、`*ΟΣ*`／`*ος*` 在 renderer 前合并；keyword 复用 R8 已有原文代表及双重 contains 保护，不重复实现。不全面替换 `_domain_comparison_value`。
+- 保持旧字符类准入；`[İ]`／`[İ-J]` 等原 unsupported class 不因 simple lowercase 新增输出。复用既有 class 验证，不新增 parser。`İ`／`xİ`、中文／ASCII 安全归约、identity、根点和 class 正反例均保持。
+- scalar、AND／OR／NOT、公开 allow、target white、六格式 diagnostics 与实际 generate／publish 验证三 purpose × 三 no_resolve；YAML source 同轮及 publish 后非空 disk-only 回读保留正确 matcher，正／逆序、重复和一次性 iterable 一致。
+- 普通 Surge source white 的 Unicode 完整覆盖依据尚不足，本项不修改普通来源比较／white，不把观察到的目标差别扩成 Go 全局 key 或关闭全部 Unicode 归约。保持原白名单来源语义，target white 按实际投影核查。
+
+完成条件：两类普通投影及原文 unique 的最小 red -> green 和真实 bytes 回归通过，原 class／root／identity／安全归约保持；A 在 U14 后独立提交 U17。
+
+### R18. native Unicode keyword／wildcard 的 Surge 能力使用完整 case-variant 判定
+
+native keyword／wildcard 含固定 Go15 case 变体字符时，只跳过 Surge full／non-DOMAIN-SET split 输出并计 unsupported；含此叶子的 AND／OR／NOT 对 Surge 整条跳过。`É`／`Σ`／`ẞ` 及 lowercase `é`／`σ`／`ß` 均须使用同一能力 guard，不能以 `value == _go_lower(value)` 代替 case-variant 检查。
+
+依据为固定 Mihomo keyword／wildcard constructor 仅将 pattern lowercase、以原 RuleHost 做 contains／byte 比较，与 Surge 自身字面命中存在已证明差别。独立报告核对现有 `_PROCESS_CASE_VARIANTS` 与固定 Go15 全部 CaseRanges／caseOrbit 的 2,880 个 case 变体，无缺漏；只证明该固定集合，不承诺闭源全域 Unicode／IDNA 等价。
+
+- `rules._surge_keyword_source_supported` 与 `formats._domain_value` 的 native wildcard guard 统一复用现有 `_PROCESS_CASE_VARIANTS`，沿用 R14 同一共享定义，不复制表或新增依赖。保留 helper 的全部 process／DNS caller。
+- 只收紧 Surge 目标能力，不改 DOMAIN／DOMAIN-SUFFIX、native unique／keyword source comparison、普通来源 white 或已有 `_route_whitelist` 的更严格限制。原 Mihomo／QX／DNS、数字／中文／case-invariant 支持保持。
+- 保留 keyword 末尾点、wildcard 尾星号／根点、问号 byte／字符和 bracket 条件；white／allow 不因此跨来源删除其他规则。scalar／logical、三 purpose × 三 no_resolve、六格式及真实 YAML 同轮／非空磁盘依赖均核查。
+- 旧测试仅精确修改范围表列明的 `PublicGeneratedPipelineTests.expected` parent／child 两份 Surge 输出及其 header／unsupported；YAML、QX、DNS Greek bytes、DOMAIN-SET、fixture、发布和其余断言保持，新增回归使用 `tests/test_native_unicode_capability_regressions.py`。
+
+完成条件：uppercase／lowercase case 变体只跳 Surge，logical 整条跳过及正对照均有公开 red -> green／真实发布证据；A 在 U17 后完成 U18，最终 head 满足 R10。
 
 ## 完成标准与不处理项
 
-R1-R8 及 R13-R16 均有公开接口、负例及真实 bytes 回归。六组 owner 从各自确定文档范围连续完成 slice，最终集成前核对全部覆盖收据；各最终 head 与集成 exact tree 通过 R10，固定输入、42 产物和实际获授权远程发布分别满足 R11、R12。未确认候选不计入完成结论。
+R1-R8 及 R13-R18 均有公开接口、负例及真实 bytes 回归。六组 owner 从各自确定文档范围连续完成 slice，最终集成前核对全部覆盖收据；各最终 head 与集成 exact tree 通过 R10，固定输入、42 产物和实际获授权远程发布分别满足 R11、R12。未确认候选不计入完成结论。
 
 不启动客户端，不执行外部源码或二进制，不做网络安全扫描或修复，不调查本机适配、多平台或已有 Windows 故障，不修已知 suffix 大小写，不扩展独立 publish 的未知非 canonical leaf API，不增加未确认性能优化。当前文档任务仅修改本规格和配套计划，不运行实现测试、不改源码／测试／README／配置／static／产物、不 push 或合并 main。
