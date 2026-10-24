@@ -14,9 +14,9 @@ baseline: 00d20710af4ad62805ad63c609c4796711058de8
 ## Goal Capsule
 
 - **目标：**合法规则经公开转换及真实文件回读后保留可表达 matcher，非法 regexp2 与 native `@@` 不进入生成链，GitHub Actions Ubuntu 更新的七组产物满足现有格式和发布要求。
-- **依据：**`docs/superpowers/specs/2026-10-24-functional-audit-design.md` R1-R12 规定行为和完成条件；本计划分配实现所有权及验证顺序，不重定义 matcher 语义。
-- **方法：**A dedup、B regex、C SUBNET／native 三个独立 worktree 并行，组内行为连续完成 vertical TDD、审查、修正、英文提交及最终 head 完整 Linux suite（KTD1-KTD3）。
-- **开始条件：**R1-R8 均已确认并纳入共同文档 base；文档独立审查已通过。主会话在实施前核对六领域覆盖收据，文档提交不等待该收据；若确认额外实际问题，精确更新受影响要求后继续。
+- **依据：**`docs/superpowers/specs/2026-10-24-functional-audit-design.md` R1-R13 规定行为和完成条件；本计划分配实现所有权及验证顺序，不重定义 matcher 语义。
+- **方法：**A dedup、B regex、C SUBNET／native、D quoted process 四个独立 worktree 并行，组内行为连续完成 vertical TDD、审查、修正、英文提交及最终 head 完整 Linux suite（KTD1-KTD3）。
+- **开始条件：**R1-R8 及 R13 已确认，R8 包含合法 DNS 输出完整性；独立单元按已提交确定范围实施。六领域终报已收齐，主会话在最终集成前核对覆盖收据，后续确认问题精确交对应 owner，不阻塞无修改冲突的单元。
 - **停止条件：**实际证据与规格冲突、需要写入其他 owner 位置或无法保持目标能力时，报告具体缺口并停止对应操作。原始用户请求已明确要求 main 合并、GitHub push 及远程更新核验，发布按该授权范围执行。
 - **交付责任：**各 owner 完成其全部实现与验证，主会话只合并已完成且无所有权冲突的提交，并负责最终精确树、固定输入、main、获授权发布和清理。
 
@@ -26,11 +26,11 @@ baseline: 00d20710af4ad62805ad63c609c4796711058de8
 
 ### Summary
 
-实施规格 R1-R8 的八项已确认功能修正，包含 QX 非 ASCII comparison key 及两个 caller 的未证明跨值覆盖，完成公开接口回归、精确树 Linux 测试和固定 bytes 生成发布验收。
+实施规格 R1-R8 和 R13 的九项已确认修正，包含 QX 非 ASCII 比较、normalize 的合法 keyword 输出能力及普通 quoted process 尾注释，完成公开接口回归、精确树 Linux 测试和固定 bytes 生成发布验收。
 
 ### Problem Frame
 
-基线的共享归约与校验会删除普通 wildcard 仍需的 Mihomo 投影，误判部分 regexp2 conditional／class、legacy SUBNET 和 native NOT，将 native quoted ABP 例外误读为 allow，并因 QX 非 ASCII 比较误删不同的 matcher。这些结果经白名单和生成依赖传递，可能丢失可表达规则或发布语法非法的 matcher。已完成的 Debian 基线 suite 未覆盖这些最小见证，新增测试须证明具体行为。
+基线的共享归约与校验会删除普通 wildcard 仍需的 Mihomo 投影，误判部分 regexp2 conditional／class、legacy SUBNET 和 native NOT，将 native quoted ABP 例外误读为 allow，因 QX 非 ASCII 比较误删不同 matcher，并丢失合法长 keyword 的 DNS 输出。普通 quoted process 的尾注释还会进入 matcher。这些结果经白名单和生成依赖传递，可能丢失可表达规则或发布错误 matcher。新增测试须证明具体行为，DNS 长值结论限定输出完整性。
 
 ### Requirements
 
@@ -43,17 +43,18 @@ baseline: 00d20710af4ad62805ad63c609c4796711058de8
 | R5 legacy SUBNET | U5 | bare BSSID 可回读，prefixed 与未知 colon 边界保持 |
 | R6 native NOT | U6 | ASCII space 包装按结构接受，native 单 child 及 ordinary 行为保持 |
 | R7 native `@@` | U7 | 解码后拒绝，无 allow／DNS 例外泄漏，其他 mixed-format 兼容保持 |
-| R8 QX 非 ASCII comparison | U8 | 原文 key 与 normalize／white 跨值覆盖限制同时生效，身份及 ASCII 归约保持 |
-| R9 公开入口与 bytes | U2-U8 | 六格式、source＋white 同轮及非空 disk-only、三 purpose × 三 no_resolve |
-| R10 精确树 suite | U2-U10 | 各 owner 最终 head 和最终集成树独立完整 Linux 验证 |
+| R8 Unicode comparison／keyword 输出能力 | U8 | QX 跨值限制、keyword 原文代表及双重 contains 证明同时生效，合法 DNS 行和安全归约保持 |
+| R9 公开入口与 bytes | U2-U8、U13 | 六格式、source＋white 同轮及非空 disk-only、三 purpose × 三 no_resolve |
+| R10 精确树 suite | U2-U10、U13 | 各 owner 最终 head 和最终集成树独立完整 Linux 验证 |
 | R11 固定生产输入 | U10 | 同输入 baseline 对比、两轮 42 文件稳定、static／README／格式核查 |
 | R12 集成与远程 | U9、U11、U12 | clean 提交正常合并、真实授权、Ubuntu 与远端实际结果、限定清理 |
+| R13 quoted process 尾注释 | U13 | 四 process 字段在已闭 quote 外识别尾注释，裸 marker／policy／logical／native 保持 |
 
 Product Contract 由独立规格承载。这里的引用保留全部行为边界，不把审查复现或内存实验写成产品修复验收。
 
 ### Scope Boundaries
 
-生产变更限定在规格的 A／B／C 位置。`Rule`、API、配置、依赖、导出和六文件集合保持。只新增各 owner 的独立小型测试，不复制已有大型矩阵；A 精确调整已有 wildcard 归约断言，其他 owner 不写 `tests/test_rules.py`。当前文档任务仅创建 origin 和本计划，不修改其他受控路径，不执行客户端、安全工作、源码修正或远程操作。
+生产变更限定在规格的 A／B／C／D 位置。`Rule`、API、配置、依赖、导出和六文件集合保持。只新增各 owner 的独立小型测试，不复制已有大型矩阵；A 精确调整两处旧 wildcard 断言和指定性能测试的 QX pair 期望，其他 owner 不写旧测试。当前文档任务仅更新 origin 和本计划，不修改其他受控路径，不执行客户端、安全工作、源码修正或远程操作。
 
 本轮不处理 suffix 大小写、批量 suffix regex 改写、本机／多平台适配、未确认性能问题或独立 publish 非 canonical leaf API。不新增 Unicode 表，不改 Rule 原值，不承诺闭源 QX 全域 Unicode 等价。
 
@@ -63,10 +64,10 @@ Product Contract 由独立规格承载。这里的引用保留全部行为边界
 
 ### Key Technical Decisions
 
-- KTD1. **三组按共享状态分配所有权。**A 拥有 dedup／comparison，B 拥有整个相关 regex scanner，C 拥有 SUBNET／native 三处。R2/R3 及 R4 共享 `_valid_regex` 的初始化、probe 和收尾状态，由 B 顺序实现，避免并发修改该函数。三组的生产 hunk 和测试写入文件互不重叠。
+- KTD1. **四组按共享状态分配所有权。**A 拥有 dedup／comparison，B 拥有相关 regex scanner，C 拥有 SUBNET／native 三处，D 只修改普通 process comment 分支。R2/R3 及 R4 共享 `_valid_regex` 的初始化、probe 和收尾状态，由 B 顺序实现。四组生产 hunk 和新测试互不重叠，独立实施不等待其他单元的审查终报。
 - KTD2. **同一 owner 按行为完成 vertical TDD。**每个 slice 从一个公开失败用例开始，只修共享根因使该例 green，再逐例加入相邻边界及真实 bytes 联动；完成规格／功能／简化审查、修正、复审和英文提交后才进入下一 slice。R2/R3 是同一 conditional 状态 slice，R4 另行提交。
-- KTD3. **各 owner 完成最终提交 head 的全套后交付。**A、B、C 在各自最终 head 满足规格 R10，返回 clean commit／tree、red／green、相关回归、审查和完整 suite 证据。失败由原 owner 连续处理，主会话不接收待测试或待修正半成品。
-- KTD4. **共享修正保留既有目标能力。**R2-R4 只修来源 validator 和验证 probe，保持 DNS 独立证书及 URL-REGEX；R5 不新增目标支持；R6 仅 native 分支；R7 只拒解码后的 native `@@`；R8 的原文 key 与两个 caller 的未证明跨值覆盖限制连续完成，不交付只改 key 的结果。复用现有 caller 和字段读取，不增加 parser、wrapper 或依赖。
+- KTD3. **各 owner 完成最终提交 head 的全套后交付。**A、B、C、D 在各自最终 head 满足规格 R10，返回 clean commit／tree、red／green、相关回归、审查和完整 suite 证据。失败由原 owner 连续处理，主会话不接收待测试或待修正半成品。
+- KTD4. **共享修正保留既有目标能力。**R2-R4 只修来源 validator 和验证 probe，保持 DNS 独立证书及 URL-REGEX；R5 不新增目标支持；R6 仅 native 分支；R7 只拒解码后的 native `@@`；R8 连续完成 QX 原文 key、两个 caller 跨值限制、keyword equality／索引／contains 输出能力保护；R13 只修普通 quoted process 尾注释，不改全局 lexer。复用现有 caller 和字段读取，不增加 parser、wrapper 或依赖。
 - KTD5. **输入身份与执行身份分开记录。**只读固定 manifest／body，baseline 与最终代码运行在各自可信 archive；下载数据和执行脚本分开，不从下载目录运行解释器。旧抓取 commit／hash 不改写为最终代码 SHA。
 - KTD6. **受控树确定后才做最终验收。**正常合并全部已完成分支和必要文档修正，形成唯一 commit／tree，再执行 R10、R11。测试后发生任何受控修改，重新提交并验证新树；组件和 baseline 日志不能替代最终结果。
 - KTD7. **本地固定输入与远端实时更新分别验收。**固定输入验证代码差异和两轮稳定性，Ubuntu 按实际事件 SHA 与当次来源更新；分别保存结果，不把不同输入的数量差异归因于代码。
@@ -75,12 +76,13 @@ Product Contract 由独立规格承载。这里的引用保留全部行为边界
 
 | owner | 可修改生产位置 | 测试文件 | 调用方与保持项 |
 | --- | --- | --- | --- |
-| A | `rules.normalize` 的 wildcard／keyword 归约、`_domain_comparison_value`、`exclude_covered` 的 QX 跨值覆盖 | 新增 `tests/test_wildcard_suffix_normalization_regressions.py`、`tests/test_qx_unicode_comparison_regressions.py`；精确调整 `tests/test_rules.py` 两个旧断言 | `generate` 的 source／allow／white 顺序、`render` 目标覆盖、keyword 长度索引、identity、ASCII 及 Mihomo／Surge 安全归约 |
+| A | `rules.normalize` 的 wildcard／keyword identity、索引及 contains，`_domain_comparison_value`、`exclude_covered` 的 QX 跨值覆盖 | 新增 `tests/test_wildcard_suffix_normalization_regressions.py`、`tests/test_qx_unicode_comparison_regressions.py`；精确调整 `tests/test_rules.py` 两个 wildcard 断言及 `tests/test_keyword_normalization_performance.py` 指定方法中 QX pair 期望 | source／allow／white 顺序、目标覆盖、合法 DNS 行、keyword 长度索引、identity、ASCII 及 Surge 安全归约 |
 | B | `_valid_regex` conditional、class 与 probe；确需时同一 owner 修改 `_regexp2_capture_slots`／`_valid_deep_regex` | 新增 `tests/test_regexp2_conditional_regressions.py`、`tests/test_regexp2_completed_range_regressions.py` | scalar parse、logical normalize／no_resolve、DOMAIN-REGEX white、`formats._dns_regex`、deep；不改 DNS 投影算法 |
 | C | `_valid_simple` SUBNET、`_logical_children` native 分支、`parse` native `@@` | 新增 `tests/test_subnet_legacy_regressions.py`、`tests/test_native_not_space_regressions.py`、`tests/test_native_allow_regressions.py` | scalar／logical／kind traversal、native 字段与标量解码、allow／white、mixed shortcut、生成冻结与旧产物 |
+| D | `_source_parts` 的普通 process 分支，复用 `_literal_fields` | 新增 `tests/test_process_comment_regressions.py` | `_source_records`／`_without_comment`、parse、生成依赖、process 不新增 white 支持、裸 marker／policy／logical／native 保持 |
 | 集成 owner | 已完成分支的合并、必要规格／计划修正 | 复用上述模块，缺口交回原 owner | 最终 exact tree、固定 bytes、README 副本、main、Ubuntu 和远端产物 |
 
-A 不修改 regex 或 C 的 parser hunk，B 不修改归约、SUBNET、logical wrapper 或 native allow 判定，C 不修改 regex／dedup。测试 fixture 在临时 root 自建；不改 `rulesets.json`、static 或生产输出。实现需要跨所有权位置时，提供具体 failing caller，由主会话调整分工后继续。
+A 不修改 regex 或 parser，B 不修改归约或其他 parser，C 不修改 regex／dedup／process comment，D 不修改其他分支或全局 lexer。测试 fixture 在临时 root 自建；不改 `rulesets.json`、static 或生产输出。实现需要跨所有权位置时，提供具体 failing caller，由主会话调整分工后继续。
 
 ### High-Level Technical Design
 
@@ -105,12 +107,12 @@ flowchart TB
     D --> PW
 ```
 
-实施和验收依赖顺序如下。A 连续完成 U2、U8，B 连续完成 U3、U4，C 连续完成 U5-U7。
+A、B、C 从 `109ea30f83720178130a1db0c608937eaae86ef8` 独立实施并吸收各自后续确认文档，A 连续 U2／U8，B 连续 U3／U4，C 连续 U5-U7。D 从包含 R13 的文档提交独立完成 U13。覆盖收据在 U9 前核对。
 
 ```mermaid
 flowchart TB
-    Q[U1 共同文档 base 与实施前覆盖核对] --> A1[U2 A wildcard]
-    A1 --> A2[U8 A QX comparison]
+    Q[U1 已提交确定文档] --> A1[U2 A wildcard]
+    A1 --> A2[U8 A comparison 与输出能力]
     Q --> B1[U3 B conditional]
     B1 --> B2[U4 B completed range]
     Q --> C1[U5 C SUBNET]
@@ -119,6 +121,9 @@ flowchart TB
     A2 --> I[U9 已完成提交集成]
     B2 --> I
     C3 --> I
+    Q --> D1[U13 D process comment]
+    D1 --> I
+    COV[覆盖收据与确认范围核对] --> I
     I --> F[U10 最终 Linux 与固定 bytes]
     F --> M[U11 main 与真实授权 push]
     M --> V[Ubuntu test 与 update 及远端核验]
@@ -127,7 +132,7 @@ flowchart TB
 
 ### Evidence and Execution Preconditions
 
-R1-R8 的独立双视角终报已收齐，确定范围与文档独立审查均已完成。主会话继续接收六领域补终报，并在启动实施前核对覆盖收据；它不阻塞本次文档提交。若发现额外实际问题，只更新受影响要求、测试与所有权。全部覆盖终报收齐前不声明全面审查结束。
+R1-R8、R13 及 DNS 输出完整性补充的独立终报已收齐，既有文档独立审查已通过，本次确定补充按证据自审。六领域补查已完成，主会话在最终集成前核对全部源码、20 static、42 产物、35 回读和 52 CI 测试等覆盖收据及候选处置；不阻塞已确认独立单元。额外问题须经独立确认后精确更新并交对应 owner 完整处理。
 
 可信 Linux archive 运行方法、固定响应和旧验收脚本可复用，但实际目录、commit、tree、body hash 和终态须在执行时核查。旧脚本中的固定文件数、测试数和 SHA 属于其原运行身份，只允许在新副本适配本次身份，不放宽产品断言。
 
@@ -137,29 +142,30 @@ R1-R8 的独立双视角终报已收齐，确定范围与文档独立审查均�
 
 | 单元 | 交付结果 | 主要文件 | 依赖 |
 | --- | --- | --- | --- |
-| U1 | 确定范围与共同文档 base | 两份功能审查文档 | 已收齐的八项复核；实施前核对覆盖收据 |
+| U1 | 确定范围与文档提交 | 两份功能审查文档 | 已收齐的确认终报 |
 | U2 | wildcard 投影保留 | `rules.py`、wildcard 新测试、`tests/test_rules.py` 精确断言 | U1 |
 | U3 | conditional 层级与 header | `rules.py`、conditional 新测试 | U1 |
 | U4 | completed range 状态 | `rules.py`、completed-range 新测试 | U3 |
 | U5 | legacy SUBNET | `rules.py`、SUBNET 新测试 | U1 |
 | U6 | native NOT 包装 | `rules.py`、NOT 新测试 | U5 |
 | U7 | native `@@` 拒绝 | `rules.py`、native-allow 新测试 | U6 |
-| U8 | QX 非 ASCII comparison 与跨值覆盖修正 | `rules.py`、QX comparison 新测试 | U2 |
-| U9 | 已完成提交集成 | 三组提交与必要文档 | A、B、C 最终交付 |
+| U8 | Unicode comparison 与 keyword 输出能力 | `rules.py`、QX comparison 新测试、指定 QX 旧期望 | U2 |
+| U9 | 已完成提交集成 | 四组提交与必要文档 | A、B、C、D 最终交付及覆盖收据核对 |
 | U10 | 最终 Linux 和固定输入验收 | archive、隔离证据与产物 root | U9 |
 | U11 | main、Ubuntu 与远端验收 | 既有 update／workflow | U10、真实授权 |
 | U12 | 证据和限定清理 | 本次 worktree／branch | U11 或明确本地交付状态 |
+| U13 | quoted process 尾注释 | `rules.py`、process-comment 新测试 | 包含 R13 的 U1 文档提交 |
 
 ### U1. 固定最终范围和共同文档 base
 
-**要求：**R1-R12。当前文档任务只完成本单元，不执行后续实现。
+**要求：**R1-R13。当前文档任务只完成本单元，不执行功能实现。
 
-1. 核对本 worktree 的 HEAD／branch／status 与初始 baseline；若自动基线偏离，以正常新分支切换到初始提交，保留原内容，不 reset。核查本次仅创建指定两份文档。
-2. 依据已完成独立报告、当前代码及固定源码，将 R1-R8 写为确定范围。R8 同时规定共享原文 key、normalize 与 exclude_covered 的未证明跨值覆盖限制，并核对 A 所有权、U8 及测试情景。
-3. 先完成规格，再核对本计划的要求、caller、fixture、目标能力、测试及交付边界。完成文档审查和 `git diff --check`，只提交两份文档，使用英文 commit 消息。
-4. 主会话记录 clean 文档 commit／tree，并在实施前核对六领域覆盖收据。文档提交不等待该收据；若其确认额外实际问题，精确更新后固定共同 base。A／B／C 三个 workflow 从同一 base 的独立 worktree 并行，要求完成后主动回报，不轮询。
+1. 核对获准 worktree 的 HEAD／branch／status 与当前文档提交，保留原内容、不 reset；仅编辑指定两份文档。初始 base 为 `109ea30f83720178130a1db0c608937eaae86ef8`，后续采用正常文档追加提交。
+2. 依据已完成独立报告、当前代码及固定源码规定 R1-R8、R13。R8 覆盖 QX 跨值关系及 normalize 的 equality／索引／contains 输出能力，R13 规定最窄 process 分支；同步 owner、测试、依赖与实际并行安排。
+3. 核对要求、caller、fixture、目标能力、测试及交付边界，保留已有独立文档审查结果，对确认补充自审并运行 `git diff --check`。只提交两份文档，使用英文 commit 消息。
+4. 主会话记录实际 clean 文档 commit／tree，各 owner 仅吸收相关确定范围，在独立 worktree 连续完成。已确认独立任务并行，最终集成前核对覆盖收据，完成后主动回报、不轮询。
 
-**完成标准：**八项复核与文档一致，范围确定且文档 commit 可正常合并；六领域覆盖收据由主会话在实施前另行核对。当前文档任务不创建实现任务、不改其他路径。
+**完成标准：**确定要求与终报一致，文档提交可供对应 owner 使用；未确认候选不写为实施要求。当前文档任务不创建实现任务、不改其他路径。
 
 ### U2. A：普通 wildcard 的必要投影
 
@@ -256,18 +262,20 @@ R1-R8 的独立双视角终报已收齐，确定范围与文档独立审查均�
 
 **核查：**functional audit DNS、hosts comment、native domains、ordinary ABP／allow、generated white／冻结／publish 回归通过。规格／功能／简化审查、修正复审后独立英文提交，C 最终 head 按 KTD3 全套后交付。
 
-### U8. A：QX 非 ASCII comparison 与跨值覆盖
+### U8. A：Unicode comparison 与 keyword 输出能力
 
-**要求：**R8、R9、R10。**依赖：**U2。**文件：**`rules.py` 的 `_domain_comparison_value`、`normalize` keyword 归约、`exclude_covered` 的 QX 覆盖分支，新增 `tests/test_qx_unicode_comparison_regressions.py`。
+**要求：**R8、R9、R10。**依赖：**U2。**文件：**`rules.py` 的 `_domain_comparison_value`、`normalize` keyword identity／索引／contains、`exclude_covered` 的 QX 覆盖分支，新增 `tests/test_qx_unicode_comparison_regressions.py`；只精确调整 `tests/test_keyword_normalization_performance.py` 的 `test_comparison_key_lengths_original_values_and_identity_groups_are_preserved` 中 QX pair 的稳定排序期望。
 
-**方法：**从 `HOST-KEYWORD,ΟΣ`／`HOST-KEYWORD,ος` 经 normalize 丢失不同 Mihomo matcher 的公开 red 开始。共享 helper 对 QX 非 ASCII keyword／wildcard 保留完整原文，包括其中的 ASCII 字符；连续用 proper substring 和两方向 white 失败例限制两个 caller 的未证明跨值覆盖。只改 key 会让 `Σ` 成为 `ΟΣ` 的字面子串并新增误删，本 slice 必须同时完成三处并独立提交。不改变 Rule 原值、Mihomo／Surge 比较、ASCII 归约、目标编码或支持能力，不新增 Unicode 表、依赖或配置。
+**方法：**从 `HOST-KEYWORD,ΟΣ`／`HOST-KEYWORD,ος` 经 normalize 丢失不同 Mihomo matcher 的公开 red 开始。共享 helper 对 QX 非 ASCII keyword／wildcard 保留完整原文，包括其中的 ASCII 字符；连续用 proper substring 和两方向 white 失败例限制两个 caller 的未证明跨值覆盖。只改 key 会让 `Σ` 成为 `ΟΣ` 的字面子串并新增误删，本 slice 必须同时完成三处并独立提交。同时以 DNS equal-key 和 proper-substring 公开失败修正 normalize 的 keyword 代表及索引，非 ASCII identity 保留原文；contains 同时要求原文字面 substring、旧 source comparison 包含及全部 target／root guards。保留普通 Surge 原来源比较、source white、ASCII 及 Surge `İ`／`xİ`、中文安全归约，不改 DNS renderer／65,536 bytes 限值／Rule，不新增 Unicode 表、依赖或配置。
 
 **测试情景：**
 
 - keyword 的 `ΟΣ`／`ος`，wildcard 的 literal 同值及 `*ΟΣ*`／`*ος*` 均保留两条原文；重复、逆序、一次性 iterable 得到相同结果。用固定源码对应的 `οσ`／`ος` matcher 差别核查已证明的 Mihomo 输出，不运行客户端。
 - `İ`／`i̇` 和 `xİ`／`xi̇` 覆盖 full lowercase 扩展碰撞，其中第二值包含 U+0307。keyword 使用 ASCII Host `i.example`，literal wildcard 使用 `i`，带星号 wildcard 使用 `i.example`，分别核对 Go simple lowercase 的 `i`／`i̇` 差别和原 matcher 保留。
 - `ΑΟΣ`／`ος` 的 proper substring 不再误删，`Σ`／`ΟΣ` 的现有保留不回归。含非 ASCII 的 QX white 或 candidate 不依据 keyword 子串、wildcard 匹配、suffix／segment 推导产生未证明的跨值覆盖；覆盖 white 非 ASCII 与 candidate 非 ASCII 的两方向。
-- 相同来源、相同 kind、相同原 payload 的去重及 white 身份覆盖保留；ASCII case 去重、ASCII keyword 包含、原 native Greek 和普通 Surge 行为保持。allow／options／literal_process／native_fields／domain_source 不同组不互删，跨 kind／跨来源不推断新等价。
+- 相同来源、相同 kind、相同原 payload 的去重及 white 身份覆盖保留；ASCII case／keyword 包含、Surge `İ`／`xİ` 和 `中文`／`中文广告` 安全归约、native root-dot 与全部 target guards 保持。native 不同 Unicode 原文可保守保留，实际旧安全断言受影响须交主会话核实，不将全部 native 停止归约写成条件。allow／options／literal_process／native_fields／domain_source 继续分组。
+- `N = 21843`，equal-key 的 `İ * N`／`(i + U+0307) * N` 保留 43,695 bytes 的合法 DNS 行，超限项 65,538 bytes 仍 unsupported；proper-substring 的 `x + İ * N` 保留 block 43,696 bytes／allow 43,698 bytes 的行，short 的 block／allow 分别需要 65,538／65,540 bytes。全部计入 LF 和 `@@`，覆盖普通 Surge／QX、公开 allow、raw／generated white、相同／逆序／重复／一次性 iterable，不宣称可达 DNS 漏拦截。
+- 指定旧性能测试的 QX `İ`／`xİ` pair 保留两条，期望为 `pair[::-1]`，对应现有 normalize 稳定排序。Surge／Mihomo 旧期望、timeout、资源条件及其他断言保持；两条 DNS 路径的新回归复用本单元新模块。
 - 真实 parse_whitelist、公开 allow、raw／generated white 和正常删除对照保留。三 purpose × 三 no_resolve、六格式正文及 diagnostics 按现有能力检查，不把 QX／DNS 产物行数解释为未验证客户端的 Unicode 语义。
 - 临时 root 真实 generate／publish；同轮 `fin-qx.txt` source＋white 和 publish 后移除 parent 的非空 disk-only source＋white 均保留所需 matcher。`fin.yaml` 重导入按 Mihomo 来源处理，输入、static、旧产物和冻结行为保持。
 
@@ -275,14 +283,14 @@ R1-R8 的独立双视角终报已收齐，确定范围与文档独立审查均�
 
 ### U9. 合并已完成分支与联合回归
 
-**要求：**R9、R10、R12。**依赖：**A／B／C 的最终 clean 交付。**文件：**三组已审查提交、必要 origin／本计划修正。
+**要求：**R9、R10、R12。**依赖：**A／B／C／D 的最终 clean 交付及覆盖收据核对。**文件：**四组已审查提交、必要 origin／本计划修正。
 
-1. 核对各分支共同 base、commit／tree、精确 hunk、clean、逐 slice 提交、red／green、审查与 KTD3 完整 suite。缺失项由原 owner 连续补齐后交付。
+1. 核对六领域覆盖收据、全部确认要求及候选处置；核对各分支起始 base 和后续文档范围、commit／tree、精确 hunk、clean、逐 slice 提交、red／green、审查与 KTD3 完整 suite。缺失项由原 owner 连续补齐后交付。
 2. 在本次已从 baseline 建立的 `audit-20261024-5bebe430-integration` 分支和同名独立 worktree 正常合并文档 base 及全部完成历史，按实际 hunk 处理必要冲突，不整文件选边。新失败交回原 owner 的 worktree，完成测试、修正、复审、提交与最终 head 全套后重新合并。
-3. 联合运行所有新增模块与相关 rules／formats、domain／white、regex／DNS、native／routing、YAML／generate、README／CI 测试。重点核对 A 的实际目标覆盖、B 的完整 probe／capture、C 共享 caller 与 no_resolve，以及同轮 source＋white 和非空磁盘。
+3. 联合运行所有新增模块与相关 rules／formats、domain／white、regex／DNS、native／routing、YAML／generate、README／CI 测试。重点核对 A 的目标覆盖及 keyword equality／contains、B 的 probe／capture、C 共享 caller／no_resolve、D 的 quoted／literal comment，以及同轮 source＋white 和非空磁盘。
 4. 逐项对照最终规格，清除本次未采用实现、重复 helper、未使用内容和无关改动，完成审查、修正复审及英文提交，固定唯一受控 commit／tree。本轮不要求额外 README 功能段落；计数由 U10 的隔离副本和 U11 发布实际计算。
 
-**完成标准：**三个完成分支的预期 hunk 全部存在，联合测试通过，受控树 clean，具备 U10 的唯一执行身份。
+**完成标准：**四个完成分支的预期 hunk 全部存在，联合测试通过，受控树 clean，具备 U10 的唯一执行身份。
 
 ### U10. 最终 exact tree、固定输入与真实发布验收
 
@@ -319,6 +327,21 @@ R1-R8 的独立双视角终报已收齐，确定范围与文档独立审查均�
 
 **完成标准：**必要证据保留，本次已完成且无用途的目录／分支按权限清理，未执行和未清理项如实交付。
 
+### U13. D：普通 quoted process 尾注释
+
+**要求：**R13、R9、R10。**依赖：**包含 R13 的文档提交；与 A／B／C 的生产 hunk 不重叠。**文件：**`rules.py` 的 `_source_parts` 普通 process 分支，新增 `tests/test_process_comment_regressions.py`。
+
+**方法：**以公开 `PROCESS-NAME,"Game" # tail` 得到错误 value 的 red 开始，仅对四个 process kind 中以字段 quote 开头、quote 已闭合且外部空白 marker 已由现有扫描确认的分支复用 `_literal_fields`，正确结束字段读取。修正共享来源入口，不在 renderer 补救，不修改全局 lexer、policy／logical／native 语义或 HOST-KEYWORD literal 例外。
+
+**测试情景：**
+
+- 四 process kind、single／double quote、`#`／`;`／`//`、三 purpose 的 72 组合均与无注释对照相同；补三 no_resolve 和六格式完整正文／diagnostics，Mihomo 编码不得包含尾注释。
+- 注释内逗号、未闭合 quote、括号、markup 不再破坏合法已闭合字段；源字段真正未闭合仍按原校验拒绝，健康邻行与物理行号准确。
+- 裸 `Game # literal`、quote 内 marker、外层 quote 表达字面双引号、escaped quote／反斜杠、value 内逗号、policy 后注释、AND／OR／NOT 内 process、native YAML 外层注释及内部字面字段分别保持。
+- 真实 parse_whitelist 不新增 process 支持；临时 source 的 generate／publish、同轮 `fin.txt`／`fin.yaml` 依赖及发布后移除 parent 的非空 disk-only 回读保留正确 matcher。原输入、static、旧产物及生成失败保护保持。
+
+**核查：**逐例 red -> green，运行新模块及既有 process／ordinary whitespace／literal lexer／formats／generate／routing field 相关回归。完成规格／功能／简化审查、必要修正和复审后独立英文提交，D 最终 head 按 KTD3 完整 Linux suite 后交付，不修改其他 owner 的测试文件。
+
 ---
 
 ## Verification Contract
@@ -331,12 +354,13 @@ R1-R8 的独立双视角终报已收齐，确定范围与文档独立审查均�
 | C SUBNET | 新 `test_subnet_legacy_regressions`、routing／target／logical 相关测试 | R5 bare 与 prefixed／colon 的明确边界和 Surge bytes 回读 |
 | C native NOT | 新 `test_native_not_space_regressions`、native arity／domains／logical whitespace | R6 真正包装、单 child、ordinary 保持、深层及直接 render |
 | C native allow | 新 `test_native_allow_regressions`、functional DNS／hosts／ABP／generate | R7 解码后拒绝、无误删、mixed shortcut 和顶层 allow 保持 |
-| A QX comparison | 新 `test_qx_unicode_comparison_regressions`、QX／keyword／domain／white 相关模块 | R8 Greek／dotted-I、Σ／ΟΣ、两个 caller、身份及 ASCII 对照、真实依赖 bytes |
+| A comparison／输出能力 | 新 `test_qx_unicode_comparison_regressions`、keyword／white／性能相关模块 | R8 Greek／dotted-I、Σ／ΟΣ、equal-key／索引／contains、DNS block／allow 预算与真实依赖 bytes |
+| D process comment | 新 `test_process_comment_regressions`、既有 process／lexer／generate 相关模块 | R13 的 72 组合、裸 marker／quote 内／policy／logical／native 对照及真实依赖 bytes |
 | 公开链路 | 全部新增模块、`test_rules`／`test_formats`／`test_generate`、functional integration／YAML／white | R9 公开入口、三 purpose × 三 mode、source＋white 和非空 disk-only 完整 |
 | 各 owner 最终 head | R10 的完整可信 Git archive，Python `-I -B` 下显式 root 的 unittest discovery | KTD3，无 failure／error，原 skips／资源阈值与清单保持 |
 | 最终集成 head | 独立完整 archive 与全套 discovery | U10 实际 commit／tree 和所有受控内容前后一致 |
 | 固定生产 bytes | manifest／body hash、真实 generate／publish／README update | R11 同 input 两轮稳定 42 文件、static／格式／count／逐规则差异 |
-| 范围和文档 | 精确 diff／status、`git diff --check`、规格与计划逐项审查 | 两份当前文档及后续各 owner 只改所分配位置，英文提交，八项范围和验收身份准确 |
+| 范围和文档 | 精确 diff／status、`git diff --check`、规格与计划逐项审查 | 两份当前文档及后续各 owner 只改所分配位置，英文提交，九项确定范围和验收身份准确 |
 | 实际远程 | 真实授权普通 push、Ubuntu test／update、最终远端 bytes | U11 事件身份、真实终态、代码祖先与限定产物核对 |
 
 新增模块以现有标准库 unittest discovery 读取；完整重型 suite 只按 R10 的 Debian `/tmp` 完整 archive 方法执行。现有 `tests/test_readme.py`、`tests/test_readme_counts.py`、`tests/test_ci_publication.py`、`tests/test_workflow.py` 和 alias／transport 回归保留，不做本机适配。当前计划没有执行实现、suite、生成或发布。
@@ -345,6 +369,6 @@ R1-R8 的独立双视角终报已收齐，确定范围与文档独立审查均�
 
 ## Definition of Done
 
-两份文档规定 R1-R8 的确定范围，实施前覆盖收据已核对，A／B／C 从共同文档 base 完成各 slice 的公开 red／green、相邻及真实 bytes 回归、规格／功能／简化审查、修正复审和英文提交。每个 owner 的最终 head 通过完整 Linux suite，主会话正常合并后另行验证最终 exact tree，所有预期 hunk 和入口保持。
+两份文档规定 R1-R8、R13 及 R8 DNS 输出完整性补充，最终集成前覆盖收据与确认范围已核对，A／B／C／D 按各自已提交文档范围完成公开 red／green、相邻及真实 bytes 回归、规格／功能／简化审查、修正复审和英文提交。每个 owner 的最终 head 通过完整 Linux suite，主会话正常合并后另行验证最终 exact tree，所有预期 hunk 和入口保持。
 
 最终同输入 baseline 与两轮 42 产物满足 R11，必要证据可复查。依据原始用户授权正常合并 main／push，核对实际 Ubuntu test／update 和远端 bytes。只清理本次已合并、clean 且无用途的 worktree／branch，记录未执行或未清理项，保留原用户内容。
