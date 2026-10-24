@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 from formats import FILES, render
 from generate import generate, publish
-from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
+from rules import exclude_covered, normalize, parse, parse_whitelist
 
 
 class NativeWildcardWidthTests(unittest.TestCase):
