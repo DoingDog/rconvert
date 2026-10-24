@@ -2182,7 +2182,18 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                     break
                 candidate = candidate.partition('.')[2]
             if candidate:
-                continue
+                # 普通 wildcard 的可选根点 regex 仍有 suffix 未覆盖的范围，allow 也需要该投影。
+                if (kind != 'DOMAIN-WILDCARD' or rule.domain_source != 'surge' or
+                        any(option not in _QX_INTERFACE_OPTIONS for option in rule.options) or
+                        not _valid_domain(kind, value)):
+                    continue
+                classes = re.findall(r'\[[a-z0-9-]+\]', value)
+                if any('--' in part for part in classes):
+                    continue
+                try:
+                    re.compile(''.join(classes))
+                except re.error:
+                    continue
         # 短 keyword 必须保留长 keyword 在其他目标已有的投影能力。
         if kind == 'DOMAIN-KEYWORD':
             lengths = keyword_lengths[group]

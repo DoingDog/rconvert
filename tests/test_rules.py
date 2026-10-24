@@ -4743,7 +4743,7 @@ class NativeWildcardWhitelistTests(unittest.TestCase):
                     self.assertEqual(normalize([wildcard, exact]), [exact, wildcard])
                     self.assertEqual(set(normalize([wildcard, exact, foreign])), {wildcard, exact, foreign})
                     self.assertEqual(set(normalize([wildcard, exact, suffix, child, neighbor, append])),
-                                     {suffix, neighbor, append})
+                                     {suffix, neighbor, append} | ({wildcard} if source == 'surge' else set()))
                     self.assertEqual(rules.exclude_covered([wildcard, exact, child, neighbor, append], [suffix]),
                                      [neighbor, append])
                     self.assertEqual(rules.exclude_covered([suffix], [wildcard, exact]), [suffix])
@@ -5006,7 +5006,8 @@ class NormalizeTests(unittest.TestCase):
             Rule("DOMAIN-SUFFIX", "example.com"),
         ]
         self.assertEqual(normalize(rules), [
-            Rule("DOMAIN-SUFFIX", "example.com"), Rule("DOMAIN-WILDCARD", "*example.com")
+            Rule("DOMAIN-SUFFIX", "example.com"), Rule("DOMAIN-WILDCARD", "*.example.com"),
+            Rule("DOMAIN-WILDCARD", "*example.com"), Rule("DOMAIN-WILDCARD", "api-*.example.com")
         ])
         self.assertEqual(normalize([Rule("DOMAIN-WILDCARD", "*.example.com")]), [
             Rule("DOMAIN-WILDCARD", "*.example.com")
