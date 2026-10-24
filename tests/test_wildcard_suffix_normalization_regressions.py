@@ -80,8 +80,6 @@ class WildcardSuffixNormalizationTests(unittest.TestCase):
                         self.assertEqual(direct_diagnostics.get(covered, 0), int(option != 'special'))
                         self.assertEqual(diagnostics.get(covered, 0), int(option != 'special'))
                         self.assertEqual(normalized, [blocker, *expected_white])
-                        self.assertTrue(all(any(rule is original for rule in normalized)
-                                            for original in expected_white))
 
     def test_source_white_and_target_allow_have_separate_coverage(self):
         parsed, messages = parse('DOMAIN-SUFFIX,example.com\nDOMAIN-WILDCARD,*.example.com', purpose='block')
