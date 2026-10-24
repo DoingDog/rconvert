@@ -824,6 +824,11 @@ def _regexp2_capture_slots(value: str) -> tuple[set[int], set[str]] | None:
 def _valid_regex(kind: str, value: str) -> bool:
     if not value:
         return False
+    if kind != 'URL-REGEX':
+        captured = _regexp2_capture_slots(value)
+        if captured is None:
+            return False
+        capture_slots, names = captured
     probe, in_class, index, quantified = [], False, 0, False
     class_atom, range_from_literal, extended = None, False, False
     class_first = class_hyphen = False
@@ -863,7 +868,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                     index += 2
                     probe.append(r'\x1b')
                 if in_class:
-                    class_atom, range_from_literal = 'literal', False
+                    class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
                 continue
             if escape in "pP":
                 if value.startswith("{", index + 2):
@@ -897,8 +902,17 @@ def _valid_regex(kind: str, value: str) -> bool:
                     return False
                 probe.append(re.escape(chr(codepoint)))
                 if in_class:
-                    class_atom, range_from_literal = "literal", False
+                    class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
                 index = end + 1
+                continue
+            if in_class and escape in 'xu':
+                end = index + (4 if escape == 'x' else 6)
+                digits = value[index + 2:end]
+                if len(digits) != end - index - 2 or _hex_codepoint(digits) is None:
+                    return False
+                probe.append(value[index:end])
+                class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
+                index = end
                 continue
             if not in_class and escape in 'AGZzbB':
                 anchor = r'\A' if escape == 'G' else r'\Z' if escape == 'z' else value[index:index + 2]
@@ -931,7 +945,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                 digits = re.match(r'[0-7]{1,3}', value[index + 1:])[0]
                 probe.append(re.escape(chr(int(digits, 8) & 255)))
                 if in_class:
-                    class_atom, range_from_literal = 'literal', False
+                    class_atom, range_from_literal = 'completed' if range_from_literal else 'literal', False
                 index += len(digits) + 1
                 continue
             elif _regexp2_word_char(escape) and escape not in 'abfnrtvuxdDsSwWBAZ':
@@ -942,7 +956,8 @@ def _valid_regex(kind: str, value: str) -> bool:
                     continue
                 probe.append(value[index:index + 2])
             if in_class:
-                class_atom, range_from_literal = ("escaped_hyphen" if escape == "-" else "literal"), False
+                class_atom, range_from_literal = ('escaped_hyphen' if escape == '-' else
+                                                  'completed' if range_from_literal else 'literal'), False
             index += 2
             continue
         if extended and not in_class and char in ' \t\n\r\v\f':
@@ -985,8 +1000,9 @@ def _valid_regex(kind: str, value: str) -> bool:
             quantifier_probe = len(probe)
         if not in_class and char == "(":
             if value.startswith(('(?(?=', '(?(?!', '(?(?<=', '(?(?<!'), index):
+                conditional_head = False
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0, True])
+                conditionals.append([len(extended_stack), 0, True, True])
                 probe.append('(?:')
                 index += 2
                 continue
@@ -995,10 +1011,11 @@ def _valid_regex(kind: str, value: str) -> bool:
                 if numeric and (value[end:end + 1] != ')' or _capture_number(key) is None):
                     return False
                 extended_stack.append((extended, explicit_capture))
-                conditionals.append([len(extended_stack), 0, False])
+                conditionals.append([len(extended_stack), 0, False, False])
                 probe.append('(?:')
-                if key and value[end:end + 1] == ')':
-                    # 条件头不分配捕获槽，引用在完整捕获集合建立后验证。
+                if key and value[end:end + 1] == ')' and (numeric or key in names):
+                    conditional_head = False
+                    # 仅完整捕获集合中的名称构成 reference condition。
                     references.append((key, numeric, 'condition', None))
                     index = end + 1
                 else:
@@ -1006,17 +1023,19 @@ def _valid_regex(kind: str, value: str) -> bool:
                     if head.startswith(('(?#', "(?'")) or (head.startswith('(?<') and head[3:4] not in {'=', '!'}):
                         return False
                     conditional_head = True
-                    conditionals[-1][2] = True
+                    conditionals[-1][2] = conditionals[-1][3] = True
                     index += 2
                 continue
             if conditional_head:
                 conditional_head = False
                 extended_stack.append((extended, explicit_capture))
                 probe.append('(?:')
-                index += 1
+                index += 3 if value.startswith(('(?:', '(?>'), index) else 1
                 continue
             flags = _scan_regex_options(value, index, extended, explicit_capture)
             if flags is not None:
+                if conditionals and conditionals[-1][3] and len(extended_stack) == conditionals[-1][0]:
+                    return False
                 if flags[1] == ':':
                     extended_stack.append((extended, explicit_capture))
                     probe.append('(?:')
@@ -1076,7 +1095,7 @@ def _valid_regex(kind: str, value: str) -> bool:
             if conditionals:
                 if len(extended_stack) < conditionals[-1][0]:
                     conditionals.pop()
-                elif len(extended_stack) == conditionals[-1][0] and conditionals[-1][2]:
+                if conditionals and len(extended_stack) == conditionals[-1][0] and conditionals[-1][2]:
                     # regexp2 的条件表达式结束后没有量词对象；comment 和 x-mode 空白保持此边界。
                     missing_operand = True
                     conditionals[-1][2] = False
@@ -1084,8 +1103,10 @@ def _valid_regex(kind: str, value: str) -> bool:
             class_hyphen = char == '-' and not class_first
             if char != '^' or index != class_start + 1:
                 class_first = False
-            if char == "-":
-                if class_atom in {"class", "escaped_hyphen"}:
+            if char == '-' and range_from_literal:
+                class_atom, range_from_literal, class_hyphen = 'completed', False, False
+            elif char == "-":
+                if class_atom in {"class", "escaped_hyphen", "completed"}:
                     probe.append(r"\-")
                     class_atom, range_from_literal = "literal", False
                     index += 1
@@ -1096,7 +1117,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                     range_from_literal = class_atom == "literal"
                     class_atom = None
             elif char != "^" or index != class_start + 1:
-                class_atom, range_from_literal = "literal", False
+                class_atom, range_from_literal = "completed" if range_from_literal else "literal", False
         elif char == "(" and not in_class and value.startswith(("(?<", "(?'"), index):
             marker = value[index + 2]
             if marker == "<" and value[index + 3:index + 4] in {"=", "!"}:
@@ -1138,11 +1159,6 @@ def _valid_regex(kind: str, value: str) -> bool:
         index += 1
     if in_class or classes:
         return False
-    if kind != "URL-REGEX":
-        captured = _regexp2_capture_slots(value)
-        if captured is None:
-            return False
-        capture_slots, names = captured
     for key, numeric, form, position in references:
         if numeric:
             number = _capture_number(key)
@@ -1156,9 +1172,7 @@ def _valid_regex(kind: str, value: str) -> bool:
             octal = re.match(r'[0-7]{1,3}', key)[0]
             probe[position] = re.escape(chr(int(octal, 8) & 255)) + key[len(octal):]
         elif key not in names:
-            # regexp2 将未定义的词语条件作为无捕获的表达式条件。
-            if form != 'condition':
-                return False
+            return False
     try:
         re.compile(value if kind == "URL-REGEX" else "".join(probe))
     except RecursionError:
