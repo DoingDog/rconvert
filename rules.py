@@ -574,10 +574,11 @@ def _source_parts(line: str) -> tuple[list[str], int]:
             if token == 'comment':
                 return [head.strip(), line[value_start:index].strip()], index
         return [head.strip(), value.strip()], len(line)
-    # 普通进程和 QX keyword 字段中的 marker 是字面内容；确定尾字段后停止范围扫描。
+    # 裸进程和 QX keyword 字段中的 marker 是字面内容；确定尾字段后停止范围扫描。
     process = kind in {'HOST-KEYWORD', 'PROCESS-NAME', 'PROCESS-PATH', 'PROCESS-NAME-WILDCARD', 'PROCESS-PATH-WILDCARD'}
     for token, index in _delimiters(line):
-        if token == 'comment' and not process:
+        if token == 'comment' and (not process or kind != 'HOST-KEYWORD' and
+                                   line[offset:offset + 1] in ("'", '"')):
             fields, _ = _literal_fields(line[:index])
             return fields, index
         if token == ',' and index > len(head):
