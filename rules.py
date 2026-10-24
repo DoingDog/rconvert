@@ -1279,6 +1279,12 @@ def _valid_simple(kind: str, value: str, native_fields: bool = False) -> bool:
         prefix, separator, target = value.partition(':')
         if not separator:
             return bool(value) and not any(c in value for c in '<>\r\n')
+        if prefix not in {"SSID", "BSSID", "ROUTER", "TYPE", "MCCMNC"}:
+            try:
+                ipaddress.ip_address(value)
+                return True
+            except ValueError:
+                return _valid_simple("MAC-ADDRESS", value)
         if prefix == "TYPE":
             return target.upper() in {"WIFI", "WIRED", "CELLULAR"}
         if prefix == "ROUTER":
