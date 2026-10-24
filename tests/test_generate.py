@@ -944,6 +944,8 @@ class NativeKeywordGenerateTests(unittest.TestCase):
         flag = ',no-resolve' if mode != 'strip' else ''
         public = ([] if only_keyword else [Rule('DOMAIN', 'keep.example.com', domain_source=source)])
         public.append(Rule('DOMAIN-KEYWORD', keyword, domain_source=source))
+        if white and not parent:
+            public.append(Rule('DOMAIN-KEYWORD', value + '9', domain_source=source))
         if not only_keyword:
             public.append(Rule('IP-CIDR', '203.0.113.0/24', ('no-resolve',) if flag else ()))
         if not only_keyword and (parent or white):
@@ -958,6 +960,12 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                   'fin-qx.txt': ([] if only_keyword else ['HOST,keep.example.com,LIST']) + ['HOST-KEYWORD,' + keyword + ',LIST'],
                   'fin-surge.txt': ['DOMAIN-KEYWORD,' + field],
                   'fin-surge-ds.txt': [] if only_keyword or parent else ['keep.example.com'], 'fin.yaml': []}
+        if white and not parent:
+            longer = value + '9'
+            longer_field = ("'" + longer + "'" if any(' ' + marker in longer for marker in ('#', ';', '//')) else longer)
+            for name in ('fin.txt', 'fin-surge.txt'):
+                bodies[name].append('DOMAIN-KEYWORD,' + longer_field)
+            bodies['fin-qx.txt'].append('HOST-KEYWORD,' + longer + ',LIST')
         if not only_keyword:
             for name in ('fin.txt', 'fin-surge.txt'):
                 bodies[name].append('IP-CIDR,203.0.113.0/24' + flag)
@@ -982,6 +990,8 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                 dns.append((r'/(?s-i:\A' + DNS_BYTE_TOKEN + r'*\\228\\184\\173\\230\\150\\135' +
                             suffixes[keyword] + DNS_BYTE_TOKEN + r'*\z)/') if parent else
                            '/^.*' + re.escape(keyword) + '.*$/')
+            if white and not parent and '/' not in value:
+                dns.append('/^.*' + re.escape(value + '9') + '.*$/')
             if not only_keyword and not parent:
                 dns.append('0.0.0.0 keep.example.com')
         dns.sort(key=lambda line: (not line.startswith('@@'), len(line), line))
@@ -989,9 +999,10 @@ class NativeKeywordGenerateTests(unittest.TestCase):
             '! Homepage: https://github.com/DoingDog/rconvert\n! Expires: 1 day\n! License: Inherits upstream licenses\n'
             '! Version: ' + version + f'\n! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) +
             ('! No AdBlock rules for non-advertising group.\n' if purpose != 'block' else ''))
-        skipped = {'fin-surge-ds.txt:DOMAIN-KEYWORD': 1}
+        keyword_count = 2 if white and not parent else 1
+        skipped = {'fin-surge-ds.txt:DOMAIN-KEYWORD': keyword_count}
         if purpose != 'block' or '/' in keyword:
-            skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+            skipped['fin-adb.txt:DOMAIN-KEYWORD'] = keyword_count
         if not only_keyword:
             if parent:
                 skipped.update({'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1})
@@ -1002,7 +1013,7 @@ class NativeKeywordGenerateTests(unittest.TestCase):
                 skipped.update({name + ':SRC-IP-CIDR': 1 for name in
                                 ('fin-qx.txt', 'fin-adb.txt', 'fin-surge-ds.txt')})
             if purpose == 'block' and white and not parent and '/' in value:
-                skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 1
+                skipped['fin-adb.txt:DOMAIN-KEYWORD'] = 2
         native_public = [Rule(rule.kind, rule.value, rule.options, domain_source=
                          'mihomo' if rule.kind.startswith('DOMAIN') else 'surge') for rule in public]
         return expected, native_public, skipped
@@ -6232,18 +6243,18 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
         if child:
             payloads.remove(keep)
             native_rules.pop(1)
-            bodies = {'fin.txt': ['DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
+            bodies = {'fin.txt': ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
                       'fin-qx.txt': ['HOST,NATIVE.EXAMPLE.ORG.,LIST', 'HOST-KEYWORD,ΟΣ,LIST',
                                     'HOST-SUFFIX,broad.example.net,LIST', 'IP-CIDR,192.0.2.0/24,LIST' + flag],
-                      'fin-surge.txt': ['DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
+                      'fin-surge.txt': ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
                       'fin-surge-ds.txt': []}
         else:
             dns = ['||broad.example.net^', '0.0.0.0 keep.example.org', dns[0]]
-            bodies = {'fin.txt': [surge_logic, 'DOMAIN,keep.example.org', 'DOMAIN-KEYWORD,ΟΣ',
+            bodies = {'fin.txt': [surge_logic, 'DOMAIN,keep.example.org',
                                  'DOMAIN-SUFFIX,broad.example.net', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
                       'fin-qx.txt': ['HOST,keep.example.org,LIST', 'HOST,NATIVE.EXAMPLE.ORG.,LIST', 'HOST-KEYWORD,ΟΣ,LIST',
                                     'HOST-SUFFIX,broad.example.net,LIST', 'IP-CIDR,192.0.2.0/24,LIST' + flag],
-                      'fin-surge.txt': [surge_logic, 'DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
+                      'fin-surge.txt': [surge_logic, 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
                       'fin-surge-ds.txt': ['keep.example.org', '.broad.example.net']}
         bodies['fin.yaml'] = ['  - ' + json.dumps(payload, ensure_ascii=False) for payload in payloads]
         expected = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
@@ -6254,7 +6265,8 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
             (f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) if purpose == 'block' else
              '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
         source_kind = 'SRC-IP-CIDR' if child else 'SRC-IP'
-        skipped = {'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1,
+        skipped = {'fin.txt:DOMAIN-KEYWORD': 1, 'fin-surge.txt:DOMAIN-KEYWORD': 1,
+                   'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1,
                    'fin-adb.txt:AND': 1, 'fin-adb.txt:IP-CIDR': 1, 'fin-adb.txt:' + source_kind: 1,
                    'fin-qx.txt:AND': 1, 'fin-qx.txt:' + source_kind: 1, 'fin-surge-ds.txt:AND': 1,
                    'fin-surge-ds.txt:DOMAIN-KEYWORD': 1, 'fin-surge-ds.txt:IP-CIDR': 1,

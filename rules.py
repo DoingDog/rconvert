@@ -6,6 +6,49 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from fnmatch import fnmatchcase
 
+from _unicode15 import _GO15_LOWER
+
+
+# 固定 Go Unicode 15.0.0 的 CaseRanges 与 caseOrbit 非自身映射（含 U+00DF）。
+# 区间外 scalar 的 SimpleFold 与 ToLower 均保持自身，不依赖 Python UCD。
+_PROCESS_CASE_VARIANTS = re.compile(
+    r"["
+    r"A-Za-zµÀ-ÖØ-öø-ķĹ-ň"
+    r"Ŋ-ƌƎ-ƚƜ-ƩƬ-ƹƼ-ƽƿǄ-ǯ"
+    r"Ǳ-ȠȢ-ȳȺ-ɔɖ-ɗəɛ-ɜɠ-ɡɣ"
+    r"ɥ-ɦɨ-ɬɯɱ-ɲɵɽʀʂ-ʃʇ-ʌ"
+    r"ʒʝ-ʞͅͰ-ͳͶ-ͷͻ-ͽͿΆΈ-Ί"
+    r"ΌΎ-ΏΑ-ΡΣ-ία-ϑϕ-ϵϷ-ϻ"
+    r"Ͻ-ҁҊ-ԯԱ-Ֆա-ֆႠ-ჅჇჍა-ჺ"
+    r"ჽ-ჿᎠ-Ᏽᏸ-ᏽᲀ-ᲈᲐ-ᲺᲽ-Ჿᵹᵽ"
+    r"ᶎḀ-ẕẛẞẠ-ἕἘ-Ἕἠ-ὅὈ-Ὅὑ"
+    r"ὓὕὗὙὛὝὟ-ώᾀ-ᾱᾳᾸ-ᾼι"
+    r"ῃῈ-ῌῐ-ῑῘ-Ίῠ-ῡῥῨ-Ῥῳ"
+    r"Ὸ-ῼΩK-ÅℲⅎⅠ-ⅿↃ-ↄⒶ-ⓩ"
+    r"Ⰰ-ⱰⱲ-ⱳⱵ-ⱶⱾ-ⳣⳫ-ⳮⳲ-ⳳ"
+    r"ⴀ-ⴥⴧⴭꙀ-ꙭꚀ-ꚛꜢ-ꜯꜲ-ꝯꝹ-ꞇ"
+    r"Ꞌ-ꞍꞐ-ꞔꞖ-ꞮꞰ-ꟊꟐ-ꟑꟖ-ꟙ"
+    r"Ꟶ-ꟶꭓꭰ-ꮿＡ-Ｚａ-ｚ\U00010400-\U0001044f"
+    r"\U000104b0-\U000104d3\U000104d8-\U000104fb\U00010570-\U0001057a\U0001057c-\U0001058a"
+    r"\U0001058c-\U00010592\U00010594-\U00010595\U00010597-\U000105a1\U000105a3-\U000105b1"
+    r"\U000105b3-\U000105b9\U000105bb-\U000105bc\U00010c80-\U00010cb2\U00010cc0-\U00010cf2"
+    r"\U000118a0-\U000118df\U00016e40-\U00016e7f\U0001e900-\U0001e943"
+    r"]"
+)
+
+
+def _go_lower(value: str) -> str:
+    def lower(match):
+        point = ord(match[0])
+        position = bisect_right(_GO15_LOWER, (point, 0x110000, 0x110000, 0x110000)) - 1
+        if position >= 0:
+            start, end, stride, delta = _GO15_LOWER[position]
+            if point <= end and (point - start) % stride == 0:
+                return chr(point + delta)
+        return match[0]
+
+    return _PROCESS_CASE_VARIANTS.sub(lower, value)
+
 
 @dataclass(frozen=True, slots=True)
 class Rule:
@@ -1676,7 +1719,7 @@ def _ordinary_field_supported(kind: str, value: str, *, literal_field: bool = Fa
 
 
 def _surge_keyword_source_supported(value: str, source: str) -> bool:
-    return source != 'mihomo' or not (re.search(r'[a-z]', value, re.I) or value.endswith('.'))
+    return source != 'mihomo' or not (_PROCESS_CASE_VARIANTS.search(value) or value.endswith('.'))
 
 
 def _mihomo_domain_field_supported(kind: str, value: str, source: str) -> bool:
@@ -2018,6 +2061,8 @@ def parse_whitelist(text: str, *, domain_set: bool = False) -> list[Rule]:
 
 
 def _domain_comparison_value(kind: str, value: str, source: str) -> str:
+    if source == 'qx' and kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and not value.isascii():
+        return value
     if source != 'mihomo':
         return value.lower()
     # 只使用已核实的 simple lowercase；其余字符保留字面比较，不推断新的跨值覆盖。
@@ -2033,6 +2078,10 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
     networks = {"src": set(), "dst": set()}
     for entry in whitelist:
         _reject_ip_scope(entry.kind, entry.value, entry.native_fields)
+        if (entry.domain_source == 'qx' and not entry.value.isascii() and
+                entry.kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}):
+            typed.add((entry.domain_source, entry.kind, entry.value))
+            continue
         exact, suffixes, keywords, wildcards = domain_groups.setdefault(
             entry.domain_source, (set(), set(), set(), set()))
         value = _domain_comparison_value(entry.kind, entry.value, entry.domain_source)
@@ -2069,7 +2118,7 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
     # native wildcard 按 UTF-8 byte 匹配，方括号是字面内容。
     wildcard_patterns = {
         source: [''.join('[[]' if char == '[' else '[]]' if char == ']' else char
-                         for char in pattern).encode('utf-8') if source == "mihomo" else pattern
+                         for char in _go_lower(pattern)).encode('utf-8') if source == "mihomo" else pattern
                  for pattern in group[3] if source in {"surge", "mihomo"} or '[' not in pattern]
         for source, group in domain_groups.items()
     }
@@ -2082,8 +2131,11 @@ def exclude_covered(rules: Iterable[Rule], whitelist: Iterable[Rule]) -> list[Ru
         kind, value = rule.kind, _domain_comparison_value(rule.kind, rule.value, rule.domain_source)
         exact, suffixes, keywords, wildcards = domain_groups.get(rule.domain_source, empty)
         wildcard_chars = "*?" if rule.domain_source == "mihomo" else "*?[]"
-        if kind == "DOMAIN" or (kind == "DOMAIN-WILDCARD" and not any(c in value for c in wildcard_chars)):
-            match_value = value.encode('utf-8') if rule.domain_source == "mihomo" else value
+        if (rule.domain_source == 'qx' and not rule.value.isascii() and
+                kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'}):
+            covered = (rule.domain_source, kind, rule.value) in typed
+        elif kind == "DOMAIN" or (kind == "DOMAIN-WILDCARD" and not any(c in value for c in wildcard_chars)):
+            match_value = _go_lower(value).encode('utf-8') if rule.domain_source == "mihomo" else value
             covered = (value in exact or _has_parent(value, suffixes) or
                        any(keyword in value for keyword in keywords) or
                        any(fnmatchcase(match_value, pattern)
@@ -2171,6 +2223,9 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
         group = (rule.allow, rule.options, rule.literal_process, rule.native_fields, rule.domain_source)
         value = (_domain_comparison_value(rule.kind, rule.value, rule.domain_source)
                  if rule.kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} else rule.value)
+        if (rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and
+                rule.domain_source != 'mihomo' and not rule.value.isascii()):
+            value = rule.value
         unique.setdefault((rule.kind, value, group), rule)
         if rule.kind == 'DOMAIN-SUFFIX':
             suffixes.setdefault(group, set()).add(value)
@@ -2185,23 +2240,41 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
             if kind == 'DOMAIN-WILDCARD':
                 last_wildcard = max(candidate.rfind(char) for char in '*?]')
                 tail = candidate[last_wildcard + 1:]
-                candidate = tail.partition('.')[2]
+                candidate = '' if rule.domain_source == 'qx' and not value.isascii() else tail.partition('.')[2]
             parents = suffixes.get(group, set())
             while candidate:
                 if candidate in parents and (kind != 'DOMAIN-SUFFIX' or candidate != value):
                     break
                 candidate = candidate.partition('.')[2]
             if candidate:
-                continue
+                # 普通 wildcard 的可选根点 regex 仍有 suffix 未覆盖的范围，allow 也需要该投影。
+                projection_value = value.lower()
+                if (kind != 'DOMAIN-WILDCARD' or rule.domain_source != 'surge' or
+                        any(option not in _QX_INTERFACE_OPTIONS for option in rule.options) or
+                        not _valid_domain(kind, projection_value)):
+                    continue
+                parts = re.split(r'(\[[a-z0-9-]+\])', projection_value)
+                if any('[' in part or ']' in part for part in parts[::2]):
+                    continue
+                classes = parts[1::2]
+                if any('--' in part for part in classes):
+                    continue
+                try:
+                    re.compile(''.join(classes))
+                except re.error:
+                    continue
         # 短 keyword 必须保留长 keyword 在其他目标已有的投影能力。
-        if kind == 'DOMAIN-KEYWORD':
+        if kind == 'DOMAIN-KEYWORD' and (rule.domain_source != 'qx' or rule.value.isascii()):
             lengths = keyword_lengths[group]
             lengths = lengths[:bisect_right(lengths, len(value) - 1)]
             ordinary = (_ordinary_field_supported(kind, rule.value) and
                         _surge_keyword_source_supported(rule.value, rule.domain_source))
             qx = _qx_field_supported(kind, rule.value)
             mihomo = _mihomo_domain_field_supported(kind, rule.value, rule.domain_source)
+            comparison = _domain_comparison_value(kind, rule.value, rule.domain_source)
             if lengths and any((short_rule := keywords[group].get(short)) is not None and
+                   (rule.domain_source == 'mihomo' or value.isascii() or
+                    _domain_comparison_value(kind, short_rule.value, rule.domain_source) in comparison) and
                    (not ordinary or _ordinary_field_supported(kind, short_rule.value) and
                     _surge_keyword_source_supported(short_rule.value, rule.domain_source)) and
                    (not qx or _qx_field_supported(kind, short_rule.value)) and

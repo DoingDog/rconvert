@@ -1184,7 +1184,7 @@ class NativeWildcardBoundaryAuditTests(unittest.TestCase):
         for source in ('surge', 'qx'):
             white = parse_whitelist(('DOMAIN-WILDCARD,' if source == 'surge' else 'HOST-WILDCARD,') + 'a?.example.org')
             blocker = Rule('DOMAIN', 'aé.example.org', domain_source=source)
-            self.assertEqual(exclude_covered([blocker], white), [])
+            self.assertEqual(exclude_covered([blocker], white), [] if source == 'surge' else [blocker])
         native = Rule('DOMAIN-WILDCARD', 'a?.example.org', domain_source='mihomo')
         surge = Rule('DOMAIN-WILDCARD', 'a?.example.org')
         qx = Rule('DOMAIN-WILDCARD', 'a?.example.org', domain_source='qx')

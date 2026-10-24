@@ -133,7 +133,7 @@ class KeywordNormalizationPerformanceTests(unittest.TestCase):
                 values = ('İ', 'xİ') if source != 'mihomo' else ('İ', 'I9')
                 pair = [Rule('DOMAIN-KEYWORD', value, domain_source=source) for value in values]
                 for order in (pair, pair[::-1], pair + pair):
-                    assert normalize(iter(order)) == pair[:1]
+                    assert normalize(iter(order)) == (pair[::-1] if source == 'qx' else pair[:1])
                 guarded = [Rule('DOMAIN-KEYWORD', value, domain_source=source) for value in ('<İ>', '(?<İ>)')]
                 assert set(normalize(iter(guarded[::-1] + guarded))) == set(guarded)
                 outputs, diagnostics = render('unicode', normalize(guarded), purpose='proxy', no_resolve='keep')
