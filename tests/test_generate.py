@@ -6243,18 +6243,18 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
         if child:
             payloads.remove(keep)
             native_rules.pop(1)
-            bodies = {'fin.txt': ['DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
+            bodies = {'fin.txt': ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
                       'fin-qx.txt': ['HOST,NATIVE.EXAMPLE.ORG.,LIST', 'HOST-KEYWORD,ΟΣ,LIST',
                                     'HOST-SUFFIX,broad.example.net,LIST', 'IP-CIDR,192.0.2.0/24,LIST' + flag],
-                      'fin-surge.txt': ['DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
+                      'fin-surge.txt': ['IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1/32'],
                       'fin-surge-ds.txt': []}
         else:
             dns = ['||broad.example.net^', '0.0.0.0 keep.example.org', dns[0]]
-            bodies = {'fin.txt': [surge_logic, 'DOMAIN,keep.example.org', 'DOMAIN-KEYWORD,ΟΣ',
+            bodies = {'fin.txt': [surge_logic, 'DOMAIN,keep.example.org',
                                  'DOMAIN-SUFFIX,broad.example.net', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
                       'fin-qx.txt': ['HOST,keep.example.org,LIST', 'HOST,NATIVE.EXAMPLE.ORG.,LIST', 'HOST-KEYWORD,ΟΣ,LIST',
                                     'HOST-SUFFIX,broad.example.net,LIST', 'IP-CIDR,192.0.2.0/24,LIST' + flag],
-                      'fin-surge.txt': [surge_logic, 'DOMAIN-KEYWORD,ΟΣ', 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
+                      'fin-surge.txt': [surge_logic, 'IP-CIDR,192.0.2.0/24' + flag, 'SRC-IP,127.0.0.1'],
                       'fin-surge-ds.txt': ['keep.example.org', '.broad.example.net']}
         bodies['fin.yaml'] = ['  - ' + json.dumps(payload, ensure_ascii=False) for payload in payloads]
         expected = {name: f'# {group} rules: {len(body)}\n' + ('payload:\n' if name == 'fin.yaml' else '') +
@@ -6265,7 +6265,8 @@ class PublicGeneratedPipelineTests(unittest.TestCase):
             (f'! Total count: {len(dns)}\n' + ''.join(line + '\n' for line in dns) if purpose == 'block' else
              '! Total count: 0\n! No AdBlock rules for non-advertising group.\n'))
         source_kind = 'SRC-IP-CIDR' if child else 'SRC-IP'
-        skipped = {'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1,
+        skipped = {'fin.txt:DOMAIN-KEYWORD': 1, 'fin-surge.txt:DOMAIN-KEYWORD': 1,
+                   'fin.txt:DOMAIN': 1, 'fin-surge-ds.txt:DOMAIN': 1, 'fin-adb.txt:DOMAIN': 1,
                    'fin-adb.txt:AND': 1, 'fin-adb.txt:IP-CIDR': 1, 'fin-adb.txt:' + source_kind: 1,
                    'fin-qx.txt:AND': 1, 'fin-qx.txt:' + source_kind: 1, 'fin-surge-ds.txt:AND': 1,
                    'fin-surge-ds.txt:DOMAIN-KEYWORD': 1, 'fin-surge-ds.txt:IP-CIDR': 1,

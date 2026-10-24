@@ -1712,7 +1712,7 @@ def _ordinary_field_supported(kind: str, value: str, *, literal_field: bool = Fa
 
 
 def _surge_keyword_source_supported(value: str, source: str) -> bool:
-    return source != 'mihomo' or not (re.search(r'[a-z]', value, re.I) or value.endswith('.'))
+    return source != 'mihomo' or not (_PROCESS_CASE_VARIANTS.search(value) or value.endswith('.'))
 
 
 def _mihomo_domain_field_supported(kind: str, value: str, source: str) -> bool:

@@ -77,7 +77,7 @@ def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tu
     if supported is SURGE_TYPES:
         if source == "mihomo":
             if (kind == 'DOMAIN-KEYWORD' and not _surge_keyword_source_supported(value, source) or
-                    kind == 'DOMAIN-WILDCARD' and (re.search(r'[a-z]', value, re.I) or any(c in value for c in '[]'))):
+                    kind == 'DOMAIN-WILDCARD' and (_PROCESS_CASE_VARIANTS.search(value) or any(c in value for c in '[]'))):
                 return kind, None
             if kind == "DOMAIN-WILDCARD":
                 # 尾星号仅在最后必要 token 为非点字面字符时吸收 hostname 根点。
