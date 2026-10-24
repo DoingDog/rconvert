@@ -2238,6 +2238,7 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
         if kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-WILDCARD'}:
             candidate = value
             if kind == 'DOMAIN-WILDCARD':
+                candidate = _domain_comparison_value(kind, rule.value, rule.domain_source)
                 last_wildcard = max(candidate.rfind(char) for char in '*?]')
                 tail = candidate[last_wildcard + 1:]
                 candidate = '' if rule.domain_source == 'qx' and not value.isascii() else tail.partition('.')[2]
