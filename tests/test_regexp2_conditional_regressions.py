@@ -16,6 +16,12 @@ from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 
 
 KINDS = ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX')
+R3_CASES = (('^(?(?:ads)ads|other)$', True),
+            ('^(?(?>ads)ads|other)$', True),
+            ('^(?(?:a|b|c)ads|other)$', True),
+            ('^(?(?>a|b|c)ads|other)$', True),
+            ('^(?(?:ads)(?i)ads|other)$', False),
+            ('^(?(?>ads)ads|other|third)$', False))
 R2_CASES = (('^(?(?=ads)(?i)ads|other)$', False),
             ('^(?(missing)(?i)ads|other)$', False),
             ('^(a)(?(1)(?i)ads|other)$', True),
@@ -24,6 +30,65 @@ R2_CASES = (('^(?(?=ads)(?i)ads|other)$', False),
 
 
 class Regexp2ConditionalTests(unittest.TestCase):
+    def test_noncapture_expression_condition_preserves_matcher(self):
+        value = '^(?(?:ads)ads|other)$'
+        self.assertEqual(parse('DOMAIN-REGEX,' + value, purpose='block'),
+                         ([Rule('DOMAIN-REGEX', value)], []))
+
+    def test_atomic_expression_condition_preserves_matcher(self):
+        value = '^(?(?>ads)ads|other)$'
+        self.assertEqual(parse('DOMAIN-REGEX,' + value, purpose='block'),
+                         ([Rule('DOMAIN-REGEX', value)], []))
+
+    def test_condition_headers_alternation_and_forbidden_neighbors(self):
+        valid = ('^(?(ads|other|third)ads|other)$', '^(?(?=ads)ads|other)$',
+                 '^(?(?!ads)ads|other)$', '^(?(?<=ads)ads|other)$', '^(?(?<!ads)ads|other)$',
+                 '^(?(?:ads)(?:(?i)ads)|other)$', '^(?(?>(?i)ads)ads|other)$',
+                 '^(?((?(?=ads)ads|other))ads|other)$',
+                 r'^(?(?:(a))ads|other)\1$', r'^(?(?>(a))ads|other)\1$')
+        invalid = ('^(?(?:ads)ads|other|third)$', '^(?(?:ads)+ads|other)$',
+                   '^(?(?>ads){1}ads|other)$', '^(?(?:ads)(?#note)+ads|other)$',
+                   '^(?(?:ads)ads|(?i:other))$', '^(?(?i:ads)ads|other)$',
+                   '^(?(?#ads)ads|other)$', '^(?(?<word>ads)ads|other)$',
+                   "^(?(?'word'ads)ads|other)$", '^(?(?:ads)ads|other$',
+                   r'^(?(?:ads)ads|other)\1$', r'^(?(?:(a))ads|other)\2$')
+        for accepted, values in ((True, valid), (False, invalid)):
+            for value in values:
+                with self.subTest(value=value):
+                    self.assertEqual(parse('DOMAIN-REGEX,' + json.dumps(value), purpose='block'),
+                                     ([Rule('DOMAIN-REGEX', value)], []) if accepted else
+                                     ([], [f'line 1: invalid DOMAIN-REGEX {value}']))
+        self._check_scalar_forms(R3_CASES)
+        self._check_logical(R3_CASES[:2] + R3_CASES[4:])
+
+    def test_condition_headers_do_not_expand_dns_or_url_support(self):
+        for value, _ in R3_CASES[:4]:
+            for purpose in ('block', 'direct', 'proxy'):
+                for mode in ('keep', 'add', 'strip'):
+                    for kind in KINDS:
+                        parsed, messages = parse(kind + ',' + value, purpose=purpose)
+                        self.assertEqual(messages, [])
+                        outputs, skipped = render('conditional', parsed, purpose=purpose, no_resolve=mode)
+                        self.assertEqual(outputs['fin.yaml'], '# conditional rules: 1\npayload:\n  - ' +
+                                         json.dumps(kind + ',' + value) + '\n')
+                        self.assertEqual(skipped, {name + ':' + kind: 1 for name in FILES if name != 'fin.yaml'})
+            for consumer in ('allow', 'white'):
+                outputs, skipped = render('conditional', [Rule('DOMAIN-REGEX', value, allow=consumer == 'allow')],
+                                          whitelist=[Rule('DOMAIN-REGEX', value)] if consumer == 'white' else [],
+                                          purpose='block', no_resolve='keep')
+                self.assertEqual(outputs['fin-adb.txt'].splitlines()[6:], ['! Total count: 0'])
+                self.assertEqual(skipped['fin-adb.txt:DOMAIN-REGEX'], 1 if consumer == 'allow' else 2)
+        for value in (R3_CASES[0][0], R3_CASES[1][0], R2_CASES[0][0]):
+            self.assertEqual(parse('URL-REGEX,' + value, purpose='proxy'),
+                             ([], [f'line 1: invalid URL-REGEX {value}']))
+        value = r'^(?:ads|other)$'
+        self.assertEqual(parse('URL-REGEX,' + value, purpose='proxy'), ([Rule('URL-REGEX', value)], []))
+
+    def test_condition_header_white_generation_and_nonempty_disk_readback(self):
+        for value, _ in R3_CASES[:2]:
+            self.assertEqual(parse_whitelist('DOMAIN-REGEX,' + value), [Rule('DOMAIN-REGEX', value)])
+            self._check_generation(value, R3_CASES[4][0])
+
     def test_expression_direct_options_reject_matcher_and_keep_neighbor(self):
         value = '^(?(?=ads)(?i)ads|other)$'
         self.assertEqual(parse('DOMAIN-REGEX,' + value + '\nDOMAIN,keep.example.org', purpose='block'),
@@ -149,10 +214,25 @@ class Regexp2ConditionalTests(unittest.TestCase):
         script = r'''
 import sys
 sys.path.insert(0, sys.argv[1])
-from tests.test_regexp2_conditional_regressions import Regexp2ConditionalTests, R2_CASES
+from tests.test_regexp2_conditional_regressions import Regexp2ConditionalTests, R2_CASES, R3_CASES
+from formats import render
+from rules import Rule, parse
 assert sys.getrecursionlimit() == 1000
 case = Regexp2ConditionalTests()
-case._check_scalar_forms(R2_CASES, int(sys.argv[2]))
+depth = int(sys.argv[2])
+case._check_scalar_forms(R2_CASES + R3_CASES[:2] + R3_CASES[4:], depth)
+for atom, accepted in R3_CASES[:2] + R2_CASES[:1]:
+    value = '(?:' * depth + atom + ')' * depth
+    expression = f'((DOMAIN-REGEX,{value}),(IP-CIDR,203.0.113.0/24,no-resolve))'
+    source = 'AND,' + expression
+    parsed, messages = parse(source, purpose='proxy')
+    assert parsed == ([Rule('AND', expression)] if accepted else [])
+    assert messages == ([] if accepted else [f'line 1: invalid logical expression {expression}'])
+    if accepted:
+        for mode in ('keep', 'add', 'strip'):
+            outputs, _ = render('conditional', parsed, purpose='proxy', no_resolve=mode)
+            restored, messages = parse(outputs['fin.yaml'], purpose='proxy')
+            assert messages == [] and len(restored) == 1
 assert sys.getrecursionlimit() == 1000
 '''
         root = Path(__file__).resolve().parents[1]

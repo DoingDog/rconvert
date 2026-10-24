@@ -975,7 +975,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                 conditional_head = False
                 extended_stack.append((extended, explicit_capture))
                 probe.append('(?:')
-                index += 1
+                index += 3 if value.startswith(('(?:', '(?>'), index) else 1
                 continue
             flags = _scan_regex_options(value, index, extended, explicit_capture)
             if flags is not None:
@@ -1115,9 +1115,7 @@ def _valid_regex(kind: str, value: str) -> bool:
             octal = re.match(r'[0-7]{1,3}', key)[0]
             probe[position] = re.escape(chr(int(octal, 8) & 255)) + key[len(octal):]
         elif key not in names:
-            # regexp2 将未定义的词语条件作为无捕获的表达式条件。
-            if form != 'condition':
-                return False
+            return False
     try:
         re.compile(value if kind == "URL-REGEX" else "".join(probe))
     except RecursionError:
