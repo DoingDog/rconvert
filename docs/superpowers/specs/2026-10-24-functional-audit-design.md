@@ -28,6 +28,7 @@ A、B、C 已从共同文档提交 `109ea30f83720178130a1db0c608937eaae86ef8` �
 | `tests/test_keyword_normalization_performance.py` 的 `test_comparison_key_lengths_original_values_and_identity_groups_are_preserved` | 仅 QX `İ`／`xİ` pair 保留两条，按稳定排序为 `pair[::-1]`；Surge／Mihomo 期望保持 |
 | `tests/test_rules.py` 的 `_check_complete_qx_literal_fields`、`test_qx_keyword_markers_preserve_complete_fields_and_whitelist_scope`、`test_keyword_whitelist_preserves_literal_range_allow_and_source_identity` | 仅非 ASCII QX white 不再跨值删除 longer；相同原文身份覆盖和其他来源／allow 保持 |
 | `tests/test_rules.py` 的 `NativeWildcardWhitelistTests.test_coverage_preserves_source_flags_and_allow_rules`、`test_normalize_keeps_wildcard_predicates_and_source_groups` | 仅受 QX 非 ASCII candidate 保护影响的来源覆盖期望；保留 ASCII／Surge／Mihomo／flags／allow 对照 |
+| `tests/test_functional_audit_coverage.py` 的 `NativeWildcardBoundaryAuditTests.test_native_short_wildcards_match_bytes_and_literal_brackets_without_cross_source_merging` | 仅原第 1187 行，`source in ('surge', 'qx')` 中 `DOMAIN,aé.example.org` 对 white `a?.example.org` 的期望改为 `[] if source == 'surge' else [blocker]`；其余 Surge／native 矩阵、fixture、资源条件及其他断言保持 |
 | `tests/test_generate.py` 的 `NativeKeywordGenerateTests._qx_marker_products`、`_check_qx_keyword_marker_dependency`，及 white 调用测试 `test_qx_literal_whitelist_preserves_shorter_matcher_same_round_and_disk`、`test_qx_keyword_whitelist_keeps_short_keyword_same_round_and_disk_without_mock` | 同一原 fixture 下，仅更新非 ASCII QX 跨值保留所影响的六格式正文、count、diagnostics 与回读身份；不削弱 source／white、同轮／磁盘、旧产物保护断言 |
 
 R18 另允许精确修改 `tests/test_generate.py` 的 `PublicGeneratedPipelineTests.expected`：只从 parent／child 的 `fin.txt`、`fin-surge.txt` 移除 native `DOMAIN-KEYWORD,ΟΣ` 正文，header 按实际数量计算；各组各增加对应两项 unsupported。YAML identity、QX、DNS Greek bytes、DOMAIN-SET、fixture 和 publish 断言保持。其他旧期望若实际受影响，先由主会话核查，不扩大授权。
@@ -143,7 +144,7 @@ native `NOT,( (DOMAIN,a.test) )` 必须接受，并规范化为保留 child list
 
 该补充依据 README 的完整可表达输出、keyword 目标能力要求及 `2026-10-23-functional-regressions-design.md` R6 的合法长值边界。验收同时覆盖 Surge／QX 的 unique 代表、keyword 索引和 contains，block／allow、raw／generated white 的 `@@`、真实 source／同轮／非空磁盘依赖；native DNS 保持 constructor lowercase 后的 presentation bytes 和原安全归约。保留 DNS renderer、65,536 bytes 限值、原 Rule 与来源 white 语义；超限项仍计 unsupported。此处确认受支持输出完整性丢失，未证明正常可达 DNS Host 漏匹配，不单列运行时缺陷。
 
-完成条件：公开 parse -> normalize／exclude_covered -> render 和真实 generate／publish 保留已证明不同的 Mihomo matcher 及上述合法 DNS 行；共享 helper 与两个 caller、normalize 的 equality／索引／contains 均满足边界。身份覆盖、稳定排序、已证明 ASCII 和 Surge Unicode 安全归约及原性能条件继续通过。R8 的旧测试调整仅限范围表列明的非 ASCII QX 跨值删除与生成期望，不改变 fixture 或削弱其他断言；R18 另有明确的 native Surge 目标能力期望修正。
+完成条件：公开 parse -> normalize／exclude_covered -> render 和真实 generate／publish 保留已证明不同的 Mihomo matcher 及上述合法 DNS 行；共享 helper 与两个 caller、normalize 的 equality／索引／contains 均满足边界。身份覆盖、稳定排序、已证明 ASCII 和 Surge Unicode 安全归约及原性能条件继续通过。R8 的旧测试调整仅限范围表列明的非 ASCII QX 跨值删除与生成期望；其中 `NativeWildcardBoundaryAuditTests.test_native_short_wildcards_match_bytes_and_literal_brackets_without_cross_source_merging` 只将 `aé.example.org` 对 `a?.example.org` 的统一空列表期望改为 Surge 删除、QX 保留。该项属于既有 R8，不增加产品缺陷；A 精确修改、回归和提交后以新最终 head 完整验收，fixture、其他断言和资源条件不变。R18 另有明确的 native Surge 目标能力期望修正。
 
 ### R9. 公开接口与真实 bytes 联动
 
@@ -163,7 +164,9 @@ fixture 覆盖 BOM／CRLF、ordinary 字段引用及 native 两种 header／三�
 
 ### R10. 组件与最终 exact tree 的 Linux 验收
 
-每个 owner 连续完成实现、相关回归、规格／功能／简化审查、修正、复审和英文提交，再以最终提交 head 的完整 Git archive 在 Debian 原生 `/tmp` 运行完整 suite 后交付。失败由原 owner 修正并重新提交、重验，不能把未完成步骤转交主会话。主会话仅合并无所有权冲突的已完成提交，集成树另行完整验收。
+每个 owner 在各自获准的独立 worktree 连续完成实现、相关回归、规格／功能／简化审查、修正、复审和英文提交，再以最终提交 head 的完整 Git archive 在 Debian 原生 `/tmp` 运行完整 suite 后交付。失败仍由同一 unit 处理，不能把未完成步骤转交主会话；涉及产品修改时，owner 必须在有效独立编码 worktree 完成修正、重新提交和重验。主会话仅合并无所有权冲突的已完成提交，集成树另行完整验收。
+
+D 已在独立 worktree 完成编码、提交及独立 review，仅欠完整 suite；原路径访问和新 harness isolation 均因 protected checkout 的 Git identity 无法核实而失败。保留原 worktree 和提交，不再创建或切换 worktree，由专门 workflow 的同 D-unit 只读验收者在当前获准 integration 仓库读取共享 Git 对象，将原实现完整提交 `5a25411fab3084c57a3f43affcab126ded477bbe` 的完整 Git archive 提取至新的可信 Debian `/tmp` 目录，完成本节全部完整 suite 检查。此过程不 checkout／合并 D，不访问被拒旧路径，不修改真实源码或 index，不重做实现，不手工修改 `.git`、权限或调查本机；仅使用当前获准仓库可读对象，不改变访问权限。只读验收通过后，直接记录原 D 实际 commit／tree 的完整结果，不为文档更新制造新 merge 提交，已有 review／focused 不能代替全套。若出现需要产品修改的真实失败，仍须有效独立编码 worktree；无法取得时明确阻塞该修正，禁止在 integration 写产品。本次执行条款更新不要求其他 owner 重跑已在同一 head 通过的完整 suite。
 
 精确 archive 不叠加未提交文件，使用 Python `-I -B` 并显式加入可信 snapshot root；记录 commit、tree、解释器、Git 版本和全部受控路径 mode／blob／bytes／SHA-256。测试前后清单相同，discovery 包含新测试，无 failure／error，十个既有 skips 保持。最终文件数和测试数按实际记录，不固定为基线 145／1503。任何受控修改均需重新提交并验证新的 exact tree，Debian 记录不冒充实际 Ubuntu。
 
@@ -184,7 +187,7 @@ fixture 覆盖 BOM／CRLF、ordinary 字段引用及 native 两种 header／三�
 
 核对实际 Ubuntu Actions 对事件 SHA 的 `test` 和依赖它的 `update` 终态，记录 run／attempt／job／SHA 与 published／unchanged 结果。`superseded` 需要继续核对替代 SHA。读取实际远端提交的 42 产物及 README，检查 R11 的格式约束、static 保持和限定发布路径；远端实时上游变化与本地固定输入差异分开解释。
 
-仅清理本次已合并、clean、无未合并提交且已无用途的 worktree 和本地分支，先退出任务 worktree 返回原目录。保留用户 `.claude/`、历史 worktree、其他任务分支及所有未保存内容；非阻塞清理失败逐路径记录。
+记录本次已创建的实现 worktree／分支及尝试创建的 recovery 路径，不把创建失败记为已创建；仅清理可核实存在、已合并、clean、无未合并提交且已无用途的项目，先退出任务 worktree 返回原目录。保留用户 `.claude/`、历史 worktree、其他任务分支及所有未保存内容；不为清理访问被拒旧路径或绕过隔离，不能核实的项目保留，非阻塞清理失败逐路径记录。
 
 ### R13. 普通 quoted process 字段后的尾注释
 
