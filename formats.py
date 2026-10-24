@@ -90,8 +90,10 @@ def _domain_value(kind: str, value: str, source: str, supported: set[str]) -> tu
     elif supported is MIHOMO_TYPES and source == "surge":
         if kind == "DOMAIN-KEYWORD":
             # Surge 忽略 hostname 末尾根点；keyword 的末尾点必须位于 hostname 内部。
-            return "DOMAIN-REGEX", re.escape(value.lower()) + (r"(?=.)" if value.endswith(".") else "")
-        value = value.lower().removesuffix(".")
+            return "DOMAIN-REGEX", re.escape(_go_lower(value)) + (r"(?=.)" if value.endswith(".") else "")
+        if '[' in value and _wildcard_regex(value.lower().removesuffix('.')) is None:
+            return "DOMAIN-REGEX", None
+        value = _go_lower(value).removesuffix(".")
         pattern = _wildcard_regex(value)
         # 最后必要的点或 ? 不能依靠 hostname 根点满足。
         boundary = r"(?<!\.)" if value.rstrip("*").endswith((".", "?")) else ""

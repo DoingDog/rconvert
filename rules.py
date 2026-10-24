@@ -2213,7 +2213,8 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
         group = (rule.allow, rule.options, rule.literal_process, rule.native_fields, rule.domain_source)
         value = (_domain_comparison_value(rule.kind, rule.value, rule.domain_source)
                  if rule.kind in {'DOMAIN', 'DOMAIN-SUFFIX', 'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} else rule.value)
-        if rule.kind == 'DOMAIN-KEYWORD' and rule.domain_source != 'mihomo' and not rule.value.isascii():
+        if (rule.kind in {'DOMAIN-KEYWORD', 'DOMAIN-WILDCARD'} and
+                rule.domain_source != 'mihomo' and not rule.value.isascii()):
             value = rule.value
         unique.setdefault((rule.kind, value, group), rule)
         if rule.kind == 'DOMAIN-SUFFIX':
