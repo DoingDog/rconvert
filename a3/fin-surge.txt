@@ -1,4 +1,4 @@
-# a3 rules: 314
+# a3 rules: 315
 DOMAIN-KEYWORD,a8cv.
 DOMAIN-KEYWORD,admob
 DOMAIN-KEYWORD,adsby
@@ -225,6 +225,7 @@ DOMAIN-WILDCARD,ads-*.tiktok.com
 DOMAIN-WILDCARD,ads-*.xhscdn.com
 DOMAIN-WILDCARD,beacons*.gvt?.com
 DOMAIN-WILDCARD,v*.thenewstack.io
+DOMAIN-WILDCARD,pixel*.adswizz.com
 DOMAIN-WILDCARD,f-log*.grammarly.io
 DOMAIN-WILDCARD,tracking.*.miui.com
 DOMAIN-WILDCARD,*-pcdn-*.biliapi.net

@@ -1,4 +1,4 @@
-# big-data rules: 10570
+# big-data rules: 10575
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -8428,13 +8428,17 @@ HOST-WILDCARD,youtube.*.*,LIST
 HOST-WILDCARD,youtubego.*,LIST
 HOST-WILDCARD,*.fsvod?.com,LIST
 HOST-WILDCARD,youtube.co.*,LIST
+HOST-WILDCARD,img-*.now.com,LIST
 HOST-WILDCARD,youtube.com.*,LIST
 HOST-WILDCARD,cdn*.pigav.com,LIST
+HOST-WILDCARD,i?.nhentai.net,LIST
 HOST-WILDCARD,s3-*.figma.com,LIST
 HOST-WILDCARD,sdk.*.braze.eu,LIST
+HOST-WILDCARD,t?.nhentai.net,LIST
 HOST-WILDCARD,youtubego.co.*,LIST
 HOST-WILDCARD,*.skyearth?.xyz,LIST
 HOST-WILDCARD,cdn*.porn87.com,LIST
+HOST-WILDCARD,cdn.*.dmm.co.jp,LIST
 HOST-WILDCARD,chunk-*.mux.com,LIST
 HOST-WILDCARD,img?.porngo.com,LIST
 HOST-WILDCARD,rr?---??.ouo.si,LIST
@@ -8474,6 +8478,7 @@ HOST-WILDCARD,uploads-*.insided.com,LIST
 HOST-WILDCARD,image*.cloudokyo.cloud,LIST
 HOST-WILDCARD,ocsp.*.amazontrust.com,LIST
 HOST-WILDCARD,video*.cloudokyo.cloud,LIST
+HOST-WILDCARD,proxy-*.dailymotion.com,LIST
 HOST-WILDCARD,*-intake-*-datadoghq.com,LIST
 HOST-WILDCARD,*-intake.*.datadoghq.com,LIST
 HOST-WILDCARD,cdn-msp?.jmcomic-zzz.one,LIST

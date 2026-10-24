@@ -1,4 +1,4 @@
-# big-data rules: 10536
+# big-data rules: 10541
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -4788,6 +4788,8 @@ payload:
   - "DOMAIN-REGEX,^.*\\.fsvod.\\.com\\.?$"
   - "DOMAIN-REGEX,cdn\\.adultempire\\.com"
   - "DOMAIN-REGEX,dualstack\\.apiproxy\\-"
+  - "DOMAIN-REGEX,^i.\\.nhentai\\.net\\.?$"
+  - "DOMAIN-REGEX,^t.\\.nhentai\\.net\\.?$"
   - "DOMAIN-REGEX,discovery\\.uplynk\\.com"
   - "DOMAIN-REGEX,static\\.grammarly\\.com"
   - "DOMAIN-REGEX,\\-assets\\.dmm\\.co\\.jp"
@@ -4805,6 +4807,7 @@ payload:
   - "DOMAIN-REGEX,^.*\\.skyearth.\\.xyz\\.?$"
   - "DOMAIN-REGEX,^cdn.*\\.porn87\\.com\\.?$"
   - "DOMAIN-REGEX,^img..\\.porngo\\.com\\.?$"
+  - "DOMAIN-REGEX,^img\\-.*\\.now\\.com\\.?$"
   - "DOMAIN-REGEX,^s...\\.pornone\\.com\\.?$"
   - "DOMAIN-REGEX,^s.\\.maxstream\\.org\\.?$"
   - "DOMAIN-REGEX,scripts\\.trustpilot\\.com"
@@ -4827,6 +4830,7 @@ payload:
   - "DOMAIN-REGEX,^th\\-.*\\.pornone\\.com\\.?$"
   - "DOMAIN-REGEX,hamivideo\\.cdn\\.hinet\\.net"
   - "DOMAIN-REGEX,^assets\\..*\\.imaga\\.co\\.?$"
+  - "DOMAIN-REGEX,^cdn\\..*\\.dmm\\.co\\.jp\\.?$"
   - "DOMAIN-REGEX,^stream..\\.kissjav\\.com\\.?$"
   - "DOMAIN-REGEX,^.*\\.kuaikan\\-cdn.\\.com\\.?$"
   - "DOMAIN-REGEX,^cdn\\-msp.\\.jmcomic\\.me\\.?$"
@@ -4848,6 +4852,7 @@ payload:
   - "DOMAIN-REGEX,^uploads\\-.*\\.insided\\.com\\.?$"
   - "DOMAIN-REGEX,^ocsp\\..*\\.amazontrust\\.com\\.?$"
   - "DOMAIN-REGEX,^.*\\.img\\..*\\.sendibm.\\.com\\.?$"
+  - "DOMAIN-REGEX,^proxy\\-.*\\.dailymotion\\.com\\.?$"
   - "DOMAIN-REGEX,^video\\-thumbnail2\\.fc2\\.com\\.?$"
   - "DOMAIN-REGEX,^video.\\-thumbnail.\\.fc2\\.com\\.?$"
   - "DOMAIN-REGEX,^cdn\\-msp.\\.jmcomic\\-zzz\\.one\\.?$"

@@ -1,4 +1,4 @@
-# big-data rules: 2227
+# big-data rules: 2232
 DOMAIN-KEYWORD,1drv
 DOMAIN-KEYWORD,emby.
 DOMAIN-KEYWORD,nivod
@@ -66,13 +66,17 @@ DOMAIN-WILDCARD,youtube.*.*
 DOMAIN-WILDCARD,youtubego.*
 DOMAIN-WILDCARD,*.fsvod?.com
 DOMAIN-WILDCARD,youtube.co.*
+DOMAIN-WILDCARD,img-*.now.com
 DOMAIN-WILDCARD,youtube.com.*
 DOMAIN-WILDCARD,cdn*.pigav.com
+DOMAIN-WILDCARD,i?.nhentai.net
 DOMAIN-WILDCARD,s3-*.figma.com
 DOMAIN-WILDCARD,sdk.*.braze.eu
+DOMAIN-WILDCARD,t?.nhentai.net
 DOMAIN-WILDCARD,youtubego.co.*
 DOMAIN-WILDCARD,*.skyearth?.xyz
 DOMAIN-WILDCARD,cdn*.porn87.com
+DOMAIN-WILDCARD,cdn.*.dmm.co.jp
 DOMAIN-WILDCARD,chunk-*.mux.com
 DOMAIN-WILDCARD,img?.porngo.com
 DOMAIN-WILDCARD,rr?---??.ouo.si
@@ -112,6 +116,7 @@ DOMAIN-WILDCARD,uploads-*.insided.com
 DOMAIN-WILDCARD,image*.cloudokyo.cloud
 DOMAIN-WILDCARD,ocsp.*.amazontrust.com
 DOMAIN-WILDCARD,video*.cloudokyo.cloud
+DOMAIN-WILDCARD,proxy-*.dailymotion.com
 DOMAIN-WILDCARD,*-intake-*-datadoghq.com
 DOMAIN-WILDCARD,*-intake.*.datadoghq.com
 DOMAIN-WILDCARD,cdn-msp?.jmcomic-zzz.one
