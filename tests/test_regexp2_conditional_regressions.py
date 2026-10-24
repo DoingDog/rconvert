@@ -16,6 +16,9 @@ from rules import Rule, exclude_covered, normalize, parse, parse_whitelist
 
 
 KINDS = ('DOMAIN-REGEX', 'PROCESS-NAME-REGEX', 'PROCESS-PATH-REGEX')
+NESTED_CASES = (('^(?(?(?=ads)ads|other)ads|other)$', True),
+                ('^(?(?(1)ads|(?i)other)ads|other)(a)$', True),
+                ('^(?(?(?=ads)ads|other)(?i)ads|other)$', False))
 R3_CASES = (('^(?(?:ads)ads|other)$', True),
             ('^(?(?>ads)ads|other)$', True),
             ('^(?(?:a|b|c)ads|other)$', True),
@@ -121,6 +124,32 @@ def check_generated_regex(testcase, valid, invalid):
 
 
 class Regexp2ConditionalTests(unittest.TestCase):
+    def test_nested_expression_conditional_consumes_its_own_condition_header(self):
+        value = '^(?(?(?=ads)ads|other)ads|other)$'
+        self.assertEqual(parse('DOMAIN-REGEX,' + value, purpose='block'),
+                         ([Rule('DOMAIN-REGEX', value)], []))
+
+    def test_nested_condition_types_keep_options_and_outer_branch_limits(self):
+        valid = ('^(?(?(?=ads)ads|other)ads|other)$', '^(?(?(?!ads)ads|other)ads|other)$',
+                 '^(?(?(?<=ads)ads|other)ads|other)$', '^(?(?(?<!ads)ads|other)ads|other)$',
+                 '^(?(?(?:ads)ads|other)ads|other)$', '^(?(?(?>ads)ads|other)ads|other)$',
+                 '^(?(?(1)ads|(?i)other)ads|other)(a)$',
+                 '^(?(?(later)ads|(?i)other)ads|other)(?<later>a)$',
+                 '^(?(?(?=ads)ads|other)(?:(?i)ads)|other)$',
+                 '^(?(?(?=ads)ads|other)(?(1)(?i)ads|other)|other)(a)$')
+        invalid = ('^(?(?(?=ads)ads|other)(?i)ads|other)$',
+                   '^(?(?(?=ads)(?i)ads|other)ads|other)$',
+                   '^(?(?(1)ads|(?i)other)(?i)ads|other)(a)$',
+                   '^(?(?(later)ads|(?i)other)ads|(?i)other)(?<later>a)$',
+                   '^(?(?(?=ads)ads|other)ads|other|third)$',
+                   '^(?(?(?=ads)ads|other|third)ads|other)$',
+                   '^(?(?(?=ads)ads|other)+ads|other)$')
+        self._check_scalar_forms(tuple((value, True) for value in valid) + tuple((value, False) for value in invalid))
+        self._check_logical(((valid[0], True), (invalid[0], False), (valid[6], True)))
+
+    def test_nested_condition_source_white_and_disk_bytes(self):
+        check_generated_regex(self, NESTED_CASES[0][0], NESTED_CASES[2][0])
+
     def test_noncapture_expression_condition_preserves_matcher(self):
         value = '^(?(?:ads)ads|other)$'
         self.assertEqual(parse('DOMAIN-REGEX,' + value, purpose='block'),
@@ -305,14 +334,14 @@ class Regexp2ConditionalTests(unittest.TestCase):
         script = r'''
 import sys
 sys.path.insert(0, sys.argv[1])
-from tests.test_regexp2_conditional_regressions import Regexp2ConditionalTests, R2_CASES, R3_CASES
+from tests.test_regexp2_conditional_regressions import Regexp2ConditionalTests, R2_CASES, R3_CASES, NESTED_CASES
 from formats import render
 from rules import Rule, parse
 assert sys.getrecursionlimit() == 1000
 case = Regexp2ConditionalTests()
 depth = int(sys.argv[2])
-case._check_scalar_forms(R2_CASES + R3_CASES[:2] + R3_CASES[4:], depth)
-for atom, accepted in R3_CASES[:2] + R2_CASES[:1]:
+case._check_scalar_forms(R2_CASES + R3_CASES[:2] + R3_CASES[4:] + NESTED_CASES, depth)
+for atom, accepted in R3_CASES[:2] + R2_CASES[:1] + NESTED_CASES:
     value = '(?:' * depth + atom + ')' * depth
     expression = f'((DOMAIN-REGEX,{value}),(IP-CIDR,203.0.113.0/24,no-resolve))'
     source = 'AND,' + expression

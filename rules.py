@@ -957,6 +957,7 @@ def _valid_regex(kind: str, value: str) -> bool:
             quantifier_probe = len(probe)
         if not in_class and char == "(":
             if value.startswith(('(?(?=', '(?(?!', '(?(?<=', '(?(?<!'), index):
+                conditional_head = False
                 extended_stack.append((extended, explicit_capture))
                 conditionals.append([len(extended_stack), 0, True, True])
                 probe.append('(?:')
@@ -970,6 +971,7 @@ def _valid_regex(kind: str, value: str) -> bool:
                 conditionals.append([len(extended_stack), 0, False, False])
                 probe.append('(?:')
                 if key and value[end:end + 1] == ')' and (numeric or key in names):
+                    conditional_head = False
                     # 仅完整捕获集合中的名称构成 reference condition。
                     references.append((key, numeric, 'condition', None))
                     index = end + 1
@@ -1050,7 +1052,7 @@ def _valid_regex(kind: str, value: str) -> bool:
             if conditionals:
                 if len(extended_stack) < conditionals[-1][0]:
                     conditionals.pop()
-                elif len(extended_stack) == conditionals[-1][0] and conditionals[-1][2]:
+                if conditionals and len(extended_stack) == conditionals[-1][0] and conditionals[-1][2]:
                     # regexp2 的条件表达式结束后没有量词对象；comment 和 x-mode 空白保持此边界。
                     missing_operand = True
                     conditionals[-1][2] = False
