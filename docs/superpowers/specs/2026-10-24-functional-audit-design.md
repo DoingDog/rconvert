@@ -16,7 +16,7 @@ R1-R8、R13-R18 均已完成公开接口复现与独立复核；R8 的 equal-key
 | --- | --- | --- |
 | A：R1、R8、R14、R17、R18 | `rules.py` 的已分配归约／覆盖和 `_surge_keyword_source_supported`；`formats._domain_value` 的 ordinary Unicode lowercase／native Surge 能力；复用共享 Go15 helper／case-variant 定义并同步 caller | `tests/test_wildcard_suffix_normalization_regressions.py`、`tests/test_qx_unicode_comparison_regressions.py`、`tests/test_native_wildcard_width_regressions.py`、`tests/test_surge_unicode_projection_regressions.py`、`tests/test_native_unicode_capability_regressions.py`；旧测试仅限下表 |
 | B：R2、R3、R4 | `rules.py` 的 `_valid_regex` conditional 与 class 状态／probe，确需时同一 owner 修改捕获预扫描或 deep 校验 | `tests/test_regexp2_conditional_regressions.py`、`tests/test_regexp2_completed_range_regressions.py` |
-| C：R5、R6、R7 | `rules.py` 的 `_valid_simple` SUBNET 分支、`_logical_children` native 分支、`parse` 解码后 native `@@` 判定 | `tests/test_subnet_legacy_regressions.py`、`tests/test_native_not_space_regressions.py`、`tests/test_native_allow_regressions.py` |
+| C：R5、R6、R7 | `rules.py` 的 `_valid_simple` SUBNET 分支、`_logical_children` native 分支、`parse` 解码后 native `@@` 判定；`formats._logical_value` 的 native NOT Surge 包装空白定向 hunk | `tests/test_subnet_legacy_regressions.py`、`tests/test_native_not_space_regressions.py`、`tests/test_native_allow_regressions.py` |
 | D：R13 | `rules.py` 的 `_source_parts` 普通 process 分支，复用 `_literal_fields` | `tests/test_process_comment_regressions.py` |
 | E：R15 | `rules.py` 的 hosts 注释后裁剪及 `host_parts` 分隔，复用既有 hostname validator | `tests/test_hosts_whitespace_regressions.py` |
 | F：R16 | `generate.py` 的 `_HttpsOnlyRedirect`／`fetch_https` informational response 处理，复用标准库 HTTPResponse | `tests/test_informational_response_regressions.py` |
@@ -109,10 +109,11 @@ native `NOT,( (DOMAIN,a.test) )` 必须接受，并规范化为保留 child list
 
 固定 [Mihomo logic.go 的 NewNOT](https://github.com/MetaCubeX/mihomo/blob/3f27ef39f8c96bbfbc8b0b9bb10f5c9ef60149d8/rules/logic/logic.go#L37-L65)要求恰好一个 child；[范围扫描与解析](https://github.com/MetaCubeX/mihomo/blob/3f27ef39f8c96bbfbc8b0b9bb10f5c9ef60149d8/rules/logic/logic.go#L88-L172)不要求外层与 child 的左右括号相邻。
 
-- 只修改 native 分支。普通 NOT 的单层兼容、普通 AND／OR 的最小 arity、普通空白行为保持。
+- `_logical_children` 只修改 native 分支。普通 NOT 的单层兼容、普通 AND／OR 的最小 arity、普通空白行为保持。
 - native `NOT,(DOMAIN,a.test)`、空 child、多个 child、额外包装、非法尾字段及无效叶子继续拒绝。native AND／OR 的既有空／单 child 语义保持。
 - 保持字面括号平衡、native ASCII trim、regex 内部括号、ignored tail、方向和 no_resolve 语义；HTAB／非 ASCII 空白不按 ASCII space 擅自扩展。
 - `_normalize_condition`、`_condition_kinds` 和 `formats._logical_value` 通过共享 helper 一致处理；嵌套、600／1000 层、三 purpose 与三 no_resolve 模式均完整保留或按目标整条跳过。
+- 直接合法 native Rule 的 Surge NOT 投影复用现有 child ranges／edits，删除外层 list 与唯一 child 之间的 ASCII space；例如 `Rule('NOT', '( (NETWORK,tcp) )', native_fields=True)` 在 `keep` 模式的 full／non-DOMAIN-SET split 必须输出 `NOT,((PROTOCOL,TCP))` 并可由普通 parse 回读。Mihomo YAML `keep` 保留原包装空白；ordinary 分支、AND／OR 和其他 arity 保持。该定向 hunk 由 C 修改，与 A 的 `formats._domain_value` 不重叠，不新增 parser 或重构整个函数。
 
 完成条件：public parse 和直接合法 native logical Rule 的 render 均保留必要包装，实际 YAML source 及非空磁盘依赖可回读，ordinary 行为和非法 native arity 不回归。
 
@@ -166,7 +167,9 @@ fixture 覆盖 BOM／CRLF、ordinary 字段引用及 native 两种 header／三�
 
 每个 owner 在各自获准的独立 worktree 连续完成实现、相关回归、规格／功能／简化审查、修正、复审和英文提交，再以最终提交 head 的完整 Git archive 在 Debian 原生 `/tmp` 运行完整 suite 后交付。失败仍由同一 unit 处理，不能把未完成步骤转交主会话；涉及产品修改时，owner 必须在有效独立编码 worktree 完成修正、重新提交和重验。主会话仅合并无所有权冲突的已完成提交，集成树另行完整验收。
 
-D 已在独立 worktree 完成编码、提交及独立 review，仅欠完整 suite；原路径访问和新 harness isolation 均因 protected checkout 的 Git identity 无法核实而失败。保留原 worktree 和提交，不再创建或切换 worktree，由专门 workflow 的同 D-unit 只读验收者在当前获准 integration 仓库读取共享 Git 对象，将原实现完整提交 `5a25411fab3084c57a3f43affcab126ded477bbe` 的完整 Git archive 提取至新的可信 Debian `/tmp` 目录，完成本节全部完整 suite 检查。此过程不 checkout／合并 D，不访问被拒旧路径，不修改真实源码或 index，不重做实现，不手工修改 `.git`、权限或调查本机；仅使用当前获准仓库可读对象，不改变访问权限。只读验收通过后，直接记录原 D 实际 commit／tree 的完整结果，不为文档更新制造新 merge 提交，已有 review／focused 不能代替全套。若出现需要产品修改的真实失败，仍须有效独立编码 worktree；无法取得时明确阻塞该修正，禁止在 integration 写产品。本次执行条款更新不要求其他 owner 重跑已在同一 head 通过的完整 suite。
+D 已在独立 worktree 完成编码、提交及独立 review；同 D-unit 随后从当前获准仓库只读导出原完整提交 `5a25411fab3084c57a3f43affcab126ded477bbe`、tree `5a4b68b13983050e400ea42e5072793205f4026a`，在 Debian 原生 `/tmp` 完成本节验收：1513 tests、0 failures、0 errors、10 个原 skips，148 个受控路径前后清单相同，source／index 保持，临时 snapshot 已清理。证据为 `.tmp/u13-exact-acceptance-20261024-8d6383b2`。该历史验收未 checkout／合并 D、未写真实源码或 index，R13 及 D 的 R10 已完成；最终集成、固定输入和 Ubuntu 验收分别执行，不重跑 D 已通过的同一 head。
+
+C 的 U6 接续修正使用当前已有效、从 main 分离的独立 worktree `audit-20261024-5bebe430-integration`，由同 C-unit worker 独占专用分支 `audit-20261024-5bebe430-C-current-review`。从 clean 文档 head `7fe72596e88b96ff844dc0e3228ec988d6427143` 建立该分支并正常合并原 C 完整 head `62757b30c109287bc8301500ddb7a63b1ece6a96`，保留最新文档及三个原实现提交；原 integration 分支保持原 tip。该 worker 连续完成文档提交、公开 red／green、编码、相关测试、规格／功能／简化审查、修正复审、英文提交及最终 actual HEAD 的本节完整 suite。交付前主会话不写该 checkout 或 index，不访问被拒旧路径、不另建 worktree、不修改 `.git`、权限或本机；完成后主会话切回原 integration 分支正常合并已验收结果。D 的历史只读方式不限制当前有效独立 worktree 的上述独占编码。新失败仍由原 unit 在有效独立 worktree 完成修正和新 head 重验，禁止在 main 编码或由主会话接收未完成步骤。
 
 精确 archive 不叠加未提交文件，使用 Python `-I -B` 并显式加入可信 snapshot root；记录 commit、tree、解释器、Git 版本和全部受控路径 mode／blob／bytes／SHA-256。测试前后清单相同，discovery 包含新测试，无 failure／error，十个既有 skips 保持。最终文件数和测试数按实际记录，不固定为基线 145／1503。任何受控修改均需重新提交并验证新的 exact tree，Debian 记录不冒充实际 Ubuntu。
 

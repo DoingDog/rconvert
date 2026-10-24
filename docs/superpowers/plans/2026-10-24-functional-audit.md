@@ -71,8 +71,8 @@ Product Contract 由独立规格承载。这里的引用保留全部行为边界
 
 - KTD1. **六组按共享状态分配所有权。**A 连续负责 comparison／dedup／native byte／ordinary Unicode 投影／native Surge 能力，B 负责 regex scanner，C 负责 SUBNET／native，D 只改 process comment，E 只改 hosts，F 只改 generate HTTP 传输。共享 scanner 由 B 顺序实现，A 迁移 Go15 helper 时同步原 caller；各生产 hunk／新测试独立，E 与 C 的 parse 分支保持分开。
 - KTD2. **同一 owner 按行为完成 vertical TDD。**每个 slice 从一个公开失败用例开始，只修共享根因使该例 green，再逐例加入相邻边界及真实 bytes 联动；完成规格／功能／简化审查、修正、复审和英文提交后才进入下一 slice。R2/R3 是同一 conditional 状态 slice，R4 另行提交。
-- KTD3. **各 owner 完成最终提交 head 的全套后交付。**A、B、C、D、E、F 在各自最终 head 满足规格 R10，返回 clean commit／tree、red／green、相关回归、审查和完整 suite 证据。未发生隔离恢复失败的 owner 继续原 worktree；D 已完成独立 worktree 编码／提交／独立 review，剩余完整 suite 由专门 workflow 的同 D-unit 只读验收者从当前获准 integration 的可读 Git 对象导出原 D 精确提交，在新可信 Debian `/tmp` 完成本节及 R10 全部检查，不创建／切换 worktree、不 checkout／合并 D、不修改真实源码或 index。通过后记录原 D 实际 commit／tree 的全套收据；新真实失败需要写产品时仍须有效独立编码 worktree，无法取得则明确阻塞该修正，不在 integration 写产品。主会话不接收待验收半成品，已有 focused 不代替全套，其他 owner 已在同一 head 通过的全套不因本次执行条款更新重跑。
-- KTD4. **共享修正保留既有目标能力。**R2-R4 只修来源 validator 和验证 probe，保持 DNS 独立证书及 URL-REGEX；R5 不新增目标支持；R6 仅 native 分支；R7 只拒解码后的 native `@@`；R8 连续完成 QX 跨值保护及非 native keyword equality／索引／contains 输出能力，保留 native 原安全归约；R13 只修 quoted process；R14 仅 native wildcard 两侧 byte 比较复用完整 Go15 lower；R15 仅 hosts ASCII trim／split；R16 复用 HTTPResponse.begin；R17 只修两种普通 Unicode 投影和 wildcard 原文 identity，R18 复用同一 case-variant 定义收紧 native Surge 能力。复用现有 caller 和字段读取，不增加 wrapper 或依赖。
+- KTD3. **各 owner 完成最终提交 head 的全套后交付。**A、B、C、D、E、F 在各自最终 head 满足规格 R10，返回 clean commit／tree、red／green、相关回归、审查和完整 suite 证据。D 已完成原提交 `5a25411fab3084c57a3f43affcab126ded477bbe` 的独立 review 及只读 exact-archive 全套验收，收据见 U9，不重复执行。C 的 U6 接续由同 unit worker 在当前有效独立 worktree `audit-20261024-5bebe430-integration` 的专用 `audit-20261024-5bebe430-C-current-review` 分支独占完成编码、测试、审查、修正复审、提交和最终 actual HEAD 全套；原 integration 分支保持原 tip，主会话交付后切回该分支正常合并。其他 owner 继续各自获准 worktree；新失败仍由原 unit 在有效独立编码 worktree 完成，不在 main 编码。D 历史只读验收不限制当前有效独立 worktree 的独占编码；主会话不接收待验收半成品，已有 focused 不代替全套，同一 head 已通过的全套不因执行条款更新重跑。
+- KTD4. **共享修正保留既有目标能力。**R2-R4 只修来源 validator 和验证 probe，保持 DNS 独立证书及 URL-REGEX；R5 不新增目标支持；R6 仅 native 结构分支及 native NOT Surge 包装空白投影；R7 只拒解码后的 native `@@`；R8 连续完成 QX 跨值保护及非 native keyword equality／索引／contains 输出能力，保留 native 原安全归约；R13 只修 quoted process；R14 仅 native wildcard 两侧 byte 比较复用完整 Go15 lower；R15 仅 hosts ASCII trim／split；R16 复用 HTTPResponse.begin；R17 只修两种普通 Unicode 投影和 wildcard 原文 identity，R18 复用同一 case-variant 定义收紧 native Surge 能力。复用现有 caller 和字段读取，不增加 wrapper 或依赖。
 - KTD5. **输入身份与执行身份分开记录。**只读固定 manifest／body，baseline 与最终代码运行在各自可信 archive；下载数据和执行脚本分开，不从下载目录运行解释器。旧抓取 commit／hash 不改写为最终代码 SHA。
 - KTD6. **受控树确定后才做最终验收。**正常合并全部已完成分支和必要文档修正，形成唯一 commit／tree，再执行 R10、R11。测试后发生任何受控修改，重新提交并验证新树；组件和 baseline 日志不能替代最终结果。
 - KTD7. **本地固定输入与远端实时更新分别验收。**固定输入验证代码差异和两轮稳定性，Ubuntu 按实际事件 SHA 与当次来源更新；分别保存结果，不把不同输入的数量差异归因于代码。
@@ -83,7 +83,7 @@ Product Contract 由独立规格承载。这里的引用保留全部行为边界
 | --- | --- | --- | --- |
 | A | 已分配 normalize／comparison／native byte；`formats._domain_value` 普通 lower／native 能力、`_surge_keyword_source_supported`；共享 Go15 helper／case-variant caller | 五份新测试：wildcard suffix、QX comparison、native width、Surge Unicode projection、native Unicode capability；旧期望见规格表及 U8／U18 | source white 不变、全部 helper caller、native 原比较、旧 class／root、target capability、真实 bytes |
 | B | `_valid_regex` conditional、class 与 probe；确需时同一 owner 修改 `_regexp2_capture_slots`／`_valid_deep_regex` | 新增 `tests/test_regexp2_conditional_regressions.py`、`tests/test_regexp2_completed_range_regressions.py` | scalar parse、logical normalize／no_resolve、DOMAIN-REGEX white、`formats._dns_regex`、deep；不改 DNS 投影算法 |
-| C | `_valid_simple` SUBNET、`_logical_children` native 分支、`parse` native `@@` | 新增 `tests/test_subnet_legacy_regressions.py`、`tests/test_native_not_space_regressions.py`、`tests/test_native_allow_regressions.py` | scalar／logical／kind traversal、native 字段与标量解码、allow／white、mixed shortcut、生成冻结与旧产物 |
+| C | `_valid_simple` SUBNET、`_logical_children` native 分支、`parse` native `@@`；`formats._logical_value` native NOT Surge 包装空白定向 hunk | 新增 `tests/test_subnet_legacy_regressions.py`、`tests/test_native_not_space_regressions.py`、`tests/test_native_allow_regressions.py` | scalar／logical／kind traversal、native 字段与标量解码、allow／white、mixed shortcut、生成冻结与旧产物 |
 | D | `_source_parts` 的普通 process 分支，复用 `_literal_fields` | 新增 `tests/test_process_comment_regressions.py` | `_source_records`／`_without_comment`、parse、生成依赖、process 不新增 white 支持、裸 marker／policy／logical／native 保持 |
 | E | `_source_records` 的 hosts 裁剪与 parse 的 `host_parts` | 新增 `tests/test_hosts_whitespace_regressions.py` | ordinary／native mixed hosts、parse／white、四地址／物理行、逐 alias 恢复、真实 source／white 依赖 |
 | F | `generate.py` 的 `_HttpsOnlyRedirect`／`fetch_https` informational response | 新增 `tests/test_informational_response_regressions.py` | 默认 HTTPErrorProcessor 前读取最终响应、source／white cache、redirect、编码／截断／关闭及原发布保护 |
@@ -161,7 +161,7 @@ R1-R8、R13-R18 及 DNS 输出完整性补充均有完成的独立终报，既�
 | U3 | conditional 层级与 header | `rules.py`、conditional 新测试 | U1 |
 | U4 | completed range 状态 | `rules.py`、completed-range 新测试 | U3 |
 | U5 | legacy SUBNET | `rules.py`、SUBNET 新测试 | U1 |
-| U6 | native NOT 包装 | `rules.py`、NOT 新测试 | U5 |
+| U6 | native NOT 包装 | `rules.py`、`formats._logical_value` 定向 hunk、NOT 新测试 | U5 |
 | U7 | native `@@` 拒绝 | `rules.py`、native-allow 新测试 | U6 |
 | U8 | Unicode comparison 与 keyword 输出能力 | `rules.py`、QX comparison 新测试、指定 QX 旧期望 | U2 |
 | U9 | 已完成提交集成 | 六组提交与必要文档 | A、B、C、D、E、F 最终交付及覆盖收据核对 |
@@ -252,15 +252,15 @@ R1-R8、R13-R18 及 DNS 输出完整性补充均有完成的独立终报，既�
 
 ### U6. C：native NOT 的结构包装
 
-**要求：**R6、R9、R10。**依赖：**U5。**文件：**`rules.py` 的 `_logical_children` native 分支，新增 `tests/test_native_not_space_regressions.py`。
+**要求：**R6、R9、R10。**依赖：**U5。**文件：**`rules.py` 的 `_logical_children` native 分支、`formats._logical_value` 的 native NOT Surge 包装空白定向 hunk，新增 `tests/test_native_not_space_regressions.py`。
 
-**方法：**以 `NOT,( (DOMAIN,a.test) )` 的 public parse／render 建立 red，按完整外层与单个 child 的实际范围判断，并将 native child-list 的 wrapped 状态保持到重建结果。ordinary 分支不修改。
+**方法：**以 `NOT,( (DOMAIN,a.test) )` 的 public parse／render 建立 red，按完整外层与单个 child 的实际范围判断，并将 native child-list 的 wrapped 状态保持到重建结果。直接 native `Rule('NOT', '( (NETWORK,tcp) )', native_fields=True)` 的 `keep` 模式 Surge full／split 回读另建立公开 red；最小修正只在 `formats._logical_value` 的 native NOT Surge 投影，复用现有 child ranges／edits 删除外层 list 与唯一 child 之间的 ASCII space，得到 `NOT,((PROTOCOL,TCP))`。Mihomo YAML `keep` 保留原空白，ordinary 分支和其他 operator／arity 不修改；不手写 parser 或重构全函数。该 hunk 属于 C，与 A 的 `_domain_value` 不重叠。
 
 **测试情景：**
 
 - 两侧／单侧／多个 ASCII space、native 两种 header／三种标量、嵌套 AND／OR／NOT 均得到完整 `NOT,((DOMAIN,a.test))`。
 - native 缺少 wrapper、空／多个 child、额外包装、非法尾字段及非法叶子拒绝，ordinary 单层 NOT 与 AND／OR arity 保持。
-- `_condition_kinds` 和直接合法 native Rule 的 render 与 parse 一致；平衡 literal process 括号、regex 内部括号、ignored tail、目的／来源 IP、no_resolve 保持。
+- `_condition_kinds` 和直接合法 native Rule 的 render 与 parse 一致；支持 Surge 的 NETWORK 叶子覆盖双侧／单侧空白、直接／嵌套及三 purpose × 三 mode，精确核对 full／split／YAML 正文和 parse 回读。unsupported 叶子仍整条跳过；平衡 literal process 括号、regex 内部括号、ignored tail、目的／来源 IP、no_resolve 保持。
 - HTAB／NBSP 维持原字段语义，600／1000 层不提高限制；六格式整条输出或 unsupported，健康邻行不掩盖单项可发布性。
 - 临时 YAML 真实 generate／publish、同轮 source 及非空 disk-only 依赖完整回读；不把 NOT 新增为外部 white 类型。
 
@@ -307,12 +307,14 @@ R1-R8、R13-R18 及 DNS 输出完整性补充均有完成的独立终报，既�
 
 **要求：**R9、R10、R12。**依赖：**A／B／C／D／E／F 的最终 clean 交付及覆盖收据核对。**文件：**六组已审查提交、必要 origin／本计划修正。
 
-D 的恢复收据记录：原实现提交 `5a25411fab3084c57a3f43affcab126ded477bbe`，tree `5a4b68b13983050e400ea42e5072793205f4026a`，已在独立 worktree 完成编码／提交，独立 review 已 PASS，仅欠完整 suite。fresh finalize 与恢复原代理均被 harness 固定到 integration；`EnterWorktree` 进入原 D 路径因 protected checkout 的 Git identity 无法核实被拒绝，主会话尝试同一路径也被拒绝。新 harness isolation `w59tqn7g5` 在 agent 启动前以相同原因失败，未执行工具或消耗 agent token，不能称新 recovery worktree 已创建。未手工修改 Git 元数据或权限，原 D 证据已由完成 workflow 和只读收据取得。
+D 的历史恢复收据记录：原实现提交 `5a25411fab3084c57a3f43affcab126ded477bbe`，tree `5a4b68b13983050e400ea42e5072793205f4026a`，已在独立 worktree 完成编码／提交，独立 review PASS。fresh finalize 与恢复原代理曾被 harness 固定到 integration；`EnterWorktree` 进入原 D 路径因 protected checkout 的 Git identity 无法核实被拒绝，主会话尝试同一路径也被拒绝。新 harness isolation `w59tqn7g5` 在 agent 启动前以相同原因失败，未执行工具，不能称新 recovery worktree 已创建；未手工修改 Git 元数据或权限。
 
-不再创建或切换 worktree，不读写被拒旧路径，不调查本机、不将此恢复交给用户。由专门 workflow 的同 D-unit 只读验收者从当前获准 integration 仓库的共享可读 Git 对象导出原 D 完整提交，在新可信 Debian `/tmp` 目录完成精确 archive 的完整 suite。验收不 checkout／合并 D，不修改真实源码或 index、不重做实现、不改变权限；尚须取得该原提交实际全套结果，不为文档更新新增 merge 提交。
+同 D-unit 的只读 exact-archive 验收已完成：从当前获准仓库共享 Git 对象导出上述原 D 提交，在 Debian 原生 `/tmp` 用 Python `-I -B` discovery／执行 1513 tests，0 failures、0 errors，十个既有 skips 的 ID／原因保持；148 个受控路径 mode／blob／bytes／SHA-256 前后相同，source／index 保持，临时 snapshot 已清理。证据目录为 `.tmp/u13-exact-acceptance-20261024-8d6383b2`，完成收据为 `w91w2k2z9.output`。该历史验收未 checkout／合并 D、不读写被拒旧路径、不修改真实源码或 index、不重做实现、不改变权限，R13 及 D 的 R10 已完成，不重跑同一 head。
+
+C 的 U6 接续由同 unit worker 独占当前有效独立 worktree 的 `audit-20261024-5bebe430-C-current-review` 分支，按 KTD3 完成文档、编码、测试、审查、修正复审、提交和最终 actual HEAD 全套。原 integration 分支保留 `7fe72596e88b96ff844dc0e3228ec988d6427143`；worker 完整交付前主会话不写当前受控树／index、不合并，之后切回原 integration 分支正常合并。该有效 worktree 的独占编码不受 D 历史只读验收方式限制，不再访问旧路径或创建新 worktree。
 
 1. 核对六领域覆盖收据、全部确认要求及候选处置；核对各分支起始 base 和后续文档范围、commit／tree、精确 hunk、clean、逐 slice 提交、red／green、审查与 KTD3 完整 suite。D 的只读收据须包含原完整 commit／tree、archive 和可信 snapshot 路径、逐路径 mode／blob／bytes／SHA-256、解释器／Git 版本、完整 discovery 与前后相同清单；保留十个既有 skips、全部 timeout 和资源条件。通过时直接交付原 D 实际提交的全套收据，focused／review 不能替代全套，integration 当前 HEAD 不冒充 D 执行身份。
-2. 收齐完成收据后，在本次已从 baseline 建立的 `audit-20261024-5bebe430-integration` 分支和同名独立 worktree 正常合并文档 base 及全部完成历史，按实际 hunk 处理必要冲突，不整文件选边。新失败仍由原 unit 连续处理；需要产品修改时，owner 必须在有效独立编码 worktree 完成测试、修正、复审、提交与实际最终 head 全套后重新交付，无法取得该 worktree 则明确阻塞该修正，不在 integration 写产品、不将未完成步骤转交主会话。最终集成树仍须独立完成 U10。
+2. 收齐完成收据后，在本次已从 baseline 建立的 `audit-20261024-5bebe430-integration` 分支和同名独立 worktree 正常合并文档 base 及全部完成历史，按实际 hunk 处理必要冲突，不整文件选边。新失败仍由原 unit 连续处理；需要产品修改时，owner 必须在有效独立编码 worktree 完成测试、修正、复审、提交与实际最终 head 全套后重新交付，无法取得该 worktree 则明确阻塞该修正，不在 main 编码、不将未完成步骤转交主会话；C 当前有效 worktree 的专用分支按前述独占条款执行。最终集成树仍须独立完成 U10。
 3. 联合运行所有新增模块与相关 rules／formats、domain／white、regex／DNS、native／routing、YAML／generate、README／CI 测试。重点核对 A 的非 native equality／contains／ordinary wildcard identity、native byte、两种 Unicode 投影／能力与全部 helper caller，B 的 probe／capture，C 的 native／no_resolve，D 的 comment，E 的 ASCII hosts trim／split，F 的 interim／最终响应／关闭／缓存，以及 source＋white 同轮／磁盘链。
 4. 逐项对照最终规格，清除本次未采用实现、重复 helper、未使用内容和无关改动，完成审查、修正复审及英文提交，固定唯一受控 commit／tree。本轮不要求额外 README 功能段落；计数由 U10 的隔离副本和 U11 发布实际计算。
 
