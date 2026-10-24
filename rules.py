@@ -2244,7 +2244,10 @@ def normalize(rules: Iterable[Rule]) -> list[Rule]:
                         any(option not in _QX_INTERFACE_OPTIONS for option in rule.options) or
                         not _valid_domain(kind, projection_value)):
                     continue
-                classes = re.findall(r'\[[a-z0-9-]+\]', projection_value)
+                parts = re.split(r'(\[[a-z0-9-]+\])', projection_value)
+                if any('[' in part or ']' in part for part in parts[::2]):
+                    continue
+                classes = parts[1::2]
                 if any('--' in part for part in classes):
                     continue
                 try:

@@ -46,7 +46,8 @@ class WildcardSuffixNormalizationTests(unittest.TestCase):
                     self.assertEqual(normalize(iter([b, a, b])), [a, b] if source == 'surge' else [a])
                     self.assertEqual(set(normalize(iter([suffix, b]))), {suffix, b})
         for pattern in ('[z-a].example.com', '[a--b].example.com',
-                        '[İ].example.com', '[İ-J].example.com'):
+                        '[İ].example.com', '[İ-J].example.com',
+                        '[ſ].example.com', '[ı].example.com'):
             parsed, messages = parse('DOMAIN-SUFFIX,example.com\nDOMAIN-WILDCARD,' + pattern,
                                      purpose='block')
             self.assertEqual(messages, [])
