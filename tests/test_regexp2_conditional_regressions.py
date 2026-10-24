@@ -333,7 +333,5 @@ assert sys.getrecursionlimit() == 1000
                                         cwd=root, capture_output=True, text=True, timeout=8)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-
     def test_generate_publish_nonempty_source_white_disk_bytes_and_invalid_freeze(self):
         check_generated_regex(self, R2_CASES[4][0], R2_CASES[0][0])
-
