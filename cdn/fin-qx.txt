@@ -1,4 +1,4 @@
-# cdn rules: 4801
+# cdn rules: 4789
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -211,7 +211,6 @@ HOST,cdn2.suno.ai,LIST
 HOST,cdn3.dan.com,LIST
 HOST,cf.mhgui.com,LIST
 HOST,cf.shopee.tw,LIST
-HOST,css.4jpg.top,LIST
 HOST,data.peer.as,LIST
 HOST,david-dm.org,LIST
 HOST,docs.brew.sh,LIST
@@ -416,7 +415,6 @@ HOST,pba.apple.com,LIST
 HOST,phishing.army,LIST
 HOST,pics.vpdmm.cc,LIST
 HOST,pomf2.lain.la,LIST
-HOST,proxy.cors.sh,LIST
 HOST,r2.dejavu.moe,LIST
 HOST,r2cdn.c7d.dev,LIST
 HOST,rdr.windy.com,LIST
@@ -445,7 +443,6 @@ HOST,torrindex.net,LIST
 HOST,uim.9uu22.com,LIST
 HOST,w.chatlio.com,LIST
 HOST,waitlisted.co,LIST
-HOST,www.10086.win,LIST
 HOST,www.acgpix.de,LIST
 HOST,a5.behance.net,LIST
 HOST,ajax.cdnjs.com,LIST
@@ -464,7 +461,6 @@ HOST,bst.icons8.com,LIST
 HOST,c.animaapp.com,LIST
 HOST,c.marsflag.com,LIST
 HOST,c.navattic.com,LIST
-HOST,c1.patreon.com,LIST
 HOST,c4.patreon.com,LIST
 HOST,c5.patreon.com,LIST
 HOST,c6.patreon.com,LIST
@@ -595,7 +591,6 @@ HOST,js.recurly.com,LIST
 HOST,js.rtoaster.jp,LIST
 HOST,layers.mapq.st,LIST
 HOST,lc.nssurge.com,LIST
-HOST,media.evolv.ai,LIST
 HOST,media.masto.nu,LIST
 HOST,media.mstdn.io,LIST
 HOST,media.trakt.tv,LIST
@@ -689,7 +684,6 @@ HOST,assets.time.com,LIST
 HOST,assets.yande.re,LIST
 HOST,assets.zpic.biz,LIST
 HOST,attach.setn.com,LIST
-HOST,avts.wmlabs.net,LIST
 HOST,bucket.noy.asia,LIST
 HOST,bundle.5gtb.com,LIST
 HOST,bundle.9gtb.com,LIST
@@ -967,7 +961,6 @@ HOST,badges.gitter.im,LIST
 HOST,blob.jortage.com,LIST
 HOST,bundlephobia.com,LIST
 HOST,cache.ip-api.com,LIST
-HOST,cache.sgvafs.com,LIST
 HOST,cdn-1.porn87.com,LIST
 HOST,cdn-1.strava.com,LIST
 HOST,cdn-2.porn87.com,LIST
@@ -1011,7 +1004,6 @@ HOST,cdn.playwire.com,LIST
 HOST,cdn.roboflow.com,LIST
 HOST,cdn.roseperl.com,LIST
 HOST,cdn.scaleflex.it,LIST
-HOST,cdn.seedance2.ai,LIST
 HOST,cdn.simplesat.io,LIST
 HOST,cdn.skymavis.com,LIST
 HOST,cdn.substack.com,LIST
@@ -1449,6 +1441,7 @@ HOST,static.anysex.com,LIST
 HOST,static.bbci.co.uk,LIST
 HOST,static.beebom.com,LIST
 HOST,static.buffer.com,LIST
+HOST,static.capcom.com,LIST
 HOST,static.carfax.com,LIST
 HOST,static.chaika.moe,LIST
 HOST,static.change.org,LIST
@@ -1494,7 +1487,6 @@ HOST,todoist.b-cdn.net,LIST
 HOST,tools.refokus.com,LIST
 HOST,uhf.microsoft.com,LIST
 HOST,v2.listenloop.com,LIST
-HOST,w2.influxdata.com,LIST
 HOST,wa.arounddeal.com,LIST
 HOST,wa1.aninoapps.com,LIST
 HOST,webfonts.zoho.com,LIST
@@ -1634,7 +1626,6 @@ HOST,img.fastcybers.com,LIST
 HOST,img.hellofresh.com,LIST
 HOST,img.sparknotes.com,LIST
 HOST,imgproxy.windy.com,LIST
-HOST,imgrs.apkcombo.com,LIST
 HOST,imgs3.hcaptcha.com,LIST
 HOST,isitmaintained.com,LIST
 HOST,js-eu1.hsforms.net,LIST
@@ -1763,7 +1754,6 @@ HOST,videos.elephas.app,LIST
 HOST,videos.ohentai.org,LIST
 HOST,videos2.edclub.com,LIST
 HOST,vids.imagepost.com,LIST
-HOST,walter-r2.trakt.tv,LIST
 HOST,web-cdn.bitrise.io,LIST
 HOST,webp.frostming.com,LIST
 HOST,widget.intercom.io,LIST
@@ -2036,7 +2026,6 @@ HOST,static.zerochan.net,LIST
 HOST,storageapi.fleek.co,LIST
 HOST,sync.getpublica.com,LIST
 HOST,tag.unifyintent.com,LIST
-HOST,tags.nationwide.com,LIST
 HOST,thumb.wikimedia.org,LIST
 HOST,thumbnails.padre.gg,LIST
 HOST,thumbs.onlyfans.com,LIST
@@ -2113,9 +2102,9 @@ HOST,cdn.boostcommerce.io,LIST
 HOST,cdn.botframework.com,LIST
 HOST,cdn.buymeacoffee.com,LIST
 HOST,cdn.c1.amplience.net,LIST
+HOST,cdn.capcom-unity.com,LIST
 HOST,cdn.clever-cloud.com,LIST
 HOST,cdn.cnx-software.com,LIST
-HOST,cdn.downdetector.com,LIST
 HOST,cdn.dynamicyield.com,LIST
 HOST,cdn.fastcomments.com,LIST
 HOST,cdn.forms.office.net,LIST
@@ -2289,8 +2278,6 @@ HOST,static2.onlyfans.com,LIST
 HOST,statics.simpshub.com,LIST
 HOST,stats.codesandbox.io,LIST
 HOST,status.canarymail.io,LIST
-HOST,storage.synctrack.io,LIST
-HOST,storageapi.fleek.one,LIST
 HOST,storageapi2.fleek.co,LIST
 HOST,telemetry.nextjs.org,LIST
 HOST,telemetry.vercel.com,LIST
@@ -2384,7 +2371,9 @@ HOST,cdn11.bigcommerce.com,LIST
 HOST,cdn2-imgix.macpaw.com,LIST
 HOST,cdn2.downdetector.com,LIST
 HOST,cdn2.unrealengine.com,LIST
+HOST,cdn3.downdetector.com,LIST
 HOST,cdn3.unrealengine.com,LIST
+HOST,cdn4.downdetector.com,LIST
 HOST,cdn77.boyfriendtv.com,LIST
 HOST,cdna.pcpartpicker.com,LIST
 HOST,cdne-pics.youjizz.com,LIST
@@ -2456,7 +2445,6 @@ HOST,next-images.123rf.com,LIST
 HOST,oneocsp.microsoft.com,LIST
 HOST,opensignal.cdnbye.com,LIST
 HOST,organizer.bizzabo.com,LIST
-HOST,participants.evolv.ai,LIST
 HOST,pictures-cdn.porn.com,LIST
 HOST,pixel-cdn.default.com,LIST
 HOST,platform.theverge.com,LIST
@@ -2761,6 +2749,7 @@ HOST,cdn-static-1.medium.com,LIST
 HOST,cdn-uicons.flaticon.com,LIST
 HOST,cdn.northropgrumman.com,LIST
 HOST,cdn.prod.www.spiegel.de,LIST
+HOST,cdn.promo.capcomusa.com,LIST
 HOST,cdn.ready-market.com.tw,LIST
 HOST,cdn.worldvectorlogo.com,LIST
 HOST,cdn1.singteldigital.com,LIST
@@ -3028,6 +3017,7 @@ HOST,hub-assets.displaycal.net,LIST
 HOST,hv-monsterdb-data.skk.moe,LIST
 HOST,im.np-payment-gateway.com,LIST
 HOST,image-forwarder.notaku.so,LIST
+HOST,image.icon-gen.svc.ui.com,LIST
 HOST,image.p-c2-x.abema-tv.com,LIST
 HOST,images.microcms-assets.io,LIST
 HOST,images.opencollective.com,LIST
@@ -3037,6 +3027,7 @@ HOST,lastfm.freetls.fastly.net,LIST
 HOST,lift-ai-js.marketlinc.com,LIST
 HOST,logos.speedtestcustom.com,LIST
 HOST,lzd-img-global.slatic.net,LIST
+HOST,manifest.prod.boltdns.net,LIST
 HOST,marketing.thingiverse.com,LIST
 HOST,mir-s3-cdn-cf.behance.net,LIST
 HOST,mixin-images.zeromesh.net,LIST
@@ -3077,9 +3068,6 @@ HOST,trekcdnprod.azureedge.net,LIST
 HOST,tuf-repo-cdn.sigstore.dev,LIST
 HOST,ubistatic2-a.akamaihd.net,LIST
 HOST,unlimited-cdn.waifu2x.net,LIST
-HOST,v-tiles1.downdetector.com,LIST
-HOST,v-tiles2.downdetector.com,LIST
-HOST,v-tiles3.downdetector.com,LIST
 HOST,vz-2222604c-50b.b-cdn.net,LIST
 HOST,vz-c0fe498e-5ab.b-cdn.net,LIST
 HOST,web-assets.esetstatic.com,LIST

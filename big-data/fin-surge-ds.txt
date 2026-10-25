@@ -1,4 +1,4 @@
-# big-data rules: 8362
+# big-data rules: 8346
 .aws
 .x.ai
 .db.tt
@@ -1638,7 +1638,6 @@ cdn2.suno.ai
 cdn3.dan.com
 cf.mhgui.com
 cf.shopee.tw
-css.4jpg.top
 ctan.math.ca
 d2.myani.org
 data.peer.as
@@ -1704,7 +1703,6 @@ media.dev.to
 media.fs.com
 media.mas.to
 mir.linux.kg
-mirror.0x.sg
 mirror.5i.fi
 mirror.a1.mk
 mirror.dc.uz
@@ -2276,7 +2274,6 @@ pba.apple.com
 phishing.army
 pics.vpdmm.cc
 pomf2.lain.la
-proxy.cors.sh
 r2.dejavu.moe
 r2cdn.c7d.dev
 rdr.windy.com
@@ -2309,7 +2306,6 @@ ucho.ignum.cz
 uim.9uu22.com
 w.chatlio.com
 waitlisted.co
-www.10086.win
 www.acgpix.de
 www.gnupg.org
 xenia.sote.hu
@@ -2664,7 +2660,6 @@ bst.icons8.com
 c.animaapp.com
 c.marsflag.com
 c.navattic.com
-c1.patreon.com
 c4.patreon.com
 c5.patreon.com
 c6.patreon.com
@@ -2831,7 +2826,6 @@ js.recurly.com
 js.rtoaster.jp
 layers.mapq.st
 lc.nssurge.com
-media.evolv.ai
 media.masto.nu
 media.mstdn.io
 media.trakt.tv
@@ -3296,7 +3290,6 @@ assets.time.com
 assets.yande.re
 assets.zpic.biz
 attach.setn.com
-avts.wmlabs.net
 bucket.noy.asia
 bundle.5gtb.com
 bundle.9gtb.com
@@ -3888,7 +3881,6 @@ blob.jortage.com
 boot.netboot.xyz
 bundlephobia.com
 cache.ip-api.com
-cache.sgvafs.com
 cdimage.kali.org
 cdn-1.porn87.com
 cdn-1.strava.com
@@ -3931,7 +3923,6 @@ cdn.playwire.com
 cdn.roboflow.com
 cdn.roseperl.com
 cdn.scaleflex.it
-cdn.seedance2.ai
 cdn.simplesat.io
 cdn.skymavis.com
 cdn.substack.com
@@ -4792,6 +4783,7 @@ static.ahrefs.com
 static.anysex.com
 static.beebom.com
 static.buffer.com
+static.capcom.com
 static.carfax.com
 static.chaika.moe
 static.change.org
@@ -4842,7 +4834,6 @@ ubuntu.unc.edu.ar
 ubuntu.vpsttt.com
 uhf.microsoft.com
 v2.listenloop.com
-w2.influxdata.com
 wa.arounddeal.com
 wa1.aninoapps.com
 webfonts.zoho.com
@@ -5171,7 +5162,6 @@ img.fastcybers.com
 img.hellofresh.com
 img.sparknotes.com
 imgproxy.windy.com
-imgrs.apkcombo.com
 imgs3.hcaptcha.com
 index.rubygems.org
 isitmaintained.com
@@ -5223,7 +5213,6 @@ mirror.isoc.org.il
 mirror.karneval.cz
 mirror.katapult.io
 mirror.liquidrp.de
-mirror.marcusn.net
 mirror.papua.go.id
 mirror.previder.nl
 mirror.reverse.net
@@ -5366,7 +5355,6 @@ videos.elephas.app
 videos.ohentai.org
 videos2.edclub.com
 vids.imagepost.com
-walter-r2.trakt.tv
 web-cdn.bitrise.io
 webp.frostming.com
 widget.intercom.io
@@ -5821,6 +5809,7 @@ public-img.mewe.com
 public.saasexch.com
 pubmirror.plutex.de
 qmod.quotemedia.com
+registry.gitlab.com
 release.runcloud.io
 releases.claude.com
 replicate.npmjs.com
@@ -5888,7 +5877,6 @@ su.virtualbuddy.app
 suse.uni-leipzig.de
 sync.getpublica.com
 tag.unifyintent.com
-tags.nationwide.com
 thumb.wikimedia.org
 thumbnails.padre.gg
 thumbs.onlyfans.com
@@ -6104,9 +6092,9 @@ cdn.boostcommerce.io
 cdn.botframework.com
 cdn.buymeacoffee.com
 cdn.c1.amplience.net
+cdn.capcom-unity.com
 cdn.clever-cloud.com
 cdn.cnx-software.com
-cdn.downdetector.com
 cdn.dynamicyield.com
 cdn.fastcomments.com
 cdn.forms.office.net
@@ -6363,8 +6351,6 @@ statics.simpshub.com
 stats.codesandbox.io
 status.canarymail.io
 steam.eca.qtlglb.com
-storage.synctrack.io
-storageapi.fleek.one
 storageapi2.fleek.co
 telemetry.vercel.com
 thumbnail.missav.com
@@ -6536,7 +6522,9 @@ cdn11.bigcommerce.com
 cdn2-imgix.macpaw.com
 cdn2.downdetector.com
 cdn2.unrealengine.com
+cdn3.downdetector.com
 cdn3.unrealengine.com
+cdn4.downdetector.com
 cdn77.boyfriendtv.com
 cdna.pcpartpicker.com
 cdne-pics.youjizz.com
@@ -6662,7 +6650,6 @@ opensignal.cdnbye.com
 organizer.bizzabo.com
 os-cdn.virtfusion.net
 packages.codeberg.org
-participants.evolv.ai
 pictures-cdn.porn.com
 pixel-cdn.default.com
 plugins.pubtailer.com
@@ -6912,7 +6899,6 @@ experience-ap.piano.io
 fastly-s3.allmovie.com
 fdroid.tetaneutral.net
 filestore.fortinet.com
-ftp.tsukuba.wide.ad.jp
 ftpmirror1.infania.net
 get-it-on.codeberg.org
 gmedia.playstation.com
@@ -7079,7 +7065,6 @@ widgets.automizely.com
 ws-assets.zoominfo.com
 www.gutscheinrausch.de
 www.typescriptlang.org
-www2.aomeisoftware.com
 ximage.c-spanvideo.org
 .adventuresbydisney.com
 .agahk.odysseyplus.site
@@ -7188,6 +7173,7 @@ cdn-uicons.flaticon.com
 cdn-uk1.organicmaps.app
 cdn.northropgrumman.com
 cdn.prod.www.spiegel.de
+cdn.promo.capcomusa.com
 cdn.ready-market.com.tw
 cdn.worldvectorlogo.com
 cdn1.singteldigital.com
@@ -7648,6 +7634,7 @@ hub-assets.displaycal.net
 hv-monsterdb-data.skk.moe
 im.np-payment-gateway.com
 image-forwarder.notaku.so
+image.icon-gen.svc.ui.com
 images.microcms-assets.io
 images.opencollective.com
 images7.design-editor.com
@@ -7720,9 +7707,6 @@ ubuntu.securedservers.com
 ucmirror.canterbury.ac.nz
 unlimited-cdn.waifu2x.net
 updates.bravesoftware.com
-v-tiles1.downdetector.com
-v-tiles2.downdetector.com
-v-tiles3.downdetector.com
 vz-2222604c-50b.b-cdn.net
 vz-c0fe498e-5ab.b-cdn.net
 web-assets.esetstatic.com

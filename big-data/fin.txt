@@ -1,4 +1,4 @@
-# big-data rules: 10594
+# big-data rules: 10578
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -280,7 +280,6 @@ DOMAIN,cdn2.suno.ai
 DOMAIN,cdn3.dan.com
 DOMAIN,cf.mhgui.com
 DOMAIN,cf.shopee.tw
-DOMAIN,css.4jpg.top
 DOMAIN,ctan.math.ca
 DOMAIN,d2.myani.org
 DOMAIN,data.peer.as
@@ -346,7 +345,6 @@ DOMAIN,media.dev.to
 DOMAIN,media.fs.com
 DOMAIN,media.mas.to
 DOMAIN,mir.linux.kg
-DOMAIN,mirror.0x.sg
 DOMAIN,mirror.5i.fi
 DOMAIN,mirror.a1.mk
 DOMAIN,mirror.dc.uz
@@ -582,7 +580,6 @@ DOMAIN,pba.apple.com
 DOMAIN,phishing.army
 DOMAIN,pics.vpdmm.cc
 DOMAIN,pomf2.lain.la
-DOMAIN,proxy.cors.sh
 DOMAIN,r2.dejavu.moe
 DOMAIN,r2cdn.c7d.dev
 DOMAIN,rdr.windy.com
@@ -615,7 +612,6 @@ DOMAIN,ucho.ignum.cz
 DOMAIN,uim.9uu22.com
 DOMAIN,w.chatlio.com
 DOMAIN,waitlisted.co
-DOMAIN,www.10086.win
 DOMAIN,www.acgpix.de
 DOMAIN,www.gnupg.org
 DOMAIN,xenia.sote.hu
@@ -635,7 +631,6 @@ DOMAIN,bst.icons8.com
 DOMAIN,c.animaapp.com
 DOMAIN,c.marsflag.com
 DOMAIN,c.navattic.com
-DOMAIN,c1.patreon.com
 DOMAIN,c4.patreon.com
 DOMAIN,c5.patreon.com
 DOMAIN,c6.patreon.com
@@ -802,7 +797,6 @@ DOMAIN,js.recurly.com
 DOMAIN,js.rtoaster.jp
 DOMAIN,layers.mapq.st
 DOMAIN,lc.nssurge.com
-DOMAIN,media.evolv.ai
 DOMAIN,media.masto.nu
 DOMAIN,media.mstdn.io
 DOMAIN,media.trakt.tv
@@ -950,7 +944,6 @@ DOMAIN,assets.time.com
 DOMAIN,assets.yande.re
 DOMAIN,assets.zpic.biz
 DOMAIN,attach.setn.com
-DOMAIN,avts.wmlabs.net
 DOMAIN,bucket.noy.asia
 DOMAIN,bundle.5gtb.com
 DOMAIN,bundle.9gtb.com
@@ -1320,7 +1313,6 @@ DOMAIN,blob.jortage.com
 DOMAIN,boot.netboot.xyz
 DOMAIN,bundlephobia.com
 DOMAIN,cache.ip-api.com
-DOMAIN,cache.sgvafs.com
 DOMAIN,cdimage.kali.org
 DOMAIN,cdn-1.porn87.com
 DOMAIN,cdn-1.strava.com
@@ -1363,7 +1355,6 @@ DOMAIN,cdn.playwire.com
 DOMAIN,cdn.roboflow.com
 DOMAIN,cdn.roseperl.com
 DOMAIN,cdn.scaleflex.it
-DOMAIN,cdn.seedance2.ai
 DOMAIN,cdn.simplesat.io
 DOMAIN,cdn.skymavis.com
 DOMAIN,cdn.substack.com
@@ -1998,6 +1989,7 @@ DOMAIN,static.ahrefs.com
 DOMAIN,static.anysex.com
 DOMAIN,static.beebom.com
 DOMAIN,static.buffer.com
+DOMAIN,static.capcom.com
 DOMAIN,static.carfax.com
 DOMAIN,static.chaika.moe
 DOMAIN,static.change.org
@@ -2048,7 +2040,6 @@ DOMAIN,ubuntu.unc.edu.ar
 DOMAIN,ubuntu.vpsttt.com
 DOMAIN,uhf.microsoft.com
 DOMAIN,v2.listenloop.com
-DOMAIN,w2.influxdata.com
 DOMAIN,wa.arounddeal.com
 DOMAIN,wa1.aninoapps.com
 DOMAIN,webfonts.zoho.com
@@ -2226,7 +2217,6 @@ DOMAIN,img.fastcybers.com
 DOMAIN,img.hellofresh.com
 DOMAIN,img.sparknotes.com
 DOMAIN,imgproxy.windy.com
-DOMAIN,imgrs.apkcombo.com
 DOMAIN,imgs3.hcaptcha.com
 DOMAIN,index.rubygems.org
 DOMAIN,isitmaintained.com
@@ -2278,7 +2268,6 @@ DOMAIN,mirror.isoc.org.il
 DOMAIN,mirror.karneval.cz
 DOMAIN,mirror.katapult.io
 DOMAIN,mirror.liquidrp.de
-DOMAIN,mirror.marcusn.net
 DOMAIN,mirror.papua.go.id
 DOMAIN,mirror.previder.nl
 DOMAIN,mirror.reverse.net
@@ -2421,7 +2410,6 @@ DOMAIN,videos.elephas.app
 DOMAIN,videos.ohentai.org
 DOMAIN,videos2.edclub.com
 DOMAIN,vids.imagepost.com
-DOMAIN,walter-r2.trakt.tv
 DOMAIN,web-cdn.bitrise.io
 DOMAIN,webp.frostming.com
 DOMAIN,widget.intercom.io
@@ -2741,6 +2729,7 @@ DOMAIN,public-img.mewe.com
 DOMAIN,public.saasexch.com
 DOMAIN,pubmirror.plutex.de
 DOMAIN,qmod.quotemedia.com
+DOMAIN,registry.gitlab.com
 DOMAIN,release.runcloud.io
 DOMAIN,releases.claude.com
 DOMAIN,replicate.npmjs.com
@@ -2808,7 +2797,6 @@ DOMAIN,su.virtualbuddy.app
 DOMAIN,suse.uni-leipzig.de
 DOMAIN,sync.getpublica.com
 DOMAIN,tag.unifyintent.com
-DOMAIN,tags.nationwide.com
 DOMAIN,thumb.wikimedia.org
 DOMAIN,thumbnails.padre.gg
 DOMAIN,thumbs.onlyfans.com
@@ -2904,9 +2892,9 @@ DOMAIN,cdn.boostcommerce.io
 DOMAIN,cdn.botframework.com
 DOMAIN,cdn.buymeacoffee.com
 DOMAIN,cdn.c1.amplience.net
+DOMAIN,cdn.capcom-unity.com
 DOMAIN,cdn.clever-cloud.com
 DOMAIN,cdn.cnx-software.com
-DOMAIN,cdn.downdetector.com
 DOMAIN,cdn.dynamicyield.com
 DOMAIN,cdn.fastcomments.com
 DOMAIN,cdn.forms.office.net
@@ -3163,8 +3151,6 @@ DOMAIN,statics.simpshub.com
 DOMAIN,stats.codesandbox.io
 DOMAIN,status.canarymail.io
 DOMAIN,steam.eca.qtlglb.com
-DOMAIN,storage.synctrack.io
-DOMAIN,storageapi.fleek.one
 DOMAIN,storageapi2.fleek.co
 DOMAIN,telemetry.vercel.com
 DOMAIN,thumbnail.missav.com
@@ -3269,7 +3255,9 @@ DOMAIN,cdn11.bigcommerce.com
 DOMAIN,cdn2-imgix.macpaw.com
 DOMAIN,cdn2.downdetector.com
 DOMAIN,cdn2.unrealengine.com
+DOMAIN,cdn3.downdetector.com
 DOMAIN,cdn3.unrealengine.com
+DOMAIN,cdn4.downdetector.com
 DOMAIN,cdn77.boyfriendtv.com
 DOMAIN,cdna.pcpartpicker.com
 DOMAIN,cdne-pics.youjizz.com
@@ -3395,7 +3383,6 @@ DOMAIN,opensignal.cdnbye.com
 DOMAIN,organizer.bizzabo.com
 DOMAIN,os-cdn.virtfusion.net
 DOMAIN,packages.codeberg.org
-DOMAIN,participants.evolv.ai
 DOMAIN,pictures-cdn.porn.com
 DOMAIN,pixel-cdn.default.com
 DOMAIN,plugins.pubtailer.com
@@ -3568,7 +3555,6 @@ DOMAIN,experience-ap.piano.io
 DOMAIN,fastly-s3.allmovie.com
 DOMAIN,fdroid.tetaneutral.net
 DOMAIN,filestore.fortinet.com
-DOMAIN,ftp.tsukuba.wide.ad.jp
 DOMAIN,ftpmirror1.infania.net
 DOMAIN,get-it-on.codeberg.org
 DOMAIN,gmedia.playstation.com
@@ -3735,7 +3721,6 @@ DOMAIN,widgets.automizely.com
 DOMAIN,ws-assets.zoominfo.com
 DOMAIN,www.gutscheinrausch.de
 DOMAIN,www.typescriptlang.org
-DOMAIN,www2.aomeisoftware.com
 DOMAIN,ximage.c-spanvideo.org
 DOMAIN,abre-videos.youjizz.com
 DOMAIN,analytics.canarymail.io
@@ -3782,6 +3767,7 @@ DOMAIN,cdn-uicons.flaticon.com
 DOMAIN,cdn-uk1.organicmaps.app
 DOMAIN,cdn.northropgrumman.com
 DOMAIN,cdn.prod.www.spiegel.de
+DOMAIN,cdn.promo.capcomusa.com
 DOMAIN,cdn.ready-market.com.tw
 DOMAIN,cdn.worldvectorlogo.com
 DOMAIN,cdn1.singteldigital.com
@@ -4160,6 +4146,7 @@ DOMAIN,hub-assets.displaycal.net
 DOMAIN,hv-monsterdb-data.skk.moe
 DOMAIN,im.np-payment-gateway.com
 DOMAIN,image-forwarder.notaku.so
+DOMAIN,image.icon-gen.svc.ui.com
 DOMAIN,images.microcms-assets.io
 DOMAIN,images.opencollective.com
 DOMAIN,images7.design-editor.com
@@ -4232,9 +4219,6 @@ DOMAIN,ubuntu.securedservers.com
 DOMAIN,ucmirror.canterbury.ac.nz
 DOMAIN,unlimited-cdn.waifu2x.net
 DOMAIN,updates.bravesoftware.com
-DOMAIN,v-tiles1.downdetector.com
-DOMAIN,v-tiles2.downdetector.com
-DOMAIN,v-tiles3.downdetector.com
 DOMAIN,vz-2222604c-50b.b-cdn.net
 DOMAIN,vz-c0fe498e-5ab.b-cdn.net
 DOMAIN,web-assets.esetstatic.com
