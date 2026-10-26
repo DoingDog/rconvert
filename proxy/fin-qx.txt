@@ -1,4 +1,4 @@
-# proxy rules: 7059
+# proxy rules: 7079
 HOST,ip.cn,LIST
 HOST,tv.apple.com,LIST
 HOST,api.waqi.info,LIST
@@ -430,6 +430,7 @@ HOST-SUFFIX,nic.gov,LIST
 HOST-SUFFIX,nih.gov,LIST
 HOST-SUFFIX,nimg.jp,LIST
 HOST-SUFFIX,niu.moe,LIST
+HOST-SUFFIX,njav.tv,LIST
 HOST-SUFFIX,now.com,LIST
 HOST-SUFFIX,npnt.me,LIST
 HOST-SUFFIX,nps.gov,LIST
@@ -809,6 +810,7 @@ HOST-SUFFIX,news1.kr,LIST
 HOST-SUFFIX,nf.id.au,LIST
 HOST-SUFFIX,nike.com,LIST
 HOST-SUFFIX,ning.com,LIST
+HOST-SUFFIX,njav.com,LIST
 HOST-SUFFIX,nnews.eu,LIST
 HOST-SUFFIX,nobel.se,LIST
 HOST-SUFFIX,note.com,LIST
@@ -989,6 +991,7 @@ HOST-SUFFIX,zyns.com,LIST
 HOST-SUFFIX,zzux.com,LIST
 HOST-SUFFIX,100ke.org,LIST
 HOST-SUFFIX,123av.com,LIST
+HOST-SUFFIX,123av.org,LIST
 HOST-SUFFIX,123rf.com,LIST
 HOST-SUFFIX,12bet.com,LIST
 HOST-SUFFIX,12vpn.com,LIST
@@ -1918,6 +1921,7 @@ HOST-SUFFIX,fzh999.com,LIST
 HOST-SUFFIX,fzh999.net,LIST
 HOST-SUFFIX,g-area.org,LIST
 HOST-SUFFIX,g0v.social,LIST
+HOST-SUFFIX,ga.jspm.io,LIST
 HOST-SUFFIX,ganges.com,LIST
 HOST-SUFFIX,garena.com,LIST
 HOST-SUFFIX,gather.com,LIST
@@ -2109,6 +2113,7 @@ HOST-SUFFIX,mesotw.com,LIST
 HOST-SUFFIX,metart.com,LIST
 HOST-SUFFIX,mimiai.net,LIST
 HOST-SUFFIX,mimivv.com,LIST
+HOST-SUFFIX,minkch.com,LIST
 HOST-SUFFIX,mirror.xyz,LIST
 HOST-SUFFIX,missav.com,LIST
 HOST-SUFFIX,mistral.ai,LIST
@@ -2160,6 +2165,7 @@ HOST-SUFFIX,nhncorp.jp,LIST
 HOST-SUFFIX,nikkei.com,LIST
 HOST-SUFFIX,nitter.net,LIST
 HOST-SUFFIX,njactb.org,LIST
+HOST-SUFFIX,njavtv.com,LIST
 HOST-SUFFIX,njuice.com,LIST
 HOST-SUFFIX,nokola.com,LIST
 HOST-SUFFIX,ntrfun.com,LIST
@@ -2611,6 +2617,7 @@ HOST-SUFFIX,betfair.com,LIST
 HOST-SUFFIX,bianlei.com,LIST
 HOST-SUFFIX,bic2011.org,LIST
 HOST-SUFFIX,bignews.org,LIST
+HOST-SUFFIX,bikaios.xyz,LIST
 HOST-SUFFIX,binance.com,LIST
 HOST-SUFFIX,binance.org,LIST
 HOST-SUFFIX,bintray.com,LIST
@@ -3040,6 +3047,7 @@ HOST-SUFFIX,pbworks.com,LIST
 HOST-SUFFIX,pdproxy.com,LIST
 HOST-SUFFIX,phprcdn.com,LIST
 HOST-SUFFIX,piaotia.com,LIST
+HOST-SUFFIX,pica-id.com,LIST
 HOST-SUFFIX,picidae.net,LIST
 HOST-SUFFIX,picsart.com,LIST
 HOST-SUFFIX,pinboard.in,LIST
@@ -3415,6 +3423,7 @@ HOST-SUFFIX,bbnradio.org,LIST
 HOST-SUFFIX,bestgore.com,LIST
 HOST-SUFFIX,betternet.co,LIST
 HOST-SUFFIX,bettween.com,LIST
+HOST-SUFFIX,bidobido.xyz,LIST
 HOST-SUFFIX,bigfools.com,LIST
 HOST-SUFFIX,biggo.com.tw,LIST
 HOST-SUFFIX,bigmoney.biz,LIST
@@ -3517,6 +3526,7 @@ HOST-SUFFIX,deepmind.com,LIST
 HOST-SUFFIX,demosisto.hk,LIST
 HOST-SUFFIX,digicert.com,LIST
 HOST-SUFFIX,discoins.com,LIST
+HOST-SUFFIX,diwodiwo.xyz,LIST
 HOST-SUFFIX,dnscrypt.org,LIST
 HOST-SUFFIX,dnsimple.com,LIST
 HOST-SUFFIX,dotplane.com,LIST
@@ -4029,6 +4039,7 @@ HOST-SUFFIX,tigervpn.com,LIST
 HOST-SUFFIX,timtales.com,LIST
 HOST-SUFFIX,tinc-vpn.org,LIST
 HOST-SUFFIX,tinychat.com,LIST
+HOST-SUFFIX,tipatipa.xyz,LIST
 HOST-SUFFIX,togetter.com,LIST
 HOST-SUFFIX,tomonews.net,LIST
 HOST-SUFFIX,tongil.or.kr,LIST
@@ -4114,6 +4125,7 @@ HOST-SUFFIX,wetplace.com,LIST
 HOST-SUFFIX,wexiaobo.org,LIST
 HOST-SUFFIX,whylover.com,LIST
 HOST-SUFFIX,widevine.com,LIST
+HOST-SUFFIX,wikawika.xyz,LIST
 HOST-SUFFIX,wikidata.org,LIST
 HOST-SUFFIX,wikileaks.ch,LIST
 HOST-SUFFIX,wikileaks.de,LIST
@@ -4483,6 +4495,7 @@ HOST-SUFFIX,junglobal.net,LIST
 HOST-SUFFIX,kanald.com.tr,LIST
 HOST-SUFFIX,kendatire.com,LIST
 HOST-SUFFIX,kendincos.net,LIST
+HOST-SUFFIX,kimootoko.net,LIST
 HOST-SUFFIX,kindleren.com,LIST
 HOST-SUFFIX,kinmen.org.tw,LIST
 HOST-SUFFIX,kinmen.travel,LIST
@@ -4823,6 +4836,7 @@ HOST-SUFFIX,zhenxiang.biz,LIST
 HOST-SUFFIX,zhongzidi.com,LIST
 HOST-SUFFIX,zhuatieba.com,LIST
 HOST-SUFFIX,zmedia.com.tw,LIST
+HOST-SUFFIX,zozovideo.com,LIST
 HOST-SUFFIX,zzcartoon.com,LIST
 HOST-SUFFIX,000webhost.com,LIST
 HOST-SUFFIX,1-apple.com.tw,LIST
@@ -4877,6 +4891,7 @@ HOST-SUFFIX,bestvpnusa.com,LIST
 HOST-SUFFIX,betaclouds.net,LIST
 HOST-SUFFIX,bettergpt.chat,LIST
 HOST-SUFFIX,betterhash.net,LIST
+HOST-SUFFIX,bikawebapp.com,LIST
 HOST-SUFFIX,bitinka.com.ar,LIST
 HOST-SUFFIX,bittorrent.com,LIST
 HOST-SUFFIX,blacklogic.com,LIST
@@ -5049,6 +5064,7 @@ HOST-SUFFIX,hornygamer.com,LIST
 HOST-SUFFIX,hotfrog.com.tw,LIST
 HOST-SUFFIX,howtoforge.com,LIST
 HOST-SUFFIX,html5rocks.com,LIST
+HOST-SUFFIX,huakacomic.com,LIST
 HOST-SUFFIX,huayuworld.org,LIST
 HOST-SUFFIX,huggingface.co,LIST
 HOST-SUFFIX,ifreewares.com,LIST
@@ -5111,6 +5127,7 @@ HOST-SUFFIX,macromedia.com,LIST
 HOST-SUFFIX,madonna-av.com,LIST
 HOST-SUFFIX,magic-net.info,LIST
 HOST-SUFFIX,makemymood.com,LIST
+HOST-SUFFIX,manhuabika.com,LIST
 HOST-SUFFIX,mastodon.cloud,LIST
 HOST-SUFFIX,matichon.co.th,LIST
 HOST-SUFFIX,mattwilcox.net,LIST
@@ -5185,6 +5202,7 @@ HOST-SUFFIX,picturedip.com,LIST
 HOST-SUFFIX,pixeldrain.com,LIST
 HOST-SUFFIX,pixelmator.com,LIST
 HOST-SUFFIX,playpcesor.com,LIST
+HOST-SUFFIX,po-kaki-to.com,LIST
 HOST-SUFFIX,pokerstars.com,LIST
 HOST-SUFFIX,pokerstars.net,LIST
 HOST-SUFFIX,polymarket.com,LIST
@@ -6594,6 +6612,7 @@ HOST-SUFFIX,chinanewscenter.com,LIST
 HOST-SUFFIX,chinese-leaders.org,LIST
 HOST-SUFFIX,cloudflare-ipfs.com,LIST
 HOST-SUFFIX,communistcrimes.org,LIST
+HOST-SUFFIX,console.typesafe.ai,LIST
 HOST-SUFFIX,contactmagazine.net,LIST
 HOST-SUFFIX,dalailamacenter.org,LIST
 HOST-SUFFIX,dalailamaquotes.org,LIST
@@ -6630,6 +6649,7 @@ HOST-SUFFIX,makkahnewspaper.com,LIST
 HOST-SUFFIX,mathiew-badimon.com,LIST
 HOST-SUFFIX,matsushimakaede.com,LIST
 HOST-SUFFIX,microsoft-falcon.io,LIST
+HOST-SUFFIX,movie.eroterest.net,LIST
 HOST-SUFFIX,myreadingmanga.info,LIST
 HOST-SUFFIX,neverforget8964.org,LIST
 HOST-SUFFIX,ny.stgloballink.com,LIST

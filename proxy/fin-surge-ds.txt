@@ -1,4 +1,4 @@
-# proxy rules: 6921
+# proxy rules: 6941
 .d.pr
 .g.ai
 .g.co
@@ -377,6 +377,7 @@ ip.cn
 .nih.gov
 .nimg.jp
 .niu.moe
+.njav.tv
 .now.com
 .npnt.me
 .nps.gov
@@ -756,6 +757,7 @@ ip.cn
 .nf.id.au
 .nike.com
 .ning.com
+.njav.com
 .nnews.eu
 .nobel.se
 .note.com
@@ -936,6 +938,7 @@ ip.cn
 .zzux.com
 .100ke.org
 .123av.com
+.123av.org
 .123rf.com
 .12bet.com
 .12vpn.com
@@ -1865,6 +1868,7 @@ ip.cn
 .fzh999.net
 .g-area.org
 .g0v.social
+.ga.jspm.io
 .ganges.com
 .garena.com
 .gather.com
@@ -2056,6 +2060,7 @@ ip.cn
 .metart.com
 .mimiai.net
 .mimivv.com
+.minkch.com
 .mirror.xyz
 .missav.com
 .mistral.ai
@@ -2107,6 +2112,7 @@ ip.cn
 .nikkei.com
 .nitter.net
 .njactb.org
+.njavtv.com
 .njuice.com
 .nokola.com
 .ntrfun.com
@@ -2558,6 +2564,7 @@ ip.cn
 .bianlei.com
 .bic2011.org
 .bignews.org
+.bikaios.xyz
 .binance.com
 .binance.org
 .bintray.com
@@ -2987,6 +2994,7 @@ ip.cn
 .pdproxy.com
 .phprcdn.com
 .piaotia.com
+.pica-id.com
 .picidae.net
 .picsart.com
 .pinboard.in
@@ -3363,6 +3371,7 @@ tv.apple.com
 .bestgore.com
 .betternet.co
 .bettween.com
+.bidobido.xyz
 .bigfools.com
 .biggo.com.tw
 .bigmoney.biz
@@ -3465,6 +3474,7 @@ tv.apple.com
 .demosisto.hk
 .digicert.com
 .discoins.com
+.diwodiwo.xyz
 .dnscrypt.org
 .dnsimple.com
 .dotplane.com
@@ -3977,6 +3987,7 @@ tv.apple.com
 .timtales.com
 .tinc-vpn.org
 .tinychat.com
+.tipatipa.xyz
 .togetter.com
 .tomonews.net
 .tongil.or.kr
@@ -4062,6 +4073,7 @@ tv.apple.com
 .wexiaobo.org
 .whylover.com
 .widevine.com
+.wikawika.xyz
 .wikidata.org
 .wikileaks.ch
 .wikileaks.de
@@ -4433,6 +4445,7 @@ aqi.aqicn.org
 .kanald.com.tr
 .kendatire.com
 .kendincos.net
+.kimootoko.net
 .kindleren.com
 .kinmen.org.tw
 .kinmen.travel
@@ -4773,6 +4786,7 @@ aqi.aqicn.org
 .zhongzidi.com
 .zhuatieba.com
 .zmedia.com.tw
+.zozovideo.com
 .zzcartoon.com
 .000webhost.com
 .1-apple.com.tw
@@ -4827,6 +4841,7 @@ aqi.aqicn.org
 .betaclouds.net
 .bettergpt.chat
 .betterhash.net
+.bikawebapp.com
 .bitinka.com.ar
 .bittorrent.com
 .blacklogic.com
@@ -4999,6 +5014,7 @@ aqi.aqicn.org
 .hotfrog.com.tw
 .howtoforge.com
 .html5rocks.com
+.huakacomic.com
 .huayuworld.org
 .huggingface.co
 .ifreewares.com
@@ -5061,6 +5077,7 @@ aqi.aqicn.org
 .madonna-av.com
 .magic-net.info
 .makemymood.com
+.manhuabika.com
 .mastodon.cloud
 .matichon.co.th
 .mattwilcox.net
@@ -5135,6 +5152,7 @@ aqi.aqicn.org
 .pixeldrain.com
 .pixelmator.com
 .playpcesor.com
+.po-kaki-to.com
 .pokerstars.com
 .pokerstars.net
 .polymarket.com
@@ -6551,6 +6569,7 @@ fonts.googleapis.cn
 .chinese-leaders.org
 .cloudflare-ipfs.com
 .communistcrimes.org
+.console.typesafe.ai
 .contactmagazine.net
 .dalailamacenter.org
 .dalailamaquotes.org
@@ -6587,6 +6606,7 @@ fonts.googleapis.cn
 .mathiew-badimon.com
 .matsushimakaede.com
 .microsoft-falcon.io
+.movie.eroterest.net
 .myreadingmanga.info
 .neverforget8964.org
 .ny.stgloballink.com
