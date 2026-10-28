@@ -1,4 +1,4 @@
-# cdn rules: 4789
+# cdn rules: 4791
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -16,6 +16,7 @@ HOST,i.gzn.jp,LIST
 HOST,i.ibb.co,LIST
 HOST,i.vgy.me,LIST
 HOST,icons.ly,LIST
+HOST,imgur.la,LIST
 HOST,nodei.co,LIST
 HOST,ps.w.org,LIST
 HOST,rules.ac,LIST
@@ -3768,6 +3769,7 @@ HOST-SUFFIX,sixyik.com,LIST
 HOST-SUFFIX,sndcdn.com,LIST
 HOST-SUFFIX,sndimg.com,LIST
 HOST-SUFFIX,ss-cdn.com,LIST
+HOST-SUFFIX,static.pub,LIST
 HOST-SUFFIX,strpst.com,LIST
 HOST-SUFFIX,surrit.com,LIST
 HOST-SUFFIX,sxccdn.com,LIST

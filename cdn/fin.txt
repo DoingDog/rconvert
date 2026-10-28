@@ -1,4 +1,4 @@
-# cdn rules: 4789
+# cdn rules: 4791
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -16,6 +16,7 @@ DOMAIN,i.gzn.jp
 DOMAIN,i.ibb.co
 DOMAIN,i.vgy.me
 DOMAIN,icons.ly
+DOMAIN,imgur.la
 DOMAIN,nodei.co
 DOMAIN,ps.w.org
 DOMAIN,rules.ac
@@ -3768,6 +3769,7 @@ DOMAIN-SUFFIX,sixyik.com
 DOMAIN-SUFFIX,sndcdn.com
 DOMAIN-SUFFIX,sndimg.com
 DOMAIN-SUFFIX,ss-cdn.com
+DOMAIN-SUFFIX,static.pub
 DOMAIN-SUFFIX,strpst.com
 DOMAIN-SUFFIX,surrit.com
 DOMAIN-SUFFIX,sxccdn.com

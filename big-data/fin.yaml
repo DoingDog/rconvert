@@ -1,4 +1,4 @@
-# big-data rules: 10525
+# big-data rules: 10527
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -27,6 +27,7 @@ payload:
   - "DOMAIN,i.ibb.co"
   - "DOMAIN,i.vgy.me"
   - "DOMAIN,icons.ly"
+  - "DOMAIN,imgur.la"
   - "DOMAIN,nodei.co"
   - "DOMAIN,ps.w.org"
   - "DOMAIN,rules.ac"
@@ -5739,6 +5740,7 @@ payload:
   - "DOMAIN-SUFFIX,speedx.one"
   - "DOMAIN-SUFFIX,ss-cdn.com"
   - "DOMAIN-SUFFIX,static.fun"
+  - "DOMAIN-SUFFIX,static.pub"
   - "DOMAIN-SUFFIX,streaks.jp"
   - "DOMAIN-SUFFIX,strpst.com"
   - "DOMAIN-SUFFIX,surrit.com"

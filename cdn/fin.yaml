@@ -1,4 +1,4 @@
-# cdn rules: 4789
+# cdn rules: 4791
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -17,6 +17,7 @@ payload:
   - "DOMAIN,i.ibb.co"
   - "DOMAIN,i.vgy.me"
   - "DOMAIN,icons.ly"
+  - "DOMAIN,imgur.la"
   - "DOMAIN,nodei.co"
   - "DOMAIN,ps.w.org"
   - "DOMAIN,rules.ac"
@@ -3830,6 +3831,7 @@ payload:
   - "DOMAIN-SUFFIX,sndcdn.com"
   - "DOMAIN-SUFFIX,sndimg.com"
   - "DOMAIN-SUFFIX,ss-cdn.com"
+  - "DOMAIN-SUFFIX,static.pub"
   - "DOMAIN-SUFFIX,strpst.com"
   - "DOMAIN-SUFFIX,surrit.com"
   - "DOMAIN-SUFFIX,sxccdn.com"
