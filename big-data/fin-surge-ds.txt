@@ -1,4 +1,4 @@
-# big-data rules: 8348
+# big-data rules: 8444
 .aws
 .x.ai
 .db.tt
@@ -75,6 +75,7 @@ s3.c.im
 tubi.tv
 tug.org
 zod.dev
+.1drv.ms
 .1lib.at
 .1lib.cz
 .4545.cf
@@ -97,6 +98,7 @@ zod.dev
 .cbs.com
 .cnn.com
 .csb.app
+.dash.ai
 .data.hu
 .dmm.com
 .dtci.co
@@ -349,6 +351,7 @@ vudu.com
 .senja.io
 .sirv.com
 .siv2.com
+.sora.com
 .spoti.fi
 .surge.sh
 .syfy.com
@@ -426,6 +429,7 @@ y.yarn.co
 .aol.co.uk
 .apache.si
 .as174.com
+.auth0.com
 .backup.bz
 .baisi.pro
 .bbc.co.uk
@@ -576,6 +580,7 @@ y.yarn.co
 .llnwd.net
 .llnwi.net
 .maxgo.com
+.megaad.nz
 .megadl.fr
 .mickey.tv
 .mirror.ba
@@ -622,6 +627,7 @@ y.yarn.co
 .rlcdn.com
 .s.yimg.jp
 .sb-cd.com
+.sentry.io
 .socdm.com
 .srcdn.com
 .ssl0d.com
@@ -917,6 +923,8 @@ tubitv.com
 .loggly.com
 .marvel.com
 .mega.co.nz
+.megapay.nz
+.megas4.com
 .megaup.net
 .mercdn.net
 .mewatch.sg
@@ -961,6 +969,7 @@ tubitv.com
 .od-cdn.com
 .odycdn.com
 .olevod.com
+.openai.com
 .oracle.com
 .ouonet.org
 .oxygen.com
@@ -1016,6 +1025,7 @@ tubitv.com
 .static.fun
 .static.pub
 .streaks.jp
+.stripe.com
 .strpst.com
 .surrit.com
 .sxccdn.com
@@ -1281,6 +1291,7 @@ zzz.wxw.moe
 .angular.dev
 .anzfile.net
 .apkpure.com
+.apkpure.net
 .archive.org
 .asmfile.com
 .ausfile.com
@@ -1312,6 +1323,7 @@ zzz.wxw.moe
 .cdnpure.com
 .cdntrex.com
 .cf-ipfs.com
+.chatgpt.com
 .chomikuj.pl
 .cinemax.com
 .cloudimg.io
@@ -1331,6 +1343,7 @@ zzz.wxw.moe
 .dl-file.xyz
 .dl4free.com
 .dnvodcdn.me
+.docsend.com
 .dogehls.xyz
 .downace.com
 .download.gg
@@ -1416,6 +1429,7 @@ zzz.wxw.moe
 .imglink.win
 .imgsmail.ru
 .imgyzzy.com
+.intercom.io
 .ipfs.mrh.io
 .ipstatp.com
 .isnssdk.com
@@ -1481,6 +1495,8 @@ zzz.wxw.moe
 .nytimes.com
 .oktacdn.com
 .olelive.com
+.onedrive.co
+.onedrive.eu
 .openload.co
 .ouroath.com
 .overcast.fm
@@ -1536,11 +1552,13 @@ zzz.wxw.moe
 .tile.osm.ch
 .tkremby.xyz
 .top4top.net
+.transfer.it
 .ttcache.com
 .turbobit.cc
 .turbobit.pw
 .turikhay.ru
 .tutu1.space
+.tvbc.com.cn
 .typedoc.org
 .ubembed.com
 .unsplash.it
@@ -1767,6 +1785,7 @@ us.123rf.com
 .alldebrid.fr
 .alldebrid.it
 .apkadmin.com
+.apkpures.xyz
 .apperoni.top
 .artfiles.org
 .atttvnow.com
@@ -1897,6 +1916,7 @@ us.123rf.com
 .hbogoasia.ph
 .hbogoasia.sg
 .hbogoasia.tw
+.hellofax.com
 .hencover.xyz
 .hgagecdn.com
 .himalaya.com
@@ -1976,6 +1996,8 @@ us.123rf.com
 .olevodtv.com
 .on-fleek.app
 .onedrive.com
+.onedrive.net
+.onedrive.org
 .onetrust.com
 .onrender.com
 .operacdn.com
@@ -2448,6 +2470,7 @@ xenia.sote.hu
 .hbogoasia.com
 .hbomaxcdn.com
 .hdzyk-cdn.com
+.hellosign.com
 .hentaicdn.com
 .hentaiera.com
 .herokuapp.com
@@ -2460,6 +2483,7 @@ xenia.sote.hu
 .huluspain.com
 .i.posthog.com
 .ibytedtos.com
+.identrust.com
 .image8899.net
 .imageshack.us
 .imglarger.com
@@ -3117,6 +3141,7 @@ www.tubitv.com
 .now-ashare.com
 .nowestatic.com
 .obsproject.com
+.onedrive.co.uk
 .patientpop.com
 .payloadcms.app
 .pixeldrain.com
@@ -3655,9 +3680,9 @@ www.pngmart.com
 .disneystore.com
 .divio-media.net
 .dmed.technology
-.docs.google.com
 .dropbox-dns.com
 .dropboxmail.com
+.dropboxteam.com
 .dropmyfiles.com
 .dtci.technology
 .edditstatic.com
@@ -3695,7 +3720,6 @@ www.pngmart.com
 .getcomposer.org
 .glasamerike.net
 .gog-statics.com
-.googledrive.com
 .googlevideo.com
 .hentaiverse.org
 .hotstar-cdn.net
@@ -4203,6 +4227,7 @@ ws-cdn.nperf.com
 www.fumadocs.dev
 .1filesharing.com
 .aacdn.nagich.com
+.addtodropbox.com
 .aiv-delivery.net
 .akamaistream.net
 .amerikaovozi.com
@@ -4258,8 +4283,8 @@ www.fumadocs.dev
 .dl.wireshark.org
 .dockerstatic.com
 .dreamscape.cloud
-.drive.google.com
 .dropboxforum.com
+.dropboxlegal.com
 .earth.google.com
 .emby.flowercloud
 .emby.lcloud.wiki
@@ -4270,6 +4295,7 @@ www.fumadocs.dev
 .epicgamescdn.com
 .esc-apps-cdn.com
 .fakestoreapi.com
+.featuregates.org
 .files.gitbook.io
 .filesmonster.com
 .forthethrone.com
@@ -5363,7 +5389,6 @@ widget.intercom.io
 widgets.turnto.com
 wiki.metacubex.one
 ww2.justanswer.com
-www.googleapis.com
 xvcf1.xboxlive.com
 xvcf2.xboxlive.com
 .alonestreaming.com
@@ -5916,6 +5941,7 @@ www-static.ripe.net
 www.club.cc.cmu.edu
 xsrv.moratelindo.io
 .afewmomentswith.com
+.amazonprimevideo.cn
 .androidfilehost.com
 .api.loganalytics.io
 .awssecworkshops.com
@@ -6489,6 +6515,7 @@ assets5.freshdesk.com
 assets7.freshdesk.com
 assets9.freshdesk.com
 badges.greenkeeper.io
+bahamut.akamaized.net
 banners.chessbase.com
 beta.eslint-react.xyz
 bundler.nice-team.net
@@ -6734,6 +6761,7 @@ ws2-cache.aptoide.com
 www-res.cablelabs.com
 .20thcenturystudios.jp
 .abcnews.edgesuite.net
+.abematv.akamaized.net
 .amazonprimevideos.com
 .amazonuniversity.jobs
 .atv-ext-eu.amazon.com
@@ -6761,8 +6789,10 @@ www-res.cablelabs.com
 .disneymagicmoments.pl
 .download.autodesk.com
 .download.mokeedev.com
+.dropboxexperiment.com
 .edge.storage-yahoo.jp
 .envatousercontent.com
+.events.statsigapi.net
 .fimfiction-static.net
 .foxnewsaffiliates.com
 .foxsports-chicago.com
@@ -7126,6 +7156,7 @@ ximage.c-spanvideo.org
 .trustless-gateway.link
 .ubuntumirror.dei.uc.pt
 .usercontent.google.com
+.vikidash.akamaized.net
 .w-corp-staticblitz.com
 .woflthenewsstation.com
 .wup.eshop.nintendo.net
@@ -7214,6 +7245,7 @@ files.thehackernews.com
 frontend.floatplane.com
 ftp.rz.uni-wuerzburg.de
 ftp.yz.yamagata-u.ac.jp
+gamer-cds.cdn.hinet.net
 get.pixelexperience.org
 giano.com.dist.unige.it
 hentaiworldtv.b-cdn.net
@@ -7357,6 +7389,7 @@ www-cdn.uscardforum.com
 .1passwordusercontent.ca
 .1passwordusercontent.eu
 .airtableusercontent.com
+.amazonprimevideo.com.cn
 .assets.xboxservices.com
 .cas-bridge.xethub.hf.co
 .cdn.survey.medallia.com
@@ -7392,6 +7425,7 @@ www-cdn.uscardforum.com
 .storage.yandexcloud.net
 .swupdate.chaosgroup.com
 .uploads-ssl.webflow.com
+.us-west-2.amazonaws.com
 .verizonbusinessfios.com
 .verizondigitalmedia.com
 .vsmarketplacebadges.dev
@@ -7459,6 +7493,7 @@ ftp-stud.hs-esslingen.de
 ftp.rrze.uni-erlangen.de
 ftp.rrzn.uni-hannover.de
 gamemedia.armorgames.com
+gamer2-cds.cdn.hinet.net
 gpl.savoirfairelinux.net
 h-dazn.online-metrix.net
 hls-amt.itunes.apple.com
@@ -7614,7 +7649,6 @@ coin-images.coingecko.com
 components.justanswer.com
 cors-proxy.htmldriven.com
 creativajs.altervista.org
-cs428.wpc.edgecastcdn.net
 daznfeeds.com.edgekey.net
 design-assets.hubspot.com
 dlassets-ssl.xboxlive.com
@@ -7719,11 +7753,15 @@ ww2-secure.justanswer.com
 .assets.shortbread.aws.dev
 .bcbolthboa-a.akamaihd.net
 .challenges.cloudflare.com
+.client-api.arkoselabs.com
 .copr.fedorainfracloud.org
 .cos.ap-seoul.myqcloud.com
 .cos.ap-tokyo.myqcloud.com
 .crashlytics2.l.google.com
+.dashasiafox.akamaized.net
 .dataplane.rudderstack.com
+.dcalivedazn.akamaized.net
+.dcblivedazn.akamaized.net
 .delivery.mp.microsoft.com
 .disneychannelroadtrip.com
 .disneyinternationalhd.com
@@ -7736,6 +7774,7 @@ ww2-secure.justanswer.com
 .foxnewsaroundtheworld.com
 .foxsportsnetmilwaukee.com
 .foxtelevisionstations.com
+.hboasialive.akamaized.net
 .hbogeo.cust.footprint.net
 .manifest.prod.boltdns.net
 .marvel10thanniversary.com
@@ -7748,9 +7787,11 @@ ww2-secure.justanswer.com
 .s3.isk01.sakurastorage.jp
 .s3.isk02.sakurastorage.jp
 .smartscreen.microsoft.com
+.spotify-com.akamaized.net
 .steamstatic.com.8686c.com
 .tiles-api.maps.komoot.net
 .viacomcbspressexpress.com
+.vod-abematv.akamaized.net
 .wide-youtube.l.google.com
 apichatwidget.usepylon.com
 apple.comscoreresearch.com
@@ -7779,7 +7820,6 @@ documenter-assets.pstmn.io
 download.hikarifield.co.jp
 download.projectbluefin.io
 downloads.lemonsqueezy.com
-e13252.dscg.akamaiedge.net
 emby-cdn1.nebula-media.org
 encrypted-tbn0.gstatic.com
 encrypted-tbn1.gstatic.com
@@ -7871,6 +7911,7 @@ wikiwandv2-19431.kxcdn.com
 .hbounify-prod.evergent.com
 .hubspotusercontent-eu1.net
 .hubspotusercontent-na1.net
+.iflix-images.akamaized.net
 .launchercontent.mojang.com
 .m-content-viki.s.llnwi.net
 .myanalytics.cdn.office.net
@@ -7880,6 +7921,8 @@ wikiwandv2-19431.kxcdn.com
 .oss-us-west-1.aliyuncs.com
 .static.dash.cloudflare.com
 .telemetry.services.yofi.ai
+.theater-kktv.cdn.hinet.net
+.tidal-cms.s3.amazonaws.com
 antiqua-ux-cdn.monotype.com
 apache.website-solution.net
 app-static-prod.posthog.com
@@ -7970,6 +8013,7 @@ xpaywalletcdn.azureedge.net
 .disneymeetingsandevents.com
 .download.prss.microsoft.com
 .foxbroadcasting.zendesk.com
+.hbogoprod-vod.akamaized.net
 .intl-subscription.iqiyi.com
 .ipfsgateway.makersplace.com
 .marveldimensionofheroes.com
@@ -7978,11 +8022,13 @@ xpaywalletcdn.azureedge.net
 .s3-website.nl-ams.scw.cloud
 .s3-website.pl-waw.scw.cloud
 .siteintercept.qualtrics.com
+.staticasiafox.akamaized.net
 .themarvelexperiencetour.com
 .widget.cluster.groovehq.com
 .widgets.marketplace.aws.dev
 account-widget-mfe.gcore.com
 apache.melbourneitmirror.net
+as-hls-uk-live.akamaized.net
 assets.positional-bucket.com
 assets4.mist-train-girls.com
 cdn-dynmedia-1.microsoft.com
@@ -8002,6 +8048,7 @@ components.cyclingfactory.be
 connectcache20.azureedge.net
 debian-mirror.behostings.net
 depot-debian.univ-reunion.fr
+dmqdd6hw24ucf.cloudfront.net
 download.pixelexperience.org
 fastly-cloud.typenetwork.com
 frontend-assets.supabase.com
@@ -8051,12 +8098,18 @@ wctour-images.worldchess.com
 .cos.ap-hongkong.myqcloud.com
 .cos.sa-saopaulo.myqcloud.com
 .csp-reporting.cloudflare.com
+.dai3fd1oh325y.cloudfront.net
+.dc8xl0ndzn2cb.cloudfront.net
+.dfp6rglgjqszk.cloudfront.net
+.ds-vod-abematv.akamaized.net
 .foxnewsplayer-a.akamaihd.net
 .i-dont-care-about-cookies.eu
+.linear-abematv.akamaized.net
 .marvelsuperheroseptember.com
 .microsoftpersonalcontent.com
 .mirror.digitalpacific.com.au
 .ogads-pa.clients6.google.com
+.openaiapi-site.azureedge.net
 .oss-cn-hongkong.aliyuncs.com
 .privacyguidesusercontent.com
 .static-prod-web.miniclip.com
@@ -8064,6 +8117,8 @@ wctour-images.worldchess.com
 akamai-assets.squarespace.com
 akamai-origin.myanimelist.net
 analytics.welcomesoftware.com
+aod-hls-uk-live.akamaized.net
+as-dash-uk-live.akamaized.net
 assets-s3-us-east-1.ceros.com
 assets-tcpviewer.proxyman.com
 bcbolt446c5271-a.akamaihd.net
@@ -8077,6 +8132,15 @@ cloudinary-res.cloudinary.com
 connectivitycheck.android.com
 connectivitycheck.gstatic.com
 consentdeliveryfd.azurefd.net
+cwtv-amd-akamai.akamaized.net
+d17lx9ucc6k9fc.cloudfront.net
+d1v5ir2lpwr8os.cloudfront.net
+d1xfray82862hr.cloudfront.net
+d22qjgkvxw22r6.cloudfront.net
+d25xi40x97liuc.cloudfront.net
+d27xxe7juh1us6.cloudfront.net
+d3196yreox78o9.cloudfront.net
+d349g9zuie06uo.cloudfront.net
 dashasiafox.akamaized.netflix
 debian-mirror.puq.apoapsis.cl
 download-core.sys.truenas.net
@@ -8106,6 +8170,8 @@ ubuntu-archive.locaweb.com.br
 ubuntu-mirror.puq.apoapsis.cl
 updates-cdn.bravesoftware.com
 vice-web-statics-cdn.vice.com
+vod-hls-uk-live.akamaized.net
+vod-sub-uk-live.akamaized.net
 web-assets.otogi-frontier.com
 web-starharn.nebula-media.org
 website-prod.cache.wpscdn.com
@@ -8113,12 +8179,25 @@ widgets-red.media.weather.com
 .applicationinsights.azure.com
 .cos.ap-singapore.myqcloud.com
 .cos.eu-frankfurt.myqcloud.com
+.d151l6v8er5bdm.cloudfront.net
+.d1f1eryiqyjs0r.cloudfront.net
+.d1k2us671qcoau.cloudfront.net
+.d1otoma47x30pg.cloudfront.net
+.d1sgwhnao7452x.cloudfront.net
+.d2anahhhmp1ffz.cloudfront.net
+.d2wy8f7a9ursnm.cloudfront.net
+.d3c7rimkq79yfu.cloudfront.net
+.d3cv4a9a9wh0bt.cloudfront.net
+.d3lar09xbwlsge.cloudfront.net
+.d3q1qj9jzsu8nw.cloudfront.net
+.disney-portal.my.onetrust.com
 .edgestorewebcdn.azureedge.net
 .gold-usergeneratedcontent.net
 .mobile-collector.newrelic.com
 .oss-eu-central-1.aliyuncs.com
 .tile-cyclosm.openstreetmap.fr
 alpha-gnu-org.ip-connect.vn.ua
+aod-dash-uk-live.akamaized.net
 assets-next.mattersprotocol.io
 assets.extension.grammarly.com
 assets.freespeechcoalition.com
@@ -8162,6 +8241,8 @@ thumbnails.applegamingwiki.com
 tourpic-vector.maps.komoot.net
 ubuntu-archive.interhost.co.il
 uploads-cdn.omnicalculator.com
+vod-dash-uk-live.akamaized.net
+vod-dash-ww-live.akamaized.net
 vscode-sync.trafficmanager.net
 .assetshuluimcom-a.akamaihd.net
 .beautyandthebeastmusical.co.uk
@@ -8191,6 +8272,7 @@ mirror.physik-pool.tu-berlin.de
 mirror.us-midwest-1.nexcess.net
 mirrors.standaloneinstaller.com
 nobara-images.nobaraproject.org
+p16-tiktokcdn-com.akamaized.net
 panel-production-libs.b-cdn.net
 playwright-akamai.azureedge.net
 product-downloads.atlassian.com
@@ -8201,8 +8283,11 @@ telemetry.1passwordservices.com
 uploadcare.mwcglobalprofile.com
 versioncheck.addons.mozilla.org
 vesta.informatik.rwth-aachen.de
+vod-thumb-uk-live.akamaized.net
+vod-thumb-ww-live.akamaized.net
 wall-ui-cdn.p.aws.economist.com
 .clientmetrics-pa.googleapis.com
+.ds-linear-abematv.akamaized.net
 .lf16-pkgcdn.pitaya-clientai.com
 .oss-ap-northeast-1.aliyuncs.com
 .oss-ap-northeast-2.aliyuncs.com
@@ -8212,6 +8297,7 @@ wall-ui-cdn.p.aws.economist.com
 .oss-ap-southeast-5.aliyuncs.com
 .oss-ap-southeast-6.aliyuncs.com
 .oss-ap-southeast-7.aliyuncs.com
+.s3-ap-southeast-1.amazonaws.com
 .software-download.microsoft.com
 .starwarsgalacticstarcruiser.com
 .voa-11.akacast.akamaistream.net
@@ -8274,8 +8360,11 @@ edge-consumer-static.azureedge.net
 lf16-effectcdn.byteeffecttos-g.com
 streetviewpixels-pa.googleapis.com
 versioncheck-bg.addons.mozilla.org
+vs-cmaf-push-uk-live.akamaized.net
 wre-assets.prod.mapping.strava.com
 .assets.brightspot.abebooks.a2z.com
+.audio-ak-spotify-com.akamaized.net
+.paper-attachments.s3.amazonaws.com
 akmcdnoversea-tw.inter.ptqy.gitv.tv
 blade-public-static.blade-group.com
 copilot-proxy.githubusercontent.com
@@ -8291,6 +8380,8 @@ static-assets-prod.unrealengine.com
 stubdownloader.services.mozilla.com
 .autoupdatesvc.delivery.autodesk.com
 .dca-ll-voddazn-dznvodjp.s.llnwi.net
+.execute-api.us-east-1.amazonaws.com
+.heads4-ak-spotify-com.akamaized.net
 cf-images.us-east-1.prod.boltdns.net
 content-prod-live.cert.starbucks.com
 crossborder-integration.global-e.com
@@ -8300,6 +8391,7 @@ interactive-examples.mdn.mozilla.net
 pro2-ui-assets-s3-fy.myportfolio.com
 resources.digital-cloud.medallia.com
 rum-agent.na-01.cloud.solarwinds.com
+sonyliveevents-nonssai.akamaized.net
 telemetry.business.githubcopilot.com
 .cloud-object-storage.appdomain.cloud
 .crashlyticsreports-pa.googleapis.com
@@ -8318,6 +8410,7 @@ upos-sz-mirrorcosbstar1.bilivideo.com
 .dca-ll-livedazn-dznlivejp.s.llnwi.net
 businessunitprofile-cdn.trustpilot.net
 gfx-data.news-engineering.aws.wapo.pub
+litvfreemobile-hichannel.cdn.hinet.net
 nextplore.vercel.zapier-deployment.com
 runkit-packages-static-executables.com
 telemetry.individual.githubcopilot.com
@@ -8327,15 +8420,18 @@ useruploads.visualwebsiteoptimizer.com
 cdn-spotify-experiments.conductrics.com
 vscode-sync-insiders.trafficmanager.net
 .dc2-vodhls-perform.secure.footprint.net
+.mobileanalytics.us-east-1.amazonaws.com
 cartodb-basemaps-a.global.ssl.fastly.net
 edge-cloud-resource-static.azureedge.net
 edgecdn-embza6g8cacagcbn.z01.azurefd.net
+.cognito-identity.us-east-1.amazonaws.com
+.execute-api.ap-southeast-1.amazonaws.com
 cdn.mcauto-images-production.sendgrid.net
 cf-images.ap-northeast-1.prod.boltdns.net
 marfeelexperimentsexperienceengine.mrf.io
 .cf-images.ap-southeast-1.prod.boltdns.net
-images-daznservices-com.cdn.ampproject.org
 talon-website-prod.ecosec.on.epicgames.com
+.cdn-fox-networks-group-green.akamaized.net
 chuangcachecdnoversea-tw.inter.ptqy.gitv.tv
 ecommplugins-trustboxsettings.trustpilot.com
 static-resource.np.community.playstation.net
