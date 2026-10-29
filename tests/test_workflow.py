@@ -10,7 +10,7 @@ class WorkflowScheduleTests(unittest.TestCase):
     def test_push_main_builds_the_same_commit_it_tests(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         self.assertIn("  push:\n    branches: [main]\n", workflow)
-        self.assertEqual(workflow.count("          ref: ${{ github.sha }}"), 2)
+        self.assertEqual(workflow.count("      - uses: actions/checkout@v5\n        with:\n          ref: ${{ github.sha }}"), 2)
         self.assertNotIn("          ref: main", workflow)
 
     def test_update_calls_the_behavior_tested_publication_entry_point(self):
