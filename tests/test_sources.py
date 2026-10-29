@@ -12,8 +12,8 @@ REQUIRED_SOURCES = {
     "cdn": [
         "https://ruleset.skk.moe/List/domainset/cdn.conf",
         "https://ruleset.skk.moe/List/non_ip/cdn.conf",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Jsdelivr/Jsdelivr.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Limelight/Limelight.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/Jsdelivr_rules_74d31a2e8d46f140.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/Limelight_rules_5225eab41e8617a1.list",
     ],
     "a3": [
         "https://raw.githubusercontent.com/Cats-Team/AdRules/main/qx.conf",
@@ -30,14 +30,13 @@ REQUIRED_SOURCES = {
         "https://ruleset.skk.moe/List/ip/download.conf",
         "https://ruleset.skk.moe/List/ip/stream.conf",
         "https://ruleset.skk.moe/List/non_ip/stream.conf",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Apkpure/Apkpure.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Dropbox/Dropbox.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/Dubox/Dubox.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GlobalMedia/GlobalMedia.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GoogleDrive/GoogleDrive.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/MEGA/MEGA.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/OneDrive/OneDrive.list",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/SourceForge/SourceForge.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/Apkpure_rules_a1cab7851720b24a.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/Dropbox_rules_a9b45d64639554bb.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/Dubox_rules_1a89a3398138ede3.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/GlobalMedia_rules_7a791c748d79ecb2.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/MEGA_rules_cc9587baaf5421aa.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/OneDrive_rules_73ae902f418a9bc0.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/SourceForge_rules_2b326b01fccadb44.list",
         "https://raw.githubusercontent.com/SukkaW/Surge/refs/heads/master/Source/domainset/game-download.conf",
         "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/YouTube.list",
         "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Netflix.list",
@@ -53,7 +52,9 @@ REQUIRED_SOURCES = {
     ],
     "proxy": [
         "https://ruleset.skk.moe/List/non_ip/my_proxy.conf",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/ProxyLite/ProxyLite.list",
+        "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyLite.list",
+        "https://raw.githubusercontent.com/GeQ1an/Rules/master/QuantumultX/Filter/Outside.list",
+        "https://raw.githubusercontent.com/dler-io/Rules/main/Clash/Provider/Proxy.yaml",
         "https://raw.githubusercontent.com/Rabbit-Spec/Surge/Master/Rules/Proxy.list",
     ],
     "dirt": [
@@ -65,7 +66,7 @@ REQUIRED_SOURCES = {
         "https://ruleset.skk.moe/List/non_ip/direct.conf",
         "https://ruleset.skk.moe/List/non_ip/domestic.conf",
         "https://ruleset.skk.moe/List/non_ip/my_direct.conf",
-        "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/China/China.list",
+        "https://magicrule.pages.dev/data/_shared/artifacts/China_rules_25ebfc04af1afb97.list",
         "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/AccelerateDirectSites.list",
         "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list",
         "https://github.com/jqyisbest/RuCu6/raw/refs/heads/main/Rules/China.list",
@@ -201,8 +202,7 @@ class SourcesTests(unittest.TestCase):
                          config["dirt"]["sources"])
         for name, group in config.items():
             with self.subTest(group=name):
-                self.assertEqual([source for source in group["sources"] if source in REQUIRED_SOURCES[name]],
-                                 REQUIRED_SOURCES[name])
+                self.assertEqual(group["sources"], REQUIRED_SOURCES[name])
                 self.assertEqual([source for source in group["whitelist"] if source in REQUIRED_WHITELISTS[name]],
                                  REQUIRED_WHITELISTS[name])
                 for source in group["sources"] + group["whitelist"]:
@@ -250,7 +250,7 @@ class SourcesTests(unittest.TestCase):
             sources,
         )
         self.assertIn(
-            "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/QuantumultX/GlobalMedia/GlobalMedia.list",
+            "https://magicrule.pages.dev/data/_shared/artifacts/GlobalMedia_rules_7a791c748d79ecb2.list",
             sources,
         )
 
