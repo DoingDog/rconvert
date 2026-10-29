@@ -10,7 +10,7 @@ class WorkflowScheduleTests(unittest.TestCase):
     def test_push_main_builds_the_same_commit_it_tests(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         self.assertIn("  push:\n    branches: [main]\n", workflow)
-        self.assertEqual(workflow.count("          ref: ${{ github.sha }}"), 2)
+        self.assertEqual(workflow.count("      - uses: actions/checkout@v5\n        with:\n          ref: ${{ github.sha }}"), 2)
         self.assertNotIn("          ref: main", workflow)
 
     def test_update_calls_the_behavior_tested_publication_entry_point(self):
@@ -21,13 +21,24 @@ class WorkflowScheduleTests(unittest.TestCase):
         self.assertNotIn("--force", workflow)
         self.assertNotIn("rebase", workflow)
 
+    def test_full_suite_runs_only_for_push_and_pull_request(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
+        self.assertIn("  test:\n    if: github.event_name == 'push' || github.event_name == 'pull_request'\n", workflow)
+
+    def test_update_accepts_skipped_tests_only_for_scheduled_and_manual_events(self):
+        workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
+        update = workflow.split("  update:\n", 1)[1]
+        self.assertIn("      (needs.test.result == 'success' || (needs.test.result == 'skipped' &&\n"
+                      "      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'))) }}\n", update)
+
     def test_update_retains_needs_main_and_readonly_pr_boundaries(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/main.yml").read_text(encoding="utf-8")
         readonly, update = workflow.split("  update:\n", 1)
         self.assertIn("  pull_request:\n", readonly)
         self.assertIn("permissions:\n  contents: read\n", readonly)
         self.assertNotIn("contents: write", readonly)
-        self.assertIn("    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'\n", update)
+        self.assertIn("    if: >-\n"
+                      "      ${{ !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&\n", update)
         self.assertIn("    needs: test\n", update)
         self.assertIn("    permissions:\n      contents: write\n", update)
         self.assertIn("  group: rules-${{ github.ref }}\n  cancel-in-progress: false\n", readonly)

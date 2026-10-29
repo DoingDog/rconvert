@@ -506,8 +506,8 @@ class CiPublicationTests(unittest.TestCase):
         self.assertNotIn(".py", committed)
         self.assertNotIn("static/", committed)
 
-    def test_head_must_equal_the_tested_event_sha(self):
-        with self.assertRaisesRegex(ValueError, "HEAD.*tested"):
+    def test_head_must_equal_the_event_sha(self):
+        with self.assertRaisesRegex(ValueError, "^HEAD does not match the event SHA$"):
             self.run_update(sha="0" * 40)
         self.assertEqual(self.tip(), self.base)
         self.assertEqual(self.git(self.runner, "status", "--porcelain").stdout, "")
@@ -534,7 +534,8 @@ class CiPublicationTests(unittest.TestCase):
         (self.runner / "rulesets.json").write_text("invalid source config", encoding="utf-8")
         result = self.run_update(fetch=lambda url: self.fail("superseded run fetched a source"))
         self.assertEqual(result, "superseded")
-        self.assertIn("superseded", self.stdout.getvalue())
+        self.assertIn(f"superseded: event SHA {self.base}; origin main is {advanced}; skipping publication\n",
+                      self.stdout.getvalue())
         self.assertEqual(self.tip(), advanced)
         self.assertEqual(self.git(self.runner, "rev-parse", "HEAD").stdout.strip(), self.base)
         self.assertEqual((self.runner / "fixture-1/fin-adb.txt").read_bytes(), before)

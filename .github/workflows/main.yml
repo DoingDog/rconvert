@@ -17,9 +17,10 @@ concurrency:
 
 jobs:
   test:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.sha }}
       - name: Set up Python
@@ -30,13 +31,16 @@ jobs:
         run: .venv/bin/python -m unittest discover -s tests -v
 
   update:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: >-
+      ${{ !cancelled() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
+      (needs.test.result == 'success' || (needs.test.result == 'skipped' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'))) }}
     needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           ref: ${{ github.sha }}
       - name: Generate and publish current rules
