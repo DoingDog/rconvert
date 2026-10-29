@@ -20,18 +20,18 @@ def _git(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProc
     return result
 
 
-def _superseded(root: Path, tested_sha: str) -> bool:
+def _superseded(root: Path, event_sha: str) -> bool:
     remote = _git(root, "ls-remote", "--exit-code", "origin", "refs/heads/main")
     tip, ref = remote.stdout.strip().split("\t")
     if ref != "refs/heads/main":
         raise ValueError("Expected origin refs/heads/main")
-    if tip != tested_sha:
-        print(f"superseded: tested {tested_sha}; origin main is {tip}; skipping publication")
+    if tip != event_sha:
+        print(f"superseded: event SHA {event_sha}; origin main is {tip}; skipping publication")
         return True
     return False
 
 
-def _push_race(push: subprocess.CompletedProcess, tested_sha: str) -> bool:
+def _push_race(push: subprocess.CompletedProcess, event_sha: str) -> bool:
     statuses = [line.split("\t") for line in push.stdout.splitlines() if "\t" in line]
     if len(statuses) != 1 or len(statuses[0]) != 3 or statuses[0][:2] != ["!", "HEAD:refs/heads/main"]:
         return False
@@ -43,15 +43,15 @@ def _push_race(push: subprocess.CompletedProcess, tested_sha: str) -> bool:
         return False
     mismatch = re.search(
         r"^remote: error: cannot lock ref 'refs/heads/main': is at ([0-9a-f]{40}) but expected "
-        + re.escape(tested_sha) + r"[ \t]*$", push.stderr, re.MULTILINE)
-    return mismatch is not None and mismatch[1] != tested_sha
+        + re.escape(event_sha) + r"[ \t]*$", push.stderr, re.MULTILINE)
+    return mismatch is not None and mismatch[1] != event_sha
 
 
-def update(root: Path, tested_sha: str) -> str:
+def update(root: Path, event_sha: str) -> str:
     root = root.resolve()
-    if _git(root, "rev-parse", "HEAD").stdout.strip() != tested_sha:
-        raise ValueError("HEAD does not match the tested event SHA")
-    if _superseded(root, tested_sha):
+    if _git(root, "rev-parse", "HEAD").stdout.strip() != event_sha:
+        raise ValueError("HEAD does not match the event SHA")
+    if _superseded(root, event_sha):
         return "superseded"
     if _git(root, "diff", "--cached", "--name-only").stdout:
         raise ValueError("Refusing to publish with existing staged changes")
@@ -61,7 +61,7 @@ def update(root: Path, tested_sha: str) -> str:
         raise ValueError("Refusing to overwrite existing changes in publication paths")
     publish(generate(root, fetch_https), root=root)
     update_counts(root)
-    if _superseded(root, tested_sha):
+    if _superseded(root, event_sha):
         return "superseded"
     _git(root, "add", "--", *paths)
     diff = _git(root, "diff", "--cached", "--quiet", check=False)
@@ -75,7 +75,7 @@ def update(root: Path, tested_sha: str) -> str:
          "commit", "-m", "Update generated rules")
     push = _git(root, "push", "--porcelain", "origin", "HEAD:refs/heads/main", check=False)
     if push.returncode:
-        if _push_race(push, tested_sha) and _superseded(root, tested_sha):
+        if _push_race(push, event_sha) and _superseded(root, event_sha):
             return "superseded"
         push.check_returncode()
     return "published"
