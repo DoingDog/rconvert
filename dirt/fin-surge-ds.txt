@@ -1,4 +1,4 @@
-# dirt rules: 6965
+# dirt rules: 6961
 .cn
 .m2m
 .yun
@@ -97,7 +97,6 @@
 .yt0.cc
 .yy.com
 .zx.com
-dot.pub
 .110.com
 .111.com
 .115.com
@@ -1527,7 +1526,6 @@ dot.pub
 .zysou.com
 .zyyct.com
 i.dell.com
-viayoo.com
 .055110.com
 .100tal.com
 .114chn.com
@@ -4473,6 +4471,7 @@ a.iqmtp.live
 .zuowenku.net
 .zuoyebang.cc
 .zxhgroup.com
+ip.bjango.com
 umami.mao.fan
 www.yxssp.com
 .114piaowu.com
@@ -4692,7 +4691,6 @@ www.yxssp.com
 .edgemonix.top
 .eflycloud.com
 .enterdesk.com
-.ex.puata.info
 .excelhome.net
 .exiliumgf.com
 .expreview.com
@@ -4987,6 +4985,7 @@ www.yxssp.com
 .shuqistat.com
 .sinf-test.net
 .singworld.net
+.sleep.pokemon
 .smartisan.com
 .snodehome.com
 .sofreight.com
@@ -5163,10 +5162,7 @@ www.yxssp.com
 .zuihuimai.com
 .zuowenjun.com
 .zuoyebang.com
-app.viayoo.com
 cdn.angruo.com
-res.viayoo.com
-www.viayoo.com
 .0123456789.com
 .1.letvlive.com
 .2.letvlive.com
@@ -5507,6 +5503,7 @@ www.viayoo.com
 .rongechain.com
 .rongshuxia.com
 .ruby-china.org
+.s.mzstatic.com
 .sciencemag.org
 .sf-express.com
 .shanghairc.com
@@ -5650,11 +5647,15 @@ www.viayoo.com
 .zuowenwang.net
 config.ubnt.com
 end.shallow.ink
-kc.kexinshe.com
 .163industry.com
 .360huzhubao.com
 .360webcache.com
 .4thworkshop.com
+.a1.mzstatic.com
+.a2.mzstatic.com
+.a3.mzstatic.com
+.a4.mzstatic.com
+.a5.mzstatic.com
 .abercrombie.com
 .activity-dy.com
 .afp.adchina.com
@@ -6032,7 +6033,6 @@ kc.kexinshe.com
 .zhuayoukong.com
 .zhuoyuegame.com
 www.layuicdn.com
-www.libvideo.com
 .189smarthome.com
 .51kandianshi.com
 .58ganji-corp.com
@@ -6171,6 +6171,11 @@ www.libvideo.com
 .ihappystudio.com
 .ihuoshanlive.com
 .inspirecloud.com
+.is1.mzstatic.com
+.is2.mzstatic.com
+.is3.mzstatic.com
+.is4.mzstatic.com
+.is5.mzstatic.com
 .itunes.apple.com
 .ivolces-test.com
 .jcloud-cache.com
@@ -6316,7 +6321,6 @@ www.libvideo.com
 .xinrenxinshi.com
 .yidianliulan.com
 .yihaodianimg.com
-.yiliao.hupan.com
 .yingjiesheng.com
 .yingjiesheng.net
 .yiwanzhushou.com
@@ -6340,6 +6344,7 @@ p.bstarstatic.com
 .alibabaplanet.com
 .alipayobjects.com
 .annualreviews.org
+.apps.mzstatic.com
 .astral-vector.com
 .baishinetwork.com
 .bangongziyuan.com
@@ -6640,9 +6645,11 @@ time.xtracloud.net
 .volcmcdnsched1.com
 .volcmcdnsched2.com
 .volcproxy-test.net
+.weather.bjango.com
 .webofknowledge.com
 .xiangrikuisite.com
 .yuantongyizhan.com
+cn.alibabacloud.com
 end-api.shallow.ink
 hotspot.cslwifi.com
 ocsp.globalsign.com
@@ -6704,6 +6711,7 @@ ocsp.globalsign.com
 .skyworthdigital.com
 .static.gc.apple.com
 .swcatalog.apple.com
+.swcdn.g.aaplimg.com
 .tenant-zone-dev.com
 .tencentcloudapi.com
 .tencentcloudsec.com
@@ -6728,6 +6736,7 @@ ocsp.globalsign.com
 .xiaoyuankousuan.com
 .ziroomapartment.com
 analytics.strava.com
+api.alibabacloud.com
 api.blipsandchitz.me
 ocsp2.globalsign.com
 origin-a.akamaihd.ne
@@ -6763,6 +6772,11 @@ speedtest.macpaw.com
 .icbcstandardbank.com
 .ifanrusercontent.com
 .init-p01md.apple.com
+.is1-ssl.mzstatic.com
+.is2-ssl.mzstatic.com
+.is3-ssl.mzstatic.com
+.is4-ssl.mzstatic.com
+.is5-ssl.mzstatic.com
 .larksuiteimg-boe.com
 .larksuiteimg-pre.com
 .pglstatp-toutiao.com
@@ -6790,6 +6804,7 @@ xtratime.qcomgeo2.com
 .cdn2.apple-mapkit.com
 .cdn3.apple-mapkit.com
 .cdn4.apple-mapkit.com
+.cds-cdn.v.aaplimg.com
 .chinamobiledevice.com
 .chinaunicomglobal.com
 .cloudflareanycast.net
@@ -6827,6 +6842,7 @@ mirrorlist.cdn.skk.moe
 .alibabafuturehotel.com
 .alibabausercontent.com
 .api.game.letvstore.com
+.appldnld.g.aaplimg.com
 .chinatelecomglobal.com
 .engineeringvillage.com
 .gspe19-cn.ls.apple.com
@@ -6846,6 +6862,7 @@ mirrorlist.cdn.skk.moe
 .weather-map2.apple.com
 .xiangrikuijianzhan.com
 .xn--r70as2s.xn--fiqs8s
+status.alibabacloud.com
 .360buyinternational.com
 .amp-api.media.apple.com
 .binglianhuajianzhan.com
@@ -6907,12 +6924,8 @@ blzddist1-a.akamaihd.net
 .stocks-sparkline.apple.com
 .updates-http.cdn-apple.com
 p-bstarstatic.akamaized.net
-.cdn.odc.officeapps.live.com
-.cn-east-2.myhuaweicloud.com
-.cn-east-3.myhuaweicloud.com
 .dl-vip.pcfaster.baidu.co.th
 .engage.cloudflareclient.com
-.eu-west-0.myhuaweicloud.com
 .kingsoft-office-service.com
 .pglstatp-snssdk-toutiao.com
 .seed-sequoia.siri.apple.com
@@ -6920,24 +6933,13 @@ p-bstarstatic.akamaized.net
 .store.apple.com.edgekey.net
 .tencentdigitalassistant.com
 config.uca.cloud.unity3d.com
-.af-south-1.myhuaweicloud.com
 .cloud-industry-delivery.site
-.cn-north-1.myhuaweicloud.com
-.cn-north-2.myhuaweicloud.com
-.cn-north-3.myhuaweicloud.com
-.cn-north-4.myhuaweicloud.com
-.cn-north-5.myhuaweicloud.com
-.cn-north-6.myhuaweicloud.com
-.cn-north-9.myhuaweicloud.com
-.cn-south-1.myhuaweicloud.com
-.cn-south-2.myhuaweicloud.com
-.cn-south-4.myhuaweicloud.com
 .download.developer.apple.com
 .feishuopenplatformrecord.com
 .gspe11-2-cn-ssl.ls.apple.com
 .gspe19-2-cn-ssl.ls.apple.com
-.la-north-2.myhuaweicloud.com
-.la-south-2.myhuaweicloud.com
+.iosapps.itunes.g.aaplimg.com
+.osxapps.itunes.g.aaplimg.com
 .sh-pod2-smp-device.apple.com
 .smp-device-content.apple.com
 .sonyentertainmentnetwork.com
@@ -6945,19 +6947,13 @@ config.uca.cloud.unity3d.com
 steamcommunity-a.akamaihd.net
 .feishu-3rd-party-services.com
 .lenovo.com.cdn.cloudflare.net
-.na-mexico-1.myhuaweicloud.com
-.sa-brazil-1.myhuaweicloud.com
 .shazam-insights.cdn-apple.com
 .uat1.bfsspadserver.8le8le.com
 images-cn.ssl-images-amazon.com
+.guzzoni-apple-com.v.aaplimg.com
 .store.storeimages.cdn-apple.com
-.ap-southeast-1.myhuaweicloud.com
-.ap-southeast-2.myhuaweicloud.com
-.ap-southeast-3.myhuaweicloud.com
-.cn-northeast-1.myhuaweicloud.com
+.swallow-apple-com.v.aaplimg.com
 .cn-smp-paymentservices.apple.com
-.cn-southwest-2.myhuaweicloud.com
-.ru-northwest-2.myhuaweicloud.com
 .upos-hz-mirrorakam.akamaized.net
 .app-site-association.cdn-apple.com
 upos-bstar-mirrorakam.akamaized.net

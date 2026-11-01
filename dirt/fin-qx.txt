@@ -1,23 +1,17 @@
-# dirt rules: 57968
-HOST,dot.pub,LIST
+# dirt rules: 57963
 HOST,i.dell.com,LIST
-HOST,viayoo.com,LIST
 HOST,127.skk.moe,LIST
 HOST,dl.ubnt.com,LIST
 HOST,kms.03k.org,LIST
 HOST,raw.iqiq.io,LIST
 HOST,a.iqmtp.live,LIST
+HOST,ip.bjango.com,LIST
 HOST,umami.mao.fan,LIST
 HOST,www.yxssp.com,LIST
-HOST,app.viayoo.com,LIST
 HOST,cdn.angruo.com,LIST
-HOST,res.viayoo.com,LIST
-HOST,www.viayoo.com,LIST
 HOST,config.ubnt.com,LIST
 HOST,end.shallow.ink,LIST
-HOST,kc.kexinshe.com,LIST
 HOST,www.layuicdn.com,LIST
-HOST,www.libvideo.com,LIST
 HOST,captive.apple.com,LIST
 HOST,ip.istatmenus.app,LIST
 HOST,local.adguard.org,LIST
@@ -26,10 +20,12 @@ HOST,client.amplifi.com,LIST
 HOST,sms.imagetasks.com,LIST
 HOST,time.izatcloud.net,LIST
 HOST,time.xtracloud.net,LIST
+HOST,cn.alibabacloud.com,LIST
 HOST,end-api.shallow.ink,LIST
 HOST,hotspot.cslwifi.com,LIST
 HOST,ocsp.globalsign.com,LIST
 HOST,analytics.strava.com,LIST
+HOST,api.alibabacloud.com,LIST
 HOST,api.blipsandchitz.me,LIST
 HOST,ocsp2.globalsign.com,LIST
 HOST,origin-a.akamaihd.ne,LIST
@@ -46,6 +42,7 @@ HOST,gstore.val.manlaxy.com,LIST
 HOST,injections.adguard.org,LIST
 HOST,media.cdn.queniuqe.com,LIST
 HOST,mirrorlist.cdn.skk.moe,LIST
+HOST,status.alibabacloud.com,LIST
 HOST,blzddist1-a.akamaihd.net,LIST
 HOST,p-bstarstatic.akamaized.net,LIST
 HOST,config.uca.cloud.unity3d.com,LIST
@@ -73,7 +70,6 @@ HOST-KEYWORD,.tmall.com,LIST
 HOST-KEYWORD,wanfangdata,LIST
 HOST-KEYWORD,westlawchina,LIST
 HOST-KEYWORD,sciencedirect,LIST
-HOST-KEYWORD,sleep.pokemon,LIST
 HOST-SUFFIX,cn,LIST
 HOST-SUFFIX,m2m,LIST
 HOST-SUFFIX,yun,LIST
@@ -31308,7 +31304,6 @@ HOST-SUFFIX,ewetqkcxq.com,LIST
 HOST-SUFFIX,ewiqpueki.com,LIST
 HOST-SUFFIX,ewpackegr.com,LIST
 HOST-SUFFIX,ewprwtfia.com,LIST
-HOST-SUFFIX,ex.puata.info,LIST
 HOST-SUFFIX,excelhome.net,LIST
 HOST-SUFFIX,exeedcars.com,LIST
 HOST-SUFFIX,exiliumgf.com,LIST
@@ -33822,6 +33817,7 @@ HOST-SUFFIX,skwgzyatg.com,LIST
 HOST-SUFFIX,skxopechz.com,LIST
 HOST-SUFFIX,skyevihby.com,LIST
 HOST-SUFFIX,skyworthcd.cn,LIST
+HOST-SUFFIX,sleep.pokemon,LIST
 HOST-SUFFIX,sliansoft.com,LIST
 HOST-SUFFIX,slink.company,LIST
 HOST-SUFFIX,smartisan.com,LIST
@@ -37997,6 +37993,7 @@ HOST-SUFFIX,ruyipos.com.cn,LIST
 HOST-SUFFIX,rwc-beijing.cn,LIST
 HOST-SUFFIX,ryytngroup.com,LIST
 HOST-SUFFIX,s-cloud.com.cn,LIST
+HOST-SUFFIX,s.mzstatic.com,LIST
 HOST-SUFFIX,sacfurtech.com,LIST
 HOST-SUFFIX,sacneatech.com,LIST
 HOST-SUFFIX,safetykwai.com,LIST
@@ -39209,6 +39206,11 @@ HOST-SUFFIX,95105855.com.cn,LIST
 HOST-SUFFIX,95105855.net.cn,LIST
 HOST-SUFFIX,96redpacket.com,LIST
 HOST-SUFFIX,98redpacket.com,LIST
+HOST-SUFFIX,a1.mzstatic.com,LIST
+HOST-SUFFIX,a2.mzstatic.com,LIST
+HOST-SUFFIX,a3.mzstatic.com,LIST
+HOST-SUFFIX,a4.mzstatic.com,LIST
+HOST-SUFFIX,a5.mzstatic.com,LIST
 HOST-SUFFIX,aadvertising.cn,LIST
 HOST-SUFFIX,aapplication.cn,LIST
 HOST-SUFFIX,aassociation.cn,LIST
@@ -42649,6 +42651,11 @@ HOST-SUFFIX,ionewsstatic.com,LIST
 HOST-SUFFIX,ipv6ready.org.cn,LIST
 HOST-SUFFIX,iqtianshanmw.com,LIST
 HOST-SUFFIX,iquaveizeeru.com,LIST
+HOST-SUFFIX,is1.mzstatic.com,LIST
+HOST-SUFFIX,is2.mzstatic.com,LIST
+HOST-SUFFIX,is3.mzstatic.com,LIST
+HOST-SUFFIX,is4.mzstatic.com,LIST
+HOST-SUFFIX,is5.mzstatic.com,LIST
 HOST-SUFFIX,ishandianyun.com,LIST
 HOST-SUFFIX,ishansong.com.cn,LIST
 HOST-SUFFIX,isolarmaster.com,LIST
@@ -43738,7 +43745,6 @@ HOST-SUFFIX,yidaplatform.com,LIST
 HOST-SUFFIX,yidianliulan.com,LIST
 HOST-SUFFIX,yigongjia.org.cn,LIST
 HOST-SUFFIX,yihaodianimg.com,LIST
-HOST-SUFFIX,yiliao.hupan.com,LIST
 HOST-SUFFIX,yiliucapital.com,LIST
 HOST-SUFFIX,yinfinity.com.cn,LIST
 HOST-SUFFIX,yingdonglive.com,LIST
@@ -43936,6 +43942,7 @@ HOST-SUFFIX,aota-alliance.com,LIST
 HOST-SUFFIX,aph-bytedance.com,LIST
 HOST-SUFFIX,apiexpress.com.cn,LIST
 HOST-SUFFIX,appinchina.com.cn,LIST
+HOST-SUFFIX,apps.mzstatic.com,LIST
 HOST-SUFFIX,aquaterramail.com,LIST
 HOST-SUFFIX,archer-motors.com,LIST
 HOST-SUFFIX,asianewsphoto.com,LIST
@@ -46096,6 +46103,7 @@ HOST-SUFFIX,wangshanglinju.com,LIST
 HOST-SUFFIX,wangshanglinju.net,LIST
 HOST-SUFFIX,wangzherongyao.com,LIST
 HOST-SUFFIX,wangzhiregistry.cn,LIST
+HOST-SUFFIX,weather.bjango.com,LIST
 HOST-SUFFIX,weatherlive.com.cn,LIST
 HOST-SUFFIX,weathermate.com.cn,LIST
 HOST-SUFFIX,weaversoftware.com,LIST
@@ -46598,6 +46606,7 @@ HOST-SUFFIX,suninginvestment.cn,LIST
 HOST-SUFFIX,supercellsupport.cn,LIST
 HOST-SUFFIX,supergarlics.com.cn,LIST
 HOST-SUFFIX,swcatalog.apple.com,LIST
+HOST-SUFFIX,swcdn.g.aaplimg.com,LIST
 HOST-SUFFIX,swordsoflegends.com,LIST
 HOST-SUFFIX,szjr-tencentclb.com,LIST
 HOST-SUFFIX,szjr-tencentclb.net,LIST
@@ -46914,6 +46923,11 @@ HOST-SUFFIX,ifanrusercontent.com,LIST
 HOST-SUFFIX,igetcool-fission.com,LIST
 HOST-SUFFIX,infinitestars.com.cn,LIST
 HOST-SUFFIX,init-p01md.apple.com,LIST
+HOST-SUFFIX,is1-ssl.mzstatic.com,LIST
+HOST-SUFFIX,is2-ssl.mzstatic.com,LIST
+HOST-SUFFIX,is3-ssl.mzstatic.com,LIST
+HOST-SUFFIX,is4-ssl.mzstatic.com,LIST
+HOST-SUFFIX,is5-ssl.mzstatic.com,LIST
 HOST-SUFFIX,ishanggongzuo.com.cn,LIST
 HOST-SUFFIX,istudyinchina.org.cn,LIST
 HOST-SUFFIX,j-bigdataresearch.cn,LIST
@@ -47160,6 +47174,7 @@ HOST-SUFFIX,cdn1.apple-mapkit.com,LIST
 HOST-SUFFIX,cdn2.apple-mapkit.com,LIST
 HOST-SUFFIX,cdn3.apple-mapkit.com,LIST
 HOST-SUFFIX,cdn4.apple-mapkit.com,LIST
+HOST-SUFFIX,cds-cdn.v.aaplimg.com,LIST
 HOST-SUFFIX,cgoec-tencentclb.work,LIST
 HOST-SUFFIX,china-orangegroup.com,LIST
 HOST-SUFFIX,chinadiplomacy.org.cn,LIST
@@ -47432,6 +47447,7 @@ HOST-SUFFIX,aliyunedge-pipeops.com,LIST
 HOST-SUFFIX,aliyunedge-pipeops.net,LIST
 HOST-SUFFIX,aliyunvectorsearch.com,LIST
 HOST-SUFFIX,api.game.letvstore.com,LIST
+HOST-SUFFIX,appldnld.g.aaplimg.com,LIST
 HOST-SUFFIX,authenticvision-app.cn,LIST
 HOST-SUFFIX,backupdesktopcloud.com,LIST
 HOST-SUFFIX,bank-of-tianjin.com.cn,LIST
@@ -47829,12 +47845,8 @@ HOST-SUFFIX,vivozhifubaoxiaochengxu.cn,LIST
 HOST-SUFFIX,youkarsreturnoftheking.com,LIST
 HOST-SUFFIX,alibabaglobalinitatives.com,LIST
 HOST-SUFFIX,bjhldycft-tencentclb.com.cn,LIST
-HOST-SUFFIX,cdn.odc.officeapps.live.com,LIST
-HOST-SUFFIX,cn-east-2.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-east-3.myhuaweicloud.com,LIST
 HOST-SUFFIX,dl-vip.pcfaster.baidu.co.th,LIST
 HOST-SUFFIX,engage.cloudflareclient.com,LIST
-HOST-SUFFIX,eu-west-0.myhuaweicloud.com,LIST
 HOST-SUFFIX,kingsoft-office-service.com,LIST
 HOST-SUFFIX,kuai666bjs3gsymi6v4h5pz.com,LIST
 HOST-SUFFIX,pangolin-sdk-toutiao0-b.com,LIST
@@ -47853,18 +47865,7 @@ HOST-SUFFIX,shwxzfjpyzc-tencentclb.work,LIST
 HOST-SUFFIX,store.apple.com.edgekey.net,LIST
 HOST-SUFFIX,tencentdigitalassistant.com,LIST
 HOST-SUFFIX,tencentelasticsearch.com.cn,LIST
-HOST-SUFFIX,af-south-1.myhuaweicloud.com,LIST
 HOST-SUFFIX,cloud-industry-delivery.site,LIST
-HOST-SUFFIX,cn-north-1.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-north-2.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-north-3.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-north-4.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-north-5.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-north-6.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-north-9.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-south-1.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-south-2.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-south-4.myhuaweicloud.com,LIST
 HOST-SUFFIX,contributiondissector.com.cn,LIST
 HOST-SUFFIX,download.developer.apple.com,LIST
 HOST-SUFFIX,feishuopenplatformrecord.com,LIST
@@ -47872,9 +47873,9 @@ HOST-SUFFIX,gspe11-2-cn-ssl.ls.apple.com,LIST
 HOST-SUFFIX,gspe19-2-cn-ssl.ls.apple.com,LIST
 HOST-SUFFIX,harrypottermagicawakened.com,LIST
 HOST-SUFFIX,infiniteborders3kingdoms.com,LIST
+HOST-SUFFIX,iosapps.itunes.g.aaplimg.com,LIST
 HOST-SUFFIX,kuai666bjeve6ks43qyw4vc8.com,LIST
-HOST-SUFFIX,la-north-2.myhuaweicloud.com,LIST
-HOST-SUFFIX,la-south-2.myhuaweicloud.com,LIST
+HOST-SUFFIX,osxapps.itunes.g.aaplimg.com,LIST
 HOST-SUFFIX,sh-pod2-smp-device.apple.com,LIST
 HOST-SUFFIX,shhqcftfzhj-tencentclb.cloud,LIST
 HOST-SUFFIX,shwxzfjpyzc-tencentclb.cloud,LIST
@@ -47884,22 +47885,16 @@ HOST-SUFFIX,tj-pod1-smp-device.apple.com,LIST
 HOST-SUFFIX,edgeone-browser-rendering.com,LIST
 HOST-SUFFIX,feishu-3rd-party-services.com,LIST
 HOST-SUFFIX,lenovo.com.cdn.cloudflare.net,LIST
-HOST-SUFFIX,na-mexico-1.myhuaweicloud.com,LIST
-HOST-SUFFIX,sa-brazil-1.myhuaweicloud.com,LIST
 HOST-SUFFIX,shazam-insights.cdn-apple.com,LIST
 HOST-SUFFIX,socialbasecustomercontent.com,LIST
 HOST-SUFFIX,uat1.bfsspadserver.8le8le.com,LIST
 HOST-SUFFIX,development-testing-sandbox.cn,LIST
 HOST-SUFFIX,edgeone-browser-rendering-cn.cn,LIST
+HOST-SUFFIX,guzzoni-apple-com.v.aaplimg.com,LIST
 HOST-SUFFIX,store.storeimages.cdn-apple.com,LIST
-HOST-SUFFIX,ap-southeast-1.myhuaweicloud.com,LIST
-HOST-SUFFIX,ap-southeast-2.myhuaweicloud.com,LIST
-HOST-SUFFIX,ap-southeast-3.myhuaweicloud.com,LIST
-HOST-SUFFIX,cn-northeast-1.myhuaweicloud.com,LIST
+HOST-SUFFIX,swallow-apple-com.v.aaplimg.com,LIST
 HOST-SUFFIX,cn-smp-paymentservices.apple.com,LIST
-HOST-SUFFIX,cn-southwest-2.myhuaweicloud.com,LIST
 HOST-SUFFIX,edgeone-browser-rendering-cn.com,LIST
-HOST-SUFFIX,ru-northwest-2.myhuaweicloud.com,LIST
 HOST-SUFFIX,upos-hz-mirrorakam.akamaized.net,LIST
 HOST-SUFFIX,edgeone-browser-rendering-dev.com,LIST
 HOST-SUFFIX,app-site-association.cdn-apple.com,LIST
@@ -53549,7 +53544,6 @@ IP-CIDR,103.169.108.0/23,LIST
 IP-CIDR,103.169.162.0/23,LIST
 IP-CIDR,103.169.202.0/23,LIST
 IP-CIDR,103.170.134.0/23,LIST
-IP-CIDR,103.170.210.0/23,LIST
 IP-CIDR,103.170.212.0/23,LIST
 IP-CIDR,103.171.166.0/24,LIST
 IP-CIDR,103.171.214.0/23,LIST
@@ -54417,6 +54411,7 @@ IP-CIDR,223.255.236.0/22,LIST
 IP-CIDR,223.255.252.0/23,LIST
 IP-CIDR,23.40.241.251/32,LIST
 IP-CIDR,3.109.116.108/32,LIST
+IP-CIDR,38.93.228.132/32,LIST
 IP-CIDR,38.93.228.135/32,LIST
 IP-CIDR,38.93.228.139/32,LIST
 IP-CIDR,50.17.126.121/32,LIST
@@ -54431,6 +54426,7 @@ IP-CIDR,148.153.48.240/32,LIST
 IP-CIDR,154.18.212.240/32,LIST
 IP-CIDR,210.71.227.200/32,LIST
 IP-CIDR,210.71.227.202/32,LIST
+IP-CIDR,35.178.208.187/32,LIST
 IP-CIDR,43.109.186.147/32,LIST
 IP-CIDR,74.125.250.129/32,LIST
 IP-CIDR,104.109.129.153/32,LIST
@@ -57395,7 +57391,6 @@ IP6-CIDR,2406:840:fe26::/48,LIST
 IP6-CIDR,2406:840:fe28::/45,LIST
 IP6-CIDR,2406:840:fe30::/44,LIST
 IP6-CIDR,2406:840:fe40::/44,LIST
-IP6-CIDR,2406:840:fe51::/48,LIST
 IP6-CIDR,2406:840:fe52::/47,LIST
 IP6-CIDR,2406:840:fe54::/46,LIST
 IP6-CIDR,2406:840:fe58::/45,LIST
