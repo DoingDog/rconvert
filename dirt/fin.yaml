@@ -1,4 +1,4 @@
-# dirt rules: 57931
+# dirt rules: 57930
 payload:
   - "DOMAIN,i.dell.com"
   - "DOMAIN,127.skk.moe"
@@ -57388,7 +57388,6 @@ payload:
   - "IP-CIDR6,2406:840:fee8::/46"
   - "IP-CIDR6,2406:840:feec::/48"
   - "IP-CIDR6,2406:840:feee::/47"
-  - "IP-CIDR6,2406:840:feff::/48"
   - "IP-CIDR6,2406:840:ff00::/40"
   - "IP-CIDR6,2406:dd80:400::/38"
   - "IP-CIDR6,2406:dd80:c00::/38"

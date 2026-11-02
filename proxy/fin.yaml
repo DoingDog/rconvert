@@ -1,4 +1,4 @@
-# proxy rules: 24891
+# proxy rules: 24895
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,eep.io"
@@ -11211,6 +11211,7 @@ payload:
   - "DOMAIN-SUFFIX,girl7942.com"
   - "DOMAIN-SUFFIX,girlsway.com"
   - "DOMAIN-SUFFIX,girlsxxx.net"
+  - "DOMAIN-SUFFIX,github1s.com"
   - "DOMAIN-SUFFIX,gizmoxxx.com"
   - "DOMAIN-SUFFIX,globaltm.org"
   - "DOMAIN-SUFFIX,globo.com.br"
@@ -14414,6 +14415,7 @@ payload:
   - "DOMAIN-SUFFIX,ranyunfei.com"
   - "DOMAIN-SUFFIX,rapefilms.net"
   - "DOMAIN-SUFFIX,raremovie.net"
+  - "DOMAIN-SUFFIX,rawgithub.com"
   - "DOMAIN-SUFFIX,razyboard.com"
   - "DOMAIN-SUFFIX,rb-crisis.com"
   - "DOMAIN-SUFFIX,rbspeakup.com"
@@ -20240,6 +20242,7 @@ payload:
   - "DOMAIN-SUFFIX,giantessbooru.com"
   - "DOMAIN-SUFFIX,giantessnight.com"
   - "DOMAIN-SUFFIX,girlsofdesire.org"
+  - "DOMAIN-SUFFIX,githubcopilot.com"
   - "DOMAIN-SUFFIX,githubpreview.dev"
   - "DOMAIN-SUFFIX,githubsupport.com"
   - "DOMAIN-SUFFIX,gitlab-static.net"
@@ -24786,6 +24789,7 @@ payload:
   - "DOMAIN-SUFFIX,cloudflare-terms-of-service-abuse.com"
   - "DOMAIN-SUFFIX,mastercardcenterforinclusivegrowth.org"
   - "DOMAIN-SUFFIX,microsoftadvertisingregionalawards.com"
+  - "DOMAIN-SUFFIX,github-avatars.oss-cn-hongkong.aliyuncs.com"
   - "DOMAIN-SUFFIX,wiremoneytoirelandwithxoomeasierandcheaper.com"
   - "PROCESS-NAME-REGEX,(?-i:\\A\\x{61}\\x{70}\\x{73}\\x{64}\\z)"
   - "PROCESS-NAME-REGEX,(?-i:\\A\\x{66}\\x{6D}\\x{66}\\x{64}\\z)"

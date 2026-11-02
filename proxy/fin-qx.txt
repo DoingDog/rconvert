@@ -1,4 +1,4 @@
-# proxy rules: 24876
+# proxy rules: 24880
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -11194,6 +11194,7 @@ HOST-SUFFIX,giratina.com,LIST
 HOST-SUFFIX,girl7942.com,LIST
 HOST-SUFFIX,girlsway.com,LIST
 HOST-SUFFIX,girlsxxx.net,LIST
+HOST-SUFFIX,github1s.com,LIST
 HOST-SUFFIX,gizmoxxx.com,LIST
 HOST-SUFFIX,globaltm.org,LIST
 HOST-SUFFIX,globo.com.br,LIST
@@ -14397,6 +14398,7 @@ HOST-SUFFIX,randyblue.com,LIST
 HOST-SUFFIX,ranyunfei.com,LIST
 HOST-SUFFIX,rapefilms.net,LIST
 HOST-SUFFIX,raremovie.net,LIST
+HOST-SUFFIX,rawgithub.com,LIST
 HOST-SUFFIX,razyboard.com,LIST
 HOST-SUFFIX,rb-crisis.com,LIST
 HOST-SUFFIX,rbspeakup.com,LIST
@@ -20223,6 +20225,7 @@ HOST-SUFFIX,genshinimpact.com,LIST
 HOST-SUFFIX,giantessbooru.com,LIST
 HOST-SUFFIX,giantessnight.com,LIST
 HOST-SUFFIX,girlsofdesire.org,LIST
+HOST-SUFFIX,githubcopilot.com,LIST
 HOST-SUFFIX,githubpreview.dev,LIST
 HOST-SUFFIX,githubsupport.com,LIST
 HOST-SUFFIX,gitlab-static.net,LIST
@@ -24769,6 +24772,7 @@ HOST-SUFFIX,international-news.newsmagazine.asia,LIST
 HOST-SUFFIX,cloudflare-terms-of-service-abuse.com,LIST
 HOST-SUFFIX,mastercardcenterforinclusivegrowth.org,LIST
 HOST-SUFFIX,microsoftadvertisingregionalawards.com,LIST
+HOST-SUFFIX,github-avatars.oss-cn-hongkong.aliyuncs.com,LIST
 HOST-SUFFIX,wiremoneytoirelandwithxoomeasierandcheaper.com,LIST
 USER-AGENT,Roam*,LIST
 USER-AGENT,PayPal*,LIST

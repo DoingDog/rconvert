@@ -1,4 +1,4 @@
-# proxy rules: 24618
+# proxy rules: 24633
 DOMAIN,ip.cn
 DOMAIN,eep.io
 DOMAIN,ipxy.io
@@ -1668,6 +1668,7 @@ DOMAIN,design-assets.hubspot.com
 DOMAIN,dlassets-ssl.xboxlive.com
 DOMAIN,euc-widget.freshworks.com
 DOMAIN,events.ld.catamorphic.com
+DOMAIN,github-api.arkoselabs.com
 DOMAIN,global-assets.fitch.group
 DOMAIN,hub-assets.displaycal.net
 DOMAIN,im.np-payment-gateway.com
@@ -6436,6 +6437,7 @@ DOMAIN-SUFFIX,gitbook.io
 DOMAIN-SUFFIX,gitcdn.top
 DOMAIN-SUFFIX,gitcdn.xyz
 DOMAIN-SUFFIX,github.com
+DOMAIN-SUFFIX,github.dev
 DOMAIN-SUFFIX,gitlab.com
 DOMAIN-SUFFIX,gitlab.net
 DOMAIN-SUFFIX,gizlen.net
@@ -8659,6 +8661,7 @@ DOMAIN-SUFFIX,gitbook.com
 DOMAIN-SUFFIX,gitbooks.io
 DOMAIN-SUFFIX,gitcdn.link
 DOMAIN-SUFFIX,githack.com
+DOMAIN-SUFFIX,github.blog
 DOMAIN-SUFFIX,gitstar.com
 DOMAIN-SUFFIX,gitstar.net
 DOMAIN-SUFFIX,glam0ur.com
@@ -11072,6 +11075,7 @@ DOMAIN-SUFFIX,giratina.com
 DOMAIN-SUFFIX,girl7942.com
 DOMAIN-SUFFIX,girlsway.com
 DOMAIN-SUFFIX,girlsxxx.net
+DOMAIN-SUFFIX,github1s.com
 DOMAIN-SUFFIX,gizmoxxx.com
 DOMAIN-SUFFIX,globaltm.org
 DOMAIN-SUFFIX,globo.com.br
@@ -13417,6 +13421,7 @@ DOMAIN-SUFFIX,gfrevenge.com
 DOMAIN-SUFFIX,gfwlist.start
 DOMAIN-SUFFIX,ghostpath.com
 DOMAIN-SUFFIX,gigantits.com
+DOMAIN-SUFFIX,github.career
 DOMAIN-SUFFIX,githubapp.com
 DOMAIN-SUFFIX,gitkraken.com
 DOMAIN-SUFFIX,gitkraken.dev
@@ -14189,6 +14194,7 @@ DOMAIN-SUFFIX,randyblue.com
 DOMAIN-SUFFIX,ranyunfei.com
 DOMAIN-SUFFIX,rapefilms.net
 DOMAIN-SUFFIX,raremovie.net
+DOMAIN-SUFFIX,rawgithub.com
 DOMAIN-SUFFIX,razyboard.com
 DOMAIN-SUFFIX,rb-crisis.com
 DOMAIN-SUFFIX,rbspeakup.com
@@ -15433,6 +15439,7 @@ DOMAIN-SUFFIX,gigacircle.com
 DOMAIN-SUFFIX,girlbanker.com
 DOMAIN-SUFFIX,girlscanner.cc
 DOMAIN-SUFFIX,girlsdelta.com
+DOMAIN-SUFFIX,githubnext.com
 DOMAIN-SUFFIX,glitchprod.com
 DOMAIN-SUFFIX,glitchwave.com
 DOMAIN-SUFFIX,global-sci.org
@@ -18706,6 +18713,7 @@ DOMAIN-SUFFIX,girlsgogames.com
 DOMAIN-SUFFIX,girlsnudepic.com
 DOMAIN-SUFFIX,girlstryanal.com
 DOMAIN-SUFFIX,githubassets.com
+DOMAIN-SUFFIX,githubstatus.com
 DOMAIN-SUFFIX,gittigidiyor.net
 DOMAIN-SUFFIX,globalrescue.net
 DOMAIN-SUFFIX,globalsign.cloud
@@ -19978,6 +19986,9 @@ DOMAIN-SUFFIX,genshinimpact.com
 DOMAIN-SUFFIX,giantessbooru.com
 DOMAIN-SUFFIX,giantessnight.com
 DOMAIN-SUFFIX,girlsofdesire.org
+DOMAIN-SUFFIX,githubcopilot.com
+DOMAIN-SUFFIX,githubpreview.dev
+DOMAIN-SUFFIX,githubsupport.com
 DOMAIN-SUFFIX,gitlab-static.net
 DOMAIN-SUFFIX,givemebuzzsaw.com
 DOMAIN-SUFFIX,globalsign.com.br
@@ -20464,6 +20475,7 @@ DOMAIN-SUFFIX,thechinastory.org
 DOMAIN-SUFFIX,theclasshroom.com
 DOMAIN-SUFFIX,theepochtimes.com
 DOMAIN-SUFFIX,thefappening.wiki
+DOMAIN-SUFFIX,thegithubshop.com
 DOMAIN-SUFFIX,thehealthsite.com
 DOMAIN-SUFFIX,theintelstore.com
 DOMAIN-SUFFIX,themilfmovies.com
@@ -20998,6 +21010,7 @@ DOMAIN-SUFFIX,girlfriendvids.net
 DOMAIN-SUFFIX,girlfuckshorse.net
 DOMAIN-SUFFIX,girlsfuck-tube.com
 DOMAIN-SUFFIX,girlswelustfor.com
+DOMAIN-SUFFIX,githubuniverse.com
 DOMAIN-SUFFIX,globalsecurity.org
 DOMAIN-SUFFIX,gmo-clinic-map.com
 DOMAIN-SUFFIX,gmo-healthtech.com
@@ -21821,6 +21834,7 @@ DOMAIN-SUFFIX,geeksquadonline.com
 DOMAIN-SUFFIX,getdrebeatssale.com
 DOMAIN-SUFFIX,girlsgogamescdn.com
 DOMAIN-SUFFIX,girlsheaven-job.net
+DOMAIN-SUFFIX,githubhackathon.com
 DOMAIN-SUFFIX,gloryofheracles.com
 DOMAIN-SUFFIX,goodnewsnetwork.org
 DOMAIN-SUFFIX,greginhollywood.com
@@ -24503,6 +24517,7 @@ DOMAIN-SUFFIX,international-news.newsmagazine.asia
 DOMAIN-SUFFIX,cloudflare-terms-of-service-abuse.com
 DOMAIN-SUFFIX,mastercardcenterforinclusivegrowth.org
 DOMAIN-SUFFIX,microsoftadvertisingregionalawards.com
+DOMAIN-SUFFIX,github-avatars.oss-cn-hongkong.aliyuncs.com
 DOMAIN-SUFFIX,wiremoneytoirelandwithxoomeasierandcheaper.com
 PROCESS-NAME,apsd
 PROCESS-NAME,fmfd
