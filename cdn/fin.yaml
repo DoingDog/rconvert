@@ -1,4 +1,4 @@
-# cdn rules: 4791
+# cdn rules: 4792
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -3381,6 +3381,7 @@ payload:
   - "DOMAIN,static.institution.grammarly.com"
   - "DOMAIN,static.registration.bluehost.com"
   - "DOMAIN,assets-growth-common.circleci.com"
+  - "DOMAIN,assets.temporary-phone-number.com"
   - "DOMAIN,consumersiteimages.trustpilot.net"
   - "DOMAIN,firebase-settings.crashlytics.com"
   - "DOMAIN,firebaselogging-pa.googleapis.com"

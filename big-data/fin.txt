@@ -1,4 +1,4 @@
-# big-data rules: 10072
+# big-data rules: 10073
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -4614,6 +4614,7 @@ DOMAIN,static.registration.bluehost.com
 DOMAIN,steamdeck-packages.steamos.cloud
 DOMAIN,assets-growth-common.circleci.com
 DOMAIN,assets-production.packagecloud.io
+DOMAIN,assets.temporary-phone-number.com
 DOMAIN,consumersiteimages.trustpilot.net
 DOMAIN,debian-archive.trafficmanager.net
 DOMAIN,edge.cwtv-vod-ext.top.comcast.net

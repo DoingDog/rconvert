@@ -1,4 +1,4 @@
-# dirt rules: 57685
+# dirt rules: 57699
 HOST,i.dell.com,LIST
 HOST,127.skk.moe,LIST
 HOST,dl.ubnt.com,LIST
@@ -19091,6 +19091,7 @@ HOST-SUFFIX,fastcdn.com,LIST
 HOST-SUFFIX,fastidea.cc,LIST
 HOST-SUFFIX,fastidea.me,LIST
 HOST-SUFFIX,favokit.com,LIST
+HOST-SUFFIX,favonis.com,LIST
 HOST-SUFFIX,fawuren.com,LIST
 HOST-SUFFIX,fawuren.net,LIST
 HOST-SUFFIX,fayone.tech,LIST
@@ -31343,6 +31344,8 @@ HOST-SUFFIX,fanxingyl.com,LIST
 HOST-SUFFIX,fanyiniao.com,LIST
 HOST-SUFFIX,fapiao123.com,LIST
 HOST-SUFFIX,fariycloud.cn,LIST
+HOST-SUFFIX,favonis.cloud,LIST
+HOST-SUFFIX,favonis.space,LIST
 HOST-SUFFIX,faxingbao.com,LIST
 HOST-SUFFIX,faxuanyun.com,LIST
 HOST-SUFFIX,fbaichuan.com,LIST
@@ -33858,6 +33861,7 @@ HOST-SUFFIX,soulteary.com,LIST
 HOST-SUFFIX,soumaiche.com,LIST
 HOST-SUFFIX,soumaiche.net,LIST
 HOST-SUFFIX,soundforge.cn,LIST
+HOST-SUFFIX,southchip.com,LIST
 HOST-SUFFIX,space365.info,LIST
 HOST-SUFFIX,space365.live,LIST
 HOST-SUFFIX,space365.plus,LIST
@@ -36462,6 +36466,7 @@ HOST-SUFFIX,dongmancorp.cn,LIST
 HOST-SUFFIX,dongtuitui.com,LIST
 HOST-SUFFIX,dothantech.com,LIST
 HOST-SUFFIX,doubao-dev.com,LIST
+HOST-SUFFIX,doubaoapps.com,LIST
 HOST-SUFFIX,douyinlike.com,LIST
 HOST-SUFFIX,downjoy.com.cn,LIST
 HOST-SUFFIX,dragontooth.cn,LIST
@@ -37841,6 +37846,7 @@ HOST-SUFFIX,qianshouapp.cn,LIST
 HOST-SUFFIX,qianxincdn.com,LIST
 HOST-SUFFIX,qianyanlab.com,LIST
 HOST-SUFFIX,qiaobutang.com,LIST
+HOST-SUFFIX,qiaqiafood.com,LIST
 HOST-SUFFIX,qichemishu.com,LIST
 HOST-SUFFIX,qidian-cos.com,LIST
 HOST-SUFFIX,qidianping.com,LIST
@@ -43928,6 +43934,7 @@ HOST-SUFFIX,aliyun-edtech.com,LIST
 HOST-SUFFIX,aliyundrive.cloud,LIST
 HOST-SUFFIX,aliyundunddos.com,LIST
 HOST-SUFFIX,aliyunhttpdns.com,LIST
+HOST-SUFFIX,allwinnertech.com,LIST
 HOST-SUFFIX,alphagptlawyer.cn,LIST
 HOST-SUFFIX,amazing-brick.com,LIST
 HOST-SUFFIX,amhimalayanet.com,LIST
@@ -47897,6 +47904,12 @@ HOST-SUFFIX,cn-smp-paymentservices.apple.com,LIST
 HOST-SUFFIX,edgeone-browser-rendering-cn.com,LIST
 HOST-SUFFIX,upos-hz-mirrorakam.akamaized.net,LIST
 HOST-SUFFIX,edgeone-browser-rendering-dev.com,LIST
+HOST-SUFFIX,mnc000.mcc460.pub.3gppnetwork.org,LIST
+HOST-SUFFIX,mnc002.mcc460.pub.3gppnetwork.org,LIST
+HOST-SUFFIX,mnc004.mcc460.pub.3gppnetwork.org,LIST
+HOST-SUFFIX,mnc007.mcc460.pub.3gppnetwork.org,LIST
+HOST-SUFFIX,mnc011.mcc460.pub.3gppnetwork.org,LIST
+HOST-SUFFIX,mnc015.mcc460.pub.3gppnetwork.org,LIST
 HOST-SUFFIX,app-site-association.cdn-apple.com,LIST
 HOST-SUFFIX,edgeone-browser-rendering-cn.com.cn,LIST
 HOST-SUFFIX,test-edgeone-browser-rendering-cn.cn,LIST
@@ -52581,7 +52594,7 @@ IP-CIDR,203.95.208.0/22,LIST
 IP-CIDR,203.95.224.0/19,LIST
 IP-CIDR,204.77.130.0/24,LIST
 IP-CIDR,205.198.19.0/24,LIST
-IP-CIDR,206.109.70.0/23,LIST
+IP-CIDR,206.109.71.0/24,LIST
 IP-CIDR,206.109.75.0/24,LIST
 IP-CIDR,207.57.167.0/24,LIST
 IP-CIDR,207.57.168.0/24,LIST
@@ -56189,6 +56202,7 @@ IP6-CIDR,2001:dc7:9::/48,LIST
 IP6-CIDR,2001:dc7:a::/47,LIST
 IP6-CIDR,2001:dc7:c::/46,LIST
 IP6-CIDR,2001:dd8:1::/48,LIST
+IP6-CIDR,2405:6c0:1::/48,LIST
 IP6-CIDR,2405:6c0:2::/47,LIST
 IP6-CIDR,2405:6c0:4::/46,LIST
 IP6-CIDR,2405:6c0:8::/45,LIST

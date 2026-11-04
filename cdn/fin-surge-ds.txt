@@ -1,4 +1,4 @@
-# cdn rules: 4710
+# cdn rules: 4711
 0x0.st
 eep.io
 img.gs
@@ -4617,6 +4617,7 @@ static.registration.bluehost.com
 .crash-reports.browser.yandex.net
 .w-credentialless-staticblitz.com
 assets-growth-common.circleci.com
+assets.temporary-phone-number.com
 consumersiteimages.trustpilot.net
 firebase-settings.crashlytics.com
 firebaselogging-pa.googleapis.com

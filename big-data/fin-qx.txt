@@ -1,4 +1,4 @@
-# big-data rules: 10053
+# big-data rules: 10054
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -4614,6 +4614,7 @@ HOST,static.registration.bluehost.com,LIST
 HOST,steamdeck-packages.steamos.cloud,LIST
 HOST,assets-growth-common.circleci.com,LIST
 HOST,assets-production.packagecloud.io,LIST
+HOST,assets.temporary-phone-number.com,LIST
 HOST,consumersiteimages.trustpilot.net,LIST
 HOST,debian-archive.trafficmanager.net,LIST
 HOST,edge.cwtv-vod-ext.top.comcast.net,LIST

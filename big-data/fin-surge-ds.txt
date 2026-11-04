@@ -1,4 +1,4 @@
-# big-data rules: 8705
+# big-data rules: 8706
 .aws
 .x.ai
 .db.tt
@@ -8364,6 +8364,7 @@ steamdeck-packages.steamos.cloud
 .w-credentialless-staticblitz.com
 assets-growth-common.circleci.com
 assets-production.packagecloud.io
+assets.temporary-phone-number.com
 consumersiteimages.trustpilot.net
 debian-archive.trafficmanager.net
 edge.cwtv-vod-ext.top.comcast.net

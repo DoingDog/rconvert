@@ -1,4 +1,4 @@
-# cdn rules: 4791
+# cdn rules: 4792
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -3380,6 +3380,7 @@ HOST,static.global.visioncritical.com,LIST
 HOST,static.institution.grammarly.com,LIST
 HOST,static.registration.bluehost.com,LIST
 HOST,assets-growth-common.circleci.com,LIST
+HOST,assets.temporary-phone-number.com,LIST
 HOST,consumersiteimages.trustpilot.net,LIST
 HOST,firebase-settings.crashlytics.com,LIST
 HOST,firebaselogging-pa.googleapis.com,LIST
