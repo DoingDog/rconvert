@@ -1,4 +1,4 @@
-# big-data rules: 10054
+# big-data rules: 10057
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -7046,6 +7046,8 @@ HOST-SUFFIX,thecwvideo.com,LIST
 HOST-SUFFIX,tik-tokapi.com,LIST
 HOST-SUFFIX,tiktok-row.net,LIST
 HOST-SUFFIX,tiktokminis.us,LIST
+HOST-SUFFIX,tiktokshop.com,LIST
+HOST-SUFFIX,tiktokvapp.com,LIST
 HOST-SUFFIX,timestalks.com,LIST
 HOST-SUFFIX,tinyupload.com,LIST
 HOST-SUFFIX,torproject.org,LIST
@@ -7717,6 +7719,7 @@ HOST-SUFFIX,t3.storageapi.dev,LIST
 HOST-SUFFIX,theclasshroom.com,LIST
 HOST-SUFFIX,thisispolaris.com,LIST
 HOST-SUFFIX,tiktokrow-cdn.com,LIST
+HOST-SUFFIX,tiktokstaticb.com,LIST
 HOST-SUFFIX,tlauncherrepo.com,LIST
 HOST-SUFFIX,transcend-cdn.com,LIST
 HOST-SUFFIX,travel-assets.com,LIST

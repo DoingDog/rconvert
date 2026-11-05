@@ -1,4 +1,4 @@
-# big-data rules: 10073
+# big-data rules: 10076
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -7046,6 +7046,8 @@ DOMAIN-SUFFIX,thecwvideo.com
 DOMAIN-SUFFIX,tik-tokapi.com
 DOMAIN-SUFFIX,tiktok-row.net
 DOMAIN-SUFFIX,tiktokminis.us
+DOMAIN-SUFFIX,tiktokshop.com
+DOMAIN-SUFFIX,tiktokvapp.com
 DOMAIN-SUFFIX,timestalks.com
 DOMAIN-SUFFIX,tinyupload.com
 DOMAIN-SUFFIX,torproject.org
@@ -7717,6 +7719,7 @@ DOMAIN-SUFFIX,t3.storageapi.dev
 DOMAIN-SUFFIX,theclasshroom.com
 DOMAIN-SUFFIX,thisispolaris.com
 DOMAIN-SUFFIX,tiktokrow-cdn.com
+DOMAIN-SUFFIX,tiktokstaticb.com
 DOMAIN-SUFFIX,tlauncherrepo.com
 DOMAIN-SUFFIX,transcend-cdn.com
 DOMAIN-SUFFIX,travel-assets.com
