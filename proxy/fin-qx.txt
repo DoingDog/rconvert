@@ -1,4 +1,4 @@
-# proxy rules: 24897
+# proxy rules: 24899
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -11255,6 +11255,7 @@ HOST-SUFFIX,google.co.zw,LIST
 HOST-SUFFIX,gosexpod.com,LIST
 HOST-SUFFIX,got-game.org,LIST
 HOST-SUFFIX,gotgeeks.com,LIST
+HOST-SUFFIX,gotinder.com,LIST
 HOST-SUFFIX,govforce.com,LIST
 HOST-SUFFIX,gpstatic.com,LIST
 HOST-SUFFIX,grafolio.com,LIST
@@ -19600,6 +19601,7 @@ HOST-SUFFIX,tiktokcdn-eu.com,LIST
 HOST-SUFFIX,tiktokcdn-us.com,LIST
 HOST-SUFFIX,tiktokeu-cdn.com,LIST
 HOST-SUFFIX,timesnownews.com,LIST
+HOST-SUFFIX,tindersparks.com,LIST
 HOST-SUFFIX,tinkerboxapp.com,LIST
 HOST-SUFFIX,tkcs-collins.com,LIST
 HOST-SUFFIX,tmei-taoyuan.com,LIST

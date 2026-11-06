@@ -1,4 +1,4 @@
-# proxy rules: 24912
+# proxy rules: 24914
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,eep.io"
@@ -11272,6 +11272,7 @@ payload:
   - "DOMAIN-SUFFIX,gosexpod.com"
   - "DOMAIN-SUFFIX,got-game.org"
   - "DOMAIN-SUFFIX,gotgeeks.com"
+  - "DOMAIN-SUFFIX,gotinder.com"
   - "DOMAIN-SUFFIX,govforce.com"
   - "DOMAIN-SUFFIX,gpstatic.com"
   - "DOMAIN-SUFFIX,grafolio.com"
@@ -19617,6 +19618,7 @@ payload:
   - "DOMAIN-SUFFIX,tiktokcdn-us.com"
   - "DOMAIN-SUFFIX,tiktokeu-cdn.com"
   - "DOMAIN-SUFFIX,timesnownews.com"
+  - "DOMAIN-SUFFIX,tindersparks.com"
   - "DOMAIN-SUFFIX,tinkerboxapp.com"
   - "DOMAIN-SUFFIX,tkcs-collins.com"
   - "DOMAIN-SUFFIX,tmei-taoyuan.com"
