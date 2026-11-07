@@ -26,7 +26,8 @@
       "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-QuantumultX.list",
       "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
       "https://ruleset.skk.moe/List/domainset/reject.conf",
-      "https://ruleset.skk.moe/List/non_ip/reject.conf"
+      "https://ruleset.skk.moe/List/non_ip/reject.conf",
+      "https://raw.githubusercontent.com/arnold117/iOS-NOIR/refs/heads/main/shields/ios_noir_shield.module"
     ],
     "whitelist": [
       "static/main/Direct.list",
