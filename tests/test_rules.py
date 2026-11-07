@@ -1274,7 +1274,7 @@ class ScalarContinuationTests(unittest.TestCase):
 
     def test_bare_custom_policy_and_marker_matrix_keeps_legal_neighbor(self):
         for kind in ("DOMAIN-REGEX", "PROCESS-NAME-REGEX", "PROCESS-PATH-REGEX", "URL-REGEX"):
-            for value in ("^foo$", "^a{b$", r"^foo\z", "^(?x)a{b$"):
+            for value in ("^foo$", "^a{b$", r"^foo\p{L}\z", "^(?x)a{b$"):
                 for policy in ("China", "My Proxy [", "My } (Proxy$", r"My } Proxy\z"):
                     for marker in ("#", ";", "//"):
                         with self.subTest(kind=kind, value=value, policy=policy, marker=marker):
@@ -1283,7 +1283,7 @@ class ScalarContinuationTests(unittest.TestCase):
                                              ([self.keep], ["line 1: ambiguous unquoted regex comma or policy"]))
                             explicit = f"{kind},{_quote_matcher(value)},{policy} {marker} note }} [ ($,PROXY"
                             expected = ([self.keep], [f"line 1: invalid URL-REGEX {value}"]) if (
-                                kind == "URL-REGEX" and value in (r"^foo\z", "^(?x)a{b$")
+                                kind == "URL-REGEX" and value in (r"^foo\p{L}\z", "^(?x)a{b$")
                             ) else ([Rule(kind, value), self.keep], [])
                             self.assertEqual(parse(explicit + "\nDOMAIN,keep.example.com,China", purpose="proxy"), expected)
 
