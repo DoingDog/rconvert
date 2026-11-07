@@ -190,17 +190,28 @@ class GzipTransportTests(unittest.TestCase):
 
     def test_wire_status_and_incomplete_chunk_preserve_url_and_cause(self):
         for status, exception, cause in ((206, ValueError, None),
+                                         (404, RuntimeError, error.HTTPError),
+                                         (429, RuntimeError, error.HTTPError),
                                          (503, RuntimeError, error.HTTPError)):
             with self.subTest(status=status):
-                with _WireEndpoint({URL: _wire(RULE_BYTES, status=status)}):
+                with _WireEndpoint({URL: _wire(RULE_BYTES, status=status)}) as endpoint:
                     with self.assertRaises(exception) as caught:
                         fetch_https(URL)
-                self.assertIn(URL, str(caught.exception))
-                self.assertIn(str(status), str(caught.exception))
-                if cause is None:
-                    self.assertIsNone(caught.exception.__cause__)
-                else:
-                    self.assertIsInstance(caught.exception.__cause__, cause)
+                    self.assertIn(URL, str(caught.exception))
+                    self.assertIn(str(status), str(caught.exception))
+                    if cause is None:
+                        self.assertIsNone(caught.exception.__cause__)
+                    else:
+                        failure = caught.exception.__cause__
+                        self.assertIsInstance(failure, cause)
+                        self.addCleanup(failure.close)
+                        self.assertEqual((failure.code, failure.reason, failure.url),
+                                         (status, HTTPStatus(status).phrase, URL))
+                        self.assertIs(failure.headers, endpoint.responses[0].headers)
+                        self.assertIs(failure.fp, endpoint.responses[0])
+                        self.assertTrue(failure.closed)
+                    self.assertTrue(endpoint.responses[0].closed)
+                    self.assertTrue(endpoint.sockets[0].stream.closed)
         wire = _wire(b"10\r\nshort", headers=(("Transfer-Encoding", "chunked"),))
         with _WireEndpoint({URL: wire}):
             with self.assertRaises(RuntimeError) as caught:
@@ -209,13 +220,19 @@ class GzipTransportTests(unittest.TestCase):
         self.assertIsInstance(caught.exception.__cause__, IncompleteRead)
 
     def test_network_errors_keep_original_cause_and_source_url(self):
-        for failure in (error.URLError("TLS endpoint failed"), TimeoutError("timed out")):
+        for failure in (error.HTTPError(URL, 503, "Service Unavailable", {}, io.BytesIO(b"unavailable")),
+                        error.URLError("TLS endpoint failed"), TimeoutError("timed out")):
             with self.subTest(failure=failure):
+                if isinstance(failure, error.HTTPError):
+                    self.addCleanup(failure.close)
                 with patch.object(request.HTTPSHandler, "https_open", side_effect=failure):
                     with self.assertRaises(RuntimeError) as caught:
                         fetch_https(URL)
                 self.assertIn(URL, str(caught.exception))
                 self.assertIs(caught.exception.__cause__, failure)
+                if isinstance(failure, error.HTTPError):
+                    self.assertTrue(failure.closed)
+                    self.assertTrue(failure.fp.closed)
 
     def test_wire_gzip_source_and_remote_whitelist_generate_six_files(self):
         white_url = "https://example.org/white.txt"

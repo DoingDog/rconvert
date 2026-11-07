@@ -75,6 +75,8 @@ def fetch_https(url: str) -> bytes:
                 raise _UnusableSource(f"Source is empty: {url}")
             return data
     except (error.URLError, TimeoutError, IncompleteRead) as exc:
+        if isinstance(exc, error.HTTPError):
+            exc.close()
         raise RuntimeError(f"Failed to fetch {url}: {exc}") from exc
 
 
@@ -202,6 +204,7 @@ def generate(root: Path, fetch: Callable[[str], bytes]) -> dict[Path, str]:
                 except RuntimeError as exc:
                     if not isinstance(exc.__cause__, error.HTTPError) or exc.__cause__.code != 404:
                         raise
+                    exc.__cause__.close()
                     print(f"{source}: HTTP 404; skipped", file=sys.stderr)
                     cache[source] = None
                 except _UnusableSource as exc:

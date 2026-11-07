@@ -461,12 +461,18 @@ class CidrWhitelistUnionGenerateTests(unittest.TestCase):
                 (root / 'rulesets.json').write_text(json.dumps(configs), encoding='utf-8')
                 old = self.seed_old(root, [config['name'] for config in configs])
 
+                response = HTTPError('https://example.org/missing', 404, 'Not Found', {}, io.BytesIO(b'missing'))
+                self.addCleanup(response.close)
+
                 def unavailable(url):
                     self.assertEqual(url, 'https://example.org/missing')
-                    raise RuntimeError('source unavailable') from HTTPError(url, 404, 'Not Found', {}, None)
+                    raise RuntimeError('source unavailable') from response
 
                 with contextlib.redirect_stderr(io.StringIO()) as messages:
                     outputs = generate(root, unavailable)
+                if failure == 'missing':
+                    self.assertTrue(response.closed)
+                    self.assertTrue(response.fp.closed)
                 neighbor = {'fin.txt': ['IP-CIDR,203.0.113.0/24'], 'fin-surge.txt': ['IP-CIDR,203.0.113.0/24'],
                             'fin-qx.txt': ['IP-CIDR,203.0.113.0/24,LIST'], 'fin.yaml': ['IP-CIDR,203.0.113.0/24']}
                 expected = {root / 'healthy' / name: text
