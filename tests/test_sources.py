@@ -22,6 +22,7 @@ REQUIRED_SOURCES = {
         "https://raw.githubusercontent.com/fmz200/wool_scripts/refs/heads/main/QuantumultX/filter/filter.list",
         "https://ruleset.skk.moe/List/domainset/reject.conf",
         "https://ruleset.skk.moe/List/non_ip/reject.conf",
+        "https://raw.githubusercontent.com/arnold117/iOS-NOIR/refs/heads/main/shields/ios_noir_shield.module",
     ],
     "big-data": [
         "cdn/fin.txt", "static/serv/cdn.list", "static/serv/emby.list", "static/serv/sharing.list",
