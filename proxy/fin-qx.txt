@@ -1,4 +1,4 @@
-# proxy rules: 24899
+# proxy rules: 24902
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -2834,7 +2834,6 @@ HOST-SUFFIX,sex.com,LIST
 HOST-SUFFIX,sex8.cc,LIST
 HOST-SUFFIX,sih.app,LIST
 HOST-SUFFIX,simp.ly,LIST
-HOST-SUFFIX,skk.moe,LIST
 HOST-SUFFIX,sky.com,LIST
 HOST-SUFFIX,snmc.io,LIST
 HOST-SUFFIX,snow.me,LIST
@@ -12202,6 +12201,7 @@ HOST-SUFFIX,sitescdn.net,LIST
 HOST-SUFFIX,sketch.cloud,LIST
 HOST-SUFFIX,skillbox.pro,LIST
 HOST-SUFFIX,skimtube.com,LIST
+HOST-SUFFIX,skinswap.com,LIST
 HOST-SUFFIX,skunkgirl.cc,LIST
 HOST-SUFFIX,skytigris.cn,LIST
 HOST-SUFFIX,skyvegas.com,LIST
@@ -22820,6 +22820,9 @@ HOST-SUFFIX,leannecrowvideos.com,LIST
 HOST-SUFFIX,lethalhardcorevr.com,LIST
 HOST-SUFFIX,liangzhichuanmei.com,LIST
 HOST-SUFFIX,libsolutions.domains,LIST
+HOST-SUFFIX,limbuscompany.global,LIST
+HOST-SUFFIX,limbuscompanyapi.com,LIST
+HOST-SUFFIX,limbuscompanycdn.org,LIST
 HOST-SUFFIX,linuxfromscratch.org,LIST
 HOST-SUFFIX,listinganalytics.net,LIST
 HOST-SUFFIX,makingstartshere.com,LIST

@@ -1,4 +1,4 @@
-# proxy rules: 24914
+# proxy rules: 24917
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,eep.io"
@@ -2851,7 +2851,6 @@ payload:
   - "DOMAIN-SUFFIX,sex8.cc"
   - "DOMAIN-SUFFIX,sih.app"
   - "DOMAIN-SUFFIX,simp.ly"
-  - "DOMAIN-SUFFIX,skk.moe"
   - "DOMAIN-SUFFIX,sky.com"
   - "DOMAIN-SUFFIX,snmc.io"
   - "DOMAIN-SUFFIX,snow.me"
@@ -12219,6 +12218,7 @@ payload:
   - "DOMAIN-SUFFIX,sketch.cloud"
   - "DOMAIN-SUFFIX,skillbox.pro"
   - "DOMAIN-SUFFIX,skimtube.com"
+  - "DOMAIN-SUFFIX,skinswap.com"
   - "DOMAIN-SUFFIX,skunkgirl.cc"
   - "DOMAIN-SUFFIX,skytigris.cn"
   - "DOMAIN-SUFFIX,skyvegas.com"
@@ -22837,6 +22837,9 @@ payload:
   - "DOMAIN-SUFFIX,lethalhardcorevr.com"
   - "DOMAIN-SUFFIX,liangzhichuanmei.com"
   - "DOMAIN-SUFFIX,libsolutions.domains"
+  - "DOMAIN-SUFFIX,limbuscompany.global"
+  - "DOMAIN-SUFFIX,limbuscompanyapi.com"
+  - "DOMAIN-SUFFIX,limbuscompanycdn.org"
   - "DOMAIN-SUFFIX,linuxfromscratch.org"
   - "DOMAIN-SUFFIX,listinganalytics.net"
   - "DOMAIN-SUFFIX,makingstartshere.com"
