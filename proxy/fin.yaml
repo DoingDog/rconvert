@@ -1,4 +1,4 @@
-# proxy rules: 24917
+# proxy rules: 24919
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,eep.io"
@@ -1869,6 +1869,7 @@ payload:
   - "DOMAIN,ahrefscomscreenshot-3b70.kxcdn.com"
   - "DOMAIN,cdn-a.sonyentertainmentnetwork.com"
   - "DOMAIN,disco-static.productessentials.app"
+  - "DOMAIN,http-intake.logs.us5.datadoghq.com"
   - "DOMAIN,openaiassets.blob.core.windows.net"
   - "DOMAIN,blade-public-static.blade-group.com"
   - "DOMAIN,gog-cdn-lumen.secure2.footprint.net"
@@ -8827,6 +8828,7 @@ payload:
   - "DOMAIN-SUFFIX,gr8name.biz"
   - "DOMAIN-SUFFIX,grafana.com"
   - "DOMAIN-SUFFIX,graphql.org"
+  - "DOMAIN-SUFFIX,grokbot.com"
   - "DOMAIN-SUFFIX,ground.news"
   - "DOMAIN-SUFFIX,group-ib.ae"
   - "DOMAIN-SUFFIX,gstatic.com"

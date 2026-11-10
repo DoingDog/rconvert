@@ -1,4 +1,4 @@
-# proxy rules: 24653
+# proxy rules: 24657
 DOMAIN,ip.cn
 DOMAIN,eep.io
 DOMAIN,ipxy.io
@@ -1868,6 +1868,7 @@ DOMAIN,unsubscribe-imgs.leavemealone.com
 DOMAIN,ahrefscomscreenshot-3b70.kxcdn.com
 DOMAIN,cdn-a.sonyentertainmentnetwork.com
 DOMAIN,disco-static.productessentials.app
+DOMAIN,http-intake.logs.us5.datadoghq.com
 DOMAIN,openaiassets.blob.core.windows.net
 DOMAIN,blade-public-static.blade-group.com
 DOMAIN,gog-cdn-lumen.secure2.footprint.net
@@ -8696,6 +8697,7 @@ DOMAIN-SUFFIX,gotblop.com
 DOMAIN-SUFFIX,gr8name.biz
 DOMAIN-SUFFIX,grafana.com
 DOMAIN-SUFFIX,graphql.org
+DOMAIN-SUFFIX,grokbot.com
 DOMAIN-SUFFIX,ground.news
 DOMAIN-SUFFIX,group-ib.ae
 DOMAIN-SUFFIX,gstatic.com
@@ -11111,6 +11113,7 @@ DOMAIN-SUFFIX,gooddns.info
 DOMAIN-SUFFIX,gosexpod.com
 DOMAIN-SUFFIX,got-game.org
 DOMAIN-SUFFIX,gotgeeks.com
+DOMAIN-SUFFIX,gotinder.com
 DOMAIN-SUFFIX,govforce.com
 DOMAIN-SUFFIX,gpstatic.com
 DOMAIN-SUFFIX,grafolio.com
@@ -19367,6 +19370,7 @@ DOMAIN-SUFFIX,tiktokcdn-eu.com
 DOMAIN-SUFFIX,tiktokcdn-us.com
 DOMAIN-SUFFIX,tiktokeu-cdn.com
 DOMAIN-SUFFIX,timesnownews.com
+DOMAIN-SUFFIX,tindersparks.com
 DOMAIN-SUFFIX,tinkerboxapp.com
 DOMAIN-SUFFIX,tkcs-collins.com
 DOMAIN-SUFFIX,tmei-taoyuan.com

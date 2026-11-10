@@ -1,4 +1,4 @@
-# proxy rules: 24902
+# proxy rules: 24904
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -1868,6 +1868,7 @@ HOST,unsubscribe-imgs.leavemealone.com,LIST
 HOST,ahrefscomscreenshot-3b70.kxcdn.com,LIST
 HOST,cdn-a.sonyentertainmentnetwork.com,LIST
 HOST,disco-static.productessentials.app,LIST
+HOST,http-intake.logs.us5.datadoghq.com,LIST
 HOST,openaiassets.blob.core.windows.net,LIST
 HOST,blade-public-static.blade-group.com,LIST
 HOST,gog-cdn-lumen.secure2.footprint.net,LIST
@@ -8810,6 +8811,7 @@ HOST-SUFFIX,gotblop.com,LIST
 HOST-SUFFIX,gr8name.biz,LIST
 HOST-SUFFIX,grafana.com,LIST
 HOST-SUFFIX,graphql.org,LIST
+HOST-SUFFIX,grokbot.com,LIST
 HOST-SUFFIX,ground.news,LIST
 HOST-SUFFIX,group-ib.ae,LIST
 HOST-SUFFIX,gstatic.com,LIST
