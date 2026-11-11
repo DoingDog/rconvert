@@ -1,4 +1,4 @@
-# big-data rules: 1372
+# big-data rules: 1370
 DOMAIN-KEYWORD,1drv
 DOMAIN-KEYWORD,emby.
 DOMAIN-KEYWORD,nivod
@@ -818,9 +818,9 @@ IP-CIDR,18.60.78.240/28,no-resolve
 IP-CIDR,184.51.102.0/24,no-resolve
 IP-CIDR,185.206.24.0/22,no-resolve
 IP-CIDR,192.173.64.0/18,no-resolve
+IP-CIDR,192.51.172.0/24,no-resolve
 IP-CIDR,203.198.80.0/21,no-resolve
 IP-CIDR,203.83.220.0/22,no-resolve
-IP-CIDR,204.141.42.0/23,no-resolve
 IP-CIDR,218.102.32.0/19,no-resolve
 IP-CIDR,23.219.172.0/24,no-resolve
 IP-CIDR,23.40.242.10/32,no-resolve
@@ -1042,8 +1042,6 @@ IP-CIDR,130.176.136.0/23,no-resolve
 IP-CIDR,130.176.140.0/22,no-resolve
 IP-CIDR,130.176.144.0/20,no-resolve
 IP-CIDR,130.176.160.0/19,no-resolve
-IP-CIDR,136.143.186.0/23,no-resolve
-IP-CIDR,136.143.188.0/22,no-resolve
 IP-CIDR,15.152.24.128/29,no-resolve
 IP-CIDR,15.157.167.28/30,no-resolve
 IP-CIDR,15.160.55.112/29,no-resolve
@@ -1070,7 +1068,7 @@ IP-CIDR,157.175.255.0/24,no-resolve
 IP-CIDR,16.162.162.96/29,no-resolve
 IP-CIDR,16.62.188.224/28,no-resolve
 IP-CIDR,16.62.248.128/25,no-resolve
-IP-CIDR,165.173.179.0/24,no-resolve
+IP-CIDR,165.173.176.0/24,no-resolve
 IP-CIDR,18.100.64.128/25,no-resolve
 IP-CIDR,18.117.239.68/30,no-resolve
 IP-CIDR,18.130.91.144/29,no-resolve
