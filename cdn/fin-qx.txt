@@ -1,4 +1,4 @@
-# cdn rules: 4792
+# cdn rules: 4793
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -2183,6 +2183,7 @@ HOST,img.atlasobscura.com,LIST
 HOST,img.community.ui.com,LIST
 HOST,imgproxy.flathub.org,LIST
 HOST,instafeed.nfcube.com,LIST
+HOST,iprsoftwaremedia.com,LIST
 HOST,jac.yahoosandbox.com,LIST
 HOST,js.verygoodvault.com,LIST
 HOST,jsmodule.svc.litv.tv,LIST

@@ -1,4 +1,4 @@
-# cdn rules: 4792
+# cdn rules: 4793
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -2184,6 +2184,7 @@ payload:
   - "DOMAIN,img.community.ui.com"
   - "DOMAIN,imgproxy.flathub.org"
   - "DOMAIN,instafeed.nfcube.com"
+  - "DOMAIN,iprsoftwaremedia.com"
   - "DOMAIN,jac.yahoosandbox.com"
   - "DOMAIN,js.verygoodvault.com"
   - "DOMAIN,jsmodule.svc.litv.tv"

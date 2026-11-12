@@ -1,4 +1,4 @@
-# big-data rules: 13536
+# big-data rules: 13720
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -714,6 +714,7 @@ HOST,dl8.osmand.net,LIST
 HOST,dl9.osmand.net,LIST
 HOST,dma.canyon.com,LIST
 HOST,down.filen.net,LIST
+HOST,e.muckrack.com,LIST
 HOST,edata.ndtv.com,LIST
 HOST,edge.marker.io,LIST
 HOST,emos.plurk.com,LIST
@@ -2998,6 +2999,7 @@ HOST,img.atlasobscura.com,LIST
 HOST,img.community.ui.com,LIST
 HOST,imgproxy.flathub.org,LIST
 HOST,instafeed.nfcube.com,LIST
+HOST,iprsoftwaremedia.com,LIST
 HOST,jac.yahoosandbox.com,LIST
 HOST,js.verygoodvault.com,LIST
 HOST,kde.ip-connect.vn.ua,LIST
@@ -3663,6 +3665,7 @@ HOST,snippets.freshchat.com,LIST
 HOST,social-cdn.vivaldi.net,LIST
 HOST,source.domaintools.com,LIST
 HOST,spcdn.incartupsell.com,LIST
+HOST,speedtest.alpenhost.at,LIST
 HOST,spotify.map.fastly.net,LIST
 HOST,sr-cdn-1.shiprocket.in,LIST
 HOST,st-eu.dynamicyield.com,LIST
@@ -4446,6 +4449,7 @@ HOST,social-reaction-api.hk01.com,LIST
 HOST,softwareupdate.pilotmoon.com,LIST
 HOST,sourcepointcmp.bloomberg.com,LIST
 HOST,speedtest-din.rapidnet.co.in,LIST
+HOST,speedtest.internetarribes.es,LIST
 HOST,starharn-cf.nebula-media.org,LIST
 HOST,static-assets.codecademy.com,LIST
 HOST,static-community.tp-link.com,LIST
@@ -6317,6 +6321,7 @@ HOST-SUFFIX,corsproxy.io,LIST
 HOST-SUFFIX,cosmobox.org,LIST
 HOST-SUFFIX,crossbell.io,LIST
 HOST-SUFFIX,d.kelviq.com,LIST
+HOST-SUFFIX,dardicvv.cfd,LIST
 HOST-SUFFIX,daumkakao.io,LIST
 HOST-SUFFIX,dazn-api.com,LIST
 HOST-SUFFIX,dditsadn.com,LIST
@@ -6645,6 +6650,7 @@ HOST-SUFFIX,4hfm8gfow.com,LIST
 HOST-SUFFIX,4j9cjy80f.com,LIST
 HOST-SUFFIX,52netflix.com,LIST
 HOST-SUFFIX,5hi8d6076.com,LIST
+HOST-SUFFIX,7oavaac8i.com,LIST
 HOST-SUFFIX,9bialak0c.com,LIST
 HOST-SUFFIX,9wkvbvm90.com,LIST
 HOST-SUFFIX,a.klaviyo.com,LIST
@@ -6708,6 +6714,7 @@ HOST-SUFFIX,cristiamo.xyz,LIST
 HOST-SUFFIX,ctfassets.net,LIST
 HOST-SUFFIX,cufmmuhibj.in,LIST
 HOST-SUFFIX,cvmnq9cre.com,LIST
+HOST-SUFFIX,czuoszwava.in,LIST
 HOST-SUFFIX,data284.click,LIST
 HOST-SUFFIX,data741.click,LIST
 HOST-SUFFIX,dateiload.com,LIST
@@ -7106,6 +7113,7 @@ HOST-SUFFIX,9f38fe9b98.com,LIST
 HOST-SUFFIX,9o2r9h0ket.com,LIST
 HOST-SUFFIX,a3.mtindex.top,LIST
 HOST-SUFFIX,abc-cdn.net.au,LIST
+HOST-SUFFIX,abelianmxd.cfd,LIST
 HOST-SUFFIX,adguardcdn.com,LIST
 HOST-SUFFIX,agdbaltzyo.com,LIST
 HOST-SUFFIX,akamaiedge.net,LIST
@@ -7137,6 +7145,7 @@ HOST-SUFFIX,bbcmedia.co.uk,LIST
 HOST-SUFFIX,bbcpersian.com,LIST
 HOST-SUFFIX,bestjavcdn.com,LIST
 HOST-SUFFIX,bigbigshop.com,LIST
+HOST-SUFFIX,binwfyodpaq.in,LIST
 HOST-SUFFIX,bistrosflu.com,LIST
 HOST-SUFFIX,bkontegudnm.in,LIST
 HOST-SUFFIX,blueseacdn.com,LIST
@@ -7166,12 +7175,14 @@ HOST-SUFFIX,cdnclouder.com,LIST
 HOST-SUFFIX,centassels.com,LIST
 HOST-SUFFIX,characterai.io,LIST
 HOST-SUFFIX,chocotv.com.tw,LIST
+HOST-SUFFIX,cloabobra.cyou,LIST
 HOST-SUFFIX,cloudflare.ltd,LIST
 HOST-SUFFIX,cloudfront.net,LIST
 HOST-SUFFIX,cloudghost.net,LIST
 HOST-SUFFIX,cms.replit.com,LIST
 HOST-SUFFIX,codeforces.org,LIST
 HOST-SUFFIX,condancing.com,LIST
+HOST-SUFFIX,coolaspen.tech,LIST
 HOST-SUFFIX,cosecant36.com,LIST
 HOST-SUFFIX,curseforge.com,LIST
 HOST-SUFFIX,cursor-cdn.com,LIST
@@ -7328,6 +7339,7 @@ HOST-SUFFIX,ninjastream.to,LIST
 HOST-SUFFIX,nippyshare.com,LIST
 HOST-SUFFIX,nitroflare.com,LIST
 HOST-SUFFIX,nitroflare.net,LIST
+HOST-SUFFIX,niwrtodujaz.in,LIST
 HOST-SUFFIX,now-ashare.com,LIST
 HOST-SUFFIX,obsproject.com,LIST
 HOST-SUFFIX,onedrive.co.uk,LIST
@@ -7386,6 +7398,7 @@ HOST-SUFFIX,similarcdn.com,LIST
 HOST-SUFFIX,skyking.com.tw,LIST
 HOST-SUFFIX,slack-edge.com,LIST
 HOST-SUFFIX,slack-imgs.com,LIST
+HOST-SUFFIX,snowdahlia.pro,LIST
 HOST-SUFFIX,solidfiles.com,LIST
 HOST-SUFFIX,solution97.com,LIST
 HOST-SUFFIX,soundcloud.com,LIST
@@ -7414,6 +7427,7 @@ HOST-SUFFIX,sthlstatic.com,LIST
 HOST-SUFFIX,streamango.com,LIST
 HOST-SUFFIX,streamtape.com,LIST
 HOST-SUFFIX,striiiipst.com,LIST
+HOST-SUFFIX,szzrkszzyg.com,LIST
 HOST-SUFFIX,t.draftbit.com,LIST
 HOST-SUFFIX,t.shoelace.run,LIST
 HOST-SUFFIX,tandylists.cfd,LIST
@@ -7638,6 +7652,7 @@ HOST-SUFFIX,filedropper.com,LIST
 HOST-SUFFIX,filefactory.com,LIST
 HOST-SUFFIX,filehosting.org,LIST
 HOST-SUFFIX,filetransfer.io,LIST
+HOST-SUFFIX,finebucket.info,LIST
 HOST-SUFFIX,finkmirrors.net,LIST
 HOST-SUFFIX,firebaseapp.com,LIST
 HOST-SUFFIX,flash-files.com,LIST
@@ -7702,7 +7717,9 @@ HOST-SUFFIX,loinwryneck.com,LIST
 HOST-SUFFIX,ltwebstatic.com,LIST
 HOST-SUFFIX,lzbgekdtxse.com,LIST
 HOST-SUFFIX,macysassets.com,LIST
+HOST-SUFFIX,mafogmpacaps.in,LIST
 HOST-SUFFIX,marvelparty.net,LIST
+HOST-SUFFIX,maskedadmin.com,LIST
 HOST-SUFFIX,matomo.aecsi.eu,LIST
 HOST-SUFFIX,matomo.aioeu.eu,LIST
 HOST-SUFFIX,matomo.anrys.eu,LIST
@@ -7732,8 +7749,8 @@ HOST-SUFFIX,mirror.web4u.cz,LIST
 HOST-SUFFIX,mirrors.ovh.net,LIST
 HOST-SUFFIX,mirrors.tds.net,LIST
 HOST-SUFFIX,mirrors.uk2.net,LIST
-HOST-SUFFIX,misovxorsrti.in,LIST
 HOST-SUFFIX,missiqcalqmu.in,LIST
+HOST-SUFFIX,mjlrssyhioj.com,LIST
 HOST-SUFFIX,mos.matomotj.cc,LIST
 HOST-SUFFIX,muggsparly.rest,LIST
 HOST-SUFFIX,mujnfamihqce.in,LIST
@@ -7749,6 +7766,7 @@ HOST-SUFFIX,news-bnubiko.cc,LIST
 HOST-SUFFIX,nftstorage.link,LIST
 HOST-SUFFIX,nichtsforay.cfd,LIST
 HOST-SUFFIX,nopewrhyjbp.com,LIST
+HOST-SUFFIX,nrdyxtmzbku.com,LIST
 HOST-SUFFIX,ocmcazmweagv.in,LIST
 HOST-SUFFIX,omqhizvmyzh.com,LIST
 HOST-SUFFIX,oswincvpxrs.com,LIST
@@ -7795,6 +7813,7 @@ HOST-SUFFIX,rundeldefi.cyou,LIST
 HOST-SUFFIX,s.leretapeur.fr,LIST
 HOST-SUFFIX,schemastore.org,LIST
 HOST-SUFFIX,scqcigoladk.com,LIST
+HOST-SUFFIX,sdvpvjlspoz.com,LIST
 HOST-SUFFIX,secureupload.eu,LIST
 HOST-SUFFIX,sendeewhine.cfd,LIST
 HOST-SUFFIX,sfenuhakgotd.in,LIST
@@ -7902,6 +7921,7 @@ HOST-SUFFIX,api.tv.colnv.com,LIST
 HOST-SUFFIX,app.analyzza.com,LIST
 HOST-SUFFIX,app.telledit.com,LIST
 HOST-SUFFIX,appsflyersdk.com,LIST
+HOST-SUFFIX,areekcookee.rest,LIST
 HOST-SUFFIX,artifacts.ui.com,LIST
 HOST-SUFFIX,assets.ipinfo.io,LIST
 HOST-SUFFIX,assmanphose.cyou,LIST
@@ -7918,6 +7938,7 @@ HOST-SUFFIX,bimaskeymen.rest,LIST
 HOST-SUFFIX,blackbaudcdn.net,LIST
 HOST-SUFFIX,blink-script.com,LIST
 HOST-SUFFIX,bootstrapcdn.com,LIST
+HOST-SUFFIX,bquoheminqrp.com,LIST
 HOST-SUFFIX,brevityfurs.rest,LIST
 HOST-SUFFIX,britmislen.click,LIST
 HOST-SUFFIX,bspyoibtwrrc.com,LIST
@@ -7940,12 +7961,14 @@ HOST-SUFFIX,cdn.tophatch.com,LIST
 HOST-SUFFIX,cdn2.hubspot.net,LIST
 HOST-SUFFIX,cdninstagram.com,LIST
 HOST-SUFFIX,charmingtiger.me,LIST
+HOST-SUFFIX,ciupqkbtklvb.com,LIST
 HOST-SUFFIX,clicknupload.com,LIST
 HOST-SUFFIX,clicknupload.org,LIST
 HOST-SUFFIX,clipwatching.com,LIST
 HOST-SUFFIX,cloudconvert.com,LIST
 HOST-SUFFIX,contents.fc2.com,LIST
 HOST-SUFFIX,count.xorder.com,LIST
+HOST-SUFFIX,cuddyzuleika.cfd,LIST
 HOST-SUFFIX,dailyuploads.net,LIST
 HOST-SUFFIX,dandieamobyr.cfd,LIST
 HOST-SUFFIX,dash.cfworks.vip,LIST
@@ -7995,6 +8018,7 @@ HOST-SUFFIX,fclvqcvpcxho.com,LIST
 HOST-SUFFIX,featuregates.org,LIST
 HOST-SUFFIX,files.gitbook.io,LIST
 HOST-SUFFIX,filesmonster.com,LIST
+HOST-SUFFIX,foinedmtscmd.com,LIST
 HOST-SUFFIX,forthethrone.com,LIST
 HOST-SUFFIX,fox10phoenix.com,LIST
 HOST-SUFFIX,fox13memphis.com,LIST
@@ -8072,6 +8096,7 @@ HOST-SUFFIX,kajingametrix.de,LIST
 HOST-SUFFIX,kartcalques.rest,LIST
 HOST-SUFFIX,kinja-static.com,LIST
 HOST-SUFFIX,kirantisalem.com,LIST
+HOST-SUFFIX,knickixodids.cfd,LIST
 HOST-SUFFIX,knurryanele.cyou,LIST
 HOST-SUFFIX,labraskulmet.com,LIST
 HOST-SUFFIX,larinserail.cyou,LIST
@@ -8154,6 +8179,7 @@ HOST-SUFFIX,poleyntenia.rest,LIST
 HOST-SUFFIX,ports.ubuntu.com,LIST
 HOST-SUFFIX,pressablecdn.com,LIST
 HOST-SUFFIX,projectglove.com,LIST
+HOST-SUFFIX,propylamoile.com,LIST
 HOST-SUFFIX,pursuitwomen.com,LIST
 HOST-SUFFIX,pythonhosted.org,LIST
 HOST-SUFFIX,rawbonebrim.cyou,LIST
@@ -8175,6 +8201,7 @@ HOST-SUFFIX,simfileshare.net,LIST
 HOST-SUFFIX,slodchessel.cyou,LIST
 HOST-SUFFIX,sny.monosnap.com,LIST
 HOST-SUFFIX,solarscolder.cfd,LIST
+HOST-SUFFIX,sommaconrail.com,LIST
 HOST-SUFFIX,sonycrackle.club,LIST
 HOST-SUFFIX,spacebattles.com,LIST
 HOST-SUFFIX,spotify.app.link,LIST
@@ -8213,6 +8240,7 @@ HOST-SUFFIX,streamcherry.com,LIST
 HOST-SUFFIX,streamhentai.org,LIST
 HOST-SUFFIX,stripeassets.com,LIST
 HOST-SUFFIX,strpssts-ana.com,LIST
+HOST-SUFFIX,suezandaqui.rest,LIST
 HOST-SUFFIX,sunrosehippi.com,LIST
 HOST-SUFFIX,susercontent.com,LIST
 HOST-SUFFIX,t.bakeprofit.com,LIST
@@ -8257,6 +8285,8 @@ HOST-SUFFIX,voatiengviet.com,LIST
 HOST-SUFFIX,vscode-unpkg.net,LIST
 HOST-SUFFIX,vultrobjects.com,LIST
 HOST-SUFFIX,vusercontent.net,LIST
+HOST-SUFFIX,vztmzgauqofc.com,LIST
+HOST-SUFFIX,whimmedamies.cfd,LIST
 HOST-SUFFIX,widget.clutch.co,LIST
 HOST-SUFFIX,wikiplus-app.com,LIST
 HOST-SUFFIX,wpcomstaging.com,LIST
@@ -8267,6 +8297,7 @@ HOST-SUFFIX,youboranqs01.com,LIST
 HOST-SUFFIX,youtubego.com.br,LIST
 HOST-SUFFIX,zeriamerikes.com,LIST
 HOST-SUFFIX,zjedmeoqtthd.com,LIST
+HOST-SUFFIX,abidetoucans.cyou,LIST
 HOST-SUFFIX,acidickoussin.cfd,LIST
 HOST-SUFFIX,adobeccstatic.com,LIST
 HOST-SUFFIX,alfionaupleap.com,LIST
@@ -8298,6 +8329,7 @@ HOST-SUFFIX,bribeesioni.click,LIST
 HOST-SUFFIX,brightcovecdn.com,LIST
 HOST-SUFFIX,brightspotcdn.com,LIST
 HOST-SUFFIX,brookedmacaca.com,LIST
+HOST-SUFFIX,bucklesunmold.com,LIST
 HOST-SUFFIX,byebyebaby.it.com,LIST
 HOST-SUFFIX,canliopenest.rest,LIST
 HOST-SUFFIX,cashmereabove.com,LIST
@@ -8331,6 +8363,7 @@ HOST-SUFFIX,cyclopslicorn.com,LIST
 HOST-SUFFIX,datafast.yash.ceo,LIST
 HOST-SUFFIX,daumpotplayer.com,LIST
 HOST-SUFFIX,deashedungilt.cfd,LIST
+HOST-SUFFIX,debugszinced.rest,LIST
 HOST-SUFFIX,deducedcallid.cfd,LIST
 HOST-SUFFIX,delvenetworks.com,LIST
 HOST-SUFFIX,deofleadyetca.org,LIST
@@ -8445,6 +8478,8 @@ HOST-SUFFIX,lifeatspotify.com,LIST
 HOST-SUFFIX,linodeobjects.com,LIST
 HOST-SUFFIX,livefilestore.com,LIST
 HOST-SUFFIX,livemediahost.com,LIST
+HOST-SUFFIX,logmancopist.cyou,LIST
+HOST-SUFFIX,loyaltymatrix.com,LIST
 HOST-SUFFIX,lxovrggqvtgxs.com,LIST
 HOST-SUFFIX,marketing.aws.dev,LIST
 HOST-SUFFIX,marvelpinball.com,LIST
@@ -8538,6 +8573,7 @@ HOST-SUFFIX,richeshumpies.com,LIST
 HOST-SUFFIX,rockspreading.com,LIST
 HOST-SUFFIX,s.knightcatai.app,LIST
 HOST-SUFFIX,sacelasartors.cfd,LIST
+HOST-SUFFIX,sapelemoils.click,LIST
 HOST-SUFFIX,saquarolunel.rest,LIST
 HOST-SUFFIX,scoldsetamins.com,LIST
 HOST-SUFFIX,scowlsdensus.cyou,LIST
@@ -8548,6 +8584,7 @@ HOST-SUFFIX,shoppulse88.store,LIST
 HOST-SUFFIX,sighingrastus.com,LIST
 HOST-SUFFIX,simplecastcdn.com,LIST
 HOST-SUFFIX,sitrepsoning.rest,LIST
+HOST-SUFFIX,sketchpodcast.com,LIST
 HOST-SUFFIX,slidesharecdn.com,LIST
 HOST-SUFFIX,smartmediarep.com,LIST
 HOST-SUFFIX,sneerscuartel.com,LIST
@@ -8649,7 +8686,9 @@ HOST-SUFFIX,abslakpdotzst.site,LIST
 HOST-SUFFIX,adorableorchid.com,LIST
 HOST-SUFFIX,aeyukxzcjxobd.site,LIST
 HOST-SUFFIX,agkmngwhtwtni.site,LIST
+HOST-SUFFIX,aivwuxzgcygjq.site,LIST
 HOST-SUFFIX,ajtcqmlorjesx.site,LIST
+HOST-SUFFIX,alglhogzeqhel.site,LIST
 HOST-SUFFIX,alonestreaming.com,LIST
 HOST-SUFFIX,alvmcwmdyspqc.site,LIST
 HOST-SUFFIX,alypinehubbly.cyou,LIST
@@ -8670,6 +8709,7 @@ HOST-SUFFIX,analytics.unibo.it,LIST
 HOST-SUFFIX,analytics.web60.ie,LIST
 HOST-SUFFIX,analytics.zonky.cz,LIST
 HOST-SUFFIX,anfblijzchzbr.site,LIST
+HOST-SUFFIX,ansxwfkltrmyj.site,LIST
 HOST-SUFFIX,anxegytdedafg.site,LIST
 HOST-SUFFIX,api.jackiezone.com,LIST
 HOST-SUFFIX,app-cdn.minepi.com,LIST
@@ -8731,11 +8771,13 @@ HOST-SUFFIX,cdn.serverable.com,LIST
 HOST-SUFFIX,cdn.tranquilli.org,LIST
 HOST-SUFFIX,cdn.vidarequre.com,LIST
 HOST-SUFFIX,cdxwzqkuuacxl.site,LIST
+HOST-SUFFIX,cegibxgxdkfuc.site,LIST
 HOST-SUFFIX,cgcshlpzacjjg.site,LIST
 HOST-SUFFIX,cheerercrackup.cfd,LIST
 HOST-SUFFIX,cinema.facmata.net,LIST
 HOST-SUFFIX,ckucufscmjrkq.site,LIST
 HOST-SUFFIX,classicalradio.com,LIST
+HOST-SUFFIX,cmosdznhcybkr.site,LIST
 HOST-SUFFIX,cms-cdn.linear.app,LIST
 HOST-SUFFIX,cnkkfxajyvium.site,LIST
 HOST-SUFFIX,colliderimages.com,LIST
@@ -8749,6 +8791,7 @@ HOST-SUFFIX,crunchyrollcdn.com,LIST
 HOST-SUFFIX,csp.withgoogle.com,LIST
 HOST-SUFFIX,cthebztsomuqr.site,LIST
 HOST-SUFFIX,cubdomdwamish.qpon,LIST
+HOST-SUFFIX,cubicalstoner.cyou,LIST
 HOST-SUFFIX,cudgelgateau.click,LIST
 HOST-SUFFIX,customeriomail.com,LIST
 HOST-SUFFIX,cxmuoewwxzczi.site,LIST
@@ -8762,6 +8805,7 @@ HOST-SUFFIX,deixislathen.click,LIST
 HOST-SUFFIX,delegated-ipfs.dev,LIST
 HOST-SUFFIX,desktop.docker.com,LIST
 HOST-SUFFIX,dfdvhjuletrsh.site,LIST
+HOST-SUFFIX,dfjwmytrhzfsy.site,LIST
 HOST-SUFFIX,dhovqdnulcadz.site,LIST
 HOST-SUFFIX,disneyinflight.com,LIST
 HOST-SUFFIX,disneyworld-go.com,LIST
@@ -8779,6 +8823,7 @@ HOST-SUFFIX,eclipsecontent.org,LIST
 HOST-SUFFIX,ecpinzovabzbl.site,LIST
 HOST-SUFFIX,eduphldlaqtvr.site,LIST
 HOST-SUFFIX,efgkjtkupbqqs.site,LIST
+HOST-SUFFIX,efvcxevyy9lqbf.cfd,LIST
 HOST-SUFFIX,eightcontented.com,LIST
 HOST-SUFFIX,eimqxukbomvl5x.cfd,LIST
 HOST-SUFFIX,eiqipsyfaemep.site,LIST
@@ -8791,6 +8836,7 @@ HOST-SUFFIX,emby.prprcloud.com,LIST
 HOST-SUFFIX,engracelithest.com,LIST
 HOST-SUFFIX,enjezxfmmlorw.site,LIST
 HOST-SUFFIX,enmvvyoxasqbk.site,LIST
+HOST-SUFFIX,eppeoiwixrnzt.site,LIST
 HOST-SUFFIX,equiaxetunings.cfd,LIST
 HOST-SUFFIX,espn.hb.omtrdc.net,LIST
 HOST-SUFFIX,etouffehalutz.cyou,LIST
@@ -8798,6 +8844,8 @@ HOST-SUFFIX,eujgdrvqhgrpv.site,LIST
 HOST-SUFFIX,events.stocks.help,LIST
 HOST-SUFFIX,evkpkbwwmnfgj.site,LIST
 HOST-SUFFIX,evrpzvsplmwzt.site,LIST
+HOST-SUFFIX,evsfmzsdxilxd.site,LIST
+HOST-SUFFIX,expelsgenoise.cyou,LIST
 HOST-SUFFIX,eyfvknqqivkfs.site,LIST
 HOST-SUFFIX,ezygwbeelptbx.site,LIST
 HOST-SUFFIX,f.hubspotemail.net,LIST
@@ -8812,6 +8860,7 @@ HOST-SUFFIX,florealtriaxal.cfd,LIST
 HOST-SUFFIX,foliesacantha.cyou,LIST
 HOST-SUFFIX,fomgggkpmzlxo.site,LIST
 HOST-SUFFIX,forms.gpuslash.com,LIST
+HOST-SUFFIX,foucqegmupzjw.site,LIST
 HOST-SUFFIX,fox46charlotte.com,LIST
 HOST-SUFFIX,foxcorporation.com,LIST
 HOST-SUFFIX,foxnewschannel.com,LIST
@@ -8819,6 +8868,8 @@ HOST-SUFFIX,foxnewsnetwork.com,LIST
 HOST-SUFFIX,foxnewsopinion.com,LIST
 HOST-SUFFIX,foxnewsrundown.com,LIST
 HOST-SUFFIX,foxsportsworld.com,LIST
+HOST-SUFFIX,foyerspolaxis.rest,LIST
+HOST-SUFFIX,fqqwubotkwynt.site,LIST
 HOST-SUFFIX,frakturfasten.cyou,LIST
 HOST-SUFFIX,freedomplatform.tv,LIST
 HOST-SUFFIX,frsamsxjlpfhv.site,LIST
@@ -8830,6 +8881,7 @@ HOST-SUFFIX,fzguyxpmpragr.site,LIST
 HOST-SUFFIX,fzqtvzfbuxrwf.site,LIST
 HOST-SUFFIX,ga.watchesorbit.se,LIST
 HOST-SUFFIX,galliedlamed.click,LIST
+HOST-SUFFIX,gaslikepipiri.rest,LIST
 HOST-SUFFIX,gawbctrhehzls.site,LIST
 HOST-SUFFIX,gazzettaobjects.it,LIST
 HOST-SUFFIX,gcpczbniuuuoo.site,LIST
@@ -8884,6 +8936,7 @@ HOST-SUFFIX,ilpfpxfkkkpqz.site,LIST
 HOST-SUFFIX,images-dnxlive.com,LIST
 HOST-SUFFIX,immitmalkite.click,LIST
 HOST-SUFFIX,imqnbnwqfmxqh.site,LIST
+HOST-SUFFIX,imufhtdmngfkx.site,LIST
 HOST-SUFFIX,intercomassets.com,LIST
 HOST-SUFFIX,intl-rcd.iqiyi.com,LIST
 HOST-SUFFIX,ipfs-gateway.cloud,LIST
@@ -8905,12 +8958,15 @@ HOST-SUFFIX,jqrrbqfdjkazm.site,LIST
 HOST-SUFFIX,js-eu1.hubspot.com,LIST
 HOST-SUFFIX,js.usemessages.com,LIST
 HOST-SUFFIX,jsumdixbcmepv.site,LIST
+HOST-SUFFIX,jtrqeevihpuau.site,LIST
+HOST-SUFFIX,juoanvouymacf.site,LIST
 HOST-SUFFIX,jurjdpyqrgezo.site,LIST
 HOST-SUFFIX,jzkiojvomdxeu.site,LIST
 HOST-SUFFIX,jzuklhgekldnk.site,LIST
 HOST-SUFFIX,kalwarpelioma.rest,LIST
 HOST-SUFFIX,karatesisaria.rest,LIST
 HOST-SUFFIX,kc-usercontent.com,LIST
+HOST-SUFFIX,kcfrfiwoqzwda.site,LIST
 HOST-SUFFIX,kesfktgsfpdqx.site,LIST
 HOST-SUFFIX,kfpuejiakadbw.site,LIST
 HOST-SUFFIX,kfrvhjpthtddk.site,LIST
@@ -8923,6 +8979,7 @@ HOST-SUFFIX,kocletggrqkdh.site,LIST
 HOST-SUFFIX,kqprfqoezehja.site,LIST
 HOST-SUFFIX,kv4tzec84ouiv6.cfd,LIST
 HOST-SUFFIX,kwintravetoer.cyou,LIST
+HOST-SUFFIX,kwmomvbdrhrrg.site,LIST
 HOST-SUFFIX,lactidefessely.cfd,LIST
 HOST-SUFFIX,land.izuchai.dance,LIST
 HOST-SUFFIX,lathielustly.click,LIST
@@ -8931,6 +8988,7 @@ HOST-SUFFIX,lcodijuiijzqu.site,LIST
 HOST-SUFFIX,lcusfjajbouks.site,LIST
 HOST-SUFFIX,lheaiqflgtsil.site,LIST
 HOST-SUFFIX,licensebuttons.net,LIST
+HOST-SUFFIX,ljxpbshzqmnxd.site,LIST
 HOST-SUFFIX,lmzvrkojtjxae.site,LIST
 HOST-SUFFIX,lrhkpzszyrhzl.site,LIST
 HOST-SUFFIX,luckfullacinia.com,LIST
@@ -9017,7 +9075,9 @@ HOST-SUFFIX,nel.cloudflare.com,LIST
 HOST-SUFFIX,netflixstudios.com,LIST
 HOST-SUFFIX,ngygsbpntbnkp.site,LIST
 HOST-SUFFIX,njzrirvxprspg.site,LIST
+HOST-SUFFIX,nkcdnydwkcmdp.site,LIST
 HOST-SUFFIX,nkghwccxeymyp.site,LIST
+HOST-SUFFIX,nmocqlujlilko.site,LIST
 HOST-SUFFIX,nmsuhgiepzpqc.site,LIST
 HOST-SUFFIX,notfijhxkqrsy.site,LIST
 HOST-SUFFIX,notify.bugsnag.com,LIST
@@ -9045,6 +9105,7 @@ HOST-SUFFIX,ozwpqjnqohjii.site,LIST
 HOST-SUFFIX,ozzzqizjpcwqd.site,LIST
 HOST-SUFFIX,p.timelesssong.com,LIST
 HOST-SUFFIX,packingmolters.cfd,LIST
+HOST-SUFFIX,patclxqwxybvn.site,LIST
 HOST-SUFFIX,pdynrtubqauer.site,LIST
 HOST-SUFFIX,pfcfngllppeol.site,LIST
 HOST-SUFFIX,pgkaouggnuvqj.site,LIST
@@ -9062,11 +9123,13 @@ HOST-SUFFIX,pryerssnuffed.cyou,LIST
 HOST-SUFFIX,psceiiwiwgswf.site,LIST
 HOST-SUFFIX,psg.cdn.hgc.com.hk,LIST
 HOST-SUFFIX,ptelnqutbqhfx.site,LIST
+HOST-SUFFIX,puffinnashgab.rest,LIST
 HOST-SUFFIX,pulse.rasmlabs.com,LIST
 HOST-SUFFIX,pxpmnthwmqzcf.site,LIST
 HOST-SUFFIX,qbxdoahjiykjz.site,LIST
 HOST-SUFFIX,qgauajujymtaw.site,LIST
 HOST-SUFFIX,qicponpbnzrfr.site,LIST
+HOST-SUFFIX,qlpvssymowjat.site,LIST
 HOST-SUFFIX,qmjkpfldtkvny.site,LIST
 HOST-SUFFIX,qqaociyyofdlv.site,LIST
 HOST-SUFFIX,qtezsivcvmhhw.site,LIST
@@ -9079,6 +9142,7 @@ HOST-SUFFIX,rcdjlpqydhont.site,LIST
 HOST-SUFFIX,recaseamicron.cyou,LIST
 HOST-SUFFIX,reliableparrot.biz,LIST
 HOST-SUFFIX,replicate.delivery,LIST
+HOST-SUFFIX,respotcapered.cyou,LIST
 HOST-SUFFIX,rftjsuwyyzrjf.site,LIST
 HOST-SUFFIX,rfxvxqcgsieib.site,LIST
 HOST-SUFFIX,rhilxpozhkzrz.site,LIST
@@ -9097,6 +9161,7 @@ HOST-SUFFIX,rubymoonwinery.com,LIST
 HOST-SUFFIX,rutslohwymxlb.site,LIST
 HOST-SUFFIX,ryivqamowwxxlk.com,LIST
 HOST-SUFFIX,ryvmfussmajcp.site,LIST
+HOST-SUFFIX,rzytwpkefeoyw.site,LIST
 HOST-SUFFIX,s.filmcraft.online,LIST
 HOST-SUFFIX,s.verylongname.uno,LIST
 HOST-SUFFIX,s2.gameanswers.net,LIST
@@ -9104,12 +9169,14 @@ HOST-SUFFIX,s3-1.amazonaws.com,LIST
 HOST-SUFFIX,safebrowsing.apple,LIST
 HOST-SUFFIX,salmonsjudaize.com,LIST
 HOST-SUFFIX,sawttmoujczwb.site,LIST
+HOST-SUFFIX,sbigiumsjduxd.site,LIST
 HOST-SUFFIX,sdlcbmlpmfbpj.site,LIST
 HOST-SUFFIX,sdoqnyfwqamhk.site,LIST
 HOST-SUFFIX,sdsakrbkquxdm.site,LIST
 HOST-SUFFIX,seattlespheres.com,LIST
 HOST-SUFFIX,seeusercontent.com,LIST
 HOST-SUFFIX,semperinshave.rest,LIST
+HOST-SUFFIX,seyusxutyylve.site,LIST
 HOST-SUFFIX,sicijuxixeqiu.site,LIST
 HOST-SUFFIX,sislpicznmdtj.site,LIST
 HOST-SUFFIX,snortsrasters.cyou,LIST
@@ -9118,6 +9185,7 @@ HOST-SUFFIX,sorcerersarena.com,LIST
 HOST-SUFFIX,speeddreamride.com,LIST
 HOST-SUFFIX,spktmxycjeeke.site,LIST
 HOST-SUFFIX,spotifynewsroom.jp,LIST
+HOST-SUFFIX,spyzdindnauks.site,LIST
 HOST-SUFFIX,spzsynbvnudov.site,LIST
 HOST-SUFFIX,sqjmykhwzoyod.site,LIST
 HOST-SUFFIX,squireschasers.cfd,LIST
@@ -9172,6 +9240,7 @@ HOST-SUFFIX,terciohagrid.click,LIST
 HOST-SUFFIX,terciohunting.cyou,LIST
 HOST-SUFFIX,tfcnxspcpgorn.site,LIST
 HOST-SUFFIX,tfhwtqlgesdry.site,LIST
+HOST-SUFFIX,tggtudrdytkps.site,LIST
 HOST-SUFFIX,tgudxroftsego.site,LIST
 HOST-SUFFIX,thifuwospdvev.site,LIST
 HOST-SUFFIX,thumb.oloadcdn.net,LIST
@@ -9204,6 +9273,7 @@ HOST-SUFFIX,usitfbfndhvpa.site,LIST
 HOST-SUFFIX,uudanzrcuonlv.site,LIST
 HOST-SUFFIX,uudzkdihvjtit.site,LIST
 HOST-SUFFIX,uwmvszhfyodqc.site,LIST
+HOST-SUFFIX,uyqhhxjylygof.site,LIST
 HOST-SUFFIX,uzvjbgknoijof.site,LIST
 HOST-SUFFIX,vacatedfiants.cyou,LIST
 HOST-SUFFIX,vaccarycalvous.cfd,LIST
@@ -9235,6 +9305,7 @@ HOST-SUFFIX,wagatihobble.click,LIST
 HOST-SUFFIX,warnermediacdn.com,LIST
 HOST-SUFFIX,wavedsuspect.click,LIST
 HOST-SUFFIX,waveletiricize.cfd,LIST
+HOST-SUFFIX,wbsmuenfbnsqk.site,LIST
 HOST-SUFFIX,weznuihmrrshp.site,LIST
 HOST-SUFFIX,wgenxjvutxyif.site,LIST
 HOST-SUFFIX,wgotdxjymlfme.site,LIST
@@ -9278,8 +9349,10 @@ HOST-SUFFIX,yvwvllpfuwsgm.site,LIST
 HOST-SUFFIX,yxaasylsdjado.site,LIST
 HOST-SUFFIX,yzwpxwxkmeqxt.site,LIST
 HOST-SUFFIX,zbnmyrdxthmbl.site,LIST
+HOST-SUFFIX,zbrjapghdgvryv.com,LIST
 HOST-SUFFIX,zgaoczburrxqk.site,LIST
 HOST-SUFFIX,zhtmxmrzgwltk.site,LIST
+HOST-SUFFIX,zippkkqlxvxws.site,LIST
 HOST-SUFFIX,zjownvjdhfqub.site,LIST
 HOST-SUFFIX,zkdwtdzlcadfu.site,LIST
 HOST-SUFFIX,zkqpakjqpvfks.site,LIST
@@ -9338,7 +9411,9 @@ HOST-SUFFIX,bvzzcqfalsend.space,LIST
 HOST-SUFFIX,bxkhuffkbmxln.space,LIST
 HOST-SUFFIX,byarjsfxfrove.space,LIST
 HOST-SUFFIX,bylawskilnman.click,LIST
+HOST-SUFFIX,bywsijvjatyfp.space,LIST
 HOST-SUFFIX,bzrgbresuhvrw.space,LIST
+HOST-SUFFIX,canrwhwfhzobw.space,LIST
 HOST-SUFFIX,cavzgoqiozmyc.space,LIST
 HOST-SUFFIX,cbspressexpress.com,LIST
 HOST-SUFFIX,cdn.getfeedback.com,LIST
@@ -9348,8 +9423,10 @@ HOST-SUFFIX,cerrivvskghhs.space,LIST
 HOST-SUFFIX,ceymmbgyqnnes.space,LIST
 HOST-SUFFIX,cf.odysseyplus.site,LIST
 HOST-SUFFIX,ciqhpbyoybhclr.rest,LIST
+HOST-SUFFIX,ckbwbclddktqr.space,LIST
 HOST-SUFFIX,cloudflare-ipfs.com,LIST
 HOST-SUFFIX,cmcojoetqgtnq.space,LIST
+HOST-SUFFIX,cmdrqpsntamwk.space,LIST
 HOST-SUFFIX,coaqhbgliewbm.space,LIST
 HOST-SUFFIX,coayahtscmjre.space,LIST
 HOST-SUFFIX,cocklettherial.cyou,LIST
@@ -9369,6 +9446,7 @@ HOST-SUFFIX,data.bettkonzept.de,LIST
 HOST-SUFFIX,data.simplepages.ai,LIST
 HOST-SUFFIX,dbnivsmljtdbk.space,LIST
 HOST-SUFFIX,dbtstlfijmlqx.space,LIST
+HOST-SUFFIX,degustochroma.click,LIST
 HOST-SUFFIX,dhdkptepdezia.space,LIST
 HOST-SUFFIX,discoveryplus.co.uk,LIST
 HOST-SUFFIX,disney-discount.com,LIST
@@ -9385,6 +9463,7 @@ HOST-SUFFIX,dl.steam.clngaa.com,LIST
 HOST-SUFFIX,dnrrwrherpizl.space,LIST
 HOST-SUFFIX,dodderyatabals.cyou,LIST
 HOST-SUFFIX,dog1.verystream.com,LIST
+HOST-SUFFIX,dolosehoggism.click,LIST
 HOST-SUFFIX,domugthhpdtft.space,LIST
 HOST-SUFFIX,download.nvidia.com,LIST
 HOST-SUFFIX,downloads.skype.com,LIST
@@ -9392,11 +9471,13 @@ HOST-SUFFIX,dropbox.zendesk.com,LIST
 HOST-SUFFIX,dropboxbusiness.com,LIST
 HOST-SUFFIX,dropboxinsiders.com,LIST
 HOST-SUFFIX,dropboxpartners.com,LIST
+HOST-SUFFIX,drtjzmceapgik.space,LIST
 HOST-SUFFIX,dscqxvxlwbxpc.space,LIST
 HOST-SUFFIX,duwifymkjfpnm.space,LIST
 HOST-SUFFIX,dvkqcpacwqlzy.space,LIST
 HOST-SUFFIX,dxynbmrkwrvbj.space,LIST
 HOST-SUFFIX,eaxemfcmapemq.space,LIST
+HOST-SUFFIX,ebzzilrmoithf.space,LIST
 HOST-SUFFIX,eccytygvbsnjh.space,LIST
 HOST-SUFFIX,eegaizkumkpjk.space,LIST
 HOST-SUFFIX,eewqlmtwdsron.space,LIST
@@ -9416,6 +9497,7 @@ HOST-SUFFIX,events.backtrace.io,LIST
 HOST-SUFFIX,ewaxekpshwrid.space,LIST
 HOST-SUFFIX,exdsogxhiatsx.space,LIST
 HOST-SUFFIX,fcqxqbrhpduuk.space,LIST
+HOST-SUFFIX,fgcxmwiaayzmg.space,LIST
 HOST-SUFFIX,fhylxvhtxpnwo.space,LIST
 HOST-SUFFIX,files.wordpress.com,LIST
 HOST-SUFFIX,fkjpanvarvmgr.space,LIST
@@ -9437,14 +9519,17 @@ HOST-SUFFIX,freshetgoboes.click,LIST
 HOST-SUFFIX,frtjdwbojvpyz.space,LIST
 HOST-SUFFIX,fsnndjtymruaf.space,LIST
 HOST-SUFFIX,ftdwnqyfhwihn.space,LIST
+HOST-SUFFIX,ftflqcbjxbonu.space,LIST
 HOST-SUFFIX,gbguqrbokfdlz.space,LIST
 HOST-SUFFIX,geuvkatbkmlsn.space,LIST
+HOST-SUFFIX,ggymibegmsflu.space,LIST
 HOST-SUFFIX,ghrjyouvkdqwu.space,LIST
 HOST-SUFFIX,girlsgogamescdn.com,LIST
 HOST-SUFFIX,gjfjmxslylmem.space,LIST
 HOST-SUFFIX,gkhtzvgekzcwk.space,LIST
 HOST-SUFFIX,glnqkatlvqfzf.space,LIST
 HOST-SUFFIX,grqxqnacyjvxd.space,LIST
+HOST-SUFFIX,gvxjqaciaxwvo.space,LIST
 HOST-SUFFIX,haqgcjroiitgr.space,LIST
 HOST-SUFFIX,hbedtvugrfdgm.space,LIST
 HOST-SUFFIX,hbfhqwyklulff.space,LIST
@@ -9453,9 +9538,9 @@ HOST-SUFFIX,hclkrrnvxeztm.space,LIST
 HOST-SUFFIX,hclnjzgwzbamn.space,LIST
 HOST-SUFFIX,hcotvwpasqknw.space,LIST
 HOST-SUFFIX,hdbvlshiszaoa.space,LIST
+HOST-SUFFIX,hehsnanmlquyx.space,LIST
 HOST-SUFFIX,hehyznjjcnypx.space,LIST
 HOST-SUFFIX,hewostitismalic.cfd,LIST
-HOST-SUFFIX,hgzqyoxssozyp.space,LIST
 HOST-SUFFIX,hhjagwizdqahy.space,LIST
 HOST-SUFFIX,howtogeekimages.com,LIST
 HOST-SUFFIX,huffpostmaghreb.com,LIST
@@ -9471,6 +9556,8 @@ HOST-SUFFIX,igqycwfegdmhv.space,LIST
 HOST-SUFFIX,ihvfxqhkzrsvl.space,LIST
 HOST-SUFFIX,iijbombwncqrx.space,LIST
 HOST-SUFFIX,ilgosajlubqdg.space,LIST
+HOST-SUFFIX,illfhpcxxmgel.space,LIST
+HOST-SUFFIX,ilnsuyxbzrcqs.space,LIST
 HOST-SUFFIX,inexeyxzouqzh.space,LIST
 HOST-SUFFIX,invisionapp-cdn.com,LIST
 HOST-SUFFIX,iomaduexiqtho.space,LIST
@@ -9494,12 +9581,14 @@ HOST-SUFFIX,jhloeccwchpee.space,LIST
 HOST-SUFFIX,jltpxzdwnnwuj.space,LIST
 HOST-SUFFIX,jlzzwb9ix8vpxk3.cfd,LIST
 HOST-SUFFIX,jrnplooafwfjn.space,LIST
+HOST-SUFFIX,jrqvkeudbdevm.space,LIST
 HOST-SUFFIX,jubmxyrmpdthm.space,LIST
 HOST-SUFFIX,jvelknhcjragq.space,LIST
 HOST-SUFFIX,jymqhypdvvbra.space,LIST
 HOST-SUFFIX,jzkhcjmzghcsf.space,LIST
 HOST-SUFFIX,kbwakkvqlxmvp.space,LIST
 HOST-SUFFIX,kbxatopvgjpth.space,LIST
+HOST-SUFFIX,kejwsfsmcdvyd.space,LIST
 HOST-SUFFIX,kevnaishekimf.space,LIST
 HOST-SUFFIX,kfbysoxcbleqk.space,LIST
 HOST-SUFFIX,kiln-dev.artisan.co,LIST
@@ -9517,6 +9606,7 @@ HOST-SUFFIX,kuomxnlobnzvn.space,LIST
 HOST-SUFFIX,kwbomltgixbkn.space,LIST
 HOST-SUFFIX,kwxytrygpcmxu.space,LIST
 HOST-SUFFIX,kzzbdsattavdw.space,LIST
+HOST-SUFFIX,laboresbracers.cyou,LIST
 HOST-SUFFIX,labroidconfess.cyou,LIST
 HOST-SUFFIX,launcher.mojang.com,LIST
 HOST-SUFFIX,lcsdktmitfqlj.space,LIST
@@ -9577,7 +9667,9 @@ HOST-SUFFIX,matomo.sexcams4u.eu,LIST
 HOST-SUFFIX,matomo.ufomap.space,LIST
 HOST-SUFFIX,matomo.whentorun.eu,LIST
 HOST-SUFFIX,matomov5.ltntec.com,LIST
+HOST-SUFFIX,mbhgdthtfvwvf.space,LIST
 HOST-SUFFIX,mbyfhkzasrxbn.space,LIST
+HOST-SUFFIX,mcjtbmepmgrhy.space,LIST
 HOST-SUFFIX,media.amplience.net,LIST
 HOST-SUFFIX,media.strapiapp.com,LIST
 HOST-SUFFIX,meowkofbxivyi.space,LIST
@@ -9601,6 +9693,7 @@ HOST-SUFFIX,mirrors.utermux.dev,LIST
 HOST-SUFFIX,mkfshtuxymriq.space,LIST
 HOST-SUFFIX,mletnkddrqios.space,LIST
 HOST-SUFFIX,mlyynfnutrtvq.space,LIST
+HOST-SUFFIX,mmmporlalokma.space,LIST
 HOST-SUFFIX,moblgybqwdgul.space,LIST
 HOST-SUFFIX,motherlessmedia.com,LIST
 HOST-SUFFIX,mpdcrhuvetsvt.space,LIST
@@ -9629,6 +9722,7 @@ HOST-SUFFIX,netflixtechblog.com,LIST
 HOST-SUFFIX,niismjhqtmqnq.space,LIST
 HOST-SUFFIX,niueiqsndsbcz.space,LIST
 HOST-SUFFIX,notebook.straw.page,LIST
+HOST-SUFFIX,nrzqmdwfqfqse.space,LIST
 HOST-SUFFIX,nsewbdlfjeshr.space,LIST
 HOST-SUFFIX,nyvlwjvxrmoqb.space,LIST
 HOST-SUFFIX,oacsztduksuby.space,LIST
@@ -9647,14 +9741,17 @@ HOST-SUFFIX,oxberrygesnera.rest,LIST
 HOST-SUFFIX,oysgxtqkruymc.space,LIST
 HOST-SUFFIX,pahwteqceoxrb.space,LIST
 HOST-SUFFIX,pedxbqnadnebr.space,LIST
+HOST-SUFFIX,perlldmytuxyg.space,LIST
 HOST-SUFFIX,personamaiefic.rest,LIST
 HOST-SUFFIX,pipedriveassets.com,LIST
 HOST-SUFFIX,pjlgqycnxajzg.space,LIST
 HOST-SUFFIX,pls.velvetshark.com,LIST
 HOST-SUFFIX,podgilyprefill.rest,LIST
 HOST-SUFFIX,posthog.intelcad.ai,LIST
+HOST-SUFFIX,priapicunbased.cyou,LIST
 HOST-SUFFIX,project1content.com,LIST
 HOST-SUFFIX,proxy.startpage.com,LIST
+HOST-SUFFIX,pteyynqpqzbqn.space,LIST
 HOST-SUFFIX,puamwfdfltwzp.space,LIST
 HOST-SUFFIX,pvhlnalfjazfk.space,LIST
 HOST-SUFFIX,pxuxlswadjlfu.space,LIST
@@ -9671,6 +9768,7 @@ HOST-SUFFIX,qshoullmhrqao.space,LIST
 HOST-SUFFIX,qtuwrmjlwgkuv.space,LIST
 HOST-SUFFIX,qvyxioimpckua.space,LIST
 HOST-SUFFIX,qzwzbemuupzbl.space,LIST
+HOST-SUFFIX,raccapfzxzukl.space,LIST
 HOST-SUFFIX,rcnzknpqdnjrk.space,LIST
 HOST-SUFFIX,reasoningtheory.net,LIST
 HOST-SUFFIX,registry.gitplac.si,LIST
@@ -9708,6 +9806,7 @@ HOST-SUFFIX,sgtm.ebikecenter.fi,LIST
 HOST-SUFFIX,shakdfjwwwjsn.space,LIST
 HOST-SUFFIX,shankedunwindy.cyou,LIST
 HOST-SUFFIX,slwzbjciejyhy.space,LIST
+HOST-SUFFIX,snaooicdnsuas.space,LIST
 HOST-SUFFIX,sngpyudhhdjca.space,LIST
 HOST-SUFFIX,snhyvuzgaoxdh.space,LIST
 HOST-SUFFIX,soccermatchpass.com,LIST
@@ -9779,6 +9878,7 @@ HOST-SUFFIX,updfcisoyimay.space,LIST
 HOST-SUFFIX,upiprxfoyeikp.space,LIST
 HOST-SUFFIX,uplinksspindly.cyou,LIST
 HOST-SUFFIX,upsmwvpdtsvxi.space,LIST
+HOST-SUFFIX,uqrgdfwafkazi.space,LIST
 HOST-SUFFIX,urosomerevived.cyou,LIST
 HOST-SUFFIX,utuphgiqeckzf.space,LIST
 HOST-SUFFIX,uuozqpkdlqbkn.space,LIST
@@ -9803,6 +9903,7 @@ HOST-SUFFIX,visit.seobility.pro,LIST
 HOST-SUFFIX,visit.snapedit.site,LIST
 HOST-SUFFIX,vkvmatnuscqkn.space,LIST
 HOST-SUFFIX,vkyieskdlavjt.space,LIST
+HOST-SUFFIX,vvqpgzbwrzsuh.space,LIST
 HOST-SUFFIX,vxnurbodyeces.space,LIST
 HOST-SUFFIX,waffingmythism.cyou,LIST
 HOST-SUFFIX,warslerufology.cyou,LIST
@@ -9810,6 +9911,7 @@ HOST-SUFFIX,wdahqumfpnmav.space,LIST
 HOST-SUFFIX,webstats.polisen.se,LIST
 HOST-SUFFIX,wedchfyatktez.space,LIST
 HOST-SUFFIX,wmlxmfjvnvwmq.space,LIST
+HOST-SUFFIX,wmrzpmaekbwdy.space,LIST
 HOST-SUFFIX,wmymtjaraeoxv.space,LIST
 HOST-SUFFIX,womxwsnxadxtl.space,LIST
 HOST-SUFFIX,wouldntdemarks.cyou,LIST
@@ -9821,6 +9923,7 @@ HOST-SUFFIX,wvzoezmzjgixc.space,LIST
 HOST-SUFFIX,wyggbgqwzctxq.space,LIST
 HOST-SUFFIX,xbylfjliltytf.space,LIST
 HOST-SUFFIX,ximdoqxdrighn.space,LIST
+HOST-SUFFIX,xjfjsqbyajuwg.space,LIST
 HOST-SUFFIX,xjzkkbfqfotbc.space,LIST
 HOST-SUFFIX,xkysykhputthf.space,LIST
 HOST-SUFFIX,xngbmsgvckcqi.space,LIST
@@ -9830,15 +9933,19 @@ HOST-SUFFIX,xwzsvikozysmg.space,LIST
 HOST-SUFFIX,xxtzyeiujzlnz.space,LIST
 HOST-SUFFIX,xybpbifpyzhtz.space,LIST
 HOST-SUFFIX,yfqgyzuifmkjw.space,LIST
+HOST-SUFFIX,yhxpacevrlsmc.space,LIST
 HOST-SUFFIX,yicuhxojxgqju.space,LIST
 HOST-SUFFIX,ylqtjplsdrspb.space,LIST
 HOST-SUFFIX,yurqfto73olqr1.rest,LIST
 HOST-SUFFIX,yuxomrgsfvnxu.space,LIST
 HOST-SUFFIX,zcxcbcsjafdck.space,LIST
+HOST-SUFFIX,zentnertuglike.cyou,LIST
 HOST-SUFFIX,zeroclampentice.com,LIST
 HOST-SUFFIX,zigptycmiycjn.space,LIST
+HOST-SUFFIX,ziipgrpkhbigq.space,LIST
 HOST-SUFFIX,zmeuycenunvgv.space,LIST
 HOST-SUFFIX,zmgttvqoqnsgz.space,LIST
+HOST-SUFFIX,zqbpgojxnbvzt.space,LIST
 HOST-SUFFIX,zrbezdaddiahk.space,LIST
 HOST-SUFFIX,zshuretjbswom.space,LIST
 HOST-SUFFIX,zunzjzxaaiwfj.space,LIST
@@ -9896,9 +10003,11 @@ HOST-SUFFIX,bkqvysqgajcgg.online,LIST
 HOST-SUFFIX,bmuijasxhezxe.online,LIST
 HOST-SUFFIX,booejgnliutcd.online,LIST
 HOST-SUFFIX,browsepantartful.com,LIST
+HOST-SUFFIX,bwanpzeajyoga.online,LIST
 HOST-SUFFIX,ccucnuuahikzz.online,LIST
 HOST-SUFFIX,cerxwkmeywkdy.online,LIST
 HOST-SUFFIX,cfmbroselispers.cyou,LIST
+HOST-SUFFIX,cfphzvdymxipz.online,LIST
 HOST-SUFFIX,cgcexsprstohm.online,LIST
 HOST-SUFFIX,chalinamajagga.click,LIST
 HOST-SUFFIX,circle-artifacts.com,LIST
@@ -9913,26 +10022,33 @@ HOST-SUFFIX,cloudinary.vpsvc.com,LIST
 HOST-SUFFIX,cnozgrimopoof.online,LIST
 HOST-SUFFIX,coldongjiffies.click,LIST
 HOST-SUFFIX,commandslikeable.com,LIST
+HOST-SUFFIX,conjoinmollusk.click,LIST
 HOST-SUFFIX,cssdwkjzdxxqn.online,LIST
 HOST-SUFFIX,ctvsxekypkaue.online,LIST
 HOST-SUFFIX,cydskqupzdook.online,LIST
 HOST-SUFFIX,czapwobjmqucl.online,LIST
 HOST-SUFFIX,dekeifblwjuou.online,LIST
+HOST-SUFFIX,dfcqsybwzgnzy.online,LIST
+HOST-SUFFIX,dillesksyruped.click,LIST
 HOST-SUFFIX,disneytermsofuse.com,LIST
 HOST-SUFFIX,disneyturkiye.com.tr,LIST
 HOST-SUFFIX,djqeyfmaqkvoo.online,LIST
 HOST-SUFFIX,dolphin-anty-cdn.com,LIST
 HOST-SUFFIX,domzpbsymwbtf.online,LIST
+HOST-SUFFIX,doumeqtimrllx.online,LIST
 HOST-SUFFIX,dowpvxtbknqml.online,LIST
 HOST-SUFFIX,dphheyqbwgaau.online,LIST
 HOST-SUFFIX,dqwdebmtifbey.online,LIST
 HOST-SUFFIX,drhfybnsntsop.online,LIST
+HOST-SUFFIX,dtqelcsqivmqj.online,LIST
+HOST-SUFFIX,dtuqzwvfgiphe.online,LIST
 HOST-SUFFIX,dulvxkusxdcpc.online,LIST
 HOST-SUFFIX,dxaqcakgokcbe.online,LIST
 HOST-SUFFIX,dyblpgaiomtdv.online,LIST
 HOST-SUFFIX,eeztfgqkdagfl.online,LIST
 HOST-SUFFIX,embitterlorrycar.com,LIST
 HOST-SUFFIX,emqyssutavqxc.online,LIST
+HOST-SUFFIX,epskbyzwbmpra.online,LIST
 HOST-SUFFIX,eqq91cgw2trehrp.rest,LIST
 HOST-SUFFIX,ethosesbeyonds.click,LIST
 HOST-SUFFIX,etrader.kalahari.com,LIST
@@ -9957,13 +10073,17 @@ HOST-SUFFIX,foxsportsflorida.com,LIST
 HOST-SUFFIX,fzehebhsdrwrk.online,LIST
 HOST-SUFFIX,fzlcthmjydxty.online,LIST
 HOST-SUFFIX,gdixalmotphku.online,LIST
+HOST-SUFFIX,geyabxkpzbvsy.online,LIST
 HOST-SUFFIX,ggvjgcqosjsiv.online,LIST
 HOST-SUFFIX,ghvwhqkmesfhu.online,LIST
 HOST-SUFFIX,givynlmumqzjd.online,LIST
+HOST-SUFFIX,gjaetiklkqycy.online,LIST
 HOST-SUFFIX,go-disneyworldgo.com,LIST
 HOST-SUFFIX,googleadservices.com,LIST
 HOST-SUFFIX,gqrvjbpmobsvi.online,LIST
+HOST-SUFFIX,gradwcntoprvn.online,LIST
 HOST-SUFFIX,gsaqyswvkveoy.online,LIST
+HOST-SUFFIX,guxuxecuitddv.online,LIST
 HOST-SUFFIX,gvzfoohrojaqw.online,LIST
 HOST-SUFFIX,gyzpkkzojclpq.online,LIST
 HOST-SUFFIX,haadqzvaencuq.online,LIST
@@ -9986,10 +10106,12 @@ HOST-SUFFIX,huffingtonpost.co.uk,LIST
 HOST-SUFFIX,huffingtonpost.co.za,LIST
 HOST-SUFFIX,humpingtonight.click,LIST
 HOST-SUFFIX,hvflwoyoxetjz.online,LIST
+HOST-SUFFIX,hwikmrenzqmva.online,LIST
 HOST-SUFFIX,hxypzksqmlnor.online,LIST
 HOST-SUFFIX,hyklujfryizpf.online,LIST
 HOST-SUFFIX,iaoonfojwtujn.online,LIST
 HOST-SUFFIX,idfqmtrhzvtgn.online,LIST
+HOST-SUFFIX,iffkhsuxcxnjv.online,LIST
 HOST-SUFFIX,ijjjepuharutb.online,LIST
 HOST-SUFFIX,imtvzvzihstno.online,LIST
 HOST-SUFFIX,insights.hafen.guide,LIST
@@ -10000,11 +10122,13 @@ HOST-SUFFIX,iruyalfzzlijz.online,LIST
 HOST-SUFFIX,itvjqrhqhvorx.online,LIST
 HOST-SUFFIX,jewupyokehispano.cfd,LIST
 HOST-SUFFIX,jffpcvacalnrv.online,LIST
+HOST-SUFFIX,jotanngycjvxw.online,LIST
 HOST-SUFFIX,jqlxcdanyqbtz.online,LIST
 HOST-SUFFIX,jsoedbrzgxpqb.online,LIST
 HOST-SUFFIX,jwutznbnhgmkg.online,LIST
 HOST-SUFFIX,jyiuvsfhmxkfa.online,LIST
 HOST-SUFFIX,kasoyckcsmgal.online,LIST
+HOST-SUFFIX,kaurqcckxtmxz.online,LIST
 HOST-SUFFIX,kcnlbswxseble.online,LIST
 HOST-SUFFIX,kco3up8miwi1cqv.rest,LIST
 HOST-SUFFIX,kdlweeirjtofc.online,LIST
@@ -10012,6 +10136,7 @@ HOST-SUFFIX,kiko-play-niptan.one,LIST
 HOST-SUFFIX,kpyktnhvzxzdb.online,LIST
 HOST-SUFFIX,krindtrdlmfvx.online,LIST
 HOST-SUFFIX,kvjthavimymgk.online,LIST
+HOST-SUFFIX,kvskvclkziqne.online,LIST
 HOST-SUFFIX,kxgdynrozodcv.online,LIST
 HOST-SUFFIX,kylzuarxeyeli.online,LIST
 HOST-SUFFIX,kyrjreyxdcmel.online,LIST
@@ -10094,11 +10219,13 @@ HOST-SUFFIX,mirror.shastacoe.net,LIST
 HOST-SUFFIX,mirror.zzunipark.com,LIST
 HOST-SUFFIX,mirrors.nublue.co.uk,LIST
 HOST-SUFFIX,misformchipsggr.cyou,LIST
+HOST-SUFFIX,mjwlfprfdybal.online,LIST
 HOST-SUFFIX,mkdhwyqybkwqe.online,LIST
 HOST-SUFFIX,mndftqopovamj.online,LIST
 HOST-SUFFIX,mnqpiodhufoso.online,LIST
 HOST-SUFFIX,mogpvvslpdrbz.online,LIST
 HOST-SUFFIX,muiiiwbdzkyvc.online,LIST
+HOST-SUFFIX,munbfoeocuheu.online,LIST
 HOST-SUFFIX,mvhkwtwdciprs.online,LIST
 HOST-SUFFIX,mwuekzwqdrnan.online,LIST
 HOST-SUFFIX,mxhkadwedflsr.online,LIST
@@ -10116,6 +10243,7 @@ HOST-SUFFIX,nkrmvifnnztez.online,LIST
 HOST-SUFFIX,nneagmdjdshrf.online,LIST
 HOST-SUFFIX,nnnrnxdlmjpph.online,LIST
 HOST-SUFFIX,nodctzeikfjzt.online,LIST
+HOST-SUFFIX,nqejmuknzurfc.online,LIST
 HOST-SUFFIX,nsswlifbkpvkg.online,LIST
 HOST-SUFFIX,nubfhfikrpdnw.online,LIST
 HOST-SUFFIX,nvhptfxiaamca.online,LIST
@@ -10123,6 +10251,7 @@ HOST-SUFFIX,nyrblicigjttk.online,LIST
 HOST-SUFFIX,nzonduetevcmj.online,LIST
 HOST-SUFFIX,nzxepbrvqtmwn.online,LIST
 HOST-SUFFIX,nzxwekknfnfea.online,LIST
+HOST-SUFFIX,oauntvabltxpu.online,LIST
 HOST-SUFFIX,oavgofyxwyryj.online,LIST
 HOST-SUFFIX,obdndfupmqoqs.online,LIST
 HOST-SUFFIX,oemteckrcihsp.online,LIST
@@ -10135,11 +10264,13 @@ HOST-SUFFIX,omspokbliewrg.online,LIST
 HOST-SUFFIX,oouvhmoxzsevq.online,LIST
 HOST-SUFFIX,opkxndddgcwnj.online,LIST
 HOST-SUFFIX,oqqzbccqxtfvf.online,LIST
+HOST-SUFFIX,ordfkfcnrrlzr.online,LIST
 HOST-SUFFIX,orlandohurricane.com,LIST
 HOST-SUFFIX,oszfblxxhwozi.online,LIST
 HOST-SUFFIX,p.aiflyingcar.online,LIST
 HOST-SUFFIX,pangsoundpayback.com,LIST
 HOST-SUFFIX,parallelepiped48.com,LIST
+HOST-SUFFIX,pdgifgpbfasrb.online,LIST
 HOST-SUFFIX,pgebiaujvjkid.online,LIST
 HOST-SUFFIX,piwik.visitberlin.de,LIST
 HOST-SUFFIX,pixel.profound.click,LIST
@@ -10153,6 +10284,7 @@ HOST-SUFFIX,proxy3.startpage.com,LIST
 HOST-SUFFIX,przwyerclgags.online,LIST
 HOST-SUFFIX,pvhlewexcpcqq.online,LIST
 HOST-SUFFIX,qaxerpzgohvqv.online,LIST
+HOST-SUFFIX,qbzdmkvtfjnkh.online,LIST
 HOST-SUFFIX,qcrydchpkzlbw.online,LIST
 HOST-SUFFIX,qevdyjaxjruwm.online,LIST
 HOST-SUFFIX,qlakcpscdsvde.online,LIST
@@ -10259,9 +10391,11 @@ HOST-SUFFIX,tracking.beecrazy.hk,LIST
 HOST-SUFFIX,tracking.uhrzeit.net,LIST
 HOST-SUFFIX,trfppaapclyvo.online,LIST
 HOST-SUFFIX,ttnimlmqitkne.online,LIST
+HOST-SUFFIX,tuqwuqqxflqxa.online,LIST
 HOST-SUFFIX,tvbeventpower.com.hk,LIST
 HOST-SUFFIX,tvwofyvaksbuy.online,LIST
 HOST-SUFFIX,twpvnbyjstnwm.online,LIST
+HOST-SUFFIX,tzmaasbuxigix.online,LIST
 HOST-SUFFIX,ubplrowabexlq.online,LIST
 HOST-SUFFIX,ugazuogyeeadt.online,LIST
 HOST-SUFFIX,ugzmqcshtlyuo.online,LIST
@@ -10289,7 +10423,9 @@ HOST-SUFFIX,visit.remove-bg.info,LIST
 HOST-SUFFIX,visit.unlucid.online,LIST
 HOST-SUFFIX,visit.upsampler.info,LIST
 HOST-SUFFIX,visit.vanceai.online,LIST
+HOST-SUFFIX,vmlfyrzyiaszj.online,LIST
 HOST-SUFFIX,vnbodehnermda.online,LIST
+HOST-SUFFIX,vpyprkzguiqdj.online,LIST
 HOST-SUFFIX,vueffikzsjewx.online,LIST
 HOST-SUFFIX,vwvxrfnsmwakf.online,LIST
 HOST-SUFFIX,vylivgbhjqkbl.online,LIST
@@ -10365,6 +10501,7 @@ HOST-SUFFIX,analytics.typesite.io,LIST
 HOST-SUFFIX,analytics.velalink.de,LIST
 HOST-SUFFIX,analytics.vyntaro.com,LIST
 HOST-SUFFIX,app.ownmailserver.com,LIST
+HOST-SUFFIX,auahobcnuyvwd.website,LIST
 HOST-SUFFIX,avouchlawsrethink.com,LIST
 HOST-SUFFIX,aws-iot-hackathon.com,LIST
 HOST-SUFFIX,awsloft-stockholm.com,LIST
@@ -10380,12 +10517,14 @@ HOST-SUFFIX,bjjdeotpjglih.website,LIST
 HOST-SUFFIX,bkkunbeurvocc.website,LIST
 HOST-SUFFIX,bkvkoaiwfrrnt.website,LIST
 HOST-SUFFIX,blacklivesmatter1.org,LIST
+HOST-SUFFIX,boyyeykcleeza.website,LIST
 HOST-SUFFIX,bqyrrwhnugwrp.website,LIST
 HOST-SUFFIX,bucabjnocfjgu.website,LIST
 HOST-SUFFIX,cagcyjcznorpu.website,LIST
 HOST-SUFFIX,cbrsgkdqhftjt.website,LIST
 HOST-SUFFIX,cbstelevisioncity.com,LIST
 HOST-SUFFIX,ccvmhtybbbhir.website,LIST
+HOST-SUFFIX,ccxcgbntafhsv.website,LIST
 HOST-SUFFIX,cdn.autoevolution.com,LIST
 HOST-SUFFIX,cdn.printfriendly.com,LIST
 HOST-SUFFIX,chargebeestaticv2.com,LIST
@@ -10412,6 +10551,8 @@ HOST-SUFFIX,ctzzirfslkvcv.website,LIST
 HOST-SUFFIX,cvpvhwygtmdve.website,LIST
 HOST-SUFFIX,cvzysdsrgupor.website,LIST
 HOST-SUFFIX,cxcskkwvghzvp.website,LIST
+HOST-SUFFIX,czajzhhntppol.website,LIST
+HOST-SUFFIX,datqtwusfdrdj.website,LIST
 HOST-SUFFIX,dcztyoozeqstv.website,LIST
 HOST-SUFFIX,devzpntxzimzy.website,LIST
 HOST-SUFFIX,diltsnjkxnxev.website,LIST
@@ -10423,9 +10564,11 @@ HOST-SUFFIX,disneymagicmoments.it,LIST
 HOST-SUFFIX,disneymagicmoments.pl,LIST
 HOST-SUFFIX,dlmbmjmplwepo.website,LIST
 HOST-SUFFIX,dltcauxfnkcgg.website,LIST
+HOST-SUFFIX,dmaipdzphaasj.website,LIST
 HOST-SUFFIX,download.autodesk.com,LIST
 HOST-SUFFIX,download.mokeedev.com,LIST
 HOST-SUFFIX,dqwqglbiiealk.website,LIST
+HOST-SUFFIX,drmgsqxgfhgtf.website,LIST
 HOST-SUFFIX,dropboxexperiment.com,LIST
 HOST-SUFFIX,dsznwssdfnylt.website,LIST
 HOST-SUFFIX,dtswpgusucgfd.website,LIST
@@ -10450,6 +10593,7 @@ HOST-SUFFIX,eyukpdjlfivny.website,LIST
 HOST-SUFFIX,ezkzzvzwfjasj.website,LIST
 HOST-SUFFIX,fanbjeshwssbc.website,LIST
 HOST-SUFFIX,fbfvlqsjqclep.website,LIST
+HOST-SUFFIX,fbouuanxwspzh.website,LIST
 HOST-SUFFIX,feuvjelaaoxce.website,LIST
 HOST-SUFFIX,figglegrillpruned.cfd,LIST
 HOST-SUFFIX,fimfiction-static.net,LIST
@@ -10465,6 +10609,7 @@ HOST-SUFFIX,ftp-master.debian.org,LIST
 HOST-SUFFIX,gapmeezmpklpd.website,LIST
 HOST-SUFFIX,gateway.serph.network,LIST
 HOST-SUFFIX,gbbqaanguyacx.website,LIST
+HOST-SUFFIX,gebcgqxgcbote.website,LIST
 HOST-SUFFIX,gesupdfknxzae.website,LIST
 HOST-SUFFIX,ghzjgjrkqxcyc.website,LIST
 HOST-SUFFIX,gifvqnylnssyg.website,LIST
@@ -10507,6 +10652,7 @@ HOST-SUFFIX,ixngopmimflal.website,LIST
 HOST-SUFFIX,jaiiezpgtdvcm.website,LIST
 HOST-SUFFIX,jbnxmssvgylqy.website,LIST
 HOST-SUFFIX,jeiwyjigntamf.website,LIST
+HOST-SUFFIX,jgceudwlcveio.website,LIST
 HOST-SUFFIX,jgollcdgvgndi.website,LIST
 HOST-SUFFIX,jgsxwcwrdkiwk.website,LIST
 HOST-SUFFIX,jqktoecjleeuh.website,LIST
@@ -10521,6 +10667,8 @@ HOST-SUFFIX,kpveankjptsra.website,LIST
 HOST-SUFFIX,krpxzaxqykgwi.website,LIST
 HOST-SUFFIX,ksjgsjqcsuprs.website,LIST
 HOST-SUFFIX,kxbhakvhkhmgy.website,LIST
+HOST-SUFFIX,kxtzxsvtjpfev.website,LIST
+HOST-SUFFIX,kxwzalqsecehl.website,LIST
 HOST-SUFFIX,l4y1o8l9wvejpnwc.rest,LIST
 HOST-SUFFIX,lbcljwreslalb.website,LIST
 HOST-SUFFIX,lcutmzhnetsum.website,LIST
@@ -10586,9 +10734,11 @@ HOST-SUFFIX,matomo.techcomfort.eu,LIST
 HOST-SUFFIX,matomo.thenftstore.eu,LIST
 HOST-SUFFIX,matomo.tsv-gangelt.de,LIST
 HOST-SUFFIX,matomo.venturicomm.eu,LIST
+HOST-SUFFIX,mefkthnqxifjr.website,LIST
 HOST-SUFFIX,metrics.aohostels.com,LIST
 HOST-SUFFIX,mgkcacokjqgft.website,LIST
 HOST-SUFFIX,mhstirljanfyy.website,LIST
+HOST-SUFFIX,micatebumprewinds.cfd,LIST
 HOST-SUFFIX,mirror.cdnetworks.com,LIST
 HOST-SUFFIX,mirror.famaserver.com,LIST
 HOST-SUFFIX,mirror.thegigabit.com,LIST
@@ -10596,11 +10746,14 @@ HOST-SUFFIX,mirrors.clouvider.net,LIST
 HOST-SUFFIX,mirrors.omnilance.com,LIST
 HOST-SUFFIX,mirrors.spacedump.net,LIST
 HOST-SUFFIX,misskeyusercontent.jp,LIST
+HOST-SUFFIX,mljkzxrvtieeh.website,LIST
 HOST-SUFFIX,mooletsawfishyaup.cfd,LIST
 HOST-SUFFIX,mowjikjotqhka.website,LIST
 HOST-SUFFIX,mqqxxswqtiohq.website,LIST
 HOST-SUFFIX,mvemojfndjgyi.website,LIST
 HOST-SUFFIX,mwrywqefemapj.website,LIST
+HOST-SUFFIX,mxvlaoctzvwyb.website,LIST
+HOST-SUFFIX,mzaqgfzlmlmhw.website,LIST
 HOST-SUFFIX,mzmkwyqvjpqgs.website,LIST
 HOST-SUFFIX,nachashentingtidy.cfd,LIST
 HOST-SUFFIX,navismithapis-cdn.com,LIST
@@ -10609,6 +10762,7 @@ HOST-SUFFIX,nbc-sports.go-vip.net,LIST
 HOST-SUFFIX,nehhvajhrfibq.website,LIST
 HOST-SUFFIX,nfvhaykwspcus.website,LIST
 HOST-SUFFIX,nguswfavipgqm.website,LIST
+HOST-SUFFIX,nixnrpwbxhuza.website,LIST
 HOST-SUFFIX,nmdthrgpykmpo.website,LIST
 HOST-SUFFIX,nmscpuyhwzuyb.website,LIST
 HOST-SUFFIX,notionusercontent.com,LIST
@@ -10618,6 +10772,7 @@ HOST-SUFFIX,nvgoilskjnzzk.website,LIST
 HOST-SUFFIX,nwmzoqaznoukm.website,LIST
 HOST-SUFFIX,nwyaipktoityy.website,LIST
 HOST-SUFFIX,nxrvwzzojfnkp.website,LIST
+HOST-SUFFIX,obslwycwddbbh.website,LIST
 HOST-SUFFIX,obtsbskplemtn.website,LIST
 HOST-SUFFIX,ocvzylsrdcetn.website,LIST
 HOST-SUFFIX,odhxzvbnoliix.website,LIST
@@ -10630,6 +10785,7 @@ HOST-SUFFIX,oqujaczroycoa.website,LIST
 HOST-SUFFIX,oryssuskimfourre.cyou,LIST
 HOST-SUFFIX,osxorqsyfvrlr.website,LIST
 HOST-SUFFIX,owdkspzudzwnz.website,LIST
+HOST-SUFFIX,ownwdfdghpxyk.website,LIST
 HOST-SUFFIX,parsecusercontent.com,LIST
 HOST-SUFFIX,peqpazmweassq.website,LIST
 HOST-SUFFIX,phin.contextbridge.ai,LIST
@@ -10638,6 +10794,7 @@ HOST-SUFFIX,pimtdaqgvozsx.website,LIST
 HOST-SUFFIX,piwik.bistum-essen.de,LIST
 HOST-SUFFIX,piwik.faviconlion.com,LIST
 HOST-SUFFIX,pjcmoaxftojjz.website,LIST
+HOST-SUFFIX,pkcbqcfqhanxn.website,LIST
 HOST-SUFFIX,platform.arabyads.com,LIST
 HOST-SUFFIX,plulwjtillajt.website,LIST
 HOST-SUFFIX,pmnfljkofbztx.website,LIST
@@ -10650,6 +10807,7 @@ HOST-SUFFIX,public.cdn.office.net,LIST
 HOST-SUFFIX,puckrietalioz.website,LIST
 HOST-SUFFIX,pxfheijvtbkik.website,LIST
 HOST-SUFFIX,qaegccfsfdqqr.website,LIST
+HOST-SUFFIX,qdgjpsiqkjiet.website,LIST
 HOST-SUFFIX,qgtldjqiofbxp.website,LIST
 HOST-SUFFIX,qhnxvxazilvdl.website,LIST
 HOST-SUFFIX,qhypfpwzbaayj.website,LIST
@@ -10658,12 +10816,16 @@ HOST-SUFFIX,qlhbogdkshotr.website,LIST
 HOST-SUFFIX,qneftuovurwsx.website,LIST
 HOST-SUFFIX,qobqsakwxaqdn.website,LIST
 HOST-SUFFIX,qsamoyqhggqsb.website,LIST
+HOST-SUFFIX,qulpnrpviqvgg.website,LIST
 HOST-SUFFIX,qupbkhnlqgw5vyti5.cfd,LIST
 HOST-SUFFIX,qwyefmelmyubo.website,LIST
+HOST-SUFFIX,qzrohlnbbyeft.website,LIST
 HOST-SUFFIX,rdchdwkqmdhxr.website,LIST
 HOST-SUFFIX,rdfidtzkhvdtm.website,LIST
 HOST-SUFFIX,rebootsuedebinomy.cfd,LIST
 HOST-SUFFIX,ressctjygpsyx.website,LIST
+HOST-SUFFIX,rftgwmifboelz.website,LIST
+HOST-SUFFIX,rgoridetghmuz.website,LIST
 HOST-SUFFIX,rmceynfgelxnz.website,LIST
 HOST-SUFFIX,rocyapfkcoide.website,LIST
 HOST-SUFFIX,rzxfrofoiamfl.website,LIST
@@ -10731,6 +10893,7 @@ HOST-SUFFIX,uepgyvbkuxafp.website,LIST
 HOST-SUFFIX,ukrrogqbsnoao.website,LIST
 HOST-SUFFIX,upgaigawgffks.website,LIST
 HOST-SUFFIX,uphufwudbxxhq.website,LIST
+HOST-SUFFIX,urjxessdbskvr.website,LIST
 HOST-SUFFIX,uwtgyywrefbls.website,LIST
 HOST-SUFFIX,uwuhzjkgswmao.website,LIST
 HOST-SUFFIX,verizonenterprise.com,LIST
@@ -10763,18 +10926,24 @@ HOST-SUFFIX,winvtpxbdwovc.website,LIST
 HOST-SUFFIX,wiqqcwenkdkcl.website,LIST
 HOST-SUFFIX,wishcbbdrouqq.website,LIST
 HOST-SUFFIX,wkxwoawiqphxb.website,LIST
+HOST-SUFFIX,wnxrluoksntpw.website,LIST
 HOST-SUFFIX,woteaszymanst.website,LIST
 HOST-SUFFIX,wqtkrqohkuloe.website,LIST
 HOST-SUFFIX,wup.shop.nintendo.net,LIST
 HOST-SUFFIX,wvxapdctfaraf.website,LIST
 HOST-SUFFIX,xagmkdnfixmvz.website,LIST
+HOST-SUFFIX,xamarlwmbpylo.website,LIST
 HOST-SUFFIX,xbwtrkrxpwlqo.website,LIST
 HOST-SUFFIX,xdniaximcmxti.website,LIST
 HOST-SUFFIX,xfqlkrircukkg.website,LIST
+HOST-SUFFIX,xkx9oxlxblgpe78u.rest,LIST
 HOST-SUFFIX,xrpxabvijnuoe.website,LIST
 HOST-SUFFIX,xsphbrthlluwm.website,LIST
+HOST-SUFFIX,xxwzjxspkozgy.website,LIST
+HOST-SUFFIX,xysiaydrbuzpd.website,LIST
 HOST-SUFFIX,yammerusercontent.com,LIST
 HOST-SUFFIX,ykbrbfmlpoqkj.website,LIST
+HOST-SUFFIX,ykoppuvofidgr.website,LIST
 HOST-SUFFIX,ymdytifzfyxkv.website,LIST
 HOST-SUFFIX,ynwnzoxxtaolq.website,LIST
 HOST-SUFFIX,ypq72b6ningrip8jy.cfd,LIST
@@ -10799,6 +10968,8 @@ HOST-SUFFIX,zuzyfcqcdttlk.website,LIST
 HOST-SUFFIX,zylmjmmemwkqq.website,LIST
 HOST-SUFFIX,1n2o5jcnh778xxqfz4.cfd,LIST
 HOST-SUFFIX,20thcenturystudios.com,LIST
+HOST-SUFFIX,4gvlnlfx4qr67ulrn.rest,LIST
+HOST-SUFFIX,7p329mu17cci85n3m.rest,LIST
 HOST-SUFFIX,advantageroughplay.com,LIST
 HOST-SUFFIX,adventuresbydisney.com,LIST
 HOST-SUFFIX,agahk.odysseyplus.site,LIST
@@ -10833,6 +11004,7 @@ HOST-SUFFIX,balutbackupgrockle.cfd,LIST
 HOST-SUFFIX,betrayedjoltmethod.com,LIST
 HOST-SUFFIX,blog-analytics.hskl.me,LIST
 HOST-SUFFIX,bridesoveractboart.cfd,LIST
+HOST-SUFFIX,brujabaretmisterm.cyou,LIST
 HOST-SUFFIX,cavuscecilydvornik.cfd,LIST
 HOST-SUFFIX,cdn-lfs.huggingface.co,LIST
 HOST-SUFFIX,cdn.manage.runcloud.io,LIST
@@ -11038,8 +11210,10 @@ HOST-SUFFIX,autorepairworcester.com,LIST
 HOST-SUFFIX,avestastupendfreit.cyou,LIST
 HOST-SUFFIX,bayamosrepacetrichi.cfd,LIST
 HOST-SUFFIX,brinieryankspsalmic.cfd,LIST
+HOST-SUFFIX,bvypp3rttivc1fq914v.cfd,LIST
 HOST-SUFFIX,cas-bridge.xethub.hf.co,LIST
 HOST-SUFFIX,cdn.survey.medallia.com,LIST
+HOST-SUFFIX,cingleanlagelollup.cyou,LIST
 HOST-SUFFIX,claristequipttonish.cfd,LIST
 HOST-SUFFIX,cms-twdigitalassets.com,LIST
 HOST-SUFFIX,contenthub.allstate.com,LIST
@@ -11057,6 +11231,7 @@ HOST-SUFFIX,foxsportsneworleans.com,LIST
 HOST-SUFFIX,foxsportsuniversity.com,LIST
 HOST-SUFFIX,freepornhdonlinegay.com,LIST
 HOST-SUFFIX,grazie.aws.intellij.net,LIST
+HOST-SUFFIX,hamalnarrowfinnier.cyou,LIST
 HOST-SUFFIX,hboasia1-i.akamaihd.net,LIST
 HOST-SUFFIX,hboasia2-i.akamaihd.net,LIST
 HOST-SUFFIX,hboasia3-i.akamaihd.net,LIST
@@ -11182,6 +11357,7 @@ HOST-SUFFIX,5xv573givjgnpty9kc5g.cfd,LIST
 HOST-SUFFIX,7ciiewbz2neo1g9q5y5.rest,LIST
 HOST-SUFFIX,administerembodiment.com,LIST
 HOST-SUFFIX,afenildrapingdissect.cfd,LIST
+HOST-SUFFIX,allureddefenceculets.cfd,LIST
 HOST-SUFFIX,amercedmexicabourock.cfd,LIST
 HOST-SUFFIX,analityka.podmlotkiem.pl,LIST
 HOST-SUFFIX,analiz.takvimrehberi.com,LIST
@@ -11233,6 +11409,7 @@ HOST-SUFFIX,espndotcom.tt.omtrdc.net,LIST
 HOST-SUFFIX,firestore.googleapis.com,LIST
 HOST-SUFFIX,functions.raabkarcher.de,LIST
 HOST-SUFFIX,gangwaynumberprivacy.com,LIST
+HOST-SUFFIX,hickykacharinatural.cyou,LIST
 HOST-SUFFIX,hubspotusercontent00.net,LIST
 HOST-SUFFIX,hubspotusercontent10.net,LIST
 HOST-SUFFIX,hubspotusercontent20.net,LIST
@@ -11294,7 +11471,9 @@ HOST-SUFFIX,paradisehotelquizfox.com,LIST
 HOST-SUFFIX,parkishmozingediting.cfd,LIST
 HOST-SUFFIX,pilarcardiaeunglory.cyou,LIST
 HOST-SUFFIX,piwik.webagentur-helm.de,LIST
+HOST-SUFFIX,prioralmatricrousing.cfd,LIST
 HOST-SUFFIX,prod.public.atl-paas.net,LIST
+HOST-SUFFIX,proxiessippleexodist.cfd,LIST
 HOST-SUFFIX,questionablequesting.com,LIST
 HOST-SUFFIX,raspiteteachyargyria.cfd,LIST
 HOST-SUFFIX,realamericanstories.info,LIST
@@ -11316,6 +11495,7 @@ HOST-SUFFIX,stats.keybindstudios.com,LIST
 HOST-SUFFIX,stats.komparacuracao.com,LIST
 HOST-SUFFIX,stats.whatsmynameapps.us,LIST
 HOST-SUFFIX,steamcontent.tnkjmec.com,LIST
+HOST-SUFFIX,swaggedstrepenlowmen.cfd,LIST
 HOST-SUFFIX,teensysarsnetrandier.cfd,LIST
 HOST-SUFFIX,thesourcemediaassets.com,LIST
 HOST-SUFFIX,thewaltdisneycompany.com,LIST
@@ -11391,6 +11571,7 @@ HOST-SUFFIX,download.cdp.bethesda.net,LIST
 HOST-SUFFIX,dynamic-static-assets.com,LIST
 HOST-SUFFIX,e649fcmt4w54v8758cj8.rest,LIST
 HOST-SUFFIX,eskarsunleavesmokier.cyou,LIST
+HOST-SUFFIX,f46281l9orhz3pgmzjkf.rest,LIST
 HOST-SUFFIX,foxcreativeuniversity.com,LIST
 HOST-SUFFIX,foxnewsaroundtheworld.com,LIST
 HOST-SUFFIX,foxsportsnetmilwaukee.com,LIST
@@ -11401,7 +11582,9 @@ HOST-SUFFIX,hboasialive.akamaized.net,LIST
 HOST-SUFFIX,hbogeo.cust.footprint.net,LIST
 HOST-SUFFIX,hestherwottestcunonia.cfd,LIST
 HOST-SUFFIX,ipm-provider.ff.avast.com,LIST
+HOST-SUFFIX,josephajewbushlauwine.cfd,LIST
 HOST-SUFFIX,kk38h95rfcm7479cnp92u.cfd,LIST
+HOST-SUFFIX,kraalscandidscrannia.cyou,LIST
 HOST-SUFFIX,ku1f68z792.rblbornholm.dk,LIST
 HOST-SUFFIX,load.getaphotographer.com,LIST
 HOST-SUFFIX,lyricaljustinewicked.cyou,LIST
@@ -11509,7 +11692,6 @@ HOST-SUFFIX,analytics.zelvia-sales.com,LIST
 HOST-SUFFIX,app-analytics-services.com,LIST
 HOST-SUFFIX,avodmp4s3ww-a.akamaihd.net,LIST
 HOST-SUFFIX,azuriteorthiteguaymie.cyou,LIST
-HOST-SUFFIX,bannery.navratdoreality.cz,LIST
 HOST-SUFFIX,cbsservice.aws.syncbak.com,LIST
 HOST-SUFFIX,cdn-uploads.huggingface.co,LIST
 HOST-SUFFIX,cdn.applicationinsights.io,LIST
@@ -11568,6 +11750,7 @@ HOST-SUFFIX,oss-me-east-1.aliyuncs.com,LIST
 HOST-SUFFIX,oss-us-east-1.aliyuncs.com,LIST
 HOST-SUFFIX,oss-us-west-1.aliyuncs.com,LIST
 HOST-SUFFIX,pkp21ni51cqurgjgn3t9q.rest,LIST
+HOST-SUFFIX,q1c1pmwv6uy5xk3j8rxq6t.cfd,LIST
 HOST-SUFFIX,redrawnpennamegruffer.cyou,LIST
 HOST-SUFFIX,redwardanubingtewsome.cyou,LIST
 HOST-SUFFIX,rufflefireballcherries.com,LIST
@@ -11740,7 +11923,6 @@ HOST-SUFFIX,matomo.sanneskreativewelt.de,LIST
 HOST-SUFFIX,matomo.spd-sterkrade-nord.de,LIST
 HOST-SUFFIX,microsoftpersonalcontent.com,LIST
 HOST-SUFFIX,mirror.digitalpacific.com.au,LIST
-HOST-SUFFIX,mutinousburyquestionable.com,LIST
 HOST-SUFFIX,ogads-pa.clients6.google.com,LIST
 HOST-SUFFIX,openaiapi-site.azureedge.net,LIST
 HOST-SUFFIX,oss-cn-hongkong.aliyuncs.com,LIST
@@ -11889,6 +12071,7 @@ HOST-SUFFIX,matomo.powermoon-transformer.de,LIST
 HOST-SUFFIX,matomo.strongwificertificate.eu,LIST
 HOST-SUFFIX,matomo.vivaldis-waisenkinder.de,LIST
 HOST-SUFFIX,matomo.wollschlaeger-hamburg.de,LIST
+HOST-SUFFIX,o68u4mc85u7wribbcu9f3kwgpyj.cfd,LIST
 HOST-SUFFIX,oss-ap-northeast-1.aliyuncs.com,LIST
 HOST-SUFFIX,oss-ap-northeast-2.aliyuncs.com,LIST
 HOST-SUFFIX,oss-ap-southeast-1.aliyuncs.com,LIST
@@ -13139,6 +13322,7 @@ IP-CIDR,76.223.104.0/24,LIST,no-resolve
 IP-CIDR,99.77.55.253/32,LIST,no-resolve
 IP-CIDR,99.77.55.254/31,LIST,no-resolve
 IP-CIDR,99.79.20.192/26,LIST,no-resolve
+IP-CIDR,104.251.176.0/22,LIST,no-resolve
 IP-CIDR,104.85.165.17/32,LIST,no-resolve
 IP-CIDR,108.128.160.0/23,LIST,no-resolve
 IP-CIDR,108.128.162.0/24,LIST,no-resolve
