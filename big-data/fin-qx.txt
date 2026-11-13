@@ -2317,6 +2317,7 @@ HOST,previews.123rf.com,LIST
 HOST,proxy.spigotmc.org,LIST
 HOST,pt.wisernotify.com,LIST
 HOST,public.hare200.com,LIST
+HOST,public.popclip.app,LIST
 HOST,r2cdn.corespeed.io,LIST
 HOST,reader.readmoo.com,LIST
 HOST,registry.npmjs.com,LIST
@@ -13167,7 +13168,6 @@ IP-CIDR,18.60.78.240/28,LIST,no-resolve
 IP-CIDR,184.51.102.0/24,LIST,no-resolve
 IP-CIDR,185.206.24.0/22,LIST,no-resolve
 IP-CIDR,192.173.64.0/18,LIST,no-resolve
-IP-CIDR,192.51.172.0/24,LIST,no-resolve
 IP-CIDR,203.198.80.0/21,LIST,no-resolve
 IP-CIDR,203.83.220.0/22,LIST,no-resolve
 IP-CIDR,218.102.32.0/19,LIST,no-resolve

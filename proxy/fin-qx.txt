@@ -1,4 +1,4 @@
-# proxy rules: 24895
+# proxy rules: 24896
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -1207,6 +1207,7 @@ HOST,img-new.cgtrader.com,LIST
 HOST,img.atlasobscura.com,LIST
 HOST,imperial.insendi.com,LIST
 HOST,instafeed.nfcube.com,LIST
+HOST,iprsoftwaremedia.com,LIST
 HOST,js.verygoodvault.com,LIST
 HOST,learn.optimizely.com,LIST
 HOST,link.theplatform.com,LIST

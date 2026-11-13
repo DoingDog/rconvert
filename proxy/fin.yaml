@@ -1,4 +1,4 @@
-# proxy rules: 24910
+# proxy rules: 24911
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,eep.io"
@@ -1208,6 +1208,7 @@ payload:
   - "DOMAIN,img.atlasobscura.com"
   - "DOMAIN,imperial.insendi.com"
   - "DOMAIN,instafeed.nfcube.com"
+  - "DOMAIN,iprsoftwaremedia.com"
   - "DOMAIN,js.verygoodvault.com"
   - "DOMAIN,learn.optimizely.com"
   - "DOMAIN,link.theplatform.com"

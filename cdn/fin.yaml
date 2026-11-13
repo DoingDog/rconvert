@@ -1,4 +1,4 @@
-# cdn rules: 4793
+# cdn rules: 4794
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -1672,6 +1672,7 @@ payload:
   - "DOMAIN,previews.123rf.com"
   - "DOMAIN,proxy.spigotmc.org"
   - "DOMAIN,public.hare200.com"
+  - "DOMAIN,public.popclip.app"
   - "DOMAIN,r2cdn.corespeed.io"
   - "DOMAIN,reader.readmoo.com"
   - "DOMAIN,registry.oomol.com"

@@ -1,4 +1,4 @@
-# cdn rules: 4793
+# cdn rules: 4794
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -1671,6 +1671,7 @@ HOST,preview.anysex.com,LIST
 HOST,previews.123rf.com,LIST
 HOST,proxy.spigotmc.org,LIST
 HOST,public.hare200.com,LIST
+HOST,public.popclip.app,LIST
 HOST,r2cdn.corespeed.io,LIST
 HOST,reader.readmoo.com,LIST
 HOST,registry.oomol.com,LIST
