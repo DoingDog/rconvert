@@ -1,4 +1,4 @@
-# proxy rules: 24896
+# proxy rules: 24897
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -906,6 +906,7 @@ HOST,play.gotolstoy.com,LIST
 HOST,player.cnevids.com,LIST
 HOST,plugins.dprint.dev,LIST
 HOST,public.hare200.com,LIST
+HOST,public.popclip.app,LIST
 HOST,r2cdn.corespeed.io,LIST
 HOST,registry.oomol.com,LIST
 HOST,rss.wudifeixue.com,LIST

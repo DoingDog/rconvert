@@ -1,4 +1,4 @@
-# proxy rules: 24911
+# proxy rules: 24912
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,eep.io"
@@ -907,6 +907,7 @@ payload:
   - "DOMAIN,player.cnevids.com"
   - "DOMAIN,plugins.dprint.dev"
   - "DOMAIN,public.hare200.com"
+  - "DOMAIN,public.popclip.app"
   - "DOMAIN,r2cdn.corespeed.io"
   - "DOMAIN,registry.oomol.com"
   - "DOMAIN,rss.wudifeixue.com"
