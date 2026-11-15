@@ -1,4 +1,4 @@
-# dirt rules: 57743
+# dirt rules: 57799
 HOST,url.cn,LIST
 HOST,i.dell.com,LIST
 HOST,127.skk.moe,LIST
@@ -3734,6 +3734,7 @@ HOST-SUFFIX,kafan.cn,LIST
 HOST-SUFFIX,kb3g.com,LIST
 HOST-SUFFIX,kdcmo.cn,LIST
 HOST-SUFFIX,kdocs.cn,LIST
+HOST-SUFFIX,kdtmc.cn,LIST
 HOST-SUFFIX,kdwnt.cn,LIST
 HOST-SUFFIX,kdwz.net,LIST
 HOST-SUFFIX,kdxy.com,LIST
@@ -4866,6 +4867,7 @@ HOST-SUFFIX,y139.net,LIST
 HOST-SUFFIX,y43f6.cn,LIST
 HOST-SUFFIX,y5gg.com,LIST
 HOST-SUFFIX,yahui.cc,LIST
+HOST-SUFFIX,yamu.com,LIST
 HOST-SUFFIX,yanzi.cn,LIST
 HOST-SUFFIX,yapi.pro,LIST
 HOST-SUFFIX,ybyzb.cn,LIST
@@ -7971,6 +7973,8 @@ HOST-SUFFIX,kd100.top,LIST
 HOST-SUFFIX,kdcmo.com,LIST
 HOST-SUFFIX,kdehs.top,LIST
 HOST-SUFFIX,kdtcdn.cn,LIST
+HOST-SUFFIX,kdtmc.com,LIST
+HOST-SUFFIX,kdtmc.net,LIST
 HOST-SUFFIX,kedou.com,LIST
 HOST-SUFFIX,kedvc.top,LIST
 HOST-SUFFIX,keegoo.cn,LIST
@@ -8474,6 +8478,7 @@ HOST-SUFFIX,mshow.net,LIST
 HOST-SUFFIX,mskhn.com,LIST
 HOST-SUFFIX,mslmc.net,LIST
 HOST-SUFFIX,mstalk.cn,LIST
+HOST-SUFFIX,mstand.cn,LIST
 HOST-SUFFIX,mszdld.cn,LIST
 HOST-SUFFIX,mt4h4.com,LIST
 HOST-SUFFIX,mtbank.cn,LIST
@@ -12394,6 +12399,7 @@ HOST-SUFFIX,cinemaz.to,LIST
 HOST-SUFFIX,cipchat.cn,LIST
 HOST-SUFFIX,cipgpt.com,LIST
 HOST-SUFFIX,ciscon.org,LIST
+HOST-SUFFIX,cistore.cn,LIST
 HOST-SUFFIX,cistsc.com,LIST
 HOST-SUFFIX,cistsc.net,LIST
 HOST-SUFFIX,citswx.com,LIST
@@ -12500,6 +12506,7 @@ HOST-SUFFIX,cnlvcc.com,LIST
 HOST-SUFFIX,cnmooc.org,LIST
 HOST-SUFFIX,cnmstl.net,LIST
 HOST-SUFFIX,cnolnic.cn,LIST
+HOST-SUFFIX,cnpcsp.com,LIST
 HOST-SUFFIX,cnpsec.com,LIST
 HOST-SUFFIX,cnquote.cn,LIST
 HOST-SUFFIX,cnread.top,LIST
@@ -14414,6 +14421,7 @@ HOST-SUFFIX,klcxkj.com,LIST
 HOST-SUFFIX,klcxkj.net,LIST
 HOST-SUFFIX,klingai.cn,LIST
 HOST-SUFFIX,klpbbs.com,LIST
+HOST-SUFFIX,klszkj.com,LIST
 HOST-SUFFIX,klzzsh.com,LIST
 HOST-SUFFIX,kmctec.com,LIST
 HOST-SUFFIX,kmeila.com,LIST
@@ -14496,6 +14504,7 @@ HOST-SUFFIX,kukejs.com,LIST
 HOST-SUFFIX,kumiao.com,LIST
 HOST-SUFFIX,kunbuy.com,LIST
 HOST-SUFFIX,kunlun.com,LIST
+HOST-SUFFIX,kunpay.com,LIST
 HOST-SUFFIX,kuyiso.com,LIST
 HOST-SUFFIX,kvps85.com,LIST
 HOST-SUFFIX,kvread.com,LIST
@@ -15123,6 +15132,7 @@ HOST-SUFFIX,ofweek.com,LIST
 HOST-SUFFIX,ogccdn.com,LIST
 HOST-SUFFIX,ogehycl.cn,LIST
 HOST-SUFFIX,oicq88.com,LIST
+HOST-SUFFIX,oilint.com,LIST
 HOST-SUFFIX,okispos.cn,LIST
 HOST-SUFFIX,okjike.com,LIST
 HOST-SUFFIX,oklpoi.com,LIST
@@ -17037,6 +17047,7 @@ HOST-SUFFIX,yiqiso.net,LIST
 HOST-SUFFIX,yiqisuv.cn,LIST
 HOST-SUFFIX,yiqiwen.cn,LIST
 HOST-SUFFIX,yiqiyou.cc,LIST
+HOST-SUFFIX,yirujs.com,LIST
 HOST-SUFFIX,yisihui.cn,LIST
 HOST-SUFFIX,yiupin.com,LIST
 HOST-SUFFIX,yiwise.com,LIST
@@ -19275,6 +19286,7 @@ HOST-SUFFIX,frp-ski.com,LIST
 HOST-SUFFIX,frp-sun.com,LIST
 HOST-SUFFIX,frp-tag.com,LIST
 HOST-SUFFIX,fssdrcw.com,LIST
+HOST-SUFFIX,ftycloud.cn,LIST
 HOST-SUFFIX,fuanbang.cn,LIST
 HOST-SUFFIX,fudanyun.cn,LIST
 HOST-SUFFIX,fulantv.com,LIST
@@ -20385,6 +20397,7 @@ HOST-SUFFIX,kldoctor.cn,LIST
 HOST-SUFFIX,klingai.com,LIST
 HOST-SUFFIX,klonline.cn,LIST
 HOST-SUFFIX,klsg.org.cn,LIST
+HOST-SUFFIX,klyr.com.cn,LIST
 HOST-SUFFIX,kmimuse.com,LIST
 HOST-SUFFIX,kmizeus.com,LIST
 HOST-SUFFIX,kmpxyhv.com,LIST
@@ -20449,6 +20462,7 @@ HOST-SUFFIX,kujiang.com,LIST
 HOST-SUFFIX,kukuinfo.cn,LIST
 HOST-SUFFIX,kunlunaq.cn,LIST
 HOST-SUFFIX,kunlunar.cn,LIST
+HOST-SUFFIX,kunlunbd.cn,LIST
 HOST-SUFFIX,kunlunca.cn,LIST
 HOST-SUFFIX,kunlunea.cn,LIST
 HOST-SUFFIX,kunlungr.cn,LIST
@@ -21706,6 +21720,7 @@ HOST-SUFFIX,rhmfdpai.cn,LIST
 HOST-SUFFIX,ricenter.cn,LIST
 HOST-SUFFIX,richapm.com,LIST
 HOST-SUFFIX,richdata.cn,LIST
+HOST-SUFFIX,richfit.com,LIST
 HOST-SUFFIX,richinfo.cn,LIST
 HOST-SUFFIX,richpush.cn,LIST
 HOST-SUFFIX,rigidpai.cn,LIST
@@ -22798,6 +22813,7 @@ HOST-SUFFIX,wufan88.com,LIST
 HOST-SUFFIX,wuhanev.com,LIST
 HOST-SUFFIX,wuhansr.top,LIST
 HOST-SUFFIX,wujicode.cn,LIST
+HOST-SUFFIX,wupansh.com,LIST
 HOST-SUFFIX,wupinma.com,LIST
 HOST-SUFFIX,wuyoujb.com,LIST
 HOST-SUFFIX,wuzhuiso.cn,LIST
@@ -24424,6 +24440,7 @@ HOST-SUFFIX,cloudflux.cn,LIST
 HOST-SUFFIX,cloudlvs.com,LIST
 HOST-SUFFIX,cloudpki.com,LIST
 HOST-SUFFIX,cloudrive.cn,LIST
+HOST-SUFFIX,cloudruit.cn,LIST
 HOST-SUFFIX,cloudses.com,LIST
 HOST-SUFFIX,cloudtake.cn,LIST
 HOST-SUFFIX,cloudvdn.com,LIST
@@ -24617,6 +24634,7 @@ HOST-SUFFIX,cyclepai.com,LIST
 HOST-SUFFIX,cyktqdrp.com,LIST
 HOST-SUFFIX,cylan.com.cn,LIST
 HOST-SUFFIX,cyrcwzpw.com,LIST
+HOST-SUFFIX,cyrftech.com,LIST
 HOST-SUFFIX,cyservice.cn,LIST
 HOST-SUFFIX,cytxl.com.cn,LIST
 HOST-SUFFIX,cyzpwzpw.com,LIST
@@ -25744,6 +25762,7 @@ HOST-SUFFIX,ifengdev.com,LIST
 HOST-SUFFIX,ifengidc.com,LIST
 HOST-SUFFIX,ifengimg.com,LIST
 HOST-SUFFIX,ifengmap.com,LIST
+HOST-SUFFIX,ifiscnpc.com,LIST
 HOST-SUFFIX,iflyaiedu.cn,LIST
 HOST-SUFFIX,iflyauto.com,LIST
 HOST-SUFFIX,iflyops.work,LIST
@@ -25999,6 +26018,7 @@ HOST-SUFFIX,jjweixin.org,LIST
 HOST-SUFFIX,jjxinwen.net,LIST
 HOST-SUFFIX,jkwlx.com.cn,LIST
 HOST-SUFFIX,jlc-ecad.com,LIST
+HOST-SUFFIX,jmdossen.com,LIST
 HOST-SUFFIX,jmltouzi.com,LIST
 HOST-SUFFIX,jmstatic.com,LIST
 HOST-SUFFIX,jnswctalk.cn,LIST
@@ -26106,6 +26126,7 @@ HOST-SUFFIX,kczkoady.com,LIST
 HOST-SUFFIX,kddaoyou.com,LIST
 HOST-SUFFIX,kdgalaxy.com,LIST
 HOST-SUFFIX,kdmchina.org,LIST
+HOST-SUFFIX,kdtmc.com.cn,LIST
 HOST-SUFFIX,kechuang.org,LIST
 HOST-SUFFIX,keepfrds.com,LIST
 HOST-SUFFIX,keguance.com,LIST
@@ -26203,6 +26224,7 @@ HOST-SUFFIX,kukiemky.com,LIST
 HOST-SUFFIX,kukuinfo.com,LIST
 HOST-SUFFIX,kunlunaq.com,LIST
 HOST-SUFFIX,kunlunar.com,LIST
+HOST-SUFFIX,kunlunbd.com,LIST
 HOST-SUFFIX,kunlunca.com,LIST
 HOST-SUFFIX,kunlundns.cn,LIST
 HOST-SUFFIX,kunlunea.com,LIST
@@ -28711,6 +28733,7 @@ HOST-SUFFIX,txvideo1.com,LIST
 HOST-SUFFIX,txvideo2.com,LIST
 HOST-SUFFIX,tyasredu.com,LIST
 HOST-SUFFIX,tycredit.com,LIST
+HOST-SUFFIX,tydevice.com,LIST
 HOST-SUFFIX,tyhuixue.com,LIST
 HOST-SUFFIX,typeeasy.net,LIST
 HOST-SUFFIX,tzkmwcdz.com,LIST
@@ -29449,6 +29472,7 @@ HOST-SUFFIX,yachtpai.com,LIST
 HOST-SUFFIX,yadea.com.cn,LIST
 HOST-SUFFIX,yadeaiot.net,LIST
 HOST-SUFFIX,yakgamer.com,LIST
+HOST-SUFFIX,yamutech.com,LIST
 HOST-SUFFIX,yangyi02.com,LIST
 HOST-SUFFIX,yangyi03.com,LIST
 HOST-SUFFIX,yangyi04.com,LIST
@@ -31085,6 +31109,7 @@ HOST-SUFFIX,didiqiche.com,LIST
 HOST-SUFFIX,diertaoke.com,LIST
 HOST-SUFFIX,difengyun.com,LIST
 HOST-SUFFIX,digi-dance.cn,LIST
+HOST-SUFFIX,digiccykp.com,LIST
 HOST-SUFFIX,digiloong.com,LIST
 HOST-SUFFIX,dilidili.wang,LIST
 HOST-SUFFIX,dingcloud.com,LIST
@@ -31135,6 +31160,7 @@ HOST-SUFFIX,doorverse.com,LIST
 HOST-SUFFIX,dorainsur.com,LIST
 HOST-SUFFIX,dorfatech.com,LIST
 HOST-SUFFIX,doservice.com,LIST
+HOST-SUFFIX,dossenbuy.com,LIST
 HOST-SUFFIX,doticloud.com,LIST
 HOST-SUFFIX,doubao.com.cn,LIST
 HOST-SUFFIX,doubaocdn.com,LIST
@@ -31619,6 +31645,7 @@ HOST-SUFFIX,gpivymaxs.com,LIST
 HOST-SUFFIX,gplayspace.cn,LIST
 HOST-SUFFIX,gplus-lab.com,LIST
 HOST-SUFFIX,gpupzrgmq.com,LIST
+HOST-SUFFIX,gqdangjian.cn,LIST
 HOST-SUFFIX,gqegmkfck.com,LIST
 HOST-SUFFIX,gqprwvzka.com,LIST
 HOST-SUFFIX,gqpyskcbt.com,LIST
@@ -31627,6 +31654,7 @@ HOST-SUFFIX,gqzxvogde.com,LIST
 HOST-SUFFIX,grapxovmp.com,LIST
 HOST-SUFFIX,grasplive.com,LIST
 HOST-SUFFIX,greedyint.com,LIST
+HOST-SUFFIX,griobd.com.cn,LIST
 HOST-SUFFIX,growingio.com,LIST
 HOST-SUFFIX,grrzievkm.com,LIST
 HOST-SUFFIX,grviymrxr.com,LIST
@@ -32415,6 +32443,7 @@ HOST-SUFFIX,kongduoka.com,LIST
 HOST-SUFFIX,kongfz.com.cn,LIST
 HOST-SUFFIX,koukao.com.cn,LIST
 HOST-SUFFIX,kovyesaec.com,LIST
+HOST-SUFFIX,kpdigiccy.com,LIST
 HOST-SUFFIX,kpxutqvbr.com,LIST
 HOST-SUFFIX,kpywurmra.com,LIST
 HOST-SUFFIX,kpzhushou.com,LIST
@@ -32459,6 +32488,7 @@ HOST-SUFFIX,kunlundns.com,LIST
 HOST-SUFFIX,kunlundns.net,LIST
 HOST-SUFFIX,kunlungem.com,LIST
 HOST-SUFFIX,kunlunhuf.com,LIST
+HOST-SUFFIX,kunlunjyk.com,LIST
 HOST-SUFFIX,kunlunxin.com,LIST
 HOST-SUFFIX,kunpengbx.com,LIST
 HOST-SUFFIX,kuqwaytfa.com,LIST
@@ -33658,6 +33688,7 @@ HOST-SUFFIX,rwoycsazr.com,LIST
 HOST-SUFFIX,rwrxyikau.com,LIST
 HOST-SUFFIX,rwxkarmer.com,LIST
 HOST-SUFFIX,rwystuhcw.com,LIST
+HOST-SUFFIX,rxianfeng.com,LIST
 HOST-SUFFIX,rxivorago.com,LIST
 HOST-SUFFIX,rygqpwvte.com,LIST
 HOST-SUFFIX,ryqztixkw.com,LIST
@@ -34201,6 +34232,7 @@ HOST-SUFFIX,tianwenca.com,LIST
 HOST-SUFFIX,tianya.com.cn,LIST
 HOST-SUFFIX,tianyancam.cn,LIST
 HOST-SUFFIX,tianyancha.cn,LIST
+HOST-SUFFIX,tianyigou.com,LIST
 HOST-SUFFIX,tianyiiot.com,LIST
 HOST-SUFFIX,tianyuyun.com,LIST
 HOST-SUFFIX,tidbcloud.com,LIST
@@ -35136,6 +35168,7 @@ HOST-SUFFIX,xzgreidap.com,LIST
 HOST-SUFFIX,xzosxuxvx.com,LIST
 HOST-SUFFIX,xzxerkzru.com,LIST
 HOST-SUFFIX,xzxpay.com.cn,LIST
+HOST-SUFFIX,yamucloud.com,LIST
 HOST-SUFFIX,yangguoqi.net,LIST
 HOST-SUFFIX,yangjibao.com,LIST
 HOST-SUFFIX,yangkeduo.com,LIST
@@ -35907,6 +35940,7 @@ HOST-SUFFIX,authine.com.cn,LIST
 HOST-SUFFIX,authing-inc.co,LIST
 HOST-SUFFIX,auto-shafa.com,LIST
 HOST-SUFFIX,autoadsense.cn,LIST
+HOST-SUFFIX,autoengine.com,LIST
 HOST-SUFFIX,autoimg.com.cn,LIST
 HOST-SUFFIX,auxtelecom.com,LIST
 HOST-SUFFIX,avlinsight.com,LIST
@@ -37010,6 +37044,8 @@ HOST-SUFFIX,hubeifurui.com,LIST
 HOST-SUFFIX,hubeikejin.com,LIST
 HOST-SUFFIX,hubjuherui.com,LIST
 HOST-SUFFIX,huifudashi.com,LIST
+HOST-SUFFIX,huifuemall.com,LIST
+HOST-SUFFIX,huifuemall.net,LIST
 HOST-SUFFIX,huijiaoyun.com,LIST
 HOST-SUFFIX,huijingcai.net,LIST
 HOST-SUFFIX,huijingcai.top,LIST
@@ -38014,6 +38050,7 @@ HOST-SUFFIX,rezenresort.cn,LIST
 HOST-SUFFIX,rezentravel.cn,LIST
 HOST-SUFFIX,rfyunydfv31.cn,LIST
 HOST-SUFFIX,richedm.com.cn,LIST
+HOST-SUFFIX,richfit-en.com,LIST
 HOST-SUFFIX,rightpaddle.cn,LIST
 HOST-SUFFIX,rirfactech.com,LIST
 HOST-SUFFIX,rj.m.taobao.co,LIST
@@ -38181,6 +38218,7 @@ HOST-SUFFIX,sinastorage.cn,LIST
 HOST-SUFFIX,sinfors.com.cn,LIST
 HOST-SUFFIX,sinocad.com.cn,LIST
 HOST-SUFFIX,sinojet.org.cn,LIST
+HOST-SUFFIX,sinopec-ec.com,LIST
 HOST-SUFFIX,siweidaotu.com,LIST
 HOST-SUFFIX,sixresource.cn,LIST
 HOST-SUFFIX,siyewenhua.com,LIST
@@ -38581,6 +38619,7 @@ HOST-SUFFIX,tusiassets.com,LIST
 HOST-SUFFIX,tuyafamily.com,LIST
 HOST-SUFFIX,tuyooworld.com,LIST
 HOST-SUFFIX,tuyooyouxi.com,LIST
+HOST-SUFFIX,txbonline.tech,LIST
 HOST-SUFFIX,txclivecdn.com,LIST
 HOST-SUFFIX,txcloudlive.cn,LIST
 HOST-SUFFIX,txlivecdn2.com,LIST
@@ -39043,6 +39082,7 @@ HOST-SUFFIX,yonghuivip.com,LIST
 HOST-SUFFIX,yonyouauto.com,LIST
 HOST-SUFFIX,yonyoutrip.com,LIST
 HOST-SUFFIX,youdaosmart.cn,LIST
+HOST-SUFFIX,youdianiot.com,LIST
 HOST-SUFFIX,youhongren.com,LIST
 HOST-SUFFIX,youkuhonor.com,LIST
 HOST-SUFFIX,youngbixin.com,LIST
@@ -39057,6 +39097,7 @@ HOST-SUFFIX,youzansvip.com,LIST
 HOST-SUFFIX,youzansvip.net,LIST
 HOST-SUFFIX,youzhuqian.com,LIST
 HOST-SUFFIX,yqxiuyoung.com,LIST
+HOST-SUFFIX,yrliuliang.com,LIST
 HOST-SUFFIX,yswebportal.cc,LIST
 HOST-SUFFIX,ytoexpress.com,LIST
 HOST-SUFFIX,ytoholding.com,LIST
@@ -39096,6 +39137,7 @@ HOST-SUFFIX,yunjiai.com.cn,LIST
 HOST-SUFFIX,yunkandian.com,LIST
 HOST-SUFFIX,yunlanling.com,LIST
 HOST-SUFFIX,yunpaiqian.net,LIST
+HOST-SUFFIX,yunruitian.com,LIST
 HOST-SUFFIX,yunshanapp.com,LIST
 HOST-SUFFIX,yuntigroup.com,LIST
 HOST-SUFFIX,yuntingcem.com,LIST
@@ -39493,6 +39535,7 @@ HOST-SUFFIX,bj-chargenet.cn,LIST
 HOST-SUFFIX,bj-cloud.com.cn,LIST
 HOST-SUFFIX,bjdxkf10000.com,LIST
 HOST-SUFFIX,bjdytjfzcjh.com,LIST
+HOST-SUFFIX,bjlingyi.com.cn,LIST
 HOST-SUFFIX,bjqtsecbase.com,LIST
 HOST-SUFFIX,bjsuperpass.com,LIST
 HOST-SUFFIX,bjswjwsysba.com,LIST
@@ -40753,6 +40796,7 @@ HOST-SUFFIX,muchslimest.top,LIST
 HOST-SUFFIX,mujinhealth.com,LIST
 HOST-SUFFIX,muqingmedia.com,LIST
 HOST-SUFFIX,music.apple.com,LIST
+HOST-SUFFIX,mx-cloud.com.cn,LIST
 HOST-SUFFIX,mycos-email.com,LIST
 HOST-SUFFIX,mycos-mails.com,LIST
 HOST-SUFFIX,mycos-mails.net,LIST
@@ -41432,6 +41476,7 @@ HOST-SUFFIX,ucloudufile.com,LIST
 HOST-SUFFIX,ucreyiju.com.cn,LIST
 HOST-SUFFIX,udalogistic.com,LIST
 HOST-SUFFIX,udeskglobal.com,LIST
+HOST-SUFFIX,udianwulian.com,LIST
 HOST-SUFFIX,ugreencloud.com,LIST
 HOST-SUFFIX,ugreengroup.com,LIST
 HOST-SUFFIX,ugreensmart.com,LIST
@@ -41518,6 +41563,7 @@ HOST-SUFFIX,watchpage06.top,LIST
 HOST-SUFFIX,watchpage07.top,LIST
 HOST-SUFFIX,watchpage08.top,LIST
 HOST-SUFFIX,wccdaily.com.cn,LIST
+HOST-SUFFIX,wearemanner.com,LIST
 HOST-SUFFIX,webankbkcdn.net,LIST
 HOST-SUFFIX,webankjiasu.com,LIST
 HOST-SUFFIX,webanktcftp.net,LIST
@@ -41946,6 +41992,7 @@ HOST-SUFFIX,aeon-life.com.cn,LIST
 HOST-SUFFIX,affinitychina.cn,LIST
 HOST-SUFFIX,agitalent.com.cn,LIST
 HOST-SUFFIX,ahaschool.com.cn,LIST
+HOST-SUFFIX,ahmahandmade.com,LIST
 HOST-SUFFIX,ai-guardrail.com,LIST
 HOST-SUFFIX,ai-propeller.com,LIST
 HOST-SUFFIX,aichaxiansuo.com,LIST
@@ -42930,6 +42977,7 @@ HOST-SUFFIX,makewavestal.com,LIST
 HOST-SUFFIX,mamaxiaozhen.com,LIST
 HOST-SUFFIX,managenegames.cn,LIST
 HOST-SUFFIX,manbangjituan.cn,LIST
+HOST-SUFFIX,mannercoffee.com,LIST
 HOST-SUFFIX,manualsproapp.cn,LIST
 HOST-SUFFIX,manxinhotels.com,LIST
 HOST-SUFFIX,manxinhotels.net,LIST
@@ -43009,6 +43057,7 @@ HOST-SUFFIX,mountaintoys.com,LIST
 HOST-SUFFIX,moutai519.com.cn,LIST
 HOST-SUFFIX,mparticle.com.cn,LIST
 HOST-SUFFIX,mpserverless.com,LIST
+HOST-SUFFIX,mstandcoffee.com,LIST
 HOST-SUFFIX,mszhuanzhuan.com,LIST
 HOST-SUFFIX,mvtianshanlr.com,LIST
 HOST-SUFFIX,myanonamouse.net,LIST
@@ -43126,6 +43175,7 @@ HOST-SUFFIX,pinganbaodai.com,LIST
 HOST-SUFFIX,pinganxinyong.cn,LIST
 HOST-SUFFIX,pingguohuifu.net,LIST
 HOST-SUFFIX,pingplusplus.com,LIST
+HOST-SUFFIX,pipechina.com.cn,LIST
 HOST-SUFFIX,pixelgame.com.cn,LIST
 HOST-SUFFIX,pixelmatorpro.cn,LIST
 HOST-SUFFIX,playaoligame.com,LIST
@@ -43765,6 +43815,7 @@ HOST-SUFFIX,xintongpc.com.cn,LIST
 HOST-SUFFIX,xinxiliusdk.wang,LIST
 HOST-SUFFIX,xinxiliusdk2.com,LIST
 HOST-SUFFIX,xinxinapp.com.cn,LIST
+HOST-SUFFIX,xinxitianxia.com,LIST
 HOST-SUFFIX,xinxixiaofei.com,LIST
 HOST-SUFFIX,xinyong12333.com,LIST
 HOST-SUFFIX,xitongqingli.com,LIST
@@ -44656,6 +44707,7 @@ HOST-SUFFIX,luohanacademy.com,LIST
 HOST-SUFFIX,lushichuanshuo.cn,LIST
 HOST-SUFFIX,made-in-china.com,LIST
 HOST-SUFFIX,maichebaodian.com,LIST
+HOST-SUFFIX,maichetong.com.cn,LIST
 HOST-SUFFIX,maimaixiangce.com,LIST
 HOST-SUFFIX,maimaixiangce.net,LIST
 HOST-SUFFIX,maimemostatus.com,LIST
@@ -44786,6 +44838,7 @@ HOST-SUFFIX,peopledaily.ac.cn,LIST
 HOST-SUFFIX,peopledata.com.cn,LIST
 HOST-SUFFIX,peopleinfo.com.cn,LIST
 HOST-SUFFIX,perfect-lingo.com,LIST
+HOST-SUFFIX,petrochina.com.cn,LIST
 HOST-SUFFIX,phonepadgames.com,LIST
 HOST-SUFFIX,photozoomchina.cn,LIST
 HOST-SUFFIX,pickcodecloud.com,LIST
@@ -44924,6 +44977,7 @@ HOST-SUFFIX,shuidipintuan.com,LIST
 HOST-SUFFIX,shuidizhunong.com,LIST
 HOST-SUFFIX,shuziqianxiang.cn,LIST
 HOST-SUFFIX,simetascan.com.cn,LIST
+HOST-SUFFIX,sinopec-ec.com.cn,LIST
 HOST-SUFFIX,sinosofter.com.cn,LIST
 HOST-SUFFIX,sinowaycredit.com,LIST
 HOST-SUFFIX,sitestarcenter.cn,LIST
@@ -45332,6 +45386,7 @@ HOST-SUFFIX,zhongcheng818.com,LIST
 HOST-SUFFIX,zhonghexinapi.com,LIST
 HOST-SUFFIX,zhongshang.com.cn,LIST
 HOST-SUFFIX,zhongyiguanjia.cn,LIST
+HOST-SUFFIX,zhongyouhuifu.com,LIST
 HOST-SUFFIX,zhuangxiubaike.cn,LIST
 HOST-SUFFIX,zhuanyewanjia.com,LIST
 HOST-SUFFIX,zhuishushenqi.com,LIST
@@ -46650,6 +46705,7 @@ HOST-SUFFIX,shuidiaixinchou.net,LIST
 HOST-SUFFIX,shuidichoujiuzhu.cn,LIST
 HOST-SUFFIX,shuidijiuzhu.com.cn,LIST
 HOST-SUFFIX,sichuandaily.com.cn,LIST
+HOST-SUFFIX,sinopecgroup.com.cn,LIST
 HOST-SUFFIX,skyworthdigital.com,LIST
 HOST-SUFFIX,skyworthdigital.net,LIST
 HOST-SUFFIX,skyworthdigital.top,LIST
@@ -46768,6 +46824,7 @@ HOST-SUFFIX,xbec-tencentclb.com,LIST
 HOST-SUFFIX,xbec-tencentclb.net,LIST
 HOST-SUFFIX,xestiantianlian.com,LIST
 HOST-SUFFIX,xhhomelandhotel.com,LIST
+HOST-SUFFIX,xianfengdangjian.cn,LIST
 HOST-SUFFIX,xiangtingzhanji.com,LIST
 HOST-SUFFIX,xiangyujiankang.com,LIST
 HOST-SUFFIX,xiangyunqicheng.com,LIST
@@ -47189,6 +47246,8 @@ HOST-SUFFIX,whec-tencentclb.work,LIST
 HOST-SUFFIX,whitelearningbox.com,LIST
 HOST-SUFFIX,xbec-tencentclb.work,LIST
 HOST-SUFFIX,xiamenairconnect.com,LIST
+HOST-SUFFIX,xianfengdangjian.com,LIST
+HOST-SUFFIX,xianfengdangjian.net,LIST
 HOST-SUFFIX,xiangtuanzhushou.com,LIST
 HOST-SUFFIX,xiaomingtaiji.com.cn,LIST
 HOST-SUFFIX,xiaoyangzhenxuan.vip,LIST
@@ -47738,6 +47797,7 @@ HOST-SUFFIX,volcengine-api-test.com,LIST
 HOST-SUFFIX,wannianqingjianzhan.com,LIST
 HOST-SUFFIX,weimiaoshangxueyuan.top,LIST
 HOST-SUFFIX,wuhandaishudiandian.com,LIST
+HOST-SUFFIX,xianfengdangjian.com.cn,LIST
 HOST-SUFFIX,xiaobanbanyuelinghe.com,LIST
 HOST-SUFFIX,xingshengshangcheng.com,LIST
 HOST-SUFFIX,yourwebsolutions.com.cn,LIST
@@ -49865,7 +49925,6 @@ IP-CIDR,202.10.64.0/20,LIST
 IP-CIDR,202.112.0.0/13,LIST
 IP-CIDR,202.12.17.0/24,LIST
 IP-CIDR,202.12.18.0/24,LIST
-IP-CIDR,202.12.30.0/24,LIST
 IP-CIDR,202.12.72.0/24,LIST
 IP-CIDR,202.12.84.0/23,LIST
 IP-CIDR,202.12.96.0/24,LIST
@@ -51995,7 +52054,6 @@ IP-CIDR,192.163.11.0/24,LIST
 IP-CIDR,192.232.34.0/23,LIST
 IP-CIDR,192.232.44.0/22,LIST
 IP-CIDR,192.232.97.0/24,LIST
-IP-CIDR,192.41.192.0/24,LIST
 IP-CIDR,192.51.172.0/23,LIST
 IP-CIDR,198.11.141.0/24,LIST
 IP-CIDR,198.11.184.0/21,LIST
@@ -53261,7 +53319,6 @@ IP-CIDR,103.130.228.0/22,LIST
 IP-CIDR,103.131.138.0/23,LIST
 IP-CIDR,103.131.152.0/22,LIST
 IP-CIDR,103.131.168.0/22,LIST
-IP-CIDR,103.131.194.0/23,LIST
 IP-CIDR,103.131.224.0/21,LIST
 IP-CIDR,103.131.240.0/22,LIST
 IP-CIDR,103.131.252.0/22,LIST
@@ -54211,7 +54268,6 @@ IP-CIDR,205.204.122.0/23,LIST
 IP-CIDR,205.204.124.0/22,LIST
 IP-CIDR,210.185.192.0/18,LIST
 IP-CIDR,210.201.32.11/32,LIST
-IP-CIDR,211.120.240.0/21,LIST
 IP-CIDR,211.149.128.0/17,LIST
 IP-CIDR,211.152.128.0/20,LIST
 IP-CIDR,211.152.144.0/22,LIST

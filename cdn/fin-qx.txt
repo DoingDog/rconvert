@@ -1,4 +1,4 @@
-# cdn rules: 4794
+# cdn rules: 4796
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -1641,6 +1641,7 @@ HOST,maps.wikimedia.org,LIST
 HOST,maptile.osmand.net,LIST
 HOST,media-cms.ayoba.me,LIST
 HOST,media.cgtrader.com,LIST
+HOST,media.datacamp.com,LIST
 HOST,media.flaticon.com,LIST
 HOST,media.formula1.com,LIST
 HOST,media.gamestop.com,LIST
@@ -2263,6 +2264,7 @@ HOST,static.grammarly.com,LIST
 HOST,static.helpjuice.com,LIST
 HOST,static.incapsula.com,LIST
 HOST,static.infomaniak.ch,LIST
+HOST,static.karousell.com,LIST
 HOST,static.macupdate.com,LIST
 HOST,static.mediafire.com,LIST
 HOST,static.meteoblue.com,LIST

@@ -1,4 +1,4 @@
-# proxy rules: 24897
+# proxy rules: 24898
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -10344,6 +10344,7 @@ HOST-SUFFIX,4epenaxa.com,LIST
 HOST-SUFFIX,4everland.io,LIST
 HOST-SUFFIX,51luoben.com,LIST
 HOST-SUFFIX,51luoli.info,LIST
+HOST-SUFFIX,51papaya.com,LIST
 HOST-SUFFIX,54647.global,LIST
 HOST-SUFFIX,54647.online,LIST
 HOST-SUFFIX,5isotoi5.org,LIST

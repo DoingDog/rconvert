@@ -1,4 +1,4 @@
-# big-data rules: 13705
+# big-data rules: 13707
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -2232,6 +2232,7 @@ payload:
   - "DOMAIN,maven.is-quite.gay"
   - "DOMAIN,media-cms.ayoba.me"
   - "DOMAIN,media.cgtrader.com"
+  - "DOMAIN,media.datacamp.com"
   - "DOMAIN,media.flaticon.com"
   - "DOMAIN,media.formula1.com"
   - "DOMAIN,media.gamestop.com"
@@ -3133,6 +3134,7 @@ payload:
   - "DOMAIN,static.helpjuice.com"
   - "DOMAIN,static.incapsula.com"
   - "DOMAIN,static.infomaniak.ch"
+  - "DOMAIN,static.karousell.com"
   - "DOMAIN,static.macupdate.com"
   - "DOMAIN,static.meteoblue.com"
   - "DOMAIN,static.mocortech.com"

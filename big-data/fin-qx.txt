@@ -1,4 +1,4 @@
-# big-data rules: 13720
+# big-data rules: 13722
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -2231,6 +2231,7 @@ HOST,maptile.osmand.net,LIST
 HOST,maven.is-quite.gay,LIST
 HOST,media-cms.ayoba.me,LIST
 HOST,media.cgtrader.com,LIST
+HOST,media.datacamp.com,LIST
 HOST,media.flaticon.com,LIST
 HOST,media.formula1.com,LIST
 HOST,media.gamestop.com,LIST
@@ -3132,6 +3133,7 @@ HOST,static.grammarly.com,LIST
 HOST,static.helpjuice.com,LIST
 HOST,static.incapsula.com,LIST
 HOST,static.infomaniak.ch,LIST
+HOST,static.karousell.com,LIST
 HOST,static.macupdate.com,LIST
 HOST,static.meteoblue.com,LIST
 HOST,static.mocortech.com,LIST
