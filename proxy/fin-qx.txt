@@ -1,4 +1,4 @@
-# proxy rules: 24898
+# proxy rules: 24903
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -890,6 +890,7 @@ HOST,link.storjshare.io,LIST
 HOST,logos.composio.dev,LIST
 HOST,media-cms.ayoba.me,LIST
 HOST,media.cgtrader.com,LIST
+HOST,media.datacamp.com,LIST
 HOST,media.flaticon.com,LIST
 HOST,media.gamestop.com,LIST
 HOST,media.hachyderm.io,LIST
@@ -1260,6 +1261,7 @@ HOST,static.aninoapps.com,LIST
 HOST,static.filehorse.com,LIST
 HOST,static.helpjuice.com,LIST
 HOST,static.incapsula.com,LIST
+HOST,static.karousell.com,LIST
 HOST,static.meteoblue.com,LIST
 HOST,static.mocortech.com,LIST
 HOST,static.newsbreak.com,LIST
@@ -1747,6 +1749,7 @@ HOST,user-uploads.perchance.org,LIST
 HOST,wikiwandv2-19431.kxcdn.com,LIST
 HOST,a4e8s8k3.map2.ssl.hwcdn.net,LIST
 HOST,assets.weather-forecast.com,LIST
+HOST,builds.dotnet.microsoft.com,LIST
 HOST,cdn-teams-slug.flaticon.com,LIST
 HOST,cdntranscend.eventbrite.com,LIST
 HOST,components.clever-cloud.com,LIST
@@ -5347,6 +5350,7 @@ HOST-SUFFIX,redwap.me,LIST
 HOST-SUFFIX,redxxx.cc,LIST
 HOST-SUFFIX,reg.cloud,LIST
 HOST-SUFFIX,reimu.net,LIST
+HOST-SUFFIX,remna.dev,LIST
 HOST-SUFFIX,rentry.co,LIST
 HOST-SUFFIX,resao.com,LIST
 HOST-SUFFIX,revit.com,LIST
@@ -8421,6 +8425,7 @@ HOST-SUFFIX,ctinews.com,LIST
 HOST-SUFFIX,cuhkacs.org,LIST
 HOST-SUFFIX,cunhua.pics,LIST
 HOST-SUFFIX,cups.online,LIST
+HOST-SUFFIX,cygames.com,LIST
 HOST-SUFFIX,czechav.com,LIST
 HOST-SUFFIX,czechvr.com,LIST
 HOST-SUFFIX,d-fukyu.com,LIST

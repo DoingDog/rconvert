@@ -1,4 +1,4 @@
-# proxy rules: 24651
+# proxy rules: 24656
 DOMAIN,ip.cn
 DOMAIN,eep.io
 DOMAIN,ipxy.io
@@ -890,6 +890,7 @@ DOMAIN,link.storjshare.io
 DOMAIN,logos.composio.dev
 DOMAIN,media-cms.ayoba.me
 DOMAIN,media.cgtrader.com
+DOMAIN,media.datacamp.com
 DOMAIN,media.flaticon.com
 DOMAIN,media.gamestop.com
 DOMAIN,media.hachyderm.io
@@ -1260,6 +1261,7 @@ DOMAIN,static.aninoapps.com
 DOMAIN,static.filehorse.com
 DOMAIN,static.helpjuice.com
 DOMAIN,static.incapsula.com
+DOMAIN,static.karousell.com
 DOMAIN,static.meteoblue.com
 DOMAIN,static.mocortech.com
 DOMAIN,static.newsbreak.com
@@ -1747,6 +1749,7 @@ DOMAIN,user-uploads.perchance.org
 DOMAIN,wikiwandv2-19431.kxcdn.com
 DOMAIN,a4e8s8k3.map2.ssl.hwcdn.net
 DOMAIN,assets.weather-forecast.com
+DOMAIN,builds.dotnet.microsoft.com
 DOMAIN,cdn-teams-slug.flaticon.com
 DOMAIN,cdntranscend.eventbrite.com
 DOMAIN,components.clever-cloud.com
@@ -5240,6 +5243,7 @@ DOMAIN-SUFFIX,redwap.me
 DOMAIN-SUFFIX,redxxx.cc
 DOMAIN-SUFFIX,reg.cloud
 DOMAIN-SUFFIX,reimu.net
+DOMAIN-SUFFIX,remna.dev
 DOMAIN-SUFFIX,rentry.co
 DOMAIN-SUFFIX,resao.com
 DOMAIN-SUFFIX,revit.com
@@ -8307,6 +8311,7 @@ DOMAIN-SUFFIX,ctinews.com
 DOMAIN-SUFFIX,cuhkacs.org
 DOMAIN-SUFFIX,cunhua.pics
 DOMAIN-SUFFIX,cups.online
+DOMAIN-SUFFIX,cygames.com
 DOMAIN-SUFFIX,czechav.com
 DOMAIN-SUFFIX,czechvr.com
 DOMAIN-SUFFIX,d-fukyu.com
