@@ -1,4 +1,4 @@
-# big-data rules: 8711
+# big-data rules: 8714
 .aws
 .x.ai
 .db.tt
@@ -6757,7 +6757,6 @@ www-res.cablelabs.com
 .cdn.autoevolution.com
 .cdn.printfriendly.com
 .chargebeestaticv2.com
-.claudeusercontent.com
 .cloud1.influxdata.com
 .cloud2.influxdata.com
 .cloudflare.docker.com
@@ -8019,6 +8018,7 @@ xpaywalletcdn.azureedge.net
 .disneymeetingsandevents.com
 .download.prss.microsoft.com
 .foxbroadcasting.zendesk.com
+.frame.claudeusercontent.com
 .hbogoprod-vod.akamaized.net
 .intl-subscription.iqiyi.com
 .ipfsgateway.makersplace.com
@@ -8048,6 +8048,7 @@ xpaywalletcdn.azureedge.net
 account-widget-mfe.gcore.com
 apache.melbourneitmirror.net
 as-hls-uk-live.akamaized.net
+assets.claudeusercontent.com
 assets.positional-bucket.com
 assets4.mist-train-girls.com
 cdn-dynmedia-1.microsoft.com
@@ -8101,6 +8102,7 @@ static-documents.wizards.com
 static-oforms.onlyoffice.com
 static-r.kamihimeproject.net
 static-secure-uploads.ui.com
+static.claudeusercontent.com
 static.community.workday.com
 static.edge.microsoftapp.net
 static2.sharepointonline.com
@@ -8109,6 +8111,7 @@ store-images.s-microsoft.com
 ui-statics-cf.streamable.com
 uos-support-files.svc.ui.com
 update.code.visualstudio.com
+upload.claudeusercontent.com
 vsmarketplacebadge.apphb.com
 wctour-images.worldchess.com
 .agechecker-northern-apps.com

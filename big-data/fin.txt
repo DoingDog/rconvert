@@ -1,4 +1,4 @@
-# big-data rules: 10077
+# big-data rules: 10080
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -4398,6 +4398,7 @@ DOMAIN,xpaywalletcdn.azureedge.net
 DOMAIN,account-widget-mfe.gcore.com
 DOMAIN,apache.melbourneitmirror.net
 DOMAIN,as-hls-uk-live.akamaized.net
+DOMAIN,assets.claudeusercontent.com
 DOMAIN,assets.positional-bucket.com
 DOMAIN,assets4.mist-train-girls.com
 DOMAIN,cdn-dynmedia-1.microsoft.com
@@ -4451,6 +4452,7 @@ DOMAIN,static-documents.wizards.com
 DOMAIN,static-oforms.onlyoffice.com
 DOMAIN,static-r.kamihimeproject.net
 DOMAIN,static-secure-uploads.ui.com
+DOMAIN,static.claudeusercontent.com
 DOMAIN,static.community.workday.com
 DOMAIN,static.edge.microsoftapp.net
 DOMAIN,static2.sharepointonline.com
@@ -4459,6 +4461,7 @@ DOMAIN,store-images.s-microsoft.com
 DOMAIN,ui-statics-cf.streamable.com
 DOMAIN,uos-support-files.svc.ui.com
 DOMAIN,update.code.visualstudio.com
+DOMAIN,upload.claudeusercontent.com
 DOMAIN,vsmarketplacebadge.apphb.com
 DOMAIN,wctour-images.worldchess.com
 DOMAIN,akamai-assets.squarespace.com
@@ -8074,7 +8077,6 @@ DOMAIN-SUFFIX,cbstelevisioncity.com
 DOMAIN-SUFFIX,cdn.autoevolution.com
 DOMAIN-SUFFIX,cdn.printfriendly.com
 DOMAIN-SUFFIX,chargebeestaticv2.com
-DOMAIN-SUFFIX,claudeusercontent.com
 DOMAIN-SUFFIX,cloud1.influxdata.com
 DOMAIN-SUFFIX,cloud2.influxdata.com
 DOMAIN-SUFFIX,cloudflare.docker.com
@@ -8401,6 +8403,7 @@ DOMAIN-SUFFIX,design-system.economist.com
 DOMAIN-SUFFIX,disneymeetingsandevents.com
 DOMAIN-SUFFIX,download.prss.microsoft.com
 DOMAIN-SUFFIX,foxbroadcasting.zendesk.com
+DOMAIN-SUFFIX,frame.claudeusercontent.com
 DOMAIN-SUFFIX,hbogoprod-vod.akamaized.net
 DOMAIN-SUFFIX,intl-subscription.iqiyi.com
 DOMAIN-SUFFIX,ipfsgateway.makersplace.com

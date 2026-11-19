@@ -1,4 +1,4 @@
-# cdn rules: 4715
+# cdn rules: 4718
 0x0.st
 eep.io
 img.gs
@@ -3625,7 +3625,6 @@ www-res.cablelabs.com
 .cdn.autoevolution.com
 .cdn.printfriendly.com
 .chargebeestaticv2.com
-.claudeusercontent.com
 .cloud1.influxdata.com
 .cloud2.influxdata.com
 .content001.bet365.com
@@ -4435,12 +4434,14 @@ xpaywalletcdn.azureedge.net
 .cdn-lfs-us-1.huggingface.co
 .dam-cdn.atl.orangelogic.com
 .design-system.economist.com
+.frame.claudeusercontent.com
 .ipfsgateway.makersplace.com
 .siteintercept.qualtrics.com
 .widget.cluster.groovehq.com
 .widgets.marketplace.aws.dev
 account-widget-mfe.gcore.com
 assets-cdn.watchdisneyfe.com
+assets.claudeusercontent.com
 assets.positional-bucket.com
 assets4.mist-train-girls.com
 cdn-dynmedia-1.microsoft.com
@@ -4482,6 +4483,7 @@ static-documents.wizards.com
 static-oforms.onlyoffice.com
 static-r.kamihimeproject.net
 static-secure-uploads.ui.com
+static.claudeusercontent.com
 static.community.workday.com
 static.edge.microsoftapp.net
 static2.sharepointonline.com
@@ -4489,6 +4491,7 @@ staticintl.cloudcachetci.com
 store-images.s-microsoft.com
 ui-statics-cf.streamable.com
 uos-support-files.svc.ui.com
+upload.claudeusercontent.com
 vsmarketplacebadge.apphb.com
 wctour-images.worldchess.com
 .agechecker-northern-apps.com

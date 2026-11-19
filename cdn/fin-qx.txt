@@ -1,4 +1,4 @@
-# cdn rules: 4796
+# cdn rules: 4799
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -3224,6 +3224,7 @@ HOST,webappassets.smartsheet.com,LIST
 HOST,xpaywalletcdn.azureedge.net,LIST
 HOST,account-widget-mfe.gcore.com,LIST
 HOST,assets-cdn.watchdisneyfe.com,LIST
+HOST,assets.claudeusercontent.com,LIST
 HOST,assets.positional-bucket.com,LIST
 HOST,assets4.mist-train-girls.com,LIST
 HOST,cdn-dynmedia-1.microsoft.com,LIST
@@ -3265,6 +3266,7 @@ HOST,static-documents.wizards.com,LIST
 HOST,static-oforms.onlyoffice.com,LIST
 HOST,static-r.kamihimeproject.net,LIST
 HOST,static-secure-uploads.ui.com,LIST
+HOST,static.claudeusercontent.com,LIST
 HOST,static.community.workday.com,LIST
 HOST,static.edge.microsoftapp.net,LIST
 HOST,static2.sharepointonline.com,LIST
@@ -3272,6 +3274,7 @@ HOST,staticintl.cloudcachetci.com,LIST
 HOST,store-images.s-microsoft.com,LIST
 HOST,ui-statics-cf.streamable.com,LIST
 HOST,uos-support-files.svc.ui.com,LIST
+HOST,upload.claudeusercontent.com,LIST
 HOST,vsmarketplacebadge.apphb.com,LIST
 HOST,wctour-images.worldchess.com,LIST
 HOST,akamai-assets.squarespace.com,LIST
@@ -4593,7 +4596,6 @@ HOST-SUFFIX,vodvideo.cbsnews.com,LIST
 HOST-SUFFIX,cdn.autoevolution.com,LIST
 HOST-SUFFIX,cdn.printfriendly.com,LIST
 HOST-SUFFIX,chargebeestaticv2.com,LIST
-HOST-SUFFIX,claudeusercontent.com,LIST
 HOST-SUFFIX,cloud1.influxdata.com,LIST
 HOST-SUFFIX,cloud2.influxdata.com,LIST
 HOST-SUFFIX,content001.bet365.com,LIST
@@ -4704,6 +4706,7 @@ HOST-SUFFIX,telemetry.services.yofi.ai,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,dam-cdn.atl.orangelogic.com,LIST
 HOST-SUFFIX,design-system.economist.com,LIST
+HOST-SUFFIX,frame.claudeusercontent.com,LIST
 HOST-SUFFIX,ipfsgateway.makersplace.com,LIST
 HOST-SUFFIX,siteintercept.qualtrics.com,LIST
 HOST-SUFFIX,widget.cluster.groovehq.com,LIST

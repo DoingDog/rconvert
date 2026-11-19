@@ -1,4 +1,4 @@
-# cdn rules: 4796
+# cdn rules: 4799
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -3225,6 +3225,7 @@ payload:
   - "DOMAIN,xpaywalletcdn.azureedge.net"
   - "DOMAIN,account-widget-mfe.gcore.com"
   - "DOMAIN,assets-cdn.watchdisneyfe.com"
+  - "DOMAIN,assets.claudeusercontent.com"
   - "DOMAIN,assets.positional-bucket.com"
   - "DOMAIN,assets4.mist-train-girls.com"
   - "DOMAIN,cdn-dynmedia-1.microsoft.com"
@@ -3266,6 +3267,7 @@ payload:
   - "DOMAIN,static-oforms.onlyoffice.com"
   - "DOMAIN,static-r.kamihimeproject.net"
   - "DOMAIN,static-secure-uploads.ui.com"
+  - "DOMAIN,static.claudeusercontent.com"
   - "DOMAIN,static.community.workday.com"
   - "DOMAIN,static.edge.microsoftapp.net"
   - "DOMAIN,static2.sharepointonline.com"
@@ -3273,6 +3275,7 @@ payload:
   - "DOMAIN,store-images.s-microsoft.com"
   - "DOMAIN,ui-statics-cf.streamable.com"
   - "DOMAIN,uos-support-files.svc.ui.com"
+  - "DOMAIN,upload.claudeusercontent.com"
   - "DOMAIN,vsmarketplacebadge.apphb.com"
   - "DOMAIN,wctour-images.worldchess.com"
   - "DOMAIN,akamai-assets.squarespace.com"
@@ -4655,7 +4658,6 @@ payload:
   - "DOMAIN-SUFFIX,cdn.autoevolution.com"
   - "DOMAIN-SUFFIX,cdn.printfriendly.com"
   - "DOMAIN-SUFFIX,chargebeestaticv2.com"
-  - "DOMAIN-SUFFIX,claudeusercontent.com"
   - "DOMAIN-SUFFIX,cloud1.influxdata.com"
   - "DOMAIN-SUFFIX,cloud2.influxdata.com"
   - "DOMAIN-SUFFIX,content001.bet365.com"
@@ -4766,6 +4768,7 @@ payload:
   - "DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co"
   - "DOMAIN-SUFFIX,dam-cdn.atl.orangelogic.com"
   - "DOMAIN-SUFFIX,design-system.economist.com"
+  - "DOMAIN-SUFFIX,frame.claudeusercontent.com"
   - "DOMAIN-SUFFIX,ipfsgateway.makersplace.com"
   - "DOMAIN-SUFFIX,siteintercept.qualtrics.com"
   - "DOMAIN-SUFFIX,widget.cluster.groovehq.com"
