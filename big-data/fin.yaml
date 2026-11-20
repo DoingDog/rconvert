@@ -1,4 +1,4 @@
-# big-data rules: 10045
+# big-data rules: 10047
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -4106,6 +4106,7 @@ payload:
   - "DOMAIN,asset-cdn.uscardforum.com"
   - "DOMAIN,assets.map.brightcove.com"
   - "DOMAIN,assets.media-platform.com"
+  - "DOMAIN,assets.monetizationos.com"
   - "DOMAIN,assets.openalternative.co"
   - "DOMAIN,assets.squarewebsites.org"
   - "DOMAIN,assets.visioncritical.net"
@@ -8344,6 +8345,7 @@ payload:
   - "DOMAIN-SUFFIX,awsloft-johannesburg.com"
   - "DOMAIN-SUFFIX,buildkiteusercontent.com"
   - "DOMAIN-SUFFIX,bundle.thimatic-apps.com"
+  - "DOMAIN-SUFFIX,butterfly-effect-cdn.dev"
   - "DOMAIN-SUFFIX,cbsi.live.ott.irdeto.com"
   - "DOMAIN-SUFFIX,cdn.entelectonline.co.za"
   - "DOMAIN-SUFFIX,content.cdp.bethesda.net"

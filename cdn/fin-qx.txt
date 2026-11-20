@@ -1,4 +1,4 @@
-# cdn rules: 4799
+# cdn rules: 4801
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -2990,6 +2990,7 @@ HOST,app-static.sendsafely.com,LIST
 HOST,asset-cdn.uscardforum.com,LIST
 HOST,assets.map.brightcove.com,LIST
 HOST,assets.media-platform.com,LIST
+HOST,assets.monetizationos.com,LIST
 HOST,assets.openalternative.co,LIST
 HOST,assets.squarewebsites.org,LIST
 HOST,assets.visioncritical.net,LIST
@@ -4671,6 +4672,7 @@ HOST-SUFFIX,1passwordusercontent.com,LIST
 HOST-SUFFIX,assets.as2.amazonaws.com,LIST
 HOST-SUFFIX,buildkiteusercontent.com,LIST
 HOST-SUFFIX,bundle.thimatic-apps.com,LIST
+HOST-SUFFIX,butterfly-effect-cdn.dev,LIST
 HOST-SUFFIX,firestore.googleapis.com,LIST
 HOST-SUFFIX,hubspotusercontent00.net,LIST
 HOST-SUFFIX,hubspotusercontent10.net,LIST

@@ -1,4 +1,4 @@
-# big-data rules: 10080
+# big-data rules: 10082
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -4105,6 +4105,7 @@ DOMAIN,app-updates.agilebits.com
 DOMAIN,asset-cdn.uscardforum.com
 DOMAIN,assets.map.brightcove.com
 DOMAIN,assets.media-platform.com
+DOMAIN,assets.monetizationos.com
 DOMAIN,assets.openalternative.co
 DOMAIN,assets.squarewebsites.org
 DOMAIN,assets.visioncritical.net
@@ -8261,6 +8262,7 @@ DOMAIN-SUFFIX,assets.as2.amazonaws.com
 DOMAIN-SUFFIX,awsloft-johannesburg.com
 DOMAIN-SUFFIX,buildkiteusercontent.com
 DOMAIN-SUFFIX,bundle.thimatic-apps.com
+DOMAIN-SUFFIX,butterfly-effect-cdn.dev
 DOMAIN-SUFFIX,cbsi.live.ott.irdeto.com
 DOMAIN-SUFFIX,cdn.entelectonline.co.za
 DOMAIN-SUFFIX,content.cdp.bethesda.net

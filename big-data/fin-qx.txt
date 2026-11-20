@@ -1,4 +1,4 @@
-# big-data rules: 10061
+# big-data rules: 10063
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -4105,6 +4105,7 @@ HOST,app-updates.agilebits.com,LIST
 HOST,asset-cdn.uscardforum.com,LIST
 HOST,assets.map.brightcove.com,LIST
 HOST,assets.media-platform.com,LIST
+HOST,assets.monetizationos.com,LIST
 HOST,assets.openalternative.co,LIST
 HOST,assets.squarewebsites.org,LIST
 HOST,assets.visioncritical.net,LIST
@@ -8261,6 +8262,7 @@ HOST-SUFFIX,assets.as2.amazonaws.com,LIST
 HOST-SUFFIX,awsloft-johannesburg.com,LIST
 HOST-SUFFIX,buildkiteusercontent.com,LIST
 HOST-SUFFIX,bundle.thimatic-apps.com,LIST
+HOST-SUFFIX,butterfly-effect-cdn.dev,LIST
 HOST-SUFFIX,cbsi.live.ott.irdeto.com,LIST
 HOST-SUFFIX,cdn.entelectonline.co.za,LIST
 HOST-SUFFIX,content.cdp.bethesda.net,LIST

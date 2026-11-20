@@ -1,4 +1,4 @@
-# cdn rules: 4799
+# cdn rules: 4801
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -2991,6 +2991,7 @@ payload:
   - "DOMAIN,asset-cdn.uscardforum.com"
   - "DOMAIN,assets.map.brightcove.com"
   - "DOMAIN,assets.media-platform.com"
+  - "DOMAIN,assets.monetizationos.com"
   - "DOMAIN,assets.openalternative.co"
   - "DOMAIN,assets.squarewebsites.org"
   - "DOMAIN,assets.visioncritical.net"
@@ -4733,6 +4734,7 @@ payload:
   - "DOMAIN-SUFFIX,assets.as2.amazonaws.com"
   - "DOMAIN-SUFFIX,buildkiteusercontent.com"
   - "DOMAIN-SUFFIX,bundle.thimatic-apps.com"
+  - "DOMAIN-SUFFIX,butterfly-effect-cdn.dev"
   - "DOMAIN-SUFFIX,firestore.googleapis.com"
   - "DOMAIN-SUFFIX,hubspotusercontent00.net"
   - "DOMAIN-SUFFIX,hubspotusercontent10.net"
