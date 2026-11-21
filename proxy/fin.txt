@@ -1,4 +1,4 @@
-# proxy rules: 24656
+# proxy rules: 24676
 DOMAIN,ip.cn
 DOMAIN,eep.io
 DOMAIN,ipxy.io
@@ -146,6 +146,7 @@ DOMAIN,tags.nba.com
 DOMAIN,tn.txxx.tube
 DOMAIN,adkit.9pub.io
 DOMAIN,adobeereg.com
+DOMAIN,ai.google.dev
 DOMAIN,api.waqi.info
 DOMAIN,apim.m3pd.com
 DOMAIN,app.groove.cm
@@ -487,6 +488,7 @@ DOMAIN,alcdn.msauth.net
 DOMAIN,api.dicebear.com
 DOMAIN,api.indexnow.org
 DOMAIN,api.qrserver.com
+DOMAIN,api.together.xyz
 DOMAIN,api.web3.storage
 DOMAIN,app-cdn.logo.com
 DOMAIN,app.cart-bot.net
@@ -961,6 +963,7 @@ DOMAIN,webp.frostming.com
 DOMAIN,widgets.turnto.com
 DOMAIN,ww2.justanswer.com
 DOMAIN,agb9r0ad.qllfkl.com
+DOMAIN,aistudio.google.com
 DOMAIN,ak.sail-horizon.com
 DOMAIN,api-esp-ap.piano.io
 DOMAIN,api-eu.mixpanel.com
@@ -1656,6 +1659,7 @@ DOMAIN,tiles.openrailwaymap.org
 DOMAIN,wl-apps.yourwebsite.life
 DOMAIN,app-static.sendsafely.com
 DOMAIN,assets.media-platform.com
+DOMAIN,assets.monetizationos.com
 DOMAIN,assets.openalternative.co
 DOMAIN,assets.squarewebsites.org
 DOMAIN,assets.visioncritical.net
@@ -1843,6 +1847,7 @@ DOMAIN,uploads-cdn.omnicalculator.com
 DOMAIN,cdn-widgetsrepository.yotpo.com
 DOMAIN,cdn.techcommunity.microsoft.com
 DOMAIN,datarouter.apps.netherrealm.com
+DOMAIN,geminiweb-pa.clients.google.com
 DOMAIN,media-central.indianexpress.com
 DOMAIN,prodforza.blob.core.windows.net
 DOMAIN,static.themebuilder.aws.arc.pub
@@ -1850,6 +1855,7 @@ DOMAIN,uploadcare.mwcglobalprofile.com
 DOMAIN,assetscdn-wchat.eu.freshchat.com
 DOMAIN,cmtycdn.powerpages.microsoft.com
 DOMAIN,detectportal.brave-http-only.com
+DOMAIN,geminiweb-pa.clients6.google.com
 DOMAIN,playgroundcdn.typescriptlang.org
 DOMAIN,public-us-pingsx.api.clonoth.com
 DOMAIN,rawmarkdown.cloudflareaccess.org
@@ -1927,8 +1933,10 @@ DOMAIN-KEYWORD,tesla
 DOMAIN-KEYWORD,ttvnw
 DOMAIN-KEYWORD,twimg
 DOMAIN-KEYWORD,amazon
+DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,github
 DOMAIN-KEYWORD,google
+DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,paypal
 DOMAIN-KEYWORD,99avcdn
 DOMAIN-KEYWORD,beetalk
@@ -1947,10 +1955,12 @@ DOMAIN-KEYWORD,onedrive
 DOMAIN-KEYWORD,skydrive
 DOMAIN-KEYWORD,telegram
 DOMAIN-KEYWORD,whatsapp
+DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,dlercloud
 DOMAIN-KEYWORD,instagram
 DOMAIN-KEYWORD,pinterest
 DOMAIN-KEYWORD,appledaily
+DOMAIN-KEYWORD,antigravity
 DOMAIN-KEYWORD,browserleaks
 DOMAIN-KEYWORD,dsn.algolia.net
 DOMAIN-KEYWORD,-assets.dmm.co.jp
@@ -16852,6 +16862,7 @@ DOMAIN-SUFFIX,bailandaily.com
 DOMAIN-SUFFIX,bang-movies.com
 DOMAIN-SUFFIX,bangdream.space
 DOMAIN-SUFFIX,bangkokpost.com
+DOMAIN-SUFFIX,bard.google.com
 DOMAIN-SUFFIX,baterias-hp.com
 DOMAIN-SUFFIX,battlefield.com
 DOMAIN-SUFFIX,bbs.tuitui.info
@@ -18650,6 +18661,7 @@ DOMAIN-SUFFIX,farwestchina.com
 DOMAIN-SUFFIX,fawanghuihui.org
 DOMAIN-SUFFIX,fbinnovation.com
 DOMAIN-SUFFIX,feanonlinear.com
+DOMAIN-SUFFIX,featuregates.org
 DOMAIN-SUFFIX,fedorapeople.org
 DOMAIN-SUFFIX,ferronetwork.com
 DOMAIN-SUFFIX,fetishdreamz.com
@@ -19999,6 +20011,7 @@ DOMAIN-SUFFIX,game-platform.net
 DOMAIN-SUFFIX,gamesathletes.com
 DOMAIN-SUFFIX,gamesgamescdn.com
 DOMAIN-SUFFIX,gamesofdesire.com
+DOMAIN-SUFFIX,gemini.google.com
 DOMAIN-SUFFIX,genkai-hounyo.com
 DOMAIN-SUFFIX,genshinimpact.com
 DOMAIN-SUFFIX,giantessbooru.com
@@ -20275,6 +20288,7 @@ DOMAIN-SUFFIX,nintendostore.com
 DOMAIN-SUFFIX,nix-community.org
 DOMAIN-SUFFIX,nlsexfilmpjes.com
 DOMAIN-SUFFIX,nordstromrack.com
+DOMAIN-SUFFIX,notebooklm.google
 DOMAIN-SUFFIX,notion-static.com
 DOMAIN-SUFFIX,notion-status.com
 DOMAIN-SUFFIX,noxinfluencer.com
@@ -21523,7 +21537,6 @@ DOMAIN-SUFFIX,xvideosnovinha.com
 DOMAIN-SUFFIX,xxxgratisfilms.com
 DOMAIN-SUFFIX,yakbutterblues.com
 DOMAIN-SUFFIX,yandexwebcache.net
-DOMAIN-SUFFIX,yandexwebcache.org
 DOMAIN-SUFFIX,yourimageshare.com
 DOMAIN-SUFFIX,yourpelvicexam.com
 DOMAIN-SUFFIX,yourprivatevpn.com
@@ -22963,6 +22976,7 @@ DOMAIN-SUFFIX,emergingsolutions.com
 DOMAIN-SUFFIX,envatousercontent.com
 DOMAIN-SUFFIX,erogazou-pinkline.com
 DOMAIN-SUFFIX,eromanga-mainichi.com
+DOMAIN-SUFFIX,events.statsigapi.net
 DOMAIN-SUFFIX,exec-appointments.com
 DOMAIN-SUFFIX,experience-vmware.com
 DOMAIN-SUFFIX,extensionworkshop.com
@@ -23031,6 +23045,7 @@ DOMAIN-SUFFIX,lesbiansubmission.com
 DOMAIN-SUFFIX,local.webcontainer.io
 DOMAIN-SUFFIX,macintoshsoftware.com
 DOMAIN-SUFFIX,makeitrealcontest.com
+DOMAIN-SUFFIX,makersuite.google.com
 DOMAIN-SUFFIX,marketing-nirvana.com
 DOMAIN-SUFFIX,massage-in-taipei.com
 DOMAIN-SUFFIX,mastercardacademy.com
@@ -23069,6 +23084,7 @@ DOMAIN-SUFFIX,newhighlandvision.com
 DOMAIN-SUFFIX,newscorpaustralia.com
 DOMAIN-SUFFIX,nextgenerationcam.com
 DOMAIN-SUFFIX,nflhotsalejerseys.com
+DOMAIN-SUFFIX,notebooklm.google.com
 DOMAIN-SUFFIX,notepad-plus-plus.org
 DOMAIN-SUFFIX,notionusercontent.com
 DOMAIN-SUFFIX,nubilesunscripted.com
@@ -23622,6 +23638,7 @@ DOMAIN-SUFFIX,cloudflareregistrar.com
 DOMAIN-SUFFIX,cms-twdigitalassets.com
 DOMAIN-SUFFIX,connectionslearning.com
 DOMAIN-SUFFIX,contenthub.allstate.com
+DOMAIN-SUFFIX,copilot.cloud.microsoft
 DOMAIN-SUFFIX,custombeatsbydrebuy.com
 DOMAIN-SUFFIX,custombeatsforcheap.com
 DOMAIN-SUFFIX,custombeatssbydreus.com
@@ -23832,6 +23849,7 @@ DOMAIN-SUFFIX,bridgestonemarketing.com
 DOMAIN-SUFFIX,buildkiteusercontent.com
 DOMAIN-SUFFIX,bundle.thimatic-apps.com
 DOMAIN-SUFFIX,business-humanrights.org
+DOMAIN-SUFFIX,butterfly-effect-cdn.dev
 DOMAIN-SUFFIX,casquebeatsfracheter.com
 DOMAIN-SUFFIX,centerforhumanreprod.com
 DOMAIN-SUFFIX,cheapbeatsbydrdrepro.com
@@ -24020,6 +24038,7 @@ DOMAIN-SUFFIX,cheaperbeatsbydresale.com
 DOMAIN-SUFFIX,cheapmonsterbeatssale.com
 DOMAIN-SUFFIX,ciscoknowledgenetwork.com
 DOMAIN-SUFFIX,ciscopartnermarketing.com
+DOMAIN-SUFFIX,client-api.arkoselabs.com
 DOMAIN-SUFFIX,corporatecashpassport.com
 DOMAIN-SUFFIX,coursera-for-business.org
 DOMAIN-SUFFIX,cybermondaybeats4sale.com
@@ -24038,6 +24057,7 @@ DOMAIN-SUFFIX,drebeatsheadphones-nz.com
 DOMAIN-SUFFIX,dynamic-static-assets.com
 DOMAIN-SUFFIX,ebayclassifiedsgroup.info
 DOMAIN-SUFFIX,economistgroupcareers.com
+DOMAIN-SUFFIX,elevenlabsusercontent.com
 DOMAIN-SUFFIX,europeanwarzoneseries.com
 DOMAIN-SUFFIX,experiencebillmelater.com
 DOMAIN-SUFFIX,exploitedcollegegirls.com

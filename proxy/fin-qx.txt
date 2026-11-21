@@ -1,4 +1,4 @@
-# proxy rules: 24903
+# proxy rules: 24923
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -146,6 +146,7 @@ HOST,tags.nba.com,LIST
 HOST,tn.txxx.tube,LIST
 HOST,adkit.9pub.io,LIST
 HOST,adobeereg.com,LIST
+HOST,ai.google.dev,LIST
 HOST,api.waqi.info,LIST
 HOST,apim.m3pd.com,LIST
 HOST,app.groove.cm,LIST
@@ -487,6 +488,7 @@ HOST,alcdn.msauth.net,LIST
 HOST,api.dicebear.com,LIST
 HOST,api.indexnow.org,LIST
 HOST,api.qrserver.com,LIST
+HOST,api.together.xyz,LIST
 HOST,api.web3.storage,LIST
 HOST,app-cdn.logo.com,LIST
 HOST,app.cart-bot.net,LIST
@@ -961,6 +963,7 @@ HOST,webp.frostming.com,LIST
 HOST,widgets.turnto.com,LIST
 HOST,ww2.justanswer.com,LIST
 HOST,agb9r0ad.qllfkl.com,LIST
+HOST,aistudio.google.com,LIST
 HOST,ak.sail-horizon.com,LIST
 HOST,api-esp-ap.piano.io,LIST
 HOST,api-eu.mixpanel.com,LIST
@@ -1656,6 +1659,7 @@ HOST,tiles.openrailwaymap.org,LIST
 HOST,wl-apps.yourwebsite.life,LIST
 HOST,app-static.sendsafely.com,LIST
 HOST,assets.media-platform.com,LIST
+HOST,assets.monetizationos.com,LIST
 HOST,assets.openalternative.co,LIST
 HOST,assets.squarewebsites.org,LIST
 HOST,assets.visioncritical.net,LIST
@@ -1843,6 +1847,7 @@ HOST,uploads-cdn.omnicalculator.com,LIST
 HOST,cdn-widgetsrepository.yotpo.com,LIST
 HOST,cdn.techcommunity.microsoft.com,LIST
 HOST,datarouter.apps.netherrealm.com,LIST
+HOST,geminiweb-pa.clients.google.com,LIST
 HOST,media-central.indianexpress.com,LIST
 HOST,prodforza.blob.core.windows.net,LIST
 HOST,static.themebuilder.aws.arc.pub,LIST
@@ -1850,6 +1855,7 @@ HOST,uploadcare.mwcglobalprofile.com,LIST
 HOST,assetscdn-wchat.eu.freshchat.com,LIST
 HOST,cmtycdn.powerpages.microsoft.com,LIST
 HOST,detectportal.brave-http-only.com,LIST
+HOST,geminiweb-pa.clients6.google.com,LIST
 HOST,playgroundcdn.typescriptlang.org,LIST
 HOST,public-us-pingsx.api.clonoth.com,LIST
 HOST,rawmarkdown.cloudflareaccess.org,LIST
@@ -1927,8 +1933,10 @@ HOST-KEYWORD,tesla,LIST
 HOST-KEYWORD,ttvnw,LIST
 HOST-KEYWORD,twimg,LIST
 HOST-KEYWORD,amazon,LIST
+HOST-KEYWORD,claude,LIST
 HOST-KEYWORD,github,LIST
 HOST-KEYWORD,google,LIST
+HOST-KEYWORD,openai,LIST
 HOST-KEYWORD,paypal,LIST
 HOST-KEYWORD,99avcdn,LIST
 HOST-KEYWORD,beetalk,LIST
@@ -1947,10 +1955,12 @@ HOST-KEYWORD,onedrive,LIST
 HOST-KEYWORD,skydrive,LIST
 HOST-KEYWORD,telegram,LIST
 HOST-KEYWORD,whatsapp,LIST
+HOST-KEYWORD,anthropic,LIST
 HOST-KEYWORD,dlercloud,LIST
 HOST-KEYWORD,instagram,LIST
 HOST-KEYWORD,pinterest,LIST
 HOST-KEYWORD,appledaily,LIST
+HOST-KEYWORD,antigravity,LIST
 HOST-KEYWORD,browserleaks,LIST
 HOST-KEYWORD,dsn.algolia.net,LIST
 HOST-KEYWORD,-assets.dmm.co.jp,LIST
@@ -17068,6 +17078,7 @@ HOST-SUFFIX,bailandaily.com,LIST
 HOST-SUFFIX,bang-movies.com,LIST
 HOST-SUFFIX,bangdream.space,LIST
 HOST-SUFFIX,bangkokpost.com,LIST
+HOST-SUFFIX,bard.google.com,LIST
 HOST-SUFFIX,baterias-hp.com,LIST
 HOST-SUFFIX,battlefield.com,LIST
 HOST-SUFFIX,bbs.tuitui.info,LIST
@@ -18879,6 +18890,7 @@ HOST-SUFFIX,farwestchina.com,LIST
 HOST-SUFFIX,fawanghuihui.org,LIST
 HOST-SUFFIX,fbinnovation.com,LIST
 HOST-SUFFIX,feanonlinear.com,LIST
+HOST-SUFFIX,featuregates.org,LIST
 HOST-SUFFIX,fedorapeople.org,LIST
 HOST-SUFFIX,ferronetwork.com,LIST
 HOST-SUFFIX,fetishdreamz.com,LIST
@@ -20238,6 +20250,7 @@ HOST-SUFFIX,game-platform.net,LIST
 HOST-SUFFIX,gamesathletes.com,LIST
 HOST-SUFFIX,gamesgamescdn.com,LIST
 HOST-SUFFIX,gamesofdesire.com,LIST
+HOST-SUFFIX,gemini.google.com,LIST
 HOST-SUFFIX,genkai-hounyo.com,LIST
 HOST-SUFFIX,genshinimpact.com,LIST
 HOST-SUFFIX,giantessbooru.com,LIST
@@ -20515,6 +20528,7 @@ HOST-SUFFIX,nintendostore.com,LIST
 HOST-SUFFIX,nix-community.org,LIST
 HOST-SUFFIX,nlsexfilmpjes.com,LIST
 HOST-SUFFIX,nordstromrack.com,LIST
+HOST-SUFFIX,notebooklm.google,LIST
 HOST-SUFFIX,notion-static.com,LIST
 HOST-SUFFIX,notion-status.com,LIST
 HOST-SUFFIX,noxinfluencer.com,LIST
@@ -21765,7 +21779,6 @@ HOST-SUFFIX,xvideosnovinha.com,LIST
 HOST-SUFFIX,xxxgratisfilms.com,LIST
 HOST-SUFFIX,yakbutterblues.com,LIST
 HOST-SUFFIX,yandexwebcache.net,LIST
-HOST-SUFFIX,yandexwebcache.org,LIST
 HOST-SUFFIX,yourimageshare.com,LIST
 HOST-SUFFIX,yourpelvicexam.com,LIST
 HOST-SUFFIX,yourprivatevpn.com,LIST
@@ -23214,6 +23227,7 @@ HOST-SUFFIX,emergingsolutions.com,LIST
 HOST-SUFFIX,envatousercontent.com,LIST
 HOST-SUFFIX,erogazou-pinkline.com,LIST
 HOST-SUFFIX,eromanga-mainichi.com,LIST
+HOST-SUFFIX,events.statsigapi.net,LIST
 HOST-SUFFIX,exec-appointments.com,LIST
 HOST-SUFFIX,experience-vmware.com,LIST
 HOST-SUFFIX,extensionworkshop.com,LIST
@@ -23285,6 +23299,7 @@ HOST-SUFFIX,lesbiansubmission.com,LIST
 HOST-SUFFIX,local.webcontainer.io,LIST
 HOST-SUFFIX,macintoshsoftware.com,LIST
 HOST-SUFFIX,makeitrealcontest.com,LIST
+HOST-SUFFIX,makersuite.google.com,LIST
 HOST-SUFFIX,marketing-nirvana.com,LIST
 HOST-SUFFIX,massage-in-taipei.com,LIST
 HOST-SUFFIX,mastercardacademy.com,LIST
@@ -23323,6 +23338,7 @@ HOST-SUFFIX,newhighlandvision.com,LIST
 HOST-SUFFIX,newscorpaustralia.com,LIST
 HOST-SUFFIX,nextgenerationcam.com,LIST
 HOST-SUFFIX,nflhotsalejerseys.com,LIST
+HOST-SUFFIX,notebooklm.google.com,LIST
 HOST-SUFFIX,notepad-plus-plus.org,LIST
 HOST-SUFFIX,notionusercontent.com,LIST
 HOST-SUFFIX,nubilesunscripted.com,LIST
@@ -23876,6 +23892,7 @@ HOST-SUFFIX,cloudflareregistrar.com,LIST
 HOST-SUFFIX,cms-twdigitalassets.com,LIST
 HOST-SUFFIX,connectionslearning.com,LIST
 HOST-SUFFIX,contenthub.allstate.com,LIST
+HOST-SUFFIX,copilot.cloud.microsoft,LIST
 HOST-SUFFIX,custombeatsbydrebuy.com,LIST
 HOST-SUFFIX,custombeatsforcheap.com,LIST
 HOST-SUFFIX,custombeatssbydreus.com,LIST
@@ -24087,6 +24104,7 @@ HOST-SUFFIX,bridgestonemarketing.com,LIST
 HOST-SUFFIX,buildkiteusercontent.com,LIST
 HOST-SUFFIX,bundle.thimatic-apps.com,LIST
 HOST-SUFFIX,business-humanrights.org,LIST
+HOST-SUFFIX,butterfly-effect-cdn.dev,LIST
 HOST-SUFFIX,casquebeatsfracheter.com,LIST
 HOST-SUFFIX,centerforhumanreprod.com,LIST
 HOST-SUFFIX,cheapbeatsbydrdrepro.com,LIST
@@ -24275,6 +24293,7 @@ HOST-SUFFIX,cheaperbeatsbydresale.com,LIST
 HOST-SUFFIX,cheapmonsterbeatssale.com,LIST
 HOST-SUFFIX,ciscoknowledgenetwork.com,LIST
 HOST-SUFFIX,ciscopartnermarketing.com,LIST
+HOST-SUFFIX,client-api.arkoselabs.com,LIST
 HOST-SUFFIX,corporatecashpassport.com,LIST
 HOST-SUFFIX,coursera-for-business.org,LIST
 HOST-SUFFIX,cybermondaybeats4sale.com,LIST
@@ -24293,6 +24312,7 @@ HOST-SUFFIX,drebeatsheadphones-nz.com,LIST
 HOST-SUFFIX,dynamic-static-assets.com,LIST
 HOST-SUFFIX,ebayclassifiedsgroup.info,LIST
 HOST-SUFFIX,economistgroupcareers.com,LIST
+HOST-SUFFIX,elevenlabsusercontent.com,LIST
 HOST-SUFFIX,europeanwarzoneseries.com,LIST
 HOST-SUFFIX,experiencebillmelater.com,LIST
 HOST-SUFFIX,exploitedcollegegirls.com,LIST

@@ -1,4 +1,4 @@
-# proxy rules: 166
+# proxy rules: 170
 DOMAIN-KEYWORD,1drv
 DOMAIN-KEYWORD,avtb
 DOMAIN-KEYWORD,porn
@@ -10,8 +10,10 @@ DOMAIN-KEYWORD,tesla
 DOMAIN-KEYWORD,ttvnw
 DOMAIN-KEYWORD,twimg
 DOMAIN-KEYWORD,amazon
+DOMAIN-KEYWORD,claude
 DOMAIN-KEYWORD,github
 DOMAIN-KEYWORD,google
+DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,paypal
 DOMAIN-KEYWORD,99avcdn
 DOMAIN-KEYWORD,beetalk
@@ -30,10 +32,12 @@ DOMAIN-KEYWORD,onedrive
 DOMAIN-KEYWORD,skydrive
 DOMAIN-KEYWORD,telegram
 DOMAIN-KEYWORD,whatsapp
+DOMAIN-KEYWORD,anthropic
 DOMAIN-KEYWORD,dlercloud
 DOMAIN-KEYWORD,instagram
 DOMAIN-KEYWORD,pinterest
 DOMAIN-KEYWORD,appledaily
+DOMAIN-KEYWORD,antigravity
 DOMAIN-KEYWORD,browserleaks
 DOMAIN-KEYWORD,dsn.algolia.net
 DOMAIN-KEYWORD,-assets.dmm.co.jp
