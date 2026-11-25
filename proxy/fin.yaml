@@ -1,4 +1,4 @@
-# proxy rules: 24938
+# proxy rules: 24943
 payload:
   - "DOMAIN,ip.cn"
   - "DOMAIN,eep.io"
@@ -1772,6 +1772,7 @@ payload:
   - "DOMAIN,media.theresanaiforthat.com"
   - "DOMAIN,medone-education.thieme.com"
   - "DOMAIN,my-json-server.typicode.com"
+  - "DOMAIN,o825645.ingest.us.sentry.io"
   - "DOMAIN,oaos-resources.allstate.com"
   - "DOMAIN,player-frontend.cnevids.com"
   - "DOMAIN,public-pages.cbinsights.com"
@@ -1857,6 +1858,8 @@ payload:
   - "DOMAIN,cmtycdn.powerpages.microsoft.com"
   - "DOMAIN,detectportal.brave-http-only.com"
   - "DOMAIN,geminiweb-pa.clients6.google.com"
+  - "DOMAIN,mhg0jr-launches.appsflyersdk.com"
+  - "DOMAIN,mhg0jr.launches.appsflyersdk.com"
   - "DOMAIN,playgroundcdn.typescriptlang.org"
   - "DOMAIN,public-us-pingsx.api.clonoth.com"
   - "DOMAIN,rawmarkdown.cloudflareaccess.org"
@@ -1881,6 +1884,8 @@ payload:
   - "DOMAIN,openaiassets.blob.core.windows.net"
   - "DOMAIN,blade-public-static.blade-group.com"
   - "DOMAIN,gog-cdn-lumen.secure2.footprint.net"
+  - "DOMAIN,mhg0jr-skadsdkless.appsflyersdk.com"
+  - "DOMAIN,mhg0jr.skadsdkless.appsflyersdk.com"
   - "DOMAIN,screenshots.downloadtorrentfile.com"
   - "DOMAIN,crossborder-integration.global-e.com"
   - "DOMAIN,pro2-ui-assets-s3-fy.myportfolio.com"

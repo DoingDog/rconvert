@@ -1,4 +1,4 @@
-# proxy rules: 24923
+# proxy rules: 24928
 HOST,ip.cn,LIST
 HOST,eep.io,LIST
 HOST,ipxy.io,LIST
@@ -1771,6 +1771,7 @@ HOST,media.technologycounter.com,LIST
 HOST,media.theresanaiforthat.com,LIST
 HOST,medone-education.thieme.com,LIST
 HOST,my-json-server.typicode.com,LIST
+HOST,o825645.ingest.us.sentry.io,LIST
 HOST,oaos-resources.allstate.com,LIST
 HOST,player-frontend.cnevids.com,LIST
 HOST,public-pages.cbinsights.com,LIST
@@ -1856,6 +1857,8 @@ HOST,assetscdn-wchat.eu.freshchat.com,LIST
 HOST,cmtycdn.powerpages.microsoft.com,LIST
 HOST,detectportal.brave-http-only.com,LIST
 HOST,geminiweb-pa.clients6.google.com,LIST
+HOST,mhg0jr-launches.appsflyersdk.com,LIST
+HOST,mhg0jr.launches.appsflyersdk.com,LIST
 HOST,playgroundcdn.typescriptlang.org,LIST
 HOST,public-us-pingsx.api.clonoth.com,LIST
 HOST,rawmarkdown.cloudflareaccess.org,LIST
@@ -1880,6 +1883,8 @@ HOST,http-intake.logs.us5.datadoghq.com,LIST
 HOST,openaiassets.blob.core.windows.net,LIST
 HOST,blade-public-static.blade-group.com,LIST
 HOST,gog-cdn-lumen.secure2.footprint.net,LIST
+HOST,mhg0jr-skadsdkless.appsflyersdk.com,LIST
+HOST,mhg0jr.skadsdkless.appsflyersdk.com,LIST
 HOST,screenshots.downloadtorrentfile.com,LIST
 HOST,crossborder-integration.global-e.com,LIST
 HOST,pro2-ui-assets-s3-fy.myportfolio.com,LIST
