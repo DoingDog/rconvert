@@ -1,4 +1,4 @@
-# big-data rules: 10062
+# big-data rules: 10047
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -308,7 +308,6 @@ HOST,ftp.csuc.cat,LIST
 HOST,ftp.eq.uc.pt,LIST
 HOST,ftp.funet.fi,LIST
 HOST,ftp.is.co.za,LIST
-HOST,ftp.ktug.org,LIST
 HOST,ftp.lanet.kr,LIST
 HOST,ftp.linux.cz,LIST
 HOST,ftp.linux.it,LIST
@@ -579,7 +578,6 @@ HOST,phishing.army,LIST
 HOST,pics.vpdmm.cc,LIST
 HOST,pomf2.lain.la,LIST
 HOST,r2.dejavu.moe,LIST
-HOST,r2cdn.c7d.dev,LIST
 HOST,rdr.windy.com,LIST
 HOST,repo.xtom.com,LIST
 HOST,repository.su,LIST
@@ -861,7 +859,6 @@ HOST,s.midishow.net,LIST
 HOST,s1.divhunt.com,LIST
 HOST,s3.2233778.xyz,LIST
 HOST,s3.teckids.org,LIST
-HOST,scdn.clerk.com,LIST
 HOST,sdata.ndtv.com,LIST
 HOST,sdk.qikify.com,LIST
 HOST,searchcpan.org,LIST
@@ -882,7 +879,6 @@ HOST,static.reo.dev,LIST
 HOST,static.snyk.io,LIST
 HOST,static.toss.im,LIST
 HOST,static.xns.one,LIST
-HOST,static.yfsp.tv,LIST
 HOST,stc.utdstc.com,LIST
 HOST,stream.mux.com,LIST
 HOST,t0.gstatic.com,LIST
@@ -1185,7 +1181,6 @@ HOST,mta.newfold.com,LIST
 HOST,object.innei.in,LIST
 HOST,objects.hit.moe,LIST
 HOST,opensuse.nic.cz,LIST
-HOST,pacdn.500px.org,LIST
 HOST,packagecloud.io,LIST
 HOST,pcz.javidol.org,LIST
 HOST,ph.langfuse.com,LIST
@@ -1396,7 +1391,6 @@ HOST,down.filen-4.net,LIST
 HOST,down.filen-5.net,LIST
 HOST,download.kde.org,LIST
 HOST,download.nust.na,LIST
-HOST,drscdn.500px.org,LIST
 HOST,e.deviantart.net,LIST
 HOST,eclats.crans.org,LIST
 HOST,embed.lantern.io,LIST
@@ -1568,7 +1562,6 @@ HOST,s3.picacomic.com,LIST
 HOST,s3.sitepoint.com,LIST
 HOST,s8.maxstream.org,LIST
 HOST,sdk.customfit.ai,LIST
-HOST,segapi.clerk.com,LIST
 HOST,share.riseup.net,LIST
 HOST,shots.codepen.io,LIST
 HOST,skimdb.npmjs.com,LIST
@@ -2146,7 +2139,6 @@ HOST,content.gapinc.com,LIST
 HOST,cover.yymanhua.com,LIST
 HOST,cpan-mirror.rbc.ru,LIST
 HOST,cpan.dcc.uchile.cl,LIST
-HOST,cpan.mines-albi.fr,LIST
 HOST,ctan.dcc.uchile.cl,LIST
 HOST,ctan.math.utah.edu,LIST
 HOST,ctan.mines-albi.fr,LIST
@@ -2317,7 +2309,6 @@ HOST,previews.123rf.com,LIST
 HOST,proxy.spigotmc.org,LIST
 HOST,public.hare200.com,LIST
 HOST,public.popclip.app,LIST
-HOST,r2cdn.corespeed.io,LIST
 HOST,reader.readmoo.com,LIST
 HOST,registry.npmjs.com,LIST
 HOST,registry.npmjs.org,LIST
@@ -3239,6 +3230,7 @@ HOST,cdn.eu.contentful.com,LIST
 HOST,cdn.freebiesupply.com,LIST
 HOST,cdn.heapanalytics.com,LIST
 HOST,cdn.joincommunity.xyz,LIST
+HOST,cdn.protect.clerk.com,LIST
 HOST,cdn.prowritingaid.com,LIST
 HOST,cdn.shoppinggives.com,LIST
 HOST,cdn.simplelocalize.io,LIST
@@ -3332,7 +3324,6 @@ HOST,m3u8.girigirilove.com,LIST
 HOST,media.cleanshot.cloud,LIST
 HOST,media.gettyimages.com,LIST
 HOST,media.graphassets.com,LIST
-HOST,media.hentaifreak.org,LIST
 HOST,media.identity.ui.com,LIST
 HOST,media.invisioncic.com,LIST
 HOST,media.istockphoto.com,LIST
@@ -3733,7 +3724,6 @@ HOST,assets.buttondown.email,LIST
 HOST,assets.clever-cloud.com,LIST
 HOST,assets.clickfunnels.com,LIST
 HOST,assets.lemonsqueezy.com,LIST
-HOST,assets.mcp.corespeed.io,LIST
 HOST,assets.science.nasa.gov,LIST
 HOST,assets.singaporeair.com,LIST
 HOST,assets.streamlinehq.com,LIST
@@ -4037,9 +4027,7 @@ HOST,mirror.debian.ikoula.com,LIST
 HOST,mirror.digitaloceans.dev,LIST
 HOST,mirror.dimensiondata.com,LIST
 HOST,mirror.grid.uchicago.edu,LIST
-HOST,mirror.library.ucy.ac.cy,LIST
 HOST,mirror.mythic-beasts.com,LIST
-HOST,mirror.netcologne.de.org,LIST
 HOST,mirror.ubuntu.ikoula.com,LIST
 HOST,mirror.unix-solutions.be,LIST
 HOST,mirror.us.mirhosting.net,LIST
@@ -4063,10 +4051,8 @@ HOST,puku-dist.4gamers.com.tw,LIST
 HOST,repos.del.extreme-ix.org,LIST
 HOST,service-icons.zeabur.com,LIST
 HOST,sf-coze-web-cdn.coze.com,LIST
-HOST,showcase.abovemarket.com,LIST
 HOST,sp-spiegel-de.spiegel.de,LIST
 HOST,spotify.map.fastlylb.net,LIST
-HOST,spotlightimage.biggo.com,LIST
 HOST,static-assets.mapbox.com,LIST
 HOST,static-assets.vinted.com,LIST
 HOST,static-forms.klaviyo.com,LIST
@@ -4213,7 +4199,6 @@ HOST,trekcdnprod.azureedge.net,LIST
 HOST,tuf-repo-cdn.sigstore.dev,LIST
 HOST,ubuntu.securedservers.com,LIST
 HOST,ucmirror.canterbury.ac.nz,LIST
-HOST,unlimited-cdn.waifu2x.net,LIST
 HOST,updates.bravesoftware.com,LIST
 HOST,vz-2222604c-50b.b-cdn.net,LIST
 HOST,vz-c0fe498e-5ab.b-cdn.net,LIST
@@ -4369,7 +4354,6 @@ HOST,mirror.bharatdatacenter.com,LIST
 HOST,mirror.domainhizmetleri.com,LIST
 HOST,mirror.improve.nordlo.cloud,LIST
 HOST,mirror.retentionrange.co.bw,LIST
-HOST,mirror.thunderhosting.cloud,LIST
 HOST,mirror.united-gameserver.de,LIST
 HOST,mirrors.advancedhosters.com,LIST
 HOST,my-json-server.typicode.com,LIST
@@ -4579,6 +4563,7 @@ HOST,android-safebrowsing.google.com,LIST
 HOST,bookface-static.ycombinator.com,LIST
 HOST,brand-assets.cne.ngc.nvidia.com,LIST
 HOST,bunnycdn-video-assets.b-cdn.net,LIST
+HOST,cdn-resize-prod-com.500px.cloud,LIST
 HOST,cdn-widgetsrepository.yotpo.com,LIST
 HOST,cdn.playersupport.riotgames.com,LIST
 HOST,cdn.techcommunity.microsoft.com,LIST

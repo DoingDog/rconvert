@@ -1,4 +1,4 @@
-# big-data rules: 10081
+# big-data rules: 10066
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,ghp.ci
@@ -308,7 +308,6 @@ DOMAIN,ftp.csuc.cat
 DOMAIN,ftp.eq.uc.pt
 DOMAIN,ftp.funet.fi
 DOMAIN,ftp.is.co.za
-DOMAIN,ftp.ktug.org
 DOMAIN,ftp.lanet.kr
 DOMAIN,ftp.linux.cz
 DOMAIN,ftp.linux.it
@@ -579,7 +578,6 @@ DOMAIN,phishing.army
 DOMAIN,pics.vpdmm.cc
 DOMAIN,pomf2.lain.la
 DOMAIN,r2.dejavu.moe
-DOMAIN,r2cdn.c7d.dev
 DOMAIN,rdr.windy.com
 DOMAIN,repo.xtom.com
 DOMAIN,repository.su
@@ -861,7 +859,6 @@ DOMAIN,s.midishow.net
 DOMAIN,s1.divhunt.com
 DOMAIN,s3.2233778.xyz
 DOMAIN,s3.teckids.org
-DOMAIN,scdn.clerk.com
 DOMAIN,sdata.ndtv.com
 DOMAIN,sdk.qikify.com
 DOMAIN,searchcpan.org
@@ -882,7 +879,6 @@ DOMAIN,static.reo.dev
 DOMAIN,static.snyk.io
 DOMAIN,static.toss.im
 DOMAIN,static.xns.one
-DOMAIN,static.yfsp.tv
 DOMAIN,stc.utdstc.com
 DOMAIN,stream.mux.com
 DOMAIN,t0.gstatic.com
@@ -1185,7 +1181,6 @@ DOMAIN,mta.newfold.com
 DOMAIN,object.innei.in
 DOMAIN,objects.hit.moe
 DOMAIN,opensuse.nic.cz
-DOMAIN,pacdn.500px.org
 DOMAIN,packagecloud.io
 DOMAIN,pcz.javidol.org
 DOMAIN,ph.langfuse.com
@@ -1396,7 +1391,6 @@ DOMAIN,down.filen-4.net
 DOMAIN,down.filen-5.net
 DOMAIN,download.kde.org
 DOMAIN,download.nust.na
-DOMAIN,drscdn.500px.org
 DOMAIN,e.deviantart.net
 DOMAIN,eclats.crans.org
 DOMAIN,embed.lantern.io
@@ -1568,7 +1562,6 @@ DOMAIN,s3.picacomic.com
 DOMAIN,s3.sitepoint.com
 DOMAIN,s8.maxstream.org
 DOMAIN,sdk.customfit.ai
-DOMAIN,segapi.clerk.com
 DOMAIN,share.riseup.net
 DOMAIN,shots.codepen.io
 DOMAIN,skimdb.npmjs.com
@@ -2146,7 +2139,6 @@ DOMAIN,content.gapinc.com
 DOMAIN,cover.yymanhua.com
 DOMAIN,cpan-mirror.rbc.ru
 DOMAIN,cpan.dcc.uchile.cl
-DOMAIN,cpan.mines-albi.fr
 DOMAIN,ctan.dcc.uchile.cl
 DOMAIN,ctan.math.utah.edu
 DOMAIN,ctan.mines-albi.fr
@@ -2317,7 +2309,6 @@ DOMAIN,previews.123rf.com
 DOMAIN,proxy.spigotmc.org
 DOMAIN,public.hare200.com
 DOMAIN,public.popclip.app
-DOMAIN,r2cdn.corespeed.io
 DOMAIN,reader.readmoo.com
 DOMAIN,registry.npmjs.com
 DOMAIN,registry.npmjs.org
@@ -3239,6 +3230,7 @@ DOMAIN,cdn.eu.contentful.com
 DOMAIN,cdn.freebiesupply.com
 DOMAIN,cdn.heapanalytics.com
 DOMAIN,cdn.joincommunity.xyz
+DOMAIN,cdn.protect.clerk.com
 DOMAIN,cdn.prowritingaid.com
 DOMAIN,cdn.shoppinggives.com
 DOMAIN,cdn.simplelocalize.io
@@ -3332,7 +3324,6 @@ DOMAIN,m3u8.girigirilove.com
 DOMAIN,media.cleanshot.cloud
 DOMAIN,media.gettyimages.com
 DOMAIN,media.graphassets.com
-DOMAIN,media.hentaifreak.org
 DOMAIN,media.identity.ui.com
 DOMAIN,media.invisioncic.com
 DOMAIN,media.istockphoto.com
@@ -3733,7 +3724,6 @@ DOMAIN,assets.buttondown.email
 DOMAIN,assets.clever-cloud.com
 DOMAIN,assets.clickfunnels.com
 DOMAIN,assets.lemonsqueezy.com
-DOMAIN,assets.mcp.corespeed.io
 DOMAIN,assets.science.nasa.gov
 DOMAIN,assets.singaporeair.com
 DOMAIN,assets.streamlinehq.com
@@ -4037,9 +4027,7 @@ DOMAIN,mirror.debian.ikoula.com
 DOMAIN,mirror.digitaloceans.dev
 DOMAIN,mirror.dimensiondata.com
 DOMAIN,mirror.grid.uchicago.edu
-DOMAIN,mirror.library.ucy.ac.cy
 DOMAIN,mirror.mythic-beasts.com
-DOMAIN,mirror.netcologne.de.org
 DOMAIN,mirror.ubuntu.ikoula.com
 DOMAIN,mirror.unix-solutions.be
 DOMAIN,mirror.us.mirhosting.net
@@ -4063,10 +4051,8 @@ DOMAIN,puku-dist.4gamers.com.tw
 DOMAIN,repos.del.extreme-ix.org
 DOMAIN,service-icons.zeabur.com
 DOMAIN,sf-coze-web-cdn.coze.com
-DOMAIN,showcase.abovemarket.com
 DOMAIN,sp-spiegel-de.spiegel.de
 DOMAIN,spotify.map.fastlylb.net
-DOMAIN,spotlightimage.biggo.com
 DOMAIN,static-assets.mapbox.com
 DOMAIN,static-assets.vinted.com
 DOMAIN,static-forms.klaviyo.com
@@ -4213,7 +4199,6 @@ DOMAIN,trekcdnprod.azureedge.net
 DOMAIN,tuf-repo-cdn.sigstore.dev
 DOMAIN,ubuntu.securedservers.com
 DOMAIN,ucmirror.canterbury.ac.nz
-DOMAIN,unlimited-cdn.waifu2x.net
 DOMAIN,updates.bravesoftware.com
 DOMAIN,vz-2222604c-50b.b-cdn.net
 DOMAIN,vz-c0fe498e-5ab.b-cdn.net
@@ -4369,7 +4354,6 @@ DOMAIN,mirror.bharatdatacenter.com
 DOMAIN,mirror.domainhizmetleri.com
 DOMAIN,mirror.improve.nordlo.cloud
 DOMAIN,mirror.retentionrange.co.bw
-DOMAIN,mirror.thunderhosting.cloud
 DOMAIN,mirror.united-gameserver.de
 DOMAIN,mirrors.advancedhosters.com
 DOMAIN,my-json-server.typicode.com
@@ -4579,6 +4563,7 @@ DOMAIN,android-safebrowsing.google.com
 DOMAIN,bookface-static.ycombinator.com
 DOMAIN,brand-assets.cne.ngc.nvidia.com
 DOMAIN,bunnycdn-video-assets.b-cdn.net
+DOMAIN,cdn-resize-prod-com.500px.cloud
 DOMAIN,cdn-widgetsrepository.yotpo.com
 DOMAIN,cdn.playersupport.riotgames.com
 DOMAIN,cdn.techcommunity.microsoft.com

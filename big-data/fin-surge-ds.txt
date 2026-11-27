@@ -1,4 +1,4 @@
-# big-data rules: 8715
+# big-data rules: 8700
 .aws
 .x.ai
 .db.tt
@@ -1680,7 +1680,6 @@ ftp.csuc.cat
 ftp.eq.uc.pt
 ftp.funet.fi
 ftp.is.co.za
-ftp.ktug.org
 ftp.lanet.kr
 ftp.linux.cz
 ftp.linux.it
@@ -2289,7 +2288,6 @@ phishing.army
 pics.vpdmm.cc
 pomf2.lain.la
 r2.dejavu.moe
-r2cdn.c7d.dev
 rdr.windy.com
 repo.xtom.com
 repository.su
@@ -2904,7 +2902,6 @@ s.midishow.net
 s1.divhunt.com
 s3.2233778.xyz
 s3.teckids.org
-scdn.clerk.com
 sdata.ndtv.com
 sdk.qikify.com
 searchcpan.org
@@ -2925,7 +2922,6 @@ static.reo.dev
 static.snyk.io
 static.toss.im
 static.xns.one
-static.yfsp.tv
 stc.utdstc.com
 stream.mux.com
 t0.gstatic.com
@@ -3548,7 +3544,6 @@ mta.newfold.com
 object.innei.in
 objects.hit.moe
 opensuse.nic.cz
-pacdn.500px.org
 packagecloud.io
 pcz.javidol.org
 ph.langfuse.com
@@ -3978,7 +3973,6 @@ down.filen-4.net
 down.filen-5.net
 download.kde.org
 download.nust.na
-drscdn.500px.org
 e.deviantart.net
 eclats.crans.org
 embed.lantern.io
@@ -4150,7 +4144,6 @@ s3.picacomic.com
 s3.sitepoint.com
 s8.maxstream.org
 sdk.customfit.ai
-segapi.clerk.com
 share.riseup.net
 shots.codepen.io
 skimdb.npmjs.com
@@ -5114,7 +5107,6 @@ content.gapinc.com
 cover.yymanhua.com
 cpan-mirror.rbc.ru
 cpan.dcc.uchile.cl
-cpan.mines-albi.fr
 ctan.dcc.uchile.cl
 ctan.math.utah.edu
 ctan.mines-albi.fr
@@ -5285,7 +5277,6 @@ previews.123rf.com
 proxy.spigotmc.org
 public.hare200.com
 public.popclip.app
-r2cdn.corespeed.io
 reader.readmoo.com
 registry.npmjs.com
 registry.npmjs.org
@@ -6525,6 +6516,7 @@ cdn.eu.contentful.com
 cdn.freebiesupply.com
 cdn.heapanalytics.com
 cdn.joincommunity.xyz
+cdn.protect.clerk.com
 cdn.prowritingaid.com
 cdn.shoppinggives.com
 cdn.simplelocalize.io
@@ -6618,7 +6610,6 @@ m3u8.girigirilove.com
 media.cleanshot.cloud
 media.gettyimages.com
 media.graphassets.com
-media.hentaifreak.org
 media.identity.ui.com
 media.invisioncic.com
 media.istockphoto.com
@@ -7161,7 +7152,6 @@ assets.buttondown.email
 assets.clever-cloud.com
 assets.clickfunnels.com
 assets.lemonsqueezy.com
-assets.mcp.corespeed.io
 assets.science.nasa.gov
 assets.singaporeair.com
 assets.streamlinehq.com
@@ -7513,9 +7503,7 @@ mirror.debian.ikoula.com
 mirror.digitaloceans.dev
 mirror.dimensiondata.com
 mirror.grid.uchicago.edu
-mirror.library.ucy.ac.cy
 mirror.mythic-beasts.com
-mirror.netcologne.de.org
 mirror.ubuntu.ikoula.com
 mirror.unix-solutions.be
 mirror.us.mirhosting.net
@@ -7539,10 +7527,8 @@ puku-dist.4gamers.com.tw
 repos.del.extreme-ix.org
 service-icons.zeabur.com
 sf-coze-web-cdn.coze.com
-showcase.abovemarket.com
 sp-spiegel-de.spiegel.de
 spotify.map.fastlylb.net
-spotlightimage.biggo.com
 static-assets.mapbox.com
 static-assets.vinted.com
 static-forms.klaviyo.com
@@ -7731,7 +7717,6 @@ trekcdnprod.azureedge.net
 tuf-repo-cdn.sigstore.dev
 ubuntu.securedservers.com
 ucmirror.canterbury.ac.nz
-unlimited-cdn.waifu2x.net
 updates.bravesoftware.com
 vz-2222604c-50b.b-cdn.net
 vz-c0fe498e-5ab.b-cdn.net
@@ -7982,7 +7967,6 @@ mirror.bharatdatacenter.com
 mirror.domainhizmetleri.com
 mirror.improve.nordlo.cloud
 mirror.retentionrange.co.bw
-mirror.thunderhosting.cloud
 mirror.united-gameserver.de
 mirrors.advancedhosters.com
 my-json-server.typicode.com
@@ -8294,6 +8278,7 @@ android-safebrowsing.google.com
 bookface-static.ycombinator.com
 brand-assets.cne.ngc.nvidia.com
 bunnycdn-video-assets.b-cdn.net
+cdn-resize-prod-com.500px.cloud
 cdn-widgetsrepository.yotpo.com
 cdn.playersupport.riotgames.com
 cdn.techcommunity.microsoft.com

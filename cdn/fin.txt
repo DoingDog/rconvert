@@ -1,4 +1,4 @@
-# cdn rules: 4800
+# cdn rules: 4790
 DOMAIN,0x0.st
 DOMAIN,eep.io
 DOMAIN,img.gs
@@ -417,7 +417,6 @@ DOMAIN,phishing.army
 DOMAIN,pics.vpdmm.cc
 DOMAIN,pomf2.lain.la
 DOMAIN,r2.dejavu.moe
-DOMAIN,r2cdn.c7d.dev
 DOMAIN,rdr.windy.com
 DOMAIN,s.abcnews.com
 DOMAIN,s.imgflip.com
@@ -619,7 +618,6 @@ DOMAIN,s.midishow.net
 DOMAIN,s1.divhunt.com
 DOMAIN,s3.2233778.xyz
 DOMAIN,scache.vzw.com
-DOMAIN,scdn.clerk.com
 DOMAIN,sdata.ndtv.com
 DOMAIN,sdk.qikify.com
 DOMAIN,sites.super.so
@@ -639,7 +637,6 @@ DOMAIN,static.reo.dev
 DOMAIN,static.snyk.io
 DOMAIN,static.toss.im
 DOMAIN,static.xns.one
-DOMAIN,static.yfsp.tv
 DOMAIN,stc.utdstc.com
 DOMAIN,stream.mux.com
 DOMAIN,t0.gstatic.com
@@ -857,7 +854,6 @@ DOMAIN,miro.medium.com
 DOMAIN,mta.newfold.com
 DOMAIN,object.innei.in
 DOMAIN,objects.hit.moe
-DOMAIN,pacdn.500px.org
 DOMAIN,pcz.javidol.org
 DOMAIN,ph.langfuse.com
 DOMAIN,piccdn.7mmtv.sx
@@ -1028,7 +1024,6 @@ DOMAIN,content.api.news
 DOMAIN,crl.verisign.com
 DOMAIN,crt.comodoca.com
 DOMAIN,css.yymanhua.com
-DOMAIN,drscdn.500px.org
 DOMAIN,e.deviantart.net
 DOMAIN,embed.lantern.io
 DOMAIN,embed.reddit.com
@@ -1144,7 +1139,6 @@ DOMAIN,s3.picacomic.com
 DOMAIN,s3.sitepoint.com
 DOMAIN,s8.maxstream.org
 DOMAIN,sdk.customfit.ai
-DOMAIN,segapi.clerk.com
 DOMAIN,shots.codepen.io
 DOMAIN,static.arxiv.org
 DOMAIN,static.axios.com
@@ -1673,7 +1667,6 @@ DOMAIN,previews.123rf.com
 DOMAIN,proxy.spigotmc.org
 DOMAIN,public.hare200.com
 DOMAIN,public.popclip.app
-DOMAIN,r2cdn.corespeed.io
 DOMAIN,reader.readmoo.com
 DOMAIN,registry.oomol.com
 DOMAIN,res.cloudinary.com
@@ -2361,6 +2354,7 @@ DOMAIN,cdn.eu.contentful.com
 DOMAIN,cdn.freebiesupply.com
 DOMAIN,cdn.heapanalytics.com
 DOMAIN,cdn.joincommunity.xyz
+DOMAIN,cdn.protect.clerk.com
 DOMAIN,cdn.prowritingaid.com
 DOMAIN,cdn.shoppinggives.com
 DOMAIN,cdn.simplelocalize.io
@@ -2438,7 +2432,6 @@ DOMAIN,media.cleanshot.cloud
 DOMAIN,media.games.dmm.co.jp
 DOMAIN,media.gettyimages.com
 DOMAIN,media.graphassets.com
-DOMAIN,media.hentaifreak.org
 DOMAIN,media.identity.ui.com
 DOMAIN,media.invisioncic.com
 DOMAIN,media.istockphoto.com
@@ -2725,7 +2718,6 @@ DOMAIN,assets.buttondown.email
 DOMAIN,assets.clever-cloud.com
 DOMAIN,assets.clickfunnels.com
 DOMAIN,assets.lemonsqueezy.com
-DOMAIN,assets.mcp.corespeed.io
 DOMAIN,assets.science.nasa.gov
 DOMAIN,assets.singaporeair.com
 DOMAIN,assets.streamlinehq.com
@@ -2957,9 +2949,7 @@ DOMAIN,res-etl-ssl.mypikpak.com
 DOMAIN,segment.digitalocean.com
 DOMAIN,service-icons.zeabur.com
 DOMAIN,sf-coze-web-cdn.coze.com
-DOMAIN,showcase.abovemarket.com
 DOMAIN,sp-spiegel-de.spiegel.de
-DOMAIN,spotlightimage.biggo.com
 DOMAIN,static-assets.mapbox.com
 DOMAIN,static-assets.vinted.com
 DOMAIN,static-forms.klaviyo.com
@@ -3073,7 +3063,6 @@ DOMAIN,tiles.maps.opensearch.org
 DOMAIN,trekcdnprod.azureedge.net
 DOMAIN,tuf-repo-cdn.sigstore.dev
 DOMAIN,ubistatic2-a.akamaihd.net
-DOMAIN,unlimited-cdn.waifu2x.net
 DOMAIN,vz-2222604c-50b.b-cdn.net
 DOMAIN,vz-c0fe498e-5ab.b-cdn.net
 DOMAIN,web-assets.esetstatic.com
@@ -3356,6 +3345,7 @@ DOMAIN,android-safebrowsing.google.com
 DOMAIN,bookface-static.ycombinator.com
 DOMAIN,brand-assets.cne.ngc.nvidia.com
 DOMAIN,bunnycdn-video-assets.b-cdn.net
+DOMAIN,cdn-resize-prod-com.500px.cloud
 DOMAIN,cdn-widgetsrepository.yotpo.com
 DOMAIN,cdn.playersupport.riotgames.com
 DOMAIN,cdn.techcommunity.microsoft.com
