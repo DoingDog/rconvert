@@ -1,4 +1,4 @@
-# cdn rules: 4801
+# cdn rules: 4800
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,img.gs,LIST
@@ -4708,7 +4708,6 @@ HOST-SUFFIX,telemetry.services.yofi.ai,LIST
 HOST-SUFFIX,cdn-lfs-us-1.huggingface.co,LIST
 HOST-SUFFIX,dam-cdn.atl.orangelogic.com,LIST
 HOST-SUFFIX,design-system.economist.com,LIST
-HOST-SUFFIX,frame.claudeusercontent.com,LIST
 HOST-SUFFIX,ipfsgateway.makersplace.com,LIST
 HOST-SUFFIX,siteintercept.qualtrics.com,LIST
 HOST-SUFFIX,widget.cluster.groovehq.com,LIST

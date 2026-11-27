@@ -1,4 +1,4 @@
-# big-data rules: 10063
+# big-data rules: 10062
 HOST,0x0.st,LIST
 HOST,eep.io,LIST
 HOST,ghp.ci,LIST
@@ -8405,7 +8405,6 @@ HOST-SUFFIX,design-system.economist.com,LIST
 HOST-SUFFIX,disneymeetingsandevents.com,LIST
 HOST-SUFFIX,download.prss.microsoft.com,LIST
 HOST-SUFFIX,foxbroadcasting.zendesk.com,LIST
-HOST-SUFFIX,frame.claudeusercontent.com,LIST
 HOST-SUFFIX,hbogoprod-vod.akamaized.net,LIST
 HOST-SUFFIX,intl-subscription.iqiyi.com,LIST
 HOST-SUFFIX,ipfsgateway.makersplace.com,LIST

@@ -1,4 +1,4 @@
-# big-data rules: 10047
+# big-data rules: 10046
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -8488,7 +8488,6 @@ payload:
   - "DOMAIN-SUFFIX,disneymeetingsandevents.com"
   - "DOMAIN-SUFFIX,download.prss.microsoft.com"
   - "DOMAIN-SUFFIX,foxbroadcasting.zendesk.com"
-  - "DOMAIN-SUFFIX,frame.claudeusercontent.com"
   - "DOMAIN-SUFFIX,hbogoprod-vod.akamaized.net"
   - "DOMAIN-SUFFIX,intl-subscription.iqiyi.com"
   - "DOMAIN-SUFFIX,ipfsgateway.makersplace.com"

@@ -1,4 +1,4 @@
-# cdn rules: 4801
+# cdn rules: 4800
 payload:
   - "DOMAIN,0x0.st"
   - "DOMAIN,eep.io"
@@ -4770,7 +4770,6 @@ payload:
   - "DOMAIN-SUFFIX,cdn-lfs-us-1.huggingface.co"
   - "DOMAIN-SUFFIX,dam-cdn.atl.orangelogic.com"
   - "DOMAIN-SUFFIX,design-system.economist.com"
-  - "DOMAIN-SUFFIX,frame.claudeusercontent.com"
   - "DOMAIN-SUFFIX,ipfsgateway.makersplace.com"
   - "DOMAIN-SUFFIX,siteintercept.qualtrics.com"
   - "DOMAIN-SUFFIX,widget.cluster.groovehq.com"
